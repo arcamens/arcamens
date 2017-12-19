@@ -1,0 +1,47 @@
+{% load bootstrap3 %}
+
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button"  class="close" data-dismiss="modal">&times;</button>
+{% csrf_token %}
+
+{% block title %}
+<h4> Create board </h4>
+{% endblock %}
+
+</div>
+
+<div class="modal-body">
+<form id="form-board-data" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" 
+data-form="#form-board-data" 
+data-shell="#main-view" 
+data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" 
+data-show="{% url 'board_app:create-board' %}"
+class="btn btn-default e-post">  {% trans "Create" %} </button>
+{% endblock %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+{% load i18n %}
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Arcamens</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/main.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/main.css">
+<link rel="stylesheet" href="/static/jquery-ui.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/jquery-ui.js"> </script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/static/input-extensions.js"> </script>
+<script src="/static/e-get.js"> </script>
+<script src="/static/e-post.js"> </script>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/static/icons/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/static/icons/manifest.json">
+<link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/static/icons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Arcamens">
+<meta name="application-name" content="arcamens">
+<meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+<script src="/static/input-extensions.js"> </script>
+<script src="/static/e-get.js"> </script>
+<script src="/static/e-post.js"> </script>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse" style="background-color:#071152">
+<div class="container-fluid">
+<div class="navbar-header">
+<a class="navbar-brand" href="#">
+<span class="glyphicon glyphicon-eye-open"></span> Arcamens </a>
+    
+</div>
+
+<ul class="nav navbar-nav">
+<li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:home' %}" href="#">
+<span class="glyphicon glyphicon-home"></span> {% trans "Home" %}</a></li>
+<li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:signup' %}" href="#" >
+<span class="glyphicon glyphicon-user"></span> {% trans "Sign up" %}</a></li>
+
+<li><a href="" target="_blank">
+<span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
+
+</ul>
+
+<ul class="nav navbar-right">
+
+<form class="navbar-form navbar-left" method="post" action="{% url 'site_app:login' %}">
+{% csrf_token %}
+
+{% bootstrap_field login_form.email layout='inline' %}
+{% bootstrap_field login_form.password layout='inline' %}
+{% buttons submit='Sign in' layout='inline' %}{% endbuttons %}
+
+</form>
+</ul>
+
+</div>
+</nav>
+
+<div class="container">
+{% bootstrap_form_errors login_form type='non_fields' %}
+</div>
+
+<div id="main-content">
+{% include 'site_app/home.html' %}
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

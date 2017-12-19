@@ -1,0 +1,22 @@
+{% extends 'board_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<span style="color:red"> {{event.peer.name}} </span> unbinded from
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'list_app:list-lists' event.board.id %}" href="#"> 
+<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  by 
+
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+

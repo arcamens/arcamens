@@ -1,0 +1,40 @@
+{% extends "core_app/create-organization.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block title %}
+Update Organization
+{% endblock %}
+
+{% block formfields %}
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.owner  size='md' %}
+
+{% endblock %}
+
+{% block buttons %}
+<button  type="button" 
+data-callback="window.location='{% url 'core_app:index' %}';" 
+data-show="{% url 'core_app:delete-organization' organization.id %}"
+class="btn btn-default e-get"> 
+{% trans "Delete" %}
+</button>
+
+<button  type="button" data-form="#form-organization-data" 
+data-callback="location.reload()" 
+data-shell-error="#modalContent" data-show="{% url 'core_app:update-organization' organization.id %}"
+class="btn btn-default e-post"> 
+     {% trans "Update" %}
+</button>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

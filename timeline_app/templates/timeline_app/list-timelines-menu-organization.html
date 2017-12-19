@@ -1,0 +1,66 @@
+{% load i18n %}
+
+<ul class="nav nav-pills ul-menu-posts" style="background:#DADDDD;">
+
+<li class="disabled">
+ <a href="#"> <span class="glyphicon glyphicon-flag"></span>  <b>
+{{organization.name}}'s Timelines: <span class="badge">{{children.count}}/{{total.count}}</span></b> </b></a> 
+</li>
+
+<li class="divider"></li>
+
+
+<li class="e-get" data-shell="#modalContent" data-show="{% url 'timeline_app:create-timeline' organization.id %}">
+<a data-toggle="modal" data-target="#modal" href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "timeline" %}</a></li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'timeline_app:setup-timeline-filter' organization.id %}" 
+data-callback="$('#modal').modal('show');">
+{% if filter.status %}
+<span class="glyphicon glyphicon-filter"></span> 
+Filter
+{% else %}
+<strike> 
+<span class="glyphicon glyphicon-filter"></span> 
+Filter </strike>
+
+{% endif %}
+
+</a>
+</li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="{% url 'post_app:list-assigments' user.id %}" 
+href="#"><span class="glyphicon glyphicon-tags"></span> Assigments</a></li>
+
+<li><a class="e-get" data-shell="#modalContent" 
+data-show="{% url 'timeline_app:list-clipboard' user.id %}" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-magnet"></span> Clipboard</a></li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'timeline_app:list-tags' %}" 
+data-callback="$('#modal').modal('show');">
+<span class="glyphicon glyphicon-tag"></span> Tags
+</a>
+</li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="{% url 'timeline_app:list-all-posts' user.id %}" 
+href="#"><span class="glyphicon glyphicon-globe"></span> Posts</a></li>
+
+</ul>
+
+
+
+
+
+
+
+
+
+

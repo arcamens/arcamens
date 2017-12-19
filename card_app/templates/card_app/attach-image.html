@@ -1,0 +1,44 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<script>
+function send_image() {
+   var formData = new FormData($('#form-attachment-image-data')[0]);
+
+   $.ajax({
+   url: '{% url 'card_app:attach-image' card.id  %}', 
+   type: 'POST',
+   success: function(data) {
+   $('#popover-attach-image').attr('data-content', data);
+   $('#popover-attach-image').popover('show');},
+   data: formData,
+   cache: false,
+   contentType: false,
+   processData: false});
+}
+
+$('#id_file').change(function(){
+    send_image();
+});
+
+</script>
+
+
+{% for ind in attachments %}
+<a onclick="$('#id_data').insertAtCaret($(this).attr('data-url'));$('#popover-attach-image').popover('hide');" 
+data-url="![Image](/static/{{ind.file.name}})" href="#"><span class="glyphicon glyphicon-file"></span> {{ind.file.name}}</a>
+<br>
+{% endfor %}
+...
+<hr>
+<form id="form-attachment-image-data" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.file  size='md' %}
+
+</form>
+
+
+
+
+
+

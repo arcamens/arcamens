@@ -1,0 +1,32 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>Tag </h4>
+</div>
+
+<div class="modal-body">
+<form id="bind-tag-form" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+{% bootstrap_field form.name  size='md' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-form="#bind-tag-form" 
+data-shell="#modalContent" 
+data-shell-error="#modalContent" data-show="{% url 'timeline_app:bind-tag' user.id  %}"
+class="btn btn-default e-post"> {% trans "Done" %} </button>
+</div>
+
+
+
+
+
+

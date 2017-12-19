@@ -1,0 +1,82 @@
+<ul class="nav nav-pills ">
+<li>
+<a data-shell="#main-view" 
+class="e-get text-success"
+data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
+href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
+
+<li>
+<a 
+data-shell="#bigModalContent"
+class="e-get text-warning"
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'card_app:update-card' card.id %}"
+href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
+
+<li>
+<a 
+data-shell="#bigModalContent"
+class="e-get text-info"
+data-show="{% url 'comment_app:list-comments' card.id %}" 
+data-callback="$('#bigModal').modal('toggle');" 
+href="#"><span class="glyphicon glyphicon-comment"></span> Comment</a></li>
+
+<li>
+<a 
+data-shell="#modalContent"
+class="e-get text-default"
+data-show="{% url 'card_app:manage-card-workers' card.id %}" 
+data-callback="$('#modal').modal('toggle');" 
+href="#"><span class="glyphicon glyphicon-user"></span> Workers</a></li>
+
+<li>
+<a 
+data-shell="#main-view"
+class="e-get text-warning"
+data-show="" 
+href="#"><span class="glyphicon glyphicon-ok"></span> Done</a></li>
+
+<li>
+<a 
+data-shell="#modalContent"
+class="e-get text-default"
+data-show="" 
+data-callback="$('#modal').modal('toggle');" 
+href="#"><span class="glyphicon glyphicon-tags"></span> Tags</a></li>
+
+<li>
+<a 
+data-shell="#main-view"
+class="e-get text-danger"
+data-show="{% url 'card_app:delete-card'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+
+<li>
+<a 
+data-shell="#bigModalContent"
+class="e-get text-warning"
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'card_app:create-fork'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-tasks"></span> Fork</a></li>
+
+<li>
+<a 
+data-shell="#modalContent"
+class="e-get text-primary"
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-link"></span> Relate</a></li>
+
+</ul>
+
+<script>
+// i should do it in css.
+$('#view-data  img').each(function(){
+    $(this).addClass('img-responsive');
+});
+</script>
+
+
+
+
+

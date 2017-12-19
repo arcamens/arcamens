@@ -1,0 +1,57 @@
+{% load i18n %}
+
+<ul class="nav nav-pills" style="background:#DADDDD;">
+
+<li class="disabled">
+<a  href="#"> <b><span class="glyphicon glyphicon-tag"></span>  
+Assignments: <span class="badge">{{posts.count}}/{{total.count}}</span> </b></a>
+</li>
+
+<li data-toggle="tooltip" title="Up">
+<a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
+data-shell="#main-view" data-show="" href="#">
+<span class="glyphicon glyphicon glyphicon-arrow-up clip"></span> 
+Up
+</a>
+</li>
+
+<li><a class="e-get" data-shell="#modalContent" 
+data-show="" 
+data-callback="$('#modal').modal('show');" 
+href="#"><span class="glyphicon glyphicon-filter"></span> 
+{% trans "Filter" %}</a></li>
+<li class="divider"></li>
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,24 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<span class="glyphicon glyphicon-file"></span> {{event.label}}
+deleted on 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  by 
+
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+

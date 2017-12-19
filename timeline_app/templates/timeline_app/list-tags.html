@@ -1,0 +1,63 @@
+{% load i18n %}
+{% load listutils %}
+
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>  
+<a class="e-get"
+data-show="{% url 'timeline_app:create-tag' %}"
+data-shell="#modalContent"
+href="#"> <span class="glyphicon glyphicon-plus"></span></a>
+{{organization.name}}'s Tags <span class="badge">{{tags.count}}</span></h4>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+{% for ind in tags %}
+<p>
+<a style="color:red;" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+
+<b> {{ind.name}}: </b> {{ind.description}} </p>
+{% empty %}
+No tags.
+{% endfor %}
+
+</div>
+
+<br>
+{% bootstrap_form form layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

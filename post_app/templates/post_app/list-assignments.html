@@ -1,0 +1,16 @@
+{% block menu-assignments %}
+{% include "post_app/menu-assignments.html" %}
+{% endblock %}
+
+{% load i18n %}
+{% for ind in posts %}
+    <div id="post-{{ind.id}}">
+            <script>
+            $(document).ready(function() {
+                $('#post-' + {{ind.id}}).load("{{ind.get_absolute_url}}");
+            });
+            </script>
+    </div>
+{% endfor %}
+
+

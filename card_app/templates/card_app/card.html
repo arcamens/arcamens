@@ -1,0 +1,72 @@
+{% load i18n %}
+
+<div class="panel panel-default {% if card.fork %} fork {% else %} card {% endif %}" >
+
+<div class="panel-body text-center" >
+
+<div class="pull-right" >
+<a class=" e-get text-warning"  href="#" 
+data-shell="#pins" 
+data-show="{% url 'card_app:pin-card' card.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a>
+</div>
+
+<div style="word-wrap: break-word;"> 
+
+<a href="#" 
+class="e-get
+{% if is_worker %} text-danger
+{% elif has_workers %}
+text-success
+{% endif %}"
+
+data-shell="#main-view"  type="button"
+data-show="{% url 'card_app:view-data' card.id %}" >
+<span class="glyphicon glyphicon-file"></span> 
+{% if card.fork %} Fork {% else %} Card {% endif %} {{card.label}}
+{% if card.selected %} (On clipboard) {% endif %}
+</a> 
+
+</div> 
+<br>
+<div class="btn-group btn-group-xs">
+
+<button class="btn btn-default e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:copy-card' card.id %}">
+<span class="glyphicon glyphicon-copy"></span> 
+</button>
+
+<button class="btn btn-warning e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:cut-card' card.id %}">
+<span class="glyphicon glyphicon-scissors"></span> 
+</button>
+
+<button class="btn btn-info e-get" 
+data-shell="#bigModalContent"  type="button"
+data-show="{% url 'comment_app:list-comments' card.id %}" 
+data-callback="$('#bigModal').modal('toggle');" >
+<span class="glyphicon glyphicon-comment"></span> 
+{% trans "Comment" %}</button>
+
+
+{% include 'card_app/card-menu.html' %}
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+

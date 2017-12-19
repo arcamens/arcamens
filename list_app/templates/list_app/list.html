@@ -1,0 +1,55 @@
+{% load i18n %}
+
+<div class="panel panel-default list" >
+
+<div class="panel-body text-center">
+<div class="pull-right">
+<a class=" e-get text-warning"  href="#" 
+data-shell="#pins" 
+data-show="{% url 'list_app:pin-list' list.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a>
+</div>
+
+<div style="word-wrap: break-word;"> 
+<p><em > <span class="glyphicon glyphicon-list-alt"></span> List </em> {{list.name}}
+<br>
+<span class="text-info"> {{list.description}} </span>
+
+</p>
+
+</div> 
+
+<div class="btn-group btn-group-xs">
+<button class="btn btn-default e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'list_app:copy-list' list.id %}">
+<span class="glyphicon glyphicon-copy"></span> 
+</button>
+
+<button class="btn btn-warning e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'list_app:cut-list' list.id %}">
+<span class="glyphicon glyphicon-scissors"></span> 
+</button>
+
+<button class="btn btn-success e-get" 
+data-shell="#main-view" 
+type="button"
+data-show="{% url 'card_app:list-cards' list.id %} ">
+<span class="glyphicon glyphicon-file"></span> 
+{% trans "Cards" %}</button>
+
+
+</button>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+

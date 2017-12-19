@@ -1,0 +1,40 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="form-card-data" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+{% bootstrap_field form.label  size='md' %}
+</div>
+
+<div class="modal-body">
+{% csrf_token %}
+
+{% bootstrap_field form.data  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div id="div-attachments">
+</div>
+<script>
+$('#div-attachments').load('{% url 'card_app:attach-file' card.id %}');
+</script>
+
+
+</div>
+</form>
+
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" data-form="#form-card-data" 
+data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
+data-shell-error="#bigModalContent" data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
+class="btn btn-default e-post"> 
+     {% trans "Create" %}
+</button>
+
+{% endblock %}
+</div>
+
+

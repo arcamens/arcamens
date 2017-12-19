@@ -1,29 +1,63 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+# Development standards
 
-### What is this repository for? ###
+#### Template names
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Template names should be named as follow:
 
-### How do I get set up? ###
+~~~
+view-name.html
+~~~
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Templates which are included in a given view should be named as:
 
-### Contribution guidelines ###
+~~~
+view-name-template-name.html
+~~~
 
-* Writing tests
-* Code review
-* Other guidelines
+In this way, it is easy to know where the template is rendered
+and if it is included then where it is included.
 
-### Who do I talk to? ###
+Templates which are included in more than one template
+should follow:
 
-* Repo owner or admin
-* Other community or team contact
+~~~
+utils-template-name.html
+~~~
+
+#### Form names
+
+Forms which are inherited from ModelForm should be named as follow:
+
+ModelNameForm
+
+When there are more than two forms that are used
+in different views:
+
+~~~python
+class ViewNameModelNameForm(forms.ModelForm):
+~~~
+
+#### View type/names
+
+It should be used just generic views.
+
+~~~python
+from django.views.generic import View
+~~~
+
+Views that change state of models should be named as follow:
+
+~~~python
+class ActionModelName
+~~~
+
+#### Url names
+
+
+#### Models
+
+**Mixins**
+
+

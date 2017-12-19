@@ -1,0 +1,22 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<span style="color:red"> {{event.peer.name}} </span> unbinded from
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
+
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+

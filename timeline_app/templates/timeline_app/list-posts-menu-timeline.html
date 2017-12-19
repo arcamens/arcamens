@@ -1,0 +1,83 @@
+{% load i18n %}
+
+<ul class="nav nav-pills ul-menu-posts" style="background:#DADDDD;">
+
+<li class="disabled">
+<a  href="#"> <b><span class="glyphicon glyphicon-eye-open"></span>  
+{{timeline.name|slice:":20"}}'s Posts: <span class="badge">{{timeline.posts.count}}/{{posts.count}}</span></b> </a>
+</li>
+
+<li data-toggle="tooltip" title="Up">
+<a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
+data-shell="#main-view" data-show="" href="#">
+<span class="glyphicon glyphicon glyphicon-arrow-up clip"></span> Up
+</a>
+</li>
+
+<li><a class="e-get" data-shell="#modalContent" 
+data-show="{% url 'timeline_app:update-timeline' timeline.id %}" 
+data-toggle="modal" data-target="#modal" 
+href="#"> <span class="glyphicon glyphicon-cog"></span> 
+Settings</a></li>
+
+<li class="divider"></li>
+
+<li><a class="e-get" 
+data-shell="#modalContent" data-callback="$('#modal').modal('show');"
+data-show="{% url 'timeline_app:manage-timeline-users' timeline.id %}" href="#">
+<span class="glyphicon glyphicon-user"></span>  {% trans "Members" %}</a></li>
+
+<li class="divider"></li>
+
+<li> <a class="e-get" data-shell="#modalContent" data-show="{% url 'post_app:setup-post-filter' timeline.id %}"
+data-callback="$('#modal').modal('show');" href="#">
+{% if filter.status %}
+<span class="glyphicon glyphicon-filter"></span> 
+Filter
+{% else %}
+<strike> 
+<span class="glyphicon glyphicon-filter"></span> 
+Filter </strike>
+
+{% endif %}
+</a></li>
+
+
+<li> <a class="e-get" data-shell="#modalContent" data-callback="$('#modal').modal('show');" 
+data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
+<span class="glyphicon glyphicon-plus"></span> {% trans "Post" %}</a></li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
+<span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

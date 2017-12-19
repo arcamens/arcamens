@@ -1,0 +1,50 @@
+{% load bootstrap3 %}
+
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button"  class="close" data-dismiss="modal">&times;</button>
+
+{% block title %}
+Create Organization
+{% endblock %}
+
+</div>
+
+<div class="modal-body">
+<form id="form-organization-data" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% block formfields %}
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.type  size='md' %}
+{% endblock %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+</div>
+
+<div class="modal-footer">
+{% block buttons %}
+
+<button  type="button" data-form="#form-organization-data" 
+data-callback="window.location='{% url 'core_app:index' %}';" 
+data-shell-error="#modalContent" 
+data-show="{% url 'core_app:create-organization' user.id %}"
+class="btn btn-default e-post">  {% trans "Create" %} </button>
+{% endblock %}
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

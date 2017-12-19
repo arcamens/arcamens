@@ -1,0 +1,52 @@
+{% load i18n %}
+
+
+<div class="btn-group btn-group-xs">
+<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+ <span class="caret"></span></button>
+<ul class="dropdown-menu" role="menu">
+
+<li class="hidden-xs"><a class="e-get" 
+data-show = "{% url 'board_app:find' %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-search"></span> 
+{% trans "Find" %}</a></li>
+<li class="divider"></li>
+
+<li class="hidden-xs"><a class="e-get" 
+data-show = "{% url 'card_app:list-tasks' %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-tasks"></span> 
+{% trans "Tasks" %}</a></li>
+<li class="divider"></li>
+
+<li class="hidden-xs"><a class="e-get" 
+data-show = "{% url 'board_app:list-clipboard' %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-magnet"></span> 
+{% trans "Clipboard" %}</a></li>
+
+<li class="divider"></li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'board_app:list-archive' %}" 
+data-toggle="modal" data-target="#modal">
+<span class="glyphicon glyphicon-book"></span> Archive 
+</a>
+</li>
+
+</ul>
+</div>
+
+
+
+
+
+
+
+

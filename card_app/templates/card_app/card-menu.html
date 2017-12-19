@@ -1,0 +1,53 @@
+{% load i18n %}
+
+
+<div class="btn-group btn-group-xs">
+<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+<span class="caret"></span></button>
+<ul class="dropdown-menu" role="menu">
+
+<li><a class="e-get" 
+data-shell="#bigModalContent" 
+data-show="{% url 'card_app:update-card' card.id %}" 
+data-callback="$('#bigModal').modal('show');" 
+href="#"> 
+<span class="glyphicon glyphicon-edit"></span> 
+{% trans "Update" %}</a></li>
+
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="" 
+href="#"> <span class="glyphicon glyphicon-ok-circle"></span> 
+{% trans "Done" %}</a></li>
+<li class="divider"></li>
+
+<li><a class="e-get" 
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+data-show="{% url 'card_app:manage-card-workers' card.id %}" 
+href="#"> <span class="glyphicon glyphicon-user"></span> 
+{% trans "Workers" %}</a></li>
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="{% url 'card_app:delete-card' card.id %}" 
+href="#"> <span class="glyphicon glyphicon-remove"></span> 
+{% trans "Delete" %}</a></li>
+
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

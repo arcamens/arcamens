@@ -1,0 +1,20 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h3> Subscription </h3>
+</div>
+
+<div class="modal-body">
+
+<form id="form-upgrade-data" method="post" action="{% url 'site_app:subscription-payment' %}">
+{% csrf_token %}
+
+{% bootstrap_field form.max_users  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+{% buttons submit='Upgrade' layout='inline' %}{% endbuttons %}
+
+</form>
+
+</div>

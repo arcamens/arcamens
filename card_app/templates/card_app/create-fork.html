@@ -1,0 +1,18 @@
+
+{% extends "card_app/create-card.html" %}
+{% load i18n %}
+
+
+{% block buttons %}
+<button  type="button" 
+data-form="#form-card-data" 
+data-shell="#main-view" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell-error="#bigModalContent" 
+data-show="{% url 'card_app:create-fork' card.id fork.id %}"
+class="btn btn-default e-post"> 
+{% trans "Fork" %}
+</button>
+{% endblock %}
+
+

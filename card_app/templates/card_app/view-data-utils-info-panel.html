@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+<div class="panel-body">
+
+<div class="row">
+<div class="col-md-4">
+<h4> <span class="glyphicon glyphicon-user"></span> Workers<h4>
+<hr>
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in workers %}
+
+{% empty %}
+No workers...
+{% endfor %}</div></div>
+
+<div class="col-md-4">
+<h4> <span class="glyphicon glyphicon-file"></span> Attachments<h4>
+<hr>
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in attachments %}
+{% empty %}
+No attachments...
+{% endfor %}</div></div>
+
+<div class="col-md-4">
+<h4> <span class="glyphicon glyphicon-tags"></span> Tags<h4>
+<hr>
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in tags %}
+{% empty %}
+No tags...
+
+{% endfor %}</div></div>
+
+
+</div>
+</div>
+</div>
+

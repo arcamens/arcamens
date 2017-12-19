@@ -1,0 +1,54 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="setup-list-filter-form" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>{{board.name}}'s Filter</h4>
+</div>
+
+<div class="modal-body">
+{% csrf_token %}
+
+{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.status  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</div>
+</form>
+
+<div class="modal-footer">
+<button  type="button" data-form="#setup-list-filter-form" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'list_app:setup-list-filter' board.id  %}"
+class="btn btn-default e-post"> {% trans "Setup" %} </button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

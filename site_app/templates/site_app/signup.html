@@ -1,0 +1,30 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<div class="container" >
+
+<form id="form-user-data" method="post" action="{% url 'site_app:signup' %}">
+{% csrf_token %}
+
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.email  size='md' %}
+{% bootstrap_field form.password  size='md' %}
+{% bootstrap_field form.avatar  size='md' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+
+{% buttons submit='Sign up' layout='inline' %}{% endbuttons %}
+
+</form>
+
+</div>
+
+
+
+
+
+
+
+
+

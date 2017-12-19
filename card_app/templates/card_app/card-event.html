@@ -1,0 +1,32 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+<div class="panel-body" style="font-size:70%;">
+<div style="word-wrap: break-word;"> 
+{% block content %}
+{% endblock %}
+<em class="text-info"> by <a href="#"> {{event.user}} </a> on {{event.created}}</em>
+</div>
+</div>
+
+<div class="panel-footer">
+
+<div class="btn-group btn-group-xs">
+<button class="btn btn-success e-get" data-shell="#modalContent"  type="button"
+data-show="" data-target="#modal" data-toggle="modal" 
+><span class="glyphicon glyphicon-comment"></span> 
+{% trans "Feedback" %}</button>
+
+<button class="btn btn-warning e-get" data-shell="#modalContent"  type="button"
+data-show="" data-target="#modal" data-toggle="modal" 
+><span class="glyphicon glyphicon-remove"></span> 
+{% trans "Seen" %}</button>
+
+</div>
+</div>
+
+
+
+
+
+

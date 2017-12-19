@@ -1,0 +1,64 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load listutils %}
+{% load static %}
+
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+{% block head %}
+<h4>{{organization.name}}'s Members  </h4>
+{% endblock %}
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+
+{% for ind in users %}
+<img  class="pull-left" src="{% static ind.avatar %}" width="40" height="40"/> 
+
+<p>
+
+<a href="#" data-show="{% url 'core_app:list-user-tags' ind.id %}"
+data-shell="#modalContent" 
+data-toggle="modal" 
+class="e-get">
+<span class="glyphicon glyphicon-cog"></span> {{ind.name}}  </a>
+
+<br>
+<a href="#"> {{ind.email}} </a> 
+</p>
+
+{% empty %}
+<p> ... </p>
+{% endfor %}
+</div>
+
+<hr>
+
+<form id="bind-user-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.status  size='md' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+
+</div>
+
+
+
+
+

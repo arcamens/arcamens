@@ -1,0 +1,119 @@
+{% load i18n %}
+{% load listutils %}
+{% load bootstrap3 %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>  {{organization.name}}'s Events <span class="badge">{{events.count}}</span></h4>
+</div>
+
+<div class="modal-body">
+<div class="container-fluid pre-scrollable">
+
+{% for ind in events %}
+<div id="event-{{ind.id}}">
+{% if ind.ecreatelist %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatelist.get_absolute_url}}");
+});
+</script>
+{% elif ind.ecreatefork %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatefork.get_absolute_url}}");
+});
+</script>
+
+{% elif ind.ecreatecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatecard.get_absolute_url}}");
+});
+</script>
+{% elif ind.erelatecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.erelatecard.get_absolute_url}}");
+});
+</script>
+{% elif ind.eunrelatecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunrelatecard.get_absolute_url}}");
+});
+</script>
+
+{% elif ind.ecreatecomment %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatecomment.get_absolute_url}}");
+});
+</script>
+{% elif ind.eupdatecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatecard.get_absolute_url}}");
+});
+</script>
+{% elif ind.edeletecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletecard.get_absolute_url}}");
+});
+</script>
+{% elif ind.earchivecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.earchivecard.get_absolute_url}}");
+});
+</script>
+{% elif ind.ebindboarduser %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ebindboarduser.get_absolute_url}}");
+});
+</script>
+{% elif ind.ebindcardworker %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ebindcardworker.get_absolute_url}}");
+});
+</script>
+{% elif ind.eunbindcardworker %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunbindcardworker.get_absolute_url}}");
+});
+</script>
+
+{% elif ind.eunbindboarduser %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunbindboarduser.get_absolute_url}}");
+});
+</script>
+
+{% endif %}
+</div>
+{% endfor %}
+</div>
+
+<br>
+{% bootstrap_form form layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</div>
+
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
+
+
+
+
+
+

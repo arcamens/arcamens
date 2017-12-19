@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load listutils %}
+
+{% include 'board_app/list-pins.html' %}
+
+<div class="row">
+
+<div class="col-sm-3">
+{% include "list_app/list-ancestor.html" %}
+</div>
+
+{% for ind in lists|slice:":3" %}
+<div class="col-sm-3">
+<div id="list-{{ind.id}}">
+<script>
+$(document).ready(function() {
+$('#list-{{ind.id}}').load("{% url 'list_app:list' ind.id %}");
+});
+</script>
+</div>
+
+</div>
+{% endfor %}
+</div>
+
+{% for indi in lists|slice:"3:"|partition:"4" %}
+<div class="row">
+{% for indj in indi %}
+<div class="col-sm-3">
+<div id="list-{{indj.id}}">
+
+<script>
+$(document).ready(function() {
+$('#list-{{indj.id}}').load("{% url 'list_app:list' indj.id %}");
+});
+</script>
+
+</div>
+</div>
+{% endfor %}
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

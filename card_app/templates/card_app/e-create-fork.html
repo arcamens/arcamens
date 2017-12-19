@@ -1,0 +1,41 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child0.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{event.child0.label|truncatechars:20}} </a> 
+
+forked on <a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor.name}} </a>  by 
+
+from 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child1.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child1|truncatechars:20}}
+</a>
+
+by
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+{% extends 'board_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child0.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{event.child0.label|truncatechars:20}} </a> 
+
+on
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor0.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor0.name}} </a>   
+
+unrelated to 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child1.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child1|truncatechars:20}}
+</a>
+
+on
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor1.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor1.name}} </a>   
+
+by
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

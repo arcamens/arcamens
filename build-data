@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+
+import os
+import django
+# import pika
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
+django.setup()
+
+from timeline_app.models import OpusService
+free_service = OpusService.objects.create(name='Free Service', paid=False)
+
+paid_service = OpusService.objects.create(name='Paid Service', paid=True, max_users=100)
+
+# your imports, e.g. Django models
+from django.contrib.auth.models import User
+User.objects.create_superuser('admin', 'admin@example.com', 'pass')
+
+# connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+# channel    = connection.channel()
+
+from core_app.models import User
+from timeline_app.models import Opus
+from timeline_app.models import Timeline, TimelineFilter
+
+from board_app.models import Labor
+from card_app.models import Card
+from board_app.models import Board
+from list_app.models import List
+from card_app.models import Card
+
+organization0 = Opus.objects.create(name='Arcamens' )
+# channel.exchange_declare(exchange=str(organization0.id), exchange_type='direct')
+
+user0  = User.objects.create(name='Victor Porton', email='porton@narod.ru', password='111', default=organization0)
+# queue0 = channel.queue_declare(queue=str(user0.id), durable=True)
+user0.service = free_service
+organization0.owner = user0
+organization0.save()
+user0.organizations.add(organization0)
+
+user1 = User.objects.create(name='Iury de oliveira', email='ioliveira@id.uff.br', password='111', default=organization0)
+# queue1 = channel.queue_declare(queue=str(user1.id), durable=True)
+user1.service = free_service
+
+user1.organizations.add(organization0)
+
+organization1 = Opus.objects.create(name='Job-lab')
+# channel.exchange_declare(exchange=str(organization1.id), exchange_type='direct')
+
+organization1.owner = user1
+organization1.save()
+
+user0.organizations.add(organization1)
+
+organization2 = Opus.objects.create(name='Splittask')
+organization2.owner = user1
+organization2.save()
+
+user0.organizations.add(organization2)
+# connection.close()
+
+organization3 = Labor.objects.create(name='Alpha')
+organization3.owner = user1
+organization3.save()
+user1.organizations.add(organization3)
+user1.default=organization3
+user1.save()
+
+board = Board.objects.create(organization=organization3, owner=user1, name='Alpha')
+board.members.add(user1)
+
+list = List.objects.create(owner=user1, name='Alpha', ancestor=board)
+from random import randint
+
+label= 'This is a card label and it should be used with caution.'
+
+for ind in range(30):
+    Card.objects.create(owner=user1, 
+        label=label * randint(0, 10), ancestor=list)
+
+
+
+
+
+
+

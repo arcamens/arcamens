@@ -1,0 +1,48 @@
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^list-cards/(?P<list_id>.+)/', views.ListCards.as_view(), name='list-cards'),
+    url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
+    url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
+    url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
+    url(r'^create-fork/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
+    url(r'^create-fork/(?P<card_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
+    url(r'^attach-image/(?P<card_id>.+)/', views.AttachImage.as_view(), name='attach-image'),
+    url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
+    url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
+    url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
+    url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
+    url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
+    url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
+    url(r'^e-create-card/(?P<event_id>.+)/', views.ECreateCard.as_view(), name='e-create-card'),
+    url(r'^e-create-fork/(?P<event_id>.+)/', views.ECreateFork.as_view(), name='e-create-fork'),
+    url(r'^e-update-card/(?P<event_id>.+)/', views.EUpdateCard.as_view(), name='e-update-card'),
+    url(r'^e-delete-card/(?P<event_id>.+)/', views.EDeleteCard.as_view(), name='e-delete-card'),
+    url(r'^e-relate-card/(?P<event_id>.+)/', views.ERelateCard.as_view(), name='e-relate-card'),
+    url(r'^e-unrelate-card/(?P<event_id>.+)/', views.EUnrelateCard.as_view(), name='e-unrelate-card'),
+
+    url(r'^e-bind-card-worker/(?P<event_id>.+)/', views.EBindCardWorker.as_view(), name='e-bind-card-worker'),
+    url(r'^e-unbind-card-worker/(?P<event_id>.+)/', views.EUnbindCardWorker.as_view(), name='e-unbind-card-worker'),
+    url(r'^archive-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.ArchiveCard.as_view(), name='archive-card'),
+    url(r'^e-archive-card/(?P<event_id>.+)/', views.EArchiveCard.as_view(), name='e-archive-card'),
+    url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
+    url(r'^copy-card/(?P<card_id>.+)/', views.CopyCard.as_view(), name='copy-card'),
+    url(r'^setup-card-filter/(?P<list_id>.+)', views.SetupCardFilter.as_view(), name='setup-card-filter'),
+    url(r'^manage-card-workers/(?P<card_id>.+)/', views.ManageCardWorkers.as_view(), name='manage-card-workers'),
+    url(r'^bind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.BindCardWorker.as_view(), name='bind-card-worker'),
+    url(r'^unbind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.UnbindCardWorker.as_view(), name='unbind-card-worker'),
+    url(r'^list-tasks/', views.ListTasks.as_view(), name='list-tasks'),
+    url(r'^pin-card/(?P<card_id>.+)/', views.PinCard.as_view(), name='pin-card'),
+    url(r'^relate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.RelateCard.as_view(), name='relate-card'),
+    url(r'^unrelate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.UnrelateCard.as_view(), name='unrelate-card'),
+    url(r'^manage-card-relations/(?P<card_id>.+)/', views.ManageCardRelations.as_view(), name='manage-card-relations'),
+
+]
+
+
+
+
+
+
+

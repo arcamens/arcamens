@@ -1,0 +1,40 @@
+
+{% extends "list_app/create-list.html" %}
+{% load i18n %}
+{% block title %}
+<h4> Update {{list.name}} </h4>
+{% endblock %}
+
+
+{% block buttons %}
+<button  type="button" 
+data-form="#form-list-data" 
+data-shell="#main-view" 
+data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" 
+data-show="{% url 'list_app:update-list' list.id %}"
+class="btn btn-default e-post"> 
+{% trans "Update" %}
+</button>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

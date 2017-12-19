@@ -1,0 +1,66 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> 
+
+<!-- Should open a page for attaching the user to new organizations -->
+<span class="glyphicon glyphicon-tags"></span> {{user.name}}'s Tags </h5>
+</div>
+
+<div class="modal-body">
+
+<h5>  
+<a style="font-size:110%" href="#" 
+class="e-get" data-shell="#modalContent"  
+data-show="{% url 'timeline_app:bind-tag' user.id %}"> 
+<span class="glyphicon glyphicon-plus"></span> </a>
+
+Tags </h5>
+
+<div class="pre-scrollable">
+{% for ind in tags %}
+<p>
+<a class="e-get"
+data-shell="#modalContent" 
+data-show="{% url 'timeline_app:unbind-user-tag' ind.id user.id %}"
+style="color:red;" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> </a> 
+
+<a class="e-get"
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-show=""
+href="#"> 
+{{ind.name}}</a> </p>
+{% empty %}
+<p> ... </p>
+
+{% endfor %}
+</div>
+
+</div>
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" 
+data-shell="#modalContent" 
+data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' organization.id  %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+{% endblock %}
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+
+</div>
+
+
+
+
+
+
+
+
+

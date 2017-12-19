@@ -1,0 +1,68 @@
+{% load i18n %}
+
+<div class="panel panel-defaul list-ancestor" >
+<div class="panel-body text-center">
+<p> <em > 
+<b>
+<span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} 
+</b>
+<span class="badge">{{lists.count}}/{{total.count}}</span>
+<br>
+<span class="text-info"> {{board.description}} </span>
+
+</p>
+
+<div class="btn-group btn-group-xs">
+
+<button class="btn btn-success e-get" 
+data-shell="#main-view" type="button"
+data-show="{% url 'board_app:list-boards' %}">
+<span class="glyphicon glyphicon-arrow-up"></span> Up
+</button>
+
+<button class="btn btn-warning e-get" 
+data-shell="#modalContent" type="button"
+data-show="{% url 'list_app:create-list' board.id %}"  
+data-callback="$('#modal').modal('toggle');">
+<span class="glyphicon glyphicon-plus"></span> 
+{% trans "List" %}
+</button>
+
+<button class="btn btn-default e-get" 
+data-shell="#modalContent" type="button"
+data-show="{% url 'list_app:setup-list-filter' board.id %}"  
+data-callback="$('#modal').modal('toggle');">
+{% if filter.status %}
+<span class="glyphicon glyphicon-filter"></span> 
+Filter
+{% else %}
+<strike> 
+<span class="glyphicon glyphicon-filter"></span> 
+Filter </strike>
+
+{% endif %}
+
+</button>
+
+{% include 'board_app/board-menu.html' %}
+
+</div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="form-post-data" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+{% bootstrap_field form.label  size='md' %}
+</div>
+
+<div class="modal-body">
+{% csrf_token %}
+
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div id="div-attachments">
+</div>
+<script>
+$('#div-attachments').load('{% url 'post_app:attach-file' post.id %}');
+</script>
+
+
+</div>
+</form>
+
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" data-form="#form-post-data" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'post_app:create-post' ancestor.id post.id %}"
+class="btn btn-default e-post"> 
+     {% trans "Create" %}
+</button>
+
+{% endblock %}
+</div>
+

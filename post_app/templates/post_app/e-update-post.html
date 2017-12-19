@@ -1,0 +1,37 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}"
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label}} </a> updated on 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
+
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

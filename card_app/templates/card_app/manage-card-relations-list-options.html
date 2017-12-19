@@ -1,0 +1,33 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<div class="pre-scrollable">
+
+{% for ind in included %}
+<p id="unrelate-card{{ind.id}}" style="font-size:80%">
+<a class="e-get" style="color:red"
+data-callback="$('#unrelate-card{{ind.id}}').remove();"
+data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span></a> {{ind.label}}
+</p>
+{% endfor %}
+
+{% for ind in excluded %}
+<p id="relate-card{{ind.id}}" style="font-size:80%">
+<a class="e-get" 
+data-callback="$('#relate-card{{ind.id}}').remove();"
+data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span></a> {{ind.label}}
+</p>
+
+{% endfor %}
+
+</div>
+<br> 
+
+<form id="relate-card-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+

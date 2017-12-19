@@ -1,0 +1,60 @@
+{% load i18n %}
+
+<button type="button" onclick="$('#eventsBell').css('color', 'white');" class="navbar-toggle e-get" 
+data-show="{% url 'board_app:list-events' %}" data-toggle="collapse"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#modalContent"
+href="#"> <span id="eventsBell" style="color:white;">
+<span class="glyphicon glyphicon-bell"></span>  </span></button>
+
+<button type="button" class="navbar-toggle e-get" 
+data-show="{% url 'board_app:find' %}" data-toggle="collapse"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#modalContent"
+href="#"> 
+<span class="glyphicon glyphicon-search"></span>  </button>
+
+<button type="button" class="navbar-toggle e-get" 
+data-show="{% url 'card_app:list-tasks' %}" data-toggle="collapse"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#modalContent"
+href="#"> 
+<span class="glyphicon glyphicon-tasks"></span>  </button>
+
+<div class="collapse navbar-collapse" id="myNavbar">
+
+<ul class="nav navbar-nav">
+
+<li><a class="hidden-xs e-get"  
+data-show="{% url 'board_app:list-events' %}" 
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-bell"></span> 
+{% trans "Events" %}</a></li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:list-users' user.default.id %}" 
+data-toggle="modal" data-target="#modal">
+<span class="glyphicon glyphicon-user"></span> Members 
+</a>
+</li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:update-organization' user.default.id %}" 
+data-toggle="modal" data-target="#modal">
+<span class="glyphicon glyphicon-cog"></span> Settings 
+</a>
+</li>
+
+
+</ul>
+
+{% include "core_app/navbar-context-dropdown.html" %}
+
+
+
+

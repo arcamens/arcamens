@@ -1,0 +1,42 @@
+
+{% extends "board_app/create-board.html" %}
+{% load i18n %}
+
+{% block title %}
+<h4> Update Board </h4>
+{% endblock %}
+
+
+{% block buttons %}
+<button  type="button" 
+data-form="#form-board-data" 
+data-shell="#main-view" 
+data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" 
+data-show="{% url 'board_app:update-board' board.id %}"
+class="btn btn-default e-post"> 
+{% trans "Update" %}
+</button>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

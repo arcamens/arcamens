@@ -1,0 +1,7 @@
+Django==1.10
+django-bootstrap3
+pillow
+markdown
+requests
+paho-mqtt
+django-blowdb

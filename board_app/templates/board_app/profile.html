@@ -1,0 +1,35 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4> {{user.name}} </h4>
+</div>
+
+<div class="modal-body">
+<h4> Labors </h4>
+
+{% for ind in organizations %}
+<p> <a href="#" target="_blank"> 
+<span class="glyphicon glyphicon-flag"></span>
+{{ind.name}}</a> </p>
+{% endfor %}
+
+<h4> {{user.name}}'s boards </h4>
+
+{% for ind in boards %}
+<p> <a href="#" target="_blank"> 
+<span class="glyphicon glyphicon-eye-open"></span> 
+{{ind.name}}</a> </p>
+{% endfor %}
+
+
+<div class="modal-footer">
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
+
+
+

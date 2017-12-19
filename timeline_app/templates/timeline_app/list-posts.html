@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% include "timeline_app/list-posts-menu-timeline.html" %}
+<br>
+
+{% for ind in posts %}
+    <div id="post-{{ind.id}}">
+            <script>
+            $(document).ready(function() {
+                $('#post-' + {{ind.id}}).load("{{ind.get_absolute_url}}");
+            });
+            </script>
+    </div>
+{% endfor %}
+
+
+

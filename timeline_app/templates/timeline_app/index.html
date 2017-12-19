@@ -1,0 +1,45 @@
+{% extends 'core_app/index.html' %}
+
+<!DOCTYPE html>
+{% block initializer %}
+  <script>
+        $(document).ready(function() {
+            $('#main-view').load("{% url 'timeline_app:list-timelines'  %}");
+        });
+  </script>
+</head>
+{% endblock %}
+
+{% block navbar_tools %}
+{% include "timeline_app/menu-navbar.html" %}
+{% endblock %}
+
+<div class="clearfix"></div>
+
+{% block main %}
+<div id="main-view" class="container-fluid" >
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

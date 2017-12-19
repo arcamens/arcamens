@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+<div class="panel-heading" style="font-size:80%">
+
+<div style="word-wrap: break-word;"> 
+<span class="glyphicon glyphicon-file"></span> 
+
+by <a class="e-get" href="#"
+data-show="{% url 'core_app:list-user-tags' card.owner.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" > 
+{{card.owner.name}} </a> at {{card.created}}  </div> </div>
+
+<div class="panel-body">
+<h4> {{card.label}}.. </h4>
+{{card.html | safe}}
+</div>
+</div>
+
+
+

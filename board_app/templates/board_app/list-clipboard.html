@@ -1,0 +1,55 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>Clipboard  </h4>
+</div>
+
+<div class="modal-body">
+
+<h4> Lists </h4>
+
+<div class="pre-scrollable">
+
+{% for ind in lists %}
+<a style="color:red;font-size:80%" href="#"><span class="glyphicon glyphicon-remove"></span></a>  
+<em> {{ind.name}} </em>
+<br>
+
+{% empty %}
+<p> ... </p>
+{% endfor %}
+
+</div>
+
+<h4> Cards </h4>
+
+<div class="pre-scrollable">
+{% for ind in cards %}
+
+<a style="color:red;font-size:80%" href="#"><span class="glyphicon glyphicon-remove"></span></a>  
+<em> {{ind.label}} </em>
+<br>
+{% empty %}
+<p> ... </p>
+{% endfor %}
+</div>
+
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-form="#bind-worker-form" 
+data-shell="#modalContent" 
+data-shell-error="#modalContent" data-show=""
+class="btn btn-default e-get"> {% trans "Clear" %} </button>
+
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>
+
+
+
+
+

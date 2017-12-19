@@ -1,0 +1,39 @@
+
+{% extends "timeline_app/create-timeline.html" %}
+{% load i18n %}
+
+
+{% block buttons %}
+
+<button  type="button" data-shell="#main-view" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
+class="btn btn-default e-get"> 
+{% trans "Delete" %}
+</button>
+
+<button  type="button" data-form="#form-timeline-data" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'timeline_app:update-timeline' timeline.id %}"
+class="btn btn-default e-post"> 
+{% trans "Update" %}
+</button>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

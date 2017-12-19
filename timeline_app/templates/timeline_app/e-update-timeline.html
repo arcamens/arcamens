@@ -1,0 +1,21 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+Timeline <a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
+{{event.timeline.name}} </a>  updated by 
+
+<a class="e-get" 
+data-show=""
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+href="#"> 
+{{event.user}} </a> on {{event.created}}
+
+{% endblock %}
+
+
+

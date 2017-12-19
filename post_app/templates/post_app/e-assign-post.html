@@ -1,0 +1,21 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<span class="glyphicon glyphicon-user"></span> User {{user.name}} assigned to
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+{{event.post.label}} </a>  by 
+
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+

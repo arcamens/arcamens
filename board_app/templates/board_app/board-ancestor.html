@@ -1,0 +1,65 @@
+{% load i18n %}
+
+<div class="panel panel-default" style="font-size:80%; " >
+
+<div class="panel-body text-center" style="background:#DCD6D8;">
+
+<p style="font-size:110%"><b> <em > 
+<span class="glyphicon glyphicon-flag"></span> Organization </em> {{user.default.name}} 
+
+</b>
+<span class="badge">{{boards.count}}/{{total.count}}</span>
+
+</p>
+
+<div class="btn-group btn-group-xs">
+
+
+<button class="btn btn-warning e-get" 
+data-shell="#modalContent" type="button"
+data-show="{% url 'board_app:create-board' %}"  
+data-callback="$('#modal').modal('toggle');" >
+<span class="glyphicon glyphicon-plus"></span> 
+{% trans "Board" %}
+</button>
+
+<button class="btn btn-default e-get" 
+data-shell="#modalContent" type="button"
+data-show="{% url 'board_app:setup-board-filter' organization.id %}"  
+data-callback="$('#modal').modal('toggle');">
+{% if filter.status %}
+<span class="glyphicon glyphicon-filter"></span> 
+Filter
+{% else %}
+<strike> 
+<span class="glyphicon glyphicon-filter"></span> 
+Filter </strike>
+
+{% endif %}
+
+</button>
+
+{% include 'board_app/organization-menu.html' %}
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+Timeline {{event.timeline_name}} deleted by 
+
+<a class="e-get" 
+data-show=""
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+href="#"> 
+{{event.user}} </a> on {{event.created}}
+
+{% endblock %}
+
+
+
+

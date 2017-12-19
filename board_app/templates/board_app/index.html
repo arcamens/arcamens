@@ -1,0 +1,42 @@
+{% extends 'core_app/index.html' %}
+
+<!DOCTYPE html>
+{% load i18n %}
+
+{% block initializer %}
+<script>
+$(document).ready(function() {
+    $('#main-view').load("{% url 'board_app:list-boards' %}");
+});
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+
+$(document).ready(function(){
+$('body').tooltip({
+    selector: '[data-toggle="tooltip"]'
+});
+});
+</script>
+
+{% endblock %}
+
+{% block navbar_tools %}
+
+{% include "board_app/menu-navbar.html" %}
+
+{% endblock %}
+
+{% block main %}
+<div id="main-view" class="container-fluid">
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+

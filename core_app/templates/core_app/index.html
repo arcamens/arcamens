@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="en">
+<head>
+<title>Arcamens</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/jquery-ui.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/jquery-ui.js"> </script>
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/static/input-extensions.js"> </script>
+<script src="/static/e-get.js"> </script>
+<script src="/static/e-post.js"> </script>
+<script src="/static/c-get.js"> </script>
+<link rel="stylesheet" href="/static/main.css">
+
+{% block initializer %}
+
+{% endblock %}
+
+</head>
+
+<body style="background-color:#C7C7C7;">
+<nav class="navbar navbar-inverse" style="background-color:#071152">
+<div class="container-fluid">
+<div class="navbar-header">
+<a class="navbar-brand" href="#"><span class="glyphicon glyphicon-eye-open"></span> Arcamens</a>
+</div>
+
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span> 
+</button>
+
+{% block navbar_tools %}
+{% endblock %}
+
+</div>
+</div>
+
+</nav>
+
+
+{% block navbar %}
+
+{% endblock %}
+
+<div class="clearfix"></div>
+
+{% block main %}
+{% endblock %}
+
+
+<div class="modal fade" id="modal" role="dialog">
+<div class="modal-dialog modal-sm">
+<div id="modalContent" class="modal-content">
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="view-data-modal" role="dialog">
+<div class="modal-dialog modal-lg">
+<div id="view-data-modalContent" class="modal-content">
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="bigModal" role="dialog">
+<div class="modal-dialog modal-lg">
+<div id="bigModalContent" class="modal-content">
+</div>
+</div>
+</div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+

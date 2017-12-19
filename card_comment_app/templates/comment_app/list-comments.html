@@ -1,0 +1,71 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">CardComments on {{card.label|slice:":30"}}.. 
+<span class="badge">{{records.count}}</span>
+
+</h4>
+</div>
+
+<div class="modal-body pre-scrollable">
+
+{% for ind in records %}
+<div style="word-wrap: break-word;"> 
+
+<p> <a href="#" title="{{ind.created}}"> {{ind.user.name}}: </a>
+{{ind.data}} 
+{% if ind.file %} 
+<br>
+<span style="color:red"> Attachment: </span>
+<a  href="{% static ind.file %}"  target="_blank"> {{ind.file.name}} </a> 
+{% endif %}
+<br>
+<em class="text-info" style="font-size:70%; "> 
+On {{ind.created}}</em>
+
+</p>
+
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="modal-footer" >
+<form id="form-comment-data" enctype="multipart/form-data" onsubmit="return false;">
+{% csrf_token %}
+
+<div id="inputCardComment">
+{% bootstrap_field form.data layout='inline' size='sm' %}
+{% bootstrap_field form.file layout='inline' size='sm' %}
+
+</div>
+
+<button  id="sendCardComment" type="button" 
+data-form="#form-comment-data" 
+data-shell="#bigModalContent" 
+data-shell-error="#bigModalContent" 
+data-show="{% url 'comment_app:create-comment' card.id %}"
+class="btn btn-default e-post">  {% trans "Send" %} </button>
+
+</form>
+
+<script>
+$('#inputCardComment').keypress(function(e){
+    if(e.keyCode == 13)
+        $('#sendCardComment').click();
+    e.stopPropagation();
+});
+$('#id_data').focus();
+</script>
+
+
+</div>
+
+
+
+
