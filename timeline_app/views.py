@@ -61,7 +61,8 @@ class ListAllPosts(GuardianView):
         ancestor__in = user.timelines.all())
 
         return render(request, 'timeline_app/list-all-posts.html', 
-        {'user':user, 'posts':posts, 'total': total, 'filter': filter})
+        {'user':user, 'posts':posts, 'total': total, 'filter': filter, 
+        'organization': user.default})
 
 class CreateTimeline(GuardianView):
     """
@@ -424,6 +425,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
