@@ -212,7 +212,7 @@ class BindTag(GuardianView):
         form = forms.BindTagForm(request.POST)
 
         if not form.is_valid():
-            return render(request, 'timeline_app/bind-tag.html',
+            return render(request, 'core_app/bind-tag.html',
                   {'form': form, 'user': user}, status=400)
 
         me = models.User.objects.get(id=self.user_id)
@@ -232,6 +232,7 @@ class UnbindUserTag(GuardianView):
 
         return redirect('core_app:list-user-tags', 
         user_id=user_id)
+
 
 
 

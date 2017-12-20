@@ -46,6 +46,8 @@ class TagForm(forms.ModelForm):
         model  = models.Tag
         exclude = ('organization', )
 
+class BindTagForm(forms.Form):
+    name = forms.CharField()
 
 
 

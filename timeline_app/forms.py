@@ -32,11 +32,9 @@ class FindEventForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 
-class BindTagForm(forms.Form):
-    name = forms.CharField()
-
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
 
 
 

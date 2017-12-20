@@ -15,7 +15,7 @@
 <h5>  
 <a style="font-size:110%" href="#" 
 class="e-get" data-shell="#modalContent"  
-data-show="{% url 'timeline_app:bind-tag' user.id %}"> 
+data-show="{% url 'core_app:bind-tag' user.id %}"> 
 <span class="glyphicon glyphicon-plus"></span> </a>
 
 Tags </h5>
@@ -25,7 +25,7 @@ Tags </h5>
 <p>
 <a class="e-get"
 data-shell="#modalContent" 
-data-show="{% url 'timeline_app:unbind-user-tag' ind.id user.id %}"
+data-show="{% url 'core_app:unbind-user-tag' ind.id user.id %}"
 style="color:red;" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a> 
 
@@ -55,6 +55,7 @@ class="btn btn-default e-get"> {% trans "Back" %} </button>
 </button>
 
 </div>
+
 
 
 
