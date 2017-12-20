@@ -7,11 +7,8 @@ data-shell="#modalContent"
 href="#"> <span id="eventsBell" style="color:white;">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
-<button type="button" class="e-get navbar-toggle" style="color:white;"
-data-shell="#main-view" data-toggle="collapse"
-data-show="{% url 'timeline_app:list-timelines' %}">
-<span class="glyphicon glyphicon-home"></span> </button>
-
+<a href="{% url 'board_app:index' %}" class="navbar-toggle btn btn-info" role="button">
+<span class="glyphicon glyphicon-th"></span>  </a>
 
 <div class="collapse navbar-collapse" id="myNavbar">
 <ul class="nav navbar-nav">
@@ -88,6 +85,7 @@ function onMessageArrived(message) {
     alertEvent();
 }
 </script>
+
 
 
 

@@ -7,19 +7,8 @@ data-shell="#modalContent"
 href="#"> <span id="eventsBell" style="color:white;">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
-<button type="button" class="navbar-toggle e-get" 
-data-show="{% url 'board_app:find' %}" data-toggle="collapse"
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#modalContent"
-href="#"> 
-<span class="glyphicon glyphicon-search"></span>  </button>
-
-<button type="button" class="navbar-toggle e-get" 
-data-show="{% url 'card_app:list-tasks' %}" data-toggle="collapse"
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#modalContent"
-href="#"> 
-<span class="glyphicon glyphicon-tasks"></span>  </button>
+<a href="{% url 'timeline_app:index' %}" class="navbar-toggle btn btn-info" role="button">
+<span class="glyphicon glyphicon-eye-open"></span>  </a>
 
 <div class="collapse navbar-collapse" id="myNavbar">
 
@@ -59,6 +48,7 @@ data-toggle="modal" data-target="#modal">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 
