@@ -82,7 +82,7 @@ class User(UserMixin, models.Model):
 
 class Event(models.Model):
     users = models.ManyToManyField('core_app.User', null=True,  
-    related_name='labor_events', blank=True, symmetrical=False)
+    related_name='events', blank=True, symmetrical=False)
 
     organization = models.ForeignKey('Organization', 
     related_name='events', null=True, blank=True)
@@ -92,6 +92,7 @@ class Event(models.Model):
 
     def __str__(self):
         return 'Event'
+
 
 
 

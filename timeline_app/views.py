@@ -261,10 +261,10 @@ class ListEvents(GuardianView):
 
     def get(self, request):
         user   = core_app.models.User.objects.get(id=self.user_id)
-        events = user_events.filter(organization=user.default).order_by('-created')
+        events = user.events.filter(organization=user.default).order_by('-created')
 
         # Missing dynamic filter.
-        total = user_events.filter(organization=user.default).order_by('-created')
+        total = user.events.filter(organization=user.default).order_by('-created')
 
         form = forms.FindEventForm()
         return render(request, 'timeline_app/list-events.html',
@@ -498,6 +498,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
