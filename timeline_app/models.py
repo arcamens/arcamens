@@ -110,18 +110,6 @@ class TimelineFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization',)
 
-class Tag(models.Model):
-    name = models.CharField(null=True,
-    blank=False, max_length=256)
-
-    description = models.CharField(null=True,
-    blank=False, max_length=256)
-
-    # When the organization is deleted all its tags
-    # are deleted too.
-    organization = models.ForeignKey(
-    'core_app.Organization', null=True, blank=True)
-
 class EDeleteTimeline(Event, EDeleteTimelineMixin):
     timeline_name = models.CharField(null=True,
     blank=False, max_length=50)
@@ -145,6 +133,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

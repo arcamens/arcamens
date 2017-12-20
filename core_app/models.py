@@ -35,7 +35,7 @@ class User(UserMixin, models.Model):
     null=True, blank=True, symmetrical=False)
 
     tags = models.ManyToManyField(
-    'timeline_app.Tag', related_name='users', 
+    'Tag', related_name='users', 
     null=True, blank=True, symmetrical=False)
 
     clipboard = models.ManyToManyField(
@@ -93,9 +93,17 @@ class Event(models.Model):
     def __str__(self):
         return 'Event'
 
+class Tag(models.Model):
+    name = models.CharField(null=True,
+    blank=False, max_length=256)
 
+    description = models.CharField(null=True,
+    blank=False, max_length=256)
 
-
+    # When the organization is deleted all its tags
+    # are deleted too.
+    organization = models.ForeignKey(
+    'core_app.Organization', null=True, blank=True)
 
 
 

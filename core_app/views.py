@@ -171,6 +171,67 @@ class ListEvents(GuardianView):
         {'events': events, 'user': user, 
         'form': form, 'organization': user.default})
 
+class ListTags(GuardianView):
+    def get(self, request):
+        user      = models.User.objects.get(id=self.user_id)
+        tags = models.Tag.objects.filter(organization=user.default)
+        form = forms.FindTagForm()
+
+        return render(request, 'core_app/list-tags.html', 
+        {'tags': tags, 'form': form, 'user': user, 
+        'organization': user.default})
+
+class CreateTag(GuardianView):
+    def get(self, request):
+        user     = models.User.objects.get(id=self.user_id)
+        form = forms.TagForm()
+
+        return render(request, 'core_app/create-tag.html', 
+        {'form':form})
+
+    def post(self, request):
+        user = models.User.objects.get(id=self.user_id)
+        form = forms.TagForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'core_app/create-tag.html',
+                        {'form': form, 'user': user}, status=400)
+        record       = form.save(commit=False)
+        record.organization = user.default
+        record.save()
+        return redirect('core_app:list-tags')
+
+class BindTag(GuardianView):
+    def get(self, request, user_id):
+        user = models.User.objects.get(id=user_id)
+        return render(request, 'timeline_app/bind-tag.html', 
+        {'user': user, 'form':forms.BindTagForm()})
+
+    def post(self, request, user_id):
+        user = models.User.objects.get(id=user_id)
+        form = forms.BindTagForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'timeline_app/bind-tag.html',
+                  {'form': form, 'user': user}, status=400)
+
+        me = models.User.objects.get(id=self.user_id)
+        tag = models.Tag.objects.get(
+        organization=me.default, name=form.cleaned_data['name'])
+        user.tags.add(tag)
+
+        return redirect('core_app:list-user-tags', 
+        user_id=user.id)
+
+class UnbindUserTag(GuardianView):
+    def get(self, request, tag_id, user_id):
+        user = models.User.objects.get(id=user_id)
+        tag = models.Tag.objects.get(id=tag_id)
+        tag.users.remove(user)
+        tag.save()
+
+        return redirect('core_app:list-user-tags', 
+        user_id=user_id)
 
 
 

@@ -24,14 +24,11 @@ urlpatterns = [
     url(r'^manage-user-timelines/(?P<user_id>.+)/', views.ManageUserTimelines.as_view(), name='manage-user-timelines'),
     url(r'^manage-timeline-users/(?P<timeline_id>.+)/', views.ManageTimelineUsers.as_view(), name='manage-timeline-users'),
     url(r'^disabled-organization/(?P<user_id>.+)/', views.DisabledOrganization.as_view(), name='disabled-organization'),
-    url(r'^list-tags/', views.ListTags.as_view(), name='list-tags'),
-    url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
-    url(r'^bind-tag/(?P<user_id>.+)/', views.BindTag.as_view(), name='bind-tag'),
-    url(r'^unbind-user-tag/(?P<tag_id>.+)/(?P<user_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
     url(r'^bind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.BindTimelineUser.as_view(), name='bind-timeline-user'),
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 

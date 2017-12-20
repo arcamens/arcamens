@@ -12,6 +12,10 @@ Create Organization
 </div>
 
 <div class="modal-body">
+{% block body %}
+
+{% endblock %}
+
 <form id="form-organization-data" enctype="multipart/form-data">
 {% csrf_token %}
 
@@ -35,6 +39,7 @@ class="btn btn-default e-post">  {% trans "Create" %} </button>
 {% endblock %}
 
 </div>
+
 
 
 

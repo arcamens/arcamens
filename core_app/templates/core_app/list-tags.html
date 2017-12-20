@@ -9,7 +9,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h4>  
 <a class="e-get"
-data-show="{% url 'timeline_app:create-tag' %}"
+data-show="{% url 'core_app:create-tag' %}"
 data-shell="#modalContent"
 href="#"> <span class="glyphicon glyphicon-plus"></span></a>
 {{organization.name}}'s Tags <span class="badge">{{tags.count}}</span></h4>
@@ -36,10 +36,18 @@ No tags.
 </div>
 
 <div class="modal-footer">
+<button  type="button" 
+data-shell="#modalContent" 
+data-show="{% url 'core_app:update-organization' organization.id  %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
+
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
+
 
 
 

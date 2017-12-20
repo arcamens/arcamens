@@ -12,8 +12,13 @@ urlpatterns = [
     url(r'^list-users/(?P<organization_id>.+)', views.ListUsers.as_view(), name='list-users'),
     url(r'^list-user-tags/(?P<user_id>.+)', views.ListUserTags.as_view(), name='list-user-tags'),
     url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
+    url(r'^list-tags/', views.ListTags.as_view(), name='list-tags'),
+    url(r'^bind-tag/(?P<user_id>.+)/', views.BindTag.as_view(), name='bind-tag'),
+    url(r'^unbind-user-tag/(?P<tag_id>.+)/(?P<user_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
+    url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
 
 ]
+
 
 
 

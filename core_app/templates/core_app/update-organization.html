@@ -6,6 +6,16 @@
 Update Organization
 {% endblock %}
 
+{% block body %}
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:list-tags' %}" 
+data-callback="$('#modal').modal('show');">
+<span class="glyphicon glyphicon-tag"></span> Manage Tags
+</a>
+<hr>
+{% endblock %}
+
 {% block formfields %}
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.owner  size='md' %}
@@ -28,6 +38,7 @@ class="btn btn-default e-post">
 </button>
 
 {% endblock %}
+
 
 
 

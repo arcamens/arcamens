@@ -40,20 +40,12 @@ data-show="{% url 'timeline_app:list-clipboard' user.id %}"
 data-callback="$('#modal').modal('show');"
 href="#"><span class="glyphicon glyphicon-magnet"></span> Clipboard</a></li>
 
-<li>
-<a href="#" 
-class="e-get" data-shell="#modalContent" 
-data-show="{% url 'timeline_app:list-tags' %}" 
-data-callback="$('#modal').modal('show');">
-<span class="glyphicon glyphicon-tag"></span> Tags
-</a>
-</li>
-
 <li><a class="e-get" data-shell="#main-view" 
 data-show="{% url 'timeline_app:list-all-posts' user.id %}" 
 href="#"><span class="glyphicon glyphicon-globe"></span> Posts</a></li>
 
 </ul>
+
 
 
 
