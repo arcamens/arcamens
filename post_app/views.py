@@ -186,6 +186,15 @@ class UnassignPostUser(GuardianView):
         post = models.Post.objects.get(id=post_id)
         post.workers.remove(user)
         post.save()
+
+        me = User.objects.get(id=self.user_id)
+
+        event = models.EUnassignPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, user=me, peer=user)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
+
         return HttpResponse(status=200)
 
 class AssignPostUser(GuardianView):
@@ -194,6 +203,14 @@ class AssignPostUser(GuardianView):
         post = models.Post.objects.get(id=post_id)
         post.workers.add(user)
         post.save()
+        me = User.objects.get(id=self.user_id)
+
+        event = models.EAssignPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, user=me, peer=user)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
+
         return HttpResponse(status=200)
 
 
@@ -353,6 +370,24 @@ class BindTag(GuardianView):
 
         return redirect('post_app:post', 
         post_id=post.id)
+
+class EUnassignPost(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EUnassignPost.objects.get(id=event_id)
+        return render(request, 'post_app/e-unassign-post.html', 
+        {'event':event})
+
+class EAssignPost(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EAssignPost.objects.get(id=event_id)
+        return render(request, 'post_app/e-assign-post.html', 
+        {'event':event})
 
 
 

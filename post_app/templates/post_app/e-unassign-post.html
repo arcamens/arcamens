@@ -3,17 +3,17 @@
 
 {% block content %}
 
-<span class="glyphicon glyphicon-user"></span> User {{user.name}} Unassigned from
+User {{user.name}} unassigned from
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 {{event.post.label}} </a>  by 
 
-<span class="glyphicon glyphicon-user"></span>
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 

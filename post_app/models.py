@@ -155,9 +155,39 @@ class EUpdatePost(EUpdatePostMixin, Event):
     related_name='e_update_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
 
+class EAssignPost(Event):
+    """
+    """
 
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_assign_post0', blank=True)
 
+    post = models.ForeignKey('Post', 
+    related_name='e_assign_post1', blank=True)
 
+    peer = models.ForeignKey('core_app.User', 
+    related_name='e_assign_post2', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_app:e-assign-post', 
+                    kwargs={'event_id': self.id})
+
+class EUnassignPost(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_unassign_post0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_unassign_post1', blank=True)
+
+    peer = models.ForeignKey('core_app.User', 
+    related_name='e_unassign_post2', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_app:e-unassign-post', 
+                    kwargs={'event_id': self.id})
 
 
 

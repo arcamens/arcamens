@@ -142,6 +142,18 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletepost.get_absolute_url}}");
 });
 </script>
+{% elif ind.eassignpost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eassignpost.get_absolute_url}}");
+});
+</script>
+{% elif ind.eunassignpost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
+});
+</script>
 
 {% endif %}
 </div>
@@ -160,6 +172,7 @@ $('#event-' + {{ind.id}}).load("{{ind.edeletepost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

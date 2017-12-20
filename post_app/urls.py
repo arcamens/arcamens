@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^e-create-post/(?P<event_id>.+)/', views.ECreatePost.as_view(), name='e-create-post'),
     url(r'^e-update-post/(?P<event_id>.+)/', views.EUpdatePost.as_view(), name='e-update-post'),
     url(r'^e-delete-post/(?P<event_id>.+)/', views.EDeletePost.as_view(), name='e-delete-post'),
+    url(r'^e-unassign-post/(?P<event_id>.+)/', views.EUnassignPost.as_view(), name='e-unassign-post'),
+    url(r'^e-assign-post/(?P<event_id>.+)/', views.EAssignPost.as_view(), name='e-assign-post'),
+
     url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assigments'),
     url(r'^manage-post-workers/(?P<post_id>.+)/', views.ManagePostWorkers.as_view(), name='manage-post-workers'),
     url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
@@ -25,6 +28,7 @@ urlpatterns = [
     url(r'^bind-tag/(?P<post_id>.+)/', views.BindTag.as_view(), name='bind-tag'),
 
 ]
+
 
 
 
