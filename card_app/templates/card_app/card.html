@@ -24,7 +24,6 @@ data-shell="#main-view"  type="button"
 data-show="{% url 'card_app:view-data' card.id %}" >
 <span class="glyphicon glyphicon-file"></span> 
 {% if card.fork %} Fork {% else %} Card {% endif %} {{card.label}}
-{% if card.selected %} (On clipboard) {% endif %}
 </a> 
 
 </div> 
@@ -61,6 +60,7 @@ data-callback="$('#bigModal').modal('toggle');" >
 
 
 </div>
+
 
 
 
