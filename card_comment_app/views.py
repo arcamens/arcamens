@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from board_app.views import GuardianView
 import board_app.models
 import card_app.models
+import core_app.models
 from . import models
 from . import forms
 
@@ -47,6 +48,7 @@ class ECreateCardComment(GuardianView):
         event = models.ECreateCardComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
