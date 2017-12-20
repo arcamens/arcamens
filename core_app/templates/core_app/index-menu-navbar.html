@@ -7,12 +7,14 @@ data-shell="#modalContent"
 href="#"> <span id="eventsBell" style="color:white;">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
-<a href="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
+<a data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
+href="#"
 data-shell="#main-view"
 role="button">
 <span class="glyphicon glyphicon-eye-open"></span>  </a>
 
-<a href="{% url 'board_app:list-boards' %}" class="navbar-toggle btn btn-info e-get" 
+<a data-show="{% url 'board_app:list-boards' %}" class="navbar-toggle btn btn-info e-get" 
+href="#"
 data-shell="#main-view"
 role="button">
 <span class="glyphicon glyphicon-th"></span>  </a>
@@ -50,7 +52,7 @@ data-toggle="modal" data-target="#modal">
 <a data-show="{% url 'timeline_app:list-timelines' %}" class="e-get" 
 href="#"
 data-shell="#main-view">
-<span class="glyphicon glyphicon-eye-open"></span>  </a>
+<span class="glyphicon glyphicon-eye-open"></span>  Lines</a>
 
 
 </li>
@@ -59,7 +61,7 @@ data-shell="#main-view">
 <a data-show="{% url 'board_app:list-boards' %}" class="e-get" 
 data-shell="#main-view"
 href="#">
-<span class="glyphicon glyphicon-th"></span>  </a>
+<span class="glyphicon glyphicon-th"></span>  Boards</a>
 
 </li>
 
