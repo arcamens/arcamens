@@ -34,6 +34,10 @@ class UpdateOrganizationForm(forms.ModelForm):
 class UserSearchForm(forms.Form):
     pattern = forms.CharField(required=False)
 
+class EventSearchForm(forms.Form):
+    pattern = forms.CharField()
+    seen = forms.BooleanField(required=False)
+
 
 
 

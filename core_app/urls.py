@@ -11,8 +11,10 @@ urlpatterns = [
     url(r'^delete-organization/(?P<organization_id>.+)/', views.DeleteOrganization.as_view(), name='delete-organization'),
     url(r'^list-users/(?P<organization_id>.+)', views.ListUsers.as_view(), name='list-users'),
     url(r'^list-user-tags/(?P<user_id>.+)', views.ListUserTags.as_view(), name='list-user-tags'),
+    url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
 
 ]
+
 
 
 

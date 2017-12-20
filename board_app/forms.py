@@ -16,15 +16,12 @@ class BindUsersForm(forms.Form):
     email = forms.EmailField()
     admin = forms.BooleanField(required=False)
 
-class FindEventForm(forms.Form):
-    pattern = forms.CharField()
-    seen = forms.BooleanField(required=False)
-
 class BoardSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
 
 
 

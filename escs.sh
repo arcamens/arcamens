@@ -171,9 +171,19 @@ python manage.py startapp stream_app
 # rename, customer, to user.
 
 cd ~/projects/arcamens.alpha-code
-grep -rl 'board_app.Organization' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Organization/core_app.Organization/g'
+grep -rl 'board_app\.models\.User' --exclude-dir='.git' ./ | xargs sed -i 's/board_app\.models\.User/core_app.models.User/g'
 
-grep -rl 'core_app.Organization' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Organization/core_app.Organization/g'
+grep -rl 'OrganizationEvent' --exclude-dir='.git' ./ | xargs sed -i 's/OrganizationEvent/Event/g'
+
+grep -rl 'board_app.Labor' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Labor/core_app.Organization/g'
+
+grep -rl 'timeline_app.Opus' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app.Opus/core_app.Organization/g'
+
+grep -rl '\.opus' --exclude-dir='.git' ./ | xargs sed -i 's/\.opus//g'
+grep -rl '\.labor' --exclude-dir='.git' ./ | xargs sed -i 's/\.labor//g'
+
+grep -rl 'Labor' --exclude-dir='.git' ./ | xargs sed -i 's/Labor/Organization/g'
+grep -rl 'Opus' --exclude-dir='.git' ./ | xargs sed -i 's/Opus/Organization/g'
 
 cd ~/projects/labor2-code
 
@@ -409,7 +419,7 @@ grep -rl  'card' . | xargs sed -i 's/card/markdown/g'
 
 git rm -r --cached ./*/migrations/
 git rm --cached db.sqlite3
-
+git add .gitignore
 ##############################################################################
 # install django-jdrop.
 cd ~/projects/django-jdrop-code

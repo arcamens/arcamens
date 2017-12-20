@@ -41,9 +41,10 @@ class Index(GuardianView):
 
     def get(self, request):
         user = models.User.objects.get(id=self.user_id)
-
-        # return redirect('timeline_app:index')
-        return redirect('board_app:index')
+        organizations = user.organizations.exclude(id=user.default.id)
+        return render(request, 'core_app/index.html', 
+        {'user': user, 'default': user.default, 'organization': user.default,
+        'organizations': organizations})
 
 class SwitchOrganization(GuardianView):
     def get(self, request, organization_id):
@@ -158,8 +159,17 @@ class ListUserTags(GuardianView):
         {'timelines': timelines, 'user': user, 'me': me,
         'organization': me.default, 'tags': user.tags.all()})
 
+class ListEvents(GuardianView):
+    """
+    """
 
-
+    def get(self, request):
+        user   = models.User.objects.get(id=self.user_id)
+        events = user.default.events.all().order_by('-created')
+        form   = forms.EventSearchForm()
+        return render(request, 'core_app/list-events.html', 
+        {'events': events, 'user': user, 
+        'form': form, 'organization': user.default})
 
 
 

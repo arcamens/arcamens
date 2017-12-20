@@ -1,21 +1,28 @@
 {% load i18n %}
 
 <button type="button" onclick="$('#eventsBell').css('color', 'white');" class="navbar-toggle e-get" 
-data-show="{% url 'board_app:list-events' %}" data-toggle="collapse"
+data-show="{% url 'core_app:list-events' %}" data-toggle="collapse"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#modalContent"
 href="#"> <span id="eventsBell" style="color:white;">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
-<a href="{% url 'timeline_app:index' %}" class="navbar-toggle btn btn-info" role="button">
+<a href="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
+data-shell="#main-view"
+role="button">
 <span class="glyphicon glyphicon-eye-open"></span>  </a>
+
+<a href="{% url 'board_app:list-boards' %}" class="navbar-toggle btn btn-info e-get" 
+data-shell="#main-view"
+role="button">
+<span class="glyphicon glyphicon-th"></span>  </a>
 
 <div class="collapse navbar-collapse" id="myNavbar">
 
 <ul class="nav navbar-nav">
 
 <li><a class="hidden-xs e-get"  
-data-show="{% url 'board_app:list-events' %}" 
+data-show="{% url 'core_app:list-events' %}" 
 data-shell="#modalContent" 
 data-callback="$('#modal').modal('show');"
 href="#"><span class="glyphicon glyphicon-bell"></span> 
@@ -40,14 +47,28 @@ data-toggle="modal" data-target="#modal">
 </li>
 
 <li>
-<a href="{% url 'timeline_app:index' %}" >
-<span class="glyphicon glyphicon-eye-open"></span> Timelines 
-</a>
+<a data-show="{% url 'timeline_app:list-timelines' %}" class="e-get" 
+href="#"
+data-shell="#main-view">
+<span class="glyphicon glyphicon-eye-open"></span>  </a>
+
+
 </li>
+
+<li>
+<a data-show="{% url 'board_app:list-boards' %}" class="e-get" 
+data-shell="#main-view"
+href="#">
+<span class="glyphicon glyphicon-th"></span>  </a>
+
+</li>
+
 
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
+
 
 
 

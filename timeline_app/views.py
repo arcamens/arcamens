@@ -235,18 +235,6 @@ class DisabledOrganization(View):
         {'user': user, 'default': user.default,
         'organizations': user.organizations})
 
-class Index(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        organizations = user.organizations.exclude(id=user.default.id)
-        return render(request, 'timeline_app/index.html', 
-        {'user': user, 'organization': user.default,
-        'organizations': organizations})
-
-
 class Logout(View):
     """
     """
@@ -498,6 +486,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

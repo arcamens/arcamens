@@ -93,6 +93,55 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.eunbindboarduser.get_absolute_url}}");
 });
 </script>
+<div id="event-{{ind.id}}">
+{% elif ind.ecreatepost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatepost.get_absolute_url}}");
+});
+</script>
+{% elif ind.eupdatepost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatepost.get_absolute_url}}");
+});
+</script>
+{% elif ind.eupdatetimeline %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatetimeline.get_absolute_url}}");
+});
+</script>
+{% elif ind.ebindtimelineuser %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ebindtimelineuser.get_absolute_url}}");
+});
+</script>
+{% elif ind.eunbindtimelineuser %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunbindtimelineuser.get_absolute_url}}");
+});
+</script>
+{% elif ind.edeletetimeline %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletetimeline.get_absolute_url}}");
+});
+</script>
+{% elif ind.ecreatecomment %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatecomment.get_absolute_url}}");
+});
+</script>
+{% elif ind.edeletepost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletepost.get_absolute_url}}");
+});
+</script>
 
 {% endif %}
 </div>
@@ -111,6 +160,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunbindboarduser.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

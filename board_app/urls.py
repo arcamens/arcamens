@@ -13,12 +13,10 @@ urlpatterns = [
     url(r'^paste-lists/(?P<board_id>.+)/', views.PasteLists.as_view(), name='paste-lists'),
     url(r'^delete-board/(?P<board_id>.+)/', views.DeleteBoard.as_view(), name='delete-board'),
     url(r'^setup-board-filter/(?P<organization_id>.+)', views.SetupBoardFilter.as_view(), name='setup-board-filter'),
-    url(r'^index/$', views.Index.as_view(), name='index'),
     # url(r'^login/', views.Login.as_view(), name='login'),
     # url(r'^logout/', views.Logout.as_view(), name='logout'),
     url(r'^login/', RedirectView.as_view(pattern_name='site_app:login'), name='login'),
     url(r'^logout/', RedirectView.as_view(pattern_name='site_app:logout'), name='logout'),
-    url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
     url(r'^manage-user-boards/(?P<user_id>.+)/', views.ManageUserBoards.as_view(), name='manage-user-boards'),
     url(r'^manage-board-users/(?P<board_id>.+)', views.ManageBoardUsers.as_view(), name='manage-board-users'),
     url(r'^list-pins/', views.ListPins.as_view(), name='list-pins'),
@@ -30,6 +28,8 @@ urlpatterns = [
     url(r'^unbind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardUser.as_view(), name='unbind-board-user'),
 
 ]
+
+
 
 
 

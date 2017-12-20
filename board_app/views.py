@@ -214,17 +214,6 @@ class SetupBoardFilter(GuardianView):
         return redirect('board_app:list-boards')
 
 
-class Index(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        organizations = user.organizations.exclude(id=user.default.id)
-        return render(request, 'board_app/index.html', 
-        {'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations})
-
 class DisabledAccount(GuardianView):
     def get(self, request):
         pass
@@ -366,6 +355,7 @@ class EUnbindBoardUser(GuardianView):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
         {'event':event})
+
 
 
 

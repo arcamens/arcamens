@@ -18,9 +18,21 @@
 <script src="/static/c-get.js"> </script>
 <link rel="stylesheet" href="/static/main.css">
 
-{% block initializer %}
+<script>
+$(document).ready(function() {
+    $('#main-view').load("{% url 'board_app:list-boards' %}");
+});
 
-{% endblock %}
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+
+$(document).ready(function(){
+$('body').tooltip({
+    selector: '[data-toggle="tooltip"]'
+});
+});
+</script>
 
 </head>
 
@@ -37,8 +49,7 @@
 <span class="icon-bar"></span> 
 </button>
 
-{% block navbar_tools %}
-{% endblock %}
+{% include 'core_app/index-menu-navbar.html' %}
 
 </div>
 </div>
@@ -52,8 +63,8 @@
 
 <div class="clearfix"></div>
 
-{% block main %}
-{% endblock %}
+<div id="main-view" class="container-fluid">
+</div>
 
 
 <div class="modal fade" id="modal" role="dialog">
@@ -80,6 +91,7 @@
 </body>
 
 </html>
+
 
 
 
