@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from timeline_app.views import GuardianView
 import timeline_app.models
-import timeline_app.models
+import core_app.models
 from . import forms
 from . import models
 from core_app import ws
@@ -355,7 +355,7 @@ class ManagePostTags(GuardianView):
         post = models.Post.objects.get(id=post_id)
 
         included = post.tags.all()
-        excluded = timeline_app.models.Tag.objects.exclude(posts=post)
+        excluded = core_app.models.Tag.objects.exclude(posts=post)
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
@@ -367,7 +367,7 @@ class ManagePostTags(GuardianView):
         me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         included = post.tags.all()
-        excluded = timeline_app.models.Tag.objects.exclude(posts=post)
+        excluded = core_app.models.Tag.objects.exclude(posts=post)
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-tags.html', 
@@ -437,6 +437,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
