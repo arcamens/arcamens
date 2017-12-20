@@ -1,17 +1,17 @@
 ##############################################################################
-# push arcamens.alpha development branch.
-cd ~/projects/arcamens.alpha-code
+# push arcamens development branch.
+cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
-rm -fr ~/projects/arcamens.alpha-code/static/media
+rm -fr ~/projects/arcamens-code/static/media
 git status
 git add *
 git commit -a
 git push -u origin development
 ##############################################################################
 
-# push, arcamens.alpha, master.
-cd ~/projects/arcamens.alpha-code
+# push, arcamens, master.
+cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
 
@@ -21,13 +21,13 @@ git commit -a
 git push -u origin master
 ##############################################################################
 # create dev branch.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 git branch -a
 git checkout -b development
 git push --set-upstream origin development
 ##############################################################################
-# push, arcamens.alpha, beta.
-cd ~/projects/arcamens.alpha-code
+# push, arcamens, beta.
+cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
 git status
@@ -74,23 +74,23 @@ git push -u origin alpha
 git checkout alpha
 ##############################################################################
 
-# arcamens.alpha, pull.
-cd ~/projects/arcamens.alpha-code
+# arcamens, pull.
+cd ~/projects/arcamens-code
 git pull
 ##############################################################################
 # setup, admin, site.
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python manage.py shell
 ##############################################################################
 # make migrations.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
 
-# create, arcamens.alpha, alpha, branch.
+# create, arcamens, alpha, branch.
 git checkout -b alpha
 git push --set-upstream origin alpha
 
-# create, arcamens.alpha, beta, branch.
+# create, arcamens, beta, branch.
 git checkout -b beta
 git push --set-upstream origin beta
 
@@ -102,75 +102,75 @@ git checkout alpha
 git checkout beta
 
 ##############################################################################
-# run, arcamens.alpha, server, debugging.
-cd ~/projects/arcamens.alpha-code
+# run, arcamens, server, debugging.
+cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 ##############################################################################
-# clone, arcamens.alpha, wiki.
+# clone, arcamens, wiki.
 
 cd ~/projects
-git clone git@bitbucket.org:iogf/arcamens.alpha.git/wiki arcamens.alpha.wiki-code
+git clone git@bitbucket.org:iogf/arcamens.git/wiki arcamens.wiki-code
 
 ##############################################################################
-# create, setup, virtualenv, arcamens.alpha.
+# create, setup, virtualenv, arcamens.
 cd ~/.virtualenvs/
 ls -la
 # by default, python3 has executable named python in arch linux.
-virtualenv arcamens.alpha -p /usr/bin/python
+virtualenv arcamens -p /usr/bin/python
 ##############################################################################
-# activate, virtualenv, arcamens.alpha.
+# activate, virtualenv, arcamens.
 cd ~/.virtualenvs/
-source arcamens.alpha/bin/activate
-cd ~/projects/arcamens.alpha-code
+source arcamens/bin/activate
+cd ~/projects/arcamens-code
 ##############################################################################
-# install, arcamens.alpha, dependencies, virtualenv.
+# install, arcamens, dependencies, virtualenv.
 cd ~/.virtualenvs/
-source arcamens.alpha/bin/activate
-cd ~/projects/arcamens.alpha-code
+source arcamens/bin/activate
+cd ~/projects/arcamens-code
 pip install -r requirements.txt 
 ##############################################################################
-# create, arcamens.alpha, project.
+# create, arcamens, project.
 cd ~/projects/
-django-admin startproject arcamens.alpha arcamens.alpha-code
+django-admin startproject arcamens arcamens-code
 ##############################################################################
 # create, core_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp core_app
 ##############################################################################
 # create, help_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp help_app
 ##############################################################################
 # create, register_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp register_app
 
 ##############################################################################
 # create, timeline, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp post_app
 ##############################################################################
 # create, chat_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp chat_app
 ##############################################################################
 # create, comment_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp comment_app
 
 
 ##############################################################################
 # create, timeline_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp timeline_app
 ##############################################################################
 # create, stream, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp stream_app
 ##############################################################################
 # rename, customer, to user.
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 grep -rl 'board_app\.models\.User' --exclude-dir='.git' ./ | xargs sed -i 's/board_app\.models\.User/core_app.models.User/g'
 
 grep -rl 'OrganizationEvent' --exclude-dir='.git' ./ | xargs sed -i 's/OrganizationEvent/Event/g'
@@ -193,49 +193,49 @@ grep -rl 'user-settings' --exclude-dir='.git' ./ | xargs sed -i 's/user-settings
 
 grep -rl 'timeline_app:list-timelines' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app:list-timelines/timeline_app:list-timelines/g'
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 
 grep -rl 'core_app:profile' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:profile/board_app:profile/g'
 
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 
 grep -rl 'default_organization' --exclude-dir='.git' ./ | xargs sed -i 's/default_organization/default/g'
 
-cd ~/projects/arcamens.alpha-code/board_app/
+cd ~/projects/arcamens-code/board_app/
 
 grep -rl 'timeline_app/' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\//board_app\//g'
 
 grep -rl 'timeline_app' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app/timeline_app/g'
 
-cd ~/projects/arcamens.alpha-code/board_app/
+cd ~/projects/arcamens-code/board_app/
 
 grep -rl 'timeline_app/' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\//board_app\//g'
 
-cd ~/projects/arcamens.alpha-code/list_app
+cd ~/projects/arcamens-code/list_app
 
 grep -rl 'core_app\.models' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.models/board_app.models/g'
 
-grep -rl 'core_app\.arcamens.alpha' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.arcamens.alpha/timeline_app\.arcamens.alpha/g'
+grep -rl 'core_app\.arcamens' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.arcamens/timeline_app\.arcamens/g'
 
-cd ~/projects/arcamens.alpha-code/board_app
+cd ~/projects/arcamens-code/board_app
 
 grep -rl 'core_app\.models' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.models/board_app.models/g'
 
 cd ~/projects/labor2-code
 
-grep -rl 'Organization' --exclude-dir='.git' ./ | xargs sed -i 's/Organization/arcamens.alpha/g'
+grep -rl 'Organization' --exclude-dir='.git' ./ | xargs sed -i 's/Organization/arcamens/g'
 
-cd ~/projects/arcamens.alpha-code/timeline_app
+cd ~/projects/arcamens-code/timeline_app
 
 grep -rl 'core_app:' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:/timeline_app:/g'
 
-cd ~/projects/arcamens.alpha-code/board_app
+cd ~/projects/arcamens-code/board_app
 
 grep -rl 'core_app:' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:/board_app:/g'
 
 
-cd ~/projects/arcamens.alpha-code/board_app
+cd ~/projects/arcamens-code/board_app
 
 grep -rl '#main-view' --exclude-dir='.git' ./ | xargs sed -i 's/#main-view/#main-viewport/g'
 
@@ -244,42 +244,42 @@ grep -rl '#main-view' --exclude-dir='.git' ./ | xargs sed -i 's/#main-view/#main
 
 grep -rl 'Comment' --exclude-dir='.git' ./ | xargs sed -i 's/Comment/PostComment/g'
 
-grep -rl 'UserFilter' --exclude-dir='.git' ./ | xargs sed -i 's/UserFilter/arcamens.alphaUserFilter/g'
+grep -rl 'UserFilter' --exclude-dir='.git' ./ | xargs sed -i 's/UserFilter/arcamensUserFilter/g'
 
-grep -rl 'Event' --exclude-dir='.git' ./ | xargs sed -i 's/Event/arcamens.alphaEvent/g'
+grep -rl 'Event' --exclude-dir='.git' ./ | xargs sed -i 's/Event/arcamensEvent/g'
 
 grep -rl 'customer' --exclude-dir='.git' ./ | xargs sed -i 's/customer/user/g'
 
-cd ~/projects/arcamens.alpha-code/timeline_app
+cd ~/projects/arcamens-code/timeline_app
 
 grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
 
-cd ~/projects/arcamens.alpha-code/post_app
+cd ~/projects/arcamens-code/post_app
 grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
 
-cd ~/projects/arcamens.alpha-code/post_comment_app
+cd ~/projects/arcamens-code/post_comment_app
 grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
 
-cd ~/projects/arcamens.alpha-code/site_app
+cd ~/projects/arcamens-code/site_app
 grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
 
-cd ~/projects/arcamens.alpha-code/card_comment_app
+cd ~/projects/arcamens-code/card_comment_app
 grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/board_app/g'
 
-cd ~/projects/arcamens.alpha-code/post_app
+cd ~/projects/arcamens-code/post_app
 grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/PostFileWrapper/g'
 
-cd ~/projects/arcamens.alpha-code/card_app
+cd ~/projects/arcamens-code/card_app
 grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/CardFileWrapper/g'
 
-cd ~/projects/arcamens.alpha-code/board_app
+cd ~/projects/arcamens-code/board_app
 grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/CardFileWrapper/g'
 
 
 ##############################################################################
 # delete, last, commit.
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 git reset HEAD^ --hard
 git push -f
 ##############################################################################
@@ -296,22 +296,22 @@ git commit -a
 # unversion, file, git, db.sqlite3.
 
 git rm --cached db.sqlite3
-git rm --cached arcamens.alpha/settings.py
+git rm --cached arcamens/settings.py
 ##############################################################################
 # create, signup_app, app.
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 python manage.py startapp site_app
 ##############################################################################
 # delete, beta, branch.
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 git branch -d beta
 git push origin :beta
 git fetch -p 
 ##############################################################################
 # delete, alpha, branch.
 
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 git branch -d alpha
 git push origin :alpha
 git fetch -p 
@@ -399,15 +399,15 @@ git push origin : 0.0.2
 
 cd ~/Downloads
 ls
-unzip iogf-arcamens.alpha-2a985217fd3d.zip
+unzip iogf-arcamens-2a985217fd3d.zip
 ls
-cd iogf-arcamens.alpha-2a985217fd3d
+cd iogf-arcamens-2a985217fd3d
 ls
 
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000 
 cd ~
 ##############################################################################
-cd ~/projects/arcamens.alpha-code
+cd ~/projects/arcamens-code
 
 # rename card_app to markdown_app.
 grep -rl  'card_app' . | xargs sed -i 's/card_app/markdown_app/g' 
@@ -438,7 +438,7 @@ wget --post-data='somedata' http://189.84.248.176:8000/register_app/paypal-ipn/
 ##############################################################################
 # install paybills in virtualenv.
 cd ~/.virtualenvs/
-source arcamens.alpha/bin/activate
+source arcamens/bin/activate
 cd ~/projects/django-paybills-code
 python setup.py install
 rm -fr build
@@ -446,41 +446,41 @@ rm -fr build
 
 # access victor server through ssh.
 
-tee -i >(stdbuf -o 0 ssh arcamens.alpha-test@job-lab.net 'bash -i')
+tee -i >(stdbuf -o 0 ssh arcamens-test@job-lab.net 'bash -i')
 
 # accept signals.
-tee >(stdbuf -o 0 ssh arcamens.alpha-test@job-lab.net 'bash -i')
+tee >(stdbuf -o 0 ssh arcamens-test@job-lab.net 'bash -i')
 
 # run as supervisord.
 supervisord -n -c ../conf/supervisord.conf
 
-# remove arcamens.alpha and paybills.
-rm -fr /home/arcamens.alpha-test/projects/arcamens.alpha-code
-rm -fr /home/arcamens.alpha-test/projects/django-paybills-code
+# remove arcamens and paybills.
+rm -fr /home/arcamens-test/projects/arcamens-code
+rm -fr /home/arcamens-test/projects/django-paybills-code
 ##############################################################################
 # install paybills
 cd ~/projects/django-paybills-code
 python setup.py install
 
 ##############################################################################
-# deploy arcamens.alpha on victor server.
+# deploy arcamens on victor server.
 
-cp -R ~/projects/arcamens.alpha-code /tmp
-rm -fr /tmp/arcamens.alpha-code/.git
-find /tmp/arcamens.alpha-code -path "arcamens.alpha-code/**/migrations/*.py" -not -name "__init__.py" -delete
-find /tmp/arcamens.alpha-code -path "arcamens.alpha-code/**/migrations/*.pyc" -not -name "__init__.py" -delete
-find /tmp/arcamens.alpha-code -path "arcamens.alpha-code*/*.pyc" -not -name "__init__.py" -delete
-find /tmp/arcamens.alpha-code -name "db.sqlite3" -delete
+cp -R ~/projects/arcamens-code /tmp
+rm -fr /tmp/arcamens-code/.git
+find /tmp/arcamens-code -path "arcamens-code/**/migrations/*.py" -not -name "__init__.py" -delete
+find /tmp/arcamens-code -path "arcamens-code/**/migrations/*.pyc" -not -name "__init__.py" -delete
+find /tmp/arcamens-code -path "arcamens-code*/*.pyc" -not -name "__init__.py" -delete
+find /tmp/arcamens-code -name "db.sqlite3" -delete
 
 # use rsync.
-rsync -r /tmp/arcamens.alpha-code arcamens.alpha-test@job-lab.net:/home/arcamens.alpha-test/projects
+rsync -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
 
 # uses scp.
-scp -r /tmp/arcamens.alpha-code arcamens.alpha-test@job-lab.net:/home/arcamens.alpha-test/projects
+scp -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
 
 # remove the old code.
-ssh arcamens.alpha-test@job-lab.net '
-rm -fr /home/arcamens.alpha-test/projects/arcamens.alpha-code'
+ssh arcamens-test@job-lab.net '
+rm -fr /home/arcamens-test/projects/arcamens-code'
 
 ##############################################################################
 # install paybills on victor server.
@@ -488,12 +488,12 @@ rm -fr /home/arcamens.alpha-test/projects/arcamens.alpha-code'
 cp -R ~/projects/django-paybills-code /tmp
 rm -fr /tmp/django-paybills-code/.git
 
-scp -r /tmp/django-paybills-code arcamens.alpha-test@job-lab.net:/home/arcamens.alpha-test/projects
+scp -r /tmp/django-paybills-code arcamens-test@job-lab.net:/home/arcamens-test/projects
 
-ssh arcamens.alpha-test@job-lab.net '
+ssh arcamens-test@job-lab.net '
 cd ~/.virtualenvs/
-source arcamens.alpha/bin/activate
-cd /home/arcamens.alpha-test/projects/django-paybills-code
+source arcamens/bin/activate
+cd /home/arcamens-test/projects/django-paybills-code
 sudo python setup.py install'
 
 # create basic folders victor porton server.
@@ -506,7 +506,7 @@ apt-get install rabbitmq
 ##############################################################################
 #delete #remove #virtualenv
 cd ~/.virtualenvs/
-rm -fr arcamens.alpha
+rm -fr arcamens
 ##############################################################################
 # install blowdb
 cd ~/projects/django-blowdb-code
@@ -514,6 +514,7 @@ python setup.py install
 rm -fr build
 
 ##############################################################################
+
 
 
 
