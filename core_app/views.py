@@ -204,7 +204,7 @@ class CreateTag(GuardianView):
 class BindTag(GuardianView):
     def get(self, request, user_id):
         user = models.User.objects.get(id=user_id)
-        return render(request, 'timeline_app/bind-tag.html', 
+        return render(request, 'core_app/bind-tag.html', 
         {'user': user, 'form':forms.BindTagForm()})
 
     def post(self, request, user_id):
