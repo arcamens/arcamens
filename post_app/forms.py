@@ -27,6 +27,9 @@ class GlobalPostFilterForm(forms.ModelForm):
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
+class TagSearchForm(forms.Form):
+    name = forms.CharField(required=False)
+
 
 
 

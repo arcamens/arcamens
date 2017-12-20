@@ -349,27 +349,76 @@ class EUpdatePost(GuardianView):
         return render(request, 'post_app/e-update-post.html', 
         {'event':event})
 
-class BindTag(GuardianView):
+class ManagePostTags(GuardianView):
     def get(self, request, post_id):
+        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
-        return render(request, 'post_app/bind-tag.html', 
-        {'form':timeline_app.forms.BindTagForm(), 'post': post})
+
+        included = post.tags.all()
+        excluded = timeline_app.models.Tag.objects.exclude(posts=post)
+
+        return render(request, 'post_app/manage-post-tags.html', 
+        {'included': included, 'excluded': excluded, 'post': post,
+        'organization': me.default,'form':forms.TagSearchForm()})
 
     def post(self, request, post_id):
+        form = forms.TagSearchForm(request.POST)
+
+        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
-        form = timeline_app.forms.BindTagForm(request.POST)
+        included = post.tags.all()
+        excluded = timeline_app.models.Tag.objects.exclude(posts=post)
 
         if not form.is_valid():
-            return render(request, 'post_app/bind-tag.html',
-                  {'form': form, 'user': user}, status=400)
+            return render(request, 'post_app/manage-post-tags.html', 
+                {'included': included, 'excluded': excluded,
+                    'organization': me.default, 'post': post,
+                        'form':forms.UserSearchForm()}, status=400)
 
-        me = timeline_app.models.User.objects.get(id=self.user_id)
-        tag = timeline_app.models.Tag.objects.get(
-        organization=me.default, name=form.cleaned_data['name'])
+        included = included.filter(
+        name__contains=form.cleaned_data['name'])
+
+        excluded = excluded.filter(
+        name__contains=form.cleaned_data['name'])
+
+        return render(request, 'post_app/manage-post-tags.html', 
+        {'included': included, 'excluded': excluded, 'post': post,
+        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
+class UnbindPostTag(GuardianView):
+    def get(self, request, post_id, tag_id):
+        tag = timeline_app.models.Tag.objects.get(id=tag_id)
+        post = models.Post.objects.get(id=post_id)
+        post.tags.remove(tag)
+        post.save()
+
+        # me = User.objects.get(id=self.user_id)
+
+        # event = models.EUnbindPostTag.objects.create(
+        # organization=me.default, ancestor=post.ancestor, 
+        # post=post, user=me, peer=user)
+        # event.users.add(*post.ancestor.users.all())
+        # event.save()
+
+        return HttpResponse(status=200)
+
+class BindPostTag(GuardianView):
+    def get(self, request, post_id, tag_id):
+        tag = timeline_app.models.Tag.objects.get(id=tag_id)
+        post = models.Post.objects.get(id=post_id)
         post.tags.add(tag)
+        post.save()
 
-        return redirect('post_app:post', 
-        post_id=post.id)
+        # me = User.objects.get(id=self.user_id)
+
+        # event = models.EUnbindPostTag.objects.create(
+        # organization=me.default, ancestor=post.ancestor, 
+        # post=post, tag=me, peer=tag)
+        # event.tags.add(*post.ancestor.tags.all())
+        # event.save()
+
+        return HttpResponse(status=200)
+
 
 class EUnassignPost(GuardianView):
     """
@@ -388,15 +437,6 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
-
-
-
-
-
-
-
-
-
 
 
 

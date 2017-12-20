@@ -73,7 +73,7 @@ class Post(PostMixin, models.Model):
     null=True)
 
     tags = models.ManyToManyField(
-    'timeline_app.Tag', related_name='tags', 
+    'timeline_app.Tag', related_name='posts', 
     null=True, blank=True, symmetrical=False)
 
     label = models.CharField(null=True,
@@ -188,6 +188,7 @@ class EUnassignPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unassign-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

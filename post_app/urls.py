@@ -25,9 +25,12 @@ urlpatterns = [
     url(r'^setup-global-posts-filter/', views.SetupGlobalPostFilter.as_view(), name='setup-global-post-filter'),
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
     url(r'^copy-post/(?P<post_id>.+)/', views.CopyPost.as_view(), name='copy-post'),
-    url(r'^bind-tag/(?P<post_id>.+)/', views.BindTag.as_view(), name='bind-tag'),
+    url(r'^manage-post-tags/(?P<post_id>.+)/', views.ManagePostTags.as_view(), name='manage-post-tags'),
+    url(r'^bind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.BindPostTag.as_view(), name='bind-post-tag'),
+    url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
 
 ]
+
 
 
 
