@@ -9,6 +9,7 @@ import board_app.models
 import list_app.models
 from . import models
 from . import forms
+import core_app.models
 
 # Create your views here.
 
@@ -525,6 +526,7 @@ class BindCardWorker(GuardianView):
         event.save()
 
         return HttpResponse(status=200)
+
 
 
 

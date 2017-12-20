@@ -8,6 +8,7 @@ import board_app.models
 import list_app.models
 from . import models
 from . import forms
+import core_app.models
 
 # Create your views here.
 
@@ -173,6 +174,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 
