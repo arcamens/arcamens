@@ -2,7 +2,7 @@
 # activate, virtualenv, opus.
 cd ~/.virtualenvs/
 source opus/bin/activate
-cd ~/projects/opus-code
+cd ~/projects/arcamens-code
 
 tee >(stdbuf -o 0 python -i)
 tee >(python manage.py shell --settings=opus.settings)
@@ -45,6 +45,7 @@ mod.path
 
 globals()[mod]
 getattr(, function_name)
+
 
 
 

@@ -80,6 +80,7 @@ class Pin(PinMixin, models.Model):
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
 
+    # I should use concrete inheritance here.
     board = models.ForeignKey('board_app.Board', 
     unique=True, null=True, blank=True)
 
@@ -114,6 +115,7 @@ class EUnbindBoardUser(Event, EUnbindBoardUserMixin):
     related_name='e_unbind_board_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

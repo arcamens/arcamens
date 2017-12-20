@@ -14,6 +14,7 @@ data-show="{% url 'board_app:list-boards' %}" href="#">
 <li >
 
 <a class="e-get" 
+data-callback-error="$('#modalError').modal('toggle');" 
 data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#">
 
@@ -49,6 +50,7 @@ $( "#pinned-cards" ).sortable({
     axis:'x'});
 });
 </script>
+
 
 
 
