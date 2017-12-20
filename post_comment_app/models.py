@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from timeline_app.models import OpusEvent
+from timeline_app.models import Event
 import timeline_app.models
 
 class PostComment(models.Model):
@@ -30,7 +30,7 @@ class PostComment(models.Model):
         return self.data
 
 
-class ECreatePostComment(OpusEvent):
+class ECreatePostComment(Event):
     comment = models.ForeignKey('PostComment', blank=True)
     post    = models.ForeignKey('post_app.Post', blank=True)
 

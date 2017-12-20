@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from board_app.models import LaborEvent, User
+from board_app.models import Event, User
 from django.db.models import Q
 from django.db import models
 
@@ -43,7 +43,7 @@ class List(ListMixin, models.Model):
 class ListFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('board_app.Labor', blank=True,
+    organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
 
     board = models.ForeignKey('board_app.Board', blank=True,
@@ -58,7 +58,7 @@ class ListFilter(models.Model):
         unique_together = ('user', 'organization', 'board')
 
 
-class ECreateList(LaborEvent):
+class ECreateList(Event):
     """
     """
 

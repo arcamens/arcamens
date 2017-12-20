@@ -18,7 +18,7 @@ class ListCardComments(GuardianView):
 
 class CreateCardComment(GuardianView):
     def post(self, request, card_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         card = card_app.models.Card.objects.get(id=card_id)
         records = card.cardcomment_set.order_by('-created')
         form = forms.CardCommentForm(request.POST, request.FILES)
@@ -31,8 +31,8 @@ class CreateCardComment(GuardianView):
         record.user = user
         record.save()
 
-        user = board_app.models.User.objects.get(id=self.user_id)
-        event = models.ECreateCardComment.objects.create(organization=user.default.labor,
+        user = core_app.models.User.objects.get(id=self.user_id)
+        event = models.ECreateCardComment.objects.create(organization=user.default,
         child=card, comment=record, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 

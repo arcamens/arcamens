@@ -32,7 +32,7 @@ class CreatePostComment(GuardianView):
         record.user = user
         record.save()
 
-        event = models.ECreatePostComment.objects.create(organization=user.default.opus,
+        event = models.ECreatePostComment.objects.create(organization=user.default,
         comment=record, post=post, user=user)
 
         event.users.add(*post.ancestor.users.all())

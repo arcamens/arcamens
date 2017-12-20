@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 import timeline_app.models
-from timeline_app.models import OpusEvent
+from timeline_app.models import Event
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
 
@@ -78,7 +78,7 @@ class Post(PostMixin, models.Model):
 
     label = models.CharField(null=True,
     blank=False, verbose_name=_("Label"), 
-    help_text='Task, Post, OpusEvent, Thread, Bug, \
+    help_text='Task, Post, Event, Thread, Bug, \
     Idea, Document, ..', max_length=30)
 
     workers = models.ManyToManyField('core_app.User', 
@@ -138,19 +138,19 @@ class PostFileWrapper(PostFileWrapperMixin, models.Model):
     file = models.FileField(upload_to='media/', 
     verbose_name='', help_text='')
 
-class ECreatePost(ECreatePostMixin, OpusEvent):
+class ECreatePost(ECreatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_create_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
 
-class EDeletePost(EDeletePostMixin, OpusEvent):
+class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
 
     post_label = models.CharField(null=True,
     blank=True, max_length=30)
 
-class EUpdatePost(EUpdatePostMixin, OpusEvent):
+class EUpdatePost(EUpdatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_update_post', blank=True)
     post = models.ForeignKey('Post', blank=True)

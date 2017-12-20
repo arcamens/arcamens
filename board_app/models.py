@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from core_app.models import  User, Organization
+from core_app.models import  User, Organization, Event
 from django.db.models import Q
 from django.db import models
 
@@ -34,24 +34,6 @@ class EUnbindBoardUserMixin(object):
         return reverse('board_app:e-unbind-board-user', 
         kwargs={'event_id': self.id})
 
-class Labor(Organization):
-    type = models.CharField(null=True,
-    blank=False, default='Labor',
-    max_length=256)
-
-class LaborEvent(models.Model):
-    users = models.ManyToManyField('core_app.User', null=True,  
-    related_name='labor_events', blank=True, symmetrical=False)
-
-    organization = models.ForeignKey('Labor', 
-    related_name='events', null=True, blank=True)
-
-    created = models.DateTimeField(auto_now=True, null=True)
-    user = models.ForeignKey('core_app.User', null=True, blank=True)
-
-    def __str__(self):
-        return 'LaborEvent'
-
 class Board(models.Model):
     """    
     """
@@ -73,7 +55,7 @@ class Board(models.Model):
     null=True, related_name='boards', blank=True, 
     symmetrical=False)
 
-    organization = models.ForeignKey('board_app.Labor', 
+    organization = models.ForeignKey('core_app.Organization', 
     related_name='boards', null=True, blank=True)
 
     def get_ancestor_url(self):
@@ -83,7 +65,7 @@ class Board(models.Model):
 class BoardFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('board_app.Labor', blank=True,
+    organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
@@ -108,10 +90,10 @@ class Pin(PinMixin, models.Model):
     unique=True, null=True, blank=True)
 
 
-class LaborUserFilter(models.Model):
+class OrganizationUserFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('board_app.Labor', blank=True,
+    organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
@@ -121,16 +103,18 @@ class LaborUserFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization',)
 
-class EBindBoardUser(LaborEvent, EBindBoardUserMixin):
+class EBindBoardUser(Event, EBindBoardUserMixin):
     board = models.ForeignKey('Board', 
     related_name='e_bind_board_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
 
-class EUnbindBoardUser(LaborEvent, EUnbindBoardUserMixin):
+class EUnbindBoardUser(Event, EUnbindBoardUserMixin):
     board = models.ForeignKey('Board', 
     related_name='e_unbind_board_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
+
 
 

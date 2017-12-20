@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
-from board_app.models import LaborEvent, User
+from board_app.models import Event, User
 from django.db.models import Q
 from django.db import models
 from markdown import markdown
@@ -101,7 +101,7 @@ class FileWrapper(FileWrapperMixin, models.Model):
     file = models.FileField(upload_to='media/', 
     verbose_name='', help_text='')
 
-class ERelateCard(LaborEvent):
+class ERelateCard(Event):
     """
     """
 
@@ -121,7 +121,7 @@ class ERelateCard(LaborEvent):
         return reverse('card_app:e-relate-card', 
                     kwargs={'event_id': self.id})
 
-class EUnrelateCard(LaborEvent):
+class EUnrelateCard(Event):
     """
     """
 
@@ -141,7 +141,7 @@ class EUnrelateCard(LaborEvent):
         return reverse('card_app:e-unrelate-card', 
                     kwargs={'event_id': self.id})
 
-class ECreateCard(LaborEvent):
+class ECreateCard(Event):
     """
     """
 
@@ -155,7 +155,7 @@ class ECreateCard(LaborEvent):
         return reverse('card_app:e-create-card', 
                     kwargs={'event_id': self.id})
 
-class EBindCardWorker(LaborEvent):
+class EBindCardWorker(Event):
     """
     """
 
@@ -172,7 +172,7 @@ class EBindCardWorker(LaborEvent):
         return reverse('card_app:e-bind-card-worker', 
                     kwargs={'event_id': self.id})
 
-class EUnbindCardWorker(LaborEvent):
+class EUnbindCardWorker(Event):
     """
     """
 
@@ -189,7 +189,7 @@ class EUnbindCardWorker(LaborEvent):
         return reverse('card_app:e-unbind-card-worker', 
                     kwargs={'event_id': self.id})
 
-class ECreateFork(LaborEvent):
+class ECreateFork(Event):
     """
     """
 
@@ -206,7 +206,7 @@ class ECreateFork(LaborEvent):
         return reverse('card_app:e-create-fork', 
                     kwargs={'event_id': self.id})
 
-class EUpdateCard(LaborEvent):
+class EUpdateCard(Event):
     """
     """
 
@@ -220,7 +220,7 @@ class EUpdateCard(LaborEvent):
         return reverse('card_app:e-update-card', 
                 kwargs={'event_id': self.id})
 
-class EDeleteCard(LaborEvent):
+class EDeleteCard(Event):
     """
     """
 
@@ -235,7 +235,7 @@ class EDeleteCard(LaborEvent):
             kwargs={'event_id': self.id})
 
 
-class EArchiveCard(LaborEvent):
+class EArchiveCard(Event):
     """
     """
     ancestor = models.ForeignKey('list_app.List', 
@@ -253,7 +253,7 @@ class EArchiveCard(LaborEvent):
 class CardFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('board_app.Labor', blank=True,
+    organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
 
     board = models.ForeignKey('board_app.Board', blank=True,

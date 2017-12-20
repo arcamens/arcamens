@@ -24,15 +24,6 @@ class LoginForm(forms.Form):
             self.request.session['user_id'] = user.id
 
 class OrganizationForm(forms.Form):
-    CHOICES = (
-        (1, _('Timelines')),
-        (2, _('Boards')),
-    )
-
-
-    type = forms.ChoiceField(choices = CHOICES, label="", 
-    initial='', widget=forms.Select(), required=True, 
-    help_text='Organization type.')
     name = forms.CharField()
 
 class UpdateOrganizationForm(forms.ModelForm):
@@ -42,6 +33,7 @@ class UpdateOrganizationForm(forms.ModelForm):
 
 class UserSearchForm(forms.Form):
     pattern = forms.CharField(required=False)
+
 
 
 

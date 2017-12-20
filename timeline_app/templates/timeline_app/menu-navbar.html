@@ -37,6 +37,12 @@ data-toggle="modal" data-target="#modal">
 </a>
 </li>
 
+<li>
+<a href="{% url 'board_app:index' %}" >
+<span class="glyphicon glyphicon-th"></span> Boards 
+</a>
+</li>
+
 </ul>
 
 
@@ -44,7 +50,7 @@ data-toggle="modal" data-target="#modal">
 
 
 <script>
-function alertOpusEvent() {
+function alertEvent() {
     var audio = new Audio('/static/event-alert.mp3');
     audio.play();
 
@@ -79,9 +85,10 @@ function onConnectionLost(responseObject) {
 
 function onMessageArrived(message) {
   console.log("onMessageArrived:"+message.payloadString);
-    alertOpusEvent();
+    alertEvent();
 }
 </script>
+
 
 
 

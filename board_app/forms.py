@@ -16,7 +16,7 @@ class BindUsersForm(forms.Form):
     email = forms.EmailField()
     admin = forms.BooleanField(required=False)
 
-class FindLaborEventForm(forms.Form):
+class FindEventForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 

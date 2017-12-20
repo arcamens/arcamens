@@ -27,7 +27,7 @@ Channels that glue together users.
 
 Teams are set of people.
 
-## Opus
+## Organization
 
 A set of people who share a common interest. it can be
 a business, non profite organization etc.
@@ -38,10 +38,10 @@ a business, non profite organization etc.
 3. Timeline posts should follow facebook's style of posts.
 4. Timeline post should resemble a chat window to simplify talking about subjects.
 
-### Opus Features
+### Organization Features
 
-1. Opuss could have a page where its owner/admin talks about the organization.
-3. Opus names should be unique in opus.
+1. Organizations could have a page where its owner/admin talks about the organization.
+3. Organization names should be unique in opus.
 
 ### User Features
 
@@ -50,7 +50,7 @@ a business, non profite organization etc.
 5. It should be allowed to an user to drop a msg to everyone who is in its organization.
 6. It should be possible to an user who is admin/owner of an organization
 to send invites to some other user to join that organization.
-8. Opus organization should be searchable from google, users signup in their organization
+8. Organization organization should be searchable from google, users signup in their organization
 using organization_name.job-lab.net
 10.Users should have a profile with skills listed etc. 
 

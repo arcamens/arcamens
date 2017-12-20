@@ -28,13 +28,13 @@ class ListCards(GuardianView):
     """
 
     def get(self, request, list_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         list = list_app.models.List.objects.get(id=list_id)
         total = list.cards.all().order_by('-created')
         pins = user.pin_set.all()
 
         filter, _ = models.CardFilter.objects.get_or_create(
-        user=user, organization=user.default.labor, list=list)
+        user=user, organization=user.default, list=list)
 
         cards = total.filter((Q(label__icontains=filter.pattern) | \
         Q(data__icontains=filter.pattern))) if filter.status else total
@@ -47,7 +47,7 @@ class ListCards(GuardianView):
 class ViewData(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.all()
         forks = card.forks.all()
         relations = card.relations.all()
@@ -62,7 +62,7 @@ class CreateCard(GuardianView):
 
     def get(self, request, ancestor_id, card_id=None):
         ancestor = list_app.models.List.objects.get(id=ancestor_id)
-        user     = board_app.models.User.objects.get(id=self.user_id)
+        user     = core_app.models.User.objects.get(id=self.user_id)
         card     = models.Card.objects.create(owner=user, 
         ancestor=ancestor)
         card.save()
@@ -75,7 +75,7 @@ class CreateCard(GuardianView):
         ancestor = list_app.models.List.objects.get(id=ancestor_id)
         card     = models.Card.objects.get(id=card_id)
         form     = forms.CardForm(request.POST, instance=card)
-        user     = board_app.models.User.objects.get(id=self.user_id)
+        user     = core_app.models.User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'card_app/create-card.html', 
@@ -84,7 +84,7 @@ class CreateCard(GuardianView):
 
         card.save()
 
-        event = models.ECreateCard.objects.create(organization=user.default.labor,
+        event = models.ECreateCard.objects.create(organization=user.default,
         ancestor=card.ancestor, child=card, user=user)
         event.users.add(*ancestor.ancestor.members.all())
 
@@ -115,7 +115,7 @@ class CreateFork(GuardianView):
                 {'form':form, 'card': card, 'fork':fork}, status=400)
 
         fork.save()
-        event = models.ECreateFork.objects.create(organization=user.default.labor,
+        event = models.ECreateFork.objects.create(organization=user.default,
         ancestor=card.ancestor, child0=card, child1=fork, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 
@@ -125,8 +125,8 @@ class DeleteCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id = card_id)
 
-        user = board_app.models.User.objects.get(id=self.user_id)
-        event = models.EDeleteCard.objects.create(organization=user.default.labor,
+        user = core_app.models.User.objects.get(id=self.user_id)
+        event = models.EDeleteCard.objects.create(organization=user.default,
         ancestor=card.ancestor, label=card.label, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
         card.delete()
@@ -137,7 +137,7 @@ class DeleteCard(GuardianView):
 class CutCard(GuardianView):
     def get(self, request, card_id):
         card          = models.Card.objects.get(id=card_id)
-        user          = board_app.models.User.objects.get(id=self.user_id)
+        user          = core_app.models.User.objects.get(id=self.user_id)
         list          = card.ancestor
         card.ancestor = None
         card.save()
@@ -149,7 +149,7 @@ class CutCard(GuardianView):
 class CopyCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         copy = card.duplicate()
         user.card_clipboard.add(copy)
 
@@ -235,9 +235,9 @@ class UpdateCard(GuardianView):
 
         record.save()
 
-        user  = board_app.models.User.objects.get(id=self.user_id)
+        user  = core_app.models.User.objects.get(id=self.user_id)
         event = models.EUpdateCard.objects.create(
-        organization=user.default.labor, ancestor=record.ancestor, 
+        organization=user.default, ancestor=record.ancestor, 
         child=record, user=user)
         event.users.add(*record.ancestor.ancestor.members.all())
         event.save()
@@ -330,14 +330,14 @@ class EArchiveCard(GuardianView):
 class ArchiveCard(GuardianView):
     def get(self, request, card_id):
         # i should save the user object in the GuardianView.
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
         return redirect('card_app:list-cards', card_id=list_id)
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         list = list_app.models.List.objects.get(id=list_id)
 
         filter = models.CardFilter.objects.get(
@@ -349,7 +349,7 @@ class SetupCardFilter(GuardianView):
         'list': filter.list})
 
     def post(self, request, list_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
 
         filter = models.CardFilter.objects.get(
         user__id=self.user_id, organization__id=user.default.id,
@@ -367,14 +367,14 @@ class SetupCardFilter(GuardianView):
 
 class ListTasks(GuardianView):
     def get(self, request):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
 
         return render(request, 'card_app/list-tasks.html', 
         {'tasks': user.tasks.all()})
 
 class PinCard(GuardianView):
     def get(self, request, card_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
         pin  = board_app.models.Pin.objects.create(user=user, card=card)
         return redirect('board_app:list-pins')
@@ -388,7 +388,7 @@ class UnrelateCard(GuardianView):
         card0.relations.remove(card1)
         card0.save()
 
-        event = models.EUnrelateCard.objects.create(organization=user.default.labor,
+        event = models.EUnrelateCard.objects.create(organization=user.default,
         ancestor0=card0.ancestor, ancestor1=card1.ancestor, child0=card0, child1=card1, user=user)
         event.users.add(*card0.ancestor.ancestor.members.all())
         event.users.add(*card1.ancestor.ancestor.members.all())
@@ -404,7 +404,7 @@ class RelateCard(GuardianView):
         card0.relations.add(card1)
         card0.save()
 
-        event = models.ERelateCard.objects.create(organization=user.default.labor,
+        event = models.ERelateCard.objects.create(organization=user.default,
         ancestor0=card0.ancestor, ancestor1=card1.ancestor, child0=card0, child1=card1, user=user)
         event.users.add(*card0.ancestor.ancestor.members.all())
         event.users.add(*card1.ancestor.ancestor.members.all())
@@ -503,7 +503,7 @@ class UnbindCardWorker(GuardianView):
 
         me = User.objects.get(id=self.user_id)
         event = models.EUnbindCardWorker.objects.create(
-        organization=me.default.labor, ancestor=card.ancestor, 
+        organization=me.default, ancestor=card.ancestor, 
         child=card, user=me, peer=user)
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
@@ -519,7 +519,7 @@ class BindCardWorker(GuardianView):
 
         me = User.objects.get(id=self.user_id)
         event = models.EBindCardWorker.objects.create(
-        organization=me.default.labor, ancestor=card.ancestor, 
+        organization=me.default, ancestor=card.ancestor, 
         child=card, user=me, peer=user)
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()

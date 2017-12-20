@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from board_app.models import LaborEvent
+from board_app.models import Event
 
 class CardComment(models.Model):
     file = models.FileField(upload_to='media/', 
@@ -29,7 +29,7 @@ class CardComment(models.Model):
     def __str__(self):
         return self.data
 
-class ECreateCardComment(LaborEvent):
+class ECreateCardComment(Event):
     child = models.ForeignKey('card_app.Card', 
     blank=True)
 

@@ -170,6 +170,11 @@ python manage.py startapp stream_app
 ##############################################################################
 # rename, customer, to user.
 
+cd ~/projects/arcamens.alpha-code
+grep -rl 'board_app.Organization' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Organization/core_app.Organization/g'
+
+grep -rl 'core_app.Organization' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Organization/core_app.Organization/g'
+
 cd ~/projects/labor2-code
 
 grep -rl 'timeline_app\.User' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\.User/core_app.User/g'

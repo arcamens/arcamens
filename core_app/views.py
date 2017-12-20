@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
-from timeline_app.models import Opus
-from board_app.models import Labor
+from timeline_app.models import Organization
+from board_app.models import Organization
 from . import models
 from . import forms
 import timeline_app
@@ -42,12 +42,8 @@ class Index(GuardianView):
     def get(self, request):
         user = models.User.objects.get(id=self.user_id)
 
-        try:
-            user.default.labor
-        except Exception as e:
-            return redirect('timeline_app:index')
-        else:
-            return redirect('board_app:index')
+        # return redirect('timeline_app:index')
+        return redirect('board_app:index')
 
 class SwitchOrganization(GuardianView):
     def get(self, request, organization_id):
@@ -79,11 +75,8 @@ class CreateOrganization(GuardianView):
             return render(request, 'core_ap/create-organization.html',
                         {'form': form, 'user': user}, status=400)
 
-        organization = Opus.objects.create(
-        name=form.cleaned_data['name'], type='Opus', owner=user) \
-        if form.cleaned_data['type'] == '1' else \
-        Labor.objects.create(name=form.cleaned_data['name'], 
-        type='Labor', owner=user)
+        organization = Organization.objects.create(
+        name=form.cleaned_data['name'], owner=user) 
 
         user.organizations.add(organization)
         user.default = organization
@@ -164,6 +157,8 @@ class ListUserTags(GuardianView):
         return render(request, 'core_app/list-user-tags.html', 
         {'timelines': timelines, 'user': user, 'me': me,
         'organization': me.default, 'tags': user.tags.all()})
+
+
 
 
 

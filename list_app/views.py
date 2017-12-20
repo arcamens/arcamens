@@ -16,13 +16,13 @@ class ListLists(GuardianView):
     """
 
     def get(self, request, board_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         board = board_app.models.Board.objects.get(id=board_id)
         total = board.lists.all()
         pins  = user.pin_set.all()
 
         filter, _ = models.ListFilter.objects.get_or_create(
-        user=user, organization=user.default.labor, board=board)
+        user=user, organization=user.default, board=board)
 
         lists = total.filter((Q(name__icontains=filter.pattern) | \
         Q(description__icontains=filter.pattern))) if filter.status else total
@@ -42,7 +42,7 @@ class CreateList(GuardianView):
     """
 
     def get(self, request, board_id):
-        user  = board_app.models.User.objects.get(id=self.user_id)
+        user  = core_app.models.User.objects.get(id=self.user_id)
         board = board_app.models.Board.objects.get(id=board_id)
 
         # list  = models.List.objects.create(owner=user, ancestor=board)
@@ -59,13 +59,13 @@ class CreateList(GuardianView):
 
 
         list          = form.save(commit=False)
-        user          = board_app.models.User.objects.get(id=self.user_id)
+        user          = core_app.models.User.objects.get(id=self.user_id)
         board         = board_app.models.Board.objects.get(id=board_id)
         list.owner    = user
         list.ancestor = board
         list.save()
 
-        event = models.ECreateList.objects.create(organization=user.default.labor,
+        event = models.ECreateList.objects.create(organization=user.default,
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
@@ -81,7 +81,7 @@ class DeleteList(GuardianView):
 
 class PinList(GuardianView):
     def get(self, request, list_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         list = models.List.objects.get(id=list_id)
         pin  = board_app.models.Pin.objects.create(user=user, list=list)
         return redirect('board_app:list-pins')
@@ -107,7 +107,7 @@ class UpdateList(GuardianView):
 class PasteCards(GuardianView):
     def get(self, request, list_id):
         list = models.List.objects.get(id=list_id)
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
 
         for ind in user.card_clipboard.all():
             ind.ancestor = list
@@ -120,7 +120,7 @@ class PasteCards(GuardianView):
 class CutList(GuardianView):
     def get(self, request, list_id):
         list          = models.List.objects.get(id=list_id)
-        user          = board_app.models.User.objects.get(id=self.user_id)
+        user          = core_app.models.User.objects.get(id=self.user_id)
         board         = list.ancestor
         list.ancestor = None
         list.save()
@@ -132,7 +132,7 @@ class CutList(GuardianView):
 class CopyList(GuardianView):
     def get(self, request, list_id):
         list = models.List.objects.get(id=list_id)
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
         copy = list.duplicate()
         user.list_clipboard.add(copy)
 
@@ -148,7 +148,7 @@ class ECreateList(GuardianView):
 
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
-        user   = board_app.models.User.objects.get(id=self.user_id)
+        user   = core_app.models.User.objects.get(id=self.user_id)
 
         filter = models.ListFilter.objects.get(
         user__id=self.user_id, organization__id=user.default.id,
@@ -159,7 +159,7 @@ class SetupListFilter(GuardianView):
         'board': filter.board})
 
     def post(self, request, board_id):
-        user = board_app.models.User.objects.get(id=self.user_id)
+        user = core_app.models.User.objects.get(id=self.user_id)
 
         record = models.ListFilter.objects.get(
         organization__id=user.default.id, 

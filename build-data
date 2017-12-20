@@ -7,10 +7,10 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
 django.setup()
 
-from timeline_app.models import OpusService
-free_service = OpusService.objects.create(name='Free Service', paid=False)
+from timeline_app.models import OrganizationService
+free_service = OrganizationService.objects.create(name='Free Service', paid=False)
 
-paid_service = OpusService.objects.create(name='Paid Service', paid=True, max_users=100)
+paid_service = OrganizationService.objects.create(name='Paid Service', paid=True, max_users=100)
 
 # your imports, e.g. Django models
 from django.contrib.auth.models import User
@@ -20,16 +20,16 @@ User.objects.create_superuser('admin', 'admin@example.com', 'pass')
 # channel    = connection.channel()
 
 from core_app.models import User
-from timeline_app.models import Opus
+from timeline_app.models import Organization
 from timeline_app.models import Timeline, TimelineFilter
 
-from board_app.models import Labor
+from core_app.models import Organization
 from card_app.models import Card
 from board_app.models import Board
 from list_app.models import List
 from card_app.models import Card
 
-organization0 = Opus.objects.create(name='Arcamens' )
+organization0 = Organization.objects.create(name='Arcamens' )
 # channel.exchange_declare(exchange=str(organization0.id), exchange_type='direct')
 
 user0  = User.objects.create(name='Victor Porton', email='porton@narod.ru', password='111', default=organization0)
@@ -45,7 +45,7 @@ user1.service = free_service
 
 user1.organizations.add(organization0)
 
-organization1 = Opus.objects.create(name='Job-lab')
+organization1 = Organization.objects.create(name='Job-lab')
 # channel.exchange_declare(exchange=str(organization1.id), exchange_type='direct')
 
 organization1.owner = user1
@@ -53,14 +53,14 @@ organization1.save()
 
 user0.organizations.add(organization1)
 
-organization2 = Opus.objects.create(name='Splittask')
+organization2 = Organization.objects.create(name='Splittask')
 organization2.owner = user1
 organization2.save()
 
 user0.organizations.add(organization2)
 # connection.close()
 
-organization3 = Labor.objects.create(name='Alpha')
+organization3 = Organization.objects.create(name='Alpha')
 organization3.owner = user1
 organization3.save()
 user1.organizations.add(organization3)
@@ -78,6 +78,7 @@ label= 'This is a card label and it should be used with caution.'
 for ind in range(30):
     Card.objects.create(owner=user1, 
         label=label * randint(0, 10), ancestor=list)
+
 
 
 

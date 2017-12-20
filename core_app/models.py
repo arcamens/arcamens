@@ -80,6 +80,20 @@ class User(UserMixin, models.Model):
     def __str__(self):
         return self.name
 
+class Event(models.Model):
+    users = models.ManyToManyField('core_app.User', null=True,  
+    related_name='labor_events', blank=True, symmetrical=False)
+
+    organization = models.ForeignKey('Organization', 
+    related_name='events', null=True, blank=True)
+
+    created = models.DateTimeField(auto_now=True, null=True)
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+
+    def __str__(self):
+        return 'Event'
+
+
 
 
 

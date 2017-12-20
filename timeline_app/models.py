@@ -3,12 +3,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from paybills.models import Service
-from core_app.models import Organization, User
+from core_app.models import Organization, User, Event
 import datetime
-
-class OpusMixin(object):
-    def __str__(self):
-        return self.name
 
 class EUpdateTimelineMixin(object):
     def get_absolute_url(self):
@@ -35,22 +31,13 @@ class EUnbindTimelineUserMixin(object):
         return reverse('timeline_app:e-unbind-timeline-user', 
         kwargs={'event_id': self.id})
 
-class OpusEventMixin(object):
-    def __str__(self):
-        return 'OpusEvent'
-
 class TimelineMixin(object):
     """
     Mixins.
     """
     pass
 
-class Opus(OpusMixin, Organization):
-    type = models.CharField(null=True,
-    blank=False, default='Labor',
-    max_length=256)
-
-class OpusService(Service):
+class OrganizationService(Service):
     """
     Fill here with basic  info 
     about the product that has to be sent
@@ -71,16 +58,6 @@ class OpusService(Service):
     def __str__(self):
         return self.name
 
-class OpusEvent(models.Model):
-    users = models.ManyToManyField('core_app.User', null=True,  
-    related_name='opus_events', blank=True, symmetrical=False)
-
-    organization = models.ForeignKey('Opus', null=True,  
-    related_name='events', blank=True)
-
-    created = models.DateTimeField(auto_now=True, null=True)
-    user = models.ForeignKey('core_app.User', null=True, blank=True)
-
 class Clipboard(models.Model):
     timeline = models.ForeignKey(
     'timeline_app.Timeline', null=True, blank=True)
@@ -96,7 +73,7 @@ class Timeline(TimelineMixin, models.Model):
     owner = models.ForeignKey('core_app.User', 
     related_name='owned_timelines', null=True)
 
-    organization = models.ForeignKey('timeline_app.Opus', 
+    organization = models.ForeignKey('core_app.Organization', 
     null=True, related_name='timelines')
 
     users = models.ManyToManyField('core_app.User', null=True,  
@@ -123,7 +100,7 @@ class Timeline(TimelineMixin, models.Model):
 class TimelineFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('timeline_app.Opus', blank=True,
+    organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
@@ -143,29 +120,31 @@ class Tag(models.Model):
     # When the organization is deleted all its tags
     # are deleted too.
     organization = models.ForeignKey(
-    'Opus', null=True, blank=True)
+    'core_app.Organization', null=True, blank=True)
 
-class EDeleteTimeline(OpusEvent, EDeleteTimelineMixin):
+class EDeleteTimeline(Event, EDeleteTimelineMixin):
     timeline_name = models.CharField(null=True,
     blank=False, max_length=50)
 
-class ECreateTimeline(OpusEvent, ECreateTimelineMixin):
+class ECreateTimeline(Event, ECreateTimelineMixin):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_create_timeline', blank=True)
 
-class EUpdateTimeline(OpusEvent, EUpdateTimelineMixin):
+class EUpdateTimeline(Event, EUpdateTimelineMixin):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_update_timeline', blank=True)
 
-class EBindTimelineUser(OpusEvent, EBindTimelineUserMixin):
+class EBindTimelineUser(Event, EBindTimelineUserMixin):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_bind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
 
-class EUnbindTimelineUser(OpusEvent, EUnbindTimelineUserMixin):
+class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
+
 

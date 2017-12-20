@@ -28,7 +28,7 @@ class BindTimelinesForm(forms.Form):
 # class ListUsersSearchForm(forms.Form):
     # pattern = forms.CharField(required=False)
 
-class FindOpusEventForm(forms.Form):
+class FindEventForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 

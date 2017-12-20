@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.shortcuts import render
 from django.views.generic import View
-from timeline_app.models import Opus, OpusService
+from timeline_app.models import Organization, OrganizationService
 from core_app.views import AuthenticatedView
 from core_app.models import User
 import paybills.views
@@ -80,12 +80,12 @@ class SignUp(View):
         # has a field named enabled, it is False for default
         # unless it is a free plan whose record is created by us.
         record         = form.save(commit=False)
-        service        = OpusService.objects.get(paid=False)
+        service        = OrganizationService.objects.get(paid=False)
         record.service = service
         record.enabled = True
 
         record.save()
-        organization   = Opus.objects.create(name='Main', owner=record)
+        organization   = Organization.objects.create(name='Main', owner=record)
         record.default = organization
         record.save()
 
@@ -122,12 +122,12 @@ class ManualPayment(AuthenticatedView):
 
         # Fields that are related to generating the
         # html form. 
-        service, _ = OpusService.objects.get_or_create(
+        service, _ = OrganizationService.objects.get_or_create(
         max_users=form.cleaned_data['max_users'], paid=True)
         user = User.objects.get(id=self.user_id)
 
         payload = {
-        'item_name': "Opus",
+        'item_name': "Organization",
         'currency_code': 'EUR',
         'amount': service.max_users * 1,
         'quantity': 1,
@@ -154,7 +154,7 @@ class SubscriptionPayment(AuthenticatedView):
                 'site_app_app/subscription-payment.html', {
                      'form':form}, status=400)
 
-        service, _ = OpusService.objects.get_or_create(
+        service, _ = OrganizationService.objects.get_or_create(
         max_users=form.cleaned_data['max_users'], paid=True)
         user = User.objects.get(id=self.user_id)
 
@@ -164,7 +164,7 @@ class SubscriptionPayment(AuthenticatedView):
         # delta = max(delta.days, 90)
 
         payload = {
-       'item_name': "Opus",
+       'item_name': "Organization",
        'src': 1,
        'currency_code': 'EUR',
        'shopping_url': 'http://opus.test.splittask.net:61001',

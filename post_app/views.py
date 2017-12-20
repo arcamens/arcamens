@@ -47,7 +47,7 @@ class CreatePost(GuardianView):
         ancestor = timeline_app.models.Timeline.objects.get(id=ancestor_id)
         user     = timeline_app.models.User.objects.get(id=self.user_id)
 
-        event    = models.ECreatePost.objects.create(organization=user.default.opus,
+        event    = models.ECreatePost.objects.create(organization=user.default,
         timeline=ancestor, post=post, user=user)
 
         users = ancestor.users.all()
@@ -95,7 +95,7 @@ class UpdatePost(GuardianView):
         record.save()
 
         user     = timeline_app.models.User.objects.get(id=self.user_id)
-        event    = models.EUpdatePost.objects.create(organization=user.default.opus,
+        event    = models.EUpdatePost.objects.create(organization=user.default,
         timeline=record.ancestor, post=record, user=user)
 
         event.users.add(*record.ancestor.users.all())
@@ -152,7 +152,7 @@ class DeletePost(GuardianView):
 
         user  = timeline_app.models.User.objects.get(id=self.user_id)
 
-        event = models.EDeletePost.objects.create(organization=user.default.opus,
+        event = models.EDeletePost.objects.create(organization=user.default,
         timeline=post.ancestor, post_label=post.label, user=user)
         users = post.ancestor.users.all()
         event.users.add(*users)
@@ -259,7 +259,7 @@ class SetupPostFilter(GuardianView):
 class SetupGlobalPostFilter(GuardianView):
     def get(self, request):
         user   = User.objects.get(id=self.user_id)
-        filter = models.GlobalPostFilter.objects.get(organization=user.default.opus,
+        filter = models.GlobalPostFilter.objects.get(organization=user.default,
         user__id=self.user_id)
 
         return render(request, 'post_app/setup-global-post-filter.html', 

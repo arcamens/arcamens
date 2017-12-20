@@ -18,7 +18,7 @@ urlpatterns = [
     # url(r'^logout/', views.Logout.as_view(), name='logout'),
     url(r'^login/', RedirectView.as_view(pattern_name='site_app:login'), name='login'),
     url(r'^logout/', RedirectView.as_view(pattern_name='site_app:logout'), name='logout'),
-    url(r'^list-events/', views.ListLaborEvents.as_view(), name='list-events'),
+    url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
     url(r'^manage-user-boards/(?P<user_id>.+)/', views.ManageUserBoards.as_view(), name='manage-user-boards'),
     url(r'^manage-board-users/(?P<board_id>.+)', views.ManageBoardUsers.as_view(), name='manage-board-users'),
     url(r'^list-pins/', views.ListPins.as_view(), name='list-pins'),
