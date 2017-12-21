@@ -1,0 +1,42 @@
+<script>
+function alertEvent() {
+    var audio = new Audio('/static/event-alert.mp3');
+    audio.play();
+
+    $('#eventsBell').css('color', 'orange');
+}
+
+var wsbroker = '127.0.0.1';  // mqtt websocket enabled broker
+var wsport = 15675; // port for above
+var client = new Paho.MQTT.Client(wsbroker, wsport, "/ws",
+        "myclientid_" + parseInt(Math.random() * 100, 10));
+
+// set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+// connect the client
+client.connect({onSuccess:onConnect});
+
+function onConnect() {
+  console.log("onConnect");
+  client.subscribe("{{user.id}}");
+  // message = new Paho.MQTT.Message("Connected from browser!");
+  // message.destinationName = "beta";
+  // client.send(message);
+}
+
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+    console.log("onConnectionLost:"+responseObject.errorMessage);
+  }
+}
+
+function onMessageArrived(message) {
+  console.log("onMessageArrived:"+message.payloadString);
+    alertEvent();
+}
+</script>
+
+
+
