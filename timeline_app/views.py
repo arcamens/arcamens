@@ -90,6 +90,9 @@ class CreateTimeline(GuardianView):
         record.users.add(user)
         record.save()
 
+        ws.client.publish('user%s' % user.id, 
+            'subscribe timeline%s' % record.id, 0, False)
+
         # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         # channel    = connection.channel()
         
@@ -439,6 +442,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

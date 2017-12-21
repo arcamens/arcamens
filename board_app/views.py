@@ -66,6 +66,11 @@ class CreateBoard(GuardianView):
         board.organization = user.default
         board.save()
 
+        # ws.client.publish('board%s' % board.id, 
+            # 'board on: %s!' % board.name, 0, False)
+        ws.client.publish('user%s' % user.id, 
+            'subscribe board%s' % board.id, 0, False)
+
         return redirect('board_app:list-boards')
 
 
@@ -368,6 +373,7 @@ class EUnbindBoardUser(GuardianView):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
         {'event':event})
+
 
 
 

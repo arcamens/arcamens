@@ -16,7 +16,7 @@ client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
 
 // connect the client
-client.connect({onSuccess:onConnect, useSSL: {{settings.WS_USE_SSL}}});
+client.connect({onSuccess:onConnect, 'useSSL': {{settings.WS_USE_SSL}}});
 
 function onConnect() {
      var queues = {{queues|safe}};
@@ -68,6 +68,7 @@ function onMessageArrived(message) {
 
 }
 </script>
+
 
 
 

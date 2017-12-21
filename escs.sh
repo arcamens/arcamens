@@ -41,6 +41,12 @@ git merge development
 git push -u origin master
 git checkout development
 ##############################################################################
+# checkout all.
+
+git checkout *
+
+##############################################################################
+
 # merge, beta, into, alpha:
 git checkout alpha
 git merge beta
@@ -514,11 +520,20 @@ python setup.py install
 rm -fr build
 
 ##############################################################################
+# install rabbitmq mqqt plugin.
 
+# Exchanges: messages sent to exchange get dispatched to the queues
+# that are binded to it.
+# rabbitmq-mqtt plugin has a default exchange amq.topic, consumers(ws clients)
+# consume from queues binded to this exchange.
+# the /ws thing is one default exchange for ws clients.
+rabbitmq-plugins enable rabbitmq_web_mqtt
 
+# https://www.rabbitmq.com/mqtt.html
+# http://www.steves-internet-guide.com/into-mqtt-python-client/
 
-
-
-
+# it explains the /ws.
+# The /ws is an endpoint exposed by the plugin.
+# https://www.rabbitmq.com/web-mqtt.html
 
 

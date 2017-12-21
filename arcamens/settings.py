@@ -34,6 +34,10 @@ PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
+WS_HOST = '127.0.0.1'
+WS_PORT = 15675
+WS_USE_SSL = 'false'
+
 # Mail settings.
 
 EMAIL_USE_TLS = True
@@ -159,3 +163,4 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
