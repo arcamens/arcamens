@@ -7,6 +7,7 @@
 <div class="col-md-4">
 <h4> <span class="glyphicon glyphicon-user"></span> Workers<h4>
 <hr>
+
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in workers %}
 <p> {{ind.name}} <p>
@@ -32,6 +33,7 @@ No attachments...
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in tags %}
+<p> {{ind.tags}}
 {% empty %}
 No tags...
 
