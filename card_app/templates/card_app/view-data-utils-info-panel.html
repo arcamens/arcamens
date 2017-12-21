@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="panel panel-default">
 <div class="panel-body">
 
@@ -17,6 +19,10 @@ No workers...
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in attachments %}
+<a href="{% static ind.file %}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} </a>
+
 {% empty %}
 No attachments...
 {% endfor %}</div></div>

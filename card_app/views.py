@@ -53,10 +53,12 @@ class ViewData(GuardianView):
         forks = card.forks.all()
         relations = card.relations.all()
         workers = card.workers.all()
+        attachments = card.filewrapper_set.all()
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
-        'user': user, 'workers': workers, 'relations': relations, 'pins': pins})
+        'attachments': attachments, 'user': user, 'workers': workers, 
+        'relations': relations, 'pins': pins})
 
 class CreateCard(GuardianView):
     """
