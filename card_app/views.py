@@ -52,10 +52,11 @@ class ViewData(GuardianView):
         pins = user.pin_set.all()
         forks = card.forks.all()
         relations = card.relations.all()
+        workers = card.workers.all()
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
-        'user': user, 'relations': relations, 'pins': pins})
+        'user': user, 'workers': workers, 'relations': relations, 'pins': pins})
 
 class CreateCard(GuardianView):
     """
@@ -526,6 +527,7 @@ class BindCardWorker(GuardianView):
         event.save()
 
         return HttpResponse(status=200)
+
 
 
 

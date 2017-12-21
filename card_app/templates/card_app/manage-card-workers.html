@@ -21,11 +21,18 @@ data-shell="#modalContent"
 data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
+<script>
+$('#modal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+})
+</script>
+
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
+
 
 
 
