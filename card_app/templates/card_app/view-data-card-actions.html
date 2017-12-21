@@ -40,7 +40,7 @@ href="#"><span class="glyphicon glyphicon-ok"></span> Done</a></li>
 <a 
 data-shell="#modalContent"
 class="e-get text-default"
-data-show="" 
+data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
 data-callback="$('#modal').modal('toggle');" 
 href="#"><span class="glyphicon glyphicon-tags"></span> Tags</a></li>
 
@@ -75,6 +75,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

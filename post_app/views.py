@@ -373,7 +373,7 @@ class ManagePostTags(GuardianView):
             return render(request, 'post_app/manage-post-tags.html', 
                 {'included': included, 'excluded': excluded,
                     'organization': me.default, 'post': post,
-                        'form':forms.UserSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         included = included.filter(
         name__contains=form.cleaned_data['name'])
@@ -383,11 +383,11 @@ class ManagePostTags(GuardianView):
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'organization': me.default,'form':form})
 
 class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = timeline_app.models.Tag.objects.get(id=tag_id)
+        tag = core_app.models.Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
         post.tags.remove(tag)
         post.save()
@@ -404,7 +404,7 @@ class UnbindPostTag(GuardianView):
 
 class BindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = timeline_app.models.Tag.objects.get(id=tag_id)
+        tag = core_app.models.Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
         post.tags.add(tag)
         post.save()
@@ -437,6 +437,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

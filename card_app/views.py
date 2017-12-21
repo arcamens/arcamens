@@ -530,13 +530,75 @@ class BindCardWorker(GuardianView):
 
         return HttpResponse(status=200)
 
+class ManageCardTags(GuardianView):
+    def get(self, request, card_id):
+        me = User.objects.get(id=self.user_id)
+        card = models.Card.objects.get(id=card_id)
 
+        included = card.tags.all()
+        excluded = core_app.models.Tag.objects.exclude(cards=card)
 
+        return render(request, 'card_app/manage-card-tags.html', 
+        {'included': included, 'excluded': excluded, 'card': card,
+        'organization': me.default,'form':forms.TagSearchForm()})
 
+    def post(self, request, card_id):
+        form = forms.TagSearchForm(request.POST)
 
+        me = User.objects.get(id=self.user_id)
+        card = models.Card.objects.get(id=card_id)
+        included = card.tags.all()
+        excluded = core_app.models.Tag.objects.exclude(cards=card)
 
+        if not form.is_valid():
+            return render(request, 'card_app/manage-card-tags.html', 
+                {'included': included, 'excluded': excluded,
+                    'organization': me.default, 'card': card,
+                        'form':form}, status=400)
 
+        included = included.filter(
+        name__contains=form.cleaned_data['name'])
 
+        excluded = excluded.filter(
+        name__contains=form.cleaned_data['name'])
+
+        return render(request, 'card_app/manage-card-tags.html', 
+        {'included': included, 'excluded': excluded, 'card': card,
+        'me': me, 'organization': me.default,'form':form})
+
+class UnbindCardTag(GuardianView):
+    def get(self, request, card_id, tag_id):
+        tag = core_app.models.Tag.objects.get(id=tag_id)
+        card = models.Card.objects.get(id=card_id)
+        card.tags.remove(tag)
+        card.save()
+
+        # me = User.objects.get(id=self.user_id)
+
+        # event = models.EUnbindCardTag.objects.create(
+        # organization=me.default, ancestor=card.ancestor, 
+        # card=card, user=me, peer=user)
+        # event.users.add(*card.ancestor.users.all())
+        # event.save()
+
+        return HttpResponse(status=200)
+
+class BindCardTag(GuardianView):
+    def get(self, request, card_id, tag_id):
+        tag = core_app.models.Tag.objects.get(id=tag_id)
+        card = models.Card.objects.get(id=card_id)
+        card.tags.add(tag)
+        card.save()
+
+        # me = User.objects.get(id=self.user_id)
+
+        # event = models.EUnbindCardTag.objects.create(
+        # organization=me.default, ancestor=card.ancestor, 
+        # card=card, tag=me, peer=tag)
+        # event.tags.add(*card.ancestor.tags.all())
+        # event.save()
+
+        return HttpResponse(status=200)
 
 
 

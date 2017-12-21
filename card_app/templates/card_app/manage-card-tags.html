@@ -1,0 +1,66 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Available {{card.label|truncatechars:20}} card's tags </h5>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+
+{% for ind in included %}
+<p id="unbind-card-tag-{{ind.id}}" > <a class="e-get" style="color:red"
+data-callback="$('#unbind-card-tag-{{ind.id}}').remove();"
+data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> </a>  {{ind.name}}
+<br>
+<small> {{ind.description}} </small>
+</p>
+{% endfor %}
+
+{% for ind in excluded %}
+<p id="bind-card-tag-{{ind.id}}">
+<a class="e-get"
+data-callback="$('#bind-card-tag-{{ind.id}}').remove();"
+data-show="{% url 'card_app:bind-card-tag' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> </a>  {{ind.name}}
+<br>
+<small> {{ind.description}} </small>
+</p>
+{% endfor %}
+
+</div>
+
+<br> 
+
+<form id="bind-card-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-form="#bind-card-search-form" 
+data-shell="#modalContent" 
+data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-tags' card.id  %}"
+class="btn btn-default e-post"> {% trans "Search" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+
+</div>
+
+
+
+
+
+
+

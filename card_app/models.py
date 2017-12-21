@@ -68,6 +68,10 @@ class Card(CardMixin, models.Model):
     null=True, related_name='related', blank=True, 
     symmetrical=True)
 
+    tags = models.ManyToManyField(
+    'core_app.Tag', related_name='cards', 
+    null=True, blank=True, symmetrical=False)
+
     html = models.TextField(null=True, blank=True)
 
 class Fork(Card):

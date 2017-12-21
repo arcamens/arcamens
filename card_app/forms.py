@@ -33,6 +33,9 @@ class UserSearchForm(forms.Form):
 class CardSearchForm(forms.Form):
     pattern = forms.CharField(required=False)
 
+class TagSearchForm(forms.Form):
+    name = forms.CharField(required=False)
+
 
 
 
