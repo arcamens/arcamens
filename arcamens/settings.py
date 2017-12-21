@@ -155,22 +155,7 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'arcamens', 'static')
 MEDIA_URL ='/'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+try:
+    from local_settings import *
+except ImportError:
+    pass
