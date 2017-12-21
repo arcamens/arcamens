@@ -7,9 +7,9 @@
 
 <a class="e-get"
 data-shell="#bigModalContent"
-data-show="{% url 'comment_app:list-comments' event.child.id %}" 
+data-show="{% url 'card_comment_app:list-comments' event.child.id %}" 
 data-callback="$('#bigModal').modal('toggle');"
-href="#"> CardComment </a> 
+href="#"> Comment </a> 
 
 added to 
 <a class="e-get"
@@ -20,14 +20,11 @@ href="#"> {{event.child.label}} </a>
 
 by
 
-<a class="e-get" 
-data-show="{% url 'core_app:list-user-tags' event.user.id %}"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-href="#"> 
-{{event.user}} </a> on {{event.created}}</p>
+{{event.user}} on {{event.created}}</p>
 
 {% endblock %}
+
+
 
 
 

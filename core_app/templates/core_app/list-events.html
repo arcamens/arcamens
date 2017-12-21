@@ -44,10 +44,10 @@ $('#event-' + {{ind.id}}).load("{{ind.eunrelatecard.get_absolute_url}}");
 });
 </script>
 
-{% elif ind.ecreatecomment %}
+{% elif ind.ecreatepostcomment %}
 <script>
 $(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatecomment.get_absolute_url}}");
+$('#event-' + {{ind.id}}).load("{{ind.ecreatepostcomment.get_absolute_url}}");
 });
 </script>
 {% elif ind.eupdatecard %}
@@ -130,10 +130,10 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletetimeline.get_absolute_url}}");
 });
 </script>
-{% elif ind.ecreatecomment %}
+{% elif ind.ecreatecardcomment %}
 <script>
 $(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatecomment.get_absolute_url}}");
+$('#event-' + {{ind.id}}).load("{{ind.ecreatecardcomment.get_absolute_url}}");
 });
 </script>
 {% elif ind.edeletepost %}
@@ -172,6 +172,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

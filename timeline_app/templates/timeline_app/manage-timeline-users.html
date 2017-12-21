@@ -22,9 +22,7 @@ Available {{timeline.name}}'s users </h5>
 </td>
 
 <td> 
-<a href="#" data-show="{% url 'core_app:list-user-tags' ind.id %}"
-data-shell="#modalContent" data-toggle="modal"  class="e-get">
-<span class="glyphicon glyphicon-cog"></span> {{ind.name}}  </a>
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
 
 <p><a href="#"> {{ind.email}} </a> </p>
 <a class="e-get" style="color:red"
@@ -39,11 +37,8 @@ data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" hre
 <td style="width:70px;height:80">
      <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
 </td>
-<td> <a href="#" data-show="{% url 'core_app:list-user-tags' ind.id %}"
-data-shell="#modalContent" 
-data-toggle="modal" 
-class="e-get">
-<span class="glyphicon glyphicon-cog"></span> {{ind.name}}  </a>
+<td> 
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  </a>
 
 <p><a href="#"> {{ind.email}} </a> </p>
 
@@ -78,6 +73,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

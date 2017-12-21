@@ -31,9 +31,10 @@ urlpatterns = [
     url(r'^board_app/', include('board_app.urls', namespace='board_app')),
     url(r'^card_app/', include('card_app.urls', namespace='card_app')),
     url(r'^list_app/', include('list_app.urls', namespace='list_app')),
-    url(r'^card_comment_app/', include('card_comment_app.urls', namespace='comment_app')),
+    url(r'^card_comment_app/', include('card_comment_app.urls', namespace='card_comment_app')),
 
 ]
+
 
 
 

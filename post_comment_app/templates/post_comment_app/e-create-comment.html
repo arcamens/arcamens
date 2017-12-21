@@ -5,7 +5,7 @@
 
 <a class="e-get"
 data-shell="#modalContent" 
-data-show="{% url 'comment_app:list-comments' event.post.id %}"
+data-show="{% url 'post_comment_app:list-comments' event.post.id %}"
 data-callback="$('#modal').modal('show');" 
 href="#"> PostComment </a> created on 
 
@@ -14,14 +14,10 @@ data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 {{event.post.label}} </a>  by 
 
-<a class="e-get" 
-data-show="{% url 'core_app:list-user-tags' event.user.id %}"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-href="#"> 
-{{event.user}} </a> on {{event.created}}
+{{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 

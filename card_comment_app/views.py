@@ -14,7 +14,7 @@ class ListCardComments(GuardianView):
     def get(self, request, card_id):
         card    = card_app.models.Card.objects.get(id=card_id)
         records = card.cardcomment_set.order_by('-created')
-        return render(request, 'comment_app/list-comments.html', 
+        return render(request, 'card_comment_app/list-comments.html', 
         {'form':forms.CardCommentForm(), 'card': card, 'records': records})
 
 class CreateCardComment(GuardianView):
@@ -25,7 +25,7 @@ class CreateCardComment(GuardianView):
         form = forms.CardCommentForm(request.POST, request.FILES)
 
         if not form.is_valid():
-            return render(request, 'comment_app/list-comments.html',
+            return render(request, 'card_comment_app/list-comments.html',
                 {'form': form, 'card':card, 'records': records}, status=400)
         record      = form.save(commit = False)
         record.card = card
@@ -37,7 +37,7 @@ class CreateCardComment(GuardianView):
         child=card, comment=record, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        return redirect('comment_app:list-comments', 
+        return redirect('card_comment_app:list-comments', 
         card_id=card.id)
 
 class ECreateCardComment(GuardianView):
@@ -46,8 +46,9 @@ class ECreateCardComment(GuardianView):
 
     def get(self, request, event_id):
         event = models.ECreateCardComment.objects.get(id=event_id)
-        return render(request, 'comment_app/e-create-comment.html', 
+        return render(request, 'card_comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

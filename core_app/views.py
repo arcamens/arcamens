@@ -149,13 +149,13 @@ class ListUsers(GuardianView):
         {'users': users, 'owner': organization.owner, 
         'total': total, 'form': form, 'organization': organization})
 
-class ListUserTags(GuardianView):
+class ManageUserTags(GuardianView):
     def get(self, request, user_id):
         user      = models.User.objects.get(id=user_id)
         me        = models.User.objects.get(id=self.user_id)
         timelines = user.timelines.filter(organization=me.default)
 
-        return render(request, 'core_app/list-user-tags.html', 
+        return render(request, 'core_app/manage-user-tags.html', 
         {'timelines': timelines, 'user': user, 'me': me,
         'organization': me.default, 'tags': user.tags.all()})
 
@@ -220,7 +220,7 @@ class BindTag(GuardianView):
         organization=me.default, name=form.cleaned_data['name'])
         user.tags.add(tag)
 
-        return redirect('core_app:list-user-tags', 
+        return redirect('core_app:manage-user-tags', 
         user_id=user.id)
 
 class UnbindUserTag(GuardianView):
@@ -232,6 +232,7 @@ class UnbindUserTag(GuardianView):
 
         return redirect('core_app:list-user-tags', 
         user_id=user_id)
+
 
 
 

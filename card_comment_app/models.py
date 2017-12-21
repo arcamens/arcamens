@@ -38,11 +38,12 @@ class ECreateCardComment(Event):
 
     def get_absolute_url(self):
         return reverse(
-            'comment_app:e-create-comment', 
+            'card_comment_app:e-create-comment', 
                  kwargs={'event_id': self.id})
 
     def __str__(self):
         return self.comment
+
 
 
 

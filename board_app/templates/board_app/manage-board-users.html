@@ -20,9 +20,7 @@ Available {{board.name}}'s users </h5>
 </td>
 
 <td> 
-<a href="#" data-show="{% url 'core_app:list-user-tags' ind.id %}"
-data-shell="#modalContent" data-toggle="modal"  class="e-get">
-<span class="glyphicon glyphicon-cog"></span> {{ind.name}}  </a>
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  </a>
 
 <p><a href="#"> {{ind.email}} </a> </p>
 <a class="e-get" style="color:red"
@@ -38,11 +36,8 @@ data-show="{% url 'board_app:unbind-board-user' board.id ind.id %}" href="#">
      <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
 </td>
 
-<td> <a href="#" data-show="{% url 'core_app:list-user-tags' ind.id %}"
-data-shell="#modalContent" 
-data-toggle="modal" 
-class="e-get">
-<span class="glyphicon glyphicon-cog"></span> {{ind.name}}  </a>
+<td>
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
 
 <p><a href="#"> {{ind.email}} </a> </p>
 
@@ -78,6 +73,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

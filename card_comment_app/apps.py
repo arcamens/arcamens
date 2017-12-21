@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class CardCommentAppConfig(AppConfig):
-    name = 'comment_app'
+    name = 'card_comment_app'
+

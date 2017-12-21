@@ -25,7 +25,7 @@ class CreatePostComment(GuardianView):
         form = forms.PostCommentForm(request.POST, request.FILES)
 
         if not form.is_valid():
-            return render(request, 'comment_app/list-comments.html',
+            return render(request, 'post_comment_app/list-comments.html',
                 {'form': form, 'post':post, 'records': records}, status=400)
         record      = form.save(commit = False)
         record.post = post
@@ -54,6 +54,7 @@ class ECreatePostComment(GuardianView):
         event = models.ECreatePostComment.objects.get(id=event_id)
         return render(request, 'post_comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
