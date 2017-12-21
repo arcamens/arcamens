@@ -9,6 +9,7 @@ import list_app.models
 from . import models
 from . import forms
 import core_app.models
+from core_app import ws
 
 # Create your views here.
 
@@ -70,12 +71,19 @@ class CreateList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
+        ws.client.publish('boards%s' % list.ancestor.id, 
+            'Card on: %s!' % list.ancestor.id, 0, False)
+
         return redirect('list_app:list-lists', board_id=board.id)
 
 class DeleteList(GuardianView):
     def get(self, request, list_id):
         list = list_app.models.List.objects.get(id=list_id)
         list.delete()
+
+        # Missing event.
+        ws.client.publish('boards%s' % list.ancestor.id, 
+            'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists',
         board_id=list.ancestor.id)
@@ -102,6 +110,11 @@ class UpdateList(GuardianView):
                         {'form': form, 'list':record, }, status=400)
 
         record.save()
+
+        # Missing event.
+        ws.client.publish('boards%s' % record.ancestor.id, 
+            'Card on: %s!' % record.ancestor.id, 0, False)
+
         return redirect('card_app:list-cards', 
         list_id=record.id)
 
@@ -115,6 +128,11 @@ class PasteCards(GuardianView):
             ind.save()
 
         user.card_clipboard.clear()
+
+        # missing event.
+        ws.client.publish('boards%s' % list.ancestor.id, 
+            'Card on: %s!' % list.ancestor.id, 0, False)
+
         return redirect('card_app:list-cards', 
         list_id=list.id)
 
@@ -123,9 +141,15 @@ class CutList(GuardianView):
         list          = models.List.objects.get(id=list_id)
         user          = core_app.models.User.objects.get(id=self.user_id)
         board         = list.ancestor
+
+        ws.client.publish('boards%s' % list.ancestor.id, 
+            'Card on: %s!' % list.ancestor.id, 0, False)
+
         list.ancestor = None
         list.save()
         user.list_clipboard.add(list)
+
+        # missing event.
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -136,6 +160,10 @@ class CopyList(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
         copy = list.duplicate()
         user.list_clipboard.add(copy)
+
+        # missing event.
+        ws.client.publish('boards%s' % list.ancestor.id, 
+            'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
@@ -174,6 +202,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 
