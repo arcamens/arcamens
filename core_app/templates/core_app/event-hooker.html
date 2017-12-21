@@ -6,8 +6,8 @@ function alertEvent() {
     $('#eventsBell').css('color', 'orange');
 }
 
-var wsbroker = '127.0.0.1';  // mqtt websocket enabled broker
-var wsport = 15675; // port for above
+var wsbroker = '{{settings.WS_HOST}}';  // mqtt websocket enabled broker
+var wsport = {{settings.WS_PORT}}; // port for above
 var client = new Paho.MQTT.Client(wsbroker, wsport, "/ws",
         "myclientid_" + parseInt(Math.random() * 100, 10));
 
@@ -16,7 +16,7 @@ client.onConnectionLost = onConnectionLost;
 client.onMessageArrived = onMessageArrived;
 
 // connect the client
-client.connect({onSuccess:onConnect});
+client.connect({onSuccess:onConnect, useSSL: {{settings.WS_USE_SSL}}});
 
 function onConnect() {
      var queues = {{queues|safe}};

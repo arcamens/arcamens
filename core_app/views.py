@@ -9,6 +9,7 @@ from . import models
 from . import forms
 import timeline_app
 import json
+from django.conf import settings
 
 # Create your views here.
 class AuthenticatedView(View):
@@ -53,7 +54,8 @@ class Index(GuardianView):
 
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'queues': json.dumps(queues)})
+        'organizations': organizations, 'queues': json.dumps(queues),
+         'settings': settings})
 
 class SwitchOrganization(GuardianView):
     def get(self, request, organization_id):
