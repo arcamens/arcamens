@@ -11,6 +11,7 @@ from . import models
 from . import forms
 import core_app.models
 import board_app.models
+from core_app import ws
 
 # Create your views here.
 
@@ -326,6 +327,12 @@ class BindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
+        ws.client.publish('board%s' % board.id, 
+            'timeline on: %s!' % board.name, 0, False)
+
+        ws.client.publish('user%s' % user.id, 
+            'subscribe board%s' % board.id, 0, False)
+
         return HttpResponse(status=200)
 
 class UnbindBoardUser(GuardianView):
@@ -342,6 +349,12 @@ class UnbindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
+        ws.client.publish('board%s' % board.id, 
+            'timeline on: %s!' % board.name, 0, False)
+
+        ws.client.publish('user%s' % user.id, 
+            'unsubscribe board%s' % board.id, 0, False)
+
         return HttpResponse(status=200)
 
 class EBindBoardUser(GuardianView):
@@ -355,6 +368,7 @@ class EUnbindBoardUser(GuardianView):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
         {'event':event})
+
 
 
 

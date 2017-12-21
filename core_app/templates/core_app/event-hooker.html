@@ -51,6 +51,7 @@ function onMessageArrived(message) {
     // then the user gets unsubscribed from the queue.
     console.log("onMessageArrived:"+ message.payloadString +
     "destionationName:" + message.destinationName);
+    alertEvent();
 
     if(message.destinationName == "user{{user.id}}") {
         args = message.payloadString.split(' ')
@@ -58,14 +59,13 @@ function onMessageArrived(message) {
 
         if(args[0] == "unsubscribe") {
             client.unsubscribe(args[1]);
-            console.log('Unsubscribing %s' + args);
+            console.log('Unsubscribing' + args);
         } else if(args[0] == "subscribe") {
             client.subscribe(args[1]);
-            console.log('Subscribing %s' + args);
+            console.log('Subscribing' + args);
         }
     }
 
-    alertEvent();
 }
 </script>
 

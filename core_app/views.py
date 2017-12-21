@@ -48,8 +48,8 @@ class Index(GuardianView):
         queues = list(map(lambda ind: 'timeline%s' % ind, 
         user.timelines.values_list('id')))
 
-        queues.extend(map(lambda ind: 'boards%s' % ind, 
-        user.timelines.values_list('id')))
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
 
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,

@@ -94,7 +94,7 @@ class CreateCard(GuardianView):
         ancestor=card.ancestor, child=card, user=user)
         event.users.add(*ancestor.ancestor.members.all())
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', list_id=ancestor.id)
@@ -128,7 +128,7 @@ class CreateFork(GuardianView):
         ancestor=card.ancestor, child0=card, child1=fork, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:view-data', card_id=card.id)
@@ -143,7 +143,7 @@ class DeleteCard(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         card.delete()
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', 
@@ -159,7 +159,7 @@ class CutCard(GuardianView):
         user.card_clipboard.add(card)
 
         # Missing event.
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', 
@@ -173,7 +173,7 @@ class CopyCard(GuardianView):
         user.card_clipboard.add(copy)
 
         # Missing event.
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', 
@@ -265,7 +265,7 @@ class UpdateCard(GuardianView):
         event.users.add(*record.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('boards%s' % record.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % record.ancestor.ancestor.id, 
             'Card on: %s!' % record.ancestor.ancestor.id, 0, False)
 
         return redirect('card_app:view-data', 
@@ -424,7 +424,7 @@ class UnrelateCard(GuardianView):
 
         for ind in set([card0.ancestor.ancestor.id, 
             card1.ancestor.ancestor.id]):
-            ws.client.publish('boards%s' % ind, 
+            ws.client.publish('board%s' % ind, 
                 'Card on: %s!' % ind, False)
 
         return HttpResponse(status=200)
@@ -447,7 +447,7 @@ class RelateCard(GuardianView):
 
         for ind in set([card0.ancestor.ancestor.id, 
             card1.ancestor.ancestor.id]):
-            ws.client.publish('boards%s' % ind, 
+            ws.client.publish('board%s' % ind, 
                 'Card on: %s!' % ind, False)
 
         return HttpResponse(status=200)
@@ -549,7 +549,7 @@ class UnbindCardWorker(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return HttpResponse(status=200)
@@ -568,7 +568,7 @@ class BindCardWorker(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return HttpResponse(status=200)
@@ -624,7 +624,7 @@ class UnbindCardTag(GuardianView):
         # event.users.add(*card.ancestor.users.all())
         # event.save()
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return HttpResponse(status=200)
@@ -644,10 +644,11 @@ class BindCardTag(GuardianView):
         # event.tags.add(*card.ancestor.tags.all())
         # event.save()
 
-        ws.client.publish('boards%s' % card.ancestor.ancestor.id, 
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
 
         return HttpResponse(status=200)
+
 
 
 

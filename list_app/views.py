@@ -71,7 +71,7 @@ class CreateList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
-        ws.client.publish('boards%s' % list.ancestor.id, 
+        ws.client.publish('board%s' % list.ancestor.id, 
             'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists', board_id=board.id)
@@ -82,7 +82,7 @@ class DeleteList(GuardianView):
         list.delete()
 
         # Missing event.
-        ws.client.publish('boards%s' % list.ancestor.id, 
+        ws.client.publish('board%s' % list.ancestor.id, 
             'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists',
@@ -112,7 +112,7 @@ class UpdateList(GuardianView):
         record.save()
 
         # Missing event.
-        ws.client.publish('boards%s' % record.ancestor.id, 
+        ws.client.publish('board%s' % record.ancestor.id, 
             'Card on: %s!' % record.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', 
@@ -130,7 +130,7 @@ class PasteCards(GuardianView):
         user.card_clipboard.clear()
 
         # missing event.
-        ws.client.publish('boards%s' % list.ancestor.id, 
+        ws.client.publish('board%s' % list.ancestor.id, 
             'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('card_app:list-cards', 
@@ -142,7 +142,7 @@ class CutList(GuardianView):
         user          = core_app.models.User.objects.get(id=self.user_id)
         board         = list.ancestor
 
-        ws.client.publish('boards%s' % list.ancestor.id, 
+        ws.client.publish('board%s' % list.ancestor.id, 
             'Card on: %s!' % list.ancestor.id, 0, False)
 
         list.ancestor = None
@@ -162,7 +162,7 @@ class CopyList(GuardianView):
         user.list_clipboard.add(copy)
 
         # missing event.
-        ws.client.publish('boards%s' % list.ancestor.id, 
+        ws.client.publish('board%s' % list.ancestor.id, 
             'Card on: %s!' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists', 
@@ -202,6 +202,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 
