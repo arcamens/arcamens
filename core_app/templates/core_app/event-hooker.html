@@ -28,11 +28,11 @@ function onConnect() {
     
     // Users will have a particular queue
     // for getting specific events.
-    client.subscribe("{{user.id}}");
+    client.subscribe("user{{user.id}}");
 
-  // message = new Paho.MQTT.Message("Connected from browser!");
-  // message.destinationName = "beta";
-  // client.send(message);
+    // message = new Paho.MQTT.Message("Connected from browser!");
+    // message.destinationName = "beta";
+    // client.send(message);
 
   console.log("onConnect");
 
@@ -44,11 +44,27 @@ function onConnectionLost(responseObject) {
     }
 }
 
+
 function onMessageArrived(message) {
     // get the queue here and parse the message
     // if it is user queue and the message is unsubscribe
     // then the user gets unsubscribed from the queue.
-    console.log("onMessageArrived:"+message.payloadString);
+    console.log("onMessageArrived:"+ message.payloadString +
+    "destionationName:" + message.destinationName);
+
+    if(message.destinationName == "user{{user.id}}") {
+        args = message.payloadString.split(' ')
+        console.log(args);
+
+        if(args[0] == "unsubscribe") {
+            client.unsubscribe(args[1]);
+            console.log('Unsubscribing %s' + args);
+        } else if(args[0] == "subscribe") {
+            client.subscribe(args[1]);
+            console.log('Subscribing %s' + args);
+        }
+    }
+
     alertEvent();
 }
 </script>

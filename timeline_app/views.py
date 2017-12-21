@@ -124,6 +124,14 @@ class UnbindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
+        ws.client.publish('timeline%s' % timeline.id, 
+            'timeline on: %s!' % timeline.name, 0, False)
+
+        # When user is removed from timline then it
+        # gets unsubscribed from the timeline.
+        ws.client.publish('user%s' % user.id, 
+            'unsubscribe timeline%s' % timeline.id, 0, False)
+
         return HttpResponse(status=200)
 
 class UpdateTimeline(GuardianView):
@@ -346,6 +354,12 @@ class BindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
+        ws.client.publish('timeline%s' % timeline.id, 
+            'timeline on: %s!' % timeline.name, 0, False)
+
+        ws.client.publish('user%s' % user.id, 
+            'subscribe timeline%s' % timeline.id, 0, False)
+
         return HttpResponse(status=200)
 
 class ManageUserTimelines(GuardianView):
@@ -425,6 +439,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
