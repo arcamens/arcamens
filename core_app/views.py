@@ -173,7 +173,7 @@ class ManageUserTags(GuardianView):
             return render(request, 'core_app/manage-user-tags.html', 
                 {'included': included, 'excluded': excluded,
                     'organization': me.default, 'user': user,
-                        'form':forms.TagSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         included = included.filter(
         name__contains=form.cleaned_data['name'])
@@ -200,12 +200,35 @@ class ListEvents(GuardianView):
 class ListTags(GuardianView):
     def get(self, request):
         user      = models.User.objects.get(id=self.user_id)
-        tags = models.Tag.objects.filter(organization=user.default)
-        form = forms.FindTagForm()
+        tags = user.default.tags.all()
+        form = forms.TagSearchForm()
 
         return render(request, 'core_app/list-tags.html', 
         {'tags': tags, 'form': form, 'user': user, 
         'organization': user.default})
+
+    def post(self, request):
+        user = models.User.objects.get(id=self.user_id)
+        form = forms.TagSearchForm(request.POST)
+        tags = user.default.tags.all()
+
+        if not form.is_valid():
+            return render(request, 'core_app/list-tags.html', 
+                {'tags': tags, 'form': form, 'user': user, 
+                    'organization': user.default})
+
+        tags = tags.filter(
+        name__contains=form.cleaned_data['name'])
+
+        return render(request, 'core_app/list-tags.html', 
+        {'tags': tags, 'form': form, 'user': user, 
+        'organization': user.default})
+
+class DeleteTag(GuardianView):
+    def get(self, request, tag_id):
+        tag = models.Tag.objects.get(id=tag_id)
+        tag.delete()
+        return HttpResponse(status=200)
 
 class CreateTag(GuardianView):
     def get(self, request):

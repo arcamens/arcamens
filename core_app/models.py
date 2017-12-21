@@ -103,7 +103,9 @@ class Tag(models.Model):
     # When the organization is deleted all its tags
     # are deleted too.
     organization = models.ForeignKey(
-    'core_app.Organization', null=True, blank=True)
+    'core_app.Organization', related_name='tags',
+    null=True, blank=True)
+
 
 
 

@@ -19,8 +19,11 @@ href="#"> <span class="glyphicon glyphicon-plus"></span></a>
 
 <div class="pre-scrollable">
 {% for ind in tags %}
-<p>
-<a style="color:red;" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+<p id="delete-tag-{{ind.id}}">
+<a class="e-get" style="color:red"
+data-callback="$('#delete-tag-{{ind.id}}').remove();"
+data-show="{% url 'core_app:delete-tag' ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> </a>
 
 <b> {{ind.name}}: </b> {{ind.description}} </p>
 {% empty %}
@@ -30,8 +33,12 @@ No tags.
 </div>
 
 <br>
-{% bootstrap_form form layout='inline' %}
+<form id="list-tag-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.name  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
 
 </div>
 
@@ -41,11 +48,16 @@ data-shell="#modalContent"
 data-show="{% url 'core_app:update-organization' organization.id  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
+<button  type="button" data-form="#list-tag-search-form"
+data-shell="#modalContent" 
+data-show="{% url 'core_app:list-tags'  %}"
+class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

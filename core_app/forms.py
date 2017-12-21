@@ -38,9 +38,6 @@ class EventSearchForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 
-class FindTagForm(forms.Form):
-    pattern = forms.CharField()
-
 class TagForm(forms.ModelForm):
     class Meta:
         model  = models.Tag
