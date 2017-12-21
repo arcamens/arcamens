@@ -17,8 +17,10 @@ urlpatterns = [
     url(r'^unbind-user-tag/(?P<user_id>.+)/(?P<tag_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
     url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
     url(r'^delete-tag/(?P<tag_id>.+)/', views.DeleteTag.as_view(), name='delete-tag'),
+    url(r'^event-queues/(?P<tag_id>.+)/', views.EventQueues.as_view(), name='event-queues'),
 
 ]
+
 
 
 

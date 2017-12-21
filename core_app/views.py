@@ -8,6 +8,7 @@ from board_app.models import Organization
 from . import models
 from . import forms
 import timeline_app
+import json
 
 # Create your views here.
 class AuthenticatedView(View):
@@ -42,9 +43,17 @@ class Index(GuardianView):
     def get(self, request):
         user = models.User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
+    
+        # can be improved.
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
+
+        queues.extend(map(lambda ind: 'boards%s' % ind, 
+        user.timelines.values_list('id')))
+
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations})
+        'organizations': organizations, 'queues': json.dumps(queues)})
 
 class SwitchOrganization(GuardianView):
     def get(self, request, organization_id):
@@ -268,6 +277,12 @@ class BindUserTag(GuardianView):
 
         return HttpResponse(status=200)
 
+class EventQueues(GuardianView):
+    def get(self, request):
+        user = models.User.objects.get(id=user_id)
+        queues = user.timelines.values_list('id')
+        data = simplejson.dumps(some_data_to_dump)
+        return HttpResponse(data, content_type='application/json')
 
 
 
