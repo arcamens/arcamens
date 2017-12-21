@@ -54,11 +54,12 @@ class ViewData(GuardianView):
         relations = card.relations.all()
         workers = card.workers.all()
         attachments = card.filewrapper_set.all()
+        tags = card.tags.all()
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 
-        'relations': relations, 'pins': pins})
+        'relations': relations, 'pins': pins, 'tags': tags})
 
 class CreateCard(GuardianView):
     """
@@ -599,6 +600,7 @@ class BindCardTag(GuardianView):
         # event.save()
 
         return HttpResponse(status=200)
+
 
 
 
