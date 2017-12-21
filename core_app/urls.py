@@ -13,11 +13,12 @@ urlpatterns = [
     url(r'^manage-user-tags/(?P<user_id>.+)', views.ManageUserTags.as_view(), name='manage-user-tags'),
     url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
     url(r'^list-tags/', views.ListTags.as_view(), name='list-tags'),
-    url(r'^bind-tag/(?P<user_id>.+)/', views.BindTag.as_view(), name='bind-tag'),
-    url(r'^unbind-user-tag/(?P<tag_id>.+)/(?P<user_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
+    url(r'^bind-user-tag/(?P<user_id>.+)/(?P<tag_id>.+)/', views.BindUserTag.as_view(), name='bind-user-tag'),
+    url(r'^unbind-user-tag/(?P<user_id>.+)/(?P<tag_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
     url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
 
 ]
+
 
 
 

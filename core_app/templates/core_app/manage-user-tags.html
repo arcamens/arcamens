@@ -1,62 +1,62 @@
 {% load bootstrap3 %}
 {% load i18n %}
+{% load static %}
 
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h5> 
-
-<!-- Should open a page for attaching the user to new organizations -->
-<span class="glyphicon glyphicon-tags"></span> {{user.name}}'s Tags </h5>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Available {{user.label}} user's tags </h5>
 </div>
 
 <div class="modal-body">
 
-<h5>  
-<a style="font-size:110%" href="#" 
-class="e-get" data-shell="#modalContent"  
-data-show="{% url 'core_app:bind-tag' user.id %}"> 
-<span class="glyphicon glyphicon-plus"></span> </a>
-
-Tags </h5>
-
 <div class="pre-scrollable">
-{% for ind in tags %}
-<p>
-<a class="e-get"
-data-shell="#modalContent" 
-data-show="{% url 'core_app:unbind-user-tag' ind.id user.id %}"
-style="color:red;" href="#"> 
-<span class="glyphicon glyphicon-remove"></span> </a> 
 
-<a class="e-get"
-data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
-data-show=""
-href="#"> 
-{{ind.name}}</a> </p>
-{% empty %}
-<p> ... </p>
-
+{% for ind in included %}
+<p id="unbind-user-tag-{{ind.id}}" > <a class="e-get" style="color:red"
+data-callback="$('#unbind-user-tag-{{ind.id}}').remove();"
+data-show="{% url 'core_app:unbind-user-tag' user.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> </a>  {{ind.name}}
+<br>
+<small> {{ind.description}} </small>
+</p>
 {% endfor %}
+
+{% for ind in excluded %}
+<p id="bind-user-tag-{{ind.id}}">
+<a class="e-get"
+data-callback="$('#bind-user-tag-{{ind.id}}').remove();"
+data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> </a>  {{ind.name}}
+<br>
+<small> {{ind.description}} </small>
+</p>
+{% endfor %}
+
 </div>
 
+<br> 
+
+<form id="bind-user-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
 </div>
 
 <div class="modal-footer">
-{% block buttons %}
-<button  type="button" 
+<button  type="button" data-form="#bind-user-search-form" 
 data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' organization.id  %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
-{% endblock %}
+data-shell-error="#modalContent" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
+class="btn btn-default e-post"> {% trans "Search" %} </button>
 
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<button type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
-
-
 
 
 

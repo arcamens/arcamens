@@ -49,6 +49,8 @@ class TagForm(forms.ModelForm):
 class BindTagForm(forms.Form):
     name = forms.CharField()
 
+class TagSearchForm(forms.Form):
+    name = forms.CharField(required=False)
 
 
 
