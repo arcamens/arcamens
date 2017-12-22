@@ -3,17 +3,28 @@
 
 {% block content %}
 
-User {{event.user.name}} has untagged
+<span class="glyphicon glyphicon-user"></span>
+{{event.user.name}} has untagged card
 
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'card_app:card' event.card.id %}" href="#"> 
-{{event.card.label}} </a>  by 
+data-show="{% url 'card_app:view-data' event.card.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card.label|truncatechars:40}} </a>  
 
-with {{event.tag.name}} on {{event.ancestor.name}}
+as {{event.tag.name}} on list 
+<span class="glyphicon glyphicon-list-alt"></span> 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
+{{event.ancestor.name}}
+</a>  
+
 at {{event.created}}
 
 {% endblock %}
+
 
 
 

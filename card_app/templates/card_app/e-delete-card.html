@@ -2,18 +2,22 @@
 {% load i18n %}
 
 {% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has deleted card
 
 <span class="glyphicon glyphicon-file"></span> {{event.label}}
-deleted on 
+
+on list
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
-<span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  by 
+<span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  
 
-{{event.user}} on {{event.created}}
+on {{event.created}}
 
 {% endblock %}
+
 
 
 

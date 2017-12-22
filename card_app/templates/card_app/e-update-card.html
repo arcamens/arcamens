@@ -2,6 +2,9 @@
 {% load i18n %}
 
 {% block content %}
+<span class="glyphicon glyphicon-user"></span>
+
+{{event.user}} has updated card
 
 <a class="e-get"
 data-shell="#main-view"
@@ -9,17 +12,18 @@ data-show="{% url 'card_app:view-data' event.child.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
 
-{{event.child.label}} </a> 
+{{event.child.label}} </a> on list
 
-updated on <a class="e-get"
+<a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.ancestor.name}} </a>  by 
+{{event.ancestor.name}} </a> 
 
-{{event.user}} on {{event.created}}
+on {{event.created}}
 
 {% endblock %}
+
 
 
 

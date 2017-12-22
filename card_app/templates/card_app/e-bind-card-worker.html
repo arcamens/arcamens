@@ -3,17 +3,19 @@
 
 
 {% block content %}
-
-{{event.peer.name}} </a> binded to
-
+<span class="glyphicon glyphicon-user"></span> {{event.user}} has binded
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} 
+to card
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
-<span class="glyphicon glyphicon-file"></span> {{event.ancestor.name}} </a>  by 
+data-show="{% url 'card_app:view-data' event.child.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span> {{event.child.label|truncatechars:40}} </a> 
 
-{{event.user}} </a> on {{event.created}}
+at {{event.created}}
 
 {% endblock %}
+
+
 
 
 
