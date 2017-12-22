@@ -428,6 +428,14 @@ class UnbindPostTag(GuardianView):
         # event.users.add(*post.ancestor.users.all())
         # event.save()
 
+        me = User.objects.get(id=self.user_id)
+
+        event = models.EUnbindTagPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=me)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
+
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'Tag unbinded on: %s!' % post.ancestor.id, 0, False)
 
@@ -462,6 +470,15 @@ class EBindTagPost(GuardianView):
         return render(request, 'post_app/e-bind-tag-post.html', 
         {'event':event})
 
+class EUnbindTagPost(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EUnbindTagPost.objects.get(id=event_id)
+        return render(request, 'post_app/e-unbind-tag-post.html', 
+        {'event':event})
+
 class EUnassignPost(GuardianView):
     """
     """
@@ -479,11 +496,6 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
-
-
-
-
-
 
 
 

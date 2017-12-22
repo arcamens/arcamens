@@ -209,6 +209,29 @@ class EBindTagPost(Event):
                     kwargs={'event_id': self.id})
 
 
+class EUnbindTagPost(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_unbind_tag_post0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_unbind_tag_post1', blank=True)
+
+    tag = models.ForeignKey('core_app.Tag', 
+    related_name='e_unbind_tag_post2', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_app:e-unbind-tag-post', 
+                    kwargs={'event_id': self.id})
+
+
+
+
+
+
+
 
 
 
