@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^e-delete-post/(?P<event_id>.+)/', views.EDeletePost.as_view(), name='e-delete-post'),
     url(r'^e-unassign-post/(?P<event_id>.+)/', views.EUnassignPost.as_view(), name='e-unassign-post'),
     url(r'^e-assign-post/(?P<event_id>.+)/', views.EAssignPost.as_view(), name='e-assign-post'),
+    url(r'^e-bind-tag-post/(?P<event_id>.+)/', views.EBindTagPost.as_view(), name='e-bind-tag-post'),
 
     url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assigments'),
     url(r'^manage-post-workers/(?P<post_id>.+)/', views.ManagePostWorkers.as_view(), name='manage-post-workers'),
@@ -30,6 +31,7 @@ urlpatterns = [
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
 
 ]
+
 
 
 

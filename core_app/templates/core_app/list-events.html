@@ -136,6 +136,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecreatecardcomment.get_absolute_url}}");
 });
 </script>
+{% elif ind.ebindtagpost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ebindtagpost.get_absolute_url}}");
+});
+</script>
 {% elif ind.edeletepost %}
 <script>
 $(document).ready(function() {
@@ -172,6 +178,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

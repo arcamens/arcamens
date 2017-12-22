@@ -191,5 +191,27 @@ class EUnassignPost(Event):
 
 
 
+class EBindTagPost(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_bind_tag_post0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_bind_tag_post0', blank=True)
+
+    tag = models.ForeignKey('core_app.Tag', 
+    related_name='e_bind_tag_post0', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_app:e-bind-tag-post', 
+                    kwargs={'event_id': self.id})
+
+
+
+
+
+
 
 

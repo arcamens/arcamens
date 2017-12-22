@@ -440,19 +440,27 @@ class BindPostTag(GuardianView):
         post.tags.add(tag)
         post.save()
 
-        # me = User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
 
-        # event = models.EUnbindPostTag.objects.create(
-        # organization=me.default, ancestor=post.ancestor, 
-        # post=post, tag=me, peer=tag)
-        # event.tags.add(*post.ancestor.tags.all())
-        # event.save()
+        event = models.EBindTagPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=me)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'Tag binded on: %s!' % post.ancestor.id, 0, False)
 
         return HttpResponse(status=200)
 
+class EBindTagPost(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EBindTagPost.objects.get(id=event_id)
+        return render(request, 'post_app/e-bind-tag-post.html', 
+        {'event':event})
 
 class EUnassignPost(GuardianView):
     """
@@ -471,6 +479,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

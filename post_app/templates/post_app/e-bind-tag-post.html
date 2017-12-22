@@ -1,0 +1,26 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+User {{event.user.name}} has tagged
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+{{event.post.label}} </a>  by 
+
+with {{event.tag.name}} on {{event.ancestor}}
+at {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
