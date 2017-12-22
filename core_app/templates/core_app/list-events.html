@@ -148,6 +148,19 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.eunbindtagpost.get_absolute_url}}");
 });
 </script>
+{% elif ind.eunbindtagcard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eunbindtagcard.get_absolute_url}}");
+});
+</script>
+{% elif ind.ebindtagcard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ebindtagcard.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.edeletepost %}
 <script>
 $(document).ready(function() {

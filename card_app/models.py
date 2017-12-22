@@ -288,9 +288,40 @@ class ExternObject(models.Model):
     blank=True)
 
 
+class EBindTagCard(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_bind_tag_card0', blank=True)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_bind_tag_card1', blank=True)
+
+    tag = models.ForeignKey('core_app.Tag', 
+    related_name='e_bind_tag_card2', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('card_app:e-bind-tag-card', 
+                    kwargs={'event_id': self.id})
 
 
+class EUnbindTagCard(Event):
+    """
+    """
 
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_unbind_tag_card0', blank=True)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_unbind_tag_card1', blank=True)
+
+    tag = models.ForeignKey('core_app.Tag', 
+    related_name='e_unbind_tag_card2', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('card_app:e-unbind-tag-card', 
+                    kwargs={'event_id': self.id})
 
 
 

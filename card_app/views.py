@@ -623,6 +623,12 @@ class UnbindCardTag(GuardianView):
         # card=card, user=me, peer=user)
         # event.users.add(*card.ancestor.users.all())
         # event.save()
+        me = User.objects.get(id=self.user_id)
+        event = models.EUnbindTagCard.objects.create(
+        organization=me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, user=me)
+        event.users.add(*card.ancestor.ancestor.members.all())
+        event.save()
 
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
@@ -643,6 +649,13 @@ class BindCardTag(GuardianView):
         # card=card, tag=me, peer=tag)
         # event.tags.add(*card.ancestor.tags.all())
         # event.save()
+        me = User.objects.get(id=self.user_id)
+
+        event = models.EBindTagCard.objects.create(
+        organization=me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, user=me)
+        event.users.add(*card.ancestor.ancestor.members.all())
+        event.save()
 
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
@@ -650,8 +663,22 @@ class BindCardTag(GuardianView):
         return HttpResponse(status=200)
 
 
+class EBindTagCard(GuardianView):
+    """
+    """
 
+    def get(self, request, event_id):
+        event = models.EBindTagCard.objects.get(id=event_id)
+        return render(request, 'card_app/e-bind-tag-card.html', 
+        {'event':event})
 
+class EUnbindTagCard(GuardianView):
+    """
+    """
 
+    def get(self, request, event_id):
+        event = models.EUnbindTagCard.objects.get(id=event_id)
+        return render(request, 'card_app/e-unbind-tag-card.html', 
+        {'event':event})
 
 

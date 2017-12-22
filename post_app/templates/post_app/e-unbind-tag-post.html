@@ -10,7 +10,7 @@ data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 {{event.post.label}} </a>  by 
 
-with {{event.tag.name}} on {{event.ancestor}}
+with {{event.tag.name}} on {{event.ancestor.name}}
 at {{event.created}}
 
 {% endblock %}
