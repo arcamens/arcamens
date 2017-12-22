@@ -467,6 +467,9 @@ rm -fr /home/arcamens-test/projects/django-paybills-code
 # install paybills
 cd ~/projects/django-paybills-code
 python setup.py install
+##############################################################################
+# passphrase for victor server.
+bohju9Do
 
 ##############################################################################
 # deploy arcamens on victor server.
@@ -520,6 +523,15 @@ python setup.py install
 rm -fr build
 
 ##############################################################################
+# check whether rabbitmq is running mqtt server on the port 
+# for paho.
+lsof -i tcp:1883
+
+# check whether rabbitmq is running mqtt websocket server on the
+# port for paho.
+
+lsof -i tcp:15675
+##############################################################################
 # install rabbitmq mqqt plugin.
 
 # Exchanges: messages sent to exchange get dispatched to the queues
@@ -536,4 +548,50 @@ rabbitmq-plugins enable rabbitmq_web_mqtt
 # The /ws is an endpoint exposed by the plugin.
 # https://www.rabbitmq.com/web-mqtt.html
 
+# setting up rabbitmq to work on server.
+
+tee -i >(stdbuf -o 0 ssh root@job-lab.net 'bash -i')
+
+# first enable the management tool.
+rabbitmq-plugins enable rabbitmq_management
+
+# we can access from here:
+# http://opus.test.splittask.net:15672/
+
+# we need to create a test user
+# then grant permissions to it on vhost /
+# because mqtt plugin uses guest for default
+# and guest is not allowed to access remotely the broker.
+
+rabbitmqctl add_user test test
+rabbitmqctl set_user_tags test administrator
+rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+
+# then we create the configuration file for setting up
+# the user for the mqtt plugin.
+# the web_mqtt plugin relies on mqtt plugin
+# it is a dependency.
+# we set the user as test/test.
+echo '
+[{rabbit,        [{tcp_listeners,    [5672]}]},
+ {rabbitmq_mqtt, [{default_user,     <<"test">>},
+                  {default_pass,     <<"test">>},
+                  {allow_anonymous,  true},
+                  {vhost,            <<"/">>},
+                  {exchange,         <<"amq.topic">>},
+                  {subscription_ttl, 1800000},
+                  {prefetch,         10},
+                  {ssl_listeners,    []},
+                  %% Default MQTT with TLS port is 8883
+                  %% {ssl_listeners,    [8883]}
+                  {tcp_listeners,    [1883]},
+                  {tcp_listen_options, [{backlog,   128},
+                                        {nodelay,   true}]}]}].
+
+' > /etc/rabbitmq/rabbitmq.config
+
+rabbitmqctl stop
+rabbitmqctl start&
+
+# then we are done, it is enough to run the server.
 
