@@ -590,6 +590,13 @@ echo '
 
 ' > /etc/rabbitmq/rabbitmq.config
 
+# point the config file in the rabbitmq-env.conf
+# it took me a shitload of time to understand
+# that setting up the plugins should be done
+# in the rabbitmq.config not in the rabbitmq-env.conf.
+echo 'RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq
+' > /etc/rabbitmq/rabbitmq-env.conf
+
 rabbitmqctl stop
 rabbitmqctl start&
 
