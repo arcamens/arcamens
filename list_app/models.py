@@ -74,3 +74,20 @@ class ECreateList(Event):
 
 
 
+class EUpdateList(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('board_app.Board', 
+    related_name='e_update_list0', blank=True)
+
+    child = models.ForeignKey('List', 
+    related_name='e_update_list1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('list_app:e-update-list', 
+                    kwargs={'event_id': self.id})
+
+
+
+

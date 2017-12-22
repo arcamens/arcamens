@@ -110,6 +110,11 @@ class UpdateList(GuardianView):
                         {'form': form, 'list':record, }, status=400)
 
         record.save()
+        user = core_app.models.User.objects.get(id=self.user_id)
+
+        event = models.EUpdateList.objects.create(organization=user.default,
+        ancestor=record.ancestor, child=record, user=user)
+        event.users.add(*record.ancestor.members.all())
 
         # Missing event.
         ws.client.publish('board%s' % record.ancestor.id, 
@@ -174,6 +179,11 @@ class ECreateList(GuardianView):
         return render(request, 'list_app/e-create-list.html', 
         {'event':event})
 
+class EUpdateList(GuardianView):
+    def get(self, request, event_id):
+        event = models.EUpdateList.objects.get(id=event_id)
+        return render(request, 'list_app/e-update-list.html', 
+        {'event':event})
 
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
@@ -202,6 +212,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 

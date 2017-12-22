@@ -18,6 +18,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecreatelist.get_absolute_url}}");
 });
 </script>
+{% elif ind.eupdatelist %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatelist.get_absolute_url}}");
+});
+</script>
 {% elif ind.ecreatefork %}
 <script>
 $(document).ready(function() {
@@ -197,6 +203,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
