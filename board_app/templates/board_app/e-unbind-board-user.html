@@ -1,18 +1,23 @@
-{% extends 'board_app/event.html' %}
+{% extends 'timeline_app/event.html' %}
 {% load i18n %}
 
 {% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has unbinded 
 
-<span style="color:red"> {{event.peer.name}} </span> unbinded from
+<span style="color:red">
+<span class="glyphicon glyphicon-user"></span>
+{{event.peer.name}} </span> from board
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.board.id %}" href="#"> 
-<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  by 
+<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  
 
-{{event.user}} on {{event.created}}
+on {{event.created}}
 
 {% endblock %}
+
 
 
 

@@ -92,14 +92,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.eunbindcardworker.get_absolute_url}}");
 });
 </script>
-
 {% elif ind.eunbindboarduser %}
 <script>
 $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.eunbindboarduser.get_absolute_url}}");
 });
 </script>
-<div id="event-{{ind.id}}">
 {% elif ind.ecreatepost %}
 <script>
 $(document).ready(function() {
@@ -203,6 +201,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
