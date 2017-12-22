@@ -2,22 +2,25 @@
 {% load i18n %}
 
 {% block content %}
-
+Post
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.post.label}} </a> updated on 
+{{event.post.label}} </a> updated on timeline
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
 
+<span class="glyphicon glyphicon-user"></span>
+
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 
