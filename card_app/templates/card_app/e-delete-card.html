@@ -5,7 +5,7 @@
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} has deleted card
 
-<span class="glyphicon glyphicon-file"></span> {{event.label}}
+<span style="color:red"> <span class="glyphicon glyphicon-file"></span> {{event.label}} </span>
 
 on list
 
@@ -17,6 +17,7 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
