@@ -34,6 +34,11 @@ class EUnbindBoardUserMixin(object):
         return reverse('board_app:e-unbind-board-user', 
         kwargs={'event_id': self.id})
 
+class EUpdateBoardMixin(object):
+    def get_absolute_url(self):
+        return reverse('board_app:e-update-board', 
+        kwargs={'event_id': self.id})
+
 class Board(models.Model):
     """    
     """
@@ -115,6 +120,11 @@ class EUnbindBoardUser(Event, EUnbindBoardUserMixin):
     related_name='e_unbind_board_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
+
+class EUpdateBoard(Event, EUpdateBoardMixin):
+    board = models.ForeignKey('Board', 
+    related_name='e_update_board', blank=True)
 
 
 

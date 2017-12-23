@@ -185,6 +185,15 @@ class UpdateBoard(GuardianView):
                         {'form': form, 'board':record, }, status=400)
 
         record.save()
+
+        me = models.User.objects.get(id=self.user_id)
+        event    = models.EUpdateBoard.objects.create(organization=me.default,
+        board=record, user=me)
+        event.users.add(*record.members.all())
+
+        ws.client.publish('board%s' % record.id, 
+            'subscribe board%s' % record.id, 0, False)
+
         return redirect('list_app:list-lists', 
         board_id=record.id)
 
@@ -368,11 +377,18 @@ class EBindBoardUser(GuardianView):
         return render(request, 'board_app/e-bind-board-user.html', 
         {'event':event})
 
+class EUpdateBoard(GuardianView):
+    def get(self, request, event_id):
+        event = models.EUpdateBoard.objects.get(id=event_id)
+        return render(request, 'board_app/e-update-board.html', 
+        {'event':event})
+
 class EUnbindBoardUser(GuardianView):
     def get(self, request, event_id):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
         {'event':event})
+
 
 
 

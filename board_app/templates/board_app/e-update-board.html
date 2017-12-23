@@ -1,0 +1,25 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has updated board
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'list_app:list-lists' event.board.id %}" href="#"> 
+<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

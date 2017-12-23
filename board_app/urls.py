@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^pin-board/(?P<board_id>.+)/', views.PinBoard.as_view(), name='pin-board'),
     url(r'^e-bind-board-user/(?P<event_id>.+)/', views.EBindBoardUser.as_view(), name='e-bind-board-user'),
     url(r'^e-unbind-board-user/(?P<event_id>.+)/', views.EUnbindBoardUser.as_view(), name='e-unbind-board-user'),
+    url(r'^e-update-board/(?P<event_id>.+)/', views.EUpdateBoard.as_view(), name='e-update-board'),
+
     url(r'^update-board/(?P<board_id>.+)/', views.UpdateBoard.as_view(), name='update-board'),
     url(r'^paste-lists/(?P<board_id>.+)/', views.PasteLists.as_view(), name='paste-lists'),
     url(r'^delete-board/(?P<board_id>.+)/', views.DeleteBoard.as_view(), name='delete-board'),
@@ -28,6 +30,7 @@ urlpatterns = [
     url(r'^unbind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardUser.as_view(), name='unbind-board-user'),
 
 ]
+
 
 
 
