@@ -158,6 +158,9 @@ class UpdateTimeline(GuardianView):
 
         event.users.add(*record.users.all())
 
+        ws.client.publish('timeline%s' % record.id, 
+            'subscribe timeline%s' % record.id, 0, False)
+
         return redirect('timeline_app:list-posts', 
         timeline_id=record.id)
 
@@ -442,6 +445,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
