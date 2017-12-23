@@ -108,7 +108,7 @@ git checkout alpha
 git checkout beta
 
 ##############################################################################
-# run, arcamens, server, debugging.
+# run arcamens project.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 ##############################################################################
@@ -452,10 +452,10 @@ rm -fr build
 
 # access victor server through ssh.
 
-tee -i >(stdbuf -o 0 ssh arcamens-test@job-lab.net 'bash -i')
+tee -i >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
 
 # accept signals.
-tee >(stdbuf -o 0 ssh arcamens-test@job-lab.net 'bash -i')
+tee >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
 
 # run as supervisord.
 supervisord -n -c ../conf/supervisord.conf
@@ -552,7 +552,7 @@ rabbitmq-plugins enable rabbitmq_web_mqtt
 
 # setting up rabbitmq to work on server.
 
-tee -i >(stdbuf -o 0 ssh root@job-lab.net 'bash -i')
+tee -i >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
 
 # first enable the management tool.
 rabbitmq-plugins enable rabbitmq_management
@@ -603,5 +603,20 @@ rabbitmqctl stop
 rabbitmqctl start&
 
 # then we are done, it is enough to run the server.
+##############################################################################
+# run arcamens on victor server.
+
+ssh root@staging.arcamens.com 'rabbitmq-server start;exit;'
+
+# activate virtualenv on victor server.
+cd ~/.virtualenvs/
+source arcamens/bin/activate
+cd ~/projects/arcamens-code
+
+# run arcamens project on victor server.
+cd ~/projects/arcamens-code
+stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
+
+
 
 

@@ -1,0 +1,15 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has deleted board
+
+<span style="color:red">
+<span class="glyphicon glyphicon-th"></span>
+{{event.child_name}} </span> 
+
+on {{event.created}}
+
+{% endblock %}
+

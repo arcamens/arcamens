@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^e-bind-board-user/(?P<event_id>.+)/', views.EBindBoardUser.as_view(), name='e-bind-board-user'),
     url(r'^e-unbind-board-user/(?P<event_id>.+)/', views.EUnbindBoardUser.as_view(), name='e-unbind-board-user'),
     url(r'^e-update-board/(?P<event_id>.+)/', views.EUpdateBoard.as_view(), name='e-update-board'),
+    url(r'^e-delete-board/(?P<event_id>.+)/', views.EDeleteBoard.as_view(), name='e-delete-board'),
 
     url(r'^update-board/(?P<board_id>.+)/', views.UpdateBoard.as_view(), name='update-board'),
     url(r'^e-create-board/(?P<event_id>.+)/', views.ECreateBoard.as_view(), name='e-create-board'),
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^unbind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardUser.as_view(), name='unbind-board-user'),
 
 ]
+
 
 
 

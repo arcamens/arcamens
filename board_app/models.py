@@ -136,6 +136,14 @@ class ECreateBoard(Event, ECreateBoardMixin):
     related_name='e_create_board', blank=True)
 
 
+class EDeleteBoard(Event):
+    board_name = models.CharField(max_length=255, 
+    blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('board_app:e-delete-board', 
+        kwargs={'event_id': self.id})
+
 
 
 

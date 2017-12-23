@@ -207,6 +207,16 @@ class UpdateBoard(GuardianView):
 class DeleteBoard(GuardianView):
     def get(self, request, board_id):
         board = models.Board.objects.get(id=board_id)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+
+        event = models.EDeleteBoard.objects.create(organization=user.default,
+        board_name=board.name, user=user)
+        event.users.add(*board.members.all())
+
+        ws.client.publish('board%s' % board.id, 
+            'Card on: %s!' % board.id, 0, False)
+
         board.delete()
 
         return redirect('board_app:list-boards')
@@ -400,6 +410,12 @@ class EUnbindBoardUser(GuardianView):
     def get(self, request, event_id):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
+        {'event':event})
+
+class EDeleteBoard(GuardianView):
+    def get(self, request, event_id):
+        event = models.EDeleteBoard.objects.get(id=event_id)
+        return render(request, 'board_app/e-delete-board.html', 
         {'event':event})
 
 
