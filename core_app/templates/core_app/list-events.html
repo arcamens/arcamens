@@ -36,6 +36,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecreatefork.get_absolute_url}}");
 });
 </script>
+{% elif ind.edeletelist %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletelist.get_absolute_url}}");
+});
+</script>
 
 {% elif ind.ecreatecard %}
 <script>

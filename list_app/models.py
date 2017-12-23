@@ -89,5 +89,15 @@ class EUpdateList(Event):
                     kwargs={'event_id': self.id})
 
 
+class EDeleteList(Event):
+    ancestor = models.ForeignKey('board_app.Board', 
+    related_name='e_delete_list0', blank=True)
+
+    child_name = models.CharField(max_length=255, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('list_app:e-delete-list', 
+        kwargs={'event_id': self.id})
+
 
 

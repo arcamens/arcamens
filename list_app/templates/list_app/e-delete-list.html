@@ -1,0 +1,41 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has deleted list
+
+<span style="color:red">
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.child_name}} </span>  on board
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-th"></span>
+{{event.ancestor.name}} </a>  by 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

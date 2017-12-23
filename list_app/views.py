@@ -79,7 +79,15 @@ class CreateList(GuardianView):
 class DeleteList(GuardianView):
     def get(self, request, list_id):
         list = list_app.models.List.objects.get(id=list_id)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+
+        event = models.EDeleteList.objects.create(organization=user.default,
+        ancestor=list.ancestor, child_name=list.name, user=user)
+        event.users.add(*list.ancestor.members.all())
+
         list.delete()
+
 
         # Missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
@@ -185,6 +193,12 @@ class EUpdateList(GuardianView):
         return render(request, 'list_app/e-update-list.html', 
         {'event':event})
 
+class EDeleteList(GuardianView):
+    def get(self, request, event_id):
+        event = models.EDeleteList.objects.get(id=event_id)
+        return render(request, 'list_app/e-delete-list.html', 
+        {'event':event})
+
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
         user   = core_app.models.User.objects.get(id=self.user_id)
@@ -212,6 +226,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 
