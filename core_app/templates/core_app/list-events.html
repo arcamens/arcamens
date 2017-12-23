@@ -30,6 +30,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.eupdateboard.get_absolute_url}}");
 });
 </script>
+{% elif ind.ecreateboard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreateboard.get_absolute_url}}");
+});
+</script>
 {% elif ind.ecreatefork %}
 <script>
 $(document).ready(function() {
@@ -213,6 +219,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

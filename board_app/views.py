@@ -66,6 +66,13 @@ class CreateBoard(GuardianView):
         board.organization = user.default
         board.save()
 
+        event    = models.ECreateBoard.objects.create(organization=user.default,
+        board=board, user=user)
+
+        # Organization admins should be notified?
+        event.users.add(user)
+        event.save()
+
         # ws.client.publish('board%s' % board.id, 
             # 'board on: %s!' % board.name, 0, False)
         ws.client.publish('user%s' % user.id, 
@@ -383,11 +390,18 @@ class EUpdateBoard(GuardianView):
         return render(request, 'board_app/e-update-board.html', 
         {'event':event})
 
+class ECreateBoard(GuardianView):
+    def get(self, request, event_id):
+        event = models.ECreateBoard.objects.get(id=event_id)
+        return render(request, 'board_app/e-create-board.html', 
+        {'event':event})
+
 class EUnbindBoardUser(GuardianView):
     def get(self, request, event_id):
         event = models.EUnbindBoardUser.objects.get(id=event_id)
         return render(request, 'board_app/e-unbind-board-user.html', 
         {'event':event})
+
 
 
 

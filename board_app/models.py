@@ -39,6 +39,11 @@ class EUpdateBoardMixin(object):
         return reverse('board_app:e-update-board', 
         kwargs={'event_id': self.id})
 
+class ECreateBoardMixin(object):
+    def get_absolute_url(self):
+        return reverse('board_app:e-create-board', 
+        kwargs={'event_id': self.id})
+
 class Board(models.Model):
     """    
     """
@@ -125,6 +130,10 @@ class EUnbindBoardUser(Event, EUnbindBoardUserMixin):
 class EUpdateBoard(Event, EUpdateBoardMixin):
     board = models.ForeignKey('Board', 
     related_name='e_update_board', blank=True)
+
+class ECreateBoard(Event, ECreateBoardMixin):
+    board = models.ForeignKey('Board', 
+    related_name='e_create_board', blank=True)
 
 
 
