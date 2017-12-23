@@ -491,6 +491,8 @@ scp -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
 ssh arcamens-test@job-lab.net '
 rm -fr /home/arcamens-test/projects/arcamens-code'
 
+scp -r /home/tau/projects/arcamens-code/build-data opus@opus.test.splittask.net:/home/opus/projects/arcamens-code
+
 ##############################################################################
 # install paybills on victor server.
 
@@ -601,4 +603,5 @@ rabbitmqctl stop
 rabbitmqctl start&
 
 # then we are done, it is enough to run the server.
+
 
