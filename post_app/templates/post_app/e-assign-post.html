@@ -3,7 +3,7 @@
 
 {% block content %}
 
-User {{event.peer.name}} 
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} 
 assigned to post
 
 <a class="e-get"
@@ -14,6 +14,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="#">
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 

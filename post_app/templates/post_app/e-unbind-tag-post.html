@@ -3,17 +3,29 @@
 
 {% block content %}
 
-User {{event.user.name}} has untagged
+<span class="glyphicon glyphicon-user"></span> {{user.name}} 
+{{event.user.name}} has removed tag 
+{{event.tag.name}} from post
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
-{{event.post.label}} </a>  by 
+{{event.post.label}} </a>  
 
-with {{event.tag.name}} on {{event.ancestor.name}}
-at {{event.created}}
+on timeline 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span> {{event.ancestor.name}} 
+
+</a>  
+
+
+on {{event.created}}
 
 {% endblock %}
+
 
 
 
