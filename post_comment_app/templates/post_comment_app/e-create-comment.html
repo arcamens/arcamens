@@ -7,16 +7,19 @@
 data-shell="#modalContent" 
 data-show="{% url 'post_comment_app:list-comments' event.post.id %}"
 data-callback="$('#modal').modal('show');" 
-href="#"> PostComment </a> created on 
+href="#"> Comment </a> created on post
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 {{event.post.label}} </a>  by 
 
+<span class="glyphicon glyphicon-user"></span> {{user.name}} 
+
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 
