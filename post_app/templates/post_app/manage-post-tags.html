@@ -18,9 +18,8 @@ Available {{post.label}} post's tags </h5>
 <p id="unbind-post-tag-{{ind.id}}" > <a class="e-get" style="color:red"
 data-callback="$('#unbind-post-tag-{{ind.id}}').remove();"
 data-show="{% url 'post_app:unbind-post-tag' post.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-remove"></span> </a>  {{ind.name}}
-<br>
-<small> {{ind.description}} </small>
+<span class="glyphicon glyphicon-remove"></span> </a>  <b> {{ind.name}}: </b>
+ {{ind.description}} 
 </p>
 {% endfor %}
 
@@ -29,9 +28,8 @@ data-show="{% url 'post_app:unbind-post-tag' post.id ind.id %}" href="#">
 <a class="e-get"
 data-callback="$('#bind-post-tag-{{ind.id}}').remove();"
 data-show="{% url 'post_app:bind-post-tag' post.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> </a>  {{ind.name}}
-<br>
-<small> {{ind.description}} </small>
+<span class="glyphicon glyphicon-plus"></span> </a>  <b> {{ind.name}}: </b>
+ {{ind.description}} 
 </p>
 {% endfor %}
 
@@ -57,6 +55,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

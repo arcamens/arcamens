@@ -18,9 +18,9 @@ Available {{card.label|truncatechars:20}} card's tags </h5>
 <p id="unbind-card-tag-{{ind.id}}" > <a class="e-get" style="color:red"
 data-callback="$('#unbind-card-tag-{{ind.id}}').remove();"
 data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-remove"></span> </a>  {{ind.name}}
-<br>
-<small> {{ind.description}} </small>
+<span class="glyphicon glyphicon-remove"></span> </a>  
+<b> {{ind.name}}: </b>
+{{ind.description}} 
 </p>
 {% endfor %}
 
@@ -29,9 +29,8 @@ data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#">
 <a class="e-get"
 data-callback="$('#bind-card-tag-{{ind.id}}').remove();"
 data-show="{% url 'card_app:bind-card-tag' card.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> </a>  {{ind.name}}
-<br>
-<small> {{ind.description}} </small>
+<span class="glyphicon glyphicon-plus"></span> </a>  <b> {{ind.name}}:</b>
+ {{ind.description}} 
 </p>
 {% endfor %}
 
@@ -63,6 +62,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 
