@@ -32,6 +32,9 @@ by  {{post.user}} at {{post.created}}
 {{post.html | safe}} 
 
 <hr>
+
+<div class="row">
+<div class="col-md-6">
 <h4> Attachments </h4>
 {% for ind in attachments %}
 <a href="{% static ind.file %}" target="_blank"> 
@@ -40,7 +43,9 @@ by  {{post.user}} at {{post.created}}
 {% empty %}
 No attachment.
 {% endfor %}
+</div>
 
+<div class="col-md-6">
 <h4> Tags </h4>
 {% for ind in tags %}
 <a href="#"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
@@ -49,9 +54,12 @@ No tags.
 {% endfor %}
 
 {% endblock %}
-</div> 
 </div>
 
+</div> 
+
+</div>
+</div>
 
 
 
@@ -102,6 +110,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 </div>
 </div>
+
 
 
 
