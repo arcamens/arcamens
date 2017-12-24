@@ -314,6 +314,11 @@ class CutPost(GuardianView):
         post          = models.Post.objects.get(id=post_id)
         user          = timeline_app.models.User.objects.get(id=self.user_id)
         timeline      = post.ancestor
+
+        # Should have an event, missing creating event.
+        ws.client.publish('timeline%s' % post.ancestor.id, 
+            'Post cut on: %s!' % post.ancestor.id, 0, False)
+
         post.ancestor = None
         post.save()
 
@@ -321,10 +326,6 @@ class CutPost(GuardianView):
         timeline=timeline, post=post)
 
         user.clipboard.add(clipboard)
-
-        # Should have an event, missing creating event.
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post cut on: %s!' % post.ancestor.id, 0, False)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
@@ -496,6 +497,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

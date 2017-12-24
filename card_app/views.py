@@ -154,13 +154,14 @@ class CutCard(GuardianView):
         card          = models.Card.objects.get(id=card_id)
         user          = core_app.models.User.objects.get(id=self.user_id)
         list          = card.ancestor
-        card.ancestor = None
-        card.save()
-        user.card_clipboard.add(card)
 
         # Missing event.
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'Card on: %s!' % card.ancestor.ancestor.id, 0, False)
+
+        card.ancestor = None
+        card.save()
+        user.card_clipboard.add(card)
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -680,5 +681,6 @@ class EUnbindTagCard(GuardianView):
         event = models.EUnbindTagCard.objects.get(id=event_id)
         return render(request, 'card_app/e-unbind-tag-card.html', 
         {'event':event})
+
 
 
