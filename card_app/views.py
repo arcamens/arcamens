@@ -40,7 +40,7 @@ class ListCards(GuardianView):
 
         cards = total.filter((Q(label__icontains=filter.pattern) | \
         Q(data__icontains=filter.pattern))) if filter.status else total
-
+    
         print(filter.status)
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
@@ -56,6 +56,12 @@ class ViewData(GuardianView):
         workers = card.workers.all()
         attachments = card.filewrapper_set.all()
         tags = card.tags.all()
+
+        # Maybe it should be retrieved here...
+        # but cards dont have path manytomany
+        # it may suggest cards should
+        # have state of forks too?
+        # path = card.path.all()
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
@@ -119,11 +125,21 @@ class CreateFork(GuardianView):
         form = forms.ForkForm(request.POST, instance=fork)
         user = User.objects.get(id=self.user_id)
 
+        # Its a hack, it means there is something wrong
+        # with the models.
+        try:
+            path = card.fork.path.all()
+        except Exception as e:
+            path = fork.path.all()
+        finally:
+            fork.path.add(*path, *(card, ))
+
         if not form.is_valid():
             return render(request, 'card_app/create-fork.html', 
                 {'form':form, 'card': card, 'fork':fork}, status=400)
 
         fork.save()
+
         event = models.ECreateFork.objects.create(organization=user.default,
         ancestor=card.ancestor, child0=card, child1=fork, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
@@ -681,6 +697,7 @@ class EUnbindTagCard(GuardianView):
         event = models.EUnbindTagCard.objects.get(id=event_id)
         return render(request, 'card_app/e-unbind-tag-card.html', 
         {'event':event})
+
 
 
 

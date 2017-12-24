@@ -32,7 +32,6 @@ class="e-get"
 data-shell="#main-view"  type="button"
 data-show="{% url 'card_app:view-data' ind.id %}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
-{% if card.selected %} (On clipboard) {% endif %}
 </a> 
 <br>
 {% empty %}
@@ -44,8 +43,14 @@ No relations.
 <hr>
 
 <div class="pre-scrollable" style="font-size:80%">
+{% for ind in card.fork.path.all %}
+<a href="#" 
+class="e-get" 
+data-shell="#main-view"  type="button"
+data-show="{% url 'card_app:view-data' ind.id %}" >
+<span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
+</a>
 
-{% for ind in parents %}
 {% empty %}
 No parents...
 {% endfor %}</div></div>
@@ -53,4 +58,5 @@ No parents...
 </div>
 </div>
 </div>
+
 

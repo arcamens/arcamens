@@ -616,7 +616,7 @@ cd ~/projects/arcamens-code
 # run arcamens project on victor server.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
-
+##############################################################################
 
 
 

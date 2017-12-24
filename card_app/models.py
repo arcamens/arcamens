@@ -78,6 +78,10 @@ class Fork(Card):
     parent = models.ForeignKey('Card', null=True, related_name='forks',
     blank=True)
 
+    path = models.ManyToManyField('Card', 
+    null=True, related_name='children', blank=True, 
+    symmetrical=False)
+
 class CardClipboard(models.Model):
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
@@ -322,6 +326,7 @@ class EUnbindTagCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-unbind-tag-card', 
                     kwargs={'event_id': self.id})
+
 
 
 
