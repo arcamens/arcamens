@@ -3,15 +3,20 @@
 
 {% block content %}
 
-<a class="e-get"
-data-shell="#modalContent" 
-data-show="{% url 'post_comment_app:list-comments' event.post.id %}"
-data-callback="$('#modal').modal('show');" 
-href="#"> Comment </a> created on post
+Comment 
+
+<span class="text-info">
+<span class="glyphicon glyphicon-comment"></span>
+
+{{event.comment.data | truncatechars:40}}
+</span>
+
+ created on post
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>  by 
 
 <span class="glyphicon glyphicon-user"></span> {{user.name}} 
@@ -19,6 +24,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="#">
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 

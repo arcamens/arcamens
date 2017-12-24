@@ -4,7 +4,7 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">CardComments on {{card.label|slice:":30"}}.. 
+<h4 class="modal-title">Comments on {{card.label|slice:":30"}}.. 
 <span class="badge">{{records.count}}</span>
 
 </h4>
@@ -39,25 +39,27 @@ On {{ind.created}}</em>
 <form id="form-comment-data" enctype="multipart/form-data" onsubmit="return false;">
 {% csrf_token %}
 
-<div id="inputCardComment">
+<div id="inputComment">
 {% bootstrap_field form.data layout='inline' size='sm' %}
 {% bootstrap_field form.file layout='inline' size='sm' %}
 
 </div>
 
-<button  id="sendCardComment" type="button" 
+{% block buttons %}
+<button  id="sendComment" type="button" 
 data-form="#form-comment-data" 
 data-shell="#bigModalContent" 
 data-shell-error="#bigModalContent" 
 data-show="{% url 'card_comment_app:create-comment' card.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
+{% endblock %}
 
 </form>
 
 <script>
-$('#inputCardComment').keypress(function(e){
+$('#inputComment').keypress(function(e){
     if(e.keyCode == 13)
-        $('#sendCardComment').click();
+        $('#sendComment').click();
     e.stopPropagation();
 });
 $('#id_data').focus();
@@ -65,8 +67,6 @@ $('#id_data').focus();
 
 
 </div>
-
-
 
 
 

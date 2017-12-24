@@ -5,24 +5,28 @@
 
 <p> 
 
-<a class="e-get"
-data-shell="#bigModalContent"
-data-show="{% url 'card_comment_app:list-comments' event.child.id %}" 
-data-callback="$('#bigModal').modal('toggle');"
-href="#"> Comment </a> 
+Comment 
+<span class="text-info">
 
-added to 
+<span class="glyphicon glyphicon-comment"></span>
+
+{{event.comment.data | truncatechars:40}}
+</span>
+
+added to card
 <a class="e-get"
-data-shell="#bigModalContent"
+data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
-data-callback="$('#bigModal').modal('toggle');"
-href="#"> {{event.child.label}} </a> 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label}} </a> 
 
 by
 
 {{event.user}} on {{event.created}}</p>
 
 {% endblock %}
+
 
 
 
