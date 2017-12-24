@@ -50,7 +50,7 @@ data-shell="#main-view"  type="button"
 data-show="{% url 'card_app:view-data' ind.id %}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
 </a>
-
+<br>
 {% empty %}
 No parents...
 {% endfor %}</div></div>
@@ -58,5 +58,6 @@ No parents...
 </div>
 </div>
 </div>
+
 
 
