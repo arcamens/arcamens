@@ -31,8 +31,11 @@ class ListPosts(GuardianView):
         filter, _ = post_app.models.PostFilter.objects.get_or_create(
         user=user, timeline=timeline)
 
-        posts = timeline.posts.filter((Q(label__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern)) & Q(done=filter.done) if filter.status else Q(ancestor=timeline))
+        posts = timeline.posts.all()
+
+        posts = posts.filter((Q(label__icontains=filter.pattern) | \
+        Q(description__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
+        posts.filter(done=False)
 
         # posts    = timeline.posts.all().order_by('-created')
         return render(request, 'timeline_app/list-posts.html', 
@@ -445,6 +448,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

@@ -56,6 +56,11 @@ class EDeletePostMixin(object):
         return reverse('post_app:e-delete-post', 
         kwargs={'event_id': self.id})
 
+class EArchivePostMixin(object):
+    def get_absolute_url(self):
+        return reverse('post_app:e-archive-post', 
+        kwargs={'event_id': self.id})
+
 class EUpdatePostMixin(object):
     def get_absolute_url(self):
         return reverse('post_app:e-update-post', 
@@ -148,6 +153,11 @@ class ECreatePost(ECreatePostMixin, Event):
     related_name='e_create_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
 
+class EArchivePost(EArchivePostMixin, Event):
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_archive_post', blank=True)
+    post = models.ForeignKey('Post', blank=True)
+
 class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
@@ -238,6 +248,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

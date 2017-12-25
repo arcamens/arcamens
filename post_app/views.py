@@ -357,6 +357,14 @@ class Done(GuardianView):
         post.done = True
         post.save()
 
+        user = timeline_app.models.User.objects.get(id=self.user_id)
+
+        # posts in the clipboard cant be archived.
+        event    = models.EArchivePost.objects.create(organization=user.default,
+        timeline=post.ancestor, post=post, user=user)
+
+        users = post.ancestor.users.all()
+        event.users.add(*users)
 
         # Missing event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
@@ -369,6 +377,12 @@ class ECreatePost(GuardianView):
     def get(self, request, event_id):
         event = models.ECreatePost.objects.get(id=event_id)
         return render(request, 'post_app/e-create-post.html', 
+        {'event':event})
+
+class EArchivePost(GuardianView):
+    def get(self, request, event_id):
+        event = models.EArchivePost.objects.get(id=event_id)
+        return render(request, 'post_app/e-archive-post.html', 
         {'event':event})
 
 class EDeletePost(GuardianView):
@@ -508,6 +522,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

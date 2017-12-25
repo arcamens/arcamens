@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^e-create-post/(?P<event_id>.+)/', views.ECreatePost.as_view(), name='e-create-post'),
+    url(r'^e-archive-post/(?P<event_id>.+)/', views.EArchivePost.as_view(), name='e-archive-post'),
+
     url(r'^e-update-post/(?P<event_id>.+)/', views.EUpdatePost.as_view(), name='e-update-post'),
     url(r'^e-delete-post/(?P<event_id>.+)/', views.EDeletePost.as_view(), name='e-delete-post'),
     url(r'^e-cut-post/(?P<event_id>.+)/', views.ECutPost.as_view(), name='e-cut-post'),
@@ -34,6 +36,7 @@ urlpatterns = [
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
 
 ]
+
 
 
 
