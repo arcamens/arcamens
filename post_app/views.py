@@ -327,6 +327,11 @@ class CutPost(GuardianView):
 
         user.clipboard.add(clipboard)
 
+        event    = models.ECutPost.objects.create(organization=user.default,
+        timeline=timeline, post=post, user=user)
+        users = timeline.users.all()
+        event.users.add(*users)
+
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
 
@@ -370,6 +375,12 @@ class EDeletePost(GuardianView):
     def get(self, request, event_id):
         event = models.EDeletePost.objects.get(id=event_id)
         return render(request, 'post_app/e-delete-post.html', 
+        {'event':event})
+
+class ECutPost(GuardianView):
+    def get(self, request, event_id):
+        event = models.ECutPost.objects.get(id=event_id)
+        return render(request, 'post_app/e-cut-post.html', 
         {'event':event})
 
 class EUpdatePost(GuardianView):
@@ -497,6 +508,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

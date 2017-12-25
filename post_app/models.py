@@ -61,6 +61,11 @@ class EUpdatePostMixin(object):
         return reverse('post_app:e-update-post', 
         kwargs={'event_id': self.id})
 
+class ECutPostMixin(object):
+    def get_absolute_url(self):
+        return reverse('post_app:e-cut-post', 
+        kwargs={'event_id': self.id})
+
 class Post(PostMixin, models.Model):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -150,6 +155,14 @@ class EDeletePost(EDeletePostMixin, Event):
     post_label = models.CharField(null=True,
     blank=True, max_length=30)
 
+class ECutPost(ECutPostMixin, Event):
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_cut_post', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_cut_post1', blank=True)
+
+
 class EUpdatePost(EUpdatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_update_post', blank=True)
@@ -225,6 +238,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

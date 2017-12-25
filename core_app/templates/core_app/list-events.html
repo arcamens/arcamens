@@ -129,6 +129,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecreatepost.get_absolute_url}}");
 });
 </script>
+{% elif ind.ecutpost %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecutpost.get_absolute_url}}");
+});
+</script>
 {% elif ind.eupdatepost %}
 <script>
 $(document).ready(function() {
@@ -226,6 +232,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
