@@ -1,9 +1,44 @@
-{% extends 'card_app/card-event.html' %}
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
 
 {% block content %}
-<a href="#"> {{event.child}}  </a> on <a href="#"> {{event.ancestor}}  </a> was finished.
- 
+card
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.card.id %}"
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card.label|truncatechars:40}} </a> archived on list
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-atl"></span> {{event.ancestor.name}} </a>  by 
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} on {{event.created}}
+
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

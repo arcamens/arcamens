@@ -71,6 +71,7 @@ class Card(CardMixin, models.Model):
     tags = models.ManyToManyField(
     'core_app.Tag', related_name='cards', 
     null=True, blank=True, symmetrical=False)
+    done = models.BooleanField(blank=True, default=False)
 
     html = models.TextField(null=True, blank=True)
 
@@ -341,6 +342,13 @@ class ECutCard(Event):
         return reverse('card_app:e-cut-card', 
                     kwargs={'event_id': self.id})
 
+class EArchiveCard(Event):
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_archive_card', blank=True)
+    card = models.ForeignKey('Card', blank=True)
 
+    def get_absolute_url(self):
+        return reverse('card_app:e-archive-card', 
+        kwargs={'event_id': self.id})
 
 

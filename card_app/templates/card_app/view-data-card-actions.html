@@ -42,7 +42,7 @@ href="#"><span class="glyphicon glyphicon-user"></span> Workers</a></li>
 <a 
 data-shell="#main-view"
 class="e-get text-warning"
-data-show="" 
+data-show="{% url 'card_app:done'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-ok"></span> Done</a></li>
 
 <li>
@@ -84,6 +84,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^list-cards/(?P<list_id>.+)/', views.ListCards.as_view(), name='list-cards'),
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
+    url(r'^done/(?P<card_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-fork/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
@@ -27,7 +28,6 @@ urlpatterns = [
 
     url(r'^e-bind-card-worker/(?P<event_id>.+)/', views.EBindCardWorker.as_view(), name='e-bind-card-worker'),
     url(r'^e-unbind-card-worker/(?P<event_id>.+)/', views.EUnbindCardWorker.as_view(), name='e-unbind-card-worker'),
-    url(r'^archive-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.ArchiveCard.as_view(), name='archive-card'),
     url(r'^e-archive-card/(?P<event_id>.+)/', views.EArchiveCard.as_view(), name='e-archive-card'),
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
     url(r'^copy-card/(?P<card_id>.+)/', views.CopyCard.as_view(), name='copy-card'),
@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

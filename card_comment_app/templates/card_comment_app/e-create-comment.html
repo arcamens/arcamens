@@ -19,13 +19,14 @@ data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child.label}} </a> 
+{{event.child.label|truncatechars:40}} </a> 
 
 by
 
 {{event.user}} on {{event.created}}</p>
 
 {% endblock %}
+
 
 
 

@@ -383,14 +383,6 @@ class EArchiveCard(GuardianView):
         return render(request, 'card_app/e-archive-card.html', 
         {'event':event})
 
-class ArchiveCard(GuardianView):
-    def get(self, request, card_id):
-        # i should save the user object in the GuardianView.
-        user = core_app.models.User.objects.get(id=self.user_id)
-        card = models.Card.objects.get(id=card_id)
-
-        return redirect('card_app:list-cards', card_id=list_id)
-
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
         user = core_app.models.User.objects.get(id=self.user_id)
@@ -711,6 +703,27 @@ class EUnbindTagCard(GuardianView):
         return render(request, 'card_app/e-unbind-tag-card.html', 
         {'event':event})
 
+
+class Done(GuardianView):
+    def get(self, request, card_id):
+        card      = models.Card.objects.get(id=card_id)
+        card.done = True
+        card.save()
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+
+        # cards in the clipboard cant be archived.
+        event    = models.EArchiveCard.objects.create(organization=user.default,
+        ancestor=card.ancestor, card=card, user=user)
+
+        users = card.ancestor.ancestor.members.all()
+        event.users.add(*users)
+
+        # Missing event.
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
+            'Card done on: %s!' % card.ancestor.ancestor.id, 0, False)
+
+        return redirect('card_app:list-cards', list_id=card.ancestor.id)
 
 
 
