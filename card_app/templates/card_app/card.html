@@ -51,8 +51,13 @@ data-callback="$('#bigModal').modal('toggle');" >
 <span class="glyphicon glyphicon-comment"></span> 
 {% trans "Comment" %}</button>
 
+<button class="btn btn-warning e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:done' card.id %}">
+<span class="glyphicon glyphicon-ok"></span> 
+</button>
 
-{% include 'card_app/card-menu.html' %}
 
 </div>
 
@@ -60,6 +65,7 @@ data-callback="$('#bigModal').modal('toggle');" >
 
 
 </div>
+
 
 
 
