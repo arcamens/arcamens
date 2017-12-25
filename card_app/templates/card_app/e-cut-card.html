@@ -1,0 +1,27 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has cut card
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label|truncatechars:40}} </a> 
+
+from list
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor.name}} </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+

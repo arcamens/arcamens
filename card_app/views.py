@@ -179,6 +179,10 @@ class CutCard(GuardianView):
         card.save()
         user.card_clipboard.add(card)
 
+        event = models.ECutCard.objects.create(organization=user.default,
+        ancestor=list, child=card, user=user)
+        event.users.add(*list.ancestor.members.all())
+
         return redirect('card_app:list-cards', 
         list_id=list.id)
 
@@ -359,6 +363,15 @@ class EDeleteCard(GuardianView):
     def get(self, request, event_id):
         event = models.EDeleteCard.objects.get(id=event_id)
         return render(request, 'card_app/e-delete-card.html', 
+        {'event':event})
+
+class ECutCard(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.ECutCard.objects.get(id=event_id)
+        return render(request, 'card_app/e-cut-card.html', 
         {'event':event})
 
 class EArchiveCard(GuardianView):
@@ -697,6 +710,7 @@ class EUnbindTagCard(GuardianView):
         event = models.EUnbindTagCard.objects.get(id=event_id)
         return render(request, 'card_app/e-unbind-tag-card.html', 
         {'event':event})
+
 
 
 

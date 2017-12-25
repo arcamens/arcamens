@@ -327,6 +327,20 @@ class EUnbindTagCard(Event):
         return reverse('card_app:e-unbind-tag-card', 
                     kwargs={'event_id': self.id})
 
+class ECutCard(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_cut_card0', blank=True)
+
+    child = models.ForeignKey('Card', 
+    related_name='e_cut_card1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('card_app:e-cut-card', 
+                    kwargs={'event_id': self.id})
+
 
 
 

@@ -93,6 +93,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletecard.get_absolute_url}}");
 });
 </script>
+{% elif ind.ecutcard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecutcard.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.earchivecard %}
 <script>
 $(document).ready(function() {
@@ -232,6 +239,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

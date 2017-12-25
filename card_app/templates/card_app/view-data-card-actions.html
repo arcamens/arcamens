@@ -1,9 +1,18 @@
 <ul class="nav nav-pills ">
 <li>
+
+<!-- If the card has no ancestor then it is on clipboard -->
+{% if card.ancestor %}
 <a data-shell="#main-view" 
 class="e-get text-success"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
+{% else %}
+<a 
+class="e-get text-success disabled"
+href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
+
+{% endif %}
 
 <li>
 <a 
@@ -75,6 +84,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
