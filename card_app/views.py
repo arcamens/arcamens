@@ -32,16 +32,20 @@ class ListCards(GuardianView):
     def get(self, request, list_id):
         user = core_app.models.User.objects.get(id=self.user_id)
         list = list_app.models.List.objects.get(id=list_id)
-        total = list.cards.all().order_by('-created')
         pins = user.pin_set.all()
 
         filter, _ = models.CardFilter.objects.get_or_create(
         user=user, organization=user.default, list=list)
 
+        total = list.cards.all()
+        
         cards = total.filter((Q(label__icontains=filter.pattern) | \
-        Q(data__icontains=filter.pattern))) if filter.status else total
-    
-        print(filter.status)
+        Q(data__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
+        total.filter(done=False)
+
+
+        cards = cards.order_by('-created')    
+
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
         'pins': pins, 'user': user, 'board': list.ancestor})
