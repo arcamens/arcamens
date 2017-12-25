@@ -244,20 +244,6 @@ class EDeleteCard(Event):
             kwargs={'event_id': self.id})
 
 
-class EArchiveCard(Event):
-    """
-    """
-    ancestor = models.ForeignKey('list_app.List', 
-    related_name='e_archive_card0', blank=True)
-
-    child = models.ForeignKey('Card', 
-    related_name='e_archive_card1', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('card_app:e-archive-card', 
-            kwargs={'event_id': self.id})
-
-
 
 class CardFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
@@ -274,6 +260,9 @@ class CardFilter(models.Model):
 
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
+
+    done = models.BooleanField(blank=True, 
+    default=False, help_text='Done cards?.')
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..
@@ -344,8 +333,10 @@ class ECutCard(Event):
 
 class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
-    related_name='e_archive_card', blank=True)
-    card = models.ForeignKey('Card', blank=True)
+    related_name='e_archive_card0', blank=True)
+
+    child = models.ForeignKey('Card', 
+    related_name='e_archive_card1', blank=True)
 
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 

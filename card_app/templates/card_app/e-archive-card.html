@@ -5,10 +5,10 @@
 card
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.card.id %}"
+data-show="{% url 'card_app:view-data' event.child.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.card.label|truncatechars:40}} </a> archived on list
+{{event.child.label|truncatechars:40}} </a> archived on list
 
 <a class="e-get"
 data-shell="#main-view"
