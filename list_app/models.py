@@ -50,6 +50,8 @@ class ListFilter(models.Model):
     board = models.ForeignKey('board_app.Board', blank=True,
     related_name='list_filter', null=True)
 
+    done = models.BooleanField(blank=True, default=False)
+
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
 
@@ -111,6 +113,7 @@ class EArchiveList(Event):
     def get_absolute_url(self):
         return reverse('list_app:e-archive-list', 
         kwargs={'event_id': self.id})
+
 
 
 

@@ -27,7 +27,8 @@ class ListLists(GuardianView):
         user=user, organization=user.default, board=board)
 
         lists = total.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern))) if filter.status else total
+        Q(description__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
+        total.filter(done=False)
 
         return render(request, 'list_app/list-lists.html', 
         {'lists': lists, 'user': user, 'board': board, 'organization': user.default,
