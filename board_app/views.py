@@ -30,7 +30,8 @@ class ListBoards(GuardianView):
         user=user, organization=user.default)
 
         boards = total.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern))) if filter.status else total
+        Q(description__icontains=filter.pattern) & Q(done=filter.done))) if filter.status else \
+        total.filter(done=False)
 
         return render(request, 'board_app/list-boards.html', 
         {'boards': boards, 'total': boards, 'user': user, 'pins': pins, 'filter': filter,

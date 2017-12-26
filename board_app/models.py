@@ -64,6 +64,7 @@ class Board(models.Model):
     members = models.ManyToManyField('core_app.User', 
     null=True, related_name='boards', blank=True, 
     symmetrical=False)
+    done = models.BooleanField(blank=True, default=False)
 
     organization = models.ForeignKey('core_app.Organization', 
     related_name='boards', null=True, blank=True)
@@ -79,6 +80,8 @@ class BoardFilter(models.Model):
     null=True)
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
+    done = models.BooleanField(blank=True, default=False,
+    help_text='Include archived boards.')
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..

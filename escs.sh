@@ -10,7 +10,7 @@ git commit -a
 git push -u origin development
 ##############################################################################
 
-# push, arcamens, master.
+# push arcamens on master.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
@@ -621,6 +621,7 @@ stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 ps aux | grep mana
 
 ##############################################################################
+
 
 
 
