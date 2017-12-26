@@ -1,0 +1,44 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+Board
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'board_app:list-boards'  %}"
+href="#"> 
+<span class="glyphicon glyphicon-th"></span>
+{{event.child.name|truncatechars:40}} </a> archived on organization
+
+<span class="glyphicon glyphicon-flag"></span> {{event.organization.name}} </a>  by 
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -419,9 +419,35 @@ class EDeleteBoard(GuardianView):
         {'event':event})
 
 
+class Done(GuardianView):
+    def get(self, request, board_id):
+        board      = models.Board.objects.get(id=board_id)
+        board.done = True
+        board.save()
 
+        user = core_app.models.User.objects.get(id=self.user_id)
 
+        # boards in the clipboard cant be archived.
+        event    = models.EArchiveBoard.objects.create(organization=user.default,
+        ancestor=board.organization, child=board, user=user)
 
+        users = board.members.all()
+        event.users.add(*users)
+
+        # Missing event.
+        ws.client.publish('board%s' % board.id, 
+            'Board done on: %s!' % board.id, 0, False)
+
+        return redirect('board_app:list-boards', list_id=board.ancestor.id)
+
+class EArchiveBoard(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EArchiveBoard.objects.get(id=event_id)
+        return render(request, 'board_app/e-archive-board.html', 
+        {'event':event})
 
 
 

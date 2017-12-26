@@ -144,6 +144,15 @@ class EDeleteBoard(Event):
         return reverse('board_app:e-delete-board', 
         kwargs={'event_id': self.id})
 
+class EArchiveBoard(Event):
+    ancestor = models.ForeignKey('core_app.Organization', 
+    related_name='e_archive_board0', blank=True)
 
+    child = models.ForeignKey('Board', 
+    related_name='e_archive_board1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('board_app:e-archive-board', 
+        kwargs={'event_id': self.id})
 
 
