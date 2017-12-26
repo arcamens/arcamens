@@ -35,6 +35,7 @@ class List(ListMixin, models.Model):
 
     description = models.CharField(null=True, blank=True, default='',
     verbose_name=_("Description"), help_text='Example: Things to do.', max_length=626)
+    done = models.BooleanField(blank=True, default=False)
 
     # members = models.ManyToManyField('core_app.User', 
     # null=True, related_name='boards_member', blank=True, 
@@ -98,6 +99,19 @@ class EDeleteList(Event):
     def get_absolute_url(self):
         return reverse('list_app:e-delete-list', 
         kwargs={'event_id': self.id})
+
+
+class EArchiveList(Event):
+    ancestor = models.ForeignKey('board_app.Board', 
+    related_name='e_archive_list0', blank=True)
+
+    child = models.ForeignKey('List', 
+    related_name='e_archive_list1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('list_app:e-archive-list', 
+        kwargs={'event_id': self.id})
+
 
 
 

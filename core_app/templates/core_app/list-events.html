@@ -24,6 +24,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.earchivepost.get_absolute_url}}");
 });
 </script>
+{% elif ind.earchivelist %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.earchivelist.get_absolute_url}}");
+});
+</script>
 
 {% elif ind.eupdatelist %}
 <script>
@@ -246,6 +252,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

@@ -17,7 +17,8 @@ href="#">
 <li class="divider"></li>
 
 <li><a class="e-get" data-shell="#main-view" 
-data-show="" 
+data-shell="#main-view"
+data-show="{% url 'list_app:done' list.id %}" 
 href="#"> <span class="glyphicon glyphicon-ok-circle"></span> 
 {% trans "Done" %}</a></li>
 <li class="divider"></li>
@@ -35,6 +36,7 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>
 
 </ul>
 </div>
+
 
 
 

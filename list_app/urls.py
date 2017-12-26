@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^list-lists/(?P<board_id>.+)/', views.ListLists.as_view(), name='list-lists'),
+    url(r'^done/(?P<list_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^update-list/(?P<list_id>.+)/', views.UpdateList.as_view(), name='update-list'),
     url(r'^create-list/(?P<board_id>.+)/', views.CreateList.as_view(), name='create-list'),
     url(r'^delete-list/(?P<list_id>.+)/', views.DeleteList.as_view(), name='delete-list'),
@@ -17,8 +18,10 @@ urlpatterns = [
     url(r'^cut-list/(?P<list_id>.+)/', views.CutList.as_view(), name='cut-list'),
     url(r'^copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
     url(r'^setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
+    url(r'^e-archive-list/(?P<event_id>.+)/', views.EArchiveList.as_view(), name='e-archive-list'),
 
 ]
+
 
 
 

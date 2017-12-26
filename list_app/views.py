@@ -228,14 +228,33 @@ class SetupListFilter(GuardianView):
         return redirect('list_app:list-lists', board_id=board_id)
 
 
+class Done(GuardianView):
+    def get(self, request, list_id):
+        list      = models.List.objects.get(id=list_id)
+        list.done = True
+        list.save()
 
+        user = core_app.models.User.objects.get(id=self.user_id)
 
+        # lists in the clipboard cant be archived.
+        event    = models.EArchiveList.objects.create(organization=user.default,
+        ancestor=list.ancestor, child=list, user=user)
 
+        users = list.ancestor.members.all()
+        event.users.add(*users)
 
+        # Missing event.
+        ws.client.publish('board%s' % list.ancestor.id, 
+            'List done on: %s!' % list.ancestor.id, 0, False)
 
+        return redirect('list_app:list-lists', board_id=list.ancestor.id)
 
+class EArchiveList(GuardianView):
+    """
+    """
 
-
-
-
+    def get(self, request, event_id):
+        event = models.EArchiveList.objects.get(id=event_id)
+        return render(request, 'list_app/e-archive-list.html', 
+        {'event':event})
 
