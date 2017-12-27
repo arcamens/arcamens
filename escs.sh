@@ -328,91 +328,6 @@ git fetch -p
 git tag -a 0.0.1 -m 'Initial release'
 git push origin : 0.0.1
 ##############################################################################
-# create, first, release, test, tag.
-
-git tag -a 0.0.13 -m 'A better release.'
-git push origin : 0.0.13
-##############################################################################
-
-# create, first, release, test, tag.
-
-git tag -a 0.0.1 -m 'Initial release'
-git push origin : 0.0.1
-##############################################################################
-
-# delete, 0.0.1, tag
-git tag -d 0.0.1
-git push --delete origin 0.0.1
-##############################################################################
-# delete, 0.0.2, tag
-git tag -d 0.0.2
-git push --delete origin 0.0.2
-##############################################################################
-# create, 0.0.4, release, test, tag.
-
-git tag -a 0.0.4 -m 'A more functional release with event system partially implemented.'
-##############################################################################
-git push origin : 0.0.5
-# create, 0.0.4, release, test, tag.
-
-git tag -a 0.0.5 -m 'Changing font size for displaying timelines.'
-git push origin : 0.0.5
-
-##############################################################################
-git push origin : 0.0.6
-# create, 0.0.4, release, test, tag.
-
-git tag -a 0.0.6 -m 'Fixing UI.'
-git push origin : 0.0.6
-
-##############################################################################
-git push origin : 0.0.7
-# create, 0.0.7, release, test, tag.
-
-git tag -a 0.0.7 -m 'Adding truncate for timeline name.'
-git push origin : 0.0.7
-##############################################################################
-git push origin : 0.0.8
-# create, 0.0.8, release, test, tag.
-
-git tag -a 0.0.8 -m 'Adding view for updating timeline.'
-git push origin : 0.0.8
-##############################################################################
-git push origin : 0.0.9
-# create, 0.0.9, release, test, tag.
-
-git tag -a 0.0.9 -m 'Adding view for updating timeline.'
-git push origin : 0.0.9
-##############################################################################
-git push origin : 0.0.10
-# create, 0.0.9, release, test, tag.
-
-git tag -a 0.0.10 -m 'Improving UI, adding navigation button.'
-git push origin : 0.0.10
-##############################################################################
-git push origin : 0.0.11
-# create, 0.0.11, release, test, tag.
-
-git tag -a 0.0.11 -m 'Improving UI, adding navigation button.'
-git push origin : 0.0.11
-##############################################################################
-
-# create, first, release, 0.0.2, tag.
-
-git tag -a 0.0.2 -m 'Implementation of card_app, it remains doing enhancements.'
-git push origin : 0.0.2
-
-
-cd ~/Downloads
-ls
-unzip iogf-arcamens-2a985217fd3d.zip
-ls
-cd iogf-arcamens-2a985217fd3d
-ls
-
-stdbuf -o 0 python manage.py runserver 0.0.0.0:8000 
-cd ~
-##############################################################################
 cd ~/projects/arcamens-code
 
 # rename card_app to markdown_app.
@@ -621,6 +536,7 @@ stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 ps aux | grep mana
 
 ##############################################################################
+
 
 
 

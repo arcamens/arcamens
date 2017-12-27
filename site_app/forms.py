@@ -33,14 +33,15 @@ class SignupForm(forms.Form):
     password     = forms.CharField()
     organization = forms.CharField()
 
-# class UserForm(forms.ModelForm):
-    # class Meta:
-        # model   = core_app.models.User
-        # exclude = ('organizations', 'default', 'service', 'expiration')
+class UserForm(forms.ModelForm):
+    class Meta:
+        model   = core_app.models.User
+        exclude = ('organizations', 'default', 'service', 'expiration')
 
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
     # paid = forms.BooleanField(required=False)
+
 
 
 
