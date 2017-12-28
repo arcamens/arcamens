@@ -1,9 +1,7 @@
-{% extends 'board_app/event.html' %}
+{% extends 'timeline_app/event.html' %}
 {% load i18n %}
 
 {% block content %}
-
-<p> 
 
 Comment 
 <span class="text-info">
@@ -23,9 +21,10 @@ href="#">
 
 by
 
-{{event.user}} on {{event.created}}</p>
+{{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 
