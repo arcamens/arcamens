@@ -1,0 +1,35 @@
+{% load i18n %}
+
+<div class="btn-group btn-group-xs">
+
+<button class="btn btn-default e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:copy-card' card.id %}">
+<span class="glyphicon glyphicon-copy"></span> 
+</button>
+
+<button class="btn btn-warning e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:cut-card' card.id %}">
+<span class="glyphicon glyphicon-scissors"></span> 
+</button>
+
+<button class="btn btn-info e-get" 
+data-shell="#bigModalContent"  type="button"
+data-show="{% url 'card_comment_app:list-comments' card.id %}" 
+data-callback="$('#bigModal').modal('toggle');" >
+<span class="glyphicon glyphicon-comment"></span> 
+{% trans "Comment" %}</button>
+
+<button class="btn btn-warning e-get"  
+type="button" 
+data-shell="#main-view" 
+data-show="{% url 'card_app:done' card.id %}">
+<span class="glyphicon glyphicon-ok"></span> 
+</button>
+
+
+</div>
+

@@ -1,0 +1,18 @@
+<li>
+
+<a class="e-get" 
+data-callback-error="$('#modalError').modal('toggle');" 
+data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#">
+
+<button type="button" class="close" 
+onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
+
+<span class="glyphicon glyphicon-file"></span>
+{{ind.card.label|truncatechars:20}}
+
+</a>
+
+</li>
+
+

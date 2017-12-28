@@ -1,0 +1,20 @@
+<li >
+
+<a class="e-get" 
+data-callback-error="$('#modalError').modal('toggle');" 
+data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#">
+
+<span style="color:#B37400">
+<button type="button" class="close" 
+onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
+<span class="glyphicon glyphicon-list-alt"> 
+{{ind.list.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{ind.list.name}}
+</span>
+</a>
+
+</li>
+
+

@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <div id="pins">
-<ul class="nav nav-pills" id="pinned-cards" style="font-size:70%">
+<ul class="nav nav-pills" id="pinned-cards" style="font-size:80%">
 
 
 <li><a class="e-get" style="color:#418C06"
@@ -11,36 +11,13 @@ data-show="{% url 'board_app:list-boards' %}" href="#">
 
 {% for ind in pins %}
 
-<li >
-
-<a class="e-get" 
-data-callback-error="$('#modalError').modal('toggle');" 
-data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="#">
-
-<button type="button" class="close" 
-onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
-
 {% if ind.board %}
-<span style="color:#333CFF" <span class="glyphicon glyphicon-th"></span> 
-{{ind.board.name}}
-
+{% include 'board_app/list-pins-board.html' %}
 {% elif ind.list %}
-<span style="color:#FF7733"> <span class="glyphicon glyphicon-list-alt"></span> 
-{{ind.list.ancestor.name}} 
-<span class="glyphicon glyphicon-arrow-right"></span>
-{{ind.list.name}}
-
-{% elif ind.card %}
-<span style="color:#7F7C7C"> <span class="glyphicon glyphicon-file"></span> 
-{{ind.card.label|truncatechars:20}}
-
+{% include 'board_app/list-pins-list.html' %}
+{% elif ind.card%}
+{% include 'board_app/list-pins-card.html' %}
 {% endif %}
-
-</span>
-</a>
-
-</li>
 
 {% endfor %}
 
@@ -55,18 +32,4 @@ $( "#pinned-cards" ).sortable({
     axis:'x'});
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
