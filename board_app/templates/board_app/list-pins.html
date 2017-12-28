@@ -23,15 +23,20 @@ onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropaga
 
 {% if ind.board %}
 <span style="color:#333CFF" <span class="glyphicon glyphicon-th"></span> 
+{{ind.board.name}}
+
 {% elif ind.list %}
 <span style="color:#FF7733"> <span class="glyphicon glyphicon-list-alt"></span> 
-{{ind.list.ancestor.name|truncatechars:20}} 
+{{ind.list.ancestor.name}} 
 <span class="glyphicon glyphicon-arrow-right"></span>
+{{ind.list.name}}
+
 {% elif ind.card %}
 <span style="color:#7F7C7C"> <span class="glyphicon glyphicon-file"></span> 
+{{ind.card.label|truncatechars:20}}
+
 {% endif %}
 
-{{ind.get_target_name|truncatechars:20}}
 </span>
 </a>
 
@@ -50,6 +55,7 @@ $( "#pinned-cards" ).sortable({
     axis:'x'});
 });
 </script>
+
 
 
 
