@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from . import models
+import site_app.forms
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
@@ -48,6 +49,12 @@ class BindTagForm(forms.Form):
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
+# site_app should inherit from here.
+class UserForm(site_app.forms.UserForm):
+    class Meta:
+        model   = models.User
+        fields = ('name', 'avatar', 'email')
 
 
 

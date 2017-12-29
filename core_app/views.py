@@ -67,7 +67,23 @@ class SwitchOrganization(GuardianView):
 
 class UpdateUserInformation(GuardianView):
     def get(self, request):
-        return render(request, 'core_app/update-user-information.html', {})
+        user = models.User.objects.get(id=self.user_id)
+        form = forms.UserForm(instance=user)
+
+        return render(request, 'core_app/update-user-information.html', 
+        {'user': user, 'form': form})
+
+    def post(self, request):
+        user = models.User.objects.get(id=self.user_id)
+        form = forms.UserForm(request.POST, instance=user)
+
+        if not form.is_valid():
+            return render(request, 
+                'core_app/update-user-information.html', 
+                    {'user': user, 'form': form}, status=400)
+
+        form.save()
+        return HttpResponse(status=200)
 
 class CreateOrganization(GuardianView):
     """
@@ -285,6 +301,7 @@ class EventQueues(GuardianView):
         queues = user.timelines.values_list('id')
         data = simplejson.dumps(some_data_to_dump)
         return HttpResponse(data, content_type='application/json')
+
 
 
 
