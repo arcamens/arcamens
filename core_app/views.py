@@ -75,7 +75,7 @@ class UpdateUserInformation(GuardianView):
 
     def post(self, request):
         user = models.User.objects.get(id=self.user_id)
-        form = forms.UserForm(request.POST, instance=user)
+        form = forms.UserForm(request.POST, request.FILES, instance=user)
 
         if not form.is_valid():
             return render(request, 
