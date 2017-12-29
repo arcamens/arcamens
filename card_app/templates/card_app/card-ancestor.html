@@ -17,7 +17,7 @@
 <div class="btn-group btn-group-xs">
 <!-- If the card has no ancestor then it is on clipboard -->
 
-{% if card.ancestor %}
+{% if list.ancestor %}
 <button class="btn btn-success e-get" 
 data-shell="#main-view" type="button"
 data-show="{% url 'list_app:list-lists' board.id %}">
