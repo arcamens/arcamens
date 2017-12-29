@@ -5,6 +5,8 @@ urlpatterns = [
     url(r'^list-cards/(?P<list_id>.+)/', views.ListCards.as_view(), name='list-cards'),
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
     url(r'^done/(?P<card_id>.+)/', views.Done.as_view(), name='done'),
+    url(r'^move-cards/(?P<card_id>.+)/', views.MoveCards.as_view(), name='move-cards'),
+
     url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-fork/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
@@ -45,6 +47,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 
