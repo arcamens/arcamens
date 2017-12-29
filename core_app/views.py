@@ -302,7 +302,33 @@ class EventQueues(GuardianView):
         data = simplejson.dumps(some_data_to_dump)
         return HttpResponse(data, content_type='application/json')
 
+class InviteOrganizationUser(GuardianView):
+    def get(self, request, organization_id):
+        organization = models.Organization.objects.get(id=organization_id)
 
+        return render(request, 'core_app/invite-organization-user.html', 
+        {'form': forms.BindUsersForm(), 'organization': organization})
 
+    def post(self, request, organization_id):
+        organization = models.Organization.objects.get(id=organization_id)
+        form         = forms.BindUsersForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'core_app/invite-organization-user.html',
+                  {'form': form, 'organization': organization}, status=400)
+
+        email = form.cleaned_data['email']
+
+        # If the user doesn't exist
+        # we send him an email invite.
+        user  = models.User.objects.get(email=email)
+        user.organizations.add(organization)
+
+        send_mail('You were invited to %s by %s.' % (organization.name, user.name),
+        organization.name, settings.EMAIL_HOST_USER, [email],
+        fail_silently=False)
+
+        return redirect('core_app:list-users', 
+        organization_id=organization_id)
 
 

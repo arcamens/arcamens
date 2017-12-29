@@ -18,8 +18,10 @@ urlpatterns = [
     url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
     url(r'^delete-tag/(?P<tag_id>.+)/', views.DeleteTag.as_view(), name='delete-tag'),
     url(r'^event-queues/(?P<tag_id>.+)/', views.EventQueues.as_view(), name='event-queues'),
+    url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
 
 ]
+
 
 
 

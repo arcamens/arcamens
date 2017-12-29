@@ -295,32 +295,6 @@ class ListTimelines(GuardianView):
         {'user': user, 'children': children, 'total': total,
         'organization':user.default, 'filter': filter})
 
-class InviteOrganizationUser(GuardianView):
-    def get(self, request, organization_id):
-        organization = models.Organization.objects.get(id=organization_id)
-
-        return render(request, 'timeline_app/invite-organization-user.html', 
-        {'form': forms.BindUsersForm(), 'organization': organization})
-        pass
-
-    def post(self, request, organization_id):
-        organization = models.Organization.objects.get(id=organization_id)
-        form         = forms.BindUsersForm(request.POST)
-
-        if not form.is_valid():
-            return render(request, 'timeline_app/invite-organization-user.html',
-                  {'form': form, 'organization': organization}, status=400)
-
-        email = form.cleaned_data['email']
-
-        # If the user doesn't exist
-        # we send him an email invite.
-        user  = core_app.models.User.objects.get(email=email)
-        user.organizations.add(organization)
-
-        return redirect('timeline_app:list-users', 
-        organization_id=organization_id)
-
 class UnbindUser(GuardianView):
     def get(self, request, organization_id, user_id):
         user = core_app.models.User.objects.get(id=user_id)
@@ -448,6 +422,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

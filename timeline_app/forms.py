@@ -7,10 +7,6 @@ class TimelineForm(forms.ModelForm):
         model  = models.Timeline
         exclude = ('owner', 'organization', 'users')
 
-class BindUsersForm(forms.Form):
-    email = forms.EmailField()
-    admin = forms.BooleanField(required=False)
-
 class FilterForm(forms.Form):
     pattern = forms.CharField()
 
@@ -34,6 +30,7 @@ class FindEventForm(forms.Form):
 
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
 
 
 

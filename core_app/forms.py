@@ -56,6 +56,10 @@ class UserForm(site_app.forms.UserForm):
         model   = models.User
         fields = ('name', 'avatar', 'email')
 
+class BindUsersForm(forms.Form):
+    email = forms.EmailField()
+    admin = forms.BooleanField(required=False)
+
 
 
 
