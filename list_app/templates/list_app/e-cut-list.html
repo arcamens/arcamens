@@ -5,8 +5,15 @@
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} has cut list
 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.child.id %}" href="#"> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.child.name|truncatechars:40}} 
+{{event.child.name|truncatechars:40}}
+</a> 
+
+ 
 
 from board
 
@@ -19,6 +26,7 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
