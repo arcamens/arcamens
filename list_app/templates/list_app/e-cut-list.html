@@ -1,0 +1,24 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has cut list
+
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.child.name|truncatechars:40}} 
+
+from board
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
+<span class="glyphicon glyphicon-th"></span>
+{{event.ancestor.name}} </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+

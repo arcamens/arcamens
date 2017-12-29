@@ -119,6 +119,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecutcard.get_absolute_url}}");
 });
 </script>
+{% elif ind.ecutlist %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecutlist.get_absolute_url}}");
+});
+</script>
+
 
 {% elif ind.earchivecard %}
 <script>
@@ -259,6 +266,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

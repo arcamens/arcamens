@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^list/(?P<list_id>.+)/', views.List.as_view(), name='list'),
     url(r'^pin-list/(?P<list_id>.+)/', views.PinList.as_view(), name='pin-list'),
     url(r'^e-create-list/(?P<event_id>.+)/', views.ECreateList.as_view(), name='e-create-list'),
+    url(r'^e-cut-list/(?P<event_id>.+)/', views.ECutList.as_view(), name='e-cut-list'),
     url(r'^e-update-list/(?P<event_id>.+)/', views.EUpdateList.as_view(), name='e-update-list'),
     url(r'^e--list/(?P<event_id>.+)/', views.EUpdateList.as_view(), name='e-update-list'),
     url(r'^e-delete-list/(?P<event_id>.+)/', views.EDeleteList.as_view(), name='e-delete-list'),
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'^e-archive-list/(?P<event_id>.+)/', views.EArchiveList.as_view(), name='e-archive-list'),
 
 ]
+
 
 
 

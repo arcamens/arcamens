@@ -114,6 +114,20 @@ class EArchiveList(Event):
         return reverse('list_app:e-archive-list', 
         kwargs={'event_id': self.id})
 
+class ECutList(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('board_app.Board', 
+    related_name='e_cut_list0', blank=True)
+
+    child = models.ForeignKey('List', 
+    related_name='e_cut_list1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('list_app:e-cut-list', 
+                    kwargs={'event_id': self.id})
+
 
 
 

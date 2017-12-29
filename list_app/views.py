@@ -163,6 +163,10 @@ class CutList(GuardianView):
         list.save()
         user.list_clipboard.add(list)
 
+        event = models.ECutList.objects.create(organization=user.default,
+        ancestor=board, child=list, user=user)
+        event.users.add(*board.members.all())
+
         # missing event.
 
         return redirect('list_app:list-lists', 
@@ -257,5 +261,14 @@ class EArchiveList(GuardianView):
     def get(self, request, event_id):
         event = models.EArchiveList.objects.get(id=event_id)
         return render(request, 'list_app/e-archive-list.html', 
+        {'event':event})
+
+class ECutList(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.ECutList.objects.get(id=event_id)
+        return render(request, 'list_app/e-cut-list.html', 
         {'event':event})
 
