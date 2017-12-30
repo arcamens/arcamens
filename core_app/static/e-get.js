@@ -6,6 +6,11 @@ function do_get(e) {
     callback = $(this).attr('data-callback');
     url   = $(this).attr('data-show');
 
+    if(shell_error == null && callback_error == null) {
+        callback_error = "$('#modalError').modal('toggle');"
+        shell_error = '#messageError';
+    }
+
     $.ajax({
     url: url,  //Server script to process data
     type: 'GET',
@@ -26,6 +31,7 @@ function do_get(e) {
 }
 
 $(document).on('click', '.e-get', do_get);
+
 
 
 

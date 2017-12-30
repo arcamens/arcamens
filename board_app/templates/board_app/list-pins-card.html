@@ -1,7 +1,6 @@
 <li>
 
 <a class="e-get" 
-data-callback-error="$('#modalError').modal('toggle');" 
 data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#">
 
@@ -14,5 +13,6 @@ onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropaga
 </a>
 
 </li>
+
 
 
