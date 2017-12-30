@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
-from django.conf.urls import handler404, handler500
+# from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -37,4 +37,4 @@ urlpatterns = [
 ]
 
 
-handler500 = 'core_app.views.default_error'
+# handler500 = 'core_app.views.default_error'

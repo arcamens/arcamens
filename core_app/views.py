@@ -21,8 +21,22 @@ class AuthenticatedView(View):
         return self.delegate(request, *args, **kwargs)
 
     def delegate(self, request, *args, **kwargs):
-        return super(AuthenticatedView, self).dispatch(
-            request, *args, **kwargs)
+        """
+        Django doesnt let customize error page
+        when not in debug mode, it may be the case
+        of it being interesting to handle differently
+        500 from each one of the views. 
+        """
+
+        try:
+            return super(AuthenticatedView, 
+                self).dispatch(request, *args, **kwargs)
+        except Exception as excpt:
+            return self.on_exception(request, excpt)
+
+    def on_exception(self, request, excpt):
+        return render(request, 
+        'core_app/default-error.html', {}, status=500)
 
     def error(self, request, *args, **kwargs):
         return redirect('site_app:index')
@@ -331,6 +345,4 @@ class InviteOrganizationUser(GuardianView):
         return redirect('core_app:list-users', 
         organization_id=organization_id)
 
-def default_error(request):
-    return render(request, 'core_app/default-error.html', {}, status=500)
 
