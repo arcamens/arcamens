@@ -331,4 +331,6 @@ class InviteOrganizationUser(GuardianView):
         return redirect('core_app:list-users', 
         organization_id=organization_id)
 
+def default_error(request):
+    return render(request, 'core_app/default-error.html', {}, status=500)
 

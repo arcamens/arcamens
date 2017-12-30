@@ -89,6 +89,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
+
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -97,6 +98,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+
     },
 ]
 
@@ -163,4 +165,5 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
