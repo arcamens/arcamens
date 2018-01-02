@@ -46,6 +46,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'arcamens.softwares@gmail.com'
 EMAIL_HOST_PASSWORD = 'arcamenssoftwares'
 
+# just a workaround.
+LOCAL_ADDR = 'http://0.0.0.0:8000'if DEBUG else 'http://www.arcamens.com'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -165,5 +168,6 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 

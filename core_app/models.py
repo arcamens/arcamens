@@ -22,6 +22,17 @@ class UserMixin(object):
     def __str__(self):
         return self.name
 
+class Invite(models.Model):
+    email = models.EmailField(max_length=70, 
+    null=True, blank=False)
+
+    # should have a count to avoid mail spam.
+    token = models.CharField(null=True,
+    blank=False, max_length=256)
+
+    organization = models.ForeignKey('Organization', 
+    null=True, blank=True)
+
 class User(UserMixin, models.Model):
     name = models.CharField(null=True,
     blank=False, verbose_name=_("Name"), 

@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
 from timeline_app.models import Organization
+from django.urls import reverse
 from board_app.models import Organization
 from . import models
 from . import forms
@@ -12,6 +13,7 @@ import json
 from django.conf import settings
 from traceback import print_exc
 from core_app import ws
+import random
 
 # Create your views here.
 class AuthenticatedView(View):
@@ -342,23 +344,39 @@ class InviteOrganizationUser(GuardianView):
 
         user, _  = models.User.objects.get_or_create(email=email)
 
-        invite = models.EInviteUser.objects.create(organization=organization, user=me, peer=user)
-        invite.users.add(me, user)
+        # need to be improved.
+        token = 'invite%s' % random.randint(1000, 10000)
+        invite = models.Invite.objects.create(organization=organization, email=email, token=token)
 
-        # send_mail('You were invited to %s by %s.' % (organization.name, user.name),
-        # organization.name, settings.EMAIL_HOST_USER, [email],
-        # fail_silently=False)
+        event = models.EInviteUser.objects.create(organization=organization, user=me, peer=user)
+        event.users.add(me, user)
+
+        url = reverse('core_app:join-organization', kwargs={
+        'organization_id': organization.id, 'token': token})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+        send_mail('You were invited to %s by %s.' % (organization.name, user.name),
+        '%s %s' % (organization.name, url), settings.EMAIL_HOST_USER, [email],
+        fail_silently=False)
 
         return redirect('core_app:list-users', 
         organization_id=organization_id)
 
 class JoinOrganization(GuardianView):
-    def get(self, request, organization_id):
+    def get(self, request, organization_id, token):
         # need some kind of token to be sent
         # for validating the invitation.
+        me = models.User.objects.get(id=self.user_id)
+
+        invite = models.Invite.objects.get(email=me.email, token=token)
+        # validates the invite.
+        invite.delete()
+
+        # Delete all the invites for this user.
+        invites = models.Invite.objects.filter(email=me.email)
+        invites.delete()
 
         organization = models.Organization.objects.get(id=organization_id)
-        me = models.User.objects.get(id=self.user_id)
         me.organizations.add(organization)
         me.default = organization
         me.save()
