@@ -2,6 +2,7 @@ from core_app.views import AuthenticatedView, GuardianView
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
+from card_app.forms import CardSearchForm
 from django.db.models import Q
 import board_app.models
 import card_app.models
@@ -343,9 +344,37 @@ class ListArchive(GuardianView):
 
 class Find(GuardianView):
     def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
+        me    = core_app.models.User.objects.get(id=self.user_id)
+        form  = CardSearchForm()
+        cards = card_app.models.Card.objects.none()
+
+        boards = me.boards.all()
+        for indi in boards:
+            for indj in indi.lists.all():
+                cards = cards | indj.cards.all()
+
         return render(request, 'board_app/find.html', 
-        {'user': user})
+        {'form': form, 'cards': cards})
+
+    def post(self, request):
+        form  = CardSearchForm(request.POST)
+        me    = core_app.models.User.objects.get(id=self.user_id)
+
+        cards = card_app.models.Card.objects.none()
+        boards = me.boards.all()
+        for indi in boards:
+            for indj in indi.lists.all():
+                cards = cards | indj.cards.all()
+
+        if not form.is_valid():
+            return render(request, 'board_app/find.html', 
+                {'form': form}, status=400)
+
+        cards = cards.filter(
+        label__contains=form.cleaned_data['pattern'])
+
+        return render(request, 'board_app/find.html', 
+        {'form': form, 'cards': cards})
 
 class BindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
@@ -450,6 +479,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

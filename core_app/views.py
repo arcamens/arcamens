@@ -10,6 +10,7 @@ from . import forms
 import timeline_app
 import json
 from django.conf import settings
+from traceback import print_exc
 
 # Create your views here.
 class AuthenticatedView(View):
@@ -35,6 +36,7 @@ class AuthenticatedView(View):
             return self.on_exception(request, excpt)
 
     def on_exception(self, request, excpt):
+        print_exc()
         return render(request, 
         'core_app/default-error.html', {}, status=500)
 
@@ -344,5 +346,6 @@ class InviteOrganizationUser(GuardianView):
 
         return redirect('core_app:list-users', 
         organization_id=organization_id)
+
 
 
