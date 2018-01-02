@@ -1,0 +1,19 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has invite you to
+
+<a href="{% url 'core_app:join-organization' event.organization.id %}">
+<span class="glyphicon glyphicon-flag"></span>
+{{event.organization.name}}  </a>
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+

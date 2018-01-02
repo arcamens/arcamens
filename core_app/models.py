@@ -107,5 +107,13 @@ class Tag(models.Model):
     null=True, blank=True)
 
 
+class EInviteUser(Event):
+    peer = models.ForeignKey('User', null=True, 
+    related_name='e_invite_user0', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('core_app:e-invite-user', 
+        kwargs={'event_id': self.id})
+
 
 

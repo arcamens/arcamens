@@ -24,6 +24,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.earchivepost.get_absolute_url}}");
 });
 </script>
+{% elif ind.einviteuser %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.einviteuser.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.earchiveboard %}
 <script>
 $(document).ready(function() {
@@ -266,6 +273,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

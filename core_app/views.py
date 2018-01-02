@@ -11,6 +11,7 @@ import timeline_app
 import json
 from django.conf import settings
 from traceback import print_exc
+from core_app import ws
 
 # Create your views here.
 class AuthenticatedView(View):
@@ -337,15 +338,37 @@ class InviteOrganizationUser(GuardianView):
 
         # If the user doesn't exist
         # we send him an email invite.
-        user  = models.User.objects.get(email=email)
-        user.organizations.add(organization)
+        me     = models.User.objects.get(id=self.user_id)
 
-        send_mail('You were invited to %s by %s.' % (organization.name, user.name),
-        organization.name, settings.EMAIL_HOST_USER, [email],
-        fail_silently=False)
+        user, _  = models.User.objects.get_or_create(email=email)
+
+        invite = models.EInviteUser.objects.create(organization=organization, user=me, peer=user)
+        invite.users.add(me, user)
+
+        # send_mail('You were invited to %s by %s.' % (organization.name, user.name),
+        # organization.name, settings.EMAIL_HOST_USER, [email],
+        # fail_silently=False)
 
         return redirect('core_app:list-users', 
         organization_id=organization_id)
+
+class JoinOrganization(GuardianView):
+    def get(self, request, organization_id):
+        # need some kind of token to be sent
+        # for validating the invitation.
+
+        organization = models.Organization.objects.get(id=organization_id)
+        me = models.User.objects.get(id=self.user_id)
+        me.organizations.add(organization)
+        me.default = organization
+        me.save()
+        return redirect('core_app:index')
+
+class EInviteUser(GuardianView):
+    def get(self, request, event_id):
+        event = models.EInviteUser.objects.get(id=event_id)
+        return render(request, 'core_app/e-invite-user.html', 
+        {'event':event})
 
 
 
