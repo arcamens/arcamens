@@ -358,7 +358,7 @@ class InviteOrganizationUser(GuardianView):
         'organization_id': organization.id, 'token': token})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
-        send_mail('You were invited to %s by %s.' % (organization.name, user.name),
+        send_mail('You were invited to %s by %s.' % (organization.name, me.name),
         '%s %s' % (organization.name, url), settings.EMAIL_HOST_USER, [email],
         fail_silently=False)
 
