@@ -37,27 +37,6 @@ class TimelineMixin(object):
     """
     pass
 
-class OrganizationService(Service):
-    """
-    Fill here with basic  info 
-    about the product that has to be sent
-    to paypal.
-    """
-
-    max_organizations = models.IntegerField(
-    null=True, default=15)
-
-    max_users = models.IntegerField(
-    null=True, default=15)
-
-    name = models.CharField(null=True, default='Paid BasicService',
-    blank=False, max_length=256)
-
-    paid = models.BooleanField(blank=True, default=False)
-
-    def __str__(self):
-        return self.name
-
 class Clipboard(models.Model):
     timeline = models.ForeignKey(
     'timeline_app.Timeline', null=True, blank=True)
@@ -133,6 +112,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

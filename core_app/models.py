@@ -14,6 +14,28 @@ class Organization(models.Model):
     related_name='owned_organizations', blank=True)
     created = models.DateTimeField(auto_now=True, null=True)
 
+class OrganizationService(Service):
+    """
+    Fill here with basic  info 
+    about the product that has to be sent
+    to paypal.
+    """
+
+    max_organizations = models.IntegerField(
+    null=True, default=15)
+
+    max_users = models.IntegerField(
+    null=True, default=15)
+
+    name = models.CharField(null=True, default='Paid BasicService',
+    blank=False, max_length=256)
+
+    paid = models.BooleanField(blank=True, default=False)
+
+    def __str__(self):
+        return self.name
+
+
 class UserMixin(object):
     def get_user_url(self):
         return reverse('core_app:user', 
@@ -127,6 +149,7 @@ class EInviteUser(Event):
     def get_absolute_url(self):
         return reverse('core_app:e-invite-user', 
         kwargs={'event_id': self.id})
+
 
 
 

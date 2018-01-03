@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.shortcuts import render
 from django.views.generic import View
-from timeline_app.models import Organization, OrganizationService
+from core_app.models import Organization, OrganizationService
 from core_app.views import AuthenticatedView
 from core_app.models import User
 import paybills.views
@@ -222,6 +222,7 @@ class PayPalIPN(paybills.views.PayPalIPN):
 
     def on_subscription_payment(self, data, user, service):
         print('User subscription payment!')
+
 
 
 

@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
-from timeline_app.models import Organization
-from timeline_app.models import OrganizationService
+from core_app.models import OrganizationService, Organization
 from django.urls import reverse
 from board_app.models import Organization
 from . import models
@@ -430,6 +429,7 @@ class EInviteUser(GuardianView):
         event = models.EInviteUser.objects.get(id=event_id)
         return render(request, 'core_app/e-invite-user.html', 
         {'event':event})
+
 
 
 
