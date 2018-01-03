@@ -3,15 +3,14 @@
 
 {% block content %}
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has invite you to
+{{event.user}} has invited {{event.peer.email}} to join
 
-<a href="{% url 'core_app:join-organization' event.organization.id %}">
-<span class="glyphicon glyphicon-flag"></span>
-{{event.organization.name}}  </a>
+{{event.organization.name}}  
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

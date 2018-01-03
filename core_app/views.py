@@ -345,8 +345,8 @@ class InviteOrganizationUser(GuardianView):
 
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
-        user, _  = models.User.objects.get_or_create(email=email, enabled=False)
-
+        user, _  = models.User.objects.get_or_create(email=email)
+        
         # need to be improved.
         token = 'invite%s' % random.randint(1000, 10000)
         invite = models.Invite.objects.create(organization=organization, user=user, token=token)
@@ -409,12 +409,12 @@ class SignupFromInvite(View):
     def post(self, request, organization_id, token):
         invite = models.Invite.objects.get(    
         organization__id=organization_id, token=token)
-        form = forms.UserForm(instance=invite.user)
+        form = forms.UserForm(request.POST, instance=invite.user)
 
-        # if not form.is_valid():
-            # return render(request, 'core_app/signup-from-invite.html', 
-                # {'form': form, 'organization': invite.organization, 
-                    # 'token': token}, status=400)
+        if not form.is_valid():
+            return render(request, 'core_app/signup-from-invite.html', 
+                {'form': form, 'organization': invite.organization, 
+                    'token': token}, status=400)
 
         record = form.save(commit=False)
         service        = OrganizationService.objects.get(paid=False)

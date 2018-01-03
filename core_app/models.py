@@ -76,7 +76,7 @@ class User(UserMixin, models.Model):
     avatar = models.ImageField(upload_to='media/', null=True,
     default='user.png',verbose_name='', help_text='', blank=True)
 
-    enabled = models.BooleanField(blank=True, default=True)
+    enabled = models.BooleanField(blank=True, default=False)
 
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)
@@ -127,6 +127,7 @@ class EInviteUser(Event):
     def get_absolute_url(self):
         return reverse('core_app:e-invite-user', 
         kwargs={'event_id': self.id})
+
 
 
 
