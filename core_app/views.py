@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
 from timeline_app.models import Organization
+from timeline_app.models import OrganizationService
 from django.urls import reverse
 from board_app.models import Organization
 from . import models
@@ -375,19 +376,23 @@ class JoinOrganization(View):
             return redirect('core_app:signup-from-invite', 
                 organization_id=organization_id, token=token)
 
-        # validates the invite.
-        invite.delete()
 
         # Delete all the invites for this user.
-        invites = models.Invite.objects.filter(
-        organization=organization, email=invite.user.email)
-
-        invites.delete()
-
         organization = models.Organization.objects.get(id=organization_id)
+
         invite.user.organizations.add(organization)
         invite.user.default = organization
         invite.user.save()
+
+        # validates the invite.
+        invite.delete()
+
+        invites = models.Invite.objects.filter(
+        organization=organization, user=invite.user)
+        invites.delete()
+
+        # Authenticate the user.
+        request.session['user_id'] = invite.user.id
 
         # Maybe just redirect the user to a page telling he joined the org.
         return redirect('core_app:index')
@@ -402,7 +407,23 @@ class SignupFromInvite(View):
         {'form': form, 'organization': invite.organization, 'token': token})
 
     def post(self, request, organization_id, token):
-        pass
+        invite = models.Invite.objects.get(    
+        organization__id=organization_id, token=token)
+        form = forms.UserForm(instance=invite.user)
+
+        # if not form.is_valid():
+            # return render(request, 'core_app/signup-from-invite.html', 
+                # {'form': form, 'organization': invite.organization, 
+                    # 'token': token}, status=400)
+
+        record = form.save(commit=False)
+        service        = OrganizationService.objects.get(paid=False)
+        record.service = service
+        record.enabled = True
+        record.save()
+
+        return redirect('core_app:join-organization', 
+        organization_id=organization_id, token=token)
 
 class EInviteUser(GuardianView):
     def get(self, request, event_id):
