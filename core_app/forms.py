@@ -54,11 +54,13 @@ class TagSearchForm(forms.Form):
 class UserForm(site_app.forms.UserForm):
     class Meta:
         model   = models.User
-        fields = ('name', 'avatar', 'email')
+        fields = ('name', 'avatar', 'email', 
+        'password', 'description')
 
 class BindUsersForm(forms.Form):
     email = forms.EmailField()
     admin = forms.BooleanField(required=False)
+
 
 
 

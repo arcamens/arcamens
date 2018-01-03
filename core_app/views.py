@@ -342,11 +342,13 @@ class InviteOrganizationUser(GuardianView):
         # we send him an email invite.
         me     = models.User.objects.get(id=self.user_id)
 
-        user, _  = models.User.objects.get_or_create(email=email)
+        # Create the user anyway, but make it disabled
+        # the user need to fill information first.
+        user, _  = models.User.objects.get_or_create(email=email, enabled=False)
 
         # need to be improved.
         token = 'invite%s' % random.randint(1000, 10000)
-        invite = models.Invite.objects.create(organization=organization, email=email, token=token)
+        invite = models.Invite.objects.create(organization=organization, user=user, token=token)
 
         event = models.EInviteUser.objects.create(organization=organization, user=me, peer=user)
         event.users.add(me, user)
@@ -362,25 +364,45 @@ class InviteOrganizationUser(GuardianView):
         return redirect('core_app:list-users', 
         organization_id=organization_id)
 
-class JoinOrganization(GuardianView):
+class JoinOrganization(View):
     def get(self, request, organization_id, token):
         # need some kind of token to be sent
         # for validating the invitation.
-        me = models.User.objects.get(id=self.user_id)
 
-        invite = models.Invite.objects.get(email=me.email, token=token)
+        invite = models.Invite.objects.get(token=token)
+
+        if not invite.user.enabled:
+            return redirect('core_app:signup-from-invite', 
+                organization_id=organization_id, token=token)
+
         # validates the invite.
         invite.delete()
 
         # Delete all the invites for this user.
-        invites = models.Invite.objects.filter(email=me.email)
+        invites = models.Invite.objects.filter(
+        organization=organization, email=invite.user.email)
+
         invites.delete()
 
         organization = models.Organization.objects.get(id=organization_id)
-        me.organizations.add(organization)
-        me.default = organization
-        me.save()
+        invite.user.organizations.add(organization)
+        invite.user.default = organization
+        invite.user.save()
+
+        # Maybe just redirect the user to a page telling he joined the org.
         return redirect('core_app:index')
+
+class SignupFromInvite(View):
+    def get(self, request, organization_id, token):
+        invite = models.Invite.objects.get(    
+        organization__id=organization_id, token=token)
+
+        form = forms.UserForm(instance=invite.user)
+        return render(request, 'core_app/signup-from-invite.html', 
+        {'form': form, 'organization': invite.organization, 'token': token})
+
+    def post(self, request, organization_id, token):
+        pass
 
 class EInviteUser(GuardianView):
     def get(self, request, event_id):

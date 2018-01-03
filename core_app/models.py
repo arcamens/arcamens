@@ -23,8 +23,10 @@ class UserMixin(object):
         return self.name
 
 class Invite(models.Model):
-    email = models.EmailField(max_length=70, 
-    null=True, blank=False)
+    # email = models.EmailField(max_length=70, 
+    # null=True, blank=False)
+
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
 
     # should have a count to avoid mail spam.
     token = models.CharField(null=True,
@@ -125,6 +127,7 @@ class EInviteUser(Event):
     def get_absolute_url(self):
         return reverse('core_app:e-invite-user', 
         kwargs={'event_id': self.id})
+
 
 
 

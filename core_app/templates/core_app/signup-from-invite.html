@@ -1,6 +1,6 @@
-<!DOCTYPE html>
 {% load bootstrap3 %}
 {% load i18n %}
+
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -38,58 +38,24 @@
 <body>
 
 
-<nav class="navbar navbar-inverse" style="background-color:#071152">
-<div class="container-fluid">
-<div class="navbar-header">
-<a class="navbar-brand" href="#">
-<span class="glyphicon glyphicon-eye-open"></span> Arcamens </a>
-    
-</div>
+<div class="container">
+<h3> Invited to join {{organization.name}} </h3>
 
-<ul class="nav navbar-nav">
-<li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:home' %}" href="#">
-<span class="glyphicon glyphicon-home"></span> {% trans "Home" %}</a></li>
-<li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:signup' %}" href="#" >
-<span class="glyphicon glyphicon-user"></span> {% trans "Sign up" %}</a></li>
-
-<li><a href="" target="_blank">
-<span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
-
-</ul>
-
-<ul class="nav navbar-right">
-
-<form class="navbar-form navbar-left" method="post" action="{% url 'site_app:login' %}">
+<form id="form-user-data" method="post" action="{% url 'core_app:signup-from-invite' organization.id token %}">
 {% csrf_token %}
 
-{% bootstrap_field login_form.email layout='inline' %}
-{% bootstrap_field login_form.password layout='inline' %}
-{% buttons submit='Sign in' layout='inline' %}{% endbuttons %}
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.email  size='md' %}
+{% bootstrap_field form.password  size='md' %}
+{% bootstrap_field form.avatar  size='md' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+
+{% buttons submit='Sign up' layout='inline' %}{% endbuttons %}
 
 </form>
-</ul>
-
 </div>
-</nav>
-
-<div class="container">
-{% bootstrap_form_errors login_form type='non_fields' %}
-</div>
-
-
-<div id="main-content">
-
-{% include 'site_app/home.html' %}
-</div>
-
 </body>
-</html>
-
-
-
-
-
-
-
 
 
