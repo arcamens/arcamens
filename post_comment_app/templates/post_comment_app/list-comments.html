@@ -7,12 +7,13 @@
 
 <button  id="sendPostComment" type="button" 
 data-form="#form-comment-data" 
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#modalContent" 
-data-shell-error="#modalContent" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#bigModalContent" 
+data-shell-error="#bigModalContent" 
 data-show="{% url 'post_comment_app:create-comment' post.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
 {% endblock %}
+
 
 
 

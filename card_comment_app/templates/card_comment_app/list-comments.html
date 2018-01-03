@@ -49,6 +49,7 @@ On {{ind.created}}</em>
 <button  id="sendComment" type="button" 
 data-form="#form-comment-data" 
 data-shell="#bigModalContent" 
+data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" 
 data-show="{% url 'card_comment_app:create-comment' card.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
@@ -67,6 +68,7 @@ $('#id_data').focus();
 
 
 </div>
+
 
 
 
