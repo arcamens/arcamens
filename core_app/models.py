@@ -137,9 +137,8 @@ class Tag(models.Model):
 
     # When the organization is deleted all its tags
     # are deleted too.
-    organization = models.ForeignKey(
-    'core_app.Organization', related_name='tags',
-    null=True, blank=True)
+    organization = models.ForeignKey('core_app.Organization',
+    related_name='tags', null=True, blank=True)
 
 
 class EInviteUser(Event):
@@ -148,6 +147,24 @@ class EInviteUser(Event):
 
     def get_absolute_url(self):
         return reverse('core_app:e-invite-user', 
+        kwargs={'event_id': self.id})
+
+class EBindUserTag(Event):
+    peer = models.ForeignKey('User', null=True, 
+    related_name='e_bind_user_tag0', blank=True)
+    tag = models.ForeignKey('Tag', null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('core_app:e-bind-user-tag', 
+        kwargs={'event_id': self.id})
+
+class EUnbindUserTag(Event):
+    peer = models.ForeignKey('User', null=True, 
+    related_name='e_unbind_user_tag0', blank=True)
+    tag = models.ForeignKey('Tag', null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('core_app:e-unbind-user-tag', 
         kwargs={'event_id': self.id})
 
 

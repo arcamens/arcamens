@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^e-invite-user/(?P<event_id>.+)/', views.EInviteUser.as_view(), name='e-invite-user'),
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
+    url(r'^e-bind-user-tag/(?P<event_id>.+)/', views.EBindUserTag.as_view(), name='e-bind-user-tag'),
+    url(r'^e-unbind-user-tag/(?P<event_id>.+)/', views.EUnbindUserTag.as_view(), name='e-unbind-user-tag'),
 
     url(r'^update-organization/(?P<organization_id>.+)/', views.UpdateOrganization.as_view(), name='update-organization'),
     url(r'^delete-organization/(?P<organization_id>.+)/', views.DeleteOrganization.as_view(), name='delete-organization'),
@@ -25,6 +27,7 @@ urlpatterns = [
     url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
 
 ]
+
 
 
 

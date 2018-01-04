@@ -303,7 +303,25 @@ class UnbindUserTag(GuardianView):
         user.tags.remove(tag)
         user.save()
 
+        me = models.User.objects.get(id=self.user_id)
+        event = models.EUnbindUserTag.objects.create(
+        organization=me.default, user=me, peer=user, tag=tag)
+        users = me.default.users.all()
+        event.users.add(*users)
+
         return HttpResponse(status=200)
+
+class EBindUserTag(GuardianView):
+    def get(self, request, event_id):
+        event = models.EBindUserTag.objects.get(id=event_id)
+        return render(request, 'core_app/e-bind-user-tag.html', 
+        {'event':event})
+
+class EUnbindUserTag(GuardianView):
+    def get(self, request, event_id):
+        event = models.EUnbindUserTag.objects.get(id=event_id)
+        return render(request, 'core_app/e-unbind-user-tag.html', 
+        {'event':event})
 
 class BindUserTag(GuardianView):
     def get(self, request, user_id, tag_id):
@@ -311,6 +329,12 @@ class BindUserTag(GuardianView):
         tag = models.Tag.objects.get(id=tag_id)
         user.tags.add(tag)
         user.save()
+
+        me = models.User.objects.get(id=self.user_id)
+        event = models.EBindUserTag.objects.create(
+        organization=me.default, user=me, peer=user, tag=tag)
+        users = me.default.users.all()
+        event.users.add(*users)
 
         return HttpResponse(status=200)
 
@@ -429,6 +453,7 @@ class EInviteUser(GuardianView):
         event = models.EInviteUser.objects.get(id=event_id)
         return render(request, 'core_app/e-invite-user.html', 
         {'event':event})
+
 
 
 

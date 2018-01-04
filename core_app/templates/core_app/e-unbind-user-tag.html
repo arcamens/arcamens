@@ -1,0 +1,21 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} has untagged {{event.peer.name}}
+
+with  {{event.tag.name}}  
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
