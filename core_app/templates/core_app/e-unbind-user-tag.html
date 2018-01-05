@@ -3,13 +3,17 @@
 
 {% block content %}
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has untagged {{event.peer.name}}
+{{event.user}} has untagged 
+<span class="glyphicon glyphicon-user"></span>
+
+{{event.peer.name}}
 
 with  {{event.tag.name}}  
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
