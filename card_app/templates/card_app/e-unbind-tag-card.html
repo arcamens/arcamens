@@ -2,9 +2,10 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user.name}} has untagged card
+{{event.user.name}} </a> has untagged card
 
 <a class="e-get"
 data-shell="#main-view"
@@ -24,6 +25,7 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#">
 at {{event.created}}
 
 {% endblock %}
+
 
 
 

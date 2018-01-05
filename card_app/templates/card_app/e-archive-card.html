@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-card
+Card
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}"
@@ -15,10 +15,12 @@ data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  by 
 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} on {{event.created}}
+{{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

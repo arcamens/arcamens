@@ -3,8 +3,14 @@
 
 
 {% block content %}
-<span class="glyphicon glyphicon-user"></span> {{event.user}} has binded
-<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span> {{event.user}} </a> has binded
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span> 
+{{event.peer.name}}  </a>
+
 to card
 <a class="e-get"
 data-shell="#main-view"
@@ -14,6 +20,7 @@ data-show="{% url 'card_app:view-data' event.child.id %}" href="#">
 at {{event.created}}
 
 {% endblock %}
+
 
 
 

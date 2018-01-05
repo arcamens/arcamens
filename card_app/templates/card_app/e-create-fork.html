@@ -2,8 +2,10 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has forked card
+{{event.user}} </a>
+has forked card
 
 <a class="e-get"
 data-shell="#main-view"
@@ -26,6 +28,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

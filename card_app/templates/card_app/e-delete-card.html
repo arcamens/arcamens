@@ -2,8 +2,9 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has deleted card
+{{event.user}} </a> has deleted card
 
 <span style="color:red"> <span class="glyphicon glyphicon-file"></span> {{event.label}} </span>
 
@@ -21,6 +22,7 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
