@@ -2,8 +2,9 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has created board
+{{event.user}} </a> has created board
 
 <a class="e-get"
 data-shell="#main-view"
@@ -13,6 +14,7 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

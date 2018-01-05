@@ -2,11 +2,14 @@
 {% load i18n %}
 
 {% block content %}
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} has binded
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.peer.name}} from board
+{{event.user}} </a> has binded
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+{{event.peer.name}} </a> from board
 
 <a class="e-get"
 data-shell="#main-view"
@@ -16,6 +19,7 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
