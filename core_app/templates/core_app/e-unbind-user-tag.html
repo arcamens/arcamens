@@ -2,17 +2,23 @@
 {% load i18n %}
 
 {% block content %}
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has untagged 
+{{event.user}} </a> has untagged 
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
 <span class="glyphicon glyphicon-user"></span>
 
-{{event.peer.name}}
+{{event.peer.name}} </a>
 
 with  {{event.tag.name}}  
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
