@@ -12,10 +12,12 @@ href="#">
 
 <span class="glyphicon glyphicon-flag"></span> {{event.organization.name}} </a>  by 
 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} on {{event.created}}
+{{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

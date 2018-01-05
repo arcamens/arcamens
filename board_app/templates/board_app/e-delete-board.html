@@ -2,8 +2,10 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has deleted board
+{{event.user}} </a> has deleted board
 
 <span style="color:red">
 <span class="glyphicon glyphicon-th"></span>
@@ -12,5 +14,6 @@
 on {{event.created}}
 
 {% endblock %}
+
 
 
