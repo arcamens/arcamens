@@ -3,7 +3,7 @@ function alertEvent() {
     var audio = new Audio('/static/event-alert.mp3');
     audio.play();
 
-    $('#eventsBell').css('color', 'orange');
+    $('a.eventsButton').addClass('new-events');
 }
 
 var wsbroker = '{{settings.WS_HOST}}';  // mqtt websocket enabled broker

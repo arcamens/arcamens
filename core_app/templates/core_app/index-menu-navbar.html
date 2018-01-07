@@ -1,10 +1,10 @@
 {% load i18n %}
 
-<button type="button" onclick="$('#eventsBell').css('color', 'white');" class="navbar-toggle e-get" 
+<button type="button" class="navbar-toggle e-get new-events" 
 data-show="{% url 'core_app:list-events' %}" data-toggle="collapse"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#modalContent"
-href="#"> <span id="eventsBell" style="color:white;">
+href="#"> <span class="eventsButton">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
 <a data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
@@ -23,10 +23,10 @@ role="button">
 
 <ul class="nav navbar-nav">
 
-<li><a class="hidden-xs e-get"  
+<li><a class="hidden-xs e-get eventsButton"  
 data-show="{% url 'core_app:list-events' %}" 
 data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');"
+data-callback="$('#modal').modal('show');$('.eventsButton').toggleClass('new-events')"
 href="#"><span class="glyphicon glyphicon-bell"></span> 
 {% trans "Events" %}</a></li>
 
@@ -69,6 +69,7 @@ href="#">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 

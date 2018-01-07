@@ -32,3 +32,8 @@ background-color:#F4F0E5;
 font-size:93%;
 
 }
+
+a.new-events  {
+  color: red;
+  font-weight: bold;
+}
