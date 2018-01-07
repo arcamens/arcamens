@@ -4,6 +4,7 @@
 {% block content %}
 Board
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'board_app:list-boards'  %}"
 href="#"> 
@@ -17,6 +18,7 @@ href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 
