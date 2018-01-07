@@ -73,7 +73,7 @@ class CreateList(GuardianView):
         event.users.add(*list.ancestor.members.all())
 
         ws.client.publish('board%s' % list.ancestor.id, 
-            'Card on: %s!' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('list_app:list-lists', board_id=board.id)
 
@@ -92,7 +92,7 @@ class DeleteList(GuardianView):
 
         # Missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
-            'Card on: %s!' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('list_app:list-lists',
         board_id=list.ancestor.id)
@@ -127,7 +127,7 @@ class UpdateList(GuardianView):
 
         # Missing event.
         ws.client.publish('board%s' % record.ancestor.id, 
-            'Card on: %s!' % record.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('card_app:list-cards', 
         list_id=record.id)
@@ -145,7 +145,7 @@ class PasteCards(GuardianView):
 
         # missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
-            'Card on: %s!' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -157,7 +157,7 @@ class CutList(GuardianView):
         board         = list.ancestor
 
         ws.client.publish('board%s' % list.ancestor.id, 
-            'Card on: %s!' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         list.ancestor = None
         list.save()
@@ -166,8 +166,6 @@ class CutList(GuardianView):
         event = models.ECutList.objects.create(organization=user.default,
         ancestor=board, child=list, user=user)
         event.users.add(*board.members.all())
-
-        # missing event.
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -181,7 +179,7 @@ class CopyList(GuardianView):
 
         # missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
-            'Card on: %s!' % list.ancestor.id, 0, False)
+            'sound' % list.ancestor.id, 0, False)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
@@ -250,7 +248,7 @@ class Done(GuardianView):
 
         # Missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
-            'List done on: %s!' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('list_app:list-lists', board_id=list.ancestor.id)
 
@@ -271,4 +269,5 @@ class ECutList(GuardianView):
         event = models.ECutList.objects.get(id=event_id)
         return render(request, 'list_app/e-cut-list.html', 
         {'event':event})
+
 
