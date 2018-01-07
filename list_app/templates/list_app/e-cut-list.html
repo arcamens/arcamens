@@ -9,6 +9,7 @@
 
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.child.id %}" href="#"> 
 <span class="glyphicon glyphicon-list-alt"></span>
@@ -20,6 +21,7 @@ data-show="{% url 'card_app:list-cards' event.child.id %}" href="#">
 from board
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-th"></span>
@@ -28,6 +30,7 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

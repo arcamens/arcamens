@@ -4,6 +4,7 @@
 {% block content %}
 List
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.child.id %}"
 href="#"> 
@@ -11,6 +12,7 @@ href="#">
 {{event.child.name|truncatechars:40}} </a> archived on board
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-th"></span> {{event.ancestor.name}} </a>  by 
@@ -20,6 +22,7 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

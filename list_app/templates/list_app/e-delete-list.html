@@ -12,6 +12,7 @@
 {{event.child_name}} </span>  on board
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-th"></span>
@@ -20,6 +21,7 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
