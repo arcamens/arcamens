@@ -76,10 +76,11 @@ class CreateBoard(GuardianView):
         event.users.add(user)
         event.save()
 
-        # ws.client.publish('board%s' % board.id, 
-            # 'board on: %s!' % board.name, 0, False)
         ws.client.publish('user%s' % user.id, 
             'subscribe board%s' % board.id, 0, False)
+
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
 
         return redirect('board_app:list-boards')
 
@@ -202,7 +203,7 @@ class UpdateBoard(GuardianView):
         event.users.add(*record.members.all())
 
         ws.client.publish('board%s' % record.id, 
-            'subscribe board%s' % record.id, 0, False)
+            'sound', 0, False)
 
         return redirect('list_app:list-lists', 
         board_id=record.id)
@@ -218,7 +219,7 @@ class DeleteBoard(GuardianView):
         event.users.add(*board.members.all())
 
         ws.client.publish('board%s' % board.id, 
-            'Card on: %s!' % board.id, 0, False)
+            'sound', 0, False)
 
         board.delete()
 
@@ -390,7 +391,7 @@ class BindBoardUser(GuardianView):
         event.users.add(*board.members.all())
 
         ws.client.publish('board%s' % board.id, 
-            'timeline on: %s!' % board.name, 0, False)
+            'sound', 0, False)
 
         ws.client.publish('user%s' % user.id, 
             'subscribe board%s' % board.id, 0, False)
@@ -412,9 +413,9 @@ class UnbindBoardUser(GuardianView):
         event.users.add(*board.members.all())
 
         ws.client.publish('board%s' % board.id, 
-            'timeline on: %s!' % board.name, 0, False)
+            'sound', 0, False)
 
-        ws.client.publish('user%s' % user.id, 
+        ws.client.publish('user%s' % me.id, 
             'unsubscribe board%s' % board.id, 0, False)
 
         return HttpResponse(status=200)
@@ -467,7 +468,7 @@ class Done(GuardianView):
 
         # Missing event.
         ws.client.publish('board%s' % board.id, 
-            'Board done on: %s!' % board.id, 0, False)
+            'sound', 0, False)
 
         return redirect('board_app:list-boards')
 
@@ -479,6 +480,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
