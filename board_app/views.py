@@ -178,6 +178,9 @@ class PasteLists(GuardianView):
             ind.ancestor = board; ind.save()
         user.list_clipboard.clear()
 
+        ws.client.publish('board%s' % board.id, 
+            'sound', 0, False)
+
         return redirect('list_app:list-lists', 
         board_id=board.id)
 
@@ -480,6 +483,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
