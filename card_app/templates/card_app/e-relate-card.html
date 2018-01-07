@@ -9,6 +9,7 @@
 {{event.user}} </a> has related card
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child0.id %}" 
 href="#"> 
@@ -19,6 +20,7 @@ href="#">
 to card
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child1.id %}" 
 href="#"> 
@@ -28,6 +30,7 @@ href="#">
 
 at {{event.created}}
 {% endblock %}
+
 
 
 
