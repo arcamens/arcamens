@@ -5,6 +5,7 @@
 
 Timeline <a class="e-get"
 data-shell="#main-view"
+data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
 <span class="glyphicon glyphicon-eye-open"></span>
 {{event.timeline.name}} </a>  updated by 
