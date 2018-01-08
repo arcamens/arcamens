@@ -3,7 +3,9 @@
 
 {% block content %}
 
-<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}}  </a>
 assigned to post
 
 <a class="e-get"
@@ -11,9 +13,13 @@ data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 {{event.post.label}} </a>  by 
 
-{{event.user}} on {{event.created}}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+
+{{event.user}} </a> n {{event.created}}
 
 {% endblock %}
+
 
 
 

@@ -3,13 +3,17 @@
 
 {% block content %}
 
-<span class="glyphicon glyphicon-user"></span> {{user.name}} 
-{{event.user.name}} has removed tag 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+{{event.user.name}} </a> has removed tag 
+
 {{event.tag.name}} from post
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+
 {{event.post.label}} </a>  
 
 on timeline 
@@ -25,6 +29,7 @@ data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
