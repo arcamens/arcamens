@@ -58,7 +58,7 @@ class ListCards(GuardianView):
         total.filter(done=False)
 
 
-        cards = cards.order_by('-created')    
+        cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,

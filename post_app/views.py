@@ -16,6 +16,11 @@ class Post(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("This post is on clipboard!\
+                It can't be accessed now.", status=400)
+
         attachments = post.postfilewrapper_set.all()
 
         return render(request, 'post_app/post.html', 
@@ -53,30 +58,8 @@ class CreatePost(GuardianView):
         event.users.add(*users)
 
         ws.client.publish('timeline%s' % ancestor.id, 
-            'Post created on: %s!' % ancestor.name, 0, False)
+            'sound', 0, False)
 
-        # Dispatch the event to the users using
-        # mqtt paho.
-        # for ind in users:
-            # ws.client.publish(str(ind.id), 
-                # 'Post created on: %s!' % ancestor.name, 0, False)
-
-        # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # channel    = connection.channel()
-
-        # channel.exchange_declare(exchange='amq.topic',
-        # exchange_type='topic')
-
-        # channel.exchange_declare(exchange=str(ancestor.organization.id),
-        # exchange_type='direct')
-
-        # channel.basic_publish(exchange='amq.topic',
-        # routing_key=str(ancestor.id), body='Post created: %s' % ancestor.name)
-
-        # channel.basic_publish(exchange=str(ancestor.organization.id),
-        # routing_key=str(ancestor.id), body='Post created: %s' % ancestor.name)
-
-        # connection.close()
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor_id)
@@ -107,7 +90,7 @@ class UpdatePost(GuardianView):
         event.users.add(*record.workers.all())
 
         ws.client.publish('timeline%s' % record.ancestor.id, 
-            'Post updated on: %s!' % record.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('post_app:post', 
         post_id=record.id)
@@ -166,13 +149,7 @@ class DeletePost(GuardianView):
         post.delete()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post updated on: %s!' % post.ancestor.id, 0, False)
-
-        # Dispatch the event to the users using
-        # mqtt paho.
-        # for ind in users:
-            # ws.client.publish(str(ind.id), 
-                # 'Deleted on: %s!' % ancestor.name, 0, False)
+            'sound', 0, False)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
@@ -204,7 +181,7 @@ class UnassignPostUser(GuardianView):
         event.save()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post updated on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -223,7 +200,7 @@ class AssignPostUser(GuardianView):
         event.save()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post updated on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -317,7 +294,7 @@ class CutPost(GuardianView):
 
         # Should have an event, missing creating event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post cut on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         post.ancestor = None
         post.save()
@@ -346,7 +323,7 @@ class CopyPost(GuardianView):
 
         # should have event, missing creation of event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post copied on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -368,7 +345,7 @@ class Done(GuardianView):
 
         # Missing event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post done on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -463,7 +440,7 @@ class UnbindPostTag(GuardianView):
         event.save()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Tag unbinded on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -483,7 +460,7 @@ class BindPostTag(GuardianView):
         event.save()
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Tag binded on: %s!' % post.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -522,6 +499,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
