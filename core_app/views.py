@@ -1,5 +1,6 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator, EmptyPage
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
@@ -231,6 +232,23 @@ class ManageUserTags(GuardianView):
         {'included': included, 'excluded': excluded, 'user': user,
         'me': me, 'organization': me.default,'form':form})
 
+class EventPaginator(GuardianView):
+    def get(self, request):
+        user      = models.User.objects.get(id=self.user_id)
+        events    = user.default.events.all().order_by('-created')
+
+        page      = request.GET.get('page', 1)
+        paginator = Paginator(events, 10)
+
+        try:
+            events = paginator.page(page)
+        except EmptyPage:
+            return HttpResponse('')
+
+        return render(request, 'core_app/event-paginator.html', 
+        {'events': events, 'user': user,})
+
+
 class ListEvents(GuardianView):
     """
     """
@@ -453,6 +471,7 @@ class EInviteUser(GuardianView):
         event = models.EInviteUser.objects.get(id=event_id)
         return render(request, 'core_app/e-invite-user.html', 
         {'event':event})
+
 
 
 
