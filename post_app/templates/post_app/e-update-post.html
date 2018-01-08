@@ -5,6 +5,7 @@
 Post
 <a class="e-get"
 data-shell="#main-view"
+data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'post_app:post' event.post.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -12,6 +13,8 @@ href="#">
 
 <a class="e-get"
 data-shell="#main-view"
+data-callback="$('#modal').modal('toggle');" 
+
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
 
@@ -22,6 +25,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

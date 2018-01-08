@@ -9,8 +9,10 @@
 assigned to post
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>  by 
 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
@@ -19,6 +21,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="#">
 {{event.user}} </a> n {{event.created}}
 
 {% endblock %}
+
 
 
 

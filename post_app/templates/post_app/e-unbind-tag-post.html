@@ -10,6 +10,7 @@
 {{event.tag.name}} from post
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -19,6 +20,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="#">
 on timeline 
 
 <a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.ancestor.name}} 
@@ -29,6 +31,7 @@ data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
