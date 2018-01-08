@@ -9,15 +9,12 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 <span class="glyphicon glyphicon-eye-open"></span>
 {{event.timeline.name}} </a>  updated by 
 
-<a class="e-get" 
-data-show=""
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-href="#"> 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

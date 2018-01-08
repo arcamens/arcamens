@@ -3,16 +3,20 @@
 
 {% block content %}
 
-Timeline {{event.timeline_name}} deleted by 
+Timeline 
+<span style="color:red"> 
 
-<a class="e-get" 
-data-show=""
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span>
+{{event.timeline_name}} </span> deleted by 
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span>
+
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

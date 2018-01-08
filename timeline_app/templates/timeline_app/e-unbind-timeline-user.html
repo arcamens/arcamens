@@ -3,16 +3,24 @@
 
 {% block content %}
 
-<span style="color:red"> {{event.peer.name}} </span> unbinded from
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="Score: value">
+<span style="color:red"> 
+<span class="glyphicon glyphicon-user"></span>
+
+{{event.peer.name}} </span> </a> unbinded from
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
 
-{{event.user}} on {{event.created}}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+
+{{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 
