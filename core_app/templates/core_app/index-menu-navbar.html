@@ -26,7 +26,7 @@ role="button">
 <li><a class="hidden-xs e-get eventsButton"  
 data-show="{% url 'core_app:list-events' %}" 
 data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');$('.eventsButton').toggleClass('new-events')"
+data-callback="$('#modal').modal('show');$('.eventsButton').removeClass('new-events')"
 href="#"><span class="glyphicon glyphicon-bell"></span> 
 {% trans "Events" %}</a></li>
 
@@ -69,6 +69,7 @@ href="#">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 

@@ -256,10 +256,9 @@ class ListEvents(GuardianView):
     def get(self, request):
         user   = models.User.objects.get(id=self.user_id)
         events = user.default.events.all().order_by('-created')
-        form   = forms.EventSearchForm()
         return render(request, 'core_app/list-events.html', 
         {'events': events, 'user': user, 
-        'form': form, 'organization': user.default})
+         'organization': user.default})
 
 class ListTags(GuardianView):
     def get(self, request):
