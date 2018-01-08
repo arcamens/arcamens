@@ -404,7 +404,8 @@ class ManageTimelineUsers(GuardianView):
         timeline = models.Timeline.objects.get(id=timeline_id)
 
         included = timeline.users.all()
-        excluded = core_app.models.User.objects.exclude(timelines=timeline)
+        users = me.default.users.all()
+        excluded = users.exclude(timelines=timeline)
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
@@ -433,5 +434,6 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
