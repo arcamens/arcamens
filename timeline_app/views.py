@@ -96,6 +96,9 @@ class CreateTimeline(GuardianView):
         ws.client.publish('user%s' % user.id, 
             'subscribe timeline%s' % record.id, 0, False)
 
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
+
         # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         # channel    = connection.channel()
         
@@ -112,8 +115,14 @@ class DeleteTimeline(GuardianView):
         event    = models.EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
+        ws.client.publish('timeline%s' % timeline.id, 
+            'sound', 0, False)
+
+        # should tell users to unsubscribe here.
+        # it may hide bugs.
         event.users.add(*timeline.users.all())
         timeline.delete()
+
             
         return redirect('timeline_app:list-timelines')
 
@@ -131,7 +140,7 @@ class UnbindTimelineUser(GuardianView):
         event.users.add(*timeline.users.all())
 
         ws.client.publish('timeline%s' % timeline.id, 
-            'timeline on: %s!' % timeline.name, 0, False)
+            'sound', 0, False)
 
         # When user is removed from timline then it
         # gets unsubscribed from the timeline.
@@ -164,6 +173,9 @@ class UpdateTimeline(GuardianView):
         ws.client.publish('timeline%s' % record.id, 
             'subscribe timeline%s' % record.id, 0, False)
 
+        ws.client.publish('timeline%s' % record.id, 
+            'sound', 0, False)
+
         return redirect('timeline_app:list-posts', 
         timeline_id=record.id)
 
@@ -181,9 +193,8 @@ class PastePosts(GuardianView):
             post=ind.post, user=user)
             event.users.add(*users)
 
-        for ind in users:
-            ws.client.publish(str(ind.id), 
-                'Post created on: %s!' % timeline.name, 0, False)
+        ws.client.publish('timeline%s' % timeline.id, 
+            'sound', 0, False)
     
         user.clipboard.clear()
         return redirect('timeline_app:list-posts', 
@@ -338,7 +349,7 @@ class BindTimelineUser(GuardianView):
         event.users.add(*timeline.users.all())
 
         ws.client.publish('timeline%s' % timeline.id, 
-            'timeline on: %s!' % timeline.name, 0, False)
+            'sound', 0, False)
 
         ws.client.publish('user%s' % user.id, 
             'subscribe timeline%s' % timeline.id, 0, False)
@@ -422,18 +433,5 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -15,8 +15,13 @@
 {% for ind in clips %}
 
 <p> 
-<a style="color:red;font-size:80%" href="#"><span class="glyphicon glyphicon-remove"></span></a>  
-Post <a href="#"> {{ind.post.label}} </a> on timeline <a href="#"> {{ind.timeline.name}} </a>
+Post 
+<span class="glyphicon glyphicon-list-alt"></span>
+
+{{ind.post.label}} on timeline <a href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span>
+
+{{ind.timeline.name}} </a>
 </p>
 
 <br>
@@ -38,6 +43,7 @@ class="btn btn-default e-get"> {% trans "Clear" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 

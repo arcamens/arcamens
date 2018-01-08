@@ -39,8 +39,13 @@ class ListCards(GuardianView):
     """
 
     def get(self, request, list_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
         list = list_app.models.List.objects.get(id=list_id)
+
+        if not list.ancestor:
+            return HttpResponse("This list is on clipboard!\
+                It can't be accessed now.", status=400)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.all()
 
         filter, _ = models.CardFilter.objects.get_or_create(
@@ -62,6 +67,16 @@ class ListCards(GuardianView):
 class ViewData(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
+
+        # First check if someone has cut this card.
+        # Cards on clipboard shouldnt be accessed due to generating
+        # too many inconsistencies.
+        on_clipboard = not (card.ancestor and card.ancestor.ancestor)
+
+        if on_clipboard:
+            return HttpResponse("This card is on clipboard! \
+               It can't be accessed.", status=400)
+
         user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.all()
         forks = card.forks.all()
@@ -738,6 +753,7 @@ class Done(GuardianView):
         card.ancestor.ancestor.id, 'sound', 0, False)
 
         return redirect('card_app:list-cards', list_id=card.ancestor.id)
+
 
 
 
