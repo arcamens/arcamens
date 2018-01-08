@@ -139,7 +139,9 @@ class ManageBoardUsers(GuardianView):
         board = models.Board.objects.get(id=board_id)
 
         included = board.members.all()
-        excluded = core_app.models.User.objects.exclude(boards=board)
+
+        users = me.default.users.all()
+        excluded = users.exclude(boards=board)
 
         return render(request, 'board_app/manage-board-users.html', 
         {'included': included, 'excluded': excluded, 'board': board,
@@ -483,6 +485,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
