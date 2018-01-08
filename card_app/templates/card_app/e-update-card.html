@@ -21,14 +21,12 @@ data-callback="$('#modal').modal('toggle');"
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.ancestor.ancestor.name}}
-<span class="glyphicon glyphicon-arrow-right"></span>
-
 {{event.ancestor.name}} </a> 
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
