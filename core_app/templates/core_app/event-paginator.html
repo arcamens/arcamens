@@ -2,7 +2,7 @@
 <script>
 {% if events.has_next %}
 $('#listEvents').on('scroll', function() {
-        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 80/100.0) {
+        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 60/100.0) {
             $('#listEvents').off('scroll');
             $('#listEvents').append(
             $('<div>').load("{% url 'core_app:event-paginator' %}?page={{ events.next_page_number|add:1 }}"));
@@ -273,4 +273,5 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 

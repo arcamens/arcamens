@@ -238,7 +238,7 @@ class EventPaginator(GuardianView):
         events    = user.default.events.all().order_by('-created')
 
         page      = request.GET.get('page', 1)
-        paginator = Paginator(events, 10)
+        paginator = Paginator(events, 4)
 
         try:
             events = paginator.page(page)
@@ -256,6 +256,11 @@ class ListEvents(GuardianView):
     def get(self, request):
         user   = models.User.objects.get(id=self.user_id)
         events = user.default.events.all().order_by('-created')
+
+        page      = request.GET.get('page', 1)
+        paginator = Paginator(events, 10)
+        events = paginator.page(page)
+
         return render(request, 'core_app/list-events.html', 
         {'events': events, 'user': user, 
          'organization': user.default})
@@ -470,6 +475,7 @@ class EInviteUser(GuardianView):
         event = models.EInviteUser.objects.get(id=event_id)
         return render(request, 'core_app/e-invite-user.html', 
         {'event':event})
+
 
 
 

@@ -9,9 +9,8 @@
 
 <div class="modal-body">
 <div id="listEvents" class="container-fluid pre-scrollable">
-<script>
-$('#listEvents').load("{% url 'core_app:event-paginator' %}?page=1")
-</script>
+{% include 'core_app/event-paginator.html' %}
+
 </div>
 
 </div>
@@ -23,6 +22,7 @@ $('#listEvents').load("{% url 'core_app:event-paginator' %}?page=1")
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
