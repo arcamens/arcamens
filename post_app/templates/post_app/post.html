@@ -37,6 +37,8 @@ by  {{post.user}} at {{post.created}}
 <div class="row">
 <div class="col-md-3">
 <h4> Attachments </h4>
+<div class="pre-scrollable" style="font-size:80%">
+
 {% for ind in attachments %}
 <a href="{% static ind.file %}" target="_blank"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -45,18 +47,24 @@ by  {{post.user}} at {{post.created}}
 No attachment.
 {% endfor %}
 </div>
+</div>
 
 <div class="col-md-3">
 <h4> Tags </h4>
+<div class="pre-scrollable" style="font-size:80%">
+
 {% for ind in tags %}
 <a href="#"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
 {% empty %}
 No tags.
 {% endfor %}
 </div>
+</div>
 
 <div class="col-md-3">
 <h4> Workers </h4>
+
+<div class="pre-scrollable" style="font-size:80%">
 {% for ind in workers %}
 <a href="#">
 <span class="glyphicon glyphicon-user"></span>
@@ -67,6 +75,8 @@ No tags.
 {% empty %}
 No tags.
 {% endfor %}
+</div>
+
 </div>
 
 </div> 
