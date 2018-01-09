@@ -473,6 +473,14 @@ class EInviteUser(GuardianView):
         return render(request, 'core_app/e-invite-user.html', 
         {'event':event})
 
+class ListAllTasks(GuardianView):
+    def get(self, request):
+        user = models.User.objects.get(id=self.user_id)
+        assignments = user.assignments.all()
+        tasks       = user.tasks.all()
+        return render(request, 'core_app/list-all-tasks.html', 
+        {'assignments': assignments, 'tasks': user.tasks.all()})
+
 
 
 

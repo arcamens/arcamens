@@ -1,11 +1,18 @@
 {% load i18n %}
 
-<button type="button" class="navbar-toggle e-get new-events" 
-data-show="{% url 'core_app:list-events' %}" data-toggle="collapse"
+<button type="button" class="navbar-toggle btn btn-info e-get new-events" 
+data-show="{% url 'core_app:list-events' %}" 
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#modalContent"
 href="#"> <span class="eventsButton">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get" 
+data-show="{% url 'core_app:list-all-tasks' %}" 
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#modalContent"
+href="#"> 
+<span class="glyphicon glyphicon-tasks">  </span></button>
 
 <a data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
 href="#"
@@ -48,6 +55,7 @@ data-toggle="modal" data-target="#modal">
 </a>
 </li>
 
+
 <li>
 <a data-show="{% url 'timeline_app:list-timelines' %}" class="e-get" 
 href="#"
@@ -65,10 +73,19 @@ href="#">
 
 </li>
 
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:list-all-tasks' %}" 
+data-toggle="modal" data-target="#modal">
+<span class="glyphicon glyphicon-tasks"></span> All Tasks 
+</a>
+</li>
 
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 
