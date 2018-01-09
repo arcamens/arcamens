@@ -30,13 +30,12 @@ by  {{post.user}} at {{post.created}}
 
 <div class="panel-body" >
 <div style="word-wrap: break-word;"> 
-{% block body %}
 {{post.html | safe}} 
 
 <hr>
 
 <div class="row">
-<div class="col-md-6">
+<div class="col-md-3">
 <h4> Attachments </h4>
 {% for ind in attachments %}
 <a href="{% static ind.file %}" target="_blank"> 
@@ -47,15 +46,27 @@ No attachment.
 {% endfor %}
 </div>
 
-<div class="col-md-6">
+<div class="col-md-3">
 <h4> Tags </h4>
 {% for ind in tags %}
 <a href="#"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
 {% empty %}
 No tags.
 {% endfor %}
+</div>
 
-{% endblock %}
+<div class="col-md-3">
+<h4> Workers </h4>
+{% for ind in workers %}
+<a href="#">
+<span class="glyphicon glyphicon-user"></span>
+
+{{ind.name}}
+</a>
+<br>
+{% empty %}
+No tags.
+{% endfor %}
 </div>
 
 </div> 
@@ -111,6 +122,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 {% endblock %}
 </div>
 </div>
+
 
 
 

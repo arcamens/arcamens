@@ -22,9 +22,10 @@ class Post(GuardianView):
                 It can't be accessed now.", status=400)
 
         attachments = post.postfilewrapper_set.all()
-
+        workers = post.workers.all()
         return render(request, 'post_app/post.html', 
-        {'post':post, 'attachments': attachments, 'tags': post.tags.all()})
+        {'post':post, 'attachments': attachments, 
+        'tags': post.tags.all(), 'workers': workers})
 
 class CreatePost(GuardianView):
     """
@@ -499,6 +500,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

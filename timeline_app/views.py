@@ -21,6 +21,10 @@ class Timeline(GuardianView):
         return render(request, 'timeline_app/timeline.html', 
         {'timeline':timeline})
 
+class PostPaginator(GuardianView):
+    def get(self, request, timeline_id):
+        pass
+
 class ListPosts(GuardianView):
     """
     """
@@ -288,6 +292,10 @@ class ListEvents(GuardianView):
         {'user': user, 'events': events, 'form': form, 
         'total': total, 'organization': user.default})
 
+class TimelinePaginator(GuardianView):
+    def get(self, request):
+        pass
+
 class ListTimelines(GuardianView):
     """
     """
@@ -434,6 +442,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

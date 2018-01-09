@@ -62,6 +62,12 @@ data-show="{% url 'post_app:assign-post-user' post.id ind.id %}" href="#">
 </div>
 
 <div class="modal-footer">
+<script>
+$('#modal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:post' post.id  %}');
+})
+</script>
+
 <button  type="button" data-form="#assign-post-search-form" 
 data-shell="#modalContent" 
 data-shell-error="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id  %}"
@@ -72,6 +78,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 
