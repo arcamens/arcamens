@@ -6,30 +6,24 @@
 <div class="panel-heading clearfix" > 
 
 <div style="word-wrap: break-word;"> 
-{% block heading %}
-<span class="glyphicon glyphicon-file"></span> {{post.label}}
 
-{% endblock %}
-on 
 
-{% if post.ancestor %}
+By  {{post.user}} 
+on
+
 <a class="e-get" href="#"
 data-show="{% url 'timeline_app:list-posts' post.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
-{% else %}
-<b> 
-<span class="glyphicon glyphicon-paperclip"></span>
-Clipboard </b>
-{% endif %}
 
-by  {{post.user}} at {{post.created}} 
+at {{post.created}} 
 
 </div>
 </div>
 
 <div class="panel-body" >
 <div style="word-wrap: break-word;"> 
+<h4> {{post.label}} </h4>
 {{post.html | safe}} 
 
 <hr>
@@ -132,6 +126,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 {% endblock %}
 </div>
 </div>
+
 
 
 
