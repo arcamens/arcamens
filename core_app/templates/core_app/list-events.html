@@ -13,6 +13,31 @@
 
 </div>
 
+<script>
+var count = 0;
+
+function autoScroll() {
+    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 60/100.0) {
+        count = count + 1;
+        var url = "{% url 'core_app:event-paginator' %}?page=" + count;
+    
+        $('#listEvents').off('scroll');
+    
+        $.get({ 
+            url: url, 
+            // async: false
+        },
+
+        function(data) {
+            $('#listEvents').on('scroll', autoScroll);
+            $('#listEvents').append(data);
+        });
+    }
+}
+
+$('#listEvents').on('scroll', autoScroll);
+</script>
+
 </div>
 
 </div>
@@ -22,28 +47,6 @@
      {% trans "Close" %}
 </button>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
