@@ -255,15 +255,12 @@ class ListEvents(GuardianView):
 
     def get(self, request):
         user   = models.User.objects.get(id=self.user_id)
-        events = user.default.events.all().order_by('-created')[10:]
-
-        page      = request.GET.get('page', 1)
-        paginator = Paginator(events, 10)
-        events = paginator.page(page)
+        events = user.default.events.all().order_by('-created')
+        count = events.count()
 
         return render(request, 'core_app/list-events.html', 
-        {'events': events, 'user': user, 
-         'organization': user.default})
+        {'events': events[:10], 'user': user, 
+         'organization': user.default, 'count': count})
 
 class ListTags(GuardianView):
     def get(self, request):
