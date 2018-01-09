@@ -99,7 +99,7 @@ class="btn btn-warning btn-xs e-get">
 <button type="button"  
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
-class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-tag"></span> Assign</button>
+class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </span> <span class=" hidden-xs"> Assign </span></button>
 
 <button type="button" 
 data-callback="$('#bigModal').modal('show');" 
@@ -111,7 +111,7 @@ data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> <span class="hidden-xs"> Delete </span> </button>
 
 <button type="button"  data-shell="#main-view" data-show="{% url 'post_app:done' post.id %}"
-class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span>  Done </button>
+class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> <span class=" hidden-xs"> Done </span></button>
 
 <button type="button" class="btn btn-default btn-xs e-get" 
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
