@@ -46,7 +46,10 @@ mod.path
 globals()[mod]
 getattr(, function_name)
 
+##############################################################################
 
+from django.core.paginator import Paginator, EmptyPage
+help(Paginator)
 
 
 
