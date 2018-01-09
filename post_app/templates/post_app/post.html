@@ -99,32 +99,32 @@ class="btn btn-warning btn-xs e-get">
 <button type="button"  
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
-class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </span> <span class=" hidden-xs"> Assign </span></button>
+class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </span> Assign </button>
 
 <button type="button" 
 data-callback="$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" data-show="{% url 'post_comment_app:list-comments' post.id %}"
-class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></span> <span class="hidden-xs"> Comment </span></button>
+class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></span> Comment </button>
 
 <button type="button" class="btn btn-danger btn-xs e-get" 
 data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
-<span class="glyphicon glyphicon-remove"></span> <span class="hidden-xs"> Delete </span> </button>
+<span class="glyphicon glyphicon-remove"></span> Delete  </button>
 
 <button type="button"  data-shell="#main-view" data-show="{% url 'post_app:done' post.id %}"
-class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> <span class=" hidden-xs"> Done </span></button>
+class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Done </button>
 
 <button type="button" class="btn btn-default btn-xs e-get" 
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
-<span class="glyphicon glyphicon-copy"></span> <span class="hidden-xs"> Copy </span></button>
+<span class="glyphicon glyphicon-copy"></span> Copy </button>
 
 <button type="button" class="btn btn-warning btn-xs e-get" 
 data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
-<span class="glyphicon glyphicon-scissors"></span> <span class="hidden-xs"> Cut </span></button>
+<span class="glyphicon glyphicon-scissors"></span> Cut </button>
 
 <button type="button" 
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
-class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span> <span class="hidden-xs"> Tags </span></button>
+class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span> Tags </button>
 
 </div>
 </div>
