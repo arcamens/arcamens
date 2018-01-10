@@ -62,7 +62,7 @@ class BindUsersForm(forms.Form):
     admin = forms.BooleanField(required=False)
 
 class TaskSearchForm(forms.Form):
-    pattern = forms.CharField()
+    pattern = forms.CharField(required=False)
     done = forms.BooleanField(required=False)
 
 

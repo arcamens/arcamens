@@ -57,7 +57,6 @@ class ListCards(GuardianView):
         Q(data__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
         total.filter(done=False)
 
-
         cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
@@ -753,6 +752,7 @@ class Done(GuardianView):
         card.ancestor.ancestor.id, 'sound', 0, False)
 
         return redirect('card_app:list-cards', list_id=card.ancestor.id)
+
 
 
 
