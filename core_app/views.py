@@ -476,13 +476,35 @@ class EInviteUser(GuardianView):
 class ListAllTasks(GuardianView):
     def get(self, request):
         user = models.User.objects.get(id=self.user_id)
+        assignments = user.assignments.filter(done=False)
+        tasks       = user.tasks.filter(done=False)
+
+        form        = forms.TaskSearchForm()
+
+        return render(request, 'core_app/list-all-tasks.html', 
+        {'assignments': assignments, 'form': form, 'tasks': tasks})
+
+    def post(self, request):
+        form = forms.TaskSearchForm(request.POST)
+        user = models.User.objects.get(id=self.user_id)
         assignments = user.assignments.all()
         tasks       = user.tasks.all()
+
+        if not form.is_valid():
+            return render(request, 'core_app/list-all-tasks.html', 
+                {'assignments': assignments, 'form': form, 
+                    'tasks': user.tasks.all()}, status=400)
+
+        assignments = assignments.filter(
+        label__contains=form.cleaned_data['pattern'], 
+        done=form.cleaned_data['done'])
+
+        tasks = tasks.filter(
+        label__contains=form.cleaned_data['pattern'], 
+        done=form.cleaned_data['done'])
+
         return render(request, 'core_app/list-all-tasks.html', 
-        {'assignments': assignments, 'tasks': user.tasks.all()})
-
-
-
+        {'assignments': assignments, 'form': form, 'tasks': tasks})
 
 
 

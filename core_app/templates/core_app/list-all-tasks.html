@@ -13,13 +13,20 @@ Tasks <span class="badge">{{tasks.count}}</span></h4>
 <div class="pre-scrollable">
 {% for ind in assignments %}
 <p>
+
 <a 
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'post_app:post' ind.id %}"
 class="e-get text-warning" href="#">
 <span class="glyphicon glyphicon-file"></span> 
-{{ind.label}}
+
+{% if ind.done %}
+(Done)
+{% endif %}
+
+{{ind.label|truncatechars:100}}
+
 </a>
 </p>
 
@@ -28,27 +35,48 @@ class="e-get text-warning" href="#">
 
 {% for ind in tasks %}
 <p>
+
 <a 
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'card_app:view-data' ind.id %}"
 class="e-get text-warning" href="#">
 <span class="glyphicon glyphicon-file"></span> 
-{{ind.label}}
+{% if ind.done %}
+(Done)
+{% endif %}
+
+{{ind.label|truncatechars:100}}
+
 </a>
 </p>
 
 {% endfor %}
 
 </div>
+<br>
+<form id="task-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_field form.done  size='md' layout='inline' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
 
 </div>
 
 <div class="modal-footer">
+
+<button  type="button" data-form="#task-search-form" 
+data-shell="#modalContent" 
+data-shell-error="#modalContent" data-show="{% url 'core_app:list-all-tasks'  %}"
+class="btn btn-default e-post"> {% trans "Search" %} </button>
+
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
