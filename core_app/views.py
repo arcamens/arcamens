@@ -366,10 +366,12 @@ class EventQueues(GuardianView):
 
 class InviteOrganizationUser(GuardianView):
     def get(self, request, organization_id):
+        user = models.User.objects.get(id=self.user_id)
+
         organization = models.Organization.objects.get(id=organization_id)
 
         return render(request, 'core_app/invite-organization-user.html', 
-        {'form': forms.BindUsersForm(), 'organization': organization})
+        {'form': forms.BindUsersForm(), 'user': user, 'organization': organization})
 
     def post(self, request, organization_id):
         organization = models.Organization.objects.get(id=organization_id)
@@ -505,6 +507,7 @@ class ListAllTasks(GuardianView):
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'assignments': assignments, 'form': form, 'tasks': tasks})
+
 
 
 
