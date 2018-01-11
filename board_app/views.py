@@ -118,8 +118,9 @@ class ManageUserBoards(GuardianView):
                     'me': me, 'organization': me.default, 
                         'form':forms.BoardSearchForm()}, status=400)
 
-        boards = boards.filter(
-        name__contains=form.cleaned_data['name'])
+        boards = boards.filter(Q(
+        name__contains=form.cleaned_data['name']) | Q(
+        description__contains=form.cleaned_data['name']))
 
         # board.users.add(user)
         # board.save()
@@ -485,6 +486,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

@@ -403,8 +403,9 @@ class ManageUserTimelines(GuardianView):
                     'me': me, 'organization': me.default, 
                         'form':forms.BindTimelinesForm()}, status=400)
 
-        timelines = timelines.filter(
-        name__contains=form.cleaned_data['name'])
+        timelines = timelines.filter(Q(
+        name__contains=form.cleaned_data['name']) | Q(
+        description__contains=form.cleaned_data['name']))
 
         # timeline.users.add(user)
         # timeline.save()
