@@ -19,7 +19,7 @@ Available {{user.label}} user's tags </h5>
 data-callback="$('#unbind-user-tag-{{ind.id}}').remove();"
 data-show="{% url 'core_app:unbind-user-tag' user.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>  
-<b> {{ind.name}}: </b>
+<b> {{ind.name}} </b>
 {{ind.description}} 
 </p>
 {% endfor %}
@@ -31,7 +31,7 @@ data-show="{% url 'core_app:unbind-user-tag' user.id ind.id %}" href="#">
 data-callback="$('#bind-user-tag-{{ind.id}}').remove();"
 data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a>  
-<b>{{ind.name}}: </b>
+<b>{{ind.name}} </b>
 
 {{ind.description}} 
 </p>
@@ -64,6 +64,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

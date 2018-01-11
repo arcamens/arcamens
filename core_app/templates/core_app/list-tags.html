@@ -25,7 +25,7 @@ data-callback="$('#delete-tag-{{ind.id}}').remove();"
 data-show="{% url 'core_app:delete-tag' ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>
 
-<b> {{ind.name}}: </b> {{ind.description}} </p>
+<b> {{ind.name}} </b> {{ind.description}} </p>
 {% empty %}
 No tags.
 {% endfor %}
@@ -57,6 +57,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
