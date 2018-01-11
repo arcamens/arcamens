@@ -1,0 +1,26 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+Timeline
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.timeline.id %}"
+href="#"> 
+<span class="glyphicon glyphicon-eye-open"></span>
+{{event.timeline.name}} </a> created on 
+
+<span class="glyphicon glyphicon-flag"></span>
+
+{{event.organization.name}} by 
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> on {{event.created}}
+
+{% endblock %}
+
+
+

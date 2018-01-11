@@ -97,6 +97,13 @@ class CreateTimeline(GuardianView):
         record.users.add(user)
         record.save()
 
+        event = models.ECreateTimeline.objects.create(organization=user.default,
+        timeline=record, user=user)
+
+        # Wondering if organization admins should be notified of this
+        # event. The same behavior for board creation too.
+        event.users.add(user)
+
         ws.client.publish('user%s' % user.id, 
             'subscribe timeline%s' % record.id, 0, False)
 
@@ -238,6 +245,12 @@ class EBindTimelineUser(GuardianView):
     def get(self, request, event_id):
         event = models.EBindTimelineUser.objects.get(id=event_id)
         return render(request, 'timeline_app/e-bind-timeline-user.html', 
+        {'event':event})
+
+class ECreateTimeline(GuardianView):
+    def get(self, request, event_id):
+        event = models.ECreateTimeline.objects.get(id=event_id)
+        return render(request, 'timeline_app/e-create-timeline.html', 
         {'event':event})
 
 class EUnbindTimelineUser(GuardianView):
@@ -442,6 +455,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

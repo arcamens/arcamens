@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^logout/', RedirectView.as_view(pattern_name='site_app:logout'), name='logout'),
     url(r'^list-timelines/', views.ListTimelines.as_view(), name='list-timelines'),
     url(r'^timeline-paginator/', views.TimelinePaginator.as_view(), name='timeline-paginator'),
+    url(r'^e-create-timeline/(?P<event_id>.+)/', views.ECreateTimeline.as_view(), name='e-create-timeline'),
 
     url(r'^check-event/(?P<user_id>.+)/', views.CheckEvent.as_view(), name='check-event'),
     url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 
