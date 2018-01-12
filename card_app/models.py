@@ -243,7 +243,25 @@ class EDeleteCard(Event):
         return reverse('card_app:e-delete-card', 
             kwargs={'event_id': self.id})
 
+class GlobalCardFilter(models.Model):
+    pattern      = models.CharField(max_length=255, blank=True, null=True)
+    user         = models.ForeignKey('core_app.User', null=True, blank=True)
+    organization = models.ForeignKey('core_app.Organization', blank=True,
+    null=True)
 
+    user = models.ForeignKey('core_app.User', 
+    null=True, blank=True)
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
+
+    status = models.BooleanField(blank=True, default=False, 
+    help_text='Filter On/Off.')
+
+    done = models.BooleanField(blank=True, 
+    default=False, help_text='Done cards?.')
+
+    class Meta:
+        unique_together = ('user', 'organization', )
 
 class CardFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
@@ -341,5 +359,6 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
