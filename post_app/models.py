@@ -103,7 +103,8 @@ class Post(PostMixin, models.Model):
 
 class PostFilter(models.Model):
     pattern = models.CharField(max_length=255, 
-    blank=True, null=True)
+    blank=True, null=True, 
+    help_text='Ex: Text + #Tag + Owner..')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -248,6 +249,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

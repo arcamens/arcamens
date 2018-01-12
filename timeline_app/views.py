@@ -1,14 +1,17 @@
 from core_app.views import AuthenticatedView, GuardianView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from core_app.utils import search_tokens
 from django.views.generic import View
 from timeline_app import models
 from timeline_app import forms
+from functools import reduce
 from django.db.models import Q
 from core_app import ws
 import core_app.models
 import timeline_app.models
 import post_app.models
+import operator
 
 # Create your views here.
 
@@ -37,13 +40,26 @@ class ListPosts(GuardianView):
 
         total = timeline.posts.all()
 
-        posts = total.filter((Q(label__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
-        total.filter(done=False)
+        posts = self.collect(total, filter) if filter.status \
+        else total.filter(done=False)
 
         # posts    = timeline.posts.all().order_by('-created')
         return render(request, 'timeline_app/list-posts.html', 
         {'timeline':timeline, 'total': total, 'posts':posts, 'filter': filter})
+
+    def collect(self, posts, filter):
+        chks, tags = search_tokens(filter.pattern)
+
+        for ind in tags:
+            posts = posts.filter(Q(tags__name__startswith=ind))
+
+        # I should make post have owner instead of user.
+        posts = posts.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(user__name__contains=ind) 
+        for ind in chks))) if chks else posts
+
+        posts = posts.filter(Q(done=filter.done))
+        return posts
 
 class ListAllPosts(GuardianView):
     """
@@ -456,6 +472,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
