@@ -1,5 +1,6 @@
 from django import forms
 from . import models
+import card_app.models
 
 class BoardForm(forms.ModelForm):
     class Meta:
@@ -21,4 +22,10 @@ class BoardSearchForm(forms.Form):
 
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
+class GlobalCardFilterForm(forms.ModelForm):
+    class Meta:
+        model  = card_app.models.GlobalCardFilter
+        exclude = ('user', 'organization')
+
 

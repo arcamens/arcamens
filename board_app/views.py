@@ -355,32 +355,27 @@ class ListArchive(GuardianView):
 class Find(GuardianView):
     def get(self, request):
         me    = core_app.models.User.objects.get(id=self.user_id)
-        form  = CardSearchForm()
-        cards = card_app.models.Card.objects.none()
-
+        filter, _ = card_app.models.GlobalCardFilter.objects.get_or_create(
+        user=me, organization=me.default)
         boards = me.boards.all()
-        for indi in boards:
-            for indj in indi.lists.all():
-                cards = cards | indj.cards.all()
+
+        form  = forms.GlobalCardFilterForm(instance=filter)
+        cards = self.collect(boards, filter)
 
         return render(request, 'board_app/find.html', 
         {'form': form, 'cards': cards})
 
-    def post(self, request):
-        form  = CardSearchForm(request.POST)
-        me    = core_app.models.User.objects.get(id=self.user_id)
-
+    def collect(self, boards, filter):
         cards = card_app.models.Card.objects.none()
-        boards = me.boards.all()
+
         for indi in boards:
             for indj in indi.lists.all():
                 cards = cards | indj.cards.all()
 
-        if not form.is_valid():
-            return render(request, 'board_app/find.html', 
-                {'form': form}, status=400)
+        if not filter.status:
+            return cards.filter(done=False)
 
-        chks, tags = search_tokens(form.cleaned_data['pattern'])
+        chks, tags = search_tokens(filter.pattern)
 
         for ind in tags:
             cards = cards.filter(Q(tags__name__startswith=ind))
@@ -388,6 +383,25 @@ class Find(GuardianView):
         cards = cards.filter(reduce(operator.and_, 
         (Q(label__contains=ind) | Q(owner__name__contains=ind) 
         for ind in chks))) if chks else cards
+
+        return cards
+
+    def post(self, request):
+        me        = core_app.models.User.objects.get(id=self.user_id)
+        filter, _ = card_app.models.GlobalCardFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        form  = forms.GlobalCardFilterForm(request.POST, instance=filter)
+        boards = me.boards.all()
+
+        if not form.is_valid():
+            return render(request, 'board_app/find.html', 
+                {'form': form, 'cards':self.collect(
+                    boards, filter)}, status=400)
+
+        cards = self.collect(boards, filter)
+
+        form.save()
 
         return render(request, 'board_app/find.html', 
         {'form': form, 'cards': cards})
@@ -495,6 +509,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
