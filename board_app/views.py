@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from card_app.forms import CardSearchForm
+from core_app.utils import search_tokens
 from django.db.models import Q
 import board_app.models
 import card_app.models
@@ -13,7 +14,9 @@ from . import forms
 import core_app.models
 import board_app.models
 from core_app import ws
-
+from functools import reduce
+import operator
+import re
 # Create your views here.
 
 class ListBoards(GuardianView):
@@ -377,8 +380,14 @@ class Find(GuardianView):
             return render(request, 'board_app/find.html', 
                 {'form': form}, status=400)
 
-        cards = cards.filter(
-        label__contains=form.cleaned_data['pattern'])
+        chks, tags = search_tokens(form.cleaned_data['pattern'])
+
+        for ind in tags:
+            cards = cards.filter(Q(tags__name__startswith=ind))
+
+        cards = cards.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
+        for ind in chks))) if chks else cards
 
         return render(request, 'board_app/find.html', 
         {'form': form, 'cards': cards})
@@ -486,6 +495,8 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
+
 
 
 

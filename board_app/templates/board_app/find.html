@@ -30,7 +30,7 @@ href="#" >
 <form id="find-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
 
-{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -46,6 +46,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 

@@ -31,10 +31,12 @@ class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
 class CardSearchForm(forms.Form):
-    pattern = forms.CharField(required=False)
+    pattern = forms.CharField(required=False, 
+    help_text='Ex: label + tag + owner')
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
 
 
 
