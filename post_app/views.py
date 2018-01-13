@@ -165,6 +165,14 @@ class ListAssignments(GuardianView):
         return render(request, 'post_app/list-assignments.html', 
         {'posts': posts, 'user':user, 'total': total})
 
+class PostWorkerInformation(GuardianView):
+    def get(self, request, peer_id, post_id):
+        event = models.EAssignPost.objects.filter(post__id=post_id,
+        peer__id=peer_id).last()
+
+        return render(request, 'post_app/post-worker-information.html', 
+        {'peer': event.peer, 'created': event.created, 'user':event.user})
+
 class UnassignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
         user = User.objects.get(id=user_id)
@@ -521,6 +529,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

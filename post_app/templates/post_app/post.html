@@ -61,7 +61,12 @@ No tags.
 
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in workers %}
-<a href="#">
+<a 
+data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
 <span class="glyphicon glyphicon-user"></span>
 
 {{ind.name}}
@@ -136,6 +141,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
 
 
 
