@@ -1,6 +1,11 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage
+from core_app.utils import search_tokens
+from card_app.models import Card
+from functools import reduce
+from post_app.models import Post
+import operator
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
@@ -508,8 +513,79 @@ class ListAllTasks(GuardianView):
         return render(request, 'core_app/list-all-tasks.html', 
         {'assignments': assignments, 'form': form, 'tasks': tasks})
 
+class Find(GuardianView):
+    def get(self, request):
+        me    = models.User.objects.get(id=self.user_id)
+        filter, _ = models.GlobalFilter.objects.get_or_create(
+        user=me, organization=me.default)
+        boards = me.boards.all()
+
+        timelines = me.timelines.all()
+
+        form  = forms.GlobalFilterForm(instance=filter)
+        cards = self.collect_cards(boards, filter)
+        posts = self.collect_posts(timelines, filter)
+
+        return render(request, 'core_app/find.html', 
+        {'form': form, 'cards': cards, 'posts': posts})
+
+    def collect_cards(self, boards, filter):
+        cards = Card.objects.none()
+
+        for indi in boards:
+            for indj in indi.lists.all():
+                cards = cards | indj.cards.all()
+
+        cards = cards.filter(done=filter.done)
+        chks, tags = search_tokens(filter.pattern)
+
+        for ind in tags:
+            cards = cards.filter(Q(tags__name__startswith=ind))
+
+        cards = cards.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
+        for ind in chks))) if chks else cards
+
+        return cards
+
+    def post(self, request):
+        me        = models.User.objects.get(id=self.user_id)
+        filter, _ = models.GlobalFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        form  = forms.GlobalFilterForm(request.POST, instance=filter)
+        boards = me.boards.all()
+        timelines = me.timelines.all()
 
 
+        if not form.is_valid():
+            return render(request, 'core_app/find.html', 
+                {'form': form, 'cards':self.collect_cards(
+                    boards, filter), 'posts': self.collect_posts(
+                        timelines, filter)}, status=400)
+
+        cards = self.collect_cards(boards, filter)
+        posts = self.collect_posts(timelines, filter)
+
+        form.save()
+
+        return render(request, 'core_app/find.html', 
+        {'form': form, 'posts': posts, 'cards': cards})
 
 
+    def collect_posts(self, timelines, filter):
+        posts = Post.objects.filter(ancestor__in = timelines)
+
+        chks, tags = search_tokens(filter.pattern)
+
+        for ind in tags:
+            posts = posts.filter(Q(tags__name__startswith=ind))
+
+        # I should make post have owner instead of user.
+        posts = posts.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(user__name__contains=ind) 
+        for ind in chks))) if chks else posts
+
+        posts = posts.filter(Q(done=filter.done))
+        return posts
 

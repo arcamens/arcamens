@@ -66,3 +66,8 @@ class TaskSearchForm(forms.Form):
     done = forms.BooleanField(required=False)
 
 
+class GlobalFilterForm(forms.ModelForm):
+    class Meta:
+        model  = models.GlobalFilter
+        exclude = ('user', 'organization')
+

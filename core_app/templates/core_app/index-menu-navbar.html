@@ -82,9 +82,20 @@ data-toggle="modal" data-target="#modal">
 </a>
 </li>
 
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:find' %}" 
+data-toggle="modal" data-target="#modal">
+<span class="glyphicon glyphicon-search"></span> Find
+</a>
+</li>
+
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
+
 
 
 
