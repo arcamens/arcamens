@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
     url(r'^done/(?P<card_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<card_id>.+)/', views.Undo.as_view(), name='undo'),
+    url(r'^card-worker-information/(?P<peer_id>.+)/(?P<card_id>.+)/', views.CardWorkerInformation.as_view(), name='card-worker-information'),
 
     url(r'^move-cards/(?P<card_id>.+)/', views.MoveCards.as_view(), name='move-cards'),
 
@@ -50,6 +51,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

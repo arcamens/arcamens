@@ -829,6 +829,14 @@ class Find(GuardianView):
         return render(request, 'card_app/find.html', 
         {'form': form, 'cards': cards})
 
+class CardWorkerInformation(GuardianView):
+    def get(self, request, peer_id, card_id):
+        event = models.EBindCardWorker.objects.filter(child__id=card_id,
+        peer__id=peer_id).last()
+
+        return render(request, 'card_app/card-worker-information.html', 
+        {'peer': event.peer, 'created': event.created, 'user':event.user})
+
 
 
 

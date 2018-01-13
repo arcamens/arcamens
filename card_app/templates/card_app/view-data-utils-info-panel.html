@@ -10,9 +10,17 @@
 
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in workers %}
-<a href="#"> 
+<a 
+data-show="{% url 'card_app:card-worker-information' ind.id card.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
 <span class="glyphicon glyphicon-user"></span>
-{{ind.name}} </a> 
+
+{{ind.name}}
+</a>
+
 <br>
 {% empty %}
 No workers...
@@ -49,6 +57,7 @@ No tags...
 </div>
 </div>
 </div>
+
 
 
 
