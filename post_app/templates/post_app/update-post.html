@@ -4,12 +4,13 @@
 
 {% block buttons %}
       <button  type="button" data-form="#form-post-data" 
-      data-shell="#{{post.id}}" data-callback="$('#modal').modal('toggle');" 
+      data-shell="#post-{{post.id}}" data-callback="$('#modal').modal('toggle');" 
       data-shell-error="#modalContent" data-show="{% url 'post_app:update-post' post.id %}"
       class="btn btn-default e-post"> 
            {% trans "Update" %}
       </button>
 {% endblock %}
+
 
 
 

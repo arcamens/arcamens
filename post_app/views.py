@@ -347,8 +347,8 @@ class Done(GuardianView):
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=post.ancestor.id)
+        return redirect('post_app:post', 
+        post_id=post.id)
 
 class Undo(GuardianView):
     def get(self, request, post_id):
@@ -369,8 +369,8 @@ class Undo(GuardianView):
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=post.ancestor.id)
+        return redirect('post_app:post', 
+        post_id=post.id)
 
 class ECreatePost(GuardianView):
     def get(self, request, event_id):
