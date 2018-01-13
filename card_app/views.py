@@ -754,7 +754,28 @@ class Done(GuardianView):
         ws.client.publish('board%s' % 
         card.ancestor.ancestor.id, 'sound', 0, False)
 
-        return redirect('card_app:list-cards', list_id=card.ancestor.id)
+        return redirect('card_app:view-data', card_id=card.id)
+
+class Undo(GuardianView):
+    def get(self, request, card_id):
+        card      = models.Card.objects.get(id=card_id)
+        card.done = False
+        card.save()
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+
+        # cards in the clipboard cant be archived.
+        # event    = models.EArchiveCard.objects.create(organization=user.default,
+        # ancestor=card.ancestor, child=card, user=user)
+
+        # users = card.ancestor.ancestor.members.all()
+        # event.users.add(*users)
+
+        # Missing event.
+        ws.client.publish('board%s' % 
+        card.ancestor.ancestor.id, 'sound', 0, False)
+
+        return redirect('card_app:view-data', card_id=card.id)
 
 class Find(GuardianView):
     def get(self, request):
@@ -807,6 +828,7 @@ class Find(GuardianView):
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'cards': cards})
+
 
 
 

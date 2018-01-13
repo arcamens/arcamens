@@ -18,6 +18,10 @@ data-shell="#pins"  data-show="{% url 'card_app:pin-card' card.id %}">
 data-shell="#main-view"  type="button"
 data-show="{% url 'card_app:view-data' card.id %}" >
 
+{% if card.done %}
+(Done)
+
+{% endif %}
 <em>
 <span class="glyphicon glyphicon-file"></span> 
 {% if card.fork %} Fork {% else %} Card {% endif %}
@@ -41,6 +45,7 @@ data-show="">
 
 
 </div>
+
 
 
 

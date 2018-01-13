@@ -38,12 +38,23 @@ data-show="{% url 'card_app:manage-card-workers' card.id %}"
 data-callback="$('#modal').modal('toggle');" 
 href="#"><span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
+{% if card.done %}
+<li>
+<a 
+data-shell="#main-view"
+class="e-get text-warning"
+data-show="{% url 'card_app:undo'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-ok"></span> Undo</a></li>
+
+{% else %}
 <li>
 <a 
 data-shell="#main-view"
 class="e-get text-warning"
 data-show="{% url 'card_app:done'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-ok"></span> Done</a></li>
+
+{% endif %}
 
 <li>
 <a 
@@ -84,6 +95,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
