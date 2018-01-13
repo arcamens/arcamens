@@ -33,7 +33,6 @@ href="#" >
 {% bootstrap_field form.pattern  size='md' %}
 {% bootstrap_field form.done  size='md' %}
 
-{% bootstrap_field form.status  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -44,11 +43,12 @@ href="#" >
 <div class="modal-footer">
 <button  type="button" data-form="#find-card-search-form" 
 data-shell="#bigModalContent" 
-data-shell-error="#bigModalContent" data-show="{% url 'board_app:find'  %}"
+data-shell-error="#bigModalContent" data-show="{% url 'card_app:find'  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 

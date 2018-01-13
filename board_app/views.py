@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from card_app.forms import CardSearchForm
-from core_app.utils import search_tokens
 from django.db.models import Q
 import board_app.models
 import card_app.models
@@ -14,8 +13,6 @@ from . import forms
 import core_app.models
 import board_app.models
 from core_app import ws
-from functools import reduce
-import operator
 import re
 # Create your views here.
 
@@ -352,60 +349,6 @@ class ListArchive(GuardianView):
         return render(request, 'board_app/list-archive.html', 
         {'user': user})
 
-class Find(GuardianView):
-    def get(self, request):
-        me    = core_app.models.User.objects.get(id=self.user_id)
-        filter, _ = card_app.models.GlobalCardFilter.objects.get_or_create(
-        user=me, organization=me.default)
-        boards = me.boards.all()
-
-        form  = forms.GlobalCardFilterForm(instance=filter)
-        cards = self.collect(boards, filter)
-
-        return render(request, 'board_app/find.html', 
-        {'form': form, 'cards': cards})
-
-    def collect(self, boards, filter):
-        cards = card_app.models.Card.objects.none()
-
-        for indi in boards:
-            for indj in indi.lists.all():
-                cards = cards | indj.cards.all()
-
-        if not filter.status:
-            return cards.filter(done=False)
-
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            cards = cards.filter(Q(tags__name__startswith=ind))
-
-        cards = cards.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
-        for ind in chks))) if chks else cards
-
-        return cards
-
-    def post(self, request):
-        me        = core_app.models.User.objects.get(id=self.user_id)
-        filter, _ = card_app.models.GlobalCardFilter.objects.get_or_create(
-        user=me, organization=me.default)
-
-        form  = forms.GlobalCardFilterForm(request.POST, instance=filter)
-        boards = me.boards.all()
-
-        if not form.is_valid():
-            return render(request, 'board_app/find.html', 
-                {'form': form, 'cards':self.collect(
-                    boards, filter)}, status=400)
-
-        cards = self.collect(boards, filter)
-
-        form.save()
-
-        return render(request, 'board_app/find.html', 
-        {'form': form, 'cards': cards})
-
 class BindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
         user = core_app.models.User.objects.get(id=user_id)
@@ -509,6 +452,9 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
+
+
 
 
 

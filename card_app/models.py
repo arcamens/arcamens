@@ -244,7 +244,7 @@ class EDeleteCard(Event):
             kwargs={'event_id': self.id})
 
 class GlobalCardFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
+    pattern      = models.CharField(max_length=255, blank=True, default='', null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
@@ -253,9 +253,6 @@ class GlobalCardFilter(models.Model):
     null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', 
     null=True, blank=True)
-
-    status = models.BooleanField(blank=True, default=False, 
-    help_text='Filter On/Off.')
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards?.')
@@ -359,6 +356,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 
