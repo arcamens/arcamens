@@ -4,13 +4,22 @@
 <div style="word-wrap: break-word;"> 
 <span class="glyphicon glyphicon-file"></span> 
 
-by  {{card.owner.name}} at {{card.created}}  </div> </div>
+by  {{card.owner.name}} on list
+
+<a class="e-get" href="#"
+data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
+data-shell="#main-view" > 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{card.ancestor.name}} </a>
+
+at {{card.created}}  </div> </div>
 
 <div class="panel-body">
 <h4> {{card.label}}.. </h4>
 {{card.html | safe}}
 </div>
 </div>
+
 
 
 
