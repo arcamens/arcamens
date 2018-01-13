@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     url(r'^post/(?P<post_id>.+)/', views.Post.as_view(), name='post'),
     url(r'^done/(?P<post_id>.+)/', views.Done.as_view(), name='done'),
+    url(r'^undo/(?P<post_id>.+)/', views.Undo.as_view(), name='undo'),
+
     url(r'^create-post/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreatePost.as_view(), name='create-post'),
     url(r'^create-post/(?P<ancestor_id>.+)/', views.CreatePost.as_view(), name='create-post'),
     url(r'^update-post/(?P<post_id>.+)/', views.UpdatePost.as_view(), name='update-post'),
@@ -36,6 +38,7 @@ urlpatterns = [
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
 
 ]
+
 
 
 

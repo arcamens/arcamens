@@ -104,8 +104,15 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></sp
 data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </button>
 
+{% if post.done %}
+<button type="button"  data-shell="#main-view" data-show="{% url 'post_app:undo' post.id %}"
+class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Undo </button>
+
+{% else %}
+
 <button type="button"  data-shell="#main-view" data-show="{% url 'post_app:done' post.id %}"
 class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Done </button>
+{% endif %}
 
 <button type="button" class="btn btn-default btn-xs e-get" 
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
@@ -126,6 +133,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 {% endblock %}
 </div>
 </div>
+
 
 
 

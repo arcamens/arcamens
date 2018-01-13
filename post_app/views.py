@@ -350,6 +350,28 @@ class Done(GuardianView):
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
 
+class Undo(GuardianView):
+    def get(self, request, post_id):
+        post      = models.Post.objects.get(id=post_id)
+        post.done = False
+        post.save()
+
+        user = timeline_app.models.User.objects.get(id=self.user_id)
+
+        # posts in the clipboard cant be archived.
+        # event    = models.EArchivePost.objects.create(organization=user.default,
+        # timeline=post.ancestor, post=post, user=user)
+
+        # users = post.ancestor.users.all()
+        # event.users.add(*users)
+
+        # Missing event.
+        ws.client.publish('timeline%s' % post.ancestor.id, 
+            'sound', 0, False)
+
+        return redirect('timeline_app:list-posts', 
+        timeline_id=post.ancestor.id)
+
 class ECreatePost(GuardianView):
     def get(self, request, event_id):
         event = models.ECreatePost.objects.get(id=event_id)
@@ -499,6 +521,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
