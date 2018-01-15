@@ -1,0 +1,49 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<div class="panel panel-default">
+<div class="panel-body">
+<div  style="font-size:80%">
+<span class="glyphicon glyphicon-comment"></span> 
+
+Note by  
+
+{{note.owner.name}} at {{note.created}}
+<br>
+<a class="text-warning e-get" 
+data-show="{% url 'note_app:update-note' note.id %}"
+data-shell="#bigModalContent" 
+data-callback="$('#bigModal').modal('show');" 
+odalContent" 
+data-callback="$('#bigModal').modal('show');" 
+href="#"><span class="glyphicon glyphicon-edit"></span> Update</a>
+<a class="text-danger" href="#"><span class="glyphicon glyphicon-remove"></span> Remove</a>
+</div>
+<hr>
+
+<div style="word-wrap: break-word;"> 
+{{note.html | safe}}
+
+</div>
+
+<div  style="font-size:80%">
+{% for ind in note.notefilewrapper_set.all %}
+<a href="#">
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} 
+</a>
+{% empty %}
+No attachments...
+
+{% endfor %}
+</div>
+
+
+</div>
+</div>
+
+
+
+
+

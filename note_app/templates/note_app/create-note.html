@@ -1,0 +1,49 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="form-note-data" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+{% bootstrap_field form.title  size='md' %}
+
+</div>
+
+<div class="modal-body">
+
+{% csrf_token %}
+
+{% bootstrap_field form.data  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+
+<div id="div-note-attachments">
+</div>
+<script>
+
+$('#div-note-attachments').load("{% url 'note_app:attach-file' note.id %}");
+</script>
+
+
+</div>
+</form>
+
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" data-form="#form-note-data" 
+data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
+data-shell-error="#bigModalContent" data-show="{% url 'note_app:create-note' card.id note.id %}"
+class="btn btn-default e-post"> 
+     {% trans "Create" %}
+</button>
+
+{% endblock %}
+</div>
+
+
+
+
+
+
+

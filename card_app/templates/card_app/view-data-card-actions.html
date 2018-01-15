@@ -31,6 +31,17 @@ data-callback="$('#bigModal').modal('toggle');"
 href="#"><span class="glyphicon glyphicon-comment"></span> Comment</a></li>
 
 <li>
+
+<li>
+<a 
+data-shell="#bigModalContent"
+class="e-get text-info"
+data-show="{% url 'note_app:create-note' card.id %}" 
+data-callback="$('#bigModal').modal('toggle');" 
+href="#"><span class="glyphicon glyphicon-plus"></span> Note</a></li>
+
+<li>
+
 <a 
 data-shell="#modalContent"
 class="e-get text-default"
@@ -95,6 +106,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

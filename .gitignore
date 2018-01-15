@@ -5,15 +5,4 @@ __pycache__/
 *.py[cod]
 *.pyc
 db.sqlite3
-*/media/*
-
-
-
-
-
-
-
-
-
-
-
+arcamens/static/media

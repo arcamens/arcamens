@@ -1,0 +1,47 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<script>
+function send_file() {
+   var formData = new FormData($('#form-note-attachment-file-data')[0]);
+
+   $.ajax({
+   url: '{% url 'note_app:attach-file' note.id  %}', 
+   type: 'POST',
+   success: function(data) {
+   $('#div-note-attachments').html(data);},
+   data: formData,
+   cache: false,
+   contentType: false,
+   processData: false});
+}
+
+$('#form-note-attachment-file-data').change(function(){
+    send_file();
+});
+
+</script>
+
+<form id="form-note-attachment-file-data" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.file  size='md' %}
+
+</form>
+
+<div class="panel panel-default" >
+<div class="panel-body">
+{% for ind in attachments %}
+<a class="e-get" data-shell="#div-note-attachments" 
+data-show="{% url 'note_app:detach-file' ind.id %}"> 
+<span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
+<br>
+{% empty %}
+No file chosen.
+{% endfor %}
+</div>
+</div>
+
+
+
+
+
