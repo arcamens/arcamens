@@ -15,24 +15,26 @@ Find <h4>
 
 <div class="pre-scrollable">
 {% for ind in cards %}
+<p>
 <a class="e-get" data-shell="#main-view" 
 data-show="{% url 'card_app:view-data' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
 {{ind.label}} </a> 
-<br>
+</p>
 
 {% endfor %}
 
 {% for ind in posts %}
+<p>
 <a class="e-get" data-shell="#main-view" 
 data-show="{% url 'post_app:post' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
 {{ind.label}} </a> 
-<br>
+</p>
 
 {% endfor %}
 
@@ -60,6 +62,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 

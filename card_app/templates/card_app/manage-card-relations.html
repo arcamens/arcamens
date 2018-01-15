@@ -17,8 +17,14 @@ Available {{card.label|truncatechars:15}} card's relations </h6>
 </div>
 
 <div class="modal-footer">
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+})
+</script>
+
 <button  type="button" data-form="#relate-card-search-form" 
-data-shell="#modalContent"  data-shell-error="#modalContent" 
+data-shell="#bigModalContent"  data-shell-error="#bigModalContent" 
 data-show="{% url 'card_app:manage-card-relations' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -32,6 +38,7 @@ $('#modal').one('hidden.bs.modal', function () {
 data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 

@@ -4,7 +4,7 @@
 <div class="pre-scrollable">
 
 {% for ind in included %}
-<p id="unrelate-card{{ind.id}}" style="font-size:80%">
+<p id="unrelate-card{{ind.id}}">
 <a class="e-get" style="color:red"
 data-callback="$('#unrelate-card{{ind.id}}').remove();"
 data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="#"> 
@@ -13,7 +13,7 @@ data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="#">
 {% endfor %}
 
 {% for ind in excluded %}
-<p id="relate-card{{ind.id}}" style="font-size:80%">
+<p id="relate-card{{ind.id}}">
 <a class="e-get" 
 data-callback="$('#relate-card{{ind.id}}').remove();"
 data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#"> 
@@ -30,5 +30,6 @@ data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#">
 {% bootstrap_field form.pattern  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
+
 
 
