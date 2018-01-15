@@ -75,9 +75,10 @@ href="#">
 
 <li>
 <a href="#" 
-class="e-get" data-shell="#modalContent" 
+class="e-get" data-shell="#bigModalContent" 
 data-show="{% url 'core_app:list-all-tasks' %}" 
-data-toggle="modal" data-target="#modal">
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#bigModalContent">
 <span class="glyphicon glyphicon-tasks"></span> All Tasks 
 </a>
 </li>
@@ -94,6 +95,7 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 
