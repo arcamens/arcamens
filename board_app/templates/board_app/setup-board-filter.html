@@ -5,7 +5,10 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>{{organization.name}}'s Filter</h4>
+<h5>
+<span class="glyphicon glyphicon-filter"></span>
+
+{{organization.name}}'s Filter</h5>
 </div>
 
 <div class="modal-body">
@@ -26,6 +29,7 @@ data-shell="#main-view" data-callback="$('#modal').modal('toggle');"
 data-shell-error="#modalContent" data-show="{% url 'board_app:setup-board-filter' organization.id  %}"
 class="btn btn-default e-post"> {% trans "Setup" %} </button>
 </div>
+
 
 
 
