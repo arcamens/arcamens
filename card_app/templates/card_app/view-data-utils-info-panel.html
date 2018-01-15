@@ -4,7 +4,7 @@
 <div class="panel-body">
 
 <div class="row">
-<div class="col-md-4">
+<div class="col-md-3">
 <h4> <span class="glyphicon glyphicon-user"></span> Workers</h4>
 <hr>
 
@@ -26,7 +26,7 @@ href="#">
 No workers...
 {% endfor %}</div></div>
 
-<div class="col-md-4">
+<div class="col-md-3">
 <h4> <span class="glyphicon glyphicon-file"></span> Attachments</h4>
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
@@ -39,7 +39,7 @@ No workers...
 No attachments...
 {% endfor %}</div></div>
 
-<div class="col-md-4">
+<div class="col-md-2">
 <h4> <span class="glyphicon glyphicon-tags"></span> Tags</h4>
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
@@ -53,10 +53,33 @@ No tags...
 
 {% endfor %}</div></div>
 
+<div class="col-md-4">
+<h4> <span class="glyphicon glyphicon-arrow-up"></span> Notes</h4>
+<hr>
+
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in notes %}
+<a 
+data-show=""
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-book"></span>
+
+{{ind.title}}
+</a>
+<br>
+{% empty %}
+No notes...
+{% endfor %}
+</div></div>
+
 
 </div>
 </div>
 </div>
+
 
 
 
