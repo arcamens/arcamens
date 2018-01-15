@@ -560,10 +560,12 @@ class ManageCardWorkers(GuardianView):
 
         included = card.workers.all()
         excluded = User.objects.exclude(tasks=card)
-
+        total = included.count() + excluded.count()
+        
         return render(request, 'card_app/manage-card-workers.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'organization': me.default, 'total': total, 
+        'count': total, 'form':forms.UserSearchForm()})
 
     def post(self, request, card_id):
         form = forms.UserSearchForm(request.POST)
@@ -572,12 +574,14 @@ class ManageCardWorkers(GuardianView):
         card = models.Card.objects.get(id=card_id)
         included = card.workers.all()
         excluded = User.objects.exclude(tasks=card)
+        total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-workers.html', 
                 {'included': included, 'excluded': excluded,
                     'me': me, 'organization': me.default, 'card': card,
-                        'form':forms.UserSearchForm()}, status=400)
+                        'form':forms.UserSearchForm(), 'total': total,
+                            'count': total,}, status=400)
 
         included = included.filter(
         name__contains=form.cleaned_data['name'])
@@ -585,9 +589,12 @@ class ManageCardWorkers(GuardianView):
         excluded = excluded.filter(
         name__contains=form.cleaned_data['name'])
 
+        count = included.count() + excluded.count()
+
         return render(request, 'card_app/manage-card-workers.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        {'included': included, 'excluded': excluded, 'card': card, 'total': total,
+        'count': count, 'me': me, 'organization': me.default,
+        'form':forms.UserSearchForm()})
 
 class UnbindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
@@ -837,6 +844,7 @@ class CardWorkerInformation(GuardianView):
 
         return render(request, 'card_app/card-worker-information.html', 
         {'peer': event.peer, 'created': event.created, 'user':event.user})
+
 
 
 
