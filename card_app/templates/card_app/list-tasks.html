@@ -17,7 +17,7 @@ Card Tasks <span class="badge">{{tasks.count}}</span></h4>
 <a 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' ind.id %}"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#bigModal').modal('toggle');" 
 class="e-get text-warning" href="#">
 <span class="glyphicon glyphicon-file"></span> 
 {{ind.label}}
@@ -34,6 +34,7 @@ class="e-get text-warning" href="#">
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
