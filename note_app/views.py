@@ -143,7 +143,20 @@ class UpdateNote(GuardianView):
         return redirect('note_app:note', 
         note_id=record.id)
 
+class DeleteNote(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.objects.get(id = note_id)
 
+        user = core_app.models.User.objects.get(id=self.user_id)
+        # event = models.EDeleteNote.objects.create(organization=user.default,
+        # ancestor=note.ancestor, label=note.label, user=user)
+        # event.users.add(*note.ancestor.ancestor.members.all())
+        note.delete()
 
+        # ws.client.publish('board%s' % note.ancestor.ancestor.id, 
+            # 'sound', 0, False)
+
+        return redirect('card_app:view-data', 
+        card_id=note.card.id)
 
 
