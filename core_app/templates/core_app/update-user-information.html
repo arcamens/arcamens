@@ -11,12 +11,14 @@
 </div>
 
 <div class="modal-body">
-<form id="update-user-information-form" enctype="multipart/form-data">
+<form id="update-user-information-form" enctype="multipart/form-data" >
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.email  size='md' %}
 
 {% bootstrap_field form.avatar  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.password  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -27,13 +29,14 @@
 
 <div class="modal-footer">
 <button  type="button" data-form="#update-user-information-form" 
-data-callback="$('#modal').modal('toggle');" 
+data-callback="window.location.replace('{% url 'core_app:index' %}');" 
 data-shell-error="#modalContent" data-show="{% url 'core_app:update-user-information'  %}"
 class="btn btn-default e-post"> 
      {% trans "Update" %}
 </button>
 
 </div>
+
 
 
 
