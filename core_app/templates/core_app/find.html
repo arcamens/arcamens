@@ -20,7 +20,7 @@ data-show="{% url 'card_app:view-data' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
-{{ind.label|truncatechars:40}} </a> 
+{{ind.label}} </a> 
 <br>
 
 {% endfor %}
@@ -31,7 +31,7 @@ data-show="{% url 'post_app:post' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
-{{ind.label|truncatechars:40}} </a> 
+{{ind.label}} </a> 
 <br>
 
 {% endfor %}
@@ -54,12 +54,13 @@ href="#" >
 
 <div class="modal-footer">
 <button  type="button" data-form="#find-card-search-form" 
-data-shell="#modalContent" 
-data-shell-error="#moodalContent" data-show="{% url 'core_app:find'  %}"
+data-shell="#bigModalContent" 
+data-shell-error="#bigModalContent" data-show="{% url 'core_app:find'  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 
