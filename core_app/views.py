@@ -589,4 +589,11 @@ class Find(GuardianView):
         posts = posts.filter(Q(done=filter.done))
         return posts
 
+class RecoverAccount(GuardianView):
+    def get(self, request, user_id):
+        user = models.User.objects.get(id=self.user_id)
+
+    def post(self, request):
+        user = models.User.objects.get(id=self.user_id)
+
 
