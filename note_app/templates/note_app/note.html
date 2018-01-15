@@ -4,13 +4,16 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<span class="glyphicon glyphicon-comment"></span> 
+<span class="glyphicon glyphicon-book"></span> 
 Note by {{note.owner.name}} at {{note.created}}
 
 </div>
 
 <div class="modal-body">
 <div style="word-wrap: break-word;"> 
+
+<h4> {{note.title}} </h4>
+
 {{note.html | safe}}
 
 </div>
@@ -45,5 +48,6 @@ class="btn btn-default e-get"> {% trans "Remove" %} </button>
      {% trans "Close" %}
 </button>
 </div>
+
 
 

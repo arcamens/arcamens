@@ -160,7 +160,7 @@ class ListAssignments(GuardianView):
         user = timeline_app.models.User.objects.get(id=self.user_id)
         total = user.assignments.all()
 
-        posts = user.assignments.filter(done=False)
+        posts = user.assignments.filter(done=False, ancestor__isnull=False)
 
         return render(request, 'post_app/list-assignments.html', 
         {'posts': posts, 'user':user, 'total': total})
@@ -529,6 +529,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
