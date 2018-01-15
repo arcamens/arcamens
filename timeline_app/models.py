@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from paybills.models import Service
-from core_app.models import Organization, User, Event
+from core_app.models import  User, Event
 import datetime
 
 class EUpdateTimelineMixin(object):
@@ -35,7 +35,11 @@ class TimelineMixin(object):
     """
     Mixins.
     """
-    pass
+
+    @classmethod
+    def get_user_timelines(cls, user):
+        timelines = user.timelines.all()
+        return timelines
 
 class Clipboard(models.Model):
     timeline = models.ForeignKey(
@@ -112,6 +116,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

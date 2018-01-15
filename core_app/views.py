@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage
 from core_app.utils import search_tokens
 from card_app.models import Card
-from functools import reduce
 from post_app.models import Post
+from functools import reduce
 import operator
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -520,37 +520,25 @@ class ListAllTasks(GuardianView):
 class Find(GuardianView):
     def get(self, request):
         me    = models.User.objects.get(id=self.user_id)
+
         filter, _ = models.GlobalFilter.objects.get_or_create(
         user=me, organization=me.default)
-        boards = me.boards.all()
-
-        timelines = me.timelines.all()
 
         form  = forms.GlobalFilterForm(instance=filter)
-        cards = self.collect_cards(boards, filter)
-        posts = self.collect_posts(timelines, filter)
+
+        cards = Card.get_user_cards(me)
+        posts = Post.get_user_posts(me)
+
+        total = cards.count() + posts.count()
+
+        cards = filter.collect_cards(cards, filter)
+        posts = filter.collect_posts(posts, filter)
+        count = cards.count() + posts.count()
+
 
         return render(request, 'core_app/find.html', 
-        {'form': form, 'cards': cards, 'posts': posts})
-
-    def collect_cards(self, boards, filter):
-        cards = Card.objects.none()
-
-        for indi in boards:
-            for indj in indi.lists.all():
-                cards = cards | indj.cards.all()
-
-        cards = cards.filter(done=filter.done)
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            cards = cards.filter(Q(tags__name__startswith=ind))
-
-        cards = cards.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
-        for ind in chks))) if chks else cards
-
-        return cards
+        {'form': form, 'cards': cards, 'posts': posts,
+        'total': total, 'count': count})
 
     def post(self, request):
         me        = models.User.objects.get(id=self.user_id)
@@ -558,40 +546,27 @@ class Find(GuardianView):
         user=me, organization=me.default)
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
-        boards = me.boards.all()
-        timelines = me.timelines.all()
 
+        cards = Card.get_user_cards(me)
+        posts = Post.get_user_posts(me)
+
+        total = cards.count() + posts.count()
 
         if not form.is_valid():
             return render(request, 'core_app/find.html', 
-                {'form': form, 'cards':self.collect_cards(
-                    boards, filter), 'posts': self.collect_posts(
-                        timelines, filter)}, status=400)
-
-        cards = self.collect_cards(boards, filter)
-        posts = self.collect_posts(timelines, filter)
-
+                {'form': form, 'cards': cards, 
+                    'posts': posts, 'total': total,
+                            'count': count}, status=400)
         form.save()
 
+        cards = filter.collect_cards(cards, filter)
+        posts = filter.collect_posts(posts, filter)
+
+        count = cards.count() + posts.count()
+
         return render(request, 'core_app/find.html', 
-        {'form': form, 'posts': posts, 'cards': cards})
-
-
-    def collect_posts(self, timelines, filter):
-        posts = Post.objects.filter(ancestor__in = timelines)
-
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            posts = posts.filter(Q(tags__name__startswith=ind))
-
-        # I should make post have owner instead of user.
-        posts = posts.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(user__name__contains=ind) 
-        for ind in chks))) if chks else posts
-
-        posts = posts.filter(Q(done=filter.done))
-        return posts
+        {'form': form, 'posts': posts, 'cards': cards,
+        'total': total, 'count': count})
 
 class RecoverAccount(GuardianView):
     def get(self, request, user_id):

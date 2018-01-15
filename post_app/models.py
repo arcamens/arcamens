@@ -2,10 +2,10 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-import timeline_app.models
-from timeline_app.models import Event
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
+from timeline_app.models import Timeline
+from core_app.models import Event
 
 # Create your models here.
 
@@ -34,6 +34,16 @@ class PostMixin(object):
         for ind in self.postfilewrapper_set.all():
             ind.duplicate(post)
         return post
+
+    @classmethod
+    def get_user_posts(cls, user):
+        timelines = Timeline.get_user_timelines(user)
+        posts  = Post.objects.none()
+
+        for ind in timelines:
+            posts = posts | ind.posts.all()
+        print('fuck', posts)
+        return posts
 
     def __str__(self):
         return self.description
@@ -249,6 +259,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 
