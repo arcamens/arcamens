@@ -8,6 +8,25 @@ from . import models
 from . import forms
 from core_app import ws
 
+class Note(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.objects.get(id=note_id)
+
+        # First check if someone has cut this card.
+        # Cards on clipboard shouldnt be accessed due to generating
+        # too many inconsistencies.
+        # on_clipboard = not (card.ancestor and card.ancestor.ancestor)
+# 
+        # if on_clipboard:
+            # return HttpResponse("This card is on clipboard! \
+               # It can't be accessed.", status=400)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+        attachments = note.notefilewrapper_set.all()
+
+        return render(request, 'note_app/note.html', 
+        {'note': note, 'attachments': attachments})
+
 
 class CreateNote(GuardianView):
     """
@@ -121,8 +140,8 @@ class UpdateNote(GuardianView):
         # ws.client.publish('board%s' % record.ancestor.ancestor.id, 
             # 'sound', 0, False)
 
-        return redirect('card_app:view-data', 
-        card_id=record.card.id)
+        return redirect('note_app:note', 
+        note_id=record.id)
 
 
 

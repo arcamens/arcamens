@@ -2,26 +2,14 @@
 {% load i18n %}
 {% load static %}
 
-<div class="panel panel-default">
-<div class="panel-body">
-<div  style="font-size:80%">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-comment"></span> 
+Note by {{note.owner.name}} at {{note.created}}
 
-Note by  
-
-{{note.owner.name}} at {{note.created}}
-<br>
-<a class="text-warning e-get" 
-data-show="{% url 'note_app:update-note' note.id %}"
-data-shell="#bigModalContent" 
-data-callback="$('#bigModal').modal('show');" 
-odalContent" 
-data-callback="$('#bigModal').modal('show');" 
-href="#"><span class="glyphicon glyphicon-edit"></span> Update</a>
-<a class="text-danger" href="#"><span class="glyphicon glyphicon-remove"></span> Remove</a>
 </div>
-<hr>
 
+<div class="modal-body">
 <div style="word-wrap: break-word;"> 
 {{note.html | safe}}
 
@@ -39,11 +27,17 @@ No attachments...
 {% endfor %}
 </div>
 
-
-</div>
 </div>
 
+<div class="modal-footer">
+<button  type="button" 
+data-show="{% url 'note_app:update-note' note.id %}"
+data-shell="#bigModalContent" 
+class="btn btn-default e-get"> {% trans "Update" %} </button>
 
-
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
 
 
