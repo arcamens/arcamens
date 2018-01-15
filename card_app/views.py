@@ -641,10 +641,12 @@ class ManageCardTags(GuardianView):
 
         included = card.tags.all()
         excluded = core_app.models.Tag.objects.exclude(cards=card)
+        total = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-tags.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'organization': me.default,'form':forms.TagSearchForm()})
+        'organization': me.default,'form':forms.TagSearchForm(),
+        'total': total, 'count': total})
 
     def post(self, request, card_id):
         form = forms.TagSearchForm(request.POST)
@@ -653,12 +655,13 @@ class ManageCardTags(GuardianView):
         card = models.Card.objects.get(id=card_id)
         included = card.tags.all()
         excluded = core_app.models.Tag.objects.exclude(cards=card)
+        total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-tags.html', 
                 {'included': included, 'excluded': excluded,
-                    'organization': me.default, 'card': card,
-                        'form':form}, status=400)
+                    'organization': me.default, 'card': card, 'total': total,
+                        'count': total, 'form':form}, status=400)
 
         included = included.filter(
         name__contains=form.cleaned_data['name'])
@@ -666,9 +669,12 @@ class ManageCardTags(GuardianView):
         excluded = excluded.filter(
         name__contains=form.cleaned_data['name'])
 
+        count = included.count() + excluded.count()
+
         return render(request, 'card_app/manage-card-tags.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':form})
+        'me': me, 'organization': me.default,
+        'total': total, 'count': count, 'form':form})
 
 class UnbindCardTag(GuardianView):
     def get(self, request, card_id, tag_id):
