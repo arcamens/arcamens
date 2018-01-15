@@ -4,10 +4,16 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Comments on {{card.label|slice:":30"}}.. 
-<span class="badge">{{records.count}}</span>
 
+{% block title %}
+<h4 class="modal-title">
+<span class="glyphicon glyphicon-comment"></span>
+Comments on card {{card.label|slice:":30"}}.. 
+<span class="badge">{{records.count}}</span>
 </h4>
+
+{% endblock %}
+
 </div>
 
 <div class="modal-body pre-scrollable">
@@ -68,6 +74,7 @@ $('#id_data').focus();
 
 
 </div>
+
 
 
 

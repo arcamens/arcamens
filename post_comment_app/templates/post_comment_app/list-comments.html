@@ -3,6 +3,16 @@
 {% load i18n %}
 {% load static %}
 
+{% block title %}
+<h4 class="modal-title">
+<span class="glyphicon glyphicon-comment"></span>
+Comments on post {{post.label|slice:":30"}}.. 
+<span class="badge">{{records.count}}</span>
+
+</h4>
+
+{% endblock %}
+
 {% block buttons %}
 
 <button  id="sendPostComment" type="button" 
@@ -13,6 +23,7 @@ data-shell-error="#bigModalContent"
 data-show="{% url 'post_comment_app:create-comment' post.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
 {% endblock %}
+
 
 
 
