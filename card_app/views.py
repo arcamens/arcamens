@@ -851,6 +851,14 @@ class CardWorkerInformation(GuardianView):
         return render(request, 'card_app/card-worker-information.html', 
         {'peer': event.peer, 'created': event.created, 'user':event.user})
 
+class CardTagInformation(GuardianView):
+    def get(self, request, tag_id, card_id):
+        event = models.EBindTagCard.objects.filter(card__id=card_id,
+        tag__id=tag_id).last()
+
+        return render(request, 'post_app/post-tag-information.html', 
+        {'user': event.user, 'created': event.created, 'tag':event.tag})
+
 
 
 

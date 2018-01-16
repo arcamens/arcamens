@@ -44,10 +44,17 @@ No attachments...
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in tags %}
-<a href="#">
+<a 
+data-show="{% url 'card_app:card-tag-information' ind.id card.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
 <span class="glyphicon glyphicon-tag"></span>
-{{ind.name}} 
+
+{{ind.name}}
 </a>
+
 {% empty %}
 No tags...
 
@@ -79,6 +86,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 
