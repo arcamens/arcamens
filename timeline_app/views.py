@@ -35,31 +35,19 @@ class ListPosts(GuardianView):
     def get(self, request, timeline_id):
         timeline  = models.Timeline.objects.get(id=timeline_id)
         user      = User.objects.get(id=self.user_id)
+
         filter, _ = post_app.models.PostFilter.objects.get_or_create(
         user=user, timeline=timeline)
 
         total = timeline.posts.all()
 
-        posts = self.collect(total, filter) if filter.status \
+        posts = filter.collect_posts(total, filter) if filter.status \
         else total.filter(done=False)
 
-        # posts    = timeline.posts.all().order_by('-created')
+        posts = posts.order_by('-created')
+
         return render(request, 'timeline_app/list-posts.html', 
         {'timeline':timeline, 'total': total, 'posts':posts, 'filter': filter})
-
-    def collect(self, posts, filter):
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            posts = posts.filter(Q(tags__name__startswith=ind))
-
-        # I should make post have owner instead of user.
-        posts = posts.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(user__name__contains=ind) 
-        for ind in chks))) if chks else posts
-
-        posts = posts.filter(Q(done=filter.done))
-        return posts
 
 class ListAllPosts(ListPosts):
     """
@@ -466,6 +454,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

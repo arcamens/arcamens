@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from timeline_app.models import Timeline
-from core_app.models import Event
+from core_app.models import Event, GlobalFilterMixin
 
 # Create your models here.
 
@@ -111,7 +111,7 @@ class Post(PostMixin, models.Model):
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
 
-class PostFilter(models.Model):
+class PostFilter(GlobalFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, 
     blank=True, null=True, 
     help_text='Ex: Text + #Tag + Owner..')
@@ -259,6 +259,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 
