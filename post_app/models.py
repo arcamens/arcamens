@@ -133,7 +133,7 @@ class PostFilter(GlobalFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'timeline', )
 
-class GlobalPostFilter(models.Model):
+class GlobalPostFilter(GlobalFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, 
     blank=True, null=True)
 

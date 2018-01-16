@@ -62,7 +62,7 @@ class ListAllPosts(ListPosts):
         timelines = user.timelines.filter(organization=user.default)
         total     = post_app.models.Post.objects.filter(ancestor__in = timelines)
 
-        posts = self.collect(total, filter) if filter.status \
+        posts = filter.collect_posts(total, filter) if filter.status \
         else total.filter(done=False)
 
         return render(request, 'timeline_app/list-all-posts.html', 
@@ -454,6 +454,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
