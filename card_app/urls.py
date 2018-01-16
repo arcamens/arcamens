@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^card-tag-information/(?P<tag_id>.+)/(?P<card_id>.+)/', views.CardTagInformation.as_view(), name='card-tag-information'),
 
     url(r'^move-cards/(?P<card_id>.+)/', views.MoveCards.as_view(), name='move-cards'),
+    url(r'^preview-card/(?P<card_id>.+)/', views.PreviewCard.as_view(), name='preview-card'),
 
     url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),

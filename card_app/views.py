@@ -860,7 +860,9 @@ class CardTagInformation(GuardianView):
         {'user': event.user, 'created': event.created, 'tag':event.tag})
 
 
-
+class PreviewCard(GuardianView):
+    def get(self, request, card_id):
+        pass
 
 
 
