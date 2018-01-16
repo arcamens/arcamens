@@ -56,8 +56,11 @@ class ListCards(GuardianView):
 
         total = list.cards.all()
         
-        cards = total.filter((Q(label__icontains=filter.pattern) | \
-        Q(data__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
+        # cards = total.filter((Q(label__icontains=filter.pattern) | \
+        # Q(data__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
+        # total.filter(done=False)
+
+        cards = filter.collect_cards(total, filter) if filter.status else \
         total.filter(done=False)
 
         cards = cards.order_by('-created')
@@ -863,6 +866,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

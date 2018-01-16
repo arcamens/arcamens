@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
-from core_app.models import Event, User
+from core_app.models import Event, User, GlobalFilterMixin
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
@@ -271,8 +271,9 @@ class GlobalCardFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class CardFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
+class CardFilter(GlobalFilterMixin, models.Model):
+    pattern      = models.CharField(max_length=255, blank=True, null=True, default='',
+    help_text='Pattern0 + Pattern1 + #Tag0 + #Tag1 ...')
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
@@ -367,6 +368,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 

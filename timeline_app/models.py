@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from paybills.models import Service
-from core_app.models import  User, Event, GlobalFilterMixin
+from core_app.models import  User, Event
 import datetime
 
 class EUpdateTimelineMixin(object):
@@ -69,7 +69,7 @@ class Timeline(TimelineMixin, models.Model):
     # blank=False, verbose_name=_("Description"), default='Timeline',
     # help_text='Timeline Description', max_length=190)
 
-class TimelineFilter(GlobalFilterMixin, models.Model):
+class TimelineFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
