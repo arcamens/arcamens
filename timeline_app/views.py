@@ -206,18 +206,18 @@ class PastePosts(GuardianView):
         user     = User.objects.get(id=self.user_id)
         users    = timeline.users.all()
 
-        for ind in user.clipboard.all():
-            ind.post.ancestor = timeline
-            ind.post.save()
+        for ind in user.post_clipboard.all():
+            ind.ancestor = timeline
+            ind.save()
             event = post_app.models.ECreatePost.objects.create(
             organization=user.default, timeline=timeline, 
-            post=ind.post, user=user)
+            post=ind, user=user)
             event.users.add(*users)
 
         ws.client.publish('timeline%s' % timeline.id, 
             'sound', 0, False)
     
-        user.clipboard.clear()
+        user.post_clipboard.clear()
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
 
