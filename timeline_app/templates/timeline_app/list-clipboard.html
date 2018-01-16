@@ -4,7 +4,7 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>{{organization.name}}'s Clipboard <span class="badge">{{clips.count}}</span>  </h4>
+<h4>Post Clipboard <span class="badge">{{posts.count}}</span>  </h4>
 </div>
 
 <div class="modal-body">
@@ -12,16 +12,13 @@
 
 <div class="pre-scrollable">
 
-{% for ind in clips %}
+{% for ind in posts %}
 
 <p> 
-Post 
-<span class="glyphicon glyphicon-list-alt"></span>
+<span class="glyphicon glyphicon-file"></span>
 
-{{ind.post.label}} on timeline <a href="#"> 
-<span class="glyphicon glyphicon-eye-open"></span>
+{{ind.label}} 
 
-{{ind.timeline.name}} </a>
 </p>
 
 <br>
@@ -43,6 +40,7 @@ class="btn btn-default e-get"> {% trans "Clear" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 

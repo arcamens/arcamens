@@ -8,7 +8,7 @@ from timeline_app import forms
 from functools import reduce
 from django.db.models import Q
 from core_app import ws
-import core_app.models
+from core_app.models import Organization, User
 import timeline_app.models
 import post_app.models
 import operator
@@ -34,7 +34,7 @@ class ListPosts(GuardianView):
 
     def get(self, request, timeline_id):
         timeline  = models.Timeline.objects.get(id=timeline_id)
-        user      = timeline_app.models.User.objects.get(id=self.user_id)
+        user      = User.objects.get(id=self.user_id)
         filter, _ = post_app.models.PostFilter.objects.get_or_create(
         user=user, timeline=timeline)
 
@@ -66,7 +66,7 @@ class ListAllPosts(ListPosts):
     """
 
     def get(self, request, user_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         filter, _ = post_app.models.GlobalPostFilter.objects.get_or_create(
         user=user, organization=user.default)
@@ -98,8 +98,8 @@ class CreateTimeline(GuardianView):
                         {'form': form, 'user_id':self.user_id, 
                                 'organization_id': organization_id}, status=400)
 
-        organization = timeline_app.models.Organization.objects.get(id=organization_id)
-        user         = timeline_app.models.User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id=organization_id)
+        user         = User.objects.get(id=self.user_id)
         record       = form.save(commit=False)
         record.owner = user
         record.organization  = organization
@@ -132,7 +132,7 @@ class CreateTimeline(GuardianView):
 class DeleteTimeline(GuardianView):
     def get(self, request,  timeline_id):
         timeline = models.Timeline.objects.get(id = timeline_id)
-        user     = timeline_app.models.User.objects.get(id=self.user_id)
+        user     = User.objects.get(id=self.user_id)
         event    = models.EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
@@ -149,11 +149,11 @@ class DeleteTimeline(GuardianView):
 
 class UnbindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
-        user = models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         timeline = models.Timeline.objects.get(id=timeline_id)
         timeline.users.remove(user)
         timeline.save()
-        me = models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
 
         event    = models.EUnbindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
@@ -185,7 +185,7 @@ class UpdateTimeline(GuardianView):
                                     {'timeline': record, 'form': form})
         form.save()
 
-        user  = timeline_app.models.User.objects.get(id=self.user_id)
+        user  = User.objects.get(id=self.user_id)
         event = models.EUpdateTimeline.objects.create(organization=user.default,
         timeline=record, user=user)
 
@@ -203,7 +203,7 @@ class UpdateTimeline(GuardianView):
 class PastePosts(GuardianView):
     def get(self, request, timeline_id):
         timeline = models.Timeline.objects.get(id=timeline_id)
-        user     = models.User.objects.get(id=self.user_id)
+        user     = User.objects.get(id=self.user_id)
         users    = timeline.users.all()
 
         for ind in user.clipboard.all():
@@ -225,7 +225,7 @@ class SetupTimelineFilter(GuardianView):
     def get(self, request, organization_id):
         filter = models.TimelineFilter.objects.get(
         user__id=self.user_id, organization__id=organization_id)
-        organization = timeline_app.models.Organization.objects.get(id=organization_id)
+        organization = Organization.objects.get(id=organization_id)
 
         return render(request, 'timeline_app/setup-timeline-filter.html', 
         {'form': forms.TimelineFilterForm(instance=filter), 
@@ -236,7 +236,7 @@ class SetupTimelineFilter(GuardianView):
         organization__id=organization_id, user__id=self.user_id)
 
         form   = forms.TimelineFilterForm(request.POST, instance=record)
-        organization = timeline_app.models.Organization.objects.get(id=organization_id)
+        organization = Organization.objects.get(id=organization_id)
 
         if not form.is_valid():
             return render(request, 'timeline_app/setup-timeline-filter.html',
@@ -277,15 +277,15 @@ class EDeleteTimeline(GuardianView):
 
 class ListClipboard(GuardianView):
     def get(self, request, user_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        clips = user.clipboard.all()
+        user = User.objects.get(id=self.user_id)
+        posts = user.post_clipboard.all()
         return render(request, 'timeline_app/list-clipboard.html', 
-        {'clips': clips, 'user': user, 'organization':user.default})
+        {'posts': posts, 'user': user, 'organization':user.default})
 
 
 class DisabledOrganization(View):
     def get(self, request, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
             
         return render(request, 'timeline_app/disabled-organization.html', 
         {'user': user, 'default': user.default,
@@ -304,7 +304,7 @@ class ListEvents(GuardianView):
     """
 
     def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
+        user   = User.objects.get(id=self.user_id)
         events = user.events.filter(organization=user.default).order_by('-created')
 
         # Missing dynamic filter.
@@ -324,7 +324,7 @@ class ListTimelines(GuardianView):
     """
 
     def get(self, request):
-        user      = core_app.models.User.objects.get(id=self.user_id)
+        user      = User.objects.get(id=self.user_id)
         filter, _ = timeline_app.models.TimelineFilter.objects.get_or_create(
         user=user, organization=user.default)
 
@@ -339,14 +339,14 @@ class ListTimelines(GuardianView):
 
 class UnbindUser(GuardianView):
     def get(self, request, organization_id, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
 
         return redirect('timeline_app:list-users', 
         organization_id=organization.id)
 
 class CheckEvent(GuardianView):
     def get(self, request, user_id):
-        user = core_app.models.User.objects.get(
+        user = User.objects.get(
         id=self.user_id)
 
         try:
@@ -357,7 +357,7 @@ class CheckEvent(GuardianView):
 
 class SeenEvent(GuardianView):
     def get(self, request, event_id):
-        user  = core_app.models.User.objects.get(id=self.user_id)
+        user  = User.objects.get(id=self.user_id)
         event = models.Event.objects.get(id=event_id)
         event.users.remove(user)
         event.save()
@@ -366,13 +366,13 @@ class SeenEvent(GuardianView):
 
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         timeline = timeline_app.models.Timeline.objects.get(id=timeline_id)
 
         timeline.users.add(user)
         timeline.save()
 
-        me = models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
 
         event    = models.EBindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
@@ -389,8 +389,8 @@ class BindTimelineUser(GuardianView):
 
 class ManageUserTimelines(GuardianView):
     def get(self, request, user_id):
-        me = core_app.models.User.objects.get(id=self.user_id)
-        user = core_app.models.User.objects.get(id=user_id)
+        me = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
 
         timelines = me.timelines.filter(organization=me.default)
         excluded = timelines.exclude(users=user)
@@ -401,7 +401,7 @@ class ManageUserTimelines(GuardianView):
         'me': me, 'organization': me.default,'form':forms.BindTimelinesForm()})
 
     def post(self, request, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         form = forms.BindTimelinesForm(request.POST)
 
         me = core_app.models.User.objects.get(id=self.user_id)
@@ -432,7 +432,7 @@ class ManageUserTimelines(GuardianView):
 
 class ManageTimelineUsers(GuardianView):
     def get(self, request, timeline_id):
-        me = core_app.models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
         timeline = models.Timeline.objects.get(id=timeline_id)
 
         included = timeline.users.all()
@@ -449,7 +449,7 @@ class ManageTimelineUsers(GuardianView):
         me = core_app.models.User.objects.get(id=self.user_id)
         timeline = models.Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
-        excluded = core_app.models.User.objects.exclude(timelines=timeline)
+        excluded = User.objects.exclude(timelines=timeline)
 
         if not form.is_valid():
             return render(request, 'timeline_app/manage-timeline-users.html', 
@@ -466,6 +466,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

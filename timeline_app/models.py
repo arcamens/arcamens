@@ -41,17 +41,6 @@ class TimelineMixin(object):
         timelines = user.timelines.all()
         return timelines
 
-class Clipboard(models.Model):
-    timeline = models.ForeignKey(
-    'timeline_app.Timeline', null=True, blank=True)
-
-    post = models.ForeignKey(
-    'post_app.Post', null=True, blank=True)
-
-    # Foreignkey to user here? when users are deleted
-    # their clipboard records should be too.
-
-
 class Timeline(TimelineMixin, models.Model):
     owner = models.ForeignKey('core_app.User', 
     related_name='owned_timelines', null=True)
@@ -116,6 +105,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

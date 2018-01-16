@@ -315,10 +315,7 @@ class CutPost(GuardianView):
         post.ancestor = None
         post.save()
 
-        clipboard = timeline_app.models.Clipboard.objects.create(
-        timeline=timeline, post=post)
-
-        user.clipboard.add(clipboard)
+        user.post_clipboard.add(post)
 
         event    = models.ECutPost.objects.create(organization=user.default,
         timeline=timeline, post=post, user=user)
@@ -333,9 +330,8 @@ class CopyPost(GuardianView):
         post = models.Post.objects.get(id=post_id)
         user = timeline_app.models.User.objects.get(id=self.user_id)
         copy = post.duplicate()
-        clipboard = timeline_app.models.Clipboard.objects.create(
-        timeline=post.ancestor, post=copy)
-        user.clipboard.add(clipboard)
+
+        user.post_clipboard.add(copy)
 
         # should have event, missing creation of event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
@@ -537,6 +533,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 

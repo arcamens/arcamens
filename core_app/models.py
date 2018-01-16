@@ -77,8 +77,9 @@ class User(UserMixin, models.Model):
     'Tag', related_name='users', 
     null=True, blank=True, symmetrical=False)
 
-    clipboard = models.ManyToManyField(
-    'timeline_app.Clipboard', null=True, blank=True, symmetrical=False)
+    post_clipboard = models.ManyToManyField(
+    'post_app.Post', null=True, blank=True, 
+    related_name='post_clipboard_users', symmetrical=False)
 
     # contacts  = models.ManyToManyField('self', 
     # related_name='users', null=True, blank=True, symmetrical=False)
@@ -217,6 +218,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 
