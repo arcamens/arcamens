@@ -4,11 +4,16 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>Post Clipboard <span class="badge">{{posts.count}}</span>  </h4>
+<h4> 
+<span class="glyphicon glyphicon-paperclip"></span>
+Clipboard <span class="badge">{{posts.count}}</span>  </h4>
 </div>
 
 <div class="modal-body">
 
+<h4> 
+<span class="glyphicon glyphicon-file"></span>
+Posts </h4>
 
 <div class="pre-scrollable">
 
@@ -24,7 +29,7 @@
 <br>
 
 {% empty %}
-<p> ... </p>
+No posts.
 {% endfor %}
 
 </div>

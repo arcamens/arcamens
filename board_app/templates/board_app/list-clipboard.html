@@ -4,12 +4,20 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>Clipboard  </h4>
+<h4>
+<span class="glyphicon glyphicon-paperclip"></span>
+
+Clipboard 
+<span class="badge">{{total}}</span>
+</h4>
 </div>
 
 <div class="modal-body">
 
-<h4> Lists </h4>
+<h4> 
+<span class="glyphicon glyphicon-list-alt"></span>
+
+Lists </h4>
 
 <div class="pre-scrollable">
 
@@ -19,12 +27,15 @@
 {{ind.name}} </p>
 
 {% empty %}
-<p> ... </p>
+No lists.
 {% endfor %}
 
 </div>
 
-<h4> Cards </h4>
+<h4> 
+<span class="glyphicon glyphicon-file"></span>
+
+Cards </h4>
 
 <div class="pre-scrollable">
 {% for ind in cards %}
@@ -34,7 +45,7 @@
 
 {{ind.label|truncatechars:30}} </p>
 {% empty %}
-<p> ... </p>
+No cards.
 {% endfor %}
 </div>
 
@@ -49,6 +60,7 @@ class="btn btn-default e-get"> {% trans "Clear" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 
