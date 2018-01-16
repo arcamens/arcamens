@@ -158,9 +158,9 @@ class DeletePost(GuardianView):
 class ListAssignments(GuardianView):
     def get(self, request, user_id):
         user = timeline_app.models.User.objects.get(id=self.user_id)
-        total = user.assignments.all()
 
         posts = user.assignments.filter(done=False, ancestor__isnull=False)
+        total = posts.count()
 
         return render(request, 'post_app/list-assignments.html', 
         {'posts': posts, 'user':user, 'total': total})
