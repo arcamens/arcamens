@@ -49,7 +49,17 @@ No attachment.
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in tags %}
-<a href="#"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
+<a 
+data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-tag"></span>
+
+{{ind.name}}
+</a>
+
 {% empty %}
 No tags.
 {% endfor %}
@@ -141,6 +151,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
 
 
 

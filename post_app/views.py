@@ -173,6 +173,14 @@ class PostWorkerInformation(GuardianView):
         return render(request, 'post_app/post-worker-information.html', 
         {'peer': event.peer, 'created': event.created, 'user':event.user})
 
+class PostTagInformation(GuardianView):
+    def get(self, request, tag_id, post_id):
+        event = models.EBindTagPost.objects.filter(post__id=post_id,
+        tag__id=tag_id).last()
+
+        return render(request, 'post_app/post-tag-information.html', 
+        {'user': event.user, 'created': event.created, 'tag':event.tag})
+
 class UnassignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
         user = User.objects.get(id=user_id)
@@ -529,6 +537,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
