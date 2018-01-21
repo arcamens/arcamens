@@ -28,15 +28,6 @@ class Card(GuardianView):
         return render(request, 'card_app/card.html', {'card': card,
         'is_worker': is_worker, 'has_workers': has_workers})
 
-class MoveCards(GuardianView):
-    def get(self, request, card_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        card = models.Card.objects.get(id=card_id)
-        cards = user.card_clipboard.all()
-
-        return render(request, 'card_app/card.html', {'card': card,
-        'is_worker': is_worker, 'has_workers': has_workers})
-
 class ListCards(GuardianView):
     """
     """
@@ -866,6 +857,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
