@@ -4,34 +4,69 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4> 
+<h4>
 <span class="glyphicon glyphicon-paperclip"></span>
-Clipboard <span class="badge">{{posts.count}}</span>  </h4>
+
+Clipboard 
+<span class="badge">{{total}}</span>
+</h4>
 </div>
+
 
 <div class="modal-body">
 
 <h4> 
 <span class="glyphicon glyphicon-file"></span>
+
 Posts </h4>
 
 <div class="pre-scrollable">
 
 {% for ind in posts %}
-
 <p> 
 <span class="glyphicon glyphicon-file"></span>
-
-{{ind.label}} 
-
-</p>
-
-<br>
+{{ind.label}} </p>
 
 {% empty %}
 No posts.
 {% endfor %}
 
+</div>
+
+
+<h4> 
+<span class="glyphicon glyphicon-list-alt"></span>
+
+Lists </h4>
+
+<div class="pre-scrollable">
+
+{% for ind in lists %}
+<p> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{ind.name}} </p>
+
+{% empty %}
+No lists.
+{% endfor %}
+
+</div>
+
+<h4> 
+<span class="glyphicon glyphicon-file"></span>
+
+Cards </h4>
+
+<div class="pre-scrollable">
+{% for ind in cards %}
+
+<p> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{ind.label|truncatechars:30}} </p>
+{% empty %}
+No cards.
+{% endfor %}
 </div>
 
 </div>
@@ -45,7 +80,6 @@ class="btn btn-default e-get"> {% trans "Clear" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
-
 
 
 

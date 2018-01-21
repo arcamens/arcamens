@@ -23,6 +23,14 @@ data-callback="$('#modal').modal('toggle');" >
 {% trans "Board" %}
 </button>
 
+<button class="btn btn-primary e-get" 
+data-shell="#modalContent" type="button"
+data-show="{% url 'card_app:list-tasks' %}"  
+data-callback="$('#modal').modal('toggle');" >
+<span class="glyphicon glyphicon-tasks"></span> 
+{% trans "Tasks" %}
+</button>
+
 <button class="btn btn-default e-get" 
 data-shell="#modalContent" type="button"
 data-show="{% url 'board_app:setup-board-filter' organization.id %}"  
@@ -39,13 +47,13 @@ Filter </strike>
 
 </button>
 
-{% include 'board_app/organization-menu.html' %}
 
 </div>
 
 </div>
 
 </div>
+
 
 
 

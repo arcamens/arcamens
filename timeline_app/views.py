@@ -263,13 +263,6 @@ class EDeleteTimeline(GuardianView):
         return render(request, 'timeline_app/e-delete-timeline.html', 
         {'event':event})
 
-class ListClipboard(GuardianView):
-    def get(self, request, user_id):
-        user = User.objects.get(id=self.user_id)
-        posts = user.post_clipboard.all()
-        return render(request, 'timeline_app/list-clipboard.html', 
-        {'posts': posts, 'user': user, 'organization':user.default})
-
 
 class DisabledOrganization(View):
     def get(self, request, user_id):
@@ -454,6 +447,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

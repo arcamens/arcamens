@@ -336,16 +336,6 @@ class CheckEvent(GuardianView):
             return HttpResponse(status=400)
         return HttpResponse(str(event.id), status=200)
 
-class ListClipboard(GuardianView):
-    def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
-        cards = user.card_clipboard.all()
-        lists = user.list_clipboard.all()
-        total = cards.count() + lists.count()
-
-        return render(request, 'board_app/list-clipboard.html', 
-        {'user': user, 'cards': cards , 'lists': lists, 'total': total})
-
 class ListArchive(GuardianView):
     def get(self, request):
         user   = core_app.models.User.objects.get(id=self.user_id)
@@ -455,6 +445,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

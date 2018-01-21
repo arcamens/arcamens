@@ -27,12 +27,12 @@ urlpatterns = [
     url(r'^manage-board-users/(?P<board_id>.+)', views.ManageBoardUsers.as_view(), name='manage-board-users'),
     url(r'^list-pins/', views.ListPins.as_view(), name='list-pins'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
-    url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
     url(r'^list-archive/', views.ListArchive.as_view(), name='list-archive'),
     url(r'^bind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.BindBoardUser.as_view(), name='bind-board-user'),
     url(r'^unbind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardUser.as_view(), name='unbind-board-user'),
 
 ]
+
 
 
 

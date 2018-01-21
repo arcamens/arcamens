@@ -42,6 +42,15 @@ data-callback="$('#modal').modal('show');" href="#">
 <li  ><a href="" target="_blank">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Upgrade" %}</a></li>
 
+<li class="divider"></li>
+<li class="hidden-xs"><a class="e-get" 
+data-show = "{% url 'core_app:list-clipboard' %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');"
+href="#"><span class="glyphicon glyphicon-magnet"></span> 
+{% trans "Clipboard" %}</a></li>
+
+
 
 <li class="divider"></li>
 <li><a  href="{% url 'timeline_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
@@ -50,6 +59,8 @@ data-callback="$('#modal').modal('show');" href="#">
 
 
 </ul>
+
+
 
 
 

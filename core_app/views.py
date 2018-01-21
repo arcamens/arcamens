@@ -14,6 +14,7 @@ from django.urls import reverse
 from board_app.models import Organization
 from . import models
 from . import forms
+from core_app.models import User
 import timeline_app
 import json
 from django.conf import settings
@@ -575,5 +576,16 @@ class RecoverAccount(GuardianView):
     def post(self, request):
         user = models.User.objects.get(id=self.user_id)
 
+
+class ListClipboard(GuardianView):
+    def get(self, request):
+        user   = User.objects.get(id=self.user_id)
+        cards = user.card_clipboard.all()
+        lists = user.list_clipboard.all()
+        posts = user.post_clipboard.all()
+        total = cards.count() + lists.count() + posts.count()
+
+        return render(request, 'core_app/list-clipboard.html', 
+        {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
 
 

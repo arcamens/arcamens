@@ -8,7 +8,6 @@ urlpatterns = [
 
     url(r'^list-posts/(?P<timeline_id>.+)/', views.ListPosts.as_view(), name='list-posts'),
     url(r'^list-all-posts/(?P<user_id>.+)', views.ListAllPosts.as_view(), name='list-all-posts'),
-    url(r'^list-clipboard/(?P<user_id>.+)', views.ListClipboard.as_view(), name='list-clipboard'),
     url(r'^create-timeline/(?P<organization_id>.+)', views.CreateTimeline.as_view(), name='create-timeline'),
     url(r'^update-timeline/(?P<timeline_id>.+)/', views.UpdateTimeline.as_view(), name='update-timeline'),
     url(r'^delete-timeline/(?P<timeline_id>.+)/', views.DeleteTimeline.as_view(), name='delete-timeline'),
@@ -32,6 +31,7 @@ urlpatterns = [
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 
