@@ -70,7 +70,7 @@ class SignUp(View):
         or just be fixed(in case we decide futurely change how we
         charge on opus). 
         """
-        form = forms.UserForm(request.POST)
+        form = forms.UserForm(request.POST, request.FILES)
 
         if not form.is_valid():
             return render(request, 'site_app/signup.html', 

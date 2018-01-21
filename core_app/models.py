@@ -101,7 +101,7 @@ class User(UserMixin, models.Model):
     max_length=256)
 
     avatar = models.ImageField(upload_to='media/', null=True,
-    default='user.png',verbose_name='', help_text='', blank=True)
+    default='user.png',verbose_name='Your avatar.', help_text='', blank=True)
 
     enabled = models.BooleanField(blank=True, default=False)
 
@@ -218,6 +218,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 

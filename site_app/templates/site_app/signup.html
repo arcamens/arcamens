@@ -3,7 +3,7 @@
 
 <div class="container" >
 
-<form id="form-user-data" method="post" action="{% url 'site_app:signup' %}">
+<form id="form-user-data" method="post" action="{% url 'site_app:signup' %}" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
@@ -19,6 +19,7 @@
 </form>
 
 </div>
+
 
 
 
