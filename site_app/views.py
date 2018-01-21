@@ -87,6 +87,7 @@ class SignUp(View):
         record.save()
         organization   = Organization.objects.create(name='Main', owner=record)
         record.default = organization
+        record.organizations.add(organization)
         record.save()
 
         request.session['user_id'] = record.id
@@ -222,6 +223,7 @@ class PayPalIPN(paybills.views.PayPalIPN):
 
     def on_subscription_payment(self, data, user, service):
         print('User subscription payment!')
+
 
 
 
