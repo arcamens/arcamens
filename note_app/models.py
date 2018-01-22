@@ -97,4 +97,21 @@ class EDeleteNote(Event):
 
 
 
+class EUpdateNote(Event):
+    child = models.ForeignKey('card_app.Card', 
+    blank=True)
+
+    note = models.ForeignKey('Note', 
+    blank=True)
+
+    def get_absolute_url(self):
+        return reverse(
+            'note_app:e-update-note', 
+                 kwargs={'event_id': self.id})
+
+    def __str__(self):
+        return self.user.name
+
+
+
 

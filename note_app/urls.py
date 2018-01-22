@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^e-create-note/(?P<event_id>.+)/', views.ECreateNote.as_view(), name='e-create-note'),
     url(r'^e-delete-note/(?P<event_id>.+)/', views.EDeleteNote.as_view(), name='e-delete-note'),
+    url(r'^e-update-note/(?P<event_id>.+)/', views.EUpdateNote.as_view(), name='e-update-note'),
 
     url(r'^create-note/(?P<card_id>.+)/(?P<note_id>.+)/', views.CreateNote.as_view(), name='create-note'),
     url(r'^create-note/(?P<card_id>.+)/', views.CreateNote.as_view(), name='create-note'),

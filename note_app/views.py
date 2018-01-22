@@ -83,6 +83,15 @@ class EDeleteNote(GuardianView):
         return render(request, 'note_app/e-delete-note.html', 
         {'event':event})
 
+class EUpdateNote(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EUpdateNote.objects.get(id=event_id)
+        return render(request, 'note_app/e-update-note.html', 
+        {'event':event})
+
 class AttachFile(GuardianView):
     """
     """
@@ -139,14 +148,15 @@ class UpdateNote(GuardianView):
 
         user  = core_app.models.User.objects.get(id=self.user_id)
 
-        # event = models.EUpdateNote.objects.create(
-        # organization=user.default, ancestor=record.ancestor, 
-        # child=record, user=user)
-        # event.users.add(*record.ancestor.ancestor.members.all())
-        # event.save()
+        event = models.EUpdateNote.objects.create(
+        organization=user.default, child=record.card, 
+        note=record, user=user)
 
-        # ws.client.publish('board%s' % record.ancestor.ancestor.id, 
-            # 'sound', 0, False)
+        event.users.add(*record.card.ancestor.ancestor.members.all())
+        event.save()
+
+        ws.client.publish('board%s' % record.card.ancestor.ancestor.id, 
+            'sound', 0, False)
 
         return redirect('note_app:note', 
         note_id=record.id)

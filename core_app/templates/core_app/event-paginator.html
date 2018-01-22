@@ -20,6 +20,12 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
 });
 </script>
+{% elif ind.eupdatenote %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatenote.get_absolute_url}}");
+});
+</script>
 
 {% elif ind.ecreatenote %}
 <script>
