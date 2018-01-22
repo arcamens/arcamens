@@ -14,6 +14,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.earchivepost.get_absolute_url}}");
 });
 </script>
+{% elif ind.edeletenote %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.ecreatenote %}
 <script>
 $(document).ready(function() {
@@ -275,6 +282,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

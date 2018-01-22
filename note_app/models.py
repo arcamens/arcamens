@@ -80,6 +80,21 @@ class ECreateNote(Event):
     def __str__(self):
         return self.user.name
 
+class EDeleteNote(Event):
+    child = models.ForeignKey('card_app.Card', 
+    blank=True)
+
+    note = models.CharField(null=True, blank=False, 
+    max_length=626)
+
+    def get_absolute_url(self):
+        return reverse(
+            'note_app:e-delete-note', 
+                 kwargs={'event_id': self.id})
+
+    def __str__(self):
+        return self.user.name
+
 
 
 
