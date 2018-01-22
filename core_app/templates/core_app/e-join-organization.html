@@ -1,0 +1,20 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<span class="glyphicon glyphicon-user"></span>
+{{event.peer}} has joined 
+
+{{event.organization.name}}  
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+

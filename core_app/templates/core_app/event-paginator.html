@@ -20,6 +20,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
 });
 </script>
+{% elif ind.ejoinorganization %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ejoinorganization.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.eupdatenote %}
 <script>
 $(document).ready(function() {
@@ -288,6 +295,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
     url(r'^create-organization/(?P<user_id>.+)/', views.CreateOrganization.as_view(), name='create-organization'),
     url(r'^e-invite-user/(?P<event_id>.+)/', views.EInviteUser.as_view(), name='e-invite-user'),
+    url(r'^e-join-organization/(?P<event_id>.+)/', views.EJoinOrganization.as_view(), name='e-join-organization'),
+
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
     url(r'^e-bind-user-tag/(?P<event_id>.+)/', views.EBindUserTag.as_view(), name='e-bind-user-tag'),
@@ -31,6 +33,7 @@ urlpatterns = [
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
 
 ]
+
 
 
 

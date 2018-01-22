@@ -441,6 +441,13 @@ class JoinOrganization(View):
         organization=organization, user=invite.user)
         invites.delete()
 
+        event = models.EJoinOrganization.objects.create(organization=organization, 
+        peer=invite.user)
+        event.users.add(*organization.users.all())
+
+        ws.client.publish('organization%s' % organization.id, 
+            'sound', 0, False)
+
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
 
@@ -479,6 +486,12 @@ class EInviteUser(GuardianView):
     def get(self, request, event_id):
         event = models.EInviteUser.objects.get(id=event_id)
         return render(request, 'core_app/e-invite-user.html', 
+        {'event':event})
+
+class EJoinOrganization(GuardianView):
+    def get(self, request, event_id):
+        event = models.EJoinOrganization.objects.get(id=event_id)
+        return render(request, 'core_app/e-join-organization.html', 
         {'event':event})
 
 class ListAllTasks(GuardianView):
@@ -587,5 +600,6 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 

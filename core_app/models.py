@@ -69,6 +69,9 @@ class User(UserMixin, models.Model):
     email = models.EmailField(max_length=70, 
     null=True, blank=False, unique=True)
 
+    remail = models.EmailField(max_length=70, 
+    null=True, blank=False, unique=True)
+
     organizations = models.ManyToManyField(
     'Organization', related_name='users', 
     null=True, blank=True, symmetrical=False)
@@ -154,6 +157,14 @@ class EInviteUser(Event):
         return reverse('core_app:e-invite-user', 
         kwargs={'event_id': self.id})
 
+class EJoinOrganization(Event):
+    peer = models.ForeignKey('User', null=True, 
+    related_name='e_join_organization0', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('core_app:e-join-organization', 
+        kwargs={'event_id': self.id})
+
 class EBindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_bind_user_tag0', blank=True)
@@ -218,6 +229,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 
