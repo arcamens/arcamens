@@ -56,12 +56,12 @@ class CreateNote(GuardianView):
 
         note.save()
 
-        # event = models.ECreateNote.objects.create(organization=user.default,
-        # ancestor=card.ancestor, child=card, user=user)
-        # event.users.add(*ancestor.ancestor.members.all())
+        event = models.ECreateNote.objects.create(
+        organization=user.default, child=card, user=user, note=note)
+        event.users.add(*card.ancestor.ancestor.members.all())
 
-        # ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            # 'sound', 0, False)
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
+            'sound', 0, False)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -71,7 +71,7 @@ class ECreateNote(GuardianView):
 
     def get(self, request, event_id):
         event = models.ECreateNote.objects.get(id=event_id)
-        return render(request, 'card_note_app/e-create-note.html', 
+        return render(request, 'note_app/e-create-note.html', 
         {'event':event})
 
 
@@ -158,5 +158,6 @@ class DeleteNote(GuardianView):
 
         return redirect('card_app:view-data', 
         card_id=note.card.id)
+
 
 
