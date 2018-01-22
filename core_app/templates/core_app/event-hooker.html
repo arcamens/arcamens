@@ -25,7 +25,10 @@ function onConnect() {
          client.subscribe(ind);
 
      });
-    
+
+    // Tell the user to subscribe to the default organization.
+    client.subscribe('organization{{organization.id}}');    
+
     // Users will have a particular queue
     // for getting specific events.
     client.subscribe("user{{user.id}}");
@@ -69,6 +72,7 @@ function onMessageArrived(message) {
 
 }
 </script>
+
 
 
 

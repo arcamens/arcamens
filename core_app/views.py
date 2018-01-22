@@ -86,8 +86,16 @@ class Index(GuardianView):
 class SwitchOrganization(GuardianView):
     def get(self, request, organization_id):
         user = models.User.objects.get(id=self.user_id)
+
+        ws.client.publish('user%s' % user.id, 
+            'unsubscribe organization%s' % user.default.id, 0, False)
+
         user.default = models.Organization.objects.get(
         id=organization_id)
+
+        ws.client.publish('user%s' % user.id, 
+            'subscribe organization%s' % user.default.id, 0, False)
+
         user.save()
         return redirect('core_app:index')
 
