@@ -33,6 +33,9 @@ class SignupForm(forms.Form):
     password     = forms.CharField()
     organization = forms.CharField()
 
+class RecoverAccountForm(forms.Form):
+    email = forms.EmailField()
+
 class UserForm(forms.ModelForm):
     class Meta:
         model   = core_app.models.User
@@ -41,6 +44,7 @@ class UserForm(forms.ModelForm):
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
     # paid = forms.BooleanField(required=False)
+
 
 
 

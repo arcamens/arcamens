@@ -7,7 +7,6 @@
 <title>Arcamens</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/static/main.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -45,8 +44,12 @@
 <ul class="nav navbar-nav">
 <li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:home' %}" href="#">
 <span class="glyphicon glyphicon-home"></span> {% trans "Home" %}</a></li>
+
 <li><a class="e-get" data-shell="#main-content" data-show="{% url 'site_app:signup' %}" href="#" >
 <span class="glyphicon glyphicon-user"></span> {% trans "Sign up" %}</a></li>
+
+<li><a href="{% url 'site_app:recover-account' %}" >
+<span class="glyphicon glyphicon-lock"></span> {% trans "Recover Account" %}</a></li>
 
 <li><a href="" target="_blank">
 <span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
@@ -79,6 +82,7 @@
 
 </body>
 </html>
+
 
 
 

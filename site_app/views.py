@@ -225,6 +225,15 @@ class PayPalIPN(paybills.views.PayPalIPN):
         print('User subscription payment!')
 
 
+class RecoverAccount(View):
+    def get(self, request):
+        form = forms.RecoverAccountForm()
+        return render(request, 'site_app/recover-account.html', 
+        {'form': form})
+
+    def post(self, request):
+        user = models.User.objects.get(id=self.user_id)
+
 
 
 

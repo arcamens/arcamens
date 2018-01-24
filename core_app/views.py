@@ -590,13 +590,6 @@ class Find(GuardianView):
         {'form': form, 'posts': posts, 'cards': cards,
         'total': total, 'count': count})
 
-class RecoverAccount(GuardianView):
-    def get(self, request, user_id):
-        user = models.User.objects.get(id=self.user_id)
-
-    def post(self, request):
-        user = models.User.objects.get(id=self.user_id)
-
 
 class ListClipboard(GuardianView):
     def get(self, request):
@@ -608,6 +601,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

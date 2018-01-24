@@ -12,8 +12,10 @@ urlpatterns = [
     url(r'^manual-payment/', views.ManualPayment.as_view(), name='manual-payment'),
     url(r'^subscription-payment/', views.SubscriptionPayment.as_view(), name='subscription-payment'),
     url(r'^paypal-ipn/', views.PayPalIPN.as_view(), name='paypal-ipn'),
+    url(r'^recover-account/', views.RecoverAccount.as_view(), name='recover-account'),
 
 ]
+
 
 
 

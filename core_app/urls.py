@@ -29,10 +29,10 @@ urlpatterns = [
     url(r'^event-queues/(?P<tag_id>.+)/', views.EventQueues.as_view(), name='event-queues'),
     url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
     url(r'^find/', views.Find.as_view(), name='find'),
-    url(r'^recover-account/(?P<user_id>.+)/', views.RecoverAccount.as_view(), name='recover-account'),
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
 
 ]
+
 
 
 
