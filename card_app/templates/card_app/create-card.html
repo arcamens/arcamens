@@ -27,14 +27,25 @@ $('#div-attachments').load('{% url 'card_app:attach-file' card.id %}');
 
 <div class="modal-footer">
 {% block buttons %}
-<button  type="button" data-form="#form-card-data" 
+<button  id="createCard" type="button" data-form="#form-card-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
+<script>
+
+$('#form-card-data').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#createCard').click();
+        return false;
+    }
+});
+</script>
+
 {% endblock %}
 </div>
+
 
 
