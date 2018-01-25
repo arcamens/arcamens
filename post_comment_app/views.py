@@ -39,7 +39,7 @@ class CreatePostComment(GuardianView):
         event.users.add(*post.workers.all())
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'Post comment on: %s!' % post.label, 0, False)
+            'sound', 0, False)
 
         return redirect('post_comment_app:list-comments', 
 
@@ -53,6 +53,7 @@ class ECreatePostComment(GuardianView):
         event = models.ECreatePostComment.objects.get(id=event_id)
         return render(request, 'post_comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

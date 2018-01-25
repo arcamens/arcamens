@@ -234,10 +234,12 @@ class RecoverAccount(View):
     def post(self, request):
         user = models.User.objects.get(id=self.user_id)
 
+class RedefinePassword(View):
+    def get(self, request):
+        pass
 
-
-
-
+    def post(self, request):
+        pass
 
 
 

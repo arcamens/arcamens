@@ -39,7 +39,7 @@ class CreateCardComment(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
 
         ws.client.publish('board%s' % record.card.ancestor.ancestor.id, 
-            'Post created on: %s!' % record.card.ancestor.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('card_comment_app:list-comments', 
         card_id=card.id)
@@ -52,6 +52,7 @@ class ECreateCardComment(GuardianView):
         event = models.ECreateCardComment.objects.get(id=event_id)
         return render(request, 'card_comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
