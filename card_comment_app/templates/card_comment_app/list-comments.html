@@ -42,20 +42,19 @@ On {{ind.created}}</em>
 </div>
 
 <div class="modal-footer" >
-<form id="form-comment-data" enctype="multipart/form-data" onsubmit="return false;">
+<form id="form-card-comment-data" enctype="multipart/form-data" onsubmit="return false;">
 {% csrf_token %}
 
-<div id="inputComment">
+<div id="inputCardComment">
 {% bootstrap_field form.data layout='inline' size='sm' %}
 {% bootstrap_field form.file layout='inline' size='sm' %}
 
 </div>
 
 {% block buttons %}
-<button  id="sendComment" type="button" 
-data-form="#form-comment-data" 
+<button  id="sendCardComment" type="button" 
+data-form="#form-card-comment-data" 
 data-shell="#bigModalContent" 
-data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" 
 data-show="{% url 'card_comment_app:create-comment' card.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
@@ -64,9 +63,9 @@ class="btn btn-default e-post">  {% trans "Send" %} </button>
 </form>
 
 <script>
-$('#inputComment').keypress(function(e){
+$('#inputCardComment').keypress(function(e){
     if(e.keyCode == 13)
-        $('#sendComment').click();
+        $('#sendCardComment').click();
     e.stopPropagation();
 });
 $('#id_data').focus();
@@ -74,6 +73,7 @@ $('#id_data').focus();
 
 
 </div>
+
 
 
 
