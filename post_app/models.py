@@ -99,7 +99,7 @@ class Post(PostMixin, models.Model):
     label = models.CharField(null=True,
     blank=False, verbose_name=_("Label"), 
     help_text='Task, Post, Event, Thread, Bug, \
-    Idea, Document, ..', max_length=30)
+    Idea, Document, ..', max_length=625)
 
     workers = models.ManyToManyField('core_app.User', 
     related_name='assignments', blank=True, 
@@ -259,6 +259,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

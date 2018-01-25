@@ -43,7 +43,7 @@ Filter </strike>
 </a></li>
 
 
-<li> <a class="e-get" data-shell="#modalContent" data-callback="$('#modal').modal('show');" 
+<li> <a class="e-get" data-shell="#bigModalContent" data-callback="$('#bigModal').modal('show');" 
 data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Post" %}</a></li>
 
@@ -52,6 +52,7 @@ data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
 </ul>
+
 
 
 
