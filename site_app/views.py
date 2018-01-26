@@ -232,7 +232,15 @@ class RecoverAccount(View):
         {'form': form})
 
     def post(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        form = forms.RecoverAccountForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'site_app/recover-account.html',
+                        {'form': form})
+
+        # crete passwordticket record here.
+        return render(request, 'site_app/recover-mail-sent.html', 
+        {'form': form})
 
 class RedefinePassword(View):
     def get(self, request):
@@ -240,6 +248,7 @@ class RedefinePassword(View):
 
     def post(self, request):
         pass
+
 
 
 

@@ -16,30 +16,10 @@
 <body>
 
 <div class="container">
-  <div class="jumbotron">
-    <h1>Arcamens</h1> 
-
-<p>Insert your primary or secondary e-mail. We'll send you a link for
-redefining a new password. </p> 
-
-<div class="row">
-<div class="col-md-5">
-<form action="{% url 'site_app:recover-account' %}" method="post">
-{% csrf_token %}
-{% bootstrap_field form.email  size='md' %}
-{% buttons submit='Send' layout='inline' %}{% endbuttons %}
-
-</form>
+<h2> Account recover mail was sent !  </h2>
 </div>
-
-</div>
-
-</div>
-{% bootstrap_form_errors form type='non_fields' %}
-
-</div>
-
 
 </body>
+
 
 
