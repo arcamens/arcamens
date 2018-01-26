@@ -4,7 +4,7 @@
 <div class="panel-body">
 
 <div class="row">
-<div class="col-md-3">
+<div class="col-md-4">
 <h4> <span class="glyphicon glyphicon-user"></span> Workers</h4>
 <hr>
 
@@ -26,20 +26,7 @@ href="#">
 No workers...
 {% endfor %}</div></div>
 
-<div class="col-md-3">
-<h4> <span class="glyphicon glyphicon-file"></span> Attachments</h4>
-<hr>
-<div class="pre-scrollable" style="font-size:80%">
-{% for ind in attachments %}
-<a href="{% static ind.file %}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span>
-{{ind.file.name}} </a>
-
-{% empty %}
-No attachments...
-{% endfor %}</div></div>
-
-<div class="col-md-2">
+<div class="col-md-4">
 <h4> <span class="glyphicon glyphicon-tags"></span> Tags</h4>
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
@@ -86,6 +73,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 

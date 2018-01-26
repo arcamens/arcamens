@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="panel panel-default">
 <div class="panel-heading" style="font-size:80%">
 
@@ -18,10 +20,22 @@ at {{card.created}}  </div> </div>
 <h4> {{card.label}}.. </h4>
 {{card.html | safe}}
 
+<span style="font-size:80%">
+{% for ind in attachments %}
+<a href="{% static ind.file %}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} </a>
+
+{% empty %}
+No attachments...
+{% endfor %}
+</span>
+
 </div>
 
 
 </div>
+
 
 
 
