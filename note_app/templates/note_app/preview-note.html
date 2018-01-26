@@ -52,7 +52,11 @@ class="btn btn-default e-get"> {% trans "Notes" %} </button>
 <button  type="button" 
 data-show="{% url 'note_app:update-note' note.id %}"
 data-shell="#bigModalContent" 
-class="btn btn-default e-get"> {% trans "update" %} </button>
+class="btn btn-default e-get"> {% trans "Update" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
 
 </div>
 
