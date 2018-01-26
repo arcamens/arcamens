@@ -137,6 +137,13 @@ class DetachFile(GuardianView):
         return render(request, 'note_app/attach-file.html', 
         {'note':filewrapper.note, 'form': form, 'attachments': attachments})
 
+class PreviewNote(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.objects.get(id=note_id)
+        
+        return render(request, 'note_app/preview-note.html',
+        {'note': note, 'card': note.card})
+
 class UpdateNote(GuardianView):
     def get(self, request, note_id):
         note = models.Note.objects.get(id=note_id)
@@ -165,7 +172,7 @@ class UpdateNote(GuardianView):
         ws.client.publish('board%s' % record.card.ancestor.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('note_app:note', 
+        return redirect('note_app:preview-note', 
         note_id=record.id)
 
 class DeleteNote(GuardianView):
@@ -185,6 +192,7 @@ class DeleteNote(GuardianView):
 
         return redirect('card_app:view-data', 
         card_id=note.card.id)
+
 
 
 

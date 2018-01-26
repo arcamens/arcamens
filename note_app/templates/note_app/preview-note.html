@@ -1,0 +1,57 @@
+{% load bootstrap3 %}
+{% load static %}
+
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+Preview note
+</div>
+
+<div class="modal-body pre-scrollable">
+
+<div class="panel panel-default">
+  <div class="panel-body">
+
+<p style="font-size:80%"> 
+<span class="glyphicon glyphicon-comment"></span> 
+
+By {{note.owner.name}} at {{note.created}} 
+
+
+</p>
+
+<div style="word-wrap: break-word;"> 
+
+{{note.html | safe}}
+
+</div>
+
+<div  style="font-size:80%">
+{% for ind in note.notefilewrapper_set.all %}
+<a href="#">
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} 
+</a>
+{% empty %}
+No attachments...
+
+{% endfor %}
+</div>
+
+</div>
+</div>
+
+<div class="modal-footer" >
+<button  type="button" 
+data-show="{% url 'note_app:list-notes' card.id %}"
+data-shell="#bigModalContent" 
+class="btn btn-default e-get"> {% trans "Notes" %} </button>
+
+<button  type="button" 
+data-show="{% url 'note_app:update-note' note.id %}"
+data-shell="#bigModalContent" 
+class="btn btn-default e-get"> {% trans "update" %} </button>
+
+</div>
+

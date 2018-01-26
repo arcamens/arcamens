@@ -2,21 +2,14 @@
 {% load i18n %}
 {% load static %}
 
+<div class="panel panel-default">
+  <div class="panel-body">
+
 <p style="font-size:80%"> 
 <span class="glyphicon glyphicon-comment"></span> 
 
 By {{note.owner.name}} at {{note.created}} 
 
-<a href="#"
-data-show="{% url 'note_app:update-note' note.id %}"
-data-shell="#bigModalContent" 
-class="e-get"> {% trans "Update" %} </a>
-
-<a href="#"
-data-show="{% url 'note_app:delete-note' note.id %}"
-data-callback="$('#bigModal').modal('toggle');" 
-data-shell="#main-view" 
-class="e-get"> {% trans "Remove" %} </a>
 
 </p>
 
@@ -38,7 +31,26 @@ No attachments...
 {% endfor %}
 </div>
 
-<hr>
+<br>
+
+<a href="#"
+data-show="{% url 'note_app:update-note' note.id %}"
+data-shell="#bigModalContent" 
+class="text-warning e-get"> 
+<span class="glyphicon glyphicon-edit"></span> 
+{% trans "Update" %} </a>
+
+<a href="#"
+data-show="{% url 'note_app:delete-note' note.id %}"
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#main-view" 
+class="text-danger e-get"> 
+<span class="glyphicon glyphicon-remove"></span> 
+
+{% trans "Remove" %} </a>
+
+</div>
+</div>
 
 
 
