@@ -1,15 +1,20 @@
 from paybills.submitters import ManualForm, SubscriptionForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import View
 from core_app.models import Organization, OrganizationService
+from django.core.mail import send_mail
 from core_app.views import AuthenticatedView
+from django.conf import settings
 from core_app.models import User
+from site_app.models import PasswordTicket
 import paybills.views
 from . import forms
 import timeline_app
 import datetime
+import time
+import random
 
 class Index(View):
     def get(self, request):
@@ -238,15 +243,32 @@ class RecoverAccount(View):
             return render(request, 'site_app/recover-account.html',
                         {'form': form})
 
+        email = form.cleaned_data['email']
+        user = timeline_app.models.User.objects.get(email = email)
+
         # crete passwordticket record here.
+        token = 'invite%s%s' % (random.randint(1000, 10000), time.time())
+
+        ticket = PasswordTicket.objects.create(token=token, user=user)
+
+        url = reverse('site_app:redefine-password', kwargs={
+        'user_id': user.id, 'token': token})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+
+        send_mail('Account recover %s' % user.name,
+        '%s' % url, settings.EMAIL_HOST_USER, [email],
+        fail_silently=False)
+
         return render(request, 'site_app/recover-mail-sent.html', 
         {'form': form})
 
 class RedefinePassword(View):
-    def get(self, request):
-        pass
+    def get(self, request, user_id, token):
+        return render(request, 'site_app/redefine-password.html', 
+        {})
 
-    def post(self, request):
+    def post(self, request, user_id, token):
         pass
 
 
