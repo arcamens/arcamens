@@ -70,7 +70,8 @@ class CreateNote(GuardianView):
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('card_app:view-data', card_id=card.id)
+        return render(request, 'note_app/preview-note.html',
+        {'note': note, 'card': note.card})
 
 class ECreateNote(GuardianView):
     """
