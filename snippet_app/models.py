@@ -1,4 +1,4 @@
-# Models for Note post type.
+# Models for Snippet post type.
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -7,42 +7,46 @@ from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from board_app.models import Event
 
-class NoteMixin(object):
+class SnippetMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(self.data, 
             extensions=[TableExtension(),
                 'markdown.extensions.tables'])
-        super(NoteMixin, self).save(*args, **kwargs)
+        super(SnippetMixin, self).save(*args, **kwargs)
 
     def __str__(self):
         """
         """
         return self.label
 
-class NoteFileWrapperMixin(object):
+class SnippetFileWrapperMixin(object):
     def duplicate(self, card=None):
-        wrapper       = NoteFileWrapper.objects.get(id=self.id)
+        wrapper       = SnippetFileWrapper.objects.get(id=self.id)
         wrapper.pk    = None
         wrapper.card  = card
         wrapper.save()
         return wrapper
 
-class NoteFileWrapper(NoteFileWrapperMixin, models.Model):
+class SnippetFileWrapper(SnippetFileWrapperMixin, models.Model):
     """
     """
 
-    note = models.ForeignKey('Note', null=True, 
+    snippet = models.ForeignKey('Snippet', null=True, 
     on_delete=models.CASCADE, blank=True)
 
     file = models.FileField(upload_to='media/', 
     verbose_name='', help_text='')
 
-class Note(NoteMixin, models.Model):
+class Snippet(SnippetMixin, models.Model):
     card = models.ForeignKey('card_app.Card', 
-    null=True, related_name='notes', blank=True)
+    null=True, related_name='snippets', blank=True)
 
     owner = models.ForeignKey('core_app.User', 
     null=True, blank=True)
+
+    title = models.CharField(null=True, blank=False, 
+    default='Draft', verbose_name=_("Title"), 
+    max_length=626)
 
     data = models.TextField(null=True,
     blank=True, verbose_name=_("Data"), 
@@ -61,31 +65,31 @@ class Note(NoteMixin, models.Model):
     def __str__(self):
         return self.data
 
-class ECreateNote(Event):
+class ECreateSnippet(Event):
     child = models.ForeignKey('card_app.Card', 
     blank=True)
 
-    note = models.ForeignKey('Note', 
+    snippet = models.ForeignKey('Snippet', 
     blank=True)
 
     def get_absolute_url(self):
         return reverse(
-            'note_app:e-create-note', 
+            'snippet_app:e-create-snippet', 
                  kwargs={'event_id': self.id})
 
     def __str__(self):
         return self.user.name
 
-class EDeleteNote(Event):
+class EDeleteSnippet(Event):
     child = models.ForeignKey('card_app.Card', 
     blank=True)
 
-    note = models.CharField(null=True, blank=False, 
+    snippet = models.CharField(null=True, blank=False, 
     max_length=626)
 
     def get_absolute_url(self):
         return reverse(
-            'note_app:e-delete-note', 
+            'snippet_app:e-delete-snippet', 
                  kwargs={'event_id': self.id})
 
     def __str__(self):
@@ -93,16 +97,16 @@ class EDeleteNote(Event):
 
 
 
-class EUpdateNote(Event):
+class EUpdateSnippet(Event):
     child = models.ForeignKey('card_app.Card', 
     blank=True)
 
-    note = models.ForeignKey('Note', 
+    snippet = models.ForeignKey('Snippet', 
     blank=True)
 
     def get_absolute_url(self):
         return reverse(
-            'note_app:e-update-note', 
+            'snippet_app:e-update-snippet', 
                  kwargs={'event_id': self.id})
 
     def __str__(self):

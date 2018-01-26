@@ -1,0 +1,8 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+{% for ind in records %}
+{% include 'snippet_app/snippet.html' with snippet=ind %}
+{% endfor %}
+

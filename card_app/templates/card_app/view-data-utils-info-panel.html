@@ -61,13 +61,13 @@ No tags...
 {% endfor %}</div></div>
 
 <div class="col-md-4">
-<h4> <span class="glyphicon glyphicon-book"></span> Notes</h4>
+<h4> <span class="glyphicon glyphicon-book"></span> Snippets</h4>
 <hr>
 
 <div class="pre-scrollable" style="font-size:80%">
-{% for ind in notes %}
+{% for ind in snippets %}
 <a 
-data-show="{% url 'note_app:note' ind.id %}"
+data-show="{% url 'snippet_app:snippet' ind.id %}"
 data-shell="#bigModalContent" 
 data-callback="$('#bigModal').modal('show');" 
 class="e-get"
@@ -86,6 +86,8 @@ No notes...
 </div>
 </div>
 </div>
+
+
 
 
 

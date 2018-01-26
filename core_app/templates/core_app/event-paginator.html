@@ -14,10 +14,10 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.earchivepost.get_absolute_url}}");
 });
 </script>
-{% elif ind.edeletenote %}
+{% elif ind.edeletesnippet %}
 <script>
 $(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
+$('#event-' + {{ind.id}}).load("{{ind.edeletesnippet.get_absolute_url}}");
 });
 </script>
 {% elif ind.ejoinorganization %}
@@ -27,17 +27,17 @@ $('#event-' + {{ind.id}}).load("{{ind.ejoinorganization.get_absolute_url}}");
 });
 </script>
 
-{% elif ind.eupdatenote %}
+{% elif ind.eupdatesnippet %}
 <script>
 $(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatenote.get_absolute_url}}");
+$('#event-' + {{ind.id}}).load("{{ind.eupdatesnippet.get_absolute_url}}");
 });
 </script>
 
-{% elif ind.ecreatenote %}
+{% elif ind.ecreatesnippet %}
 <script>
 $(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatenote.get_absolute_url}}");
+$('#event-' + {{ind.id}}).load("{{ind.ecreatesnippet.get_absolute_url}}");
 });
 </script>
 {% elif ind.ecreatetimeline %}
@@ -295,6 +295,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

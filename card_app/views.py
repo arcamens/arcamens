@@ -80,7 +80,7 @@ class ViewData(GuardianView):
         workers = card.workers.all()
         attachments = card.filewrapper_set.all()
         tags = card.tags.all()
-        notes = card.notes.all()
+        snippets = card.snippets.all()
 
         # Maybe it should be retrieved here...
         # but cards dont have path manytomany
@@ -91,7 +91,7 @@ class ViewData(GuardianView):
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 
-        'relations': relations, 'notes': notes, 'pins': pins, 'tags': tags})
+        'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags})
 
 class CreateCard(GuardianView):
     """
@@ -857,6 +857,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

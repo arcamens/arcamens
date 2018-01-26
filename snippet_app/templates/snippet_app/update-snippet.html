@@ -1,0 +1,45 @@
+
+{% extends "snippet_app/create-snippet.html" %}
+{% load i18n %}
+{% block title %}
+<span class="glyphicon glyphicon-edit"></span> 
+Update card
+{% endblock %}
+
+{% block buttons %}
+<button  type="button" 
+data-form="#form-snippet-data" 
+data-shell="#bigModalContent" 
+data-shell-error="#bigModalContent" 
+data-show="{% url 'snippet_app:update-snippet' snippet.id %}"
+class="btn btn-default e-post"> 
+{% trans "Update" %}
+</button>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -31,14 +31,17 @@ urlpatterns = [
      url(r'^paybills/', include('paybills.urls', namespace='paybills')), 
     url(r'^board_app/', include('board_app.urls', namespace='board_app')),
     url(r'^card_app/', include('card_app.urls', namespace='card_app')),
+    url(r'^snippet_app/', include('snippet_app.urls', namespace='snippet_app')),
     url(r'^note_app/', include('note_app.urls', namespace='note_app')),
 
     url(r'^list_app/', include('list_app.urls', namespace='list_app')),
-    url(r'^card_comment_app/', include('card_comment_app.urls', namespace='card_comment_app')),
 
 ]
 
 
 # handler500 = 'core_app.views.default_error'
+
+
+
 
 

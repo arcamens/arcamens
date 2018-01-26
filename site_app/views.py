@@ -246,7 +246,6 @@ class RecoverAccount(View):
         email = form.cleaned_data['email']
         user = timeline_app.models.User.objects.get(email = email)
 
-        # crete passwordticket record here.
         token = 'invite%s%s' % (random.randint(1000, 10000), time.time())
 
         ticket = PasswordTicket.objects.create(token=token, user=user)

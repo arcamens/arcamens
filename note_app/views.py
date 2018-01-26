@@ -27,6 +27,13 @@ class Note(GuardianView):
         return render(request, 'note_app/note.html', 
         {'note': note, 'attachments': attachments})
 
+class ListNotes(GuardianView):
+    def get(self, request, card_id):
+        card = card_app.models.Card.objects.get(id=card_id)
+        notes = card.notes.all()
+
+        return render(request, 'note_app/list-notes.html', 
+        {'records': notes, 'card': card})
 
 class CreateNote(GuardianView):
     """
@@ -178,6 +185,7 @@ class DeleteNote(GuardianView):
 
         return redirect('card_app:view-data', 
         card_id=note.card.id)
+
 
 
 

@@ -64,12 +64,12 @@ INSTALLED_APPS = [
     'timeline_app',
     'post_app',
     'post_comment_app',
-    'card_comment_app',
     'paybills',
     'board_app',
     'site_app', 
     'list_app', 
     'card_app', 
+    'snippet_app',
     'note_app',
     'bootstrap3',
     'blowdb',
@@ -168,6 +168,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
 
 
 

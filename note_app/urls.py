@@ -8,6 +8,8 @@ urlpatterns = [
 
     url(r'^create-note/(?P<card_id>.+)/(?P<note_id>.+)/', views.CreateNote.as_view(), name='create-note'),
     url(r'^create-note/(?P<card_id>.+)/', views.CreateNote.as_view(), name='create-note'),
+    url(r'^list-notes/(?P<card_id>.+)/', views.ListNotes.as_view(), name='list-notes'),
+
     url(r'^update-note/(?P<note_id>.+)/', views.UpdateNote.as_view(), name='update-note'),
     url(r'^note/(?P<note_id>.+)/', views.Note.as_view(), name='note'),
     url(r'^delete-note/(?P<note_id>.+)/', views.DeleteNote.as_view(), name='delete-note'),
@@ -16,6 +18,7 @@ urlpatterns = [
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
 
 ]
+
 
 
 

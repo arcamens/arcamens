@@ -1,0 +1,53 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> has updated snippet 
+
+<span class="glyphicon glyphicon-book"></span>
+{{event.snippet.title | truncatechars:30}}
+
+on
+
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label|truncatechars:40}} </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
