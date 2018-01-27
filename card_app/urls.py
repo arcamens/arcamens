@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
     url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
+    url(r'^cancel-card-creation/(?P<card_id>.+)/', views.CancelCardCreation.as_view(), name='cancel-card-creation'),
     url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
     url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
     url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
@@ -52,6 +53,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

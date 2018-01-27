@@ -174,6 +174,13 @@ class CreateFork(GuardianView):
 
         return redirect('card_app:view-data', card_id=card.id)
 
+class CancelCardCreation(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id = card_id)
+        card.delete()
+
+        return HttpResponse(status=200)
+
 class DeleteCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id = card_id)
@@ -857,6 +864,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

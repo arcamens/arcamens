@@ -27,12 +27,20 @@ $('#div-attachments').load('{% url 'card_app:attach-file' card.id %}');
 
 <div class="modal-footer">
 {% block buttons %}
+<button  type="button" data-form="#form-card-data" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'card_app:cancel-card-creation' card.id %}"
+class="btn btn-default e-get"> 
+     {% trans "Cancel" %}
+</button>
+
 <button  id="createCard" type="button" data-form="#form-card-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
+
 
 <script>
 
@@ -42,10 +50,44 @@ $('#form-card-data').keypress(function(e){
         return false;
     }
 });
+
+/*
+$('#bigModal').one('hidden.bs.modal', function () {
+    var formData = new FormData($('#form-card-data')[0]);
+
+    $.ajax({
+    url: "{% url 'card_app:create-card' ancestor.id card.id %}",  //Server script to process data
+    type: 'POST',
+    data: formData,
+    cache: false,
+    success: function(data) {
+        $('#main-view').load('{% url 'card_app:list-cards' ancestor.id  %}');
+
+    },
+
+    contentType: false,
+    processData: false
+    });
+
+})
+*/
+
+$('#bigModal').one('hidden.bs.modal', function () {
+    $.ajax({
+    url: "{% url 'card_app:cancel-card-creation' card.id  %}",
+    type: 'GET',
+    contentType: false,
+    processData: false
+
+    });
+
+})
+
 </script>
 
 {% endblock %}
 </div>
+
 
 
 
