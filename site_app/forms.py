@@ -31,6 +31,10 @@ class ServiceForm(forms.Form):
     # paid = forms.BooleanField(required=False)
 
 
+class RedefinePasswordForm(forms.Form):
+    password = forms.CharField()
+    retype   = forms.CharField()
+
 
 
 

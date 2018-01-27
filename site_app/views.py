@@ -260,12 +260,37 @@ class RecoverAccount(View):
 
 class RedefinePassword(View):
     def get(self, request, user_id, token):
+        user = timeline_app.models.User.objects.get(id = user_id)
+        form   = forms.RedefinePasswordForm()
+
         return render(request, 'site_app/redefine-password.html', 
-        {})
+        {'user': user, 'form': form, 'token': token})
 
     def post(self, request, user_id, token):
-        pass
+        # First attempt to grab the ticket
+        # if it doesnt then it just throws an inter server error.
+        user   = timeline_app.models.User.objects.get(id = user_id)
+        ticket = PasswordTicket.objects.filter(user=user)
+        form   = forms.RedefinePasswordForm(request.POST)
 
+        # The logic to check if password matches should be handled
+        # in the RedefinePasswordForm.
+        if not form.is_valid():
+            return render(request, 'site_app/redefine-password.html',
+                 {'form': form, 'user': user, 'token': token})
+
+        # Delete all password redefinition tickets.
+        ticket.delete()
+
+        # Redefine the password.
+        user.password = form.cleaned_data['password']
+        user.save()
+
+        # Log the user.
+        request.session['user_id'] = user.id
+
+        # Redirect to the application.
+        return redirect('core_app:index')
 
 
 
