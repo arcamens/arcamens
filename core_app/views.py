@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.db.models import Q
 from core_app.models import OrganizationService, Organization
+from slock.views import AuthenticatedView
 from django.urls import reverse
 from board_app.models import Organization
 from . import models
@@ -23,35 +24,6 @@ from core_app import ws
 import random
 
 # Create your views here.
-class AuthenticatedView(View):
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            self.user_id = request.session['user_id']
-        except Exception:
-            return self.error(request, *args, **kwargs)
-        return self.delegate(request, *args, **kwargs)
-
-    def delegate(self, request, *args, **kwargs):
-        """
-        Django doesnt let customize error page
-        when not in debug mode, it may be the case
-        of it being interesting to handle differently
-        500 from each one of the views. 
-        """
-
-        try:
-            return super(AuthenticatedView, 
-                self).dispatch(request, *args, **kwargs)
-        except Exception as excpt:
-            return self.on_exception(request, excpt)
-
-    def on_exception(self, request, excpt):
-        print_exc()
-        return render(request, 
-        'core_app/default-error.html', {}, status=500)
-
-    def error(self, request, *args, **kwargs):
-        return redirect('site_app:index')
 
 class GuardianView(AuthenticatedView):
     def delegate(self, request, *args, **kwargs):
@@ -601,6 +573,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from slock.models import BasicUser
 from paybills.models import Service
 from core_app.utils import search_tokens
 from functools import reduce
@@ -61,15 +62,8 @@ class Invite(models.Model):
     organization = models.ForeignKey('Organization', 
     null=True, blank=True)
 
-class User(UserMixin, models.Model):
-    name = models.CharField(null=True,
-    blank=False, verbose_name=_("Name"), 
-    help_text='User Name', max_length=256)
-
-    email = models.EmailField(max_length=70, 
-    null=True, blank=False, unique=True)
-
-    remail = models.EmailField(max_length=70, 
+class User(UserMixin, BasicUser):
+    recover_email = models.EmailField(max_length=70, 
     null=True, blank=False, unique=True)
 
     organizations = models.ManyToManyField(
@@ -93,10 +87,6 @@ class User(UserMixin, models.Model):
     # organization/add members to the organization.
     service = models.ForeignKey(
     'paybills.Service', null=True, blank=True)
-
-    password = models.CharField(null=True,
-    blank=False, verbose_name=_("Password"), 
-    help_text='Password', max_length=256)
 
     description = models.TextField(null=True,
     blank=False, verbose_name=_("Description"), 
@@ -229,6 +219,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 

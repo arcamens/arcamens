@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0']
 
+# When the user is not authenticated it is redirected by slock AuthenticatedView.
+AUTH_ERR_VIEW = 'site_app:index'
+
 DEBUG_PAYPAL_IPN_DOMAIN = get_addr(8000)
 PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
@@ -73,6 +76,7 @@ INSTALLED_APPS = [
     'note_app',
     'bootstrap3',
     'blowdb',
+    'slock'
 ]
 
 MIDDLEWARE = [
@@ -168,6 +172,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
 
 
 

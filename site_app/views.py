@@ -5,10 +5,11 @@ from django.urls import reverse
 from django.views.generic import View
 from core_app.models import Organization, OrganizationService
 from django.core.mail import send_mail
-from core_app.views import AuthenticatedView
 from django.conf import settings
 from core_app.models import User
 from site_app.models import PasswordTicket
+from slock.views import AuthenticatedView
+from slock.forms import LoginForm
 import paybills.views
 from . import forms
 import timeline_app
@@ -18,7 +19,7 @@ import random
 
 class Index(View):
     def get(self, request):
-        return render(request, 'site_app/index.html', {'login_form': forms.LoginForm(),
+        return render(request, 'site_app/index.html', {'form': LoginForm(),
         'signup_form': forms.SignupForm()})
 
 class Home(View):
@@ -35,20 +36,15 @@ class Login(View):
 
     def get(self, request):
         return render(request, 'site_app/index.html', 
-        {'login_form':forms.LoginForm()})
+        {'form':LoginForm()})
 
     def post(self, request):
-        form = forms.LoginForm(request.session, request.POST)
+        form = LoginForm(request.session, request.POST)
 
         if not form.is_valid():
             return render(request, 'site_app/index.html',
-                        {'login_form': form})
+                        {'form': form})
 
-        # email        = form.cleaned_data['email']
-        # password     = form.cleaned_data['password']
-        # user         = timeline_app.models.User.objects.get(email = email, 
-        # password=password)
-        # request.session['user_id'] = user.id
         return redirect('core_app:index')
 
 class Logout(View):
@@ -269,6 +265,7 @@ class RedefinePassword(View):
 
     def post(self, request, user_id, token):
         pass
+
 
 
 

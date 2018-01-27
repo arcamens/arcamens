@@ -1,4 +1,4 @@
-from core_app.views import AuthenticatedView, GuardianView
+from core_app.views import GuardianView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from core_app.utils import search_tokens
@@ -447,6 +447,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

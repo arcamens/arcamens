@@ -61,8 +61,8 @@
 <form class="navbar-form navbar-left" method="post" action="{% url 'site_app:login' %}">
 {% csrf_token %}
 
-{% bootstrap_field login_form.email layout='inline' %}
-{% bootstrap_field login_form.password layout='inline' %}
+{% bootstrap_field form.email layout='inline' %}
+{% bootstrap_field form.password layout='inline' %}
 {% buttons submit='Sign in' layout='inline' %}{% endbuttons %}
 
 </form>
@@ -72,7 +72,7 @@
 </nav>
 
 <div class="container">
-{% bootstrap_form_errors login_form type='non_fields' %}
+{% bootstrap_form_errors form type='non_fields' %}
 </div>
 
 <div id="main-content">
@@ -82,6 +82,7 @@
 
 </body>
 </html>
+
 
 
 

@@ -1,4 +1,4 @@
-from core_app.views import AuthenticatedView, GuardianView
+from core_app.views import GuardianView
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
@@ -445,6 +445,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
