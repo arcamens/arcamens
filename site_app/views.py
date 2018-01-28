@@ -19,8 +19,8 @@ import random
 
 class Index(View):
     def get(self, request):
-        return render(request, 'site_app/index.html', {'form': LoginForm(),
-        'signup_form': forms.SignupForm()})
+        return render(request, 'site_app/index.html', 
+        {'form': LoginForm()})
 
 class Home(View):
     def get(self, request):
@@ -291,6 +291,7 @@ class RedefinePassword(View):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 
