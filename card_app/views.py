@@ -105,6 +105,8 @@ class CreateCard(GuardianView):
         card.save()
 
         form = forms.CardForm(instance=card)
+        card.label = 'Draft.'
+        card.save()
         return render(request, 'card_app/create-card.html', 
         {'form':form, 'card': card, 'ancestor':ancestor})
 
@@ -141,6 +143,8 @@ class CreateFork(GuardianView):
         ancestor=card.ancestor, parent=card)
 
         form = forms.ForkForm(instance=fork)
+        fork.label = 'Draft.'
+        fork.save()
         return render(request, 'card_app/create-fork.html', 
         {'form':form, 'card': card, 'fork':fork})
 
@@ -864,6 +868,8 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
+
 
 
 

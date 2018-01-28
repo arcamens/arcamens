@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from board_app.views import GuardianView
+from django.http import HttpResponse
 import board_app.models
 import card_app.models
 import core_app.models
@@ -47,6 +48,8 @@ class CreateNote(GuardianView):
         card.save()
 
         form = forms.NoteForm(instance=card)
+        note.data = 'Draft.'
+        note.save()
         return render(request, 'note_app/create-note.html', 
         {'form':form, 'card': card, 'note':note})
 
@@ -183,7 +186,7 @@ class DeleteNote(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
 
         event = models.EDeleteNote.objects.create(organization=user.default,
-        child=note.card, note=note.title, user=user)
+        child=note.card, note='Note', user=user)
 
         event.users.add(*note.card.ancestor.ancestor.members.all())
         note.delete()
@@ -191,10 +194,14 @@ class DeleteNote(GuardianView):
         ws.client.publish('board%s' % note.card.ancestor.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('card_app:view-data', 
+        return redirect('note_app:list-notes', 
         card_id=note.card.id)
 
+class CancelNoteCreation(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.objects.get(id = note_id)
+        note.delete()
 
-
+        return HttpResponse(status=200)
 
 

@@ -18,35 +18,7 @@ urlpatterns = [
 
     url(r'^attach-file/(?P<note_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
+    url(r'^cancel-note-creation/(?P<note_id>.+)/', views.CancelNoteCreation.as_view(), name='cancel-note-creation'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

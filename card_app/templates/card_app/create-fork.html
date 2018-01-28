@@ -43,20 +43,11 @@ $('#bigModal').one('hidden.bs.modal', function () {
 })
 */
 
-$('#bigModal').one('hidden.bs.modal', function () {
-    $.ajax({
-    url: "{% url 'card_app:cancel-card-creation' fork.id  %}",
-    type: 'GET',
-    contentType: false,
-    processData: false
-
-    });
-
-})
 </script>
 
 
 {% endblock %}
+
 
 
 

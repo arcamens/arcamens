@@ -63,8 +63,7 @@ class Card(CardMixin, models.Model):
     null=True)
 
     label = models.CharField(null=True, blank=False, 
-    default='Draft', verbose_name=_("Label"), 
-    help_text='Label, Priority, Deadline, ...', 
+    verbose_name=_("Label"), help_text='Label, Priority, Deadline, ...', 
     max_length=626)
 
     data = models.TextField(null=True,
@@ -368,6 +367,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 
