@@ -110,7 +110,7 @@ class AttachFile(GuardianView):
 
     def post(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
-        attachments = post.PostFileWrapperForm.all()
+        attachments = post.postfilewrapper_set.all()
         form = forms.PostFileWrapperForm(request.POST, request.FILES)
 
         if not form.is_valid():
@@ -128,7 +128,7 @@ class DetachFile(GuardianView):
     def get(self, request, filewrapper_id):
         filewrapper = models.PostFileWrapper.objects.get(id=filewrapper_id)
         filewrapper.delete()
-        attachments = filewrapper.post.filewrapper_set.all()
+        attachments = filewrapper.post.postfilewrapper_set.all()
 
         form = forms.PostFileWrapperForm()
         return render(request, 'post_app/attach-file.html', 
@@ -533,6 +533,7 @@ class EAssignPost(GuardianView):
         event = models.EAssignPost.objects.get(id=event_id)
         return render(request, 'post_app/e-assign-post.html', 
         {'event':event})
+
 
 
 
