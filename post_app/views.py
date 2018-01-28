@@ -36,6 +36,8 @@ class CreatePost(GuardianView):
         user     = timeline_app.models.User.objects.get(id=self.user_id)
         post = models.Post.objects.create(user=user, ancestor=ancestor)
         form     = forms.PostForm(instance=post)
+        post.label = 'Draft.'
+        post.save()
         return render(request, 'post_app/create-post.html', 
         {'form':form, 'post': post, 'ancestor':ancestor})
 
@@ -536,19 +538,10 @@ class EAssignPost(GuardianView):
 
 
 
+class CancelPostCreation(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id = post_id)
+        post.delete()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return HttpResponse(status=200)
 

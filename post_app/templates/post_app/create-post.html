@@ -27,6 +27,13 @@ $('#div-attachments').load('{% url 'post_app:attach-file' post.id %}');
 
 <div class="modal-footer">
 {% block buttons %}
+<button  type="button" data-form="#form-post-data" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'post_app:cancel-post-creation' post.id %}"
+class="btn btn-default e-get"> 
+     {% trans "Cancel" %}
+</button>
+
 <button id="createPost" type="button" data-form="#form-post-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" data-show="{% url 'post_app:create-post' ancestor.id post.id %}"
@@ -46,6 +53,7 @@ $('#form-post-data').keypress(function(e){
 
 {% endblock %}
 </div>
+
 
 
 
