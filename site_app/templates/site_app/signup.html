@@ -1,7 +1,41 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Arcamens</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/jquery-ui.js"> </script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="/static/input-extensions.js"> </script>
+<script src="/static/e-get.js"> </script>
+<script src="/static/e-post.js"> </script>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/static/icons/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/static/icons/manifest.json">
+<link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/static/icons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Arcamens">
+<meta name="application-name" content="arcamens">
+<meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body>
 <div class="container" >
+  <div class="jumbotron">
+    <h1 >Arcamens <small> (Sign up) </small></h1> 
+
 
 <form id="form-user-data" method="post" action="{% url 'site_app:signup' %}" enctype="multipart/form-data">
 {% csrf_token %}
@@ -21,14 +55,6 @@
 </form>
 
 </div>
+</div>
 
-
-
-
-
-
-
-
-
-
-
+</body>
