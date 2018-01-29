@@ -24,6 +24,8 @@ class RecoverAccountForm(forms.Form):
                 "This user doesn't exist!")
 
 class UserForm(forms.ModelForm):
+    retype = forms.CharField(label='Retype password')
+
     class Meta:
         model   = core_app.models.User
         exclude = ('organizations', 'default', 'service', 'expiration')
@@ -36,6 +38,7 @@ class ServiceForm(forms.Form):
 class RedefinePasswordForm(forms.Form):
     password = forms.CharField()
     retype   = forms.CharField()
+
 
 
 
