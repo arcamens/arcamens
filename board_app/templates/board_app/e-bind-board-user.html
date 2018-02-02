@@ -9,7 +9,7 @@
 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.peer.name}} </a> from board
+{{event.peer.name}} </a> to board
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
@@ -20,6 +20,7 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

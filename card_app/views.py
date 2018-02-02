@@ -76,11 +76,14 @@ class ViewData(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.all()
         forks = card.forks.all()
-        relations = card.relations.all()
         workers = card.workers.all()
         attachments = card.filewrapper_set.all()
         tags = card.tags.all()
         snippets = card.snippets.all()
+        relations = card.relations.all()
+
+        relations = relations.filter(Q(
+        ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
 
         # Maybe it should be retrieved here...
         # but cards dont have path manytomany
@@ -520,7 +523,7 @@ class ManageCardRelations(GuardianView):
         # to have a board field in all the cards, it would help
         # when performing global searches over the boards.
         included = card.relations.all()
-        boards = me.boards.all()
+        boards = me.boards.filter(organization=me.default)
         lists = list_app.models.List.objects.filter(ancestor__in=boards)
         cards = models.Card.objects.filter(Q(ancestor__in=lists))
         excluded = cards.exclude(pk__in=included)
@@ -868,6 +871,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

@@ -361,6 +361,9 @@ class BindBoardUser(GuardianView):
         ws.client.publish('user%s' % user.id, 
             'subscribe board%s' % board.id, 0, False)
 
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
+
         return HttpResponse(status=200)
 
 class UnbindBoardUser(GuardianView):
@@ -382,6 +385,9 @@ class UnbindBoardUser(GuardianView):
 
         ws.client.publish('user%s' % me.id, 
             'unsubscribe board%s' % board.id, 0, False)
+
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -445,6 +451,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

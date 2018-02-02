@@ -54,7 +54,7 @@ user1.enabled = True
 user1.save()
 
 user1.organizations.add(organization1)
-
+user1.organizations.add(organization0)
 
 board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
 board.members.add(user1)
@@ -67,6 +67,7 @@ label= 'This is a card label and it should be used with caution.'
 for ind in range(50):
     Card.objects.create(owner=user1, 
         label=label * randint(0, 10), ancestor=list)
+
 
 
 
