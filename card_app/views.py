@@ -567,7 +567,7 @@ class ManageCardWorkers(GuardianView):
         card = models.Card.objects.get(id=card_id)
 
         included = card.workers.all()
-        excluded = User.objects.exclude(tasks=card)
+        excluded = me.default.users.exclude(tasks=card)
         total = included.count() + excluded.count()
         
         return render(request, 'card_app/manage-card-workers.html', 
