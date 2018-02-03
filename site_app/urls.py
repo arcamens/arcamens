@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^index/', views.Index.as_view(), name='index'),
+    url(r'^logged-out/', views.LoggedOut.as_view(), name='logged-out'),
     url(r'^home/', views.Home.as_view(), name='home'),
     url(r'^help/', views.Help.as_view(), name='help'),
     url(r'^login/', views.Login.as_view(), name='login'),
@@ -16,6 +17,7 @@ urlpatterns = [
     url(r'^redefine-password/(?P<user_id>.+)/(?P<token>.+)/', views.RedefinePassword.as_view(), name='redefine-password'),
 
 ]
+
 
 
 

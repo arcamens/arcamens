@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from core_app.models import User
 from site_app.models import PasswordTicket
-from slock.views import AuthenticatedView
+from slock.views import AuthenticatedView, LogoutView, LoginView
 from slock.forms import LoginForm
 import paybills.views
 from . import forms
@@ -17,12 +17,17 @@ import datetime
 import time
 import random
 
-class Index(View):
+class Index(LoginView):
     def get(self, request):
         return render(request, 'site_app/index.html', 
-        {'form': LoginForm()})
+        {'form':LoginForm()})
 
-class Home(View):
+class LoggedOut(View):
+    def get(self, request):
+        return render(request, 'site_app/logged-out.html', 
+        {})
+
+class Home(LoginView):
     def get(self, request):
         return render(request, 'site_app/home.html')
 
@@ -30,7 +35,7 @@ class Help(View):
     def get(self, request):
         return render(request, 'site_app/help.html')
 
-class Login(View):
+class Login(LoginView):
     """
     """
 
@@ -47,15 +52,11 @@ class Login(View):
 
         return redirect('core_app:index')
 
-class Logout(View):
+class Logout(LogoutView):
     """
     """
 
-    def get(self, request):
-        del request.session['user_id']
-        return redirect('site_app:index')
-
-class SignUp(View):
+class SignUp(LoginView):
     """
     """
 
@@ -226,7 +227,7 @@ class PayPalIPN(paybills.views.PayPalIPN):
         print('User subscription payment!')
 
 
-class RecoverAccount(View):
+class RecoverAccount(LoginView):
     def get(self, request):
         form = forms.RecoverAccountForm()
         return render(request, 'site_app/recover-account.html', 
@@ -258,7 +259,7 @@ class RecoverAccount(View):
         return render(request, 'site_app/recover-mail-sent.html', 
         {'form': form})
 
-class RedefinePassword(View):
+class RedefinePassword(LoginView):
     def get(self, request, user_id, token):
         user = timeline_app.models.User.objects.get(id = user_id)
         form   = forms.RedefinePasswordForm()
@@ -291,6 +292,7 @@ class RedefinePassword(View):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['0.0.0.0']
 
 # When the user is not authenticated it is redirected by slock AuthenticatedView.
 AUTH_ERR = 'core_app/unauthorized.html'
+LOGOUT_VIEW = 'site_app:logged-out'
+LOGGED_VIEW = 'core_app:index'
 
 DEBUG_PAYPAL_IPN_DOMAIN = get_addr(8000)
 PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
