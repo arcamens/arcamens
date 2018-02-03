@@ -5,11 +5,6 @@
 {% block content %}
 {% endblock %}
 
-<a style="color:green" data-show="{% url 'timeline_app:seen-event' event.id %}"
-data-shell="#modalContent" 
-href="#" class="e-get">
-<br>
-<span class="glyphicon glyphicon-ok"></span> Seen</a>
 </p>
 </div>
 
@@ -19,4 +14,5 @@ $(function () {
     $('[data-toggle="popover"]').popover()
 })
 </script>
+
 
