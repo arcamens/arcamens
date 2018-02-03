@@ -648,7 +648,7 @@ class ManageCardTags(GuardianView):
         card = models.Card.objects.get(id=card_id)
 
         included = card.tags.all()
-        excluded = core_app.models.Tag.objects.exclude(cards=card)
+        excluded = me.default.tags.exclude(cards=card)
         total = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-tags.html', 
@@ -871,6 +871,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
