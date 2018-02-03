@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['0.0.0.0']
 
 # When the user is not authenticated it is redirected by slock AuthenticatedView.
-AUTH_ERR_VIEW = 'site_app:index'
+AUTH_ERR = 'core_app/unauthorized.html'
 
 DEBUG_PAYPAL_IPN_DOMAIN = get_addr(8000)
 PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
@@ -172,6 +172,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

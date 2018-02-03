@@ -20,7 +20,7 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', RedirectView.as_view(pattern_name='core_app:index')),
+    url(r'^$', RedirectView.as_view(pattern_name='site_app:index')),
      url(r'^core_app/', include('core_app.urls', namespace='core_app')), 
      url(r'^timeline_app/', include('timeline_app.urls', namespace='timeline_app')), 
      url(r'^board_app/', include('board_app.urls', namespace='board_app')), 
@@ -40,6 +40,7 @@ urlpatterns = [
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 
