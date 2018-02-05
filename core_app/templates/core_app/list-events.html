@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load listutils %}
+{% load jscrolls %}
 {% load bootstrap3 %}
 
 <div class="modal-header">
@@ -16,35 +16,9 @@
 
 </div>
 
-<script>
-var count = 0;
-
-function autoScroll() {
-    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight * 60/100.0) {
-        count = count + 1;
-    
-        $('#listEvents').off('scroll');
-    
-        $.get({ 
-            url: "{% url 'core_app:event-paginator' %}",
-            data: {
-                page : count
-            },
-
-        },
-
-
-        function(data) {
-            $('#listEvents').on('scroll', autoScroll);
-            $('#listEvents').append(data);
-        });
-    }
-}
-
-$('#listEvents').on('scroll', autoScroll);
-</script>
-
+{{ 'listEvents' | paginator:'core_app:event-paginator' | safe}}
 </div>
+
 
 </div>
 
@@ -53,6 +27,7 @@ $('#listEvents').on('scroll', autoScroll);
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

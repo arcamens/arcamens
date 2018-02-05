@@ -539,10 +539,13 @@ ps aux | grep mana
 # install django-slock
 
 cd ~/projects/django-slock-code
+python setup.py install
+rm -fr build
 
 ##############################################################################
 
-
-
-
+# install django-scrolls
+cd ~/projects/django-scrolls-code
+python setup.py install
+rm -fr build
 

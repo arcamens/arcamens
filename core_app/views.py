@@ -243,7 +243,6 @@ class ListEvents(GuardianView):
         user   = models.User.objects.get(id=self.user_id)
         events = user.default.events.all().order_by('-created')
         count = events.count()
-
         return render(request, 'core_app/list-events.html', 
         {'events': events[:10], 'user': user, 
          'organization': user.default, 'count': count})
@@ -573,6 +572,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
