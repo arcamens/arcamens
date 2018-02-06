@@ -422,7 +422,7 @@ class ManagePostTags(GuardianView):
         post = models.Post.objects.get(id=post_id)
 
         included = post.tags.all()
-        excluded = core_app.models.Tag.objects.exclude(posts=post)
+        excluded = me.default.tags.exclude(posts=post)
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
@@ -434,7 +434,7 @@ class ManagePostTags(GuardianView):
         me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         included = post.tags.all()
-        excluded = core_app.models.Tag.objects.exclude(posts=post)
+        excluded = me.default.tags.exclude(posts=post)
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-tags.html', 
