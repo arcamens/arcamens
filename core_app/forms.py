@@ -32,7 +32,8 @@ class UserForm(site_app.forms.UserForm):
     class Meta:
         model   = models.User
         fields = ('name', 'avatar', 
-        'email', 'password', 'description')
+        'email', 'password', 'description', 
+        'recover_email')
 
 class GlobalFilterForm(forms.ModelForm):
     class Meta:
@@ -52,4 +53,5 @@ class UpdateOrganizationForm(forms.ModelForm):
 class EventFilterForm(forms.Form):
     start = forms.DateField(initial=datetime.date.today)
     end = forms.DateField(initial=datetime.date.today)
+
 

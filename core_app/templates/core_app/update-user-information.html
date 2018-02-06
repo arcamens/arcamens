@@ -17,10 +17,12 @@
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.email  size='md' %}
+{% bootstrap_field form.recover_email  size='md' %}
 
 {% bootstrap_field form.avatar  size='md' %}
 {% bootstrap_field form.description  size='md' %}
 {% bootstrap_field form.password  size='md' %}
+{% bootstrap_field form.retype  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -38,6 +40,7 @@ class="btn btn-default e-post">
 </button>
 
 </div>
+
 
 
 

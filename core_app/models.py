@@ -100,7 +100,7 @@ class User(UserMixin, BasicUser):
 
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)
-    expiration = models.DateField(null=True, blank=False)
+    expiration = models.DateField(null=True)
 
     card_clipboard = models.ManyToManyField(
     'card_app.Card', related_name='card_clipboard_users', 
@@ -219,6 +219,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 
