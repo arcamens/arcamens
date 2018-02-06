@@ -5,3 +5,4 @@ markdown
 requests
 paho-mqtt
 django-blowdb
+git+ssh://git@bitbucket.org/arcamens/django-scrolls.git
