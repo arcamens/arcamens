@@ -229,7 +229,7 @@ class ManagePostWorkers(GuardianView):
         post = models.Post.objects.get(id=post_id)
 
         included = post.workers.all()
-        excluded = User.objects.exclude(assignments=post)
+        excluded = me.default.users.exclude(assignments=post)
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
@@ -241,7 +241,7 @@ class ManagePostWorkers(GuardianView):
         me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         included = post.workers.all()
-        excluded = User.objects.exclude(assignments=post)
+        excluded = me.default.users.exclude(assignments=post)
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-workers.html', 
@@ -544,4 +544,5 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
