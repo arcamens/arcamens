@@ -16,7 +16,7 @@ class PostComment(models.Model):
     data = models.CharField(null=True,
     blank=False, max_length=256)
 
-    file = models.FileField(upload_to='media/', 
+    file = models.FileField(
     null=True, blank=True, verbose_name='Document')
 
     created = models.DateTimeField(

@@ -22,7 +22,7 @@ at {{card.created}}  </div> </div>
 
 <span style="font-size:80%">
 {% for ind in attachments %}
-<a href="{% static ind.file %}" target="_blank"> 
+<a href="{{ ind.file.url }}" target="_blank">
 <span class="glyphicon glyphicon-file"></span>
 {{ind.file.name}} </a>
 
