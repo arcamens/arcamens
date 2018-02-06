@@ -107,7 +107,7 @@ class ImageWrapper(models.Model):
     card = models.ForeignKey('Card', null=True, 
     on_delete=models.CASCADE, blank=True)
 
-    file = models.ImageField(upload_to='media/', 
+    file = models.ImageField(
     verbose_name='', help_text='')
 
 class FileWrapper(FileWrapperMixin, models.Model):
@@ -117,7 +117,7 @@ class FileWrapper(FileWrapperMixin, models.Model):
     card = models.ForeignKey('Card', null=True, 
     on_delete=models.CASCADE, blank=True)
 
-    file = models.FileField(upload_to='media/', 
+    file = models.FileField(
     verbose_name='', help_text='')
 
 class ERelateCard(Event):

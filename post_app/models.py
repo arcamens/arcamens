@@ -156,7 +156,7 @@ class PostFileWrapper(PostFileWrapperMixin, models.Model):
     post = models.ForeignKey('Post', 
     null=True, on_delete=models.CASCADE, blank=True)
 
-    file = models.FileField(upload_to='media/', 
+    file = models.FileField(
     verbose_name='', help_text='')
 
 class ECreatePost(ECreatePostMixin, Event):
