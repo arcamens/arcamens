@@ -581,7 +581,7 @@ class ManageCardWorkers(GuardianView):
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
         included = card.workers.all()
-        excluded = User.objects.exclude(tasks=card)
+        excluded = me.default.users.exclude(tasks=card)
         total = included.count() + excluded.count()
 
         if not form.is_valid():
@@ -871,6 +871,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
