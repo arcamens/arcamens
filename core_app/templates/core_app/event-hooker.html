@@ -11,13 +11,6 @@ var wsport = {{settings.WS_PORT}}; // port for above
 var client = new Paho.MQTT.Client(wsbroker, wsport, "/ws",
         "myclientid_" + parseInt(Math.random() * 100, 10));
 
-// set callback handlers
-client.onConnectionLost = onConnectionLost;
-client.onMessageArrived = onMessageArrived;
-
-// connect the client
-client.connect({onSuccess:onConnect, 'useSSL': {{settings.WS_USE_SSL}}, mqttVersion: 3.0});
-
 function onConnect() {
      var queues = {{queues|safe}};
 
@@ -45,7 +38,7 @@ function onConnectionLost(responseObject) {
     if (responseObject.errorCode !== 0) {
         console.log("onConnectionLost:"+responseObject.errorMessage);
     }
-    client.connect({onSuccess:onConnect, 'useSSL': {{settings.WS_USE_SSL}}, mqttVersion: 3.0});
+    start();
 
 }
 
@@ -73,6 +66,20 @@ function onMessageArrived(message) {
     }
 
 }
+
+// set callback handlers
+// connect the client
+
+function start() {
+    client.onConnectionLost = onConnectionLost;
+    client.onMessageArrived = onMessageArrived;
+    client.keepAliveInterval = 60 * 60;
+    client.connect({onSuccess:onConnect, 
+    'useSSL': {{settings.WS_USE_SSL}}, mqttVersion: 3.0});
+
+}
+
+start()
 </script>
 
 
