@@ -47,7 +47,7 @@ class CreateNote(GuardianView):
         card=card)
         card.save()
 
-        form = forms.NoteForm(instance=card)
+        form = forms.NoteForm(instance=note)
         note.data = 'Draft.'
         note.save()
         return render(request, 'note_app/create-note.html', 
@@ -203,5 +203,6 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
