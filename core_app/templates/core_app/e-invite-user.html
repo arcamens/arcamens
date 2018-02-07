@@ -2,14 +2,17 @@
 {% load i18n %}
 
 {% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} has invited {{event.peer.email}} to join
+{{event.user}} </a>
+has invited {{event.peer.email}} to join
 
 {{event.organization.name}}  
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
