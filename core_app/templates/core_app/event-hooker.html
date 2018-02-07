@@ -45,6 +45,8 @@ function onConnectionLost(responseObject) {
     if (responseObject.errorCode !== 0) {
         console.log("onConnectionLost:"+responseObject.errorMessage);
     }
+    client.connect({onSuccess:onConnect, 'useSSL': {{settings.WS_USE_SSL}}, mqttVersion: 3.0});
+
 }
 
 
@@ -72,6 +74,7 @@ function onMessageArrived(message) {
 
 }
 </script>
+
 
 
 
