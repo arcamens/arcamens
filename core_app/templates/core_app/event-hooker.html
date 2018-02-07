@@ -73,9 +73,12 @@ function onMessageArrived(message) {
 function start() {
     client.onConnectionLost = onConnectionLost;
     client.onMessageArrived = onMessageArrived;
-    client.keepAliveInterval = 60 * 60;
-    client.connect({onSuccess:onConnect, 
-    'useSSL': {{settings.WS_USE_SSL}}, mqttVersion: 3.0});
+    var options = {onSuccess:onConnect, 
+    keepAliveInterval: 60 * 60,
+    timeout: 15000,
+    'useSSL': {{settings.WS_USE_SSL}}, 
+    mqttVersion: 3.0};
+    client.connect(options);
 
 }
 
