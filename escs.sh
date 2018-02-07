@@ -111,7 +111,7 @@ git checkout beta
 # run arcamens project.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
-##############################################################################
+#####k#########################################################################
 # clone, arcamens, wiki.
 
 cd ~/projects

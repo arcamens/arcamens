@@ -48,10 +48,11 @@ class TagForm(forms.ModelForm):
 class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
-        fields = ('owner', 'name')
+        fields = ( 'name', )
 
 class EventFilterForm(forms.Form):
     start = forms.DateField(initial=datetime.date.today)
     end = forms.DateField(initial=datetime.date.today)
+
 
 
