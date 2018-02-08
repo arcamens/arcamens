@@ -4,7 +4,7 @@
 
 
 {% block buttons %}
-<button  type="button" 
+<button  type="button" id="updateCard"
 data-form="#form-card-data" 
 data-shell="#main-view" 
 data-callback="$('#bigModal').modal('toggle');" 
@@ -13,7 +13,18 @@ data-show="{% url 'card_app:update-card' card.id %}"
 class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>
+
+<script>
+$('#id_label').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#updateCard').click();
+        return false;
+    }
+});
+</script>
+
 {% endblock %}
+
 
 
 
