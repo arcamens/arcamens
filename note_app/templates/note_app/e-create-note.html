@@ -5,13 +5,7 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has created note 
-
-<span class="glyphicon glyphicon-book"></span>
-
-{{event.note.title | truncatechars:30}}
-
-on
+{{event.user}} </a> has created a <span class="glyphicon glyphicon-book"></span> Note on
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
@@ -24,6 +18,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

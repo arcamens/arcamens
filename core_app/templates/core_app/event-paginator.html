@@ -20,10 +20,29 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.edeletesnippet.get_absolute_url}}");
 });
 </script>
+{% elif ind.eupdatenote %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.eupdatenote.get_absolute_url}}");
+});
+</script>
+{% elif ind.edeletenote %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.ejoinorganization %}
 <script>
 $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ejoinorganization.get_absolute_url}}");
+});
+</script>
+{% elif ind.ecreatenote %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.ecreatenote.get_absolute_url}}");
 });
 </script>
 
@@ -295,6 +314,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

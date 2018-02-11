@@ -27,6 +27,23 @@ class Post(GuardianView):
         {'post':post, 'attachments': attachments, 
         'tags': post.tags.all(), 'workers': workers})
 
+class PostLink(GuardianView):
+    """
+    """
+
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("This post is on clipboard!\
+                It can't be accessed now.", status=400)
+
+        attachments = post.postfilewrapper_set.all()
+        workers = post.workers.all()
+        return render(request, 'post_app/post.html', 
+        {'post':post, 'attachments': attachments, 
+        'tags': post.tags.all(), 'workers': workers})
+
 class CreatePost(GuardianView):
     """
     """
@@ -544,5 +561,6 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
 

@@ -5,10 +5,7 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has updated note 
-
-<span class="glyphicon glyphicon-book"></span>
-{{event.note.title | truncatechars:30}}
+{{event.user}} </a> has updated a <span class="glyphicon glyphicon-book"></span> Note 
 
 on
 
@@ -23,6 +20,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

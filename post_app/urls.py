@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     url(r'^post/(?P<post_id>.+)/', views.Post.as_view(), name='post'),
+    url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
+
     url(r'^done/(?P<post_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<post_id>.+)/', views.Undo.as_view(), name='undo'),
 
@@ -42,5 +44,6 @@ urlpatterns = [
     url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
 
 ]
+
 
 
