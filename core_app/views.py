@@ -581,3 +581,4 @@ class ListClipboard(GuardianView):
 
 
 
+

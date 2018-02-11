@@ -549,3 +549,4 @@ cd ~/projects/django-scrolls-code
 python setup.py install
 rm -fr build
 
+

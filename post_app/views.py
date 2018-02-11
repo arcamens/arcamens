@@ -9,6 +9,8 @@ from . import forms
 from . import models
 from core_app import ws
 from core_app.models import User
+from django.conf import settings
+import json
 
 class Post(GuardianView):
     """
@@ -40,9 +42,22 @@ class PostLink(GuardianView):
 
         attachments = post.postfilewrapper_set.all()
         workers = post.workers.all()
-        return render(request, 'post_app/post.html', 
+
+        user = User.objects.get(id=self.user_id)
+        organizations = user.organizations.exclude(id=user.default.id)
+
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
+
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
+
+        return render(request, 'post_app/post-link.html', 
         {'post':post, 'attachments': attachments, 
-        'tags': post.tags.all(), 'workers': workers})
+        'tags': post.tags.all(), 'workers': workers,
+        'user': user, 'default': user.default, 'organization': user.default,
+        'organizations': organizations, 'queues': json.dumps(queues),
+         'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -561,6 +576,7 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
 
 
