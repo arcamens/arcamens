@@ -14,7 +14,7 @@ data-shell="#main-view" >
 <span class="glyphicon glyphicon-list-alt"></span>
 {{card.ancestor.name}} </a>
 
-at {{card.created}}  </div> </div>
+at <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  </div> </div>
 
 <div class="panel-body">
 <h4> {{card.label}}.. </h4>
@@ -35,6 +35,7 @@ No attachments...
 
 
 </div>
+
 
 
 

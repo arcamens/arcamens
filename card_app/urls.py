@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^undo/(?P<card_id>.+)/', views.Undo.as_view(), name='undo'),
     url(r'^card-worker-information/(?P<peer_id>.+)/(?P<card_id>.+)/', views.CardWorkerInformation.as_view(), name='card-worker-information'),
     url(r'^card-tag-information/(?P<tag_id>.+)/(?P<card_id>.+)/', views.CardTagInformation.as_view(), name='card-tag-information'),
+    url(r'^card-link/(?P<card_id>.+)/', views.CardLink.as_view(), name='card-link'),
 
     url(r'^preview-card/(?P<card_id>.+)/', views.PreviewCard.as_view(), name='preview-card'),
 
@@ -53,6 +54,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

@@ -1,0 +1,18 @@
+{% extends 'core_app/index.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block initializer %}
+<script>
+$(document).ready(function() {
+    $('#main-view').load("{% url 'card_app:view-data' card.id %}");
+});
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+{% endblock %}
+
+

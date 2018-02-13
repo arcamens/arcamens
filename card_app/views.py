@@ -14,6 +14,8 @@ from . import forms
 import operator
 import core_app.models
 from core_app import ws
+from django.conf import settings
+import json
 
 # Create your views here.
 
@@ -27,6 +29,47 @@ class Card(GuardianView):
 
         return render(request, 'card_app/card.html', {'card': card,
         'is_worker': is_worker, 'has_workers': has_workers})
+
+class CardLink(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        on_clipboard = not (card.ancestor and card.ancestor.ancestor)
+
+        if on_clipboard:
+            return HttpResponse("This card is on clipboard! \
+               It can't be accessed.", status=400)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+        pins = user.pin_set.all()
+        forks = card.forks.all()
+        workers = card.workers.all()
+        attachments = card.filewrapper_set.all()
+        tags = card.tags.all()
+        snippets = card.snippets.all()
+        relations = card.relations.all()
+
+        relations = relations.filter(Q(
+        ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
+
+
+        organizations = user.organizations.exclude(id=user.default.id)
+
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
+
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
+
+        return render(request, 'card_app/card-link.html', 
+        {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
+        'attachments': attachments, 'user': user, 'workers': workers, 
+        'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
+        'user': user, 'default': user.default, 'organization': user.default,
+        'organizations': organizations, 'queues': json.dumps(queues),
+         'settings': settings})
 
 class ListCards(GuardianView):
     """
@@ -871,6 +914,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
