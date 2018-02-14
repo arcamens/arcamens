@@ -154,7 +154,9 @@ class ManageBoardUsers(GuardianView):
         me = core_app.models.User.objects.get(id=self.user_id)
         board = models.Board.objects.get(id=board_id)
         included = board.members.all()
-        excluded = core_app.models.User.objects.exclude(boards=board)
+
+        users = me.default.users.all()
+        excluded = users.exclude(boards=board)
 
         if not form.is_valid():
             return render(request, 'board_app/manage-board-users.html', 
@@ -383,7 +385,7 @@ class UnbindBoardUser(GuardianView):
         ws.client.publish('board%s' % board.id, 
             'sound', 0, False)
 
-        ws.client.publish('user%s' % me.id, 
+        ws.client.publish('user%s' % user.id, 
             'unsubscribe board%s' % board.id, 0, False)
 
         ws.client.publish('user%s' % user.id, 
@@ -451,6 +453,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
