@@ -1,0 +1,25 @@
+{% extends 'post_app/manage-post-workers-list-user-choices.html' %}
+
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+{% block action_included %}
+<a class="e-get" style="color:red"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Remove</a>  
+
+{% endblock %}
+
+{% block action_excluded %}
+<a class="e-get"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> Bind </a> 
+
+{% endblock %}
+
+
+
+
