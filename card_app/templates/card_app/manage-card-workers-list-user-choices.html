@@ -1,0 +1,24 @@
+{% extends 'post_app/manage-post-workers-list-user-choices.html' %}
+
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+{% block action_included %}
+<a class="e-get" style="color:red"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Unbind</a>  
+
+{% endblock %}
+
+{% block action_excluded %}
+<a class="e-get"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> bind </a> 
+
+{% endblock %}
+
+
+

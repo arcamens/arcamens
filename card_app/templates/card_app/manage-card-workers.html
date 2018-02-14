@@ -14,7 +14,16 @@ Available {{card.label|truncatechars:20}} Workers
 
 <div class="modal-body">
 
-{% include 'card_app/manage-card-workers-list-options.html' %}
+{% include 'card_app/manage-card-workers-list-user-choices.html' %}
+
+<br>
+
+<form id="bind-card-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
 </div>
 
 <div class="modal-footer">
@@ -34,6 +43,7 @@ $('#modal').one('hidden.bs.modal', function () {
 </button>
 
 </div>
+
 
 
 

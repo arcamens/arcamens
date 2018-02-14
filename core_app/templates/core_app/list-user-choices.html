@@ -1,0 +1,50 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<table class="table table-condensed table-bordered">
+<div class="pre-scrollable" >
+
+<tbody>
+{% for ind in users %}
+<tr style="font-size:80%">
+<td style="width:70px;height:80">
+     <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
+</td>
+</td>
+<td>
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
+
+<p><a href="#"> {{ind.email}} </a> </p>
+
+<a href="#" data-show="{% url 'timeline_app:manage-user-timelines' ind.id %}"
+data-shell="#modalContent" 
+data-toggle="modal" 
+class="e-get">
+<span class="glyphicon glyphicon-eye-open"></span> Timelines  </a>
+
+<a href="#" data-show="{% url 'board_app:manage-user-boards' ind.id %}"
+data-shell="#modalContent" 
+data-toggle="modal" 
+class="e-get">
+<span class="glyphicon glyphicon-th"></span>  Boards  </a>
+
+<a href="#" data-show="{% url 'core_app:manage-user-tags' ind.id %}"
+data-shell="#modalContent" 
+data-toggle="modal" 
+class="e-get">
+<span class="glyphicon glyphicon-tags"></span>  Tags  </a>
+
+</td>
+
+
+</tr>
+
+{% empty %}
+<p> ... </p>
+{% endfor %}
+
+</div>
+</tbody>
+</table>
+

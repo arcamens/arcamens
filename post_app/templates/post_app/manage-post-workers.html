@@ -12,45 +12,7 @@ Available {{post.label}} post's workers </h5>
 
 <div class="modal-body">
 
-<div class="pre-scrollable">
-<table class="table table-condensed table-bordered">
-
-{% for ind in included %}
-<tr id="unassign-post-user-{{ind.id}}" style="font-size:80%">
-<td style="width:70px;height:80">
-     <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
-</td>
-
-<td> 
-<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
-
-<p><a href="#"> {{ind.email}} </a> </p>
-<a class="e-get" style="color:red"
-data-callback="$('#unassign-post-user-{{ind.id}}').remove();"
-data-show="{% url 'post_app:unassign-post-user' post.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-remove"></span> Remove</a>  </td>
-</tr>
-{% endfor %}
-
-{% for ind in excluded %}
-<tr id="assign-post-user-{{ind.id}}" style="font-size:80%">
-<td style="width:70px;height:80">
-     <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
-</td>
-<td> 
-<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
-
-<p><a href="#"> {{ind.email}} </a> </p>
-
-<a class="e-get"
-data-callback="$('#assign-post-user-{{ind.id}}').remove();"
-data-show="{% url 'post_app:assign-post-user' post.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> Assign </a> 
-</td>
-{% endfor %}
-
-</table>
-</div>
+{% include 'post_app/manage-post-workers-list-user-choices.html' %}
 
 <br> 
 
@@ -78,6 +40,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 
