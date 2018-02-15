@@ -25,7 +25,7 @@ class ListBoards(GuardianView):
 
         total = user.boards.filter(
         organization__id=user.default.id)
-        pins = user.pin_set.all()
+        pins = user.pin_set.filter(organization=user.default)
 
         filter, _ = models.BoardFilter.objects.get_or_create(
         user=user, organization=user.default)
@@ -89,7 +89,8 @@ class PinBoard(GuardianView):
     def get(self, request, board_id):
         user  = core_app.models.User.objects.get(id=self.user_id)
         board = models.Board.objects.get(id=board_id)
-        pin   = board_app.models.Pin.objects.create(user=user, board=board)
+        pin   = board_app.models.Pin.objects.create(user=user, 
+        organization=user.default, board=board)
         return redirect('board_app:list-pins')
 
 class ManageUserBoards(GuardianView):
@@ -317,7 +318,7 @@ class SwitchOrganization(GuardianView):
 class ListPins(GuardianView):
     def get(self, request):
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        pins = user.pin_set.filter(organization=user.default)
         return render(request, 'board_app/list-pins.html', 
         {'user': user, 'pins': pins})
 
@@ -453,6 +454,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

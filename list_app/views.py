@@ -21,7 +21,7 @@ class ListLists(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
         board = board_app.models.Board.objects.get(id=board_id)
         total = board.lists.all()
-        pins  = user.pin_set.all()
+        pins  = user.pin_set.filter(organization=user.default)
 
         filter, _ = models.ListFilter.objects.get_or_create(
         user=user, organization=user.default, board=board)
@@ -101,7 +101,8 @@ class PinList(GuardianView):
     def get(self, request, list_id):
         user = core_app.models.User.objects.get(id=self.user_id)
         list = models.List.objects.get(id=list_id)
-        pin  = board_app.models.Pin.objects.create(user=user, list=list)
+        pin  = board_app.models.Pin.objects.create(user=user, 
+        organization=user.default, list=list)
         return redirect('board_app:list-pins')
 
 class UpdateList(GuardianView):
@@ -269,5 +270,6 @@ class ECutList(GuardianView):
         event = models.ECutList.objects.get(id=event_id)
         return render(request, 'list_app/e-cut-list.html', 
         {'event':event})
+
 
 

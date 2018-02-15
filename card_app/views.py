@@ -83,7 +83,7 @@ class ListCards(GuardianView):
                 It can't be accessed now.", status=400)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        pins = user.pin_set.filter(organization=user.default)
 
         filter, _ = models.CardFilter.objects.get_or_create(
         user=user, organization=user.default, list=list)
@@ -117,7 +117,7 @@ class ViewData(GuardianView):
                It can't be accessed.", status=400)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        pins = user.pin_set.filter(organization=user.default)
         forks = card.forks.all()
         workers = card.workers.all()
         attachments = card.filewrapper_set.all()
@@ -506,7 +506,8 @@ class PinCard(GuardianView):
     def get(self, request, card_id):
         user = core_app.models.User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
-        pin  = board_app.models.Pin.objects.create(user=user, card=card)
+        pin  = board_app.models.Pin.objects.create(user=user, 
+        organization=user.default, card=card)
         return redirect('board_app:list-pins')
 
 class UnrelateCard(GuardianView):
@@ -914,6 +915,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

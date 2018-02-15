@@ -99,6 +99,9 @@ class Pin(PinMixin, models.Model):
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
 
+    organization = models.ForeignKey('core_app.Organization', blank=True,
+    null=True)
+
     # I should use concrete inheritance here.
     board = models.ForeignKey('board_app.Board', 
     unique=True, null=True, blank=True)
@@ -108,7 +111,6 @@ class Pin(PinMixin, models.Model):
 
     card = models.ForeignKey('card_app.Card', 
     unique=True, null=True, blank=True)
-
 
 class OrganizationUserFilter(models.Model):
     pattern      = models.CharField(max_length=255, blank=True, null=True)
@@ -163,6 +165,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 
