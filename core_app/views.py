@@ -189,8 +189,9 @@ class ManageUserTags(GuardianView):
         me = models.User.objects.get(id=self.user_id)
         user = models.User.objects.get(id=user_id)
 
-        included = user.tags.all()
-        excluded = models.Tag.objects.exclude(users=user)
+        included = user.tags.filter(organization=me.default)
+        excluded = me.default.tags.all()
+        excluded = excluded.exclude(users=user)
 
         return render(request, 'core_app/manage-user-tags.html', 
         {'included': included, 'excluded': excluded, 'user': user,
@@ -201,8 +202,10 @@ class ManageUserTags(GuardianView):
 
         me = models.User.objects.get(id=self.user_id)
         user = models.User.objects.get(id=user_id)
-        included = user.tags.all()
-        excluded = models.Tag.objects.exclude(users=user)
+
+        included = me.tags.filter(organization=me.default)
+        excluded = me.default.tags.all()
+        excluded = excluded.exclude(users=user)
 
         if not form.is_valid():
             return render(request, 'core_app/manage-user-tags.html', 
@@ -315,6 +318,9 @@ class UnbindUserTag(GuardianView):
         users = me.default.users.all()
         event.users.add(*users)
 
+        ws.client.publish('organization%s' % me.default.id, 
+            'sound', 0, False)
+
         return HttpResponse(status=200)
 
 class EBindUserTag(GuardianView):
@@ -341,6 +347,9 @@ class BindUserTag(GuardianView):
         organization=me.default, user=me, peer=user, tag=tag)
         users = me.default.users.all()
         event.users.add(*users)
+
+        ws.client.publish('organization%s' % me.default.id, 
+            'sound', 0, False)
 
         return HttpResponse(status=200)
 
@@ -574,6 +583,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
