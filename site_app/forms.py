@@ -30,6 +30,15 @@ class UserForm(forms.ModelForm):
         model   = core_app.models.User
         exclude = ('organizations', 'default', 'service', 'expiration')
 
+    def clean(self):
+        super(UserForm, self).clean()
+        retype   = self.cleaned_data.get('retype')
+        password = self.cleaned_data.get('password')
+
+        if retype != password:
+            raise forms.ValidationError(
+                'Passwords dont match!')
+
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
     # paid = forms.BooleanField(required=False)
@@ -38,6 +47,7 @@ class ServiceForm(forms.Form):
 class RedefinePasswordForm(forms.Form):
     password = forms.CharField()
     retype   = forms.CharField()
+
 
 
 

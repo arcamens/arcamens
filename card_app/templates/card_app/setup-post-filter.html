@@ -1,0 +1,54 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="setup-post-filter-form" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>{{timeline.name}}'s Filter</h4>
+</div>
+
+<div class="modal-body">
+{% csrf_token %}
+
+{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.done  size='md' %}
+{% bootstrap_field form.status  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</div>
+</form>
+
+<div class="modal-footer">
+<button  type="button" data-form="#setup-post-filter-form" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'post_app:setup-post-filter' timeline.id  %}"
+class="btn btn-default e-post"> {% trans "Setup" %} </button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

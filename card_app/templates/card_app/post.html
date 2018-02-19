@@ -1,0 +1,172 @@
+{% load i18n %}
+{% load static %}
+
+<div id="post-{{post.id}}">
+
+<div class="panel panel-default" >
+<div class="panel-heading clearfix" > 
+
+<div style="word-wrap: break-word;"> 
+<span class="glyphicon glyphicon-file"></span>
+
+
+By  {{post.user}} 
+on
+
+<a class="e-get" href="#"
+data-show="{% url 'timeline_app:list-posts' post.ancestor.id %}"
+data-shell="#main-view" > 
+<span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
+
+at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
+
+{% if post.done %}
+(Done)
+
+{% endif %}
+
+</div>
+</div>
+
+<div class="panel-body" >
+<div style="word-wrap: break-word;"> 
+<h4> {{post.label}} </h4>
+{{post.html | safe}} 
+
+<hr>
+
+<div class="row">
+<div class="col-md-3">
+<h4> Attachments </h4>
+<div class="pre-scrollable" style="font-size:80%">
+
+{% for ind in attachments %}
+<a href="{{ ind.file.url }}" target="_blank">
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} </a>
+{% empty %}
+No attachment.
+{% endfor %}
+</div>
+</div>
+
+<div class="col-md-3">
+<h4> Tags </h4>
+<div class="pre-scrollable" style="font-size:80%">
+
+{% for ind in tags %}
+<a 
+data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-tag"></span>
+
+{{ind.name}}
+</a>
+
+{% empty %}
+No tags.
+{% endfor %}
+</div>
+</div>
+
+<div class="col-md-3">
+<h4> Workers </h4>
+
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in workers %}
+<a 
+data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-user"></span>
+
+{{ind.name}}
+</a>
+<br>
+{% empty %}
+No workers.
+{% endfor %}
+</div>
+
+</div>
+
+</div> 
+
+</div>
+</div>
+
+
+
+<div class="panel-footer">
+{% block footer %}
+
+<div class="btn-group btn-group-xs">
+<button type="button"  data-show="{% url 'post_app:update-post' post.id %}"
+data-shell="#bigModalContent" 
+data-callback="$('#bigModal').modal('show');" 
+class="btn btn-warning btn-xs e-get">
+<span class="glyphicon glyphicon-edit"></span> Update</button>
+
+<button type="button"  
+data-callback="$('#modal').modal('show');" 
+data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
+class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </span> Assign </button>
+
+<button type="button" 
+data-callback="$('#bigModal').modal('show');" 
+data-shell="#bigModalContent" data-show="{% url 'post_comment_app:list-comments' post.id %}"
+class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></span> Comment </button>
+
+<button type="button" class="btn btn-danger btn-xs e-get" 
+data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
+<span class="glyphicon glyphicon-remove"></span> Delete  </button>
+
+{% if post.done %}
+<button type="button"  data-shell="#post-{{post.id}}" data-show="{% url 'post_app:undo' post.id %}"
+class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Undo </button>
+
+{% else %}
+
+<button type="button"  data-shell="#post-{{post.id}}" data-show="{% url 'post_app:done' post.id %}"
+class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Done </button>
+{% endif %}
+
+<button type="button" class="btn btn-default btn-xs e-get" 
+data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
+<span class="glyphicon glyphicon-copy"></span> Copy </button>
+
+<button type="button" class="btn btn-warning btn-xs e-get" 
+data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
+<span class="glyphicon glyphicon-scissors"></span> Cut </button>
+
+<button type="button" 
+data-callback="$('#modal').modal('show');" 
+data-shell="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
+class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span> Tags </button>
+
+</div>
+</div>
+
+{% endblock %}
+</div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
