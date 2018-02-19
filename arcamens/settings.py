@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'core_app',
     'timeline_app',
     'post_app',
-    'post_comment_app',
+    'comment_app',
     'paybills',
     'board_app',
     'site_app', 
@@ -175,6 +175,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

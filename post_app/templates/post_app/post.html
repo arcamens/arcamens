@@ -119,7 +119,7 @@ class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </s
 
 <button type="button" 
 data-callback="$('#bigModal').modal('show');" 
-data-shell="#bigModalContent" data-show="{% url 'post_comment_app:list-comments' post.id %}"
+data-shell="#bigModalContent" data-show="{% url 'comment_app:list-comments' post.id %}"
 class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></span> Comment </button>
 
 <button type="button" class="btn btn-danger btn-xs e-get" 
@@ -157,6 +157,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
 
 
 

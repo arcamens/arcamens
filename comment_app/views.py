@@ -14,7 +14,7 @@ class ListPostComments(GuardianView):
     def get(self, request, post_id):
         post    = post_app.models.Post.objects.get(id=post_id)
         records = post.postcomment_set.order_by('-created')
-        return render(request, 'post_comment_app/list-comments.html', 
+        return render(request, 'comment_app/list-comments.html', 
         {'form':forms.PostCommentForm(), 'post': post, 'records': records})
 
 class CreatePostComment(GuardianView):
@@ -25,7 +25,7 @@ class CreatePostComment(GuardianView):
         form = forms.PostCommentForm(request.POST, request.FILES)
 
         if not form.is_valid():
-            return render(request, 'post_comment_app/list-comments.html',
+            return render(request, 'comment_app/list-comments.html',
                 {'form': form, 'post':post, 'records': records}, status=400)
         record      = form.save(commit = False)
         record.post = post
@@ -41,7 +41,7 @@ class CreatePostComment(GuardianView):
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('post_comment_app:list-comments', 
+        return redirect('comment_app:list-comments', 
 
         post_id=post.id)
 
@@ -51,8 +51,9 @@ class ECreatePostComment(GuardianView):
 
     def get(self, request, event_id):
         event = models.ECreatePostComment.objects.get(id=event_id)
-        return render(request, 'post_comment_app/e-create-comment.html', 
+        return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

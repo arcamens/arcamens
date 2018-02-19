@@ -28,7 +28,8 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model   = core_app.models.User
-        exclude = ('organizations', 'default', 'service', 'expiration')
+        exclude = ('organizations', 'default', 
+        'service', 'expiration')
 
     def clean(self):
         super(UserForm, self).clean()

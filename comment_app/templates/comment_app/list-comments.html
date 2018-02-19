@@ -56,7 +56,7 @@ On {{ind.created}}</em>
 data-form="#form-post-comment-data" 
 data-shell="#bigModalContent" 
 data-shell-error="#bigModalContent" 
-data-show="{% url 'post_comment_app:create-comment' post.id %}"
+data-show="{% url 'comment_app:create-comment' post.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
 {% endblock %}
 
@@ -73,6 +73,7 @@ $('#id_data').focus();
 
 
 </div>
+
 
 
 

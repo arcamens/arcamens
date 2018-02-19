@@ -24,7 +24,7 @@ urlpatterns = [
      url(r'^core_app/', include('core_app.urls', namespace='core_app')), 
      url(r'^timeline_app/', include('timeline_app.urls', namespace='timeline_app')), 
      url(r'^board_app/', include('board_app.urls', namespace='board_app')), 
-     url(r'^post_comment_app/', include('post_comment_app.urls', namespace='post_comment_app')), 
+     url(r'^comment_app/', include('comment_app.urls', namespace='comment_app')), 
      url(r'^site_app/', include('site_app.urls', namespace='site_app')), 
      url(r'^post_app/', include('post_app.urls', namespace='post_app')), 
      url(r'^timeline_app/', include('timeline_app.urls', namespace='timeline_app')),
@@ -40,6 +40,7 @@ urlpatterns = [
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 

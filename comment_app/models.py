@@ -23,7 +23,7 @@ class PostComment(models.Model):
     auto_now=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('post_comment_app:comment', 
+        return reverse('comment_app:comment', 
         kwargs={'comment_id': self.id})
 
     def __str__(self):
@@ -35,8 +35,9 @@ class ECreatePostComment(Event):
     post    = models.ForeignKey('post_app.Post', blank=True)
 
     def get_absolute_url(self):
-        return reverse('post_comment_app:e-create-comment', 
+        return reverse('comment_app:e-create-comment', 
         kwargs={'event_id': self.id})
+
 
 
 
