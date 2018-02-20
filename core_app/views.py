@@ -367,11 +367,11 @@ class InviteOrganizationUser(GuardianView):
         organization = models.Organization.objects.get(id=organization_id)
 
         return render(request, 'core_app/invite-organization-user.html', 
-        {'form': forms.BindUsersForm(), 'user': user, 'organization': organization})
+        {'form': forms.OrganizationInviteForm(), 'user': user, 'organization': organization})
 
     def post(self, request, organization_id):
         organization = models.Organization.objects.get(id=organization_id)
-        form         = forms.BindUsersForm(request.POST)
+        form         = forms.OrganizationInviteForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'core_app/invite-organization-user.html',
@@ -381,7 +381,7 @@ class InviteOrganizationUser(GuardianView):
 
         # If the user doesn't exist
         # we send him an email invite.
-        me     = models.User.objects.get(id=self.user_id)
+        me = models.User.objects.get(id=self.user_id)
 
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
@@ -583,6 +583,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

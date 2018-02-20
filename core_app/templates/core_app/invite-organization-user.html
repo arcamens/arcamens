@@ -4,7 +4,9 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>Invite User to {{organization.name}}</h4>
+<h4>
+<span class="glyphicon glyphicon-send"></span>
+{{organization.name}}'s invite </h4>
 </div>
 
 <div class="modal-body">
@@ -13,7 +15,6 @@
 {% csrf_token %}
 
 {% bootstrap_field form.email  size='md' %}
-{% bootstrap_field form.admin  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -31,6 +32,7 @@ data-shell="#modalContent"
 data-shell-error="#modalContent" data-show="{% url 'core_app:invite-organization-user' organization.id  %}"
 class="btn btn-default e-post"> {% trans "Send" %} </button>
 </div>
+
 
 
 
