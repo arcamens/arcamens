@@ -39,7 +39,7 @@ class CreateSnippet(GuardianView):
         card=card)
         card.save()
 
-        form = forms.SnippetForm(instance=card)
+        form = forms.SnippetForm(instance=snippet)
         return render(request, 'snippet_app/create-snippet.html', 
         {'form':form, 'card': card, 'snippet':snippet})
 
@@ -178,6 +178,7 @@ class DeleteSnippet(GuardianView):
 
         return redirect('card_app:view-data', 
         card_id=snippet.card.id)
+
 
 
 

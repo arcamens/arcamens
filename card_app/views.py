@@ -176,7 +176,7 @@ class CreateCard(GuardianView):
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'sound', 0, False)
 
-        return redirect('card_app:list-cards', list_id=ancestor.id)
+        return redirect('card_app:view-data', card_id=card.id)
 
 class CreateFork(GuardianView):
     """
@@ -915,6 +915,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
