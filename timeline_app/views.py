@@ -156,6 +156,13 @@ class UnbindTimelineUser(GuardianView):
         ws.client.publish('user%s' % user.id, 
             'unsubscribe timeline%s' % timeline.id, 0, False)
 
+        # As said before, order of events cant be determined
+        # when dispatched towards two queues. It might
+        # happen of sound event being dispatched before subscribe event.
+        # So, we warrant soud to happen.
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
+
         return HttpResponse(status=200)
 
 class UpdateTimeline(GuardianView):
@@ -366,6 +373,15 @@ class BindTimelineUser(GuardianView):
         ws.client.publish('user%s' % user.id, 
             'subscribe timeline%s' % timeline.id, 0, False)
 
+        # it seems i cant warrant the order the events will be dispatched
+        # to the queue, if it is userid queue or timelineid queue
+        # then i have to just send again the sound event to the 
+        # user queue to warrant the event sound being dispatched.
+        # obs: if i'll abandon sound when user interacts it is not
+        # necessary.
+        ws.client.publish('user%s' % user.id, 
+            'sound', 0, False)
+
         return HttpResponse(status=200)
 
 class ManageUserTimelines(GuardianView):
@@ -447,6 +463,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 
