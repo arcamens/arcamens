@@ -10,13 +10,6 @@ from core_app.models import Event, GlobalFilterMixin
 # Create your models here.
 
 class PostMixin(object):
-    def save(self, *args, **kwargs):
-        self.html = markdown(self.description, 
-        extensions=[TableExtension(), 
-        'markdown.extensions.tables'])
-
-        super(PostMixin, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         return reverse('post_app:post', 
         kwargs={'post_id': self.id})
@@ -42,7 +35,6 @@ class PostMixin(object):
 
         for ind in timelines:
             posts = posts | ind.posts.all()
-        print('fuck', posts)
         return posts
 
     def __str__(self):
@@ -96,17 +88,12 @@ class Post(PostMixin, models.Model):
     'core_app.Tag', related_name='posts', 
     null=True, blank=True, symmetrical=False)
 
-    label = models.CharField(null=True,
-    blank=False, verbose_name=_("Label"), 
-    help_text='Task, Post, Event, Thread, Bug, \
-    Idea, Document, ..', max_length=625)
-
     workers = models.ManyToManyField('core_app.User', 
     related_name='assignments', blank=True, 
     symmetrical=False)
 
-    description = models.TextField(null=True, default='',
-    blank=True, verbose_name=_("Description"))
+    label = models.TextField(null=True, default='',
+    blank=True, verbose_name=_("Content"))
 
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
@@ -259,6 +246,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

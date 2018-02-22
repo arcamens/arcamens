@@ -30,10 +30,11 @@ at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 
 <div class="panel-body" >
 <div style="word-wrap: break-word;"> 
-<h4> {{post.label}} </h4>
-{{post.html | safe}} 
 
-<hr>
+<pre style="background-color:#F6E4E1;font-size:120%">
+{{post.label}} 
+</pre>
+</div>
 
 <div class="row">
 <div class="col-md-3">
@@ -98,7 +99,6 @@ No workers.
 </div> 
 
 </div>
-</div>
 
 
 
@@ -157,6 +157,8 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
+
 
 
 

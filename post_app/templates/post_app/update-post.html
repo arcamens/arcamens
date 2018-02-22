@@ -1,6 +1,12 @@
 
 {% extends "post_app/create-post.html" %}
 {% load i18n %}
+{% block title %}
+<h4> 
+<span class="glyphicon glyphicon-file"></span>
+
+Update </h4>
+{% endblock %}
 
 {% block buttons %}
       <button  type="button" data-form="#form-post-data" id="updatePost"
@@ -20,6 +26,7 @@ $('#id_label').keypress(function(e){
 </script>
 
 {% endblock %}
+
 
 
 
