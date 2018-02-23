@@ -5,7 +5,16 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has created a <span class="glyphicon glyphicon-book"></span> Note on
+{{event.user}} </a> has created a 
+
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+data-shell="#bigModalContent" 
+data-show="{% url 'note_app:preview-note' event.note.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-book"></span> Note </a> 
+
+on
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
@@ -18,6 +27,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
