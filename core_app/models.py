@@ -40,7 +40,6 @@ class OrganizationService(Service):
     def __str__(self):
         return self.name
 
-
 class UserMixin(object):
     def get_user_url(self):
         return reverse('core_app:user', 
@@ -48,6 +47,35 @@ class UserMixin(object):
 
     def __str__(self):
         return self.name
+
+class GlobalFilterMixin:
+    def collect_cards(self, cards, filter):
+        cards = cards.filter(done=filter.done)
+
+        chks, tags = search_tokens(filter.pattern)
+
+        for ind in tags:
+            cards = cards.filter(Q(tags__name__startswith=ind))
+
+        cards = cards.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
+        for ind in chks))) if chks else cards
+
+        return cards
+
+    def collect_posts(self, posts, filter):
+        chks, tags = search_tokens(filter.pattern)
+
+        for ind in tags:
+            posts = posts.filter(Q(tags__name__startswith=ind))
+
+        # I should make post have owner instead of user.
+        posts = posts.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(user__name__contains=ind) 
+        for ind in chks))) if chks else posts
+
+        posts = posts.filter(Q(done=filter.done))
+        return posts
 
 class Invite(models.Model):
     # email = models.EmailField(max_length=70, 
@@ -94,7 +122,8 @@ class User(UserMixin, BasicUser):
     max_length=256)
 
     avatar = models.ImageField( null=True,
-    default='user.png',verbose_name='Your avatar.', help_text='', blank=True)
+    default='user.png',verbose_name='Your avatar.', 
+    help_text='', blank=True)
 
     enabled = models.BooleanField(blank=True, default=False)
 
@@ -173,46 +202,15 @@ class EUnbindUserTag(Event):
         return reverse('core_app:e-unbind-user-tag', 
         kwargs={'event_id': self.id})
 
-
-class GlobalFilterMixin:
-    def collect_cards(self, cards, filter):
-        cards = cards.filter(done=filter.done)
-
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            cards = cards.filter(Q(tags__name__startswith=ind))
-
-        cards = cards.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
-        for ind in chks))) if chks else cards
-
-        return cards
-
-    def collect_posts(self, posts, filter):
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            posts = posts.filter(Q(tags__name__startswith=ind))
-
-        # I should make post have owner instead of user.
-        posts = posts.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(user__name__contains=ind) 
-        for ind in chks))) if chks else posts
-
-        posts = posts.filter(Q(done=filter.done))
-        return posts
-
 class GlobalFilter(GlobalFilterMixin, models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, default='', null=True)
-    user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('core_app.Organization', blank=True,
-    null=True)
+    pattern  = models.CharField(max_length=255, blank=True, 
+    default='', null=True)
 
-    user = models.ForeignKey('core_app.User', 
-    null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', 
-    null=True, blank=True)
+    blank=True, null=True)
+
+    user = models.ForeignKey('core_app.User', null=True, 
+    blank=True)
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards?.')
@@ -220,13 +218,20 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
+class UserFilter(models.Model):
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
 
+    pattern  = models.CharField(max_length=255, 
+    blank=True, null=True, default='')
 
+    user = models.ForeignKey('core_app.User', 
+    null=True, blank=True)
 
-
-
-
-
+    # It warrants there will exist only one user and organization
+    # filter. If we decide to permit more filters..
+    class Meta:
+        unique_together = ('user', 'organization',)
 
 
 

@@ -7,9 +7,6 @@ import datetime
 class OrganizationForm(forms.Form):
     name = forms.CharField()
 
-class UserSearchForm(forms.Form):
-    pattern = forms.CharField(required=False)
-
 class EventSearchForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
@@ -44,6 +41,11 @@ class GlobalFilterForm(forms.ModelForm):
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
+class UserFilterForm(forms.ModelForm):
+    class Meta:
+        model  = models.UserFilter
+        exclude = ('user', 'organization')
+
 class TagForm(forms.ModelForm):
     class Meta:
         model  = models.Tag
@@ -53,6 +55,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 

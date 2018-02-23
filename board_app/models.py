@@ -112,19 +112,6 @@ class Pin(PinMixin, models.Model):
     card = models.ForeignKey('card_app.Card', 
     unique=True, null=True, blank=True)
 
-class OrganizationUserFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
-    user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('core_app.Organization', blank=True,
-    null=True)
-    status = models.BooleanField(blank=True, default=False, 
-    help_text='Filter On/Off.')
-
-    # It warrants there will exist only one user and organization
-    # filter. If we decide to permit more filters..
-    class Meta:
-        unique_together = ('user', 'organization',)
-
 class EBindBoardUser(Event, EBindBoardUserMixin):
     board = models.ForeignKey('Board', 
     related_name='e_bind_board_user', blank=True)
@@ -165,6 +152,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 

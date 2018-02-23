@@ -153,21 +153,34 @@ class DeleteOrganization(GuardianView):
 
 class ListUsers(GuardianView):
     def get(self, request, organization_id):
-        user = models.User.objects.get(id=self.user_id)
+        me           = models.User.objects.get(id=self.user_id)
         organization = models.Organization.objects.get(id=organization_id)
+        total        = organization.users.all()
+        filter, _    = models.UserFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
         total = organization.users.all()
 
-        form = forms.UserSearchForm()
+        users = total.filter(Q(
+        name__contains=filter.pattern) | Q(
+        email__contains=filter.pattern))
+
+        form  = forms.UserFilterForm(instance=filter)
+
         return render(request, 'core_app/list-users.html', 
-        {'users': total, 'owner': organization.owner, 'total': total, 'form': form,
+        {'users': users, 'owner': organization.owner, 'total': total, 'form': form,
         'organization': organization})
 
     def post(self, request, organization_id):
-        user = models.User.objects.get(id=self.user_id)
+        me           = models.User.objects.get(id=self.user_id)
         organization = models.Organization.objects.get(id=organization_id)
 
+        total        = organization.users.all()
+        filter, _    = models.UserFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
         total = organization.users.all()
-        form = forms.UserSearchForm(request.POST)
+        form  = forms.UserFilterForm(request.POST, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-users.html', 
@@ -175,10 +188,11 @@ class ListUsers(GuardianView):
                     'total': total, 'form': form,
                         'organization': organization}, status=400)
   
-        total = organization.users.all()
+        form.save()
+
         users = total.filter(Q(
-        name__contains=form.cleaned_data['pattern'])| Q(
-        email__contains=form.cleaned_data['pattern']))
+        name__contains=filter.pattern) | Q(
+        email__contains=filter.pattern))
 
         return render(request, 'core_app/list-users.html', 
         {'users': users, 'owner': organization.owner, 
@@ -583,6 +597,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
