@@ -5,13 +5,11 @@
 
 {% for ind in posts %}
     <div id="post-shell-{{ind.id}}">
-            <script>
-            $(document).ready(function() {
-                $('#post-shell-' + {{ind.id}}).load("{{ind.get_absolute_url}}");
-            });
-            </script>
+        {% include "post_app/post.html" with post=ind %}
+
     </div>
 {% endfor %}
+
 
 
 

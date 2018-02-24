@@ -9,13 +9,8 @@
 {% for indj in indi %}
 <div class="col-sm-3">
 <div id='timeline-{{indj.id}}'>
-<script>
+{% include "timeline_app/timeline.html" with timeline=indj %}
 
-$(document).ready(function() {
-    $('#timeline-{{indj.id}}').load(
-        "{% url 'timeline_app:timeline' indj.id %}");
-});
-</script>
 </div>
 
 </div>
@@ -24,6 +19,7 @@ $(document).ready(function() {
 </div>
 
 {% endfor %}
+
 
 
 

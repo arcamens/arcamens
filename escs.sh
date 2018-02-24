@@ -1,4 +1,15 @@
 ##############################################################################
+# push arcamens alpha branch.
+cd ~/projects/arcamens-code
+# clean up all .pyc files. 
+find . -name "*.pyc" -exec rm -f {} \;
+rm -fr ~/projects/arcamens-code/static/media
+git status
+git add *
+git commit -a
+git push -u origin alpha
+
+##############################################################################
 # push arcamens development branch.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
@@ -548,5 +559,6 @@ rm -fr build
 cd ~/projects/django-scrolls-code
 python setup.py install
 rm -fr build
+
 
 
