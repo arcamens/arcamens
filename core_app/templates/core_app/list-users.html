@@ -33,15 +33,24 @@ data-show="{% url 'core_app:invite-organization-user' organization.id %}">
 
 <div class="modal-footer">
 <button  type="button" data-form="#list-user-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="filterUsers"
 data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' organization.id  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
+
+<script>
+$('#id_pattern').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#filterUsers').click();
+        return false;
+    }
+});
+</script>
 
 
 

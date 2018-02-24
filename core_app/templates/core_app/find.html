@@ -57,13 +57,22 @@ href="#" >
 
 <div class="modal-footer">
 <button  type="button" data-form="#find-card-search-form" 
-data-shell="#bigModalContent" 
+data-shell="#bigModalContent" id="find"
 data-shell-error="#bigModalContent" data-show="{% url 'core_app:find'  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
+
+<script>
+$('#id_pattern').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#find').click();
+        return false;
+    }
+});
+</script>
 
 
 

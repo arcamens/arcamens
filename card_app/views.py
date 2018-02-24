@@ -636,10 +636,10 @@ class ManageCardWorkers(GuardianView):
                             'count': total,}, status=400)
 
         included = included.filter(
-        name__contains=form.cleaned_data['name'])
+        name__contains=form.cleaned_data['pattern'])
 
         excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        name__contains=form.cleaned_data['pattern'])
 
         count = included.count() + excluded.count()
 
@@ -915,6 +915,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

@@ -20,7 +20,7 @@ Available {{card.label|truncatechars:20}} Workers
 
 <form id="bind-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
@@ -28,9 +28,9 @@ Available {{card.label|truncatechars:20}} Workers
 
 <div class="modal-footer">
 <button  type="button" data-form="#bind-card-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="filterCardWorkers"
 data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-workers' card.id  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 <script>
 $('#modal').one('hidden.bs.modal', function () {
@@ -46,8 +46,13 @@ $('#modal').one('hidden.bs.modal', function () {
 
 
 
-
-
-
+<script>
+$('#id_pattern').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#filterCardWorkers').click();
+        return false;
+    }
+});
+</script>
 
 

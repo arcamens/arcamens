@@ -282,10 +282,10 @@ class ManagePostWorkers(GuardianView):
                         'form':forms.UserSearchForm()}, status=400)
 
         included = included.filter(
-        name__contains=form.cleaned_data['name'])
+        name__contains=form.cleaned_data['pattern'])
 
         excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        name__contains=form.cleaned_data['pattern'])
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
@@ -576,6 +576,7 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
 
 

@@ -28,7 +28,7 @@ class ForkForm(forms.ModelForm):
         fields = ('label', 'data')
 
 class UserSearchForm(forms.Form):
-    name = forms.CharField(required=False)
+    pattern = forms.CharField(required=False)
 
 class CardSearchForm(forms.Form):
     pattern = forms.CharField(required=False, 
@@ -41,6 +41,7 @@ class GlobalCardFilterForm(forms.ModelForm):
     class Meta:
         model  = models.GlobalCardFilter
         exclude = ('user', 'organization')
+
 
 
 
