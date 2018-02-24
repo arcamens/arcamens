@@ -23,11 +23,10 @@ class Post(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=400)
 
-        attachments = post.postfilewrapper_set.all()
-        workers = post.workers.all()
+        # attachments = post.postfilewrapper_set.all()
+        # workers = post.workers.all()
         return render(request, 'post_app/post.html', 
-        {'post':post, 'attachments': attachments, 
-        'tags': post.tags.all(), 'workers': workers})
+        {'post':post, })
 
 class PostLink(GuardianView):
     """
@@ -576,6 +575,7 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
 
 
