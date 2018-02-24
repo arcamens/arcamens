@@ -416,6 +416,9 @@ class InviteOrganizationUser(GuardianView):
         '%s %s' % (organization.name, url), settings.EMAIL_HOST_USER, [email],
         fail_silently=False)
 
+        ws.client.publish('organization%s' % organization.id, 
+            'sound', 0, False)
+
         return redirect('core_app:list-users', 
         organization_id=organization_id)
 
@@ -597,6 +600,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
