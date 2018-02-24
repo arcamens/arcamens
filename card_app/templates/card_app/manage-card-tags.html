@@ -16,6 +16,13 @@ Available {{card.label|truncatechars:20}} card's tags
 <div class="modal-body">
 
 {% include 'card_app/manage-card-tags-list-options.html' %}
+
+<form id="bind-card-search-form" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
 </div>
 
 <div class="modal-footer">
@@ -26,7 +33,7 @@ $('#modal').one('hidden.bs.modal', function () {
 </script>
 
 <button  type="button" data-form="#bind-card-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="filterCardTags"
 data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-tags' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -37,12 +44,13 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </div>
 
 
-
-
-
-
-
-
-
+<script>
+$('#id_name').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#filterCardTags').click();
+        return false;
+    }
+});
+</script>
 
 

@@ -52,7 +52,7 @@ $('#modal').one('hidden.bs.modal', function () {
 </script>
 
 <button  type="button" data-form="#bind-post-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="filterPostTags"
 data-shell-error="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -61,6 +61,16 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
+<script>
+$('#id_name').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#filterPostTags').click();
+        return false;
+    }
+});
+</script>
+
 
 
 
