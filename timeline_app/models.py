@@ -38,7 +38,7 @@ class TimelineMixin(object):
 
     @classmethod
     def get_user_timelines(cls, user):
-        timelines = user.timelines.all()
+        timelines = user.timelines.filter(organization=user.default)
         return timelines
 
 class Timeline(TimelineMixin, models.Model):
@@ -105,6 +105,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

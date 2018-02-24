@@ -47,7 +47,7 @@ class ECreateBoardMixin(object):
 class BoardMixin:
     @classmethod
     def get_user_boards(cls, user):
-        boards = user.boards.all()
+        boards = user.boards.filter(organization=user.default)
         return boards
 
 class Board(BoardMixin, models.Model):
@@ -152,6 +152,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 
