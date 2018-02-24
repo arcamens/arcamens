@@ -11,11 +11,8 @@
 {% for ind in cards|slice:":3" %}
 <div class="col-sm-3">
 <div id="card-{{ind.id}}">
-<script>
-$(document).ready(function() {
-$('#card-{{ind.id}}').load("{% url 'card_app:card' ind.id %}");
-});
-</script>
+{% include "card_app/card.html" with card=ind %}
+
 </div>
 
 </div>
@@ -27,18 +24,14 @@ $('#card-{{ind.id}}').load("{% url 'card_app:card' ind.id %}");
 {% for indj in indi %}
 <div class="col-sm-3">
 <div id="card-{{indj.id}}">
-
-<script>
-$(document).ready(function() {
-$('#card-{{indj.id}}').load("{% url 'card_app:card' indj.id %}");
-});
-</script>
+{% include "card_app/card.html" with card=indj %}
 
 </div>
 </div>
 {% endfor %}
 </div>
 {% endfor %}
+
 
 
 

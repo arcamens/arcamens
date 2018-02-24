@@ -12,11 +12,8 @@
 {% for ind in lists|slice:":3" %}
 <div class="col-sm-3">
 <div id="list-{{ind.id}}">
-<script>
-$(document).ready(function() {
-$('#list-{{ind.id}}').load("{% url 'list_app:list' ind.id %}");
-});
-</script>
+{% include "list_app/list.html" with list=ind%}
+
 </div>
 
 </div>
@@ -28,18 +25,14 @@ $('#list-{{ind.id}}').load("{% url 'list_app:list' ind.id %}");
 {% for indj in indi %}
 <div class="col-sm-3">
 <div id="list-{{indj.id}}">
-
-<script>
-$(document).ready(function() {
-$('#list-{{indj.id}}').load("{% url 'list_app:list' indj.id %}");
-});
-</script>
+{% include "list_app/list.html" with list=indj%}
 
 </div>
 </div>
 {% endfor %}
 </div>
 {% endfor %}
+
 
 
 

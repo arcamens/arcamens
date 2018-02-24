@@ -12,12 +12,8 @@
 {% for ind in boards|slice:":3" %}
 <div class="col-sm-3">
 <div id="board-{{ind.id}}">
+{% include "board_app/board.html" with board=ind %}
 
-<script>
-$(document).ready(function() {
-$('#board-{{ind.id}}').load("{% url 'board_app:board' ind.id %}");
-});
-</script>
 </div>
 
 </div>
@@ -29,18 +25,14 @@ $('#board-{{ind.id}}').load("{% url 'board_app:board' ind.id %}");
 {% for indj in indi %}
 <div class="col-sm-3">
 <div id="board-{{indj.id}}">
-
-<script>
-$(document).ready(function() {
-$('#board-{{indj.id}}').load("{% url 'board_app:board' indj.id %}");
-});
-</script>
+{% include "board_app/board.html" with board=indj %}
 
 </div>
 </div>
 {% endfor %}
 </div>
 {% endfor %}
+
 
 
 
