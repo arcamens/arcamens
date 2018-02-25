@@ -529,7 +529,6 @@ class ListAllTasks(GuardianView):
         'form': form, 'tasks': tasks})
 
     def post(self, request):
-        form = forms.TaskSearchForm(request.POST)
         me = models.User.objects.get(id=self.user_id)
         assignments = me.assignments.all()
         tasks       = me.tasks.all()
@@ -621,6 +620,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

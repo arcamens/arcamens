@@ -11,30 +11,21 @@ class EventSearchForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 
-class BindTagForm(forms.Form):
-    name = forms.CharField()
+class EventFilterForm(forms.Form):
+    start = forms.DateField(initial=datetime.date.today)
+    end   = forms.DateField(initial=datetime.date.today)
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
 class OrganizationInviteForm(forms.Form):
-    email = forms.EmailField(
-    help_text="Insert user E-mail.")
-
-class TaskSearchForm(forms.Form):
-    pattern = forms.CharField(required=False)
-    done = forms.BooleanField(required=False)
-
-class EventFilterForm(forms.Form):
-    start = forms.DateField(initial=datetime.date.today)
-    end = forms.DateField(initial=datetime.date.today)
+    email = forms.EmailField(help_text="Insert user E-mail.")
 
 class UserForm(site_app.forms.UserForm):
     class Meta:
         fields = ('name', 'avatar', 
         'email', 'password', 'description', 
         'recover_email')
-
         model = models.User
 
 class GlobalFilterForm(forms.ModelForm):
@@ -61,6 +52,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 

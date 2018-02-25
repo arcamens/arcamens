@@ -223,7 +223,8 @@ class UserFilter(models.Model):
     blank=True, null=True)
 
     pattern  = models.CharField(max_length=255, 
-    blank=True, null=True, default='')
+    blank=True, null=True, default='',
+    help_text='Example: victor + #arcamens + #suggestion ...')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -235,7 +236,8 @@ class UserFilter(models.Model):
 
 class GlobalTaskFilter(models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='', null=True)
+    default='', null=True, help_text='Example: ignition mechanism  \
+    + #issue + #car ...')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -248,6 +250,7 @@ class GlobalTaskFilter(models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 

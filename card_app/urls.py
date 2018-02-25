@@ -34,7 +34,6 @@ urlpatterns = [
     url(r'^e-unrelate-card/(?P<event_id>.+)/', views.EUnrelateCard.as_view(), name='e-unrelate-card'),
     url(r'^e-bind-tag-card/(?P<event_id>.+)/', views.EBindTagCard.as_view(), name='e-bind-tag-card'),
     url(r'^e-unbind-tag-card/(?P<event_id>.+)/', views.EUnbindTagCard.as_view(), name='e-unbind-tag-card'),
-    url(r'^find/', views.Find.as_view(), name='find'),
 
     url(r'^e-bind-card-worker/(?P<event_id>.+)/', views.EBindCardWorker.as_view(), name='e-bind-card-worker'),
     url(r'^e-unbind-card-worker/(?P<event_id>.+)/', views.EUnbindCardWorker.as_view(), name='e-unbind-card-worker'),
@@ -55,6 +54,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

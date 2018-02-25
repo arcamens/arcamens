@@ -253,29 +253,13 @@ class EDeleteCard(Event):
         return reverse('card_app:e-delete-card', 
             kwargs={'event_id': self.id})
 
-class GlobalCardFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, default='', null=True)
-    user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('core_app.Organization', blank=True,
-    null=True)
-
-    user = models.ForeignKey('core_app.User', 
-    null=True, blank=True)
-    organization = models.ForeignKey('core_app.Organization', 
-    null=True, blank=True)
-
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
-
-    class Meta:
-        unique_together = ('user', 'organization', )
-
 class CardFilter(GlobalFilterMixin, models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True, default='',
-    help_text='Pattern0 + Pattern1 + #Tag0 + #Tag1 ...')
-    user         = models.ForeignKey('core_app.User', null=True, blank=True)
-    organization = models.ForeignKey('core_app.Organization', blank=True,
-    null=True)
+    pattern  = models.CharField(
+    max_length=255,  blank=True, null=True, default='', 
+    help_text='Example: victor + \#arcamens + #suggestion ...')
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
 
     board = models.ForeignKey('board_app.Board', blank=True,
     related_name='card_filter',
@@ -289,6 +273,9 @@ class CardFilter(GlobalFilterMixin, models.Model):
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards?.')
+
+    user = models.ForeignKey('core_app.User', 
+    null=True, blank=True)
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..
@@ -367,6 +354,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 

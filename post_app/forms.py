@@ -25,13 +25,11 @@ class GlobalPostFilterForm(forms.ModelForm):
         exclude = ('user', 'organization')
 
 class UserSearchForm(forms.Form):
-    pattern = forms.CharField(required=False)
+    pattern = forms.CharField(required=False,
+    help_text='Example: victor + #arcamens \
+    + #suggestion ...')
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
-
-
-
-
 
 

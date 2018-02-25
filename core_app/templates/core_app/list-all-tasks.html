@@ -57,8 +57,8 @@ class="e-get text-warning" href="#">
 <br>
 <form id="task-search-form" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.pattern  size='md' layout='inline' %}
-{% bootstrap_field form.done  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.done  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -86,6 +86,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 

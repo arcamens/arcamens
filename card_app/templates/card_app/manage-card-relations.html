@@ -16,7 +16,7 @@ Available {{card.label|truncatechars:15}} card's relations </h6>
 
 <form id="relate-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' %}
 {% bootstrap_field form.done  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -45,6 +45,7 @@ $('#modal').one('hidden.bs.modal', function () {
 data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 
