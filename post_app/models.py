@@ -51,13 +51,14 @@ class PostMixin(object):
         Return all posts from a timeline that match pattern.
         """
         chks, tags = splittokens(pattern)
+        posts = posts.filter(Q(done=done))
 
         for ind in tags:
             posts = posts.filter(Q(tags__name__startswith=ind))
 
         posts = posts.filter(reduce(operator.and_, 
         (Q(label__contains=ind) | Q(user__name__contains=ind) 
-        for ind in chks)), Q(done=done)) if chks else posts
+        for ind in chks))) if chks else posts
 
         return posts
 
@@ -271,6 +272,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

@@ -503,54 +503,50 @@ class EJoinOrganization(GuardianView):
 
 class ListAllTasks(GuardianView):
     def get(self, request):
-        me = models.User.objects.get(id=self.user_id)
-
+        me        = models.User.objects.get(id=self.user_id)
         filter, _ = models.GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
         form  = forms.GlobalTaskFilterForm(instance=filter)
 
-        assignments = me.assignments.all()
-        tasks       = me.tasks.all()
-
-        total = assignments.count() + tasks.count()
+        # Maybe add an organization field to posts/cards?
+        assignments = me.assignments.filter(ancestor__organization=me.default)
+        tasks       = me.tasks.filter(ancestor__ancestor__organization=me.default)
+        total       = assignments.count() + tasks.count()
         
-        assignments = assignments.filter(
-        label__contains=filter.pattern, 
-        done=filter.done)
-
-        tasks = tasks.filter(
-        label__contains=filter.pattern, 
-        done=filter.done)
+        tasks       = Card.collect_cards(tasks, filter.pattern, filter.done)
+        assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
 
         count = assignments.count() + tasks.count()
 
+        # If i instantiate the form here it stops working
+        # correctly when filtering the cards/posts
+        # form  = forms.GlobalTaskFilterForm(instance=filter)
+
         return render(request, 'core_app/list-all-tasks.html', 
-        {'assignments': assignments, 'total': total, 'count': total, 
+        {'assignments': assignments, 'total': total, 'count': count, 
         'form': form, 'tasks': tasks})
 
     def post(self, request):
-        me = models.User.objects.get(id=self.user_id)
-        assignments = me.assignments.all()
-        tasks       = me.tasks.all()
+        me          = models.User.objects.get(id=self.user_id)
+        assignments = me.assignments.filter(ancestor__organization=me.default)
+        tasks       = me.tasks.filter(ancestor__ancestor__organization=me.default)
+
         total = assignments.count() + tasks.count()
 
         filter, _ = models.GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
-        form  = forms.GlobalFilterForm(request.POST, instance=filter)
+
+        form = forms.GlobalFilterForm(request.POST, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-all-tasks.html', 
                 {'assignments': assignments, 'form': form, 'total': total,
-                    'count': total, 'tasks': tasks}, status=400)
+                    'count': count, 'tasks': tasks}, status=400)
 
         form.save()
-        assignments = assignments.filter(
-        label__contains=filter.pattern, 
-        done=filter.done)
 
-        tasks = tasks.filter(
-        label__contains=filter.pattern, 
-        done=filter.done)
+        tasks = Card.collect_cards(tasks, filter.pattern, filter.done)
+        assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
 
         count = assignments.count() + tasks.count()
 

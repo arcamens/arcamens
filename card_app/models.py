@@ -43,12 +43,13 @@ class CardMixin(object):
     def collect_cards(cls, cards, pattern, done=False):
         chks, tags = splittokens(pattern)
 
+        cards = cards.filter(Q(done=done))
         for ind in tags:
             cards = cards.filter(Q(tags__name__startswith=ind))
 
         cards = cards.filter(reduce(operator.and_, 
         (Q(label__contains=ind) | Q(owner__name__contains=ind) 
-        for ind in chks)), Q(done=done)) if chks else cards
+        for ind in chks))) if chks else cards
 
         return cards
 
@@ -369,6 +370,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 
