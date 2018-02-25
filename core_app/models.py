@@ -4,7 +4,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from slock.models import BasicUser
 from paybills.models import Service
-from core_app.utils import search_tokens
 from functools import reduce
 import operator
 
@@ -224,6 +223,7 @@ class GlobalTaskFilter(models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 

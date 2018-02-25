@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
-from core_app.utils import search_tokens as splittokens
+from core_app.utils import splittokens
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q, F
-from core_app.utils import search_tokens
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
@@ -858,6 +857,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

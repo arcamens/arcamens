@@ -6,7 +6,7 @@ from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
-from core_app.utils import search_tokens as splittokens
+from core_app.utils import splittokens
 from functools import reduce
 import operator
 

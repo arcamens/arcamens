@@ -1,6 +1,6 @@
 from re import split
 
-def search_tokens(data):
+def splittokens(data):
     tokens     = split(' *\+ *', data)
     chks, tags = [], []
 
@@ -10,3 +10,4 @@ def search_tokens(data):
         else:
             chks.append(ind)
     return chks, tags
+

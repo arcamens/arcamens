@@ -1,7 +1,6 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage
-from core_app.utils import search_tokens
 from card_app.models import Card
 from post_app.models import Post
 from functools import reduce
