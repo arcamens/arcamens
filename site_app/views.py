@@ -1,15 +1,15 @@
 from paybills.submitters import ManualForm, SubscriptionForm
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import View
 from core_app.models import Organization, OrganizationService
+from slock.views import AuthenticatedView, LogoutView, LoginView
+from django.shortcuts import render, redirect
+from site_app.models import PasswordTicket
 from django.core.mail import send_mail
+from django.views.generic import View
+from django.http import HttpResponse
+from slock.forms import LoginForm
+from django.urls import reverse
 from django.conf import settings
 from core_app.models import User
-from site_app.models import PasswordTicket
-from slock.views import AuthenticatedView, LogoutView, LoginView
-from slock.forms import LoginForm
 import paybills.views
 from . import forms
 import timeline_app
@@ -24,12 +24,8 @@ class Index(LoginView):
 
 class LoggedOut(View):
     def get(self, request):
-        return render(request, 'site_app/logged-out.html', 
-        {})
-
-class Home(LoginView):
-    def get(self, request):
-        return render(request, 'site_app/home.html')
+        return render(request, 
+        'site_app/logged-out.html', {})
 
 class Help(View):
     def get(self, request):
@@ -292,6 +288,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 
