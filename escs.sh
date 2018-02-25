@@ -77,12 +77,18 @@ git merge beta
 git push -u origin alpha
 git checkout beta
 ##############################################################################
-
 # merge, alpha, into, master:
 git checkout master
 git merge alpha
 git push -u origin master
 git checkout alpha
+##############################################################################
+# merge, alpha, into, dev:
+git checkout development
+git merge alpha
+git push -u origin development
+git checkout alpha
+
 ##############################################################################
 # merge, alpha, into, master:
 git checkout alpha
@@ -559,6 +565,7 @@ rm -fr build
 cd ~/projects/django-scrolls-code
 python setup.py install
 rm -fr build
+
 
 
 

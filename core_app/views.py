@@ -84,8 +84,6 @@ class UpdateUserInformation(GuardianView):
         form = forms.UserForm(request.POST, request.FILES, instance=user)
 
         if not form.is_valid():
-            print(form.errors)
-
             return render(request, 
                 'core_app/update-user-information.html', 
                     {'user': user, 'form': form}, status=400)
@@ -615,17 +613,4 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
-
-
-
-
-
-
-
-
-
-
-
-
-
 
