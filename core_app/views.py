@@ -567,15 +567,14 @@ class Find(GuardianView):
 
         form  = forms.GlobalFilterForm(instance=filter)
 
-        cards = Card.get_user_cards(me)
-        posts = Post.get_user_posts(me)
+        cards = Card.get_allowed_cards(me)
+        posts = Post.get_allowed_posts(me)
 
         total = cards.count() + posts.count()
 
-        cards = filter.collect_cards(cards, filter)
-        posts = filter.collect_posts(posts, filter)
+        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        posts = Post.collect_posts(posts, filter.pattern, filter.done)
         count = cards.count() + posts.count()
-
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'cards': cards, 'posts': posts,
@@ -588,8 +587,8 @@ class Find(GuardianView):
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
 
-        cards = Card.get_user_cards(me)
-        posts = Post.get_user_posts(me)
+        cards = Card.get_allowed_cards(me)
+        posts = Post.get_allowed_posts(me)
 
         total = cards.count() + posts.count()
 
@@ -600,8 +599,8 @@ class Find(GuardianView):
                             'count': count}, status=400)
         form.save()
 
-        cards = filter.collect_cards(cards, filter)
-        posts = filter.collect_posts(posts, filter)
+        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        posts = Post.collect_posts(posts, filter.pattern, filter.done)
 
         count = cards.count() + posts.count()
 
@@ -620,6 +619,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
