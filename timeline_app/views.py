@@ -1,7 +1,7 @@
 from core_app.views import GuardianView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from core_app.utils import search_tokens
+from core_app.utils import search_tokens as splittokens
 from django.views.generic import View
 from timeline_app import models
 from timeline_app import forms
@@ -11,6 +11,7 @@ from core_app import ws
 from core_app.models import Organization, User
 import timeline_app.models
 import post_app.models
+from post_app.models import Post
 import operator
 
 # Create your views here.
@@ -39,10 +40,12 @@ class ListPosts(GuardianView):
         filter, _ = post_app.models.PostFilter.objects.get_or_create(
         user=user, timeline=timeline)
 
-        total = timeline.posts.all()
+        posts      = timeline.posts.all()
+        total      = posts.count()
 
-        posts = filter.collect_posts(total, filter) if filter.status \
-        else total.filter(done=False)
+        posts      = Post.collect_posts(posts, 
+        filter.pattern, filter.done) if filter.status \
+        else posts.filter(done=False)
 
         posts = posts.order_by('-created')
 
@@ -59,11 +62,12 @@ class ListAllPosts(ListPosts):
         filter, _ = post_app.models.GlobalPostFilter.objects.get_or_create(
         user=user, organization=user.default)
 
-        timelines = user.timelines.filter(organization=user.default)
-        total     = post_app.models.Post.objects.filter(ancestor__in = timelines)
+        posts = Post.get_allowed_posts(user)
+        total = posts.count()
 
-        posts = filter.collect_posts(total, filter) if filter.status \
-        else total.filter(done=False)
+        posts = Post.collect_posts(posts, 
+        filter.pattern, filter.done) if filter.status \
+        else posts.filter(done=False)
 
         return render(request, 'timeline_app/list-all-posts.html', 
         {'user':user, 'posts':posts, 'total': total, 'filter': filter, 
@@ -463,6 +467,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

@@ -49,33 +49,7 @@ class UserMixin(object):
         return self.name
 
 class GlobalFilterMixin:
-    def collect_cards(self, cards, filter):
-        cards = cards.filter(done=filter.done)
-
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            cards = cards.filter(Q(tags__name__startswith=ind))
-
-        cards = cards.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
-        for ind in chks))) if chks else cards
-
-        return cards
-
-    def collect_posts(self, posts, filter):
-        chks, tags = search_tokens(filter.pattern)
-
-        for ind in tags:
-            posts = posts.filter(Q(tags__name__startswith=ind))
-
-        # I should make post have owner instead of user.
-        posts = posts.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(user__name__contains=ind) 
-        for ind in chks))) if chks else posts
-
-        posts = posts.filter(Q(done=filter.done))
-        return posts
+    pass
 
 class Invite(models.Model):
     # email = models.EmailField(max_length=70, 

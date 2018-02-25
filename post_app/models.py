@@ -6,6 +6,9 @@ from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
+from core_app.utils import search_tokens as splittokens
+from functools import reduce
+import operator
 
 # Create your models here.
 
@@ -29,12 +32,33 @@ class PostMixin(object):
         return post
 
     @classmethod
-    def get_user_posts(cls, user):
+    def get_allowed_posts(cls, user):
+        """
+        Return all posts that a given user has access 
+        regardless if it is the owner.
+        """
+
         timelines = Timeline.get_user_timelines(user)
         posts  = Post.objects.none()
 
         for ind in timelines:
             posts = posts | ind.posts.all()
+        return posts
+
+    @classmethod
+    def collect_posts(cls, posts, pattern, done=False):
+        """
+        Return all posts from a timeline that match pattern.
+        """
+        chks, tags = splittokens(pattern)
+
+        for ind in tags:
+            posts = posts.filter(Q(tags__name__startswith=ind))
+
+        posts = posts.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(user__name__contains=ind) 
+        for ind in chks)), Q(done=done)) if chks else posts
+
         return posts
 
     def __str__(self):
@@ -247,6 +271,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

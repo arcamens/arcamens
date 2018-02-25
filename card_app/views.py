@@ -88,14 +88,12 @@ class ListCards(GuardianView):
         filter, _ = models.CardFilter.objects.get_or_create(
         user=user, organization=user.default, list=list)
 
-        total = list.cards.all()
+        cards = list.cards.all()
+        total = cards.count()
         
-        # cards = total.filter((Q(label__icontains=filter.pattern) | \
-        # Q(data__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
-        # total.filter(done=False)
-
-        cards = filter.collect_cards(total, filter) if filter.status else \
-        total.filter(done=False)
+        cards = models.Card.collect_cards(cards, 
+        filter.pattern, filter.done) if filter.status else \
+        cards.filter(done=False)
 
         cards = cards.order_by('-created')
 
@@ -567,9 +565,10 @@ class ManageCardRelations(GuardianView):
         # to have a board field in all the cards, it would help
         # when performing global searches over the boards.
         included = card.relations.all()
-        boards = me.boards.filter(organization=me.default)
-        lists = list_app.models.List.objects.filter(ancestor__in=boards)
-        cards = models.Card.objects.filter(Q(ancestor__in=lists) & Q(done=False))
+
+        cards = models.Card.get_allowed_cards(me)
+        cards.filter(done=False)
+
         excluded = cards.exclude(pk__in=included)
 
         return render(request, 'card_app/manage-card-relations.html', 
@@ -587,17 +586,14 @@ class ManageCardRelations(GuardianView):
                         'form':form}, status=400)
 
         included = card.relations.all()
-        boards = me.boards.filter(organization=me.default)
-
-        lists = list_app.models.List.objects.filter(ancestor__in=boards)
-        cards = models.Card.objects.filter(Q(ancestor__in=lists))
+        cards = models.Card.get_allowed_cards(me)
         excluded = cards.exclude(pk__in=included)
 
-        included = included.filter(Q(
-        label__contains=form.cleaned_data['pattern']) & Q(done=form.cleaned_data['done']))
+        included = models.Card.collect_cards(included, 
+        form.cleaned_data['pattern'], form.cleaned_data['done']) 
 
-        excluded = excluded.filter(Q(
-        label__contains=form.cleaned_data['pattern']) & Q(done=form.cleaned_data['done']))
+        excluded = models.Card.collect_cards(excluded, 
+        form.cleaned_data['pattern'], form.cleaned_data['done']) 
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card,
@@ -862,6 +858,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

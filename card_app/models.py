@@ -2,11 +2,13 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
+from core_app.utils import search_tokens as splittokens
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
 from markdown import markdown
-import core_app
+from functools import reduce
+import operator
 
 # Create your models here.
 
@@ -28,13 +30,26 @@ class CardMixin(object):
         return card
 
     @classmethod
-    def get_user_cards(cls, user):
+    def get_allowed_cards(cls, user):
         boards = Board.get_user_boards(user)
         cards  = Card.objects.none()
 
         for indi in boards:
             for indj in indi.lists.all():
                 cards = cards | indj.cards.all()
+        return cards
+
+    @classmethod
+    def collect_cards(cls, cards, pattern, done=False):
+        chks, tags = splittokens(pattern)
+
+        for ind in tags:
+            cards = cards.filter(Q(tags__name__startswith=ind))
+
+        cards = cards.filter(reduce(operator.and_, 
+        (Q(label__contains=ind) | Q(owner__name__contains=ind) 
+        for ind in chks)), Q(done=done)) if chks else cards
+
         return cards
 
     def __str__(self):
@@ -354,6 +369,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 
