@@ -569,7 +569,7 @@ class ManageCardRelations(GuardianView):
         included = card.relations.all()
         boards = me.boards.filter(organization=me.default)
         lists = list_app.models.List.objects.filter(ancestor__in=boards)
-        cards = models.Card.objects.filter(Q(ancestor__in=lists))
+        cards = models.Card.objects.filter(Q(ancestor__in=lists) & Q(done=False))
         excluded = cards.exclude(pk__in=included)
 
         return render(request, 'card_app/manage-card-relations.html', 
@@ -581,28 +581,27 @@ class ManageCardRelations(GuardianView):
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
-        included = card.relations.all()
+        if not form.is_valid():
+            return render(request, 'card_app/manage-card-relations.html', 
+                {'me': me, 'organization': me.default, 'card': card,
+                        'form':form}, status=400)
 
-        boards = me.boards.all()
+        included = card.relations.all()
+        boards = me.boards.filter(organization=me.default)
+
         lists = list_app.models.List.objects.filter(ancestor__in=boards)
         cards = models.Card.objects.filter(Q(ancestor__in=lists))
         excluded = cards.exclude(pk__in=included)
 
-        if not form.is_valid():
-            return render(request, 'card_app/manage-card-relations.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'card': card,
-                        'form':forms.CardSearchForm()}, status=400)
+        included = included.filter(Q(
+        label__contains=form.cleaned_data['pattern']) & Q(done=form.cleaned_data['done']))
 
-        included = included.filter(
-        label__contains=form.cleaned_data['pattern'])
-
-        excluded = excluded.filter(
-        label__contains=form.cleaned_data['pattern'])
+        excluded = excluded.filter(Q(
+        label__contains=form.cleaned_data['pattern']) & Q(done=form.cleaned_data['done']))
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':forms.CardSearchForm()})
+        'me': me, 'organization': me.default,'form':form})
 
 
 class ManageCardWorkers(GuardianView):
@@ -915,6 +914,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

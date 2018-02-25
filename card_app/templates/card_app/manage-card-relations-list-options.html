@@ -8,7 +8,9 @@
 <a class="e-get" style="color:red"
 data-callback="$('#unrelate-card{{ind.id}}').remove();"
 data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-remove"></span></a> {{ind.label}}
+<span class="glyphicon glyphicon-remove"></span></a> 
+{% if ind.done %} (Done) {% endif %}
+{{ind.label}}
 </p>
 {% endfor %}
 
@@ -17,7 +19,9 @@ data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="#">
 <a class="e-get" 
 data-callback="$('#relate-card{{ind.id}}').remove();"
 data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span></a> {{ind.label}}
+<span class="glyphicon glyphicon-plus"></span></a> 
+{% if ind.done %} (Done) {% endif %}
+{{ind.label}}
 </p>
 
 {% endfor %}
@@ -25,11 +29,7 @@ data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#">
 </div>
 <br> 
 
-<form id="relate-card-search-form" enctype="multipart/form-data">
-{% csrf_token %}
-{% bootstrap_field form.pattern  size='md' layout='inline' %}
-{% bootstrap_form_errors form type='non_fields' %}
-</form>
+
 
 
 
