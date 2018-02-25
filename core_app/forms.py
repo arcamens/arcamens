@@ -41,6 +41,11 @@ class GlobalFilterForm(forms.ModelForm):
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
+class GlobalTaskFilterForm(forms.ModelForm):
+    class Meta:
+        model  = models.GlobalTaskFilter
+        exclude = ('user', 'organization')
+
 class UserFilterForm(forms.ModelForm):
     class Meta:
         model  = models.UserFilter
@@ -55,6 +60,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 

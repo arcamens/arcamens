@@ -503,35 +503,56 @@ class EJoinOrganization(GuardianView):
 
 class ListAllTasks(GuardianView):
     def get(self, request):
-        user = models.User.objects.get(id=self.user_id)
-        assignments = user.assignments.filter(done=False)
-        tasks       = user.tasks.filter(done=False)
+        me = models.User.objects.get(id=self.user_id)
 
-        form        = forms.TaskSearchForm()
+        filter, _ = models.GlobalTaskFilter.objects.get_or_create(
+        user=me, organization=me.default)
+        form  = forms.GlobalTaskFilterForm(instance=filter)
+
+        assignments = me.assignments.all()
+        tasks       = me.tasks.all()
+
         total = assignments.count() + tasks.count()
+        
+        assignments = assignments.filter(
+        label__contains=filter.pattern, 
+        done=filter.done)
+
+        tasks = tasks.filter(
+        label__contains=filter.pattern, 
+        done=filter.done)
+
+        count = assignments.count() + tasks.count()
+
         return render(request, 'core_app/list-all-tasks.html', 
         {'assignments': assignments, 'total': total, 'count': total, 
         'form': form, 'tasks': tasks})
 
     def post(self, request):
         form = forms.TaskSearchForm(request.POST)
-        user = models.User.objects.get(id=self.user_id)
-        assignments = user.assignments.all()
-        tasks       = user.tasks.all()
+        me = models.User.objects.get(id=self.user_id)
+        assignments = me.assignments.all()
+        tasks       = me.tasks.all()
         total = assignments.count() + tasks.count()
+
+        filter, _ = models.GlobalTaskFilter.objects.get_or_create(
+        user=me, organization=me.default)
+        form  = forms.GlobalFilterForm(request.POST, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-all-tasks.html', 
                 {'assignments': assignments, 'form': form, 'total': total,
-                    'count': total, 'tasks': user.tasks.all()}, status=400)
+                    'count': total, 'tasks': tasks}, status=400)
 
+        form.save()
         assignments = assignments.filter(
-        label__contains=form.cleaned_data['pattern'], 
-        done=form.cleaned_data['done'])
+        label__contains=filter.pattern, 
+        done=filter.done)
 
         tasks = tasks.filter(
-        label__contains=form.cleaned_data['pattern'], 
-        done=form.cleaned_data['done'])
+        label__contains=filter.pattern, 
+        done=filter.done)
+
         count = assignments.count() + tasks.count()
 
         return render(request, 'core_app/list-all-tasks.html', 
