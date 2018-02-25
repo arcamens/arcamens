@@ -34,7 +34,8 @@ class UserForm(site_app.forms.UserForm):
         fields = ('name', 'avatar', 
         'email', 'password', 'description', 
         'recover_email')
-        model   = models.User
+
+        model = models.User
 
 class GlobalFilterForm(forms.ModelForm):
     class Meta:
@@ -60,6 +61,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 
