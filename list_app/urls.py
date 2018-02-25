@@ -20,47 +20,8 @@ urlpatterns = [
     url(r'^copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
     url(r'^setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
     url(r'^e-archive-list/(?P<event_id>.+)/', views.EArchiveList.as_view(), name='e-archive-list'),
+    url(r'^e-paste-card/(?P<event_id>.+)/', views.EPasteCard.as_view(), name='e-paste-card'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

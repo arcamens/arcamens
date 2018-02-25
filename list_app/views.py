@@ -141,6 +141,10 @@ class PasteCards(GuardianView):
         for ind in user.card_clipboard.all():
             ind.ancestor = list
             ind.save()
+            event = models.EPasteCard.objects.create(
+            organization=user.default, ancestor=list, 
+            child=ind, user=user)
+            event.users.add(*(list.ancestor.members.all() | ind.workers.all()))
 
         user.card_clipboard.clear()
 
@@ -269,6 +273,15 @@ class ECutList(GuardianView):
     def get(self, request, event_id):
         event = models.ECutList.objects.get(id=event_id)
         return render(request, 'list_app/e-cut-list.html', 
+        {'event':event})
+
+class EPasteCard(GuardianView):
+    """
+    """
+
+    def get(self, request, event_id):
+        event = models.EPasteCard.objects.get(id=event_id)
+        return render(request, 'list_app/e-paste-card.html', 
         {'event':event})
 
 

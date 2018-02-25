@@ -144,6 +144,13 @@ $(document).ready(function() {
 $('#event-' + {{ind.id}}).load("{{ind.ecreatecard.get_absolute_url}}");
 });
 </script>
+{% elif ind.epastecard %}
+<script>
+$(document).ready(function() {
+$('#event-' + {{ind.id}}).load("{{ind.epastecard.get_absolute_url}}");
+});
+</script>
+
 {% elif ind.erelatecard %}
 <script>
 $(document).ready(function() {
@@ -314,6 +321,7 @@ $('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

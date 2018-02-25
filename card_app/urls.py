@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
     url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
     url(r'^e-create-card/(?P<event_id>.+)/', views.ECreateCard.as_view(), name='e-create-card'),
+
     url(r'^e-create-fork/(?P<event_id>.+)/', views.ECreateFork.as_view(), name='e-create-fork'),
     url(r'^e-update-card/(?P<event_id>.+)/', views.EUpdateCard.as_view(), name='e-update-card'),
     url(r'^e-delete-card/(?P<event_id>.+)/', views.EDeleteCard.as_view(), name='e-delete-card'),
@@ -54,6 +55,7 @@ urlpatterns = [
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
 
 ]
+
 
 
 

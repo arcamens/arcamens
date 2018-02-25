@@ -128,6 +128,20 @@ class ECutList(Event):
         return reverse('list_app:e-cut-list', 
                     kwargs={'event_id': self.id})
 
+class EPasteCard(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_paste_card0', blank=True)
+
+    child = models.ForeignKey('card_app.Card', 
+    related_name='e_paste_card1', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('list_app:e-paste-card', 
+                    kwargs={'event_id': self.id})
+
 
 
 
