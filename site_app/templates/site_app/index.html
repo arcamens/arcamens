@@ -62,9 +62,6 @@ footer p {
 <li><a href="{% url 'site_app:signup' %}" >
 <span class="glyphicon glyphicon-user"></span> {% trans "Sign up" %}</a></li>
 
-<li><a href="{% url 'site_app:recover-account' %}" >
-<span class="glyphicon glyphicon-lock"></span> {% trans "Recover Account" %}</a></li>
-
 <li><a href="" target="_blank">
 <span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
 
@@ -80,15 +77,22 @@ footer p {
 {% buttons submit='Sign in' layout='inline' %}{% endbuttons %}
 
 </form>
+
 </ul>
 
 </div>
 </nav>
 
 <div class="container">
+{% if form.errors %}
+<div class="text-right">
+<a href="{% url 'site_app:recover-account' %}" >
+<span class="glyphicon glyphicon-lock"></span> Lost password?</a>
+</div>
+{% endif %}
+
 {% bootstrap_form_errors form type='non_fields' %}
 </div>
-
 
 {% include 'site_app/home.html' %}
 
@@ -101,6 +105,7 @@ footer p {
 
 </body>
 </html>
+
 
 
 
