@@ -1,4 +1,6 @@
 function do_get(e) {
+    $('#modalWait').modal('show');
+
     shell = $(this).attr('data-shell');
     shell_error = $(this).attr('data-shell-error');
 
@@ -15,11 +17,14 @@ function do_get(e) {
     url: url,  //Server script to process data
     type: 'GET',
     success: function(data) {
+    $('#modalWait').modal('hide');
+
         eval(callback);
         $(shell).html(data);
 
     },
     error: function(data){
+        $('#modalWait').modal('hide');
         eval(callback_error);
         $(shell_error).html(data.responseText);
 
@@ -31,6 +36,7 @@ function do_get(e) {
 }
 
 $(document).on('click', '.e-get', do_get);
+
 
 
 
