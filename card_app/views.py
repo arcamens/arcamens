@@ -95,7 +95,7 @@ class ListCards(GuardianView):
         filter.pattern, filter.done) if filter.status else \
         cards.filter(done=False)
 
-        cards = cards.order_by('-created')
+        cards = cards.values('fork', 'label', 'id', 'workers')
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
@@ -864,6 +864,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
