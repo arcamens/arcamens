@@ -75,9 +75,9 @@ class User(UserMixin, BasicUser):
     'Tag', related_name='users', 
     null=True, blank=True, symmetrical=False)
 
-    post_clipboard = models.ManyToManyField(
-    'post_app.Post', null=True, blank=True, 
-    related_name='post_clipboard_users', symmetrical=False)
+    # post_clipboard = models.ManyToManyField(
+    # 'post_app.Post', null=True, blank=True, 
+    # related_name='post_clipboard_users', symmetrical=False)
 
     # contacts  = models.ManyToManyField('self', 
     # related_name='users', null=True, blank=True, symmetrical=False)
@@ -104,13 +104,6 @@ class User(UserMixin, BasicUser):
     # default=datetime.date.today() + datetime.timedelta(0)
     expiration = models.DateField(null=True)
 
-    card_clipboard = models.ManyToManyField(
-    'card_app.Card', related_name='card_clipboard_users', 
-    null=True, blank=True, symmetrical=False)
-
-    list_clipboard = models.ManyToManyField(
-    'list_app.List', related_name='list_clipboard_users', 
-    null=True, blank=True, symmetrical=False)
 
     def __str__(self):
         return self.name
@@ -224,8 +217,26 @@ class GlobalTaskFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
+class Clipboard(GlobalFilterMixin, models.Model):
+    organization = models.ForeignKey(
+    'core_app.Organization', blank=True)
 
+    user = models.ForeignKey('core_app.User', blank=True)
 
+    posts = models.ManyToManyField(
+    'post_app.Post', null=True, blank=True, 
+    related_name='post_clipboard_users', symmetrical=False)
+
+    cards= models.ManyToManyField(
+    'card_app.Card', related_name='card_clipboard_users', 
+    null=True, blank=True, symmetrical=False)
+
+    lists = models.ManyToManyField(
+    'list_app.List', related_name='list_clipboard_users', 
+    null=True, blank=True, symmetrical=False)
+
+    class Meta:
+        unique_together = ('user', 'organization')
 
 
 

@@ -11,6 +11,7 @@ from core_app.models import Organization, User
 import timeline_app.models
 import post_app.models
 from post_app.models import Post
+from core_app.models import Clipboard
 import operator
 
 # Create your views here.
@@ -204,7 +205,10 @@ class PastePosts(GuardianView):
         user     = User.objects.get(id=self.user_id)
         users    = timeline.users.all()
 
-        for ind in user.post_clipboard.all():
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        for ind in clipboard.posts.all():
             ind.ancestor = timeline
             ind.save()
             event = post_app.models.ECreatePost.objects.create(
@@ -215,7 +219,7 @@ class PastePosts(GuardianView):
         ws.client.publish('timeline%s' % timeline.id, 
             'sound', 0, False)
     
-        user.post_clipboard.clear()
+        clipboard.posts.clear()
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
 
@@ -457,6 +461,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

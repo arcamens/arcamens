@@ -44,7 +44,7 @@ class CashierView(AuthenticatedView):
             return render(request, 'core_app/disabled-account.html', 
                 {'user': user, 'organizations': user.default})
 
-        return super(GuardianView, self).delegate(
+        return super(CashierView, self).delegate(
             request, *args, **kwargs)
         
 class Index(AuthenticatedView):
@@ -618,12 +618,17 @@ class Find(GuardianView):
 class ListClipboard(GuardianView):
     def get(self, request):
         user   = User.objects.get(id=self.user_id)
-        cards = user.card_clipboard.all()
-        lists = user.list_clipboard.all()
-        posts = user.post_clipboard.all()
+        clipboard, _    = models.Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        cards = clipboard.cards.all()
+        lists = clipboard.lists.all()
+        posts = clipboard.posts.all()
+
         total = cards.count() + lists.count() + posts.count()
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 

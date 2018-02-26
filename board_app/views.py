@@ -1,4 +1,5 @@
 from core_app.views import GuardianView, CashierView
+from core_app.models import Clipboard
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
@@ -180,9 +181,12 @@ class PasteLists(GuardianView):
         board = models.Board.objects.get(id=board_id)
         user = core_app.models.User.objects.get(id=self.user_id)
 
-        for ind in user.list_clipboard.all():
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        for ind in clipboard.lists.all():
             ind.ancestor = board; ind.save()
-        user.list_clipboard.clear()
+        clipboard.lists.clear()
 
         ws.client.publish('board%s' % board.id, 
             'sound', 0, False)
@@ -454,6 +458,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

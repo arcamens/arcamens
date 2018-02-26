@@ -1,4 +1,5 @@
 from django.views.generic import View
+from core_app.models import Clipboard
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.db.models import Q
@@ -138,7 +139,10 @@ class PasteCards(GuardianView):
         list = models.List.objects.get(id=list_id)
         user = core_app.models.User.objects.get(id=self.user_id)
 
-        for ind in user.card_clipboard.all():
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        for ind in clipboard.cards.all():
             ind.ancestor = list
             ind.save()
             event = models.EPasteCard.objects.create(
@@ -146,7 +150,7 @@ class PasteCards(GuardianView):
             child=ind, user=user)
             event.users.add(*(list.ancestor.members.all() | ind.workers.all()))
 
-        user.card_clipboard.clear()
+        clipboard.cards.clear()
 
         # missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
@@ -166,7 +170,10 @@ class CutList(GuardianView):
 
         list.ancestor = None
         list.save()
-        user.list_clipboard.add(list)
+
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+        clipboard.lists.add(list)
 
         event = models.ECutList.objects.create(organization=user.default,
         ancestor=board, child=list, user=user)
@@ -180,11 +187,14 @@ class CopyList(GuardianView):
         list = models.List.objects.get(id=list_id)
         user = core_app.models.User.objects.get(id=self.user_id)
         copy = list.duplicate()
-        user.list_clipboard.add(copy)
+
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+        clipboard.lists.add(copy)
 
         # missing event.
         ws.client.publish('board%s' % list.ancestor.id, 
-            'sound' % list.ancestor.id, 0, False)
+            'sound', 0, False)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
@@ -283,6 +293,7 @@ class EPasteCard(GuardianView):
         event = models.EPasteCard.objects.get(id=event_id)
         return render(request, 'list_app/e-paste-card.html', 
         {'event':event})
+
 
 
 

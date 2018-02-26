@@ -3,6 +3,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from timeline_app.views import GuardianView
+from core_app.models import Clipboard
+
 import timeline_app.models
 import core_app.models
 from . import forms
@@ -348,7 +350,10 @@ class CutPost(GuardianView):
         post.ancestor = None
         post.save()
 
-        user.post_clipboard.add(post)
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        clipboard.posts.add(post)
 
         event    = models.ECutPost.objects.create(organization=user.default,
         timeline=timeline, post=post, user=user)
@@ -364,7 +369,9 @@ class CopyPost(GuardianView):
         user = timeline_app.models.User.objects.get(id=self.user_id)
         copy = post.duplicate()
 
-        user.post_clipboard.add(copy)
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+        clipboard.posts.add(copy)
 
         # should have event, missing creation of event.
         ws.client.publish('timeline%s' % post.ancestor.id, 
@@ -575,6 +582,7 @@ class CancelPostCreation(GuardianView):
         post.delete()
 
         return HttpResponse(status=200)
+
 
 
 

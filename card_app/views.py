@@ -3,6 +3,7 @@ from django.db.models import Q, F
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
+from core_app.models import Clipboard
 from core_app.views import GuardianView
 from core_app.models import User
 from functools import reduce
@@ -256,7 +257,10 @@ class CutCard(GuardianView):
 
         card.ancestor = None
         card.save()
-        user.card_clipboard.add(card)
+
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+        clipboard.cards.add(card)
 
         event = models.ECutCard.objects.create(organization=user.default,
         ancestor=list, child=card, user=user)
@@ -270,7 +274,10 @@ class CopyCard(GuardianView):
         card = models.Card.objects.get(id=card_id)
         user = core_app.models.User.objects.get(id=self.user_id)
         copy = card.duplicate()
-        user.card_clipboard.add(copy)
+
+        clipboard, _    = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+        clipboard.cards.add(copy)
 
         # Missing event.
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
@@ -857,6 +864,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
