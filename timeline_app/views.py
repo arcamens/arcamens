@@ -1,4 +1,4 @@
-from core_app.views import GuardianView
+from core_app.views import GuardianView, CashierView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
@@ -273,15 +273,6 @@ class EDeleteTimeline(GuardianView):
         return render(request, 'timeline_app/e-delete-timeline.html', 
         {'event':event})
 
-
-class DisabledOrganization(View):
-    def get(self, request, user_id):
-        user = User.objects.get(id=user_id)
-            
-        return render(request, 'timeline_app/disabled-organization.html', 
-        {'user': user, 'default': user.default,
-        'organizations': user.organizations})
-
 class Logout(View):
     """
     """
@@ -310,7 +301,7 @@ class TimelinePaginator(GuardianView):
     def get(self, request):
         pass
 
-class ListTimelines(GuardianView):
+class ListTimelines(CashierView):
     """
     """
 
@@ -466,6 +457,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
 
 
 

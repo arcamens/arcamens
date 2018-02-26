@@ -26,11 +26,11 @@ urlpatterns = [
     url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
     url(r'^manage-user-timelines/(?P<user_id>.+)/', views.ManageUserTimelines.as_view(), name='manage-user-timelines'),
     url(r'^manage-timeline-users/(?P<timeline_id>.+)/', views.ManageTimelineUsers.as_view(), name='manage-timeline-users'),
-    url(r'^disabled-organization/(?P<user_id>.+)/', views.DisabledOrganization.as_view(), name='disabled-organization'),
     url(r'^bind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.BindTimelineUser.as_view(), name='bind-timeline-user'),
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 

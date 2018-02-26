@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^index/$', views.Index.as_view(), name='index'),
+    url(r'^disabled-account/(?P<user_id>.+)/', views.DisabledAccount.as_view(), name='disabled-account'),
     url(r'^switch-organization/(?P<organization_id>.+)/', views.SwitchOrganization.as_view(), name='switch-organization'),
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
     url(r'^create-organization/(?P<user_id>.+)/', views.CreateOrganization.as_view(), name='create-organization'),
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
 
 ]
+
 
 
 

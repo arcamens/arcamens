@@ -1,10 +1,10 @@
-from django.db import models
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from slock.models import BasicUser
 from paybills.models import Service
+from django.db.models import Q
 from functools import reduce
+from django.db import models
 import operator
 
 import datetime
@@ -223,6 +223,7 @@ class GlobalTaskFilter(models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', )
+
 
 
 

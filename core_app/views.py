@@ -1,45 +1,58 @@
-from django.views.generic import View
-from django.shortcuts import render, redirect
+from core_app.models import OrganizationService, Organization
 from django.core.paginator import Paginator, EmptyPage
-from card_app.models import Card
-from post_app.models import Post
-from functools import reduce
-import operator
+from django.shortcuts import render, redirect
+from slock.views import AuthenticatedView
+from board_app.models import Organization
+from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from card_app.models import Card
+from post_app.models import Post
 from django.db.models import Q
-from core_app.models import OrganizationService, Organization
-from slock.views import AuthenticatedView
 from django.urls import reverse
-from board_app.models import Organization
-from . import models
-from . import forms
 from core_app.models import User
-import timeline_app
-import json
 from django.conf import settings
 from traceback import print_exc
 from core_app import ws
-import random
+from . import models
+from . import forms
+import json
 
 # Create your views here.
 
 class GuardianView(AuthenticatedView):
     def delegate(self, request, *args, **kwargs):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         if not user.default.owner.enabled:
-            return redirect('core_app:disabled-organization', user_id=user.id)
+            return HttpResponse("Disabled organization \
+                account!", status=400)
 
         return super(GuardianView, self).delegate(
             request, *args, **kwargs)
 
-class Index(GuardianView):
+class DisabledAccount(View):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+            
+
+class CashierView(AuthenticatedView):
+    def delegate(self, request, *args, **kwargs):
+        user = User.objects.get(id=self.user_id)
+
+        if not user.default.owner.enabled:
+            return render(request, 'core_app/disabled-account.html', 
+                {'user': user, 'organizations': user.default})
+
+        return super(GuardianView, self).delegate(
+            request, *args, **kwargs)
+        
+class Index(AuthenticatedView):
     """
     """
 
     def get(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
     
         # can be improved.
@@ -54,9 +67,9 @@ class Index(GuardianView):
         'organizations': organizations, 'queues': json.dumps(queues),
          'settings': settings})
 
-class SwitchOrganization(GuardianView):
+class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         ws.client.publish('user%s' % user.id, 
             'unsubscribe organization%s' % user.default.id, 0, False)
@@ -90,7 +103,7 @@ class UpdateUserInformation(GuardianView):
         form.save()
         return HttpResponse(status=200)
 
-class CreateOrganization(GuardianView):
+class CreateOrganization(AuthenticatedView):
     """
     """
 
@@ -612,4 +625,5 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 

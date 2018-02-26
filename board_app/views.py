@@ -1,4 +1,4 @@
-from core_app.views import GuardianView
+from core_app.views import GuardianView, CashierView
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
@@ -16,7 +16,7 @@ from core_app import ws
 import re
 # Create your views here.
 
-class ListBoards(GuardianView):
+class ListBoards(CashierView):
     """
     """
 
@@ -454,6 +454,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 
