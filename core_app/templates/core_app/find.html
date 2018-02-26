@@ -22,6 +22,8 @@ data-show="{% url 'card_app:view-data' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
+{% if ind.done %} (Done) {% endif %}
+
 {{ind.label}} </a> 
 </p>
 
@@ -34,6 +36,7 @@ data-show="{% url 'post_app:post' ind.id %}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
+{% if ind.done %} (Done) {% endif %}
 {{ind.label}} </a> 
 </p>
 
@@ -73,5 +76,6 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 

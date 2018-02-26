@@ -582,6 +582,9 @@ class Find(GuardianView):
         posts = Post.collect_posts(posts, filter.pattern, filter.done)
         count = cards.count() + posts.count()
 
+        cards = cards.values('done', 'label', 'id')
+        posts = posts.values('done', 'label', 'id')
+
         return render(request, 'core_app/find.html', 
         {'form': form, 'cards': cards, 'posts': posts,
         'total': total, 'count': count})
@@ -609,6 +612,8 @@ class Find(GuardianView):
         posts = Post.collect_posts(posts, filter.pattern, filter.done)
 
         count = cards.count() + posts.count()
+        cards = cards.values('done', 'label', 'id')
+        posts = posts.values('done', 'label', 'id')
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'posts': posts, 'cards': cards,
@@ -629,6 +634,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
