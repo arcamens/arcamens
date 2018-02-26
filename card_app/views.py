@@ -95,6 +95,7 @@ class ListCards(GuardianView):
         filter.pattern, filter.done) if filter.status else \
         cards.filter(done=False)
 
+        cards = cards.order_by('-created')
         cards = cards.values('fork', 'label', 'id', 'workers')
 
         return render(request, 'card_app/list-cards.html', 
