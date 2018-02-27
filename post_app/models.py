@@ -125,7 +125,7 @@ class Post(PostMixin, models.Model):
 
 class PostFilter(GlobalFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, null=True, help_text='Example: victor + \
+    blank=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
 
     user = models.ForeignKey('core_app.User', 
@@ -147,7 +147,7 @@ class PostFilter(GlobalFilterMixin, models.Model):
 
 class GlobalPostFilter(GlobalFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, null=True, help_text='Example: victor + \
+    blank=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
 
     user = models.ForeignKey('core_app.User', 

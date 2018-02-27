@@ -271,7 +271,7 @@ class EDeleteCard(Event):
 
 class CardFilter(GlobalFilterMixin, models.Model):
     pattern  = models.CharField(
-    max_length=255,  blank=True, null=True, default='', 
+    max_length=255,  blank=True, default='', 
     help_text='Example: victor + \#arcamens + #suggestion ...')
 
     organization = models.ForeignKey('core_app.Organization', 
@@ -370,6 +370,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 

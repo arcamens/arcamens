@@ -170,7 +170,7 @@ class EUnbindUserTag(Event):
 
 class GlobalFilter(GlobalFilterMixin, models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='', null=True)
+    default='')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -186,7 +186,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
 class UserFilter(models.Model):
     organization = models.ForeignKey('core_app.Organization', 
-    blank=True, null=True)
+    blank=True, default='')
 
     pattern  = models.CharField(max_length=255, 
     blank=True, null=True, default='',
@@ -202,7 +202,7 @@ class UserFilter(models.Model):
 
 class GlobalTaskFilter(models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='', null=True, help_text='Example: ignition mechanism  \
+    default='', help_text='Example: ignition mechanism  \
     + #issue + #car ...')
 
     organization = models.ForeignKey('core_app.Organization', 
@@ -237,6 +237,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

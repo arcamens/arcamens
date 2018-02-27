@@ -82,7 +82,7 @@ class Board(BoardMixin, models.Model):
 
 class BoardFilter(models.Model):
     pattern = models.CharField(max_length=255, blank=True, 
-    default='', null=True)
+    default='')
 
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
