@@ -35,7 +35,8 @@ class List(ListMixin, models.Model):
 
     description = models.CharField(null=True, blank=True, default='',
     verbose_name=_("Description"), help_text='Example: Things to do.', max_length=626)
-    done = models.BooleanField(blank=True, default=False)
+
+    # done = models.BooleanField(blank=True, default=False)
 
     # members = models.ManyToManyField('core_app.User', 
     # null=True, related_name='boards_member', blank=True, 
@@ -50,7 +51,7 @@ class ListFilter(models.Model):
     board = models.ForeignKey('board_app.Board', blank=True,
     related_name='list_filter', null=True)
 
-    done = models.BooleanField(blank=True, default=False)
+    # done = models.BooleanField(blank=True, default=False)
 
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
@@ -141,6 +142,7 @@ class EPasteCard(Event):
     def get_absolute_url(self):
         return reverse('list_app:e-paste-card', 
                     kwargs={'event_id': self.id})
+
 
 
 

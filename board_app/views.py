@@ -32,9 +32,8 @@ class ListBoards(CashierView):
         user=user, organization=user.default)
 
         boards = total.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
-        total.filter(done=False)
-
+        Q(description__icontains=filter.pattern))) if filter.status else \
+        total
 
         return render(request, 'board_app/list-boards.html', 
         {'boards': boards, 'total': total, 'user': user, 'pins': pins, 'filter': filter,
@@ -458,6 +457,7 @@ class EArchiveBoard(GuardianView):
         event = models.EArchiveBoard.objects.get(id=event_id)
         return render(request, 'board_app/e-archive-board.html', 
         {'event':event})
+
 
 
 

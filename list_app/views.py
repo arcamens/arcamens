@@ -28,8 +28,8 @@ class ListLists(GuardianView):
         user=user, organization=user.default, board=board)
 
         lists = total.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern)) & Q(done=filter.done)) if filter.status else \
-        total.filter(done=False)
+        Q(description__icontains=filter.pattern))) if filter.status else \
+        total
 
         return render(request, 'list_app/list-lists.html', 
         {'lists': lists, 'user': user, 'board': board, 'organization': user.default,
@@ -293,6 +293,7 @@ class EPasteCard(GuardianView):
         event = models.EPasteCard.objects.get(id=event_id)
         return render(request, 'list_app/e-paste-card.html', 
         {'event':event})
+
 
 
 

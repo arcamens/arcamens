@@ -70,7 +70,8 @@ class Board(BoardMixin, models.Model):
     members = models.ManyToManyField('core_app.User', 
     null=True, related_name='boards', blank=True, 
     symmetrical=False)
-    done = models.BooleanField(blank=True, default=False)
+
+    # done = models.BooleanField(blank=True, default=False)
 
     organization = models.ForeignKey('core_app.Organization', 
     related_name='boards', null=True, blank=True)
@@ -152,6 +153,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 

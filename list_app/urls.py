@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^list-lists/(?P<board_id>.+)/', views.ListLists.as_view(), name='list-lists'),
-    url(r'^done/(?P<list_id>.+)/', views.Done.as_view(), name='done'),
+    # url(r'^done/(?P<list_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^update-list/(?P<list_id>.+)/', views.UpdateList.as_view(), name='update-list'),
     url(r'^create-list/(?P<board_id>.+)/', views.CreateList.as_view(), name='create-list'),
     url(r'^delete-list/(?P<list_id>.+)/', views.DeleteList.as_view(), name='delete-list'),
@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^e-paste-card/(?P<event_id>.+)/', views.EPasteCard.as_view(), name='e-paste-card'),
 
 ]
+
 
 
