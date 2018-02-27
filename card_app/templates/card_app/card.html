@@ -12,10 +12,10 @@ data-shell="#pins"  data-show="{% url 'card_app:pin-card' card.id %}">
 
 <div style="word-wrap: break-word;"> 
 
-<a href="#"  class="e-get 
-{% if user in card.workers.all %} 
+<a href="#"  class="e-get
+{% if card.in_workers %}
 text-danger 
-{% elif card.workers.count %} 
+{% elif card.has_workers %}
 text-success 
 {% endif %}"
 
