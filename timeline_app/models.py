@@ -70,7 +70,8 @@ class Timeline(TimelineMixin, models.Model):
     # help_text='Timeline Description', max_length=190)
 
 class TimelineFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
+    pattern = models.CharField(max_length=255, blank=True, 
+    default='', null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
@@ -105,6 +106,7 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
     related_name='e_unbind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+
 
 
 

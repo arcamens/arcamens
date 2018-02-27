@@ -124,7 +124,7 @@ class Post(PostMixin, models.Model):
     html = models.TextField(null=True, blank=True)
 
 class PostFilter(GlobalFilterMixin, models.Model):
-    pattern = models.CharField(max_length=255, 
+    pattern = models.CharField(max_length=255, default='',
     blank=True, null=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
 
@@ -146,7 +146,7 @@ class PostFilter(GlobalFilterMixin, models.Model):
         unique_together = ('user', 'timeline', )
 
 class GlobalPostFilter(GlobalFilterMixin, models.Model):
-    pattern = models.CharField(max_length=255, 
+    pattern = models.CharField(max_length=255, default='',
     blank=True, null=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
 
@@ -272,6 +272,7 @@ class EUnbindTagPost(Event):
     def get_absolute_url(self):
         return reverse('post_app:e-unbind-tag-post', 
                     kwargs={'event_id': self.id})
+
 
 
 

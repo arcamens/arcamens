@@ -81,7 +81,9 @@ class Board(BoardMixin, models.Model):
 
 
 class BoardFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
+    pattern = models.CharField(max_length=255, blank=True, 
+    default='', null=True)
+
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
@@ -153,6 +155,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 

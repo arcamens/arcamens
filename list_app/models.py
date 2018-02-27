@@ -43,7 +43,8 @@ class List(ListMixin, models.Model):
     # symmetrical=False)
 
 class ListFilter(models.Model):
-    pattern      = models.CharField(max_length=255, blank=True, null=True)
+    pattern      = models.CharField(max_length=255, blank=True, 
+    default='', null=True)
     user         = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', blank=True,
     null=True)
@@ -142,6 +143,7 @@ class EPasteCard(Event):
     def get_absolute_url(self):
         return reverse('list_app:e-paste-card', 
                     kwargs={'event_id': self.id})
+
 
 
 
