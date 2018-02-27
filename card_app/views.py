@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.db.models import Q, F
+from django.db.models import Q, F, Exists, OuterRef
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
@@ -95,8 +95,12 @@ class ListCards(GuardianView):
         filter.pattern, filter.done) if filter.status else \
         cards.filter(done=False)
 
+        workers1 = User.objects.filter(pk=user.pk, tasks=OuterRef('pk'))
+        workers2 = User.objects.filter(tasks=OuterRef('pk'))
+        cards = cards.annotate(has_workers=Exists(workers2))
+        cards = cards.annotate(in_workers=Exists(workers1))
+        cards = cards.values('fork', 'label', 'id', 'has_workers', 'in_workers')
         cards = cards.order_by('-created')
-        cards = cards.values('fork', 'label', 'id', 'workers')
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
