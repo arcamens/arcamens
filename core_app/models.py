@@ -6,8 +6,18 @@ from django.db.models import Q
 from functools import reduce
 from django.db import models
 import operator
-
 import datetime
+
+class UserMixin(object):
+    def get_user_url(self):
+        return reverse('core_app:user', 
+        kwargs={'user_id': self.id})
+
+    def __str__(self):
+        return self.name
+
+class GlobalFilterMixin:
+    pass
 
 class Organization(models.Model):
     name     = models.CharField(null=True,
@@ -38,17 +48,6 @@ class OrganizationService(Service):
 
     def __str__(self):
         return self.name
-
-class UserMixin(object):
-    def get_user_url(self):
-        return reverse('core_app:user', 
-        kwargs={'user_id': self.id})
-
-    def __str__(self):
-        return self.name
-
-class GlobalFilterMixin:
-    pass
 
 class Invite(models.Model):
     # email = models.EmailField(max_length=70, 
@@ -104,7 +103,6 @@ class User(UserMixin, BasicUser):
     # default=datetime.date.today() + datetime.timedelta(0)
     expiration = models.DateField(null=True)
 
-
     def __str__(self):
         return self.name
 
@@ -133,31 +131,18 @@ class Tag(models.Model):
     organization = models.ForeignKey('core_app.Organization',
     related_name='tags', null=True, blank=True)
 
-
 class EInviteUser(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_invite_user0', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('core_app:e-invite-user', 
-        kwargs={'event_id': self.id})
 
 class EJoinOrganization(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_join_organization0', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('core_app:e-join-organization', 
-        kwargs={'event_id': self.id})
-
 class EBindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_bind_user_tag0', blank=True)
     tag = models.ForeignKey('Tag', null=True, blank=True)
-
-    def get_absolute_url(self):
-        return reverse('core_app:e-bind-user-tag', 
-        kwargs={'event_id': self.id})
 
 class ECreateTag(Event):
     tag = models.ForeignKey('Tag', null=True, 
@@ -171,10 +156,6 @@ class EUnbindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_unbind_user_tag0', blank=True)
     tag = models.ForeignKey('Tag', null=True, blank=True)
-
-    def get_absolute_url(self):
-        return reverse('core_app:e-unbind-user-tag', 
-        kwargs={'event_id': self.id})
 
 class GlobalFilter(GlobalFilterMixin, models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
