@@ -33,7 +33,7 @@ class List(ListMixin, models.Model):
     ancestor = models.ForeignKey('board_app.Board', null=True, 
     related_name='lists', blank=True)
 
-    description = models.CharField(null=True, blank=True, default='',
+    description = models.CharField(blank=True, default='',
     verbose_name=_("Description"), help_text='Example: Things to do.', max_length=626)
 
     # done = models.BooleanField(blank=True, default=False)
@@ -143,6 +143,7 @@ class EPasteCard(Event):
     def get_absolute_url(self):
         return reverse('list_app:e-paste-card', 
                     kwargs={'event_id': self.id})
+
 
 
 

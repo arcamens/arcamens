@@ -57,7 +57,7 @@ class Board(BoardMixin, models.Model):
     verbose_name=_("Name"), help_text='Example: /projects/labor/bugs, \
     Management, Blackdawn Team, ...', max_length=250)
 
-    description = models.CharField(null=True, blank=True, default='', 
+    description = models.CharField(blank=True, default='', 
     verbose_name=_("Description"), help_text='Example: Deals with \
     labor bugs.', max_length=626)
 
@@ -155,6 +155,7 @@ class EArchiveBoard(Event):
     def get_absolute_url(self):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
+
 
 
 

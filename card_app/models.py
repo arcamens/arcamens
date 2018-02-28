@@ -82,8 +82,7 @@ class Card(CardMixin, models.Model):
     verbose_name=_("Label"), help_text='Label, Priority, Deadline, ...', 
     max_length=626)
 
-    data = models.TextField(null=True,
-    blank=True, verbose_name=_("Data"), 
+    data = models.TextField(blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
 
     workers = models.ManyToManyField('core_app.User', 
@@ -370,6 +369,7 @@ class EArchiveCard(Event):
     def get_absolute_url(self):
         return reverse('card_app:e-archive-card', 
         kwargs={'event_id': self.id})
+
 
 
 
