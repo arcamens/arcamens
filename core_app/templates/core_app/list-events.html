@@ -11,12 +11,10 @@
 </div>
 
 <div class="modal-body">
-<div id="listEvents" class="container-fluid pre-scrollable">
-{% include 'core_app/event-paginator.html' %}
-
+<div class="container-fluid pre-scrollable">
+{% include 'core_app/event-consumer.html' %}
 </div>
 
-{{ 'listEvents' | paginator:'core_app:event-paginator' | safe}}
 </div>
 
 
@@ -27,6 +25,7 @@
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

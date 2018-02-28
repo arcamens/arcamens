@@ -16,13 +16,13 @@ urlpatterns = [
     url(r'^list-timelines/', views.ListTimelines.as_view(), name='list-timelines'),
     url(r'^timeline-paginator/', views.TimelinePaginator.as_view(), name='timeline-paginator'),
     url(r'^check-event/(?P<user_id>.+)/', views.CheckEvent.as_view(), name='check-event'),
-    url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
     url(r'^manage-user-timelines/(?P<user_id>.+)/', views.ManageUserTimelines.as_view(), name='manage-user-timelines'),
     url(r'^manage-timeline-users/(?P<timeline_id>.+)/', views.ManageTimelineUsers.as_view(), name='manage-timeline-users'),
     url(r'^bind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.BindTimelineUser.as_view(), name='bind-timeline-user'),
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 

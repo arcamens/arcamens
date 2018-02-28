@@ -116,6 +116,9 @@ class Event(models.Model):
     created = models.DateTimeField(auto_now=True, null=True)
     user = models.ForeignKey('core_app.User', null=True, blank=True)
 
+    signers = models.ManyToManyField('core_app.User', null=True,  
+    related_name='seen_events', blank=True, symmetrical=False)
+
     def __str__(self):
         return 'Event'
 
@@ -225,6 +228,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

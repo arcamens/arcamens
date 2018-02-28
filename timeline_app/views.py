@@ -292,15 +292,6 @@ class CheckEvent(GuardianView):
             return HttpResponse(status=400)
         return HttpResponse(str(event.id), status=200)
 
-class SeenEvent(GuardianView):
-    def get(self, request, event_id):
-        user  = User.objects.get(id=self.user_id)
-        event = Event.objects.get(id=event_id)
-        event.users.remove(user)
-        event.save()
-        return redirect('timeline_app:list-events')
-
-
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
         user = User.objects.get(id=user_id)
@@ -411,6 +402,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form})
+
 
 
 
