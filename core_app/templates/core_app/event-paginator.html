@@ -100,21 +100,11 @@
 {% include 'core_app/e-create-tag.html' with event=ind.ecreatetag %}
 {% elif ind.edeletetag %}
 {% include 'core_app/e-delete-tag.html' with event=ind.edeletetag %}
+{% elif ind.epastepost %}
+{% include 'timeline_app/e-paste-post.html' with event=ind.epastepost %}
 
 {% endif %}
 </div>
 {% endfor %}
-
-
-
-
-
-
-
-
-
-
-
-
 
 

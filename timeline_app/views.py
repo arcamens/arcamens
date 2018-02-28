@@ -1,29 +1,28 @@
+from timeline_app.models import Timeline, ECreateTimeline, EDeleteTimeline, \
+EUnbindTimelineUser, EUpdateTimeline, EPastePost
+from post_app.models import Post, PostFilter, GlobalPostFilter
+from core_app.models import Organization, User, Clipboard
 from core_app.views import GuardianView, CashierView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
-from timeline_app import models
-from timeline_app import forms
-from functools import reduce
 from django.db.models import Q
 from core_app import ws
-from core_app.models import Organization, User
-import timeline_app.models
 import post_app.models
-from post_app.models import Post
-from core_app.models import Clipboard
 import operator
-
+from . import forms
+from . import models
+import timeline_app.models
 # Create your views here.
 
-class Timeline(GuardianView):
-    """
-    """
-
-    def get(self, request, timeline_id):
-        timeline = models.Timeline.objects.get(id=timeline_id)
-        return render(request, 'timeline_app/timeline.html', 
-        {'timeline':timeline})
+# class Timeline(GuardianView):
+    # """
+    # """
+# 
+    # def get(self, request, timeline_id):
+        # timeline = Timeline.objects.get(id=timeline_id)
+        # return render(request, 'timeline_app/timeline.html', 
+        # {'timeline':timeline})
 
 class PostPaginator(GuardianView):
     def get(self, request, timeline_id):
@@ -34,10 +33,10 @@ class ListPosts(GuardianView):
     """
 
     def get(self, request, timeline_id):
-        timeline  = models.Timeline.objects.get(id=timeline_id)
+        timeline  = Timeline.objects.get(id=timeline_id)
         user      = User.objects.get(id=self.user_id)
 
-        filter, _ = post_app.models.PostFilter.objects.get_or_create(
+        filter, _ = PostFilter.objects.get_or_create(
         user=user, timeline=timeline)
 
         posts      = timeline.posts.all()
@@ -57,9 +56,8 @@ class ListAllPosts(ListPosts):
     """
 
     def get(self, request, user_id):
-        user = User.objects.get(id=self.user_id)
-
-        filter, _ = post_app.models.GlobalPostFilter.objects.get_or_create(
+        user      = User.objects.get(id=self.user_id)
+        filter, _ = GlobalPostFilter.objects.get_or_create(
         user=user, organization=user.default)
 
         posts = Post.get_allowed_posts(user)
@@ -99,7 +97,7 @@ class CreateTimeline(GuardianView):
         record.users.add(user)
         record.save()
 
-        event = models.ECreateTimeline.objects.create(organization=user.default,
+        event = ECreateTimeline.objects.create(organization=user.default,
         timeline=record, user=user)
 
         # Wondering if organization admins should be notified of this
@@ -123,9 +121,9 @@ class CreateTimeline(GuardianView):
 
 class DeleteTimeline(GuardianView):
     def get(self, request,  timeline_id):
-        timeline = models.Timeline.objects.get(id = timeline_id)
+        timeline = Timeline.objects.get(id = timeline_id)
         user     = User.objects.get(id=self.user_id)
-        event    = models.EDeleteTimeline.objects.create(organization=user.default,
+        event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
         ws.client.publish('timeline%s' % timeline.id, 
@@ -142,12 +140,12 @@ class DeleteTimeline(GuardianView):
 class UnbindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
         user = User.objects.get(id=user_id)
-        timeline = models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
         timeline.users.remove(user)
         timeline.save()
-        me = User.objects.get(id=self.user_id)
 
-        event    = models.EUnbindTimelineUser.objects.create(organization=me.default,
+        me    = User.objects.get(id=self.user_id)
+        event = EUnbindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
 
         event.users.add(*timeline.users.all())
@@ -171,22 +169,23 @@ class UnbindTimelineUser(GuardianView):
 
 class UpdateTimeline(GuardianView):
     def get(self, request, timeline_id):
-        timeline = models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
         return render(request, 'timeline_app/update-timeline.html',
         {'timeline': timeline, 'form': forms.TimelineForm(instance=timeline)})
 
     def post(self, request, timeline_id):
-        record  = models.Timeline.objects.get(id=timeline_id)
+        record  = Timeline.objects.get(id=timeline_id)
         form    = forms.TimelineForm(request.POST, instance=record)
 
         if not form.is_valid():
-            return render(request, 'timeline_app/update-timeline.html',
-                                    {'timeline': record, 'form': form})
+            return render(request, 
+                'timeline_app/update-timeline.html',
+                     {'timeline': record, 'form': form})
         form.save()
 
         user  = User.objects.get(id=self.user_id)
-        event = models.EUpdateTimeline.objects.create(organization=user.default,
-        timeline=record, user=user)
+        event = EUpdateTimeline.objects.create(
+        organization=user.default, timeline=record, user=user)
 
         event.users.add(*record.users.all())
 
@@ -201,20 +200,20 @@ class UpdateTimeline(GuardianView):
 
 class PastePosts(GuardianView):
     def get(self, request, timeline_id):
-        timeline = models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
         user     = User.objects.get(id=self.user_id)
         users    = timeline.users.all()
 
-        clipboard, _    = Clipboard.objects.get_or_create(
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
-        for ind in clipboard.posts.all():
-            ind.ancestor = timeline
-            ind.save()
-            event = post_app.models.ECreatePost.objects.create(
-            organization=user.default, timeline=timeline, 
-            post=ind, user=user)
-            event.users.add(*users)
+        posts = clipboard.posts.all()
+        posts.update(ancestor=timeline)
+
+        event = EPastePost.objects.create(
+        organization=user.default, timeline=timeline, user=user)
+        event.posts.add(*posts)
+        event.users.add(*users)
 
         ws.client.publish('timeline%s' % timeline.id, 
             'sound', 0, False)
@@ -246,44 +245,6 @@ class SetupTimelineFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('timeline_app:list-timelines')
-
-class EUpdateTimeline(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUpdateTimeline.objects.get(id=event_id)
-        return render(request, 'timeline_app/e-update-timeline.html', 
-        {'event':event})
-
-class EBindTimelineUser(GuardianView):
-    def get(self, request, event_id):
-        event = models.EBindTimelineUser.objects.get(id=event_id)
-        return render(request, 'timeline_app/e-bind-timeline-user.html', 
-        {'event':event})
-
-class ECreateTimeline(GuardianView):
-    def get(self, request, event_id):
-        event = models.ECreateTimeline.objects.get(id=event_id)
-        return render(request, 'timeline_app/e-create-timeline.html', 
-        {'event':event})
-
-class EUnbindTimelineUser(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUnbindTimelineUser.objects.get(id=event_id)
-        return render(request, 'timeline_app/e-unbind-timeline-user.html', 
-        {'event':event})
-
-class EDeleteTimeline(GuardianView):
-    def get(self, request, event_id):
-        event = models.EDeleteTimeline.objects.get(id=event_id)
-        return render(request, 'timeline_app/e-delete-timeline.html', 
-        {'event':event})
-
-class Logout(View):
-    """
-    """
-
-    def get(self, request):
-        del request.session['user_id']
-        return redirect('site_app:index')
 
 class ListEvents(GuardianView):
     """
@@ -461,7 +422,6 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form})
-
 
 
 

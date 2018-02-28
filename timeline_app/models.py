@@ -107,6 +107,13 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
 
+class EPastePost(Event):
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_create_post0', blank=True)
+
+    posts = models.ManyToManyField('post_app.Post', null=True,  
+    related_name='e_create_post1', blank=True, symmetrical=False)
+
 
 
 
