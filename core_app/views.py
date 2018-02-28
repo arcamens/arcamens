@@ -527,7 +527,10 @@ class ListAllTasks(GuardianView):
         tasks       = Card.collect_cards(tasks, filter.pattern, filter.done)
         assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
 
-        count = assignments.count() + tasks.count()
+        count       = assignments.count() + tasks.count()
+
+        tasks       = tasks.values('done', 'label', 'id')
+        assignments  = assignments.values('done', 'label', 'id')
 
         # If i instantiate the form here it stops working
         # correctly when filtering the cards/posts
@@ -559,7 +562,9 @@ class ListAllTasks(GuardianView):
         tasks = Card.collect_cards(tasks, filter.pattern, filter.done)
         assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
 
-        count = assignments.count() + tasks.count()
+        count       = assignments.count() + tasks.count()
+        tasks       = tasks.values('done', 'label', 'id')
+        assigments  = assignments.values('done', 'label', 'id')
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'assignments': assignments, 'form': form, 'tasks': tasks,
@@ -635,6 +640,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 
