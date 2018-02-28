@@ -1,45 +1,10 @@
+from django.utils.translation import ugettext_lazy as _
+from core_app.models import  User, Event
+from timeline_app.model_mixins import *
+from paybills.models import Service
 from django.db import models
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-from paybills.models import Service
-from core_app.models import  User, Event
 import datetime
-
-class EUpdateTimelineMixin(object):
-    def get_absolute_url(self):
-        return reverse('timeline_app:e-update-timeline', 
-        kwargs={'event_id': self.id})
-
-class EDeleteTimelineMixin(object):
-    def get_absolute_url(self):
-        return reverse('timeline_app:e-delete-timeline', 
-        kwargs={'event_id': self.id})
-
-class ECreateTimelineMixin(object):
-    def get_absolute_url(self):
-        return reverse('timeline_app:e-create-timeline', 
-        kwargs={'event_id': self.id})
-
-class EBindTimelineUserMixin(object):
-    def get_absolute_url(self):
-        return reverse('timeline_app:e-bind-timeline-user', 
-        kwargs={'event_id': self.id})
-
-class EUnbindTimelineUserMixin(object):
-    def get_absolute_url(self):
-        return reverse('timeline_app:e-unbind-timeline-user', 
-        kwargs={'event_id': self.id})
-
-class TimelineMixin(object):
-    """
-    Mixins.
-    """
-
-    @classmethod
-    def get_user_timelines(cls, user):
-        timelines = user.timelines.filter(organization=user.default)
-        return timelines
 
 class Timeline(TimelineMixin, models.Model):
     owner = models.ForeignKey('core_app.User', 
@@ -113,14 +78,5 @@ class EPastePost(Event):
 
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_create_post1', blank=True, symmetrical=False)
-
-
-
-
-
-
-
-
-
 
 
