@@ -1,10 +1,13 @@
+from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
+PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
+PostFilter, GlobalPostFilter, ECutPost, EArchivePost
+from core_app.models import Clipboard, Tag, User
+from django.shortcuts import render, redirect
+from core_app.views import GuardianView
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from timeline_app.views import GuardianView
-from core_app.models import Clipboard
-
+from timeline_app.models import Timeline
 import timeline_app.models
 import core_app.models
 from . import forms
@@ -65,10 +68,10 @@ class CreatePost(GuardianView):
     """
 
     def get(self, request, ancestor_id, post_id=None):
-        ancestor = timeline_app.models.Timeline.objects.get(id=ancestor_id)
-        user     = timeline_app.models.User.objects.get(id=self.user_id)
-        post = models.Post.objects.create(user=user, ancestor=ancestor)
-        form     = forms.PostForm(instance=post)
+        ancestor   = Timeline.objects.get(id=ancestor_id)
+        user       = User.objects.get(id=self.user_id)
+        post       = models.Post.objects.create(user=user, ancestor=ancestor)
+        form       = forms.PostForm(instance=post)
         post.label = 'Draft.'
         post.save()
         return render(request, 'post_app/create-post.html', 
@@ -76,7 +79,7 @@ class CreatePost(GuardianView):
 
     def post(self, request, ancestor_id, post_id):
         post     = models.Post.objects.get(id=post_id)
-        ancestor = timeline_app.models.Timeline.objects.get(id=ancestor_id)
+        ancestor = Timeline.objects.get(id=ancestor_id)
 
         form = forms.PostForm(request.POST, request.FILES, instance=post)
         if not form.is_valid():
@@ -85,9 +88,8 @@ class CreatePost(GuardianView):
                                 'ancestor': ancestor}, status=400)
 
         post.save()
-        user     = timeline_app.models.User.objects.get(id=self.user_id)
-
-        event    = models.ECreatePost.objects.create(organization=user.default,
+        user  = User.objects.get(id=self.user_id)
+        event = ECreatePost.objects.create(organization=user.default,
         timeline=ancestor, post=post, user=user)
 
         users = ancestor.users.all()
@@ -112,11 +114,11 @@ class UpdatePost(GuardianView):
 
         if not form.is_valid():
             return render(request, 'post_app/update-post.html',
-                                    {'post': record, 'form': form}, status=400)
+                   {'post': record, 'form': form}, status=400)
         record.save()
 
-        user     = timeline_app.models.User.objects.get(id=self.user_id)
-        event    = models.EUpdatePost.objects.create(organization=user.default,
+        user  = User.objects.get(id=self.user_id)
+        event = EUpdatePost.objects.create(organization=user.default,
         timeline=record.ancestor, post=record, user=user)
 
         event.users.add(*record.ancestor.users.all())
@@ -161,7 +163,7 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = models.PostFileWrapper.objects.get(id=filewrapper_id)
+        filewrapper = PostFileWrapper.objects.get(id=filewrapper_id)
         filewrapper.delete()
         attachments = filewrapper.post.postfilewrapper_set.all()
 
@@ -174,9 +176,9 @@ class DeletePost(GuardianView):
         post = models.Post.objects.get(id = post_id)
         # post.delete()
 
-        user  = timeline_app.models.User.objects.get(id=self.user_id)
+        user  = User.objects.get(id=self.user_id)
 
-        event = models.EDeletePost.objects.create(organization=user.default,
+        event = EDeletePost.objects.create(organization=user.default,
         timeline=post.ancestor, post_label=post.label, user=user)
         users = post.ancestor.users.all()
         event.users.add(*users)
@@ -192,7 +194,7 @@ class DeletePost(GuardianView):
 
 class ListAssignments(GuardianView):
     def get(self, request, user_id):
-        user = timeline_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         posts = user.assignments.filter(done=False, ancestor__isnull=False)
         total = posts.count()
@@ -202,7 +204,7 @@ class ListAssignments(GuardianView):
 
 class PostWorkerInformation(GuardianView):
     def get(self, request, peer_id, post_id):
-        event = models.EAssignPost.objects.filter(post__id=post_id,
+        event = EAssignPost.objects.filter(post__id=post_id,
         peer__id=peer_id).last()
 
         return render(request, 'post_app/post-worker-information.html', 
@@ -210,7 +212,7 @@ class PostWorkerInformation(GuardianView):
 
 class PostTagInformation(GuardianView):
     def get(self, request, tag_id, post_id):
-        event = models.EBindTagPost.objects.filter(post__id=post_id,
+        event = EBindTagPost.objects.filter(post__id=post_id,
         tag__id=tag_id).last()
 
         return render(request, 'post_app/post-tag-information.html', 
@@ -225,7 +227,7 @@ class UnassignPostUser(GuardianView):
 
         me = User.objects.get(id=self.user_id)
 
-        event = models.EUnassignPost.objects.create(
+        event = EUnassignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
         event.users.add(*post.ancestor.users.all())
@@ -244,7 +246,7 @@ class AssignPostUser(GuardianView):
         post.save()
         me = User.objects.get(id=self.user_id)
 
-        event = models.EAssignPost.objects.create(
+        event = EAssignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
         event.users.add(*post.ancestor.users.all())
@@ -294,20 +296,20 @@ class ManagePostWorkers(GuardianView):
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
-        filter = models.PostFilter.objects.get(
+        filter = PostFilter.objects.get(
         user__id=self.user_id, timeline__id=timeline_id)
-        timeline = timeline_app.models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
 
         return render(request, 'post_app/setup-post-filter.html', 
         {'form': forms.PostFilterForm(instance=filter), 
         'timeline': timeline})
 
     def post(self, request, timeline_id):
-        record = models.PostFilter.objects.get(
+        record = PostFilter.objects.get(
         timeline__id=timeline_id, user__id=self.user_id)
 
         form     = forms.PostFilterForm(request.POST, instance=record)
-        timeline = timeline_app.models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
 
         if not form.is_valid():
             return render(request, 'post_app/setup-post-filter.html',
@@ -318,7 +320,7 @@ class SetupPostFilter(GuardianView):
 class SetupGlobalPostFilter(GuardianView):
     def get(self, request):
         user   = User.objects.get(id=self.user_id)
-        filter = models.GlobalPostFilter.objects.get(organization=user.default,
+        filter = GlobalPostFilter.objects.get(organization=user.default,
         user__id=self.user_id)
 
         return render(request, 'post_app/setup-global-post-filter.html', 
@@ -326,7 +328,7 @@ class SetupGlobalPostFilter(GuardianView):
 
     def post(self, request):
         user   = User.objects.get(id=self.user_id)
-        record = models.GlobalPostFilter.objects.get(
+        record = GlobalPostFilter.objects.get(
         user__id=self.user_id)
 
         form = forms.GlobalPostFilterForm(request.POST, instance=record)
@@ -340,7 +342,7 @@ class SetupGlobalPostFilter(GuardianView):
 class CutPost(GuardianView):
     def get(self, request, post_id):
         post          = models.Post.objects.get(id=post_id)
-        user          = timeline_app.models.User.objects.get(id=self.user_id)
+        user          = User.objects.get(id=self.user_id)
         timeline      = post.ancestor
 
         # Should have an event, missing creating event.
@@ -350,12 +352,12 @@ class CutPost(GuardianView):
         post.ancestor = None
         post.save()
 
-        clipboard, _    = Clipboard.objects.get_or_create(
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
         clipboard.posts.add(post)
 
-        event    = models.ECutPost.objects.create(organization=user.default,
+        event = ECutPost.objects.create(organization=user.default,
         timeline=timeline, post=post, user=user)
         users = timeline.users.all()
         event.users.add(*users)
@@ -366,7 +368,7 @@ class CutPost(GuardianView):
 class CopyPost(GuardianView):
     def get(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
-        user = timeline_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         copy = post.duplicate()
 
         clipboard, _    = Clipboard.objects.get_or_create(
@@ -386,10 +388,10 @@ class Done(GuardianView):
         post.done = True
         post.save()
 
-        user = timeline_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         # posts in the clipboard cant be archived.
-        event    = models.EArchivePost.objects.create(organization=user.default,
+        event = EArchivePost.objects.create(organization=user.default,
         timeline=post.ancestor, post=post, user=user)
 
         users = post.ancestor.users.all()
@@ -401,58 +403,6 @@ class Done(GuardianView):
 
         return redirect('post_app:post', 
         post_id=post.id)
-
-class Undo(GuardianView):
-    def get(self, request, post_id):
-        post      = models.Post.objects.get(id=post_id)
-        post.done = False
-        post.save()
-
-        user = timeline_app.models.User.objects.get(id=self.user_id)
-
-        # posts in the clipboard cant be archived.
-        # event    = models.EArchivePost.objects.create(organization=user.default,
-        # timeline=post.ancestor, post=post, user=user)
-
-        # users = post.ancestor.users.all()
-        # event.users.add(*users)
-
-        # Missing event.
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
-
-        return redirect('post_app:post', 
-        post_id=post.id)
-
-class ECreatePost(GuardianView):
-    def get(self, request, event_id):
-        event = models.ECreatePost.objects.get(id=event_id)
-        return render(request, 'post_app/e-create-post.html', 
-        {'event':event})
-
-class EArchivePost(GuardianView):
-    def get(self, request, event_id):
-        event = models.EArchivePost.objects.get(id=event_id)
-        return render(request, 'post_app/e-archive-post.html', 
-        {'event':event})
-
-class EDeletePost(GuardianView):
-    def get(self, request, event_id):
-        event = models.EDeletePost.objects.get(id=event_id)
-        return render(request, 'post_app/e-delete-post.html', 
-        {'event':event})
-
-class ECutPost(GuardianView):
-    def get(self, request, event_id):
-        event = models.ECutPost.objects.get(id=event_id)
-        return render(request, 'post_app/e-cut-post.html', 
-        {'event':event})
-
-class EUpdatePost(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUpdatePost.objects.get(id=event_id)
-        return render(request, 'post_app/e-update-post.html', 
-        {'event':event})
 
 class ManagePostTags(GuardianView):
     def get(self, request, post_id):
@@ -492,22 +442,14 @@ class ManagePostTags(GuardianView):
 
 class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id)
+        tag = Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
         post.tags.remove(tag)
         post.save()
 
-        # me = User.objects.get(id=self.user_id)
-
-        # event = models.EUnbindPostTag.objects.create(
-        # organization=me.default, ancestor=post.ancestor, 
-        # post=post, user=me, peer=user)
-        # event.users.add(*post.ancestor.users.all())
-        # event.save()
-
         me = User.objects.get(id=self.user_id)
 
-        event = models.EUnbindTagPost.objects.create(
+        event = EUnbindTagPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=me)
         event.users.add(*post.ancestor.users.all())
@@ -520,14 +462,14 @@ class UnbindPostTag(GuardianView):
 
 class BindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id)
+        tag = Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
         post.tags.add(tag)
         post.save()
 
         me = User.objects.get(id=self.user_id)
 
-        event = models.EBindTagPost.objects.create(
+        event = EBindTagPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=me)
         event.users.add(*post.ancestor.users.all())
@@ -538,44 +480,6 @@ class BindPostTag(GuardianView):
 
         return HttpResponse(status=200)
 
-class EBindTagPost(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EBindTagPost.objects.get(id=event_id)
-        return render(request, 'post_app/e-bind-tag-post.html', 
-        {'event':event})
-
-class EUnbindTagPost(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUnbindTagPost.objects.get(id=event_id)
-        return render(request, 'post_app/e-unbind-tag-post.html', 
-        {'event':event})
-
-class EUnassignPost(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUnassignPost.objects.get(id=event_id)
-        return render(request, 'post_app/e-unassign-post.html', 
-        {'event':event})
-
-class EAssignPost(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EAssignPost.objects.get(id=event_id)
-        return render(request, 'post_app/e-assign-post.html', 
-        {'event':event})
-
-
-
 class CancelPostCreation(GuardianView):
     def get(self, request, post_id):
         post = models.Post.objects.get(id = post_id)
@@ -583,9 +487,19 @@ class CancelPostCreation(GuardianView):
 
         return HttpResponse(status=200)
 
+class Undo(GuardianView):
+    def get(self, request, post_id):
+        post      = models.Post.objects.get(id=post_id)
+        post.done = False
+        post.save()
 
+        user = User.objects.get(id=self.user_id)
 
+        ws.client.publish('timeline%s' % post.ancestor.id, 
+            'sound', 0, False)
 
+        return redirect('post_app:post', 
+        post_id=post.id)
 
 
 
