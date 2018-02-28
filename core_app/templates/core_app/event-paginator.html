@@ -96,10 +96,17 @@
 {% include 'post_app/e-assign-post.html' with event=ind.eassignpost %}
 {% elif ind.eunassignpost %}
 {% include 'post_app/e-unassign-post.html' with event=ind.eunassignpost %}
+{% elif ind.ecreatetag %}
+{% include 'core_app/e-create-tag.html' with event=ind.ecreatetag %}
+{% elif ind.edeletetag %}
+{% include 'core_app/e-delete-tag.html' with event=ind.edeletetag %}
 
 {% endif %}
 </div>
 {% endfor %}
+
+
+
 
 
 

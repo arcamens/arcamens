@@ -306,8 +306,18 @@ class ListTags(GuardianView):
 
 class DeleteTag(GuardianView):
     def get(self, request, tag_id):
-        tag = models.Tag.objects.get(id=tag_id)
+        user = models.User.objects.get(id=self.user_id)
+        tag  = models.Tag.objects.get(id=tag_id)
+
+        event = models.EDeleteTag.objects.create(
+        organization=user.default, user=user, tag_name=tag.name)
         tag.delete()
+
+        users = user.default.users.all()
+        event.users.add(*users)
+        ws.client.publish('organization%s' % user.default.id, 
+            'sound', 0, False)
+
         return HttpResponse(status=200)
 
 class CreateTag(GuardianView):
@@ -328,6 +338,16 @@ class CreateTag(GuardianView):
         record       = form.save(commit=False)
         record.organization = user.default
         record.save()
+
+        event = models.ECreateTag.objects.create(
+        organization=user.default, user=user, tag=record)
+
+        users = user.default.users.all()
+        event.users.add(*users)
+
+        ws.client.publish('organization%s' % user.default.id, 
+            'sound', 0, False)
+
         return redirect('core_app:list-tags')
 
 class UnbindUserTag(GuardianView):
@@ -640,6 +660,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

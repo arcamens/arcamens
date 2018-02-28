@@ -159,6 +159,14 @@ class EBindUserTag(Event):
         return reverse('core_app:e-bind-user-tag', 
         kwargs={'event_id': self.id})
 
+class ECreateTag(Event):
+    tag = models.ForeignKey('Tag', null=True, 
+    related_name='e_create_tag1', blank=True)
+
+class EDeleteTag(Event):
+    tag_name = models.CharField(null=True,
+    blank=False, max_length=256)
+
 class EUnbindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_unbind_user_tag0', blank=True)
@@ -237,6 +245,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
