@@ -572,13 +572,10 @@ class ManageCardRelations(GuardianView):
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
-        # Need to be improved, it may be interesting
-        # to have a board field in all the cards, it would help
-        # when performing global searches over the boards.
-        included = card.relations.all()
+        included = card.relations.filter(done=False)
 
         cards = models.Card.get_allowed_cards(me)
-        cards.filter(done=False)
+        cards = cards.filter(done=False)
 
         excluded = cards.exclude(pk__in=included)
 
@@ -869,6 +866,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
