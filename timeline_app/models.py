@@ -20,10 +20,9 @@ class Timeline(TimelineMixin, models.Model):
     blank=False, verbose_name=_("Name"), 
     help_text='Ex: /project/bugs, /project/dev', max_length=50)
 
-    description = models.CharField(null=True, 
-    blank=True, verbose_name=_("Description"), 
-    help_text='Short Description', 
-    max_length=300)
+    description = models.CharField(blank=True, 
+    verbose_name=_("Description"), help_text='Short Description', 
+    default='', max_length=300)
 
     created = models.DateTimeField(auto_now=True, 
     null=True)
@@ -78,5 +77,6 @@ class EPastePost(Event):
 
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_create_post1', blank=True, symmetrical=False)
+
 
 

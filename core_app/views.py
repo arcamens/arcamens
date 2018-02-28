@@ -221,7 +221,7 @@ class ManageUserTags(GuardianView):
 
         return render(request, 'core_app/manage-user-tags.html', 
         {'included': included, 'excluded': excluded, 'user': user,
-        'organization': me.default,'form':forms.TagSearchForm()})
+        'me': me,'form':forms.TagSearchForm()})
 
     def post(self, request, user_id):
         form = forms.TagSearchForm(request.POST)
@@ -651,6 +651,7 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
 
 
 

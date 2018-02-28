@@ -1,5 +1,5 @@
 from timeline_app.models import Timeline, ECreateTimeline, EDeleteTimeline, \
-EUnbindTimelineUser, EUpdateTimeline, EPastePost
+EUnbindTimelineUser, EUpdateTimeline, EPastePost, TimelineFilter, EBindTimelineUser
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
 from core_app.views import GuardianView, CashierView
@@ -12,17 +12,7 @@ import post_app.models
 import operator
 from . import forms
 from . import models
-import timeline_app.models
 # Create your views here.
-
-# class Timeline(GuardianView):
-    # """
-    # """
-# 
-    # def get(self, request, timeline_id):
-        # timeline = Timeline.objects.get(id=timeline_id)
-        # return render(request, 'timeline_app/timeline.html', 
-        # {'timeline':timeline})
 
 class PostPaginator(GuardianView):
     def get(self, request, timeline_id):
@@ -224,7 +214,7 @@ class PastePosts(GuardianView):
 
 class SetupTimelineFilter(GuardianView):
     def get(self, request, organization_id):
-        filter = models.TimelineFilter.objects.get(
+        filter = TimelineFilter.objects.get(
         user__id=self.user_id, organization__id=organization_id)
         organization = Organization.objects.get(id=organization_id)
 
@@ -233,7 +223,7 @@ class SetupTimelineFilter(GuardianView):
         'organization': organization})
 
     def post(self, request, organization_id):
-        record = models.TimelineFilter.objects.get(
+        record = TimelineFilter.objects.get(
         organization__id=organization_id, user__id=self.user_id)
 
         form   = forms.TimelineFilterForm(request.POST, instance=record)
@@ -272,7 +262,7 @@ class ListTimelines(CashierView):
 
     def get(self, request):
         user      = User.objects.get(id=self.user_id)
-        filter, _ = timeline_app.models.TimelineFilter.objects.get_or_create(
+        filter, _ = TimelineFilter.objects.get_or_create(
         user=user, organization=user.default)
 
         total = user.timelines.filter(organization=user.default)
@@ -305,7 +295,7 @@ class CheckEvent(GuardianView):
 class SeenEvent(GuardianView):
     def get(self, request, event_id):
         user  = User.objects.get(id=self.user_id)
-        event = models.Event.objects.get(id=event_id)
+        event = Event.objects.get(id=event_id)
         event.users.remove(user)
         event.save()
         return redirect('timeline_app:list-events')
@@ -314,14 +304,14 @@ class SeenEvent(GuardianView):
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
         user = User.objects.get(id=user_id)
-        timeline = timeline_app.models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
 
         timeline.users.add(user)
         timeline.save()
 
         me = User.objects.get(id=self.user_id)
 
-        event    = models.EBindTimelineUser.objects.create(organization=me.default,
+        event    = EBindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
 
         event.users.add(*timeline.users.all())
@@ -360,7 +350,7 @@ class ManageUserTimelines(GuardianView):
         user = User.objects.get(id=user_id)
         form = forms.BindTimelinesForm(request.POST)
 
-        me = core_app.models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
         timelines = me.timelines.filter(organization=me.default)
 
         if not form.is_valid():
@@ -385,11 +375,10 @@ class ManageUserTimelines(GuardianView):
         {'user': user, 'included': included, 'excluded': excluded,
         'me': me, 'organization': me.default,'form':forms.BindTimelinesForm()})
 
-
 class ManageTimelineUsers(GuardianView):
     def get(self, request, timeline_id):
         me = User.objects.get(id=self.user_id)
-        timeline = models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
 
         included = timeline.users.all()
         users = me.default.users.all()
@@ -403,7 +392,7 @@ class ManageTimelineUsers(GuardianView):
         form = forms.UserSearchForm(request.POST)
 
         me = User.objects.get(id=self.user_id)
-        timeline = models.Timeline.objects.get(id=timeline_id)
+        timeline = Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
         excluded = User.objects.exclude(timelines=timeline)
 

@@ -51,7 +51,7 @@ data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#">
 <div class="modal-footer">
 <button  type="button" 
 data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' user.default.id  %}"
+data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' me.default.id  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#bind-user-search-form" 
@@ -64,6 +64,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 
