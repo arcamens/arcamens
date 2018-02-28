@@ -3,324 +3,104 @@
 {% for ind in events %}
 <div id="event-{{ind.id}}">
 {% if ind.ecreatelist %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatelist.get_absolute_url}}");
-});
-</script>
+{% include 'list_app/e-create-list.html' with event=ind.ecreatelist %}
 {% elif ind.earchivepost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.earchivepost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-archive-post.html' with event=ind.earchivepost %}
 {% elif ind.edeletesnippet %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletesnippet.get_absolute_url}}");
-});
-</script>
+{% include 'snippet_app/e-delete-snippet.html' with event=ind.edeletesnippet%}
 {% elif ind.eupdatenote %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatenote.get_absolute_url}}");
-});
-</script>
+{% include 'note_app/e-update-note.html' with event=ind.eupdatenote %}
 {% elif ind.edeletenote %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletenote.get_absolute_url}}");
-});
-</script>
-
+{% include 'note_app/e-delete-note.html' with event=ind.edeletenote %}
 {% elif ind.ejoinorganization %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ejoinorganization.get_absolute_url}}");
-});
-</script>
+{% include 'core_app/e-join-organization.html' with event=ind.ejoinorganization %}
 {% elif ind.ecreatenote %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatenote.get_absolute_url}}");
-});
-</script>
-
+{% include 'note_app/e-create-note.html' with event=ind.ecreatenote %}
 {% elif ind.eupdatesnippet %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatesnippet.get_absolute_url}}");
-});
-</script>
-
+{% include 'snippet_app/e-update-snippet.html' with event=ind.eupdatesnippet %}
 {% elif ind.ecreatesnippet %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatesnippet.get_absolute_url}}");
-});
-</script>
+{% include 'snippet_app/e-create-snippet.html' with event=ind.ecreatesnippet %}
 {% elif ind.ecreatetimeline %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatetimeline.get_absolute_url}}");
-});
-</script>
-
+{% include 'timeline_app/e-create-timeline.html' with event=ind.ecreatetimeline %}
 {% elif ind.ebindusertag %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindusertag.get_absolute_url}}");
-});
-</script>
+{% include 'core_app/e-bind-user-tag.html' with event=ind.ebindusertag %}
 {% elif ind.eunbindusertag %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindusertag.get_absolute_url}}");
-});
-</script>
-
+{% include 'core_app/e-unbind-user-tag.html' with event=ind.eunbindusertag %}
 {% elif ind.einviteuser %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.einviteuser.get_absolute_url}}");
-});
-</script>
-
-{% elif ind.earchiveboard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.earchiveboard.get_absolute_url}}");
-});
-</script>
-
-{% elif ind.earchivelist %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.earchivelist.get_absolute_url}}");
-});
-</script>
-
+{% include 'core_app/e-invite-user.html' with event=ind.einviteuser %}
 {% elif ind.eupdatelist %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatelist.get_absolute_url}}");
-});
-</script>
+{% include 'list_app/e-update-list.html' with event=ind.eupdatelist %}
 {% elif ind.edeleteboard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeleteboard.get_absolute_url}}");
-});
-</script>
-
+{% include 'board_app/e-delete-board.html' with event=ind.edeleteboard %}
 {% elif ind.eupdateboard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdateboard.get_absolute_url}}");
-});
-</script>
+{% include 'board_app/e-update-board.html' with event=ind.eupdateboard %}
 {% elif ind.ecreateboard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreateboard.get_absolute_url}}");
-});
-</script>
+{% include 'board_app/e-create-board.html' with event=ind.ecreateboard %}
 {% elif ind.ecreatefork %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatefork.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-create-fork.html' with event=ind.ecreatefork %}
 {% elif ind.edeletelist %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletelist.get_absolute_url}}");
-});
-</script>
-
+{% include 'list_app/e-delete-list.html' with event=ind.edeletelist %}
 {% elif ind.ecreatecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatecard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-create-card.html' with event=ind.ecreatecard %}
 {% elif ind.epastecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.epastecard.get_absolute_url}}");
-});
-</script>
-
+{% include 'list_app/e-paste-card.html' with event=ind.epastecard %}
 {% elif ind.erelatecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.erelatecard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-relate-card.html' with event=ind.erelatecard %}
 {% elif ind.eunrelatecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunrelatecard.get_absolute_url}}");
-});
-</script>
-
+{% include 'card_app/e-unrelate-card.html' with event=ind.eunrelatecard %}
 {% elif ind.ecreatepostcomment %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatepostcomment.get_absolute_url}}");
-});
-</script>
+{% include 'comment_app/e-create-comment.html' with event=ind.ecreatepostcomment %}
 {% elif ind.eupdatecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatecard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-update-card.html' with event=ind.eupdatecard %}
 {% elif ind.edeletecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletecard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-delete-card.html' with event=ind.edeletecard %}
 {% elif ind.ecutcard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecutcard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-cut-card.html' with event=ind.ecutcard %}
 {% elif ind.ecutlist %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecutlist.get_absolute_url}}");
-});
-</script>
-
-
+{% include 'list_app/e-cut-list.html' with event=ind.ecutlist %}
 {% elif ind.earchivecard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.earchivecard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-archive-card.html' with event=ind.earchivecard %}
 {% elif ind.ebindboarduser %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindboarduser.get_absolute_url}}");
-});
-</script>
+{% include 'board_app/e-bind-board-user.html' with event=ind.ebindboarduser %}
 {% elif ind.ebindcardworker %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindcardworker.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-bind-card-worker.html' with event=ind.ebindcardworker %}
 {% elif ind.eunbindcardworker %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindcardworker.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-unbind-card-worker.html' with event=ind.eunbindcardworker %}
 {% elif ind.eunbindboarduser %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindboarduser.get_absolute_url}}");
-});
-</script>
+{% include 'board_app/e-unbind-board-user.html' with event=ind.eunbindboarduser %}
 {% elif ind.ecreatepost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatepost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-create-post.html' with event=ind.ecreatepost %}
 {% elif ind.ecutpost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecutpost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-cut-post.html' with event=ind.ecutpost %}
 {% elif ind.eupdatepost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatepost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-update-post.html' with event=ind.eupdatepost %}
 {% elif ind.eupdatetimeline %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eupdatetimeline.get_absolute_url}}");
-});
-</script>
+{% include 'timeline_app/e-update-timeline.html' with event=ind.eupdatetimeline %}
 {% elif ind.ebindtimelineuser %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindtimelineuser.get_absolute_url}}");
-});
-</script>
+{% include 'timeline_app/e-bind-timeline-user.html' with event=ind.ebindtimelineuser %}
 {% elif ind.eunbindtimelineuser %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindtimelineuser.get_absolute_url}}");
-});
-</script>
+{% include 'timeline_app/e-unbind-timeline-user.html' with event=ind.eunbindtimelineuser %}
 {% elif ind.edeletetimeline %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletetimeline.get_absolute_url}}");
-});
-</script>
-{% elif ind.ecreatecardcomment %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ecreatecardcomment.get_absolute_url}}");
-});
-</script>
+{% include 'timeline_app/e-delete-timeline.html' with event=ind.edeletetimeline %}
 {% elif ind.ebindtagpost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindtagpost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-bind-tag-post.html' with event=ind.ebindtagpost %}
 {% elif ind.eunbindtagpost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindtagpost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-unbind-tag-post.html' with event=ind.eunbindtagpost %}
 {% elif ind.eunbindtagcard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunbindtagcard.get_absolute_url}}");
-});
-</script>
+{% include 'card_app/e-unbind-tag-card.html' with event=ind.eunbindtagcard %}
 {% elif ind.ebindtagcard %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.ebindtagcard.get_absolute_url}}");
-});
-</script>
-
+{% include 'card_app/e-bind-tag-card.html' with event=ind.ebindtagcard %}
 {% elif ind.edeletepost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.edeletepost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-delete-post.html' with event=ind.edeletepost %}
 {% elif ind.eassignpost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eassignpost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-assign-post.html' with event=ind.eassignpost %}
 {% elif ind.eunassignpost %}
-<script>
-$(document).ready(function() {
-$('#event-' + {{ind.id}}).load("{{ind.eunassignpost.get_absolute_url}}");
-});
-</script>
+{% include 'post_app/e-unassign-post.html' with event=ind.eunassignpost %}
 
 {% endif %}
 </div>
 {% endfor %}
+
 
 
 

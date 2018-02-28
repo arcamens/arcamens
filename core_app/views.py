@@ -16,6 +16,7 @@ from traceback import print_exc
 from core_app import ws
 from . import models
 from . import forms
+import random
 import json
 
 # Create your views here.
@@ -634,6 +635,8 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+
+
 
 
 

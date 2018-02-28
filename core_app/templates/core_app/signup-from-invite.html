@@ -30,6 +30,7 @@
 <meta name="application-name" content="arcamens">
 <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
 <meta name="theme-color" content="#ffffff">
+
 <script src="/static/input-extensions.js"> </script>
 <script src="/static/e-get.js"> </script>
 <script src="/static/e-post.js"> </script>
@@ -39,6 +40,9 @@
 
 
 <div class="container">
+<div class="jumbotron">
+<h1 >Arcamens <small> (Sign up) </small></h1> 
+
 <h3> Invited to join {{organization.name}} </h3>
 
 <form id="form-user-data" method="post" action="{% url 'core_app:signup-from-invite' organization.id token %}">
@@ -55,10 +59,12 @@
 {% bootstrap_form_errors form type='non_fields' %}
 
 {% buttons submit='Sign up' layout='inline' %}{% endbuttons %}
+</div>
 
 </form>
 </div>
 </body>
+
 
 
 

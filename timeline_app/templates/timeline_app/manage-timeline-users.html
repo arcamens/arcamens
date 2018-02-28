@@ -13,9 +13,6 @@ Available {{timeline.name}}'s users </h5>
 <div class="modal-body">
 {% include 'timeline_app/manage-timeline-users-list-choices.html' %}
 
-</div>
-
-<br> 
 
 <form id="bind-timeline-search-form" enctype="multipart/form-data">
 {% csrf_token %}
@@ -36,6 +33,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

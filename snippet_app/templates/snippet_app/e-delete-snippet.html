@@ -7,8 +7,10 @@
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> has deleted snippet 
 
+<span style="color:red">
 <span class="glyphicon glyphicon-book"></span>
 {{event.snippet | truncatechars:30}}
+</span>
 
 on
 
@@ -23,6 +25,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

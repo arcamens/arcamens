@@ -441,7 +441,7 @@ class ManageTimelineUsers(GuardianView):
     def post(self, request, timeline_id):
         form = forms.UserSearchForm(request.POST)
 
-        me = core_app.models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
         timeline = models.Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
         excluded = User.objects.exclude(timelines=timeline)
@@ -460,21 +460,7 @@ class ManageTimelineUsers(GuardianView):
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        'me': me, 'organization': me.default,'form':form})
 
 
 

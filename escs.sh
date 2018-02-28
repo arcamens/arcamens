@@ -565,8 +565,12 @@ rm -fr build
 cd ~/projects/django-scrolls-code
 python setup.py install
 rm -fr build
-
-
+##############################################################################
+# pair fork master branch to upstream master branch.
+git fetch -p 
+git checkout master
+git reset --hard f7e9f0b  
+git push origin master --force 
 
 
 
