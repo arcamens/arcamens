@@ -1,20 +1,21 @@
 from core_app.views import GuardianView, CashierView
-from core_app.models import Clipboard
+from board_app.models import BoardFilter, ECreateBoard, Board, Pin, \
+EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser
+from django.shortcuts import render, redirect
+from core_app.models import Clipboard, User, Organization
 from django.http import HttpResponse
 from django.views.generic import View
-from django.shortcuts import render, redirect
-from card_app.forms import CardSearchForm
 from django.db.models import Q
+import core_app.models
 import board_app.models
+from core_app import ws
 import card_app.models
 from . import models
 from . import forms
 from . import models
 from . import forms
-import core_app.models
-import board_app.models
-from core_app import ws
 import re
+
 # Create your views here.
 
 class ListBoards(CashierView):
@@ -22,13 +23,13 @@ class ListBoards(CashierView):
     """
 
     def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
+        user  = User.objects.get(id=self.user_id)
 
         total = user.boards.filter(
         organization__id=user.default.id)
         pins = user.pin_set.filter(organization=user.default)
 
-        filter, _ = models.BoardFilter.objects.get_or_create(
+        filter, _ = BoardFilter.objects.get_or_create(
         user=user, organization=user.default)
 
         boards = total.filter((Q(name__icontains=filter.pattern) | \
@@ -38,12 +39,6 @@ class ListBoards(CashierView):
         return render(request, 'board_app/list-boards.html', 
         {'boards': boards, 'total': total, 'user': user, 'pins': pins, 'filter': filter,
         'organization': user.default})
-
-class Board(GuardianView):
-    def get(self, request, board_id):
-        board = models.Board.objects.get(id=board_id)
-        return render(request, 'board_app/board.html', 
-        {'board':board})
 
 class CreateBoard(GuardianView):
     """
@@ -62,14 +57,14 @@ class CreateBoard(GuardianView):
                         {'form': form, }, status=400)
 
         board       = form.save()
-        user        = core_app.models.User.objects.get(id=self.user_id)
+        user        = User.objects.get(id=self.user_id)
         board.owner = user
 
         board.members.add(user)
         board.organization = user.default
         board.save()
 
-        event    = models.ECreateBoard.objects.create(organization=user.default,
+        event = ECreateBoard.objects.create(organization=user.default,
         board=board, user=user)
 
         # Organization admins should be notified?
@@ -87,16 +82,16 @@ class CreateBoard(GuardianView):
 
 class PinBoard(GuardianView):
     def get(self, request, board_id):
-        user  = core_app.models.User.objects.get(id=self.user_id)
-        board = models.Board.objects.get(id=board_id)
-        pin   = board_app.models.Pin.objects.create(user=user, 
+        user  = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
+        pin   = Pin.objects.create(user=user, 
         organization=user.default, board=board)
         return redirect('board_app:list-pins')
 
 class ManageUserBoards(GuardianView):
     def get(self, request, user_id):
-        me = core_app.models.User.objects.get(id=self.user_id)
-        user = core_app.models.User.objects.get(id=user_id)
+        me   = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
 
         boards = me.boards.filter(organization=me.default)
         excluded = boards.exclude(members=user)
@@ -107,10 +102,10 @@ class ManageUserBoards(GuardianView):
         'me': me, 'organization': me.default,'form':forms.BoardSearchForm()})
 
     def post(self, request, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         form = forms.BoardSearchForm(request.POST)
 
-        me = core_app.models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
         boards = me.boards.filter(organization=me.default)
 
         if not form.is_valid():
@@ -137,8 +132,8 @@ class ManageUserBoards(GuardianView):
 
 class ManageBoardUsers(GuardianView):
     def get(self, request, board_id):
-        me = core_app.models.User.objects.get(id=self.user_id)
-        board = models.Board.objects.get(id=board_id)
+        me = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
 
         included = board.members.all()
 
@@ -152,8 +147,8 @@ class ManageBoardUsers(GuardianView):
     def post(self, request, board_id):
         form = forms.UserSearchForm(request.POST)
 
-        me = core_app.models.User.objects.get(id=self.user_id)
-        board = models.Board.objects.get(id=board_id)
+        me = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
         included = board.members.all()
 
         users = me.default.users.all()
@@ -177,14 +172,19 @@ class ManageBoardUsers(GuardianView):
 
 class PasteLists(GuardianView):
     def get(self, request, board_id):
-        board = models.Board.objects.get(id=board_id)
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        clipboard, _    = Clipboard.objects.get_or_create(
+        board        = Board.objects.get(id=board_id)
+        user         = User.objects.get(id=self.user_id)
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
-        for ind in clipboard.lists.all():
-            ind.ancestor = board; ind.save()
+        lists = clipboard.lists.all()
+        lists.update(ancestor=board)
+
+        event = EPasteList.objects.create(
+        organization=user.default, board=board, user=user)
+        event.lists.add(*lists)
+        event.users.add(*board.members.all())
+
         clipboard.lists.clear()
 
         ws.client.publish('board%s' % board.id, 
@@ -195,13 +195,13 @@ class PasteLists(GuardianView):
 
 class UpdateBoard(GuardianView):
     def get(self, request, board_id):
-        board = models.Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id)
         return render(request, 'board_app/update-board.html',
         {'board': board, 'form': forms.BoardForm(instance=board)})
 
     def post(self, request, board_id):
-        record  = models.Board.objects.get(id=board_id)
-        form    = forms.BoardForm(request.POST, instance=record)
+        record = Board.objects.get(id=board_id)
+        form   = forms.BoardForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'board_app/update-board.html',
@@ -209,8 +209,8 @@ class UpdateBoard(GuardianView):
 
         record.save()
 
-        me = models.User.objects.get(id=self.user_id)
-        event    = models.EUpdateBoard.objects.create(organization=me.default,
+        me    = User.objects.get(id=self.user_id)
+        event = EUpdateBoard.objects.create(organization=me.default,
         board=record, user=me)
         event.users.add(*record.members.all())
 
@@ -222,11 +222,10 @@ class UpdateBoard(GuardianView):
 
 class DeleteBoard(GuardianView):
     def get(self, request, board_id):
-        board = models.Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id)
+        user  = User.objects.get(id=self.user_id)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        event = models.EDeleteBoard.objects.create(organization=user.default,
+        event = EDeleteBoard.objects.create(organization=user.default,
         board_name=board.name, user=user)
         event.users.add(*board.members.all())
 
@@ -239,20 +238,20 @@ class DeleteBoard(GuardianView):
 
 class SetupBoardFilter(GuardianView):
     def get(self, request, organization_id):
-        filter = models.BoardFilter.objects.get(
+        filter = BoardFilter.objects.get(
         user__id=self.user_id, organization__id=organization_id)
-        organization = board_app.models.Organization.objects.get(id=organization_id)
+        organization = Organization.objects.get(id=organization_id)
 
         return render(request, 'board_app/setup-board-filter.html', 
         {'form': forms.BoardFilterForm(instance=filter), 
         'organization': organization})
 
     def post(self, request, organization_id):
-        record = models.BoardFilter.objects.get(
+        record = BoardFilter.objects.get(
         organization__id=organization_id, user__id=self.user_id)
 
-        form   = forms.BoardFilterForm(request.POST, instance=record)
-        organization = board_app.models.Organization.objects.get(id=organization_id)
+        form         = forms.BoardFilterForm(request.POST, instance=record)
+        organization = Organization.objects.get(id=organization_id)
 
         if not form.is_valid():
             return render(request, 'board_app/setup-board-filter.html',
@@ -261,103 +260,29 @@ class SetupBoardFilter(GuardianView):
         form.save()
         return redirect('board_app:list-boards')
 
-
-class DisabledAccount(GuardianView):
-    def get(self, request):
-        pass
-
-class Login(View):
-    """
-    """
-
-    def get(self, request):
-        return render(request, 'board_app/login.html', 
-        {'form':forms.LoginForm()})
-
-    def post(self, request):
-        form = forms.LoginForm(request.POST)
-
-        if not form.is_valid():
-            return render(request, 'board_app/login.html',
-                        {'form': form})
-
-        email        = form.cleaned_data['email']
-        password     = form.cleaned_data['password']
-        organization = form.cleaned_data['organization']
-        user         = core_app.models.User.objects.get(email = email, 
-        organization__name=organization, password=password)
-        request.session['user_id'] = user.id
-        return redirect('board_app:index')
-
-class Logout(View):
-    """
-    """
-
-    def get(self, request):
-        del request.session['user_id']
-        return redirect('board_app:login')
-
-class ListEvents(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
-        events = user.default.events.all().order_by('-created')
-        pins   = user.pin_set.all()
-        form   = forms.FindEventForm()
-        return render(request, 'board_app/list-events.html', 
-        {'events': events, 'pins': pins, 'user': user, 
-        'form': form, 'organization': user.default})
-
-class SwitchOrganization(GuardianView):
-    def get(self, request, organization_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        user.default = models.Organization.objects.get(
-        id=organization_id)
-        user.save()
-        return redirect('board_app:index')
-
 class ListPins(GuardianView):
     def get(self, request):
-        user = core_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         pins = user.pin_set.filter(organization=user.default)
         return render(request, 'board_app/list-pins.html', 
         {'user': user, 'pins': pins})
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
-        pin = models.Pin.objects.get(id=pin_id)
+        pin = Pin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
 
-class CheckEvent(GuardianView):
-    def get(self, request, user_id):
-        user = core_app.models.User.objects.get(
-        id=self.user_id)
-
-        try:
-            event = user.events.latest('id')
-        except Exception:
-            return HttpResponse(status=400)
-        return HttpResponse(str(event.id), status=200)
-
-class ListArchive(GuardianView):
-    def get(self, request):
-        user   = core_app.models.User.objects.get(id=self.user_id)
-        return render(request, 'board_app/list-archive.html', 
-        {'user': user})
-
 class BindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
-        user = core_app.models.User.objects.get(id=user_id)
-        board = board_app.models.Board.objects.get(id=board_id)
+        user = User.objects.get(id=user_id)
+        board = Board.objects.get(id=board_id)
 
         board.members.add(user)
         board.save()
 
-        me = models.User.objects.get(id=self.user_id)
-        event    = models.EBindBoardUser.objects.create(organization=me.default,
+        me    = User.objects.get(id=self.user_id)
+        event = EBindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
@@ -376,13 +301,13 @@ class UnbindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
         # This code shows up in board_app.views?
         # something is odd.
-        user = core_app.models.User.objects.get(id=user_id)
-        board = board_app.models.Board.objects.get(id=board_id)
+        user = User.objects.get(id=user_id)
+        board = Board.objects.get(id=board_id)
         board.members.remove(user)
         board.save()
 
-        me = models.User.objects.get(id=self.user_id)
-        event    = models.EUnbindBoardUser.objects.create(organization=me.default,
+        me = User.objects.get(id=self.user_id)
+        event = EUnbindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
@@ -396,89 +321,5 @@ class UnbindBoardUser(GuardianView):
             'sound', 0, False)
 
         return HttpResponse(status=200)
-
-class EBindBoardUser(GuardianView):
-    def get(self, request, event_id):
-        event = models.EBindBoardUser.objects.get(id=event_id)
-        return render(request, 'board_app/e-bind-board-user.html', 
-        {'event':event})
-
-class EUpdateBoard(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUpdateBoard.objects.get(id=event_id)
-        return render(request, 'board_app/e-update-board.html', 
-        {'event':event})
-
-class ECreateBoard(GuardianView):
-    def get(self, request, event_id):
-        event = models.ECreateBoard.objects.get(id=event_id)
-        return render(request, 'board_app/e-create-board.html', 
-        {'event':event})
-
-class EUnbindBoardUser(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUnbindBoardUser.objects.get(id=event_id)
-        return render(request, 'board_app/e-unbind-board-user.html', 
-        {'event':event})
-
-class EDeleteBoard(GuardianView):
-    def get(self, request, event_id):
-        event = models.EDeleteBoard.objects.get(id=event_id)
-        return render(request, 'board_app/e-delete-board.html', 
-        {'event':event})
-
-
-class Done(GuardianView):
-    def get(self, request, board_id):
-        board      = models.Board.objects.get(id=board_id)
-        board.done = True
-        board.save()
-
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        # boards in the clipboard cant be archived.
-        event    = models.EArchiveBoard.objects.create(organization=user.default,
-        ancestor=board.organization, child=board, user=user)
-
-        users = board.members.all()
-        event.users.add(*users)
-
-        # Missing event.
-        ws.client.publish('board%s' % board.id, 
-            'sound', 0, False)
-
-        return redirect('board_app:list-boards')
-
-class EArchiveBoard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EArchiveBoard.objects.get(id=event_id)
-        return render(request, 'board_app/e-archive-board.html', 
-        {'event':event})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

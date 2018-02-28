@@ -156,6 +156,13 @@ class EArchiveBoard(Event):
         return reverse('board_app:e-archive-board', 
         kwargs={'event_id': self.id})
 
+class EPasteList(Event, ECreateBoardMixin):
+    board = models.ForeignKey('Board', 
+    related_name='e_paste_list0', blank=True)
+
+    lists = models.ManyToManyField('list_app.List', 
+    null=True, related_name='e_paste_list1', blank=True, 
+    symmetrical=False)
 
 
 

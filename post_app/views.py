@@ -8,13 +8,11 @@ from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from timeline_app.models import Timeline
-import timeline_app.models
-import core_app.models
+from django.conf import settings
+from core_app import ws
 from . import forms
 from . import models
-from core_app import ws
-from core_app.models import User
-from django.conf import settings
+
 import json
 
 class Post(GuardianView):

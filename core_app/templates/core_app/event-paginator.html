@@ -102,9 +102,12 @@
 {% include 'core_app/e-delete-tag.html' with event=ind.edeletetag %}
 {% elif ind.epastepost %}
 {% include 'timeline_app/e-paste-post.html' with event=ind.epastepost %}
+{% elif ind.epastelist %}
+{% include 'list_app/e-paste-list.html' with event=ind.epastelist %}
 
 {% endif %}
 </div>
 {% endfor %}
+
 
 
