@@ -8,13 +8,9 @@ urlpatterns = [
     url(r'^switch-organization/(?P<organization_id>.+)/', views.SwitchOrganization.as_view(), name='switch-organization'),
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
     url(r'^create-organization/(?P<user_id>.+)/', views.CreateOrganization.as_view(), name='create-organization'),
-    url(r'^e-invite-user/(?P<event_id>.+)/', views.EInviteUser.as_view(), name='e-invite-user'),
-    url(r'^e-join-organization/(?P<event_id>.+)/', views.EJoinOrganization.as_view(), name='e-join-organization'),
 
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
-    url(r'^e-bind-user-tag/(?P<event_id>.+)/', views.EBindUserTag.as_view(), name='e-bind-user-tag'),
-    url(r'^e-unbind-user-tag/(?P<event_id>.+)/', views.EUnbindUserTag.as_view(), name='e-unbind-user-tag'),
     url(r'^event-paginator/', views.EventPaginator.as_view(), name='event-paginator'),
     url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
     url(r'^update-organization/(?P<organization_id>.+)/', views.UpdateOrganization.as_view(), name='update-organization'),
@@ -33,6 +29,7 @@ urlpatterns = [
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
 
 ]
+
 
 
 

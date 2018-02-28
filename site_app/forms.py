@@ -24,12 +24,16 @@ class RecoverAccountForm(forms.Form):
                 "This user doesn't exist!")
 
 class UserForm(forms.ModelForm):
-    retype = forms.CharField(label='Retype password')
+    retype = forms.CharField(label='Retype password', 
+    widget=forms.PasswordInput)
 
     class Meta:
         model   = core_app.models.User
         exclude = ('organizations', 'default', 
         'service', 'expiration')
+
+        widgets = {
+        'password': forms.PasswordInput()}
 
     def clean(self):
         super(UserForm, self).clean()
@@ -48,6 +52,7 @@ class ServiceForm(forms.Form):
 class RedefinePasswordForm(forms.Form):
     password = forms.CharField()
     retype   = forms.CharField()
+
 
 
 

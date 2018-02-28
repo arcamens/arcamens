@@ -196,8 +196,7 @@ class UserFilter(models.Model):
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, default='')
 
-    pattern  = models.CharField(max_length=255, 
-    blank=True, null=True, default='',
+    pattern  = models.CharField(max_length=255, blank=True, default='',
     help_text='Example: victor + #arcamens + #suggestion ...')
 
     user = models.ForeignKey('core_app.User', 
@@ -245,6 +244,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

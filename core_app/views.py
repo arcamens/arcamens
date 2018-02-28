@@ -1,8 +1,9 @@
-from core_app.models import OrganizationService, Organization
+from core_app.models import OrganizationService, Organization, User, \
+UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
+Invite, EInviteUser, EJoinOrganization, GlobalTaskFilter, GlobalFilter, Clipboard
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
-from board_app.models import Organization
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -10,7 +11,6 @@ from card_app.models import Card
 from post_app.models import Post
 from django.db.models import Q
 from django.urls import reverse
-from core_app.models import User
 from django.conf import settings
 from traceback import print_exc
 from core_app import ws
@@ -75,7 +75,7 @@ class SwitchOrganization(AuthenticatedView):
         ws.client.publish('user%s' % user.id, 
             'unsubscribe organization%s' % user.default.id, 0, False)
 
-        user.default = models.Organization.objects.get(
+        user.default = Organization.objects.get(
         id=organization_id)
 
         ws.client.publish('user%s' % user.id, 
@@ -86,14 +86,14 @@ class SwitchOrganization(AuthenticatedView):
 
 class UpdateUserInformation(GuardianView):
     def get(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.UserForm(instance=user)
 
         return render(request, 'core_app/update-user-information.html', 
         {'user': user, 'form': form})
 
     def post(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.UserForm(request.POST, request.FILES, instance=user)
 
         if not form.is_valid():
@@ -109,13 +109,13 @@ class CreateOrganization(AuthenticatedView):
     """
 
     def get(self, request, user_id):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.OrganizationForm()
         return render(request, 'core_app/create-organization.html', 
         {'form':form, 'user': user})
 
     def post(self, request, user_id):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.OrganizationForm(request.POST)
 
         if not form.is_valid():
@@ -132,12 +132,13 @@ class CreateOrganization(AuthenticatedView):
 
 class UpdateOrganization(GuardianView):
     def get(self, request, organization_id):
-        organization = models.Organization.objects.get(id=organization_id)
-        return render(request, 'core_app/update-organization.html',
-        {'organization': organization, 'form': forms.UpdateOrganizationForm(instance=organization)})
+        organization = Organization.objects.get(id=organization_id)
+        return render(request, 
+        'core_app/update-organization.html',{'organization': organization, 
+        'form': forms.UpdateOrganizationForm(instance=organization)})
 
     def post(self, request, organization_id):
-        record  = models.Organization.objects.get(id=organization_id)
+        record  = Organization.objects.get(id=organization_id)
         form    = forms.UpdateOrganizationForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -149,8 +150,8 @@ class UpdateOrganization(GuardianView):
 
 class DeleteOrganization(GuardianView):
     def get(self, request,  organization_id):
-        organization = models.Organization.objects.get(id = organization_id)
-        user         = models.User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id = organization_id)
+        user         = User.objects.get(id=self.user_id)
 
         # First remove the reference otherwise
         # the user gets deleted in cascade due to the
@@ -164,10 +165,10 @@ class DeleteOrganization(GuardianView):
 
 class ListUsers(GuardianView):
     def get(self, request, organization_id):
-        me           = models.User.objects.get(id=self.user_id)
-        organization = models.Organization.objects.get(id=organization_id)
+        me           = User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id=organization_id)
         total        = organization.users.all()
-        filter, _    = models.UserFilter.objects.get_or_create(
+        filter, _    = UserFilter.objects.get_or_create(
         user=me, organization=me.default)
 
         total = organization.users.all()
@@ -183,11 +184,11 @@ class ListUsers(GuardianView):
         'organization': organization})
 
     def post(self, request, organization_id):
-        me           = models.User.objects.get(id=self.user_id)
-        organization = models.Organization.objects.get(id=organization_id)
+        me           = User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id=organization_id)
 
         total        = organization.users.all()
-        filter, _    = models.UserFilter.objects.get_or_create(
+        filter, _    = UserFilter.objects.get_or_create(
         user=me, organization=me.default)
 
         total = organization.users.all()
@@ -211,8 +212,8 @@ class ListUsers(GuardianView):
 
 class ManageUserTags(GuardianView):
     def get(self, request, user_id):
-        me = models.User.objects.get(id=self.user_id)
-        user = models.User.objects.get(id=user_id)
+        me       = User.objects.get(id=self.user_id)
+        user     = User.objects.get(id=user_id)
 
         included = user.tags.filter(organization=me.default)
         excluded = me.default.tags.all()
@@ -225,10 +226,10 @@ class ManageUserTags(GuardianView):
     def post(self, request, user_id):
         form = forms.TagSearchForm(request.POST)
 
-        me = models.User.objects.get(id=self.user_id)
-        user = models.User.objects.get(id=user_id)
+        me = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
 
-        included = me.tags.filter(organization=me.default)
+        included = user.tags.filter(organization=me.default)
         excluded = me.default.tags.all()
         excluded = excluded.exclude(users=user)
 
@@ -250,7 +251,7 @@ class ManageUserTags(GuardianView):
 
 class EventPaginator(GuardianView):
     def get(self, request):
-        user      = models.User.objects.get(id=self.user_id)
+        user      = User.objects.get(id=self.user_id)
         events    = user.default.events.all().order_by('-created')[10:]
 
         page      = request.GET.get('page', 1)
@@ -270,7 +271,7 @@ class ListEvents(GuardianView):
     """
 
     def get(self, request):
-        user   = models.User.objects.get(id=self.user_id)
+        user   = User.objects.get(id=self.user_id)
         events = user.default.events.all().order_by('-created')
         count = events.count()
         return render(request, 'core_app/list-events.html', 
@@ -279,7 +280,7 @@ class ListEvents(GuardianView):
 
 class ListTags(GuardianView):
     def get(self, request):
-        user      = models.User.objects.get(id=self.user_id)
+        user      = User.objects.get(id=self.user_id)
         tags = user.default.tags.all()
         form = forms.TagSearchForm()
 
@@ -288,7 +289,7 @@ class ListTags(GuardianView):
         'organization': user.default})
 
     def post(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.TagSearchForm(request.POST)
         tags = user.default.tags.all()
 
@@ -306,10 +307,10 @@ class ListTags(GuardianView):
 
 class DeleteTag(GuardianView):
     def get(self, request, tag_id):
-        user = models.User.objects.get(id=self.user_id)
-        tag  = models.Tag.objects.get(id=tag_id)
+        user  = User.objects.get(id=self.user_id)
+        tag   = Tag.objects.get(id=tag_id)
 
-        event = models.EDeleteTag.objects.create(
+        event = EDeleteTag.objects.create(
         organization=user.default, user=user, tag_name=tag.name)
         tag.delete()
 
@@ -322,14 +323,14 @@ class DeleteTag(GuardianView):
 
 class CreateTag(GuardianView):
     def get(self, request):
-        user     = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.TagForm()
 
         return render(request, 'core_app/create-tag.html', 
         {'form':form})
 
     def post(self, request):
-        user = models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
         form = forms.TagForm(request.POST)
 
         if not form.is_valid():
@@ -339,7 +340,7 @@ class CreateTag(GuardianView):
         record.organization = user.default
         record.save()
 
-        event = models.ECreateTag.objects.create(
+        event = ECreateTag.objects.create(
         organization=user.default, user=user, tag=record)
 
         users = user.default.users.all()
@@ -352,14 +353,15 @@ class CreateTag(GuardianView):
 
 class UnbindUserTag(GuardianView):
     def get(self, request, user_id, tag_id):
-        user = models.User.objects.get(id=user_id)
-        tag = models.Tag.objects.get(id=tag_id)
+        user = User.objects.get(id=user_id)
+        tag  = Tag.objects.get(id=tag_id)
         user.tags.remove(tag)
         user.save()
 
-        me = models.User.objects.get(id=self.user_id)
-        event = models.EUnbindUserTag.objects.create(
+        me = User.objects.get(id=self.user_id)
+        event = EUnbindUserTag.objects.create(
         organization=me.default, user=me, peer=user, tag=tag)
+
         users = me.default.users.all()
         event.users.add(*users)
 
@@ -368,27 +370,15 @@ class UnbindUserTag(GuardianView):
 
         return HttpResponse(status=200)
 
-class EBindUserTag(GuardianView):
-    def get(self, request, event_id):
-        event = models.EBindUserTag.objects.get(id=event_id)
-        return render(request, 'core_app/e-bind-user-tag.html', 
-        {'event':event})
-
-class EUnbindUserTag(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUnbindUserTag.objects.get(id=event_id)
-        return render(request, 'core_app/e-unbind-user-tag.html', 
-        {'event':event})
-
 class BindUserTag(GuardianView):
     def get(self, request, user_id, tag_id):
-        user = models.User.objects.get(id=user_id)
-        tag = models.Tag.objects.get(id=tag_id)
+        user = User.objects.get(id=user_id)
+        tag  = Tag.objects.get(id=tag_id)
         user.tags.add(tag)
         user.save()
 
-        me = models.User.objects.get(id=self.user_id)
-        event = models.EBindUserTag.objects.create(
+        me    = User.objects.get(id=self.user_id)
+        event = EBindUserTag.objects.create(
         organization=me.default, user=me, peer=user, tag=tag)
         users = me.default.users.all()
         event.users.add(*users)
@@ -400,22 +390,22 @@ class BindUserTag(GuardianView):
 
 class EventQueues(GuardianView):
     def get(self, request):
-        user = models.User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
         queues = user.timelines.values_list('id')
         data = simplejson.dumps(some_data_to_dump)
         return HttpResponse(data, content_type='application/json')
 
 class InviteOrganizationUser(GuardianView):
     def get(self, request, organization_id):
-        user = models.User.objects.get(id=self.user_id)
-
-        organization = models.Organization.objects.get(id=organization_id)
+        user         = User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id=organization_id)
 
         return render(request, 'core_app/invite-organization-user.html', 
-        {'form': forms.OrganizationInviteForm(), 'user': user, 'organization': organization})
+        {'form': forms.OrganizationInviteForm(), 'user': user, 
+        'organization': organization})
 
     def post(self, request, organization_id):
-        organization = models.Organization.objects.get(id=organization_id)
+        organization = Organization.objects.get(id=organization_id)
         form         = forms.OrganizationInviteForm(request.POST)
 
         if not form.is_valid():
@@ -426,26 +416,30 @@ class InviteOrganizationUser(GuardianView):
 
         # If the user doesn't exist
         # we send him an email invite.
-        me = models.User.objects.get(id=self.user_id)
+        me = User.objects.get(id=self.user_id)
 
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
-        user, _  = models.User.objects.get_or_create(email=email)
+        user, _  = User.objects.get_or_create(email=email)
         
         # need to be improved.
-        token = 'invite%s' % random.randint(1000, 10000)
-        invite = models.Invite.objects.create(organization=organization, user=user, token=token)
+        token  = 'invite%s' % random.randint(1000, 10000)
+        invite = Invite.objects.create(
+        organization=organization, user=user, token=token)
 
-        event = models.EInviteUser.objects.create(organization=organization, user=me, peer=user)
+        event = EInviteUser.objects.create(
+        organization=organization, user=me, peer=user)
+
         event.users.add(me, user)
 
         url = reverse('core_app:join-organization', kwargs={
         'organization_id': organization.id, 'token': token})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
-        send_mail('You were invited to %s by %s.' % (organization.name, me.name),
-        '%s %s' % (organization.name, url), settings.EMAIL_HOST_USER, [email],
-        fail_silently=False)
+        msg = 'You were invited to %s by %s.' % (organization.name, me.name)
+
+        send_mail(msg, '%s %s' % (organization.name, 
+        url), settings.EMAIL_HOST_USER, [email], fail_silently=False)
 
         ws.client.publish('organization%s' % organization.id, 
             'sound', 0, False)
@@ -458,7 +452,7 @@ class JoinOrganization(View):
         # need some kind of token to be sent
         # for validating the invitation.
 
-        invite = models.Invite.objects.get(token=token)
+        invite = Invite.objects.get(token=token)
 
         if not invite.user.enabled:
             return redirect('core_app:signup-from-invite', 
@@ -466,7 +460,7 @@ class JoinOrganization(View):
 
 
         # Delete all the invites for this user.
-        organization = models.Organization.objects.get(id=organization_id)
+        organization = Organization.objects.get(id=organization_id)
 
         invite.user.organizations.add(organization)
         invite.user.default = organization
@@ -475,11 +469,11 @@ class JoinOrganization(View):
         # validates the invite.
         invite.delete()
 
-        invites = models.Invite.objects.filter(
+        invites = Invite.objects.filter(
         organization=organization, user=invite.user)
         invites.delete()
 
-        event = models.EJoinOrganization.objects.create(organization=organization, 
+        event = EJoinOrganization.objects.create(organization=organization, 
         peer=invite.user)
         event.users.add(*organization.users.all())
 
@@ -494,7 +488,7 @@ class JoinOrganization(View):
 
 class SignupFromInvite(View):
     def get(self, request, organization_id, token):
-        invite = models.Invite.objects.get(    
+        invite = Invite.objects.get(    
         organization__id=organization_id, token=token)
 
         form = forms.UserForm(instance=invite.user)
@@ -502,7 +496,7 @@ class SignupFromInvite(View):
         {'form': form, 'organization': invite.organization, 'token': token})
 
     def post(self, request, organization_id, token):
-        invite = models.Invite.objects.get(    
+        invite = Invite.objects.get(    
         organization__id=organization_id, token=token)
         form = forms.UserForm(request.POST, instance=invite.user)
 
@@ -520,37 +514,30 @@ class SignupFromInvite(View):
         return redirect('core_app:join-organization', 
         organization_id=organization_id, token=token)
 
-class EInviteUser(GuardianView):
-    def get(self, request, event_id):
-        event = models.EInviteUser.objects.get(id=event_id)
-        return render(request, 'core_app/e-invite-user.html', 
-        {'event':event})
-
-class EJoinOrganization(GuardianView):
-    def get(self, request, event_id):
-        event = models.EJoinOrganization.objects.get(id=event_id)
-        return render(request, 'core_app/e-join-organization.html', 
-        {'event':event})
-
 class ListAllTasks(GuardianView):
     def get(self, request):
-        me        = models.User.objects.get(id=self.user_id)
-        filter, _ = models.GlobalTaskFilter.objects.get_or_create(
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
-        form  = forms.GlobalTaskFilterForm(instance=filter)
 
-        # Maybe add an organization field to posts/cards?
-        assignments = me.assignments.filter(ancestor__organization=me.default)
-        tasks       = me.tasks.filter(ancestor__ancestor__organization=me.default)
-        total       = assignments.count() + tasks.count()
+        form        = forms.GlobalTaskFilterForm(instance=filter)
+        assignments = me.assignments.filter(
+        ancestor__organization=me.default)
+
+        tasks = me.tasks.filter(
+        ancestor__ancestor__organization=me.default)
+
+        total = assignments.count() + tasks.count()
         
-        tasks       = Card.collect_cards(tasks, filter.pattern, filter.done)
-        assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
+        tasks = Card.collect_cards(tasks, 
+        filter.pattern, filter.done)
+
+        assignments = Post.collect_posts(assignments, 
+        filter.pattern, filter.done)
 
         count       = assignments.count() + tasks.count()
-
         tasks       = tasks.values('done', 'label', 'id')
-        assignments  = assignments.values('done', 'label', 'id')
+        assignments = assignments.values('done', 'label', 'id')
 
         # If i instantiate the form here it stops working
         # correctly when filtering the cards/posts
@@ -561,30 +548,34 @@ class ListAllTasks(GuardianView):
         'form': form, 'tasks': tasks})
 
     def post(self, request):
-        me          = models.User.objects.get(id=self.user_id)
+        me          = User.objects.get(id=self.user_id)
         assignments = me.assignments.filter(ancestor__organization=me.default)
-        tasks       = me.tasks.filter(ancestor__ancestor__organization=me.default)
+
+        tasks = me.tasks.filter(
+        ancestor__ancestor__organization=me.default)
 
         total = assignments.count() + tasks.count()
 
-        filter, _ = models.GlobalTaskFilter.objects.get_or_create(
+        filter, _ = GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        form = forms.GlobalFilterForm(request.POST, instance=filter)
+        form = forms.GlobalTaskFilterForm(request.POST, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-all-tasks.html', 
                 {'assignments': assignments, 'form': form, 'total': total,
                     'count': count, 'tasks': tasks}, status=400)
-
         form.save()
 
-        tasks = Card.collect_cards(tasks, filter.pattern, filter.done)
-        assignments = Post.collect_posts(assignments, filter.pattern, filter.done)
+        tasks = Card.collect_cards(tasks, 
+        filter.pattern, filter.done)
 
-        count       = assignments.count() + tasks.count()
-        tasks       = tasks.values('done', 'label', 'id')
-        assigments  = assignments.values('done', 'label', 'id')
+        assignments = Post.collect_posts(assignments, 
+        filter.pattern, filter.done)
+
+        count      = assignments.count() + tasks.count()
+        tasks      = tasks.values('done', 'label', 'id')
+        assigments = assignments.values('done', 'label', 'id')
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'assignments': assignments, 'form': form, 'tasks': tasks,
@@ -592,9 +583,9 @@ class ListAllTasks(GuardianView):
 
 class Find(GuardianView):
     def get(self, request):
-        me    = models.User.objects.get(id=self.user_id)
+        me    = User.objects.get(id=self.user_id)
 
-        filter, _ = models.GlobalFilter.objects.get_or_create(
+        filter, _ = GlobalFilter.objects.get_or_create(
         user=me, organization=me.default)
 
         form  = forms.GlobalFilterForm(instance=filter)
@@ -616,8 +607,8 @@ class Find(GuardianView):
         'total': total, 'count': count})
 
     def post(self, request):
-        me        = models.User.objects.get(id=self.user_id)
-        filter, _ = models.GlobalFilter.objects.get_or_create(
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalFilter.objects.get_or_create(
         user=me, organization=me.default)
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
@@ -648,8 +639,8 @@ class Find(GuardianView):
 
 class ListClipboard(GuardianView):
     def get(self, request):
-        user   = User.objects.get(id=self.user_id)
-        clipboard, _    = models.Clipboard.objects.get_or_create(
+        user         = User.objects.get(id=self.user_id)
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
         cards = clipboard.cards.all()
@@ -660,10 +651,6 @@ class ListClipboard(GuardianView):
 
         return render(request, 'core_app/list-clipboard.html', 
         {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
-
-
-
-
 
 
 

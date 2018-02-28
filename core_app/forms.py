@@ -23,10 +23,13 @@ class OrganizationInviteForm(forms.Form):
 
 class UserForm(site_app.forms.UserForm):
     class Meta:
+        model  = models.User
         fields = ('name', 'avatar', 
         'email', 'password', 'description', 
         'recover_email')
-        model = models.User
+
+        widgets = {
+        'password': forms.PasswordInput()}
 
 class GlobalFilterForm(forms.ModelForm):
     class Meta:
@@ -52,6 +55,8 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
+
 
 
 
