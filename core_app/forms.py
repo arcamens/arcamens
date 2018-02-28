@@ -12,8 +12,11 @@ class EventSearchForm(forms.Form):
     seen = forms.BooleanField(required=False)
 
 class EventFilterForm(forms.Form):
-    start = forms.DateTimeField(initial=datetime.date.today()-datetime.timedelta(days=3))
-    end   = forms.DateTimeField(initial=datetime.date.today()+datetime.timedelta(days=1))
+    val0  = datetime.date.today()-datetime.timedelta(days=3)
+    start = forms.DateTimeField(initial = val0)
+
+    val1 = datetime.date.today()+datetime.timedelta(days=1)
+    end  = forms.DateTimeField(initial = val1)
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
