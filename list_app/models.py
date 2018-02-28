@@ -73,12 +73,6 @@ class ECreateList(Event):
     child = models.ForeignKey('List', 
     related_name='e_create_list1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('list_app:e-create-list', 
-                    kwargs={'event_id': self.id})
-
-
-
 class EUpdateList(Event):
     """
     """
@@ -89,21 +83,11 @@ class EUpdateList(Event):
     child = models.ForeignKey('List', 
     related_name='e_update_list1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('list_app:e-update-list', 
-                    kwargs={'event_id': self.id})
-
-
 class EDeleteList(Event):
     ancestor = models.ForeignKey('board_app.Board', 
     related_name='e_delete_list0', blank=True)
 
     child_name = models.CharField(max_length=255, blank=True, null=True)
-
-    def get_absolute_url(self):
-        return reverse('list_app:e-delete-list', 
-        kwargs={'event_id': self.id})
-
 
 class EArchiveList(Event):
     ancestor = models.ForeignKey('board_app.Board', 
@@ -111,10 +95,6 @@ class EArchiveList(Event):
 
     child = models.ForeignKey('List', 
     related_name='e_archive_list1', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('list_app:e-archive-list', 
-        kwargs={'event_id': self.id})
 
 class ECutList(Event):
     """
@@ -126,10 +106,6 @@ class ECutList(Event):
     child = models.ForeignKey('List', 
     related_name='e_cut_list1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('list_app:e-cut-list', 
-                    kwargs={'event_id': self.id})
-
 class EPasteCard(Event):
     """
     """
@@ -137,16 +113,9 @@ class EPasteCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_paste_card0', blank=True)
 
-    child = models.ForeignKey('card_app.Card', 
-    related_name='e_paste_card1', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('list_app:e-paste-card', 
-                    kwargs={'event_id': self.id})
-
-
-
-
+    cards = models.ManyToManyField('card_app.Card', 
+    null=True, related_name='e_paste_card1', blank=True, 
+    symmetrical=False)
 
 
 

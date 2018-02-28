@@ -1,5 +1,8 @@
 from django.views.generic import View
-from core_app.models import Clipboard
+from list_app.models import ListFilter, EDeleteList, List, ECreateList, \
+EUpdateList, EPasteCard, ECutList
+from core_app.models import Clipboard, User
+from board_app.models import Board, Pin
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.db.models import Q
@@ -19,12 +22,12 @@ class ListLists(GuardianView):
     """
 
     def get(self, request, board_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        board = board_app.models.Board.objects.get(id=board_id)
+        user = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
         total = board.lists.all()
         pins  = user.pin_set.filter(organization=user.default)
 
-        filter, _ = models.ListFilter.objects.get_or_create(
+        filter, _ = ListFilter.objects.get_or_create(
         user=user, organization=user.default, board=board)
 
         lists = total.filter((Q(name__icontains=filter.pattern) | \
@@ -35,19 +38,13 @@ class ListLists(GuardianView):
         {'lists': lists, 'user': user, 'board': board, 'organization': user.default,
         'total': total, 'pins': pins, 'filter': filter})
 
-class List(GuardianView):
-    def get(self, request, list_id):
-        list = models.List.objects.get(id=list_id)
-        return render(request, 'list_app/list.html', 
-        {'list':list})
-
 class CreateList(GuardianView):
     """
     """
 
     def get(self, request, board_id):
-        user  = core_app.models.User.objects.get(id=self.user_id)
-        board = board_app.models.Board.objects.get(id=board_id)
+        user  = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
 
         # list  = models.List.objects.create(owner=user, ancestor=board)
         form = forms.ListForm()
@@ -63,13 +60,13 @@ class CreateList(GuardianView):
 
 
         list          = form.save(commit=False)
-        user          = core_app.models.User.objects.get(id=self.user_id)
-        board         = board_app.models.Board.objects.get(id=board_id)
+        user          = User.objects.get(id=self.user_id)
+        board         = Board.objects.get(id=board_id)
         list.owner    = user
         list.ancestor = board
         list.save()
 
-        event = models.ECreateList.objects.create(organization=user.default,
+        event = ECreateList.objects.create(organization=user.default,
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
@@ -80,11 +77,10 @@ class CreateList(GuardianView):
 
 class DeleteList(GuardianView):
     def get(self, request, list_id):
-        list = list_app.models.List.objects.get(id=list_id)
+        list = List.objects.get(id=list_id)
+        user = User.objects.get(id=self.user_id)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        event = models.EDeleteList.objects.create(organization=user.default,
+        event = EDeleteList.objects.create(organization=user.default,
         ancestor=list.ancestor, child_name=list.name, user=user)
         event.users.add(*list.ancestor.members.all())
 
@@ -100,20 +96,20 @@ class DeleteList(GuardianView):
 
 class PinList(GuardianView):
     def get(self, request, list_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        list = models.List.objects.get(id=list_id)
-        pin  = board_app.models.Pin.objects.create(user=user, 
+        user = User.objects.get(id=self.user_id)
+        list = List.objects.get(id=list_id)
+        pin  = Pin.objects.create(user=user, 
         organization=user.default, list=list)
         return redirect('board_app:list-pins')
 
 class UpdateList(GuardianView):
     def get(self, request, list_id):
-        list = models.List.objects.get(id=list_id)
+        list = List.objects.get(id=list_id)
         return render(request, 'list_app/update-list.html',
         {'list': list, 'form': forms.ListForm(instance=list)})
 
     def post(self, request, list_id):
-        record  = models.List.objects.get(id=list_id)
+        record  = List.objects.get(id=list_id)
         form    = forms.ListForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -121,9 +117,9 @@ class UpdateList(GuardianView):
                         {'form': form, 'list':record, }, status=400)
 
         record.save()
-        user = core_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
-        event = models.EUpdateList.objects.create(organization=user.default,
+        event = EUpdateList.objects.create(organization=user.default,
         ancestor=record.ancestor, child=record, user=user)
         event.users.add(*record.ancestor.members.all())
 
@@ -136,19 +132,21 @@ class UpdateList(GuardianView):
 
 class PasteCards(GuardianView):
     def get(self, request, list_id):
-        list = models.List.objects.get(id=list_id)
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        clipboard, _    = Clipboard.objects.get_or_create(
+        list         = List.objects.get(id=list_id)
+        user         = User.objects.get(id=self.user_id)
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
-        for ind in clipboard.cards.all():
-            ind.ancestor = list
-            ind.save()
-            event = models.EPasteCard.objects.create(
-            organization=user.default, ancestor=list, 
-            child=ind, user=user)
-            event.users.add(*(list.ancestor.members.all() | ind.workers.all()))
+        cards = clipboard.cards.all()
+        cards.update(ancestor=list)
+
+        event = EPasteCard.objects.create(
+        organization=user.default, ancestor=list, user=user)
+        event.cards.add(*cards)
+
+        # Workers of the card dont need to be notified of this event
+        # because them may not belong to the board at all.
+        event.users.add(*list.ancestor.members.all())
 
         clipboard.cards.clear()
 
@@ -161,9 +159,9 @@ class PasteCards(GuardianView):
 
 class CutList(GuardianView):
     def get(self, request, list_id):
-        list          = models.List.objects.get(id=list_id)
-        user          = core_app.models.User.objects.get(id=self.user_id)
-        board         = list.ancestor
+        list  = List.objects.get(id=list_id)
+        user  = User.objects.get(id=self.user_id)
+        board = list.ancestor
 
         ws.client.publish('board%s' % list.ancestor.id, 
             'sound', 0, False)
@@ -171,11 +169,11 @@ class CutList(GuardianView):
         list.ancestor = None
         list.save()
 
-        clipboard, _    = Clipboard.objects.get_or_create(
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
         clipboard.lists.add(list)
 
-        event = models.ECutList.objects.create(organization=user.default,
+        event = ECutList.objects.create(organization=user.default,
         ancestor=board, child=list, user=user)
         event.users.add(*board.members.all())
 
@@ -184,8 +182,8 @@ class CutList(GuardianView):
 
 class CopyList(GuardianView):
     def get(self, request, list_id):
-        list = models.List.objects.get(id=list_id)
-        user = core_app.models.User.objects.get(id=self.user_id)
+        list = List.objects.get(id=list_id)
+        user = User.objects.get(id=self.user_id)
         copy = list.duplicate()
 
         clipboard, _    = Clipboard.objects.get_or_create(
@@ -199,29 +197,11 @@ class CopyList(GuardianView):
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
 
-class ECreateList(GuardianView):
-    def get(self, request, event_id):
-        event = models.ECreateList.objects.get(id=event_id)
-        return render(request, 'list_app/e-create-list.html', 
-        {'event':event})
-
-class EUpdateList(GuardianView):
-    def get(self, request, event_id):
-        event = models.EUpdateList.objects.get(id=event_id)
-        return render(request, 'list_app/e-update-list.html', 
-        {'event':event})
-
-class EDeleteList(GuardianView):
-    def get(self, request, event_id):
-        event = models.EDeleteList.objects.get(id=event_id)
-        return render(request, 'list_app/e-delete-list.html', 
-        {'event':event})
-
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
-        user   = core_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
-        filter = models.ListFilter.objects.get(
+        filter = ListFilter.objects.get(
         user__id=self.user_id, organization__id=user.default.id,
         board__id=board_id)
 
@@ -230,9 +210,8 @@ class SetupListFilter(GuardianView):
         'board': filter.board})
 
     def post(self, request, board_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        record = models.ListFilter.objects.get(
+        user   = User.objects.get(id=self.user_id)
+        record = ListFilter.objects.get(
         organization__id=user.default.id, 
         user__id=self.user_id, board__id=board_id)
 
@@ -244,57 +223,5 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
-
-
-class Done(GuardianView):
-    def get(self, request, list_id):
-        list      = models.List.objects.get(id=list_id)
-        list.done = True
-        list.save()
-
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        # lists in the clipboard cant be archived.
-        event    = models.EArchiveList.objects.create(organization=user.default,
-        ancestor=list.ancestor, child=list, user=user)
-
-        users = list.ancestor.members.all()
-        event.users.add(*users)
-
-        # Missing event.
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
-
-        return redirect('list_app:list-lists', board_id=list.ancestor.id)
-
-class EArchiveList(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EArchiveList.objects.get(id=event_id)
-        return render(request, 'list_app/e-archive-list.html', 
-        {'event':event})
-
-class ECutList(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECutList.objects.get(id=event_id)
-        return render(request, 'list_app/e-cut-list.html', 
-        {'event':event})
-
-class EPasteCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EPasteCard.objects.get(id=event_id)
-        return render(request, 'list_app/e-paste-card.html', 
-        {'event':event})
-
-
-
 
 

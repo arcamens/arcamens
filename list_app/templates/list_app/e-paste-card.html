@@ -5,15 +5,18 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has pasted card
+{{event.user}} </a> has pasted cards
 
+{% for ind in event.cards.all %}
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child.id %}" 
+data-show="{% url 'card_app:view-data' ind.id %}" 
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child.label|truncatechars:40}} </a> 
+{{ind.label|truncatechars:40}} </a> 
+
+{% endfor %}
 
 on list
 
@@ -28,6 +31,7 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
