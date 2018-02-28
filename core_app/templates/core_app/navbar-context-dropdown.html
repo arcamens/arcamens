@@ -49,8 +49,17 @@ data-shell="#modalContent"
 data-callback="$('#modal').modal('show');"
 href="#"><span class="glyphicon glyphicon-magnet"></span> 
 {% trans "Clipboard" %}</a></li>
+<li class="divider"></li>
 
 
+<li>
+<a href="#" 
+class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:list-logs'  %}" 
+data-callback="$('#modal').modal('show');">
+<span class="glyphicon glyphicon-cog"></span> Logs 
+</a>
+</li>
 
 <li class="divider"></li>
 <li><a  href="{% url 'site_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
@@ -59,6 +68,8 @@ href="#"><span class="glyphicon glyphicon-magnet"></span>
 
 
 </ul>
+
+
 
 
 

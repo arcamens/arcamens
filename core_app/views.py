@@ -3,6 +3,7 @@ UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization, GlobalTaskFilter, \
 GlobalFilter, Clipboard, Event
 from django.core.paginator import Paginator, EmptyPage
+from django.utils.dateparse import parse_datetime
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
 from django.views.generic import View
@@ -663,4 +664,34 @@ class SeenEvent(GuardianView):
         event.save()
         return redirect('core_app:list-events')
 
+class ListLogs(GuardianView):
+    """
+    """
+
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        form = forms.EventFilterForm()
+        return render(request, 'core_app/list-logs.html', 
+        {'user': user, 'form': form,
+         'organization': user.default})
+
+    def post(self, request):
+        user  = User.objects.get(id=self.user_id)
+        form  = forms.EventFilterForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'core_app/list-logs.html', 
+                {'user': user, 'form': form,
+                     'organization': user.default})
+
+        end    = parse_datetime(str(form.cleaned_data['end']))
+        start  = parse_datetime(str(form.cleaned_data['start']))
+        events = user.seen_events.filter(created__lte=end,
+        created__gte=start)
+
+        events = events.order_by('-created')
+
+        return render(request, 'core_app/list-events.html', 
+        {'user': user, 'form': form, 'events':events,
+         'organization': user.default})
 

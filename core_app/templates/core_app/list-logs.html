@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load jscrolls %}
+{% load bootstrap3 %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>  
+<span class="glyphicon glyphicon-bell"></span>
+
+{{organization.name}}'s Events <span class="badge">{{count}}</span></h4>
+</div>
+
+<div class="modal-body">
+<form id="listLogsForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.start  size='md' %}
+{% bootstrap_field form.end  size='md' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+
+</div>
+
+
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-form="#listLogsForm"
+data-shell="#modalContent" 
+data-show="{% url 'core_app:list-logs'  %}"
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
+
+</div>
+
+
+
+
+
+
+
+
+

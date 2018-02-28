@@ -12,8 +12,8 @@ class EventSearchForm(forms.Form):
     seen = forms.BooleanField(required=False)
 
 class EventFilterForm(forms.Form):
-    start = forms.DateField(initial=datetime.date.today)
-    end   = forms.DateField(initial=datetime.date.today)
+    start = forms.DateTimeField(initial=datetime.date.today()-datetime.timedelta(days=3))
+    end   = forms.DateTimeField(initial=datetime.date.today()+datetime.timedelta(days=1))
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
@@ -55,11 +55,6 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
-
-
-
-
-
 
 
 
