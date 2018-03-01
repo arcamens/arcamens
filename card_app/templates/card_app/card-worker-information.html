@@ -9,10 +9,18 @@
 </div>
 
 <div class="modal-body">
+<p>
 Binded by <span class="glyphicon glyphicon-user"></span>
 {{user.name}} <small> ({{user.email}})</small>
 
  at {{created}}
+</p>
+
+<a 
+data-show="{% url 'card_app:request-card-attention' peer.id card.id %}"
+data-shell="#modalContent" 
+class="e-get"
+href="#"> Request attention through e-mail? </a>
 </div>
 
 <div class="modal-footer">
@@ -20,5 +28,8 @@ Binded by <span class="glyphicon glyphicon-user"></span>
      {% trans "Close" %}
 </button>
 </div>
+
+
+
 
 

@@ -23,7 +23,6 @@ urlpatterns = [
     url(r'^cancel-card-creation/(?P<card_id>.+)/', views.CancelCardCreation.as_view(), name='cancel-card-creation'),
     url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
     url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
-    url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
     url(r'^e-create-card/(?P<event_id>.+)/', views.ECreateCard.as_view(), name='e-create-card'),
 
     url(r'^e-create-fork/(?P<event_id>.+)/', views.ECreateFork.as_view(), name='e-create-fork'),
@@ -52,26 +51,9 @@ urlpatterns = [
     url(r'^manage-card-tags/(?P<card_id>.+)/', views.ManageCardTags.as_view(), name='manage-card-tags'),
     url(r'^bind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.BindCardTag.as_view(), name='bind-card-tag'),
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
+    url(r'^request-card-attention/(?P<peer_id>.+)/(?P<card_id>.+)', views.RequestCardAttention.as_view(), name='request-card-attention'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

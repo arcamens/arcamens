@@ -4,8 +4,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
 from core_app.models import Clipboard
+from django.core.mail import send_mail
 from core_app.views import GuardianView
 from core_app.models import User
+from card_app.models import Card
 from functools import reduce
 import board_app.models
 import list_app.models
@@ -19,16 +21,6 @@ import json
 
 # Create your views here.
 
-
-class Card(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
-
-        is_worker = card.workers.filter(id=self.user_id).count()
-        has_workers = card.workers.count()
-
-        return render(request, 'card_app/card.html', {'card': card,
-        'is_worker': is_worker, 'has_workers': has_workers})
 
 class CardLink(GuardianView):
     """
@@ -852,7 +844,40 @@ class CardWorkerInformation(GuardianView):
         peer__id=peer_id).last()
 
         return render(request, 'card_app/card-worker-information.html', 
-        {'peer': event.peer, 'created': event.created, 'user':event.user})
+        {'peer': event.peer, 'created': event.created, 
+        'user':event.user, 'card': event.child})
+
+class RequestCardAttention(GuardianView):
+    def get(self, request, peer_id, card_id):
+        peer = User.objects.get(id=peer_id)
+        card = Card.objects.get(id=card_id)
+
+        form = forms.CardAttentionForm()
+        return render(request, 'card_app/request-card-attention.html', 
+        {'peer': peer,  'card': card, 'form': form})
+
+    def post(self, request, peer_id, card_id):
+        user = User.objects.get(id=self.user_id)
+        peer = User.objects.get(id=peer_id)
+        card = Card.objects.get(id=card_id)
+        form = forms.CardAttentionForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'card_app/request-card-attention.html', 
+                    {'peer': peer, 'card': card, 'form': form})    
+
+        url  = reverse('card_app:card-link', 
+            kwargs={'card_id': card.id})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+        msg = '%s (%s) has requested your attention on\n%s\n\n%s' % (
+        user.name, user.email, url, form.cleaned_data['message'])
+
+        send_mail('%s %s' % (user.default.name, 
+        user.name), msg, settings.EMAIL_HOST_USER, [peer.email], fail_silently=False)
+
+        return redirect('card_app:card-worker-information', 
+        peer_id=peer.id, card_id=card.id)
 
 class CardTagInformation(GuardianView):
     def get(self, request, tag_id, card_id):
@@ -862,33 +887,9 @@ class CardTagInformation(GuardianView):
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
 
-
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
