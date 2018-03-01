@@ -577,7 +577,7 @@ class ManageCardRelations(GuardianView):
         cards = models.Card.get_allowed_cards(me)
         cards = cards.filter(done=False)
 
-        excluded = cards.exclude(pk__in=included)
+        excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card,
@@ -595,7 +595,7 @@ class ManageCardRelations(GuardianView):
 
         included = card.relations.all()
         cards = models.Card.get_allowed_cards(me)
-        excluded = cards.exclude(pk__in=included)
+        excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
         included = models.Card.collect_cards(included, 
         form.cleaned_data['pattern'], form.cleaned_data['done']) 
@@ -898,6 +898,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 
