@@ -20,7 +20,15 @@ from django.conf import settings
 import json
 
 # Create your views here.
+class Card(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
 
+        is_worker = card.workers.filter(id=self.user_id).count()
+        has_workers = card.workers.count()
+
+        return render(request, 'card_app/card.html', {'card': card,
+        'is_worker': is_worker, 'has_workers': has_workers})
 
 class CardLink(GuardianView):
     """
@@ -850,7 +858,7 @@ class CardWorkerInformation(GuardianView):
 class RequestCardAttention(GuardianView):
     def get(self, request, peer_id, card_id):
         peer = User.objects.get(id=peer_id)
-        card = Card.objects.get(id=card_id)
+        card = models.Card.objects.get(id=card_id)
 
         form = forms.CardAttentionForm()
         return render(request, 'card_app/request-card-attention.html', 
@@ -859,7 +867,7 @@ class RequestCardAttention(GuardianView):
     def post(self, request, peer_id, card_id):
         user = User.objects.get(id=self.user_id)
         peer = User.objects.get(id=peer_id)
-        card = Card.objects.get(id=card_id)
+        card = models.Card.objects.get(id=card_id)
         form = forms.CardAttentionForm(request.POST)
 
         if not form.is_valid():
@@ -890,6 +898,7 @@ class CardTagInformation(GuardianView):
 class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
+
 
 
 

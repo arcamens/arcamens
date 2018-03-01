@@ -33,3 +33,8 @@ class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
 
+class PostAttentionForm(forms.Form):
+    message = forms.CharField(
+    required=False, widget=forms.Textarea,
+    help_text='(Optional) Be in the meeting 20 min earlier.')
+

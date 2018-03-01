@@ -32,8 +32,11 @@ urlpatterns = [
     url(r'^bind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.BindPostTag.as_view(), name='bind-post-tag'),
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
     url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
+    url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
 
 ]
+
+
 
 
 

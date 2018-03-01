@@ -4,6 +4,7 @@ PostFilter, GlobalPostFilter, ECutPost, EArchivePost
 from core_app.models import Clipboard, Tag, User
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
+from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -205,8 +206,10 @@ class PostWorkerInformation(GuardianView):
         event = EAssignPost.objects.filter(post__id=post_id,
         peer__id=peer_id).last()
 
-        return render(request, 'post_app/post-worker-information.html', 
-        {'peer': event.peer, 'created': event.created, 'user':event.user})
+        return render(request, 
+        'post_app/post-worker-information.html',  
+        {'peer': event.peer, 'post': event.post, 
+        'created': event.created, 'user':event.user})
 
 class PostTagInformation(GuardianView):
     def get(self, request, tag_id, post_id):
@@ -498,6 +501,39 @@ class Undo(GuardianView):
 
         return redirect('post_app:post', 
         post_id=post.id)
+
+
+class RequestPostAttention(GuardianView):
+    def get(self, request, peer_id, post_id):
+        peer = User.objects.get(id=peer_id)
+        post = models.Post.objects.get(id=post_id)
+
+        form = forms.PostAttentionForm()
+        return render(request, 'post_app/request-post-attention.html', 
+        {'peer': peer,  'post': post, 'form': form})
+
+    def post(self, request, peer_id, post_id):
+        user = User.objects.get(id=self.user_id)
+        peer = User.objects.get(id=peer_id)
+        post = models.Post.objects.get(id=post_id)
+        form = forms.PostAttentionForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'post_app/request-post-attention.html', 
+                    {'peer': peer, 'post': post, 'form': form})    
+
+        url  = reverse('post_app:post-link', 
+            kwargs={'post_id': post.id})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+        msg = '%s (%s) has requested your attention on\n%s\n\n%s' % (
+        user.name, user.email, url, form.cleaned_data['message'])
+
+        send_mail('%s %s' % (user.default.name, 
+        user.name), msg, settings.EMAIL_HOST_USER, [peer.email], fail_silently=False)
+
+        return redirect('post_app:post-worker-information', 
+        peer_id=peer.id, post_id=post.id)
 
 
 
