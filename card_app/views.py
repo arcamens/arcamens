@@ -899,6 +899,38 @@ class PreviewCard(GuardianView):
     def get(self, request, card_id):
         pass
 
+class AlertCardWorkers(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        user = User.objects.get(id=self.user_id)
+
+        form = forms.AlertCardWorkersForm()
+        print('fuck?')
+        return render(request, 'card_app/alert-card-workers.html', 
+        {'card': card, 'form': form, 'user': user})
+
+    def post(self, request, card_id):
+        user = User.objects.get(id=self.user_id)
+        card = models.Card.objects.get(id=card_id)
+        form = forms.AlertCardWorkersForm(request.POST)
+
+        if not form.is_valid():
+            return render(request,'card_app/alert-card-workers.html', 
+                    {'user': user, 'card': card, 'form': form})    
+
+        url  = reverse('card_app:card-link', 
+            kwargs={'card_id': card.id})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+        msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
+        user.name, user.email, url, form.cleaned_data['message'])
+
+        for ind in card.workers.values_list('email'):
+            send_mail('%s %s' % (user.default.name, 
+                user.name), msg, settings.EMAIL_HOST_USER, 
+                    [ind[0]], fail_silently=False)
+
+        return redirect('card_app:view-data', card_id=card.id)
 
 
 

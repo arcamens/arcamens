@@ -25,7 +25,13 @@ Activity</a></li>
 Copy url</a></li>
 <li class="divider"></li>
 
-<li><a href="#">
+<li><a 
+class="e-get text-warning"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'card_app:alert-card-workers' card.id %}"
+
+href="#">
 <span class="glyphicon glyphicon-alert"></span>
 
 Alert workers</a></li>

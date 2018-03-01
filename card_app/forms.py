@@ -48,5 +48,10 @@ class CardAttentionForm(forms.Form):
     help_text='(Optional) Hey, do you remember \
     you have a job?')
 
+class AlertCardWorkersForm(forms.Form):
+    message = forms.CharField(
+    required=False, widget=forms.Textarea,
+    help_text='I need this task done a!')
+
 
 
