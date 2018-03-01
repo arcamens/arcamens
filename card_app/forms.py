@@ -45,7 +45,8 @@ class TagSearchForm(forms.Form):
 class CardAttentionForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
-    help_text='Hey, do you remember you have a job?')
+    help_text='(Optional) Hey, do you remember \
+    you have a job?')
 
 
 
