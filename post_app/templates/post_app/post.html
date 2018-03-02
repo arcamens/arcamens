@@ -38,7 +38,10 @@ at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 
 <div class="row">
 <div class="col-md-3">
-<h4> Attachments </h4>
+<h4> 
+<span class="glyphicon glyphicon-user"></span>
+
+Attachments </h4>
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in post.postfilewrapper_set.all %}
@@ -52,7 +55,10 @@ No attachment.
 </div>
 
 <div class="col-md-3">
-<h4> Tags </h4>
+<h4> 
+<span class="glyphicon glyphicon-tag"></span>
+
+Tags </h4>
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in post.tags.all %}
@@ -74,7 +80,10 @@ No tags.
 </div>
 
 <div class="col-md-3">
-<h4> Workers </h4>
+<h4> 
+<span class="glyphicon glyphicon-user"></span>
+
+Workers </h4>
 
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in post.workers.all %}
@@ -157,6 +166,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
 
 
 
