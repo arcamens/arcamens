@@ -171,7 +171,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
     blank=True)
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
+    default=False, help_text='Done cards/posts?.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -203,7 +203,7 @@ class GlobalTaskFilter(models.Model):
     blank=True)
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
+    default=False, help_text='Done cards/posts?.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -228,6 +228,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
