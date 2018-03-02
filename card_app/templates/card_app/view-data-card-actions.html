@@ -1,43 +1,4 @@
 <ul class="nav nav-pills ">
-<li class="dropdown">
-<a class="dropdown-toggle" href="#" type="button" data-toggle="dropdown">
-<span class="glyphicon glyphicon-wrench"></span>
-
-Tools
-<span class="caret"></span> </a>
-
-<ul class="dropdown-menu">
-<li><a href="#">
-<span class="glyphicon glyphicon-calendar"></span>
-Reminds </a></li>
-<li class="divider"></li>
-
-<li><a href="#">
-<span class="glyphicon glyphicon-bell"></span>
-
-Activity</a></li>
-<li class="divider"></li>
-
-<li><a href="#">
-<span class="glyphicon glyphicon-copy"></span>
-
-Copy url</a></li>
-<li class="divider"></li>
-
-<li><a 
-class="e-get text-warning"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:alert-card-workers' card.id %}"
-
-href="#">
-<span class="glyphicon glyphicon-alert"></span>
-
-Alert workers</a></li>
-
-</ul>
-</li>
-
 <li>
 
 <!-- If the card has no ancestor then it is on clipboard -->
@@ -146,6 +107,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

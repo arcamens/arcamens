@@ -22,6 +22,20 @@ href="#">
 </a>
 
 <br>
+
+{% if forloop.last %} 
+<a 
+class="e-get text-warning"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'card_app:alert-card-workers' card.id %}"
+
+href="#">
+<span class="glyphicon glyphicon-alert"></span>
+
+Alert workers?</a>
+
+{% endif %}
 {% empty %}
 No workers...
 {% endfor %}</div></div>
@@ -73,6 +87,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 
