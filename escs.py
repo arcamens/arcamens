@@ -55,6 +55,30 @@ help(Paginator)
 from django.template.loader import get_template
 from django.template import Context
 
+##############################################################################
 
+from core_app.models import *
+from card_app.models import *
+from board_app.models import *
+from list_app.models import *
+from post_app.models import *
+from timeline_app.models import *
+from site_app.models import *
+from note_app.models import *
+from snippet_app.models import *
+from comment_app.models import *
 
+events = Event.objects.all()
+
+def normalize_events(events):
+    for ind in events:
+        ind.create_html_cache()
+
+events = ECreateCard.objects.all()
+normalize_events(events)
+events = EUpdateCard.objects.all()
+normalize_events(events)
+events = EUpdateNote.objects.all()
+normalize_events(events)
+##############################################################################
 
