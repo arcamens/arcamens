@@ -151,9 +151,7 @@ class ERelateCard(Event):
     child1 = models.ForeignKey('Card', 
     related_name='e_relate_card3', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-relate-card', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-relate-card.html'
 
 class EUnrelateCard(Event):
     """
@@ -175,6 +173,8 @@ class EUnrelateCard(Event):
         return reverse('card_app:e-unrelate-card', 
                     kwargs={'event_id': self.id})
 
+    html_template = 'card_app/e-unrelate-card.html'
+
 class ECreateCard(Event):
     """
     """
@@ -185,9 +185,7 @@ class ECreateCard(Event):
     child = models.ForeignKey('Card', 
     related_name='e_create_card1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-create-card', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-create-card.html'
 
 class EBindCardWorker(Event):
     """
@@ -202,9 +200,7 @@ class EBindCardWorker(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_bind_card_worker2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-bind-card-worker', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-bind-card-worker-card.html'
 
 class EUnbindCardWorker(Event):
     """
@@ -219,9 +215,7 @@ class EUnbindCardWorker(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_unbind_card_worker2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-unbind-card-worker', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-unbind-card.html'
 
 class ECreateFork(Event):
     """
@@ -236,9 +230,7 @@ class ECreateFork(Event):
     child1 = models.ForeignKey('Card', 
     related_name='e_create_fork2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-create-fork', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-create-fork.html'
 
 class EUpdateCard(Event):
     """
@@ -250,9 +242,7 @@ class EUpdateCard(Event):
     child = models.ForeignKey('Card', 
     related_name='e_update_card1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-update-card', 
-                kwargs={'event_id': self.id})
+    html_template = 'card_app/e-update-card.html'
 
 class EDeleteCard(Event):
     """
@@ -264,9 +254,7 @@ class EDeleteCard(Event):
     label = models.CharField(null=True, blank=False, 
     max_length=626)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-delete-card', 
-            kwargs={'event_id': self.id})
+    html_template = 'card_app/e-delete-card.html'
 
 class CardFilter(GlobalFilterMixin, models.Model):
     pattern  = models.CharField(
@@ -323,10 +311,7 @@ class EBindTagCard(Event):
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_bind_tag_card2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-bind-tag-card', 
-                    kwargs={'event_id': self.id})
-
+    html_template = 'card_app/e-bind-tag-card.html'
 
 class EUnbindTagCard(Event):
     """
@@ -341,9 +326,7 @@ class EUnbindTagCard(Event):
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_unbind_tag_card2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-unbind-tag-card', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-unbind-tag-card.html'
 
 class ECutCard(Event):
     """
@@ -355,9 +338,7 @@ class ECutCard(Event):
     child = models.ForeignKey('Card', 
     related_name='e_cut_card1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-cut-card', 
-                    kwargs={'event_id': self.id})
+    html_template = 'card_app/e-cut-card.html'
 
 class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
@@ -366,10 +347,7 @@ class EArchiveCard(Event):
     child = models.ForeignKey('Card', 
     related_name='e_archive_card1', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('card_app:e-archive-card', 
-        kwargs={'event_id': self.id})
-
+    html_template = 'card_app/e-archive-card.html'
 
 
 

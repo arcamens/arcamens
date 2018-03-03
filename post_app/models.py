@@ -176,11 +176,13 @@ class ECreatePost(ECreatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_create_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
+    html_template = 'post_app/e-create-post.html'
 
 class EArchivePost(EArchivePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_archive_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
+    html_template = 'post_app/e-archive-post.html'
 
 class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
@@ -188,6 +190,7 @@ class EDeletePost(EDeletePostMixin, Event):
 
     post_label = models.CharField(null=True,
     blank=True, max_length=30)
+    html_template = 'post_app/e-delete-post.html'
 
 class ECutPost(ECutPostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
@@ -195,12 +198,14 @@ class ECutPost(ECutPostMixin, Event):
 
     post = models.ForeignKey('Post', 
     related_name='e_cut_post1', blank=True)
+    html_template = 'post_app/e-cut-post.html'
 
 
 class EUpdatePost(EUpdatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_update_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
+    html_template = 'post_app/e-update-post.html'
 
 class EAssignPost(Event):
     """
@@ -215,9 +220,7 @@ class EAssignPost(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_assign_post2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('post_app:e-assign-post', 
-                    kwargs={'event_id': self.id})
+    html_template = 'post_app/e-assign-post.html'
 
 class EUnassignPost(Event):
     """
@@ -232,11 +235,7 @@ class EUnassignPost(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_unassign_post2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('post_app:e-unassign-post', 
-                    kwargs={'event_id': self.id})
-
-
+    html_template = 'post_app/e-unassign-post.html'
 
 class EBindTagPost(Event):
     """
@@ -251,9 +250,7 @@ class EBindTagPost(Event):
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_bind_tag_post0', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('post_app:e-bind-tag-post', 
-                    kwargs={'event_id': self.id})
+    html_template = 'post_app/e-bind-tag-post.html'
 
 
 class EUnbindTagPost(Event):
@@ -269,22 +266,6 @@ class EUnbindTagPost(Event):
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_unbind_tag_post2', blank=True)
 
-    def get_absolute_url(self):
-        return reverse('post_app:e-unbind-tag-post', 
-                    kwargs={'event_id': self.id})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    html_template = 'post_app/e-unbind-tag-post.html'
 
 

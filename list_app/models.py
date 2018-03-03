@@ -72,6 +72,7 @@ class ECreateList(Event):
 
     child = models.ForeignKey('List', 
     related_name='e_create_list1', blank=True)
+    html_template = 'list_app/e-create-list.html'
 
 class EUpdateList(Event):
     """
@@ -82,19 +83,14 @@ class EUpdateList(Event):
 
     child = models.ForeignKey('List', 
     related_name='e_update_list1', blank=True)
+    html_template = 'list_app/e-update-list.html'
 
 class EDeleteList(Event):
     ancestor = models.ForeignKey('board_app.Board', 
     related_name='e_delete_list0', blank=True)
 
     child_name = models.CharField(max_length=255, blank=True, null=True)
-
-class EArchiveList(Event):
-    ancestor = models.ForeignKey('board_app.Board', 
-    related_name='e_archive_list0', blank=True)
-
-    child = models.ForeignKey('List', 
-    related_name='e_archive_list1', blank=True)
+    html_template = 'list_app/e-delete-list.html'
 
 class ECutList(Event):
     """
@@ -106,6 +102,8 @@ class ECutList(Event):
     child = models.ForeignKey('List', 
     related_name='e_cut_list1', blank=True)
 
+    html_template = 'list_app/e-cut-list.html'
+
 class EPasteCard(Event):
     """
     """
@@ -116,6 +114,8 @@ class EPasteCard(Event):
     cards = models.ManyToManyField('card_app.Card', 
     null=True, related_name='e_paste_card1', blank=True, 
     symmetrical=False)
+
+    html_template = 'list_app/e-paste-card.html'
 
 
 

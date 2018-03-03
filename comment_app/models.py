@@ -33,24 +33,5 @@ class PostComment(models.Model):
 class ECreatePostComment(Event):
     comment = models.ForeignKey('PostComment', blank=True)
     post    = models.ForeignKey('post_app.Post', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('comment_app:e-create-comment', 
-        kwargs={'event_id': self.id})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    html_template = 'comment_app/e-create-comment.html'
 

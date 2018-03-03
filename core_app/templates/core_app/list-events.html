@@ -12,7 +12,10 @@
 
 <div class="modal-body">
 <div class="container-fluid pre-scrollable">
-{% include 'core_app/event-consumer.html' %}
+{% for ind in events %}
+
+{{ind.html | safe}}
+{% endfor %}
 </div>
 
 </div>
@@ -25,6 +28,7 @@
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

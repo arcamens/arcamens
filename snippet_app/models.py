@@ -72,10 +72,7 @@ class ECreateSnippet(Event):
     snippet = models.ForeignKey('Snippet', 
     blank=True)
 
-    def get_absolute_url(self):
-        return reverse(
-            'snippet_app:e-create-snippet', 
-                 kwargs={'event_id': self.id})
+    html_template = 'snippet_app/e-create-snippet.html'
 
     def __str__(self):
         return self.user.name
@@ -87,10 +84,7 @@ class EDeleteSnippet(Event):
     snippet = models.CharField(null=True, blank=False, 
     max_length=626)
 
-    def get_absolute_url(self):
-        return reverse(
-            'snippet_app:e-delete-snippet', 
-                 kwargs={'event_id': self.id})
+    html_template = 'snippet_app/e-delete-snippet.html'
 
     def __str__(self):
         return self.user.name
@@ -104,15 +98,10 @@ class EUpdateSnippet(Event):
     snippet = models.ForeignKey('Snippet', 
     blank=True)
 
-    def get_absolute_url(self):
-        return reverse(
-            'snippet_app:e-update-snippet', 
-                 kwargs={'event_id': self.id})
+    html_template = 'snippet_app/e-update-snippet.html'
 
     def __str__(self):
         return self.user.name
-
-
 
 
 

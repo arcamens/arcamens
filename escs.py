@@ -1,7 +1,7 @@
 ##############################################################################
 # activate, virtualenv, opus.
 cd ~/.virtualenvs/
-source opus/bin/activate
+source arcamens/bin/activate
 cd ~/projects/arcamens-code
 
 tee >(stdbuf -o 0 python -i)
@@ -50,6 +50,11 @@ getattr(, function_name)
 
 from django.core.paginator import Paginator, EmptyPage
 help(Paginator)
+
+
+from django.template.loader import get_template
+from django.template import Context
+
 
 
 

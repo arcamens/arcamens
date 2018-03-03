@@ -70,31 +70,29 @@ class EBindBoardUser(Event, EBindBoardUserMixin):
     related_name='e_bind_board_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+    html_template = 'board_app/e-bind-board-user.html'
 
 class EUnbindBoardUser(Event, EUnbindBoardUserMixin):
     board = models.ForeignKey('Board', 
     related_name='e_unbind_board_user', blank=True)
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
+    html_template = 'board_app/e-unbind-board-user.html'
 
 class EUpdateBoard(Event, EUpdateBoardMixin):
     board = models.ForeignKey('Board', 
     related_name='e_update_board', blank=True)
+    html_template = 'board_app/e-update-board.html'
 
 class ECreateBoard(Event, ECreateBoardMixin):
     board = models.ForeignKey('Board', 
     related_name='e_create_board', blank=True)
+    html_template = 'board_app/e-create-board.html'
 
 
 class EDeleteBoard(Event):
     board_name = models.CharField(max_length=255, 
     blank=True, null=True)
-
-class EArchiveBoard(Event):
-    ancestor = models.ForeignKey('core_app.Organization', 
-    related_name='e_archive_board0', blank=True)
-
-    child = models.ForeignKey('Board', 
-    related_name='e_archive_board1', blank=True)
+    html_template = 'board_app/e-delete-board.html'
 
 class EPasteList(Event, ECreateBoardMixin):
     board = models.ForeignKey('Board', 
@@ -104,9 +102,7 @@ class EPasteList(Event, ECreateBoardMixin):
     null=True, related_name='e_paste_list1', blank=True, 
     symmetrical=False)
 
-
-
-
+    html_template = 'board_app/e-paste-list.html'
 
 
 

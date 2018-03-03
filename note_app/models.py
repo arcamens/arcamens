@@ -67,11 +67,7 @@ class ECreateNote(Event):
 
     note = models.ForeignKey('Note', 
     blank=True)
-
-    def get_absolute_url(self):
-        return reverse(
-            'note_app:e-create-note', 
-                 kwargs={'event_id': self.id})
+    html_template = 'note_app/e-create-note.html'
 
     def __str__(self):
         return self.user.name
@@ -83,10 +79,7 @@ class EDeleteNote(Event):
     note = models.CharField(null=True, blank=False, 
     max_length=626)
 
-    def get_absolute_url(self):
-        return reverse(
-            'note_app:e-delete-note', 
-                 kwargs={'event_id': self.id})
+    html_template = 'note_app/e-delete-note.html'
 
     def __str__(self):
         return self.user.name
@@ -100,13 +93,11 @@ class EUpdateNote(Event):
     note = models.ForeignKey('Note', 
     blank=True)
 
-    def get_absolute_url(self):
-        return reverse(
-            'note_app:e-update-note', 
-                 kwargs={'event_id': self.id})
+    html_template = 'note_app/e-update-note.html'
 
     def __str__(self):
         return self.user.name
+
 
 
 

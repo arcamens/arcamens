@@ -1,12 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.template.loader import get_template
 from slock.models import BasicUser
 from paybills.models import Service
 from django.db.models import Q
 from functools import reduce
 from django.db import models
 import operator
-import datetime
+from datetime import datetime
 
 class UserMixin(object):
     def get_user_url(self):
@@ -106,18 +107,32 @@ class User(UserMixin, BasicUser):
     def __str__(self):
         return self.name
 
-class Event(models.Model):
+class EventMixin:
+    def save(self, *args, **kwargs):
+        # Need to make it have an id and created value.
+        tmp = get_template(self.html_template)
+        self.created = datetime.now()
+        self.html = tmp.render({'event': self})
+        super().save()
+
+class Event(EventMixin, models.Model):
     users = models.ManyToManyField('core_app.User', null=True,  
     related_name='events', blank=True, symmetrical=False)
 
     organization = models.ForeignKey('Organization', 
     related_name='events', null=True, blank=True)
 
-    created = models.DateTimeField(auto_now=True, null=True)
+    # created = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(null=True)
+
     user = models.ForeignKey('core_app.User', null=True, blank=True)
 
     signers = models.ManyToManyField('core_app.User', null=True,  
     related_name='seen_events', blank=True, symmetrical=False)
+
+    html = models.CharField(null=True,
+    blank=False, max_length=500)
+    html_template = None
 
     def __str__(self):
         return 'Event'
@@ -137,28 +152,34 @@ class Tag(models.Model):
 class EInviteUser(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_invite_user0', blank=True)
+    html_template = 'core_app/e-invite-user.html'
 
 class EJoinOrganization(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_join_organization0', blank=True)
+    html_template = 'core_app/e-join-organization.html'
 
 class EBindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_bind_user_tag0', blank=True)
     tag = models.ForeignKey('Tag', null=True, blank=True)
+    html_template = 'core_app/e-bind-user-tag.html'
 
 class ECreateTag(Event):
     tag = models.ForeignKey('Tag', null=True, 
     related_name='e_create_tag1', blank=True)
+    html_template = 'core_app/e-create-tag.html'
 
 class EDeleteTag(Event):
     tag_name = models.CharField(null=True,
     blank=False, max_length=256)
+    html_template = 'core_app/e-delete-tag.html'
 
 class EUnbindUserTag(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_unbind_user_tag0', blank=True)
     tag = models.ForeignKey('Tag', null=True, blank=True)
+    html_template = 'core_app/e-unbind-user-tag.html'
 
 class GlobalFilter(GlobalFilterMixin, models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
@@ -228,12 +249,5 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
-
-
-
-
-
-
-
 
 
