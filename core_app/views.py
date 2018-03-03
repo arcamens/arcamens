@@ -662,7 +662,7 @@ class SeenEvent(GuardianView):
         event = Event.objects.get(id=event_id)
         event.users.remove(user)
         event.signers.add(user)
-        event.save()
+        event.save(hcache=False)
         return redirect('core_app:list-events')
 
 class ListLogs(GuardianView):
@@ -695,5 +695,6 @@ class ListLogs(GuardianView):
         return render(request, 'core_app/list-events.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
+
 
 

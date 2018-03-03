@@ -108,10 +108,14 @@ class User(UserMixin, BasicUser):
         return self.name
 
 class EventMixin:
-    def save(self, *args, **kwargs):
-        # Need to make it have an id and created value.
-        tmp = get_template(self.html_template)
-        self.created = datetime.now()
+    def save(self, *args, hcache=True, **kwargs):
+        super().save(*args, **kwargs)
+
+        if hcache:
+            self.create_html_cache()
+
+    def create_html_cache(self):
+        tmp       = get_template(self.html_template)
         self.html = tmp.render({'event': self})
         super().save()
 
@@ -123,7 +127,7 @@ class Event(EventMixin, models.Model):
     related_name='events', null=True, blank=True)
 
     # created = models.DateTimeField(auto_now=True, null=True)
-    created = models.DateTimeField(null=True)
+    created = models.DateTimeField(auto_now=True, null=True)
 
     user = models.ForeignKey('core_app.User', null=True, blank=True)
 
@@ -249,5 +253,6 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 

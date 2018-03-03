@@ -200,7 +200,7 @@ class EBindCardWorker(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_bind_card_worker2', blank=True)
 
-    html_template = 'card_app/e-bind-card-worker-card.html'
+    html_template = 'card_app/e-bind-card-worker.html'
 
 class EUnbindCardWorker(Event):
     """
@@ -215,7 +215,7 @@ class EUnbindCardWorker(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_unbind_card_worker2', blank=True)
 
-    html_template = 'card_app/e-unbind-card.html'
+    html_template = 'card_app/e-unbind-card-worker.html'
 
 class ECreateFork(Event):
     """
@@ -348,6 +348,7 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
 
 
 
