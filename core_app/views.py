@@ -277,6 +277,7 @@ class ListEvents(GuardianView):
         events = user.events.filter(organization=user.default)
         events = events.order_by('-created')
         count = events.count()
+        events = events.values('html')
 
         return render(request, 'core_app/list-events.html', 
         {'events': events, 'user': user, 
@@ -692,9 +693,11 @@ class ListLogs(GuardianView):
 
         events = events.order_by('-created')
         count  = events.count()
+        events = events.values('html')
         return render(request, 'core_app/list-events.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
+
 
 
 

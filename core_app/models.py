@@ -111,7 +111,7 @@ class EventMixin:
     def save(self, *args, hcache=True, **kwargs):
         super().save(*args, **kwargs)
 
-        if hcache:
+        if hcache and self.html_template:
             self.create_html_cache()
 
     def create_html_cache(self):
@@ -253,6 +253,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
