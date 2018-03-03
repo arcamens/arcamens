@@ -134,8 +134,7 @@ class Event(EventMixin, models.Model):
     signers = models.ManyToManyField('core_app.User', null=True,  
     related_name='seen_events', blank=True, symmetrical=False)
 
-    html = models.CharField(null=True,
-    blank=False, max_length=500)
+    html = models.TextField(null=True, blank=False)
     html_template = None
 
     def __str__(self):
@@ -253,6 +252,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
