@@ -57,13 +57,17 @@ class Pin(PinMixin, models.Model):
 
     # I should use concrete inheritance here.
     board = models.ForeignKey('board_app.Board', 
-    unique=True, null=True, blank=True)
+    null=True, blank=True)
 
     list = models.ForeignKey('list_app.List', 
-    unique=True, null=True, blank=True)
+    null=True, blank=True)
 
     card = models.ForeignKey('card_app.Card', 
-    unique=True, null=True, blank=True)
+    null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 
+        'organization', 'board', 'list', 'card')
 
 class EBindBoardUser(Event, EBindBoardUserMixin):
     board = models.ForeignKey('Board', 
@@ -103,6 +107,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 
