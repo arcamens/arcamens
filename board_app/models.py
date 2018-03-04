@@ -66,8 +66,8 @@ class Pin(PinMixin, models.Model):
     null=True, blank=True)
 
     class Meta:
-        unique_together = ('user', 
-        'organization', 'board', 'list', 'card')
+        unique_together = (('user', 'organization', 'board'), 
+        ('user', 'organization', 'list'), ('user', 'organization', 'card'))
 
 class EBindBoardUser(Event, EBindBoardUserMixin):
     board = models.ForeignKey('Board', 
