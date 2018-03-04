@@ -410,8 +410,7 @@ class InviteOrganizationUser(GuardianView):
         organization = Organization.objects.get(id=organization_id)
 
         return render(request, 'core_app/invite-organization-user.html', 
-        {'form': forms.OrganizationInviteForm(), 'user': user, 
-        'organization': organization})
+        {'form': forms.OrganizationInviteForm(), 'user': user})
 
     def post(self, request, organization_id):
         organization = Organization.objects.get(id=organization_id)
@@ -701,6 +700,7 @@ class ListLogs(GuardianView):
         return render(request, 'core_app/list-events.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
+
 
 
 

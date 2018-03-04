@@ -6,7 +6,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h4>
 <span class="glyphicon glyphicon-send"></span>
-{{organization.name}}'s invite </h4>
+{{user.default.name}}'s invite </h4>
 </div>
 
 <div class="modal-body">
@@ -29,7 +29,7 @@ class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#bind-user-form" 
 data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:invite-organization-user' organization.id  %}"
+data-shell-error="#modalContent" data-show="{% url 'core_app:invite-organization-user' user.default.id  %}"
 class="btn btn-default e-post"> {% trans "Send" %} </button>
 </div>
 
