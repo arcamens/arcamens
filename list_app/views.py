@@ -140,13 +140,16 @@ class PasteCards(GuardianView):
         cards = clipboard.cards.all()
         cards.update(ancestor=list)
 
-        event = EPasteCard.objects.create(
+        event = EPasteCard(
         organization=user.default, ancestor=list, user=user)
-        event.cards.add(*cards)
+        event.save(hcache=False)
 
+        event.cards.add(*cards)
+    
         # Workers of the card dont need to be notified of this event
         # because them may not belong to the board at all.
         event.users.add(*list.ancestor.members.all())
+        event.save()
 
         clipboard.cards.clear()
 
@@ -223,5 +226,6 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 

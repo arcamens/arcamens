@@ -200,10 +200,12 @@ class PastePosts(GuardianView):
         posts = clipboard.posts.all()
         posts.update(ancestor=timeline)
 
-        event = EPastePost.objects.create(
+        event = EPastePost(
         organization=user.default, timeline=timeline, user=user)
+        event.save(hcache=False)
         event.posts.add(*posts)
         event.users.add(*users)
+        event.save()
 
         ws.client.publish('timeline%s' % timeline.id, 
             'sound', 0, False)
@@ -402,6 +404,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form})
+
 
 
 
