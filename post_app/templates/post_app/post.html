@@ -39,7 +39,7 @@ at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 <div class="row">
 <div class="col-md-3">
 <h4> 
-<span class="glyphicon glyphicon-user"></span>
+<span class="glyphicon glyphicon-file"></span>
 
 Attachments </h4>
 <div class="pre-scrollable" style="font-size:80%">
@@ -114,51 +114,49 @@ No workers.
 <div class="panel-footer">
 {% block footer %}
 
-<div class="btn-group btn-group-xs">
-<button type="button"  data-show="{% url 'post_app:update-post' post.id %}"
-data-shell="#bigModalContent" 
+<a data-show="{% url 'post_app:update-post' post.id %}"
+data-shell="#bigModalContent"  href="#"
 data-callback="$('#bigModal').modal('show');" 
-class="btn btn-warning btn-xs e-get">
-<span class="glyphicon glyphicon-edit"></span> Update</button>
+class="text-warning e-get">
+<span class="glyphicon glyphicon-edit"></span> Update</a>
 
-<button type="button"  
+<a href="#"
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
-class="btn btn-primary btn-xs e-get"><span class="glyphicon glyphicon-user"> </span> Assign </button>
+class="text-success e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
-<button type="button" 
+<a  href="#"
 data-callback="$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" data-show="{% url 'comment_app:list-comments' post.id %}"
-class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-comment"></span> Comment </button>
+class="text-info e-get"><span class="glyphicon glyphicon-comment"></span> Comment </a>
 
-<button type="button" class="btn btn-danger btn-xs e-get" 
+<a class="text-danger e-get" href="#" 
 data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
-<span class="glyphicon glyphicon-remove"></span> Delete  </button>
+<span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
 {% if post.done %}
-<button type="button"  data-shell="#post-{{post.id}}" data-show="{% url 'post_app:undo' post.id %}"
-class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Undo </button>
+<a href="#" data-shell="#post-{{post.id}}" data-show="{% url 'post_app:undo' post.id %}"
+class="text-warning text-default  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
 
 {% else %}
 
-<button type="button"  data-shell="#post-{{post.id}}" data-show="{% url 'post_app:done' post.id %}"
-class="btn btn-success btn-xs e-get"><span class="glyphicon glyphicon-ok"></span> Done </button>
+<a href="#" data-shell="#post-{{post.id}}" data-show="{% url 'post_app:done' post.id %}"
+class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
 
-<button type="button" class="btn btn-default btn-xs e-get" 
+<a class="text-info e-get"  href="#"
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
-<span class="glyphicon glyphicon-copy"></span> Copy </button>
+<span class="glyphicon glyphicon-copy"></span> Copy </a>
 
-<button type="button" class="btn btn-warning btn-xs e-get" 
+<a class="text-warning e-get" href="#"
 data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
-<span class="glyphicon glyphicon-scissors"></span> Cut </button>
+<span class="glyphicon glyphicon-scissors"></span> Cut </a>
 
-<button type="button" 
+<a href="#"
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
-class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span> Tags </button>
+class="text-info e-get"><span class="glyphicon glyphicon-tags"></span> Tags </a>
 
-</div>
 </div>
 
 {% endblock %}
@@ -166,6 +164,7 @@ class="btn btn-info btn-xs e-get"><span class="glyphicon glyphicon-tags"></span>
 </div>
 
 </div>
+
 
 
 
