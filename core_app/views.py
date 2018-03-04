@@ -155,6 +155,10 @@ class DeleteOrganization(GuardianView):
         organization = Organization.objects.get(id = organization_id)
         user         = User.objects.get(id=self.user_id)
 
+        if user.owned_organizations.count() == 1:
+            return HttpResponse("You can't delete \
+                this organization..", status=400)
+
         # First remove the reference otherwise
         # the user gets deleted in cascade due to the
         # user.default field.
@@ -697,6 +701,7 @@ class ListLogs(GuardianView):
         return render(request, 'core_app/list-events.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
+
 
 
 
