@@ -23,13 +23,17 @@ By <a class="e-get" href="#"
 data-show=""
 data-shell="#modalContent" 
 data-callback="$('#modal').modal('show');" 
-> {{timeline.owner}} </a> at {{timeline.created}}
+> 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
+{{timeline.owner}}
+</a> at {{timeline.created}}
 </span>
 
 </p>
 
 </div>
 </div>
+
 
 
 
