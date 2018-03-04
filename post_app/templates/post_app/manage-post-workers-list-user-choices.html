@@ -8,7 +8,7 @@
 {% for ind in included %}
 <tr id="user-choice-{{ind.id}}" style="font-size:80%">
 <td style="width:70px;height:80">
-<img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
+<img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
 </td>
 
 <td> 
@@ -30,7 +30,7 @@ data-show="{% url 'post_app:unassign-post-user' post.id ind.id %}" href="#">
 {% for ind in excluded %}
 <tr id="user-choice-{{ind.id}}" style="font-size:80%">
 <td style="width:70px;height:80">
-     <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
+     <img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
 </td>
 <td> 
 <span class="glyphicon glyphicon-user"></span> {{ind.name}}  
@@ -49,4 +49,5 @@ data-show="{% url 'post_app:assign-post-user' post.id ind.id %}" href="#">
 
 </table>
 </div>
+
 

@@ -9,7 +9,7 @@
 {% for ind in users %}
 <tr style="font-size:80%">
 <td style="width:70px;height:80">
-     <img style="margin:auto" class="img-responsive" src="{% static ind.avatar %}" />
+     <img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
 </td>
 </td>
 <td>
@@ -47,4 +47,5 @@ class="e-get">
 </div>
 </tbody>
 </table>
+
 
