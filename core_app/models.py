@@ -95,7 +95,7 @@ class User(UserMixin, BasicUser):
     max_length=256)
 
     avatar = models.ImageField(default='user.png',
-    verbose_name='Your avatar.', help_text='', blank=True)
+    verbose_name='Your avatar.', help_text='', blank=False)
 
     enabled = models.BooleanField(blank=True, default=False)
 
