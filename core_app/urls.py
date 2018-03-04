@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^manage-user-tags/(?P<user_id>.+)', views.ManageUserTags.as_view(), name='manage-user-tags'),
     url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
     url(r'^list-logs/', views.ListLogs.as_view(), name='list-logs'),
+    url(r'^all-seen/', views.AllSeen.as_view(), name='all-seen'),
 
     url(r'^list-tags/', views.ListTags.as_view(), name='list-tags'),
     url(r'^bind-user-tag/(?P<user_id>.+)/(?P<tag_id>.+)/', views.BindUserTag.as_view(), name='bind-user-tag'),
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
 
 ]
+
 
 
 

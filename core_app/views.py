@@ -664,9 +664,7 @@ class SeenEvent(GuardianView):
     def get(self, request, event_id):
         user  = User.objects.get(id=self.user_id)
         event = Event.objects.get(id=event_id)
-        event.users.remove(user)
-        event.signers.add(user)
-        event.save(hcache=False)
+        event.seen(user)
         return redirect('core_app:list-events')
 
 class ListLogs(GuardianView):
@@ -700,6 +698,16 @@ class ListLogs(GuardianView):
         return render(request, 'core_app/list-events.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
+
+class AllSeen(GuardianView):
+    def get(self, request):
+        user  = User.objects.get(id=self.user_id)
+        events = user.events.filter(organization=user.default)
+
+        for ind in events:
+            ind.seen(user)
+        return redirect('core_app:list-events')
+
 
 
 

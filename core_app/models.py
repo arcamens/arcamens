@@ -118,6 +118,14 @@ class EventMixin:
         self.html = tmp.render({'event': self})
         super().save()
 
+    def seen(self, user):
+        """
+        """
+
+        self.users.remove(user)
+        self.signers.add(user)
+        self.save(hcache=False)
+
 class Event(EventMixin, models.Model):
     users = models.ManyToManyField('core_app.User', null=True,  
     related_name='events', blank=True, symmetrical=False)
@@ -251,6 +259,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

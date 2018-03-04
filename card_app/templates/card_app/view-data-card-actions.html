@@ -98,6 +98,19 @@ data-callback="$('#bigModal').modal('toggle');"
 data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-link"></span> Relate</a></li>
 
+<li>
+<a 
+data-shell="#main-view"
+class="e-get text-warning"
+data-show="{% url 'card_app:cut-card' card.id %}"
+href="#"><span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
+
+<li>
+<a 
+data-shell="#main-view"
+class="e-get text-default"
+data-show="{% url 'card_app:copy-card' card.id %}"
+href="#"><span class="glyphicon glyphicon-scissors"></span> Copy</a></li>
 
 </ul>
 
@@ -107,6 +120,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
