@@ -1,0 +1,30 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="form-card-data" enctype="multipart/form-data">
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<span class="glyphicon glyphicon-remove"></span> Delete {{card.label|truncatechars:60}}?
+</div>
+
+<div class="modal-body">
+<p> info </p>
+</div>
+</form>
+
+
+<div class="modal-footer">
+<button type="button" class="btn btn-default" 
+data-dismiss="modal">Cancel</button>
+
+<button  id="createCard" type="button" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'card_app:delete-card' card.id %}"
+class="btn btn-default e-get"> 
+     {% trans "Delete" %}
+</button>
+
+
+<script>
+

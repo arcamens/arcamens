@@ -22,11 +22,6 @@ class FileWrapperForm(forms.ModelForm):
         model  = models.FileWrapper
         exclude = ('card', )
 
-class ForkForm(forms.ModelForm):
-    class Meta:
-        model  = models.Fork
-        fields = ('label', 'data')
-
 class UserSearchForm(forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: victor + #arcamens \
@@ -52,6 +47,7 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
+
 
 
 

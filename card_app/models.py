@@ -100,8 +100,7 @@ class Card(CardMixin, models.Model):
 
     html = models.TextField(null=True, blank=True)
 
-class Fork(Card):
-    parent = models.ForeignKey('Card', null=True, related_name='forks',
+    parent = models.ForeignKey('self', null=True, related_name='forks',
     blank=True)
 
     path = models.ManyToManyField('Card', 
@@ -348,6 +347,7 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
 
 
 

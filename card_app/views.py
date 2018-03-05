@@ -50,6 +50,7 @@ class CardLink(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
+        path = card.path.all()
 
         relations = relations.filter(Q(
         ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
@@ -69,7 +70,7 @@ class CardLink(GuardianView):
         'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
         'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations, 'queues': json.dumps(queues),
-         'settings': settings})
+         'settings': settings, 'path': path})
 
 class ListCards(GuardianView):
     """
@@ -99,7 +100,7 @@ class ListCards(GuardianView):
         workers2 = User.objects.filter(tasks=OuterRef('pk'))
         cards = cards.annotate(has_workers=Exists(workers2))
         cards = cards.annotate(in_workers=Exists(workers1))
-        cards = cards.values('fork', 'label', 'id', 'has_workers', 'in_workers')
+        cards = cards.values('parent', 'label', 'id', 'has_workers', 'in_workers')
         cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
@@ -127,20 +128,29 @@ class ViewData(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
+        path = card.path.all()
 
-        relations = relations.filter(Q(
-        ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
-
-        # Maybe it should be retrieved here...
-        # but cards dont have path manytomany
-        # it may suggest cards should
-        # have state of forks too?
-        # path = card.path.all()
+        # This doesnt work because the board members should be
+        # notified of a card being related to other card.
+        # It turns out to be reasonable if the a given board card
+        # is related to some other card and both board members
+        # (maybe card workers) get notified of it.
+        # If the user has information scope thats restricted
+        # he should use simple card links for relating.
+        # relations = relations.filter(Q(
+        # ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 
-        'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags})
+        'relations': relations, 'snippets': snippets, 'pins': pins, 
+        'tags': tags, 'path': path})
+
+class ConfirmCardDeletion(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        return render(request, 'card_app/confirm-card-deletion.html', 
+        {'card': card})
 
 class CreateCard(GuardianView):
     """
@@ -188,29 +198,25 @@ class CreateFork(GuardianView):
     def get(self, request, card_id, fork_id=None):
         card = models.Card.objects.get(id=card_id)
         user = User.objects.get(id=self.user_id)
-        fork = models.Fork.objects.create(owner=user, 
+        fork = models.Card.objects.create(owner=user, 
         ancestor=card.ancestor, parent=card)
 
-        form = forms.ForkForm(instance=fork)
+        form = forms.CardForm(instance=fork)
         fork.label = 'Draft.'
+
+        path = card.path.all()
+        fork.parent = card
+        fork.path.add(*path, card)
         fork.save()
+
         return render(request, 'card_app/create-fork.html', 
         {'form':form, 'card': card, 'fork':fork})
 
     def post(self, request, card_id, fork_id):
         card = models.Card.objects.get(id=card_id)
-        fork = models.Fork.objects.get(id=fork_id)
-        form = forms.ForkForm(request.POST, instance=fork)
+        fork = models.Card.objects.get(id=fork_id)
+        form = forms.CardForm(request.POST, instance=fork)
         user = User.objects.get(id=self.user_id)
-
-        # Its a hack, it means there is something wrong
-        # with the models.
-        try:
-            path = card.fork.path.all()
-        except Exception as e:
-            path = fork.path.all()
-        finally:
-            fork.path.add(*path, *(card, ))
 
         if not form.is_valid():
             return render(request, 'card_app/create-fork.html', 
@@ -931,6 +937,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return redirect('card_app:view-data', card_id=card.id)
+
 
 
 

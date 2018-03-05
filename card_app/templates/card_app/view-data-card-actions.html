@@ -77,9 +77,11 @@ href="#"><span class="glyphicon glyphicon-tags"></span> Tags</a></li>
 
 <li>
 <a 
-data-shell="#main-view"
+data-shell="#modalContent"
+data-callback="$('#modal').modal('toggle');" 
+
 class="e-get text-danger"
-data-show="{% url 'card_app:delete-card'  card.id %}" 
+data-show="{% url 'card_app:confirm-card-deletion'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
 
 <li>
@@ -120,6 +122,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
