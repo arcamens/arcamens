@@ -1,4 +1,6 @@
 function do_post(e) {
+    $('#modalWait').modal('show');
+
     shell = $(this).attr('data-shell');
     shell_error = $(this).attr('data-shell-error');
 
@@ -15,6 +17,8 @@ function do_post(e) {
     type: 'POST',
 
     success: function(data) {
+        $('#modalWait').modal('hide');
+
         eval(callback);
         $(shell).html(data);
         $(document).on('click', '.e-post', do_post);
@@ -22,6 +26,7 @@ function do_post(e) {
     },
 
     error: function(data){
+        $('#modalWait').modal('hide');
         eval(callback_error);
         $(shell_error).html(data.responseText);
         $(document).on('click', '.e-post', do_post);
@@ -36,4 +41,5 @@ function do_post(e) {
 }
 
 $(document).on('click', '.e-post', do_post);
+
 
