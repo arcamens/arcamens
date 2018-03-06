@@ -595,24 +595,31 @@ class Find(GuardianView):
 
         filter, _ = GlobalFilter.objects.get_or_create(
         user=me, organization=me.default)
-
         form  = forms.GlobalFilterForm(instance=filter)
 
-        cards = Card.get_allowed_cards(me)
-        posts = Post.get_allowed_posts(me)
+        total, elems = self.on_posts(me, filter) \
+        if filter.type == 'P' else self.on_cards(me, filter)
 
-        total = cards.count() + posts.count()
-
-        cards = Card.collect_cards(cards, filter.pattern, filter.done)
-        posts = Post.collect_posts(posts, filter.pattern, filter.done)
-        count = cards.count() + posts.count()
-
-        cards = cards.values('done', 'label', 'id')
-        posts = posts.values('done', 'label', 'id')
+        count = elems.count()
 
         return render(request, 'core_app/find.html', 
-        {'form': form, 'cards': cards, 'posts': posts,
-        'total': total, 'count': count})
+        {'form': form, 'elems':  elems, 'total': total, 'count': count})
+
+    def on_posts(self, me, filter):
+        posts = Post.get_allowed_posts(me)
+        total = posts.count()
+        posts = Post.collect_posts(posts, filter.pattern, filter.done)
+
+        posts = posts.only('done', 'label', 'id')
+        return total, posts
+
+    def on_cards(self, me, filter):
+        cards = Card.get_allowed_cards(me)
+        total = cards.count()
+        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        cards = cards.only('done', 'label', 'id')
+
+        return total, cards
 
     def post(self, request):
         me        = User.objects.get(id=self.user_id)
@@ -621,28 +628,19 @@ class Find(GuardianView):
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
 
-        cards = Card.get_allowed_cards(me)
-        posts = Post.get_allowed_posts(me)
-
-        total = cards.count() + posts.count()
-
+        # If the form is not valid then prints nothing.
         if not form.is_valid():
             return render(request, 'core_app/find.html', 
-                {'form': form, 'cards': cards, 
-                    'posts': posts, 'total': total,
-                            'count': count}, status=400)
+                {'form': form, }, status=400)
         form.save()
 
-        cards = Card.collect_cards(cards, filter.pattern, filter.done)
-        posts = Post.collect_posts(posts, filter.pattern, filter.done)
+        total, elems = self.on_posts(me, filter) \
+        if filter.type == 'P' else self.on_cards(me, filter)
 
-        count = cards.count() + posts.count()
-        cards = cards.values('done', 'label', 'id')
-        posts = posts.values('done', 'label', 'id')
+        count = elems.count()
 
         return render(request, 'core_app/find.html', 
-        {'form': form, 'posts': posts, 'cards': cards,
-        'total': total, 'count': count})
+        {'form': form, 'elems':  elems, 'total': total, 'count': count})
 
 
 class ListClipboard(GuardianView):
@@ -707,6 +705,7 @@ class AllSeen(GuardianView):
         for ind in events:
             ind.seen(user)
         return redirect('core_app:list-events')
+
 
 
 

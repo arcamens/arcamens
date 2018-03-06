@@ -192,6 +192,11 @@ class EUnbindUserTag(Event):
     html_template = 'core_app/e-unbind-user-tag.html'
 
 class GlobalFilter(GlobalFilterMixin, models.Model):
+    CHOICES = (
+        ('P', 'Posts'),
+        ('C', 'Cards'),
+    )
+
     pattern  = models.CharField(max_length=255, blank=True, 
     default='')
 
@@ -200,6 +205,8 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
 
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
+
+    type = models.CharField(max_length=1, choices=CHOICES, default='C')
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards/posts?.')
@@ -259,6 +266,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

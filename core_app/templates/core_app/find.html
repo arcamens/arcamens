@@ -15,28 +15,15 @@ Find Cards/Posts
 <div class="modal-body">
 
 <div class="pre-scrollable">
-{% for ind in cards %}
+{% for ind in elems %}
 <p>
 <a class="e-get" data-shell="#main-view" 
-data-show="{% url 'card_app:view-data' ind.id %}"
+data-show="{{ind.get_absolute_url}}"
 data-dismiss="modal" 
 href="#" > 
 <span class="glyphicon glyphicon-file"></span>
 {% if ind.done %} (Done) {% endif %}
 
-{{ind.label}} </a> 
-</p>
-
-{% endfor %}
-
-{% for ind in posts %}
-<p>
-<a class="e-get" data-shell="#main-view" 
-data-show="{% url 'post_app:post' ind.id %}"
-data-dismiss="modal" 
-href="#" > 
-<span class="glyphicon glyphicon-file"></span>
-{% if ind.done %} (Done) {% endif %}
 {{ind.label}} </a> 
 </p>
 
@@ -49,6 +36,9 @@ href="#" >
 {% csrf_token %}
 
 {% bootstrap_field form.pattern  size='md' %}
+
+{% bootstrap_field form.type  size='md' %}
+
 {% bootstrap_field form.done  size='md' %}
 
 
@@ -76,6 +66,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 
