@@ -31,7 +31,7 @@ $('#div-note-attachments').load("{% url 'note_app:attach-file' note.id %}");
 <div class="modal-footer">
 {% block buttons %}
 
-<button  type="button" data-form="#form-card-data" 
+<button  type="button"  
 data-callback="$('#bigModalContent').load('{% url 'note_app:list-notes' card.id %}')"
 data-show="{% url 'note_app:cancel-note-creation' note.id %}"
 class="btn btn-default e-get"> 
@@ -45,10 +45,14 @@ class="btn btn-default e-post">
      {% trans "Create" %}
 </button>
 
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<button  type="button" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'note_app:cancel-note-creation' note.id %}"
+class="btn btn-default e-get"> 
      {% trans "Close" %}
 </button>
 
 {% endblock %}
 </div>
+
 
