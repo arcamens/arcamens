@@ -30,7 +30,7 @@ By {{note.owner.name}} at {{note.created}}
 
 <div  style="font-size:80%">
 {% for ind in note.notefilewrapper_set.all %}
-<a href="#">
+<a href="#{{ ind.file.url }}" target="_blank">
 <span class="glyphicon glyphicon-file"></span>
 {{ind.file.name}} 
 </a>
@@ -60,5 +60,6 @@ class="btn btn-default e-get"> {% trans "Update" %} </button>
 </button>
 
 </div>
+
 
 
