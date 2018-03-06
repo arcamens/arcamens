@@ -198,7 +198,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
     )
 
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='')
+    default='', help_text='client socket  + #apollo + engine + #bug ...')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -266,6 +266,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

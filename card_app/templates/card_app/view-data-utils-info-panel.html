@@ -41,7 +41,7 @@ No workers...
 {% endfor %}</div></div>
 
 <div class="col-md-4">
-<h4> <span class="glyphicon glyphicon-tags"></span> Tags</h4>
+<h4> <b>#</b> Tags</h4>
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in tags %}
@@ -51,7 +51,7 @@ data-shell="#modalContent"
 data-callback="$('#modal').modal('show');" 
 class="e-get"
 href="#">
-<span class="glyphicon glyphicon-tag"></span>
+<b># </b>
 
 {{ind.name}}
 </a>
@@ -87,5 +87,6 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
