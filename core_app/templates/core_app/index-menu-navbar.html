@@ -9,22 +9,29 @@ href="#"> <span class="eventsButton">
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
 data-show="{% url 'core_app:list-all-tasks' %}" 
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#modalContent"
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#bigModalContent"
 href="#"> 
 <span class="glyphicon glyphicon-tasks">  </span></button>
 
-<a data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
-href="#"
-data-shell="#main-view"
-role="button">
-<span class="glyphicon glyphicon-eye-open"></span>  </a>
+<button type="button" class="navbar-toggle btn btn-info e-get" 
+data-show="{% url 'core_app:find' %}" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#bigModalContent"
+href="#"> 
+<span class="glyphicon glyphicon-search">  </span></button>
 
-<a data-show="{% url 'board_app:list-boards' %}" class="navbar-toggle btn btn-info e-get" 
+<button type="button" data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
 href="#"
 data-shell="#main-view"
 role="button">
-<span class="glyphicon glyphicon-th"></span>  </a>
+<span class="glyphicon glyphicon-eye-open"></span>  </button>
+
+<button type="button" data-show="{% url 'board_app:list-boards' %}" class="navbar-toggle btn btn-info e-get" 
+href="#"
+data-shell="#main-view"
+role="button">
+<span class="glyphicon glyphicon-th"></span>  </button>
 
 <div class="collapse navbar-collapse" id="myNavbar">
 
@@ -94,6 +101,7 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 
