@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from core_app.views import GuardianView
 from core_app.models import User
 from card_app.models import Card
+from list_app.models import List
 from functools import reduce
 import board_app.models
 import list_app.models
@@ -191,15 +192,28 @@ class CreateCard(GuardianView):
 
         return redirect('card_app:view-data', card_id=card.id)
 
+class SelectForkList(GuardianView):
+    def get(self, request, card_id):
+        user = User.objects.get(id=self.user_id)
+        card = models.Card.objects.get(id=card_id)
+        form = forms.ListSearchform()
+        lists = List.objects.filter(ancestor__in=user.boards.all())
+        return render(request, 'card_app/select-fork-list.html', 
+        {'form':form, 'card': card, 'elems': lists})
+
+    def post(self, request, card_id):
+        pass
+
 class CreateFork(GuardianView):
     """
     """
 
-    def get(self, request, card_id, fork_id=None):
+    def get(self, request, ancestor_id, card_id, fork_id=None):
         card = models.Card.objects.get(id=card_id)
         user = User.objects.get(id=self.user_id)
+        ancestor = List.objects.get(id=ancestor_id)
         fork = models.Card.objects.create(owner=user, 
-        ancestor=card.ancestor, parent=card)
+        ancestor=ancestor, parent=card)
 
         form = forms.CardForm(instance=fork)
         fork.label = 'Draft.'
@@ -210,9 +224,9 @@ class CreateFork(GuardianView):
         fork.save()
 
         return render(request, 'card_app/create-fork.html', 
-        {'form':form, 'card': card, 'fork':fork})
+        {'form':form, 'card': card, 'ancestor': ancestor, 'fork':fork})
 
-    def post(self, request, card_id, fork_id):
+    def post(self, request, ancestor_id, card_id, fork_id):
         card = models.Card.objects.get(id=card_id)
         fork = models.Card.objects.get(id=fork_id)
         form = forms.CardForm(request.POST, instance=fork)
@@ -937,6 +951,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return redirect('card_app:view-data', card_id=card.id)
+
 
 
 

@@ -15,7 +15,7 @@ data-form="#form-card-data"
 data-shell="#main-view" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" 
-data-show="{% url 'card_app:create-fork' card.id fork.id %}"
+data-show="{% url 'card_app:create-fork' ancestor.id card.id fork.id %}"
 class="btn btn-default e-post"> 
 {% trans "Fork" %}
 </button>
@@ -47,6 +47,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
 
 
 {% endblock %}
+
 
 
 

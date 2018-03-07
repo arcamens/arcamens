@@ -86,11 +86,11 @@ href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
 
 <li>
 <a 
-data-shell="#bigModalContent"
+data-shell="#modalContent"
 class="e-get text-warning"
-data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:create-fork'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-tasks"></span> Fork</a></li>
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'card_app:select-fork-list'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-random"></span> Fork</a></li>
 
 <li>
 <a 
@@ -122,6 +122,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
