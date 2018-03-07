@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models.functions import Concat
 from django.db.models import Q, F, Exists, OuterRef
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -6,6 +7,7 @@ from django.views.generic import View
 from core_app.models import Clipboard
 from django.core.mail import send_mail
 from core_app.views import GuardianView
+from core_app.utils import splittokens
 from core_app.models import User
 from card_app.models import Card
 from list_app.models import List
@@ -18,6 +20,8 @@ import operator
 import core_app.models
 from core_app import ws
 from django.conf import settings
+from re import split
+import operator
 import json
 
 # Create your views here.
@@ -198,11 +202,30 @@ class SelectForkList(GuardianView):
         card = models.Card.objects.get(id=card_id)
         form = forms.ListSearchform()
         lists = List.objects.filter(ancestor__in=user.boards.all())
+
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
 
     def post(self, request, card_id):
-        pass
+        form = forms.ListSearchform(request.POST)
+        card = models.Card.objects.get(id=card_id)
+
+        user  = User.objects.get(id=self.user_id)
+        lists = List.objects.filter(ancestor__in=user.boards.all())
+
+        if not form.is_valid():
+            return render(request, 'card_app/select-fork-list.html', 
+                  {'form':form, 'elems': lists, 'card': card})
+
+        lists = lists.annotate(text=Concat('ancestor__name', 'name'))
+
+        # Not sure if its the fastest way to do it.
+        chks = split(' *\++ *', form.cleaned_data['pattern'])
+        lists = lists.filter(reduce(operator.and_, 
+        (Q(text__contains=ind) for ind in chks))) 
+
+        return render(request, 'card_app/select-fork-list.html', 
+        {'form':form, 'card': card, 'elems': lists})
 
 class CreateFork(GuardianView):
     """
@@ -951,6 +974,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return redirect('card_app:view-data', card_id=card.id)
+
 
 
 
