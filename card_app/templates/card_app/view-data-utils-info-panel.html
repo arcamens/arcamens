@@ -5,7 +5,7 @@
 
 <div class="row">
 <div class="col-md-4">
-<h4> <span class="glyphicon glyphicon-user"></span> Workers</h4>
+<h5> <span class="glyphicon glyphicon-user"></span> Workers</h5>
 <hr>
 
 <div class="pre-scrollable" style="font-size:80%">
@@ -21,9 +21,8 @@ href="#">
 {{ind.name}}
 </a>
 
-<br>
-
 {% if forloop.last %} 
+<br>
 <a 
 class="e-get text-warning"
 data-shell="#modalContent" 
@@ -41,7 +40,7 @@ No workers...
 {% endfor %}</div></div>
 
 <div class="col-md-4">
-<h4> <b>#</b> Tags</h4>
+<h5> <b>#</b> Tags</h5>
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in tags %}
@@ -62,7 +61,7 @@ No tags...
 {% endfor %}</div></div>
 
 <div class="col-md-4">
-<h4> <span class="glyphicon glyphicon-book"></span> Snippets</h4>
+<h5> <span class="glyphicon glyphicon-book"></span> Snippets</h5>
 <hr>
 
 <div class="pre-scrollable" style="font-size:80%">
@@ -87,6 +86,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 
