@@ -1,27 +1,27 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
+<form id="form-post-data" enctype="multipart/form-data">
 
 <div class="modal-header">
+
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-{% block title %}
-<h4> 
-<span class="glyphicon glyphicon-file"></span>
 
-Create </h4>
-{% endblock %}
+{% bootstrap_field form.label  size='md' %}
+
 
 </div>
 
 <div class="modal-body">
-<form id="form-post-data" enctype="multipart/form-data">
 
 {% csrf_token %}
 
-{% bootstrap_field form.label  size='md' %}
+{% bootstrap_field form.data  size='md' %}
+
+{% bootstrap_field form.task  size='md' %}
+
 {% bootstrap_form_errors form type='non_fields' %}
-</form>
 
 <div id="div-attachments">
 </div>
@@ -31,6 +31,7 @@ $('#div-attachments').load('{% url 'post_app:attach-file' post.id %}');
 
 
 </div>
+</form>
 
 <div class="modal-footer">
 {% block buttons %}
@@ -50,6 +51,9 @@ class="btn btn-default e-post">
 
 {% endblock %}
 </div>
+
+
+
 
 
 

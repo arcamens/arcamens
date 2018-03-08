@@ -13,6 +13,12 @@ import operator
 # Create your models here.
 
 class PostMixin(object):
+    def save(self, *args, **kwargs):
+        self.html = markdown(self.data, 
+            extensions=[TableExtension(),
+                'markdown.extensions.tables'])
+        super(PostMixin, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('post_app:post', 
         kwargs={'post_id': self.id})
@@ -117,12 +123,20 @@ class Post(PostMixin, models.Model):
     'core_app.Tag', related_name='posts', 
     null=True, blank=True, symmetrical=False)
 
-    workers = models.ManyToManyField('core_app.User', 
-    related_name='assignments', blank=True, 
-    symmetrical=False)
+    # workers = models.ManyToManyField('core_app.User', 
+    # related_name='assignments', blank=True, 
+    # symmetrical=False)
 
-    label = models.TextField(null=True, default='',
-    blank=True, verbose_name=_("Content"))
+    label = models.CharField(null=True, blank=False, 
+    verbose_name=_("Label"), help_text='Short description ...', 
+    max_length=626)
+
+    html = models.TextField(null=True, blank=True)
+
+    data = models.TextField(blank=True, verbose_name=_("Data"), 
+    help_text='Markdown content.', default='')
+
+    task = models.BooleanField(blank=False, default=False)
 
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
@@ -271,6 +285,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

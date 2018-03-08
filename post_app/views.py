@@ -124,7 +124,7 @@ class UpdatePost(GuardianView):
 
         # Notify workers of the event, in case the post
         # is on a timeline whose worker is not on.
-        event.users.add(*record.workers.all())
+        # event.users.add(*record.workers.all())
 
         ws.client.publish('timeline%s' % record.ancestor.id, 
             'sound', 0, False)
@@ -534,6 +534,7 @@ class RequestPostAttention(GuardianView):
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
+
 
 
 
