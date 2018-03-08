@@ -36,7 +36,6 @@ class CreatePostComment(GuardianView):
         comment=record, post=post, user=user)
 
         event.users.add(*post.ancestor.users.all())
-        event.users.add(*post.workers.all())
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
             'sound', 0, False)
@@ -53,6 +52,7 @@ class ECreatePostComment(GuardianView):
         event = models.ECreatePostComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
