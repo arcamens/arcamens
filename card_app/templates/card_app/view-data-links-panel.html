@@ -12,9 +12,8 @@
 <a href="#" 
 class="e-get" 
 data-shell="#main-view"  type="button"
-data-show="{% url 'card_app:view-data' ind.id %}" >
+data-show="{{ind.get_absolute_url}}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
-{% if card.selected %} (On clipboard) {% endif %}
 </a> 
 <br>
 {% empty %}
@@ -58,6 +57,7 @@ No parents...
 </div>
 </div>
 </div>
+
 
 
 

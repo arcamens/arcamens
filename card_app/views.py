@@ -15,6 +15,7 @@ from core_app.models import User
 from card_app.models import Card
 from list_app.models import List
 from functools import reduce
+from itertools import chain
 import board_app.models
 import list_app.models
 from . import models
@@ -137,7 +138,8 @@ class ViewData(GuardianView):
         snippets = card.snippets.all()
         relations = card.relations.all()
         path = card.path.all()
-
+        posts = card.posts.all()
+        forks = chain(posts, forks)
         # This doesnt work because the board members should be
         # notified of a card being related to other card.
         # It turns out to be reasonable if the a given board card
@@ -1055,6 +1057,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return redirect('card_app:view-data', card_id=card.id)
+
 
 
 
