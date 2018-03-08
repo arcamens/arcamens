@@ -4,7 +4,7 @@ from . import models
 class PostForm(forms.ModelForm):
     class Meta:
         model  = models.Post
-        exclude = ('user', 'ancestor', 'html')
+        exclude = ('user', 'ancestor', 'html', 'parent')
 
 class PostFileWrapperForm(forms.ModelForm):
     class Meta:
@@ -37,4 +37,5 @@ class PostAttentionForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='(Optional) Be in the meeting 20 min earlier.')
+
 
