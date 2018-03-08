@@ -14,7 +14,7 @@ data-shell="#main-view"
 data-show="{% url 'post_app:post' ind.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{ind.label}} </a> 
+{{ind.label}} {% if ind.task %} <b> *Task* </b> {% endif %}</a> 
 
 {% endfor %}
 
@@ -30,5 +30,6 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
  on {{event.created}}
 
 {% endblock %}
+
 
 

@@ -1,5 +1,5 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
-PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
+PostFileWrapper, EDeletePost, EBindTagPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost
 from core_app.models import Clipboard, Tag, User
 from django.shortcuts import render, redirect
@@ -178,7 +178,9 @@ class DeletePost(GuardianView):
         user  = User.objects.get(id=self.user_id)
 
         event = EDeletePost.objects.create(organization=user.default,
-        timeline=post.ancestor, post_label=post.label, user=user)
+        timeline=post.ancestor, post_label=post.label, 
+        task=post.task, user=user)
+
         users = post.ancestor.users.all()
         event.users.add(*users)
 
@@ -195,21 +197,13 @@ class ListAssignments(GuardianView):
     def get(self, request, user_id):
         user = User.objects.get(id=self.user_id)
 
-        posts = user.assignments.filter(done=False, ancestor__isnull=False)
+        posts = models.Post.get_allowed_posts(user)
+        posts = posts.filter(task=True)
+
         total = posts.count()
 
         return render(request, 'post_app/list-assignments.html', 
         {'posts': posts, 'user':user, 'total': total})
-
-class PostWorkerInformation(GuardianView):
-    def get(self, request, peer_id, post_id):
-        event = EAssignPost.objects.filter(post__id=post_id,
-        peer__id=peer_id).last()
-
-        return render(request, 
-        'post_app/post-worker-information.html',  
-        {'peer': event.peer, 'post': event.post, 
-        'created': event.created, 'user':event.user})
 
 class PostTagInformation(GuardianView):
     def get(self, request, tag_id, post_id):
@@ -218,82 +212,6 @@ class PostTagInformation(GuardianView):
 
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
-
-class UnassignPostUser(GuardianView):
-    def get(self, request, post_id, user_id):
-        user = User.objects.get(id=user_id)
-        post = models.Post.objects.get(id=post_id)
-        post.workers.remove(user)
-        post.save()
-
-        me = User.objects.get(id=self.user_id)
-
-        event = EUnassignPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, user=me, peer=user)
-        event.users.add(*post.ancestor.users.all())
-        event.save()
-
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
-
-        return HttpResponse(status=200)
-
-class AssignPostUser(GuardianView):
-    def get(self, request, post_id, user_id):
-        user = User.objects.get(id=user_id)
-        post = models.Post.objects.get(id=post_id)
-        post.workers.add(user)
-        post.save()
-        me = User.objects.get(id=self.user_id)
-
-        event = EAssignPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, user=me, peer=user)
-        event.users.add(*post.ancestor.users.all())
-        event.save()
-
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
-
-        return HttpResponse(status=200)
-
-
-class ManagePostWorkers(GuardianView):
-    def get(self, request, post_id):
-        me = User.objects.get(id=self.user_id)
-        post = models.Post.objects.get(id=post_id)
-
-        included = post.workers.all()
-        excluded = me.default.users.exclude(assignments=post)
-
-        return render(request, 'post_app/manage-post-workers.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
-
-    def post(self, request, post_id):
-        form = forms.UserSearchForm(request.POST)
-
-        me = User.objects.get(id=self.user_id)
-        post = models.Post.objects.get(id=post_id)
-        included = post.workers.all()
-        excluded = me.default.users.exclude(assignments=post)
-
-        if not form.is_valid():
-            return render(request, 'post_app/manage-post-workers.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'post': post,
-                        'form':forms.UserSearchForm()}, status=400)
-
-        included = included.filter(
-        name__contains=form.cleaned_data['pattern'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['pattern'])
-
-        return render(request, 'post_app/manage-post-workers.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
@@ -534,6 +452,7 @@ class RequestPostAttention(GuardianView):
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
+
 
 
 

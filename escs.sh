@@ -8,6 +8,16 @@ git status
 git add *
 git commit -a
 git push -u origin alpha
+##############################################################################
+# push arcamens alpha branch.
+cd ~/projects/arcamens-code
+# clean up all .pyc files. 
+find . -name "*.pyc" -exec rm -f {} \;
+rm -fr ~/projects/arcamens-code/static/media
+git status
+git add *
+git commit -a
+git push -u origin gamma
 
 ##############################################################################
 # push arcamens development branch.
@@ -116,6 +126,9 @@ git push --set-upstream origin alpha
 # create, arcamens, beta, branch.
 git checkout -b beta
 git push --set-upstream origin beta
+
+git checkout -b gamma
+git push --set-upstream origin gamma
 
 ##############################################################################
 # switch, alpha, branch.
@@ -331,7 +344,18 @@ cd ~/projects/arcamens-code
 git branch -d beta
 git push origin :beta
 git fetch -p 
+
 ##############################################################################
+
+# delete, gamma, branch.
+
+cd ~/projects/arcamens-code
+git branch -d gamma
+git push origin :gamma
+git fetch -p 
+
+##############################################################################
+
 # delete, alpha, branch.
 
 cd ~/projects/arcamens-code
@@ -571,6 +595,7 @@ git fetch -p
 git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
+
 
 
 

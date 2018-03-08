@@ -4,7 +4,7 @@
 {% block content %}
 
 Post <span style="color:red"> <span class="glyphicon glyphicon-file"></span>
-{{event.post_label}}</span> deleted on timeline
+{{event.post_label}} {% if event.post.task %} <b> *Task* </b> {% endif %}</span> deleted on timeline
 
 <a class="e-get"
 data-shell="#main-view"
@@ -19,6 +19,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

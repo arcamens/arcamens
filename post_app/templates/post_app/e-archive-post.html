@@ -9,7 +9,7 @@ data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.post.label}} </a> archived on timeline
+{{event.post.label}} {% if event.post.task %} <b> *Task* </b> {% endif %} </a> archived on timeline
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
@@ -23,6 +23,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

@@ -209,6 +209,7 @@ class EDeletePost(EDeletePostMixin, Event):
     post_label = models.CharField(null=True,
     blank=True, max_length=30)
     html_template = 'post_app/e-delete-post.html'
+    task = models.BooleanField(blank=False, default=False)
 
 class ECutPost(ECutPostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
@@ -224,36 +225,6 @@ class EUpdatePost(EUpdatePostMixin, Event):
     related_name='e_update_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
     html_template = 'post_app/e-update-post.html'
-
-class EAssignPost(Event):
-    """
-    """
-
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_assign_post0', blank=True)
-
-    post = models.ForeignKey('Post', 
-    related_name='e_assign_post1', blank=True)
-
-    peer = models.ForeignKey('core_app.User', 
-    related_name='e_assign_post2', blank=True)
-
-    html_template = 'post_app/e-assign-post.html'
-
-class EUnassignPost(Event):
-    """
-    """
-
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_unassign_post0', blank=True)
-
-    post = models.ForeignKey('Post', 
-    related_name='e_unassign_post1', blank=True)
-
-    peer = models.ForeignKey('core_app.User', 
-    related_name='e_unassign_post2', blank=True)
-
-    html_template = 'post_app/e-unassign-post.html'
 
 class EBindTagPost(Event):
     """
