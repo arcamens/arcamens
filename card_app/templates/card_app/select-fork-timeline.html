@@ -1,0 +1,74 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div id="view-data">
+<div class="modal-header">
+<button type="button"  class="close" data-dismiss="modal">&times;</button>
+<h4> 
+<span class="glyphicon glyphicon-random"></span>
+Fork {{card.label|truncatechars:40}} on list..
+<h4>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+{% for ind in elems %}
+<p>
+<a class="e-get" 
+data-shell="#bigModalContent" 
+data-show=""
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+href="#" > 
+<span class="glyphicon glyphicon-eye-open"></span>
+
+{{ind.name}}
+</a> 
+</p>
+
+{% endfor %}
+
+</div>
+
+<hr>
+<form id="selectForkListForm" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% bootstrap_field form.pattern  size='md' %}
+
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+</div>
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-form="#selectForkListForm" 
+data-shell="#modalContent" id="filterLists"
+data-shell-error="#modalContent" data-show="{% url 'card_app:select-fork-timeline'  card.id %}"
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
+
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+
+
+<script>
+$('#id_pattern').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#filterLists').click();
+        return false;
+    }
+});
+</script>
+
+
+
+
+
+
+
+
+
+

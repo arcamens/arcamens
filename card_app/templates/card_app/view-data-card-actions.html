@@ -90,9 +90,19 @@ data-shell="#modalContent"
 class="e-get text-warning"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'card_app:select-fork-list'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-random"></span> Fork</a></li>
+href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
+<li>
+<a 
+data-shell="#modalContent"
+class="e-get text-warning"
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
+href="#"><span class="glyphicon glyphicon-random"></span> Fork/Post</a></li>
+
+<li>
+
 <a 
 data-shell="#bigModalContent"
 class="e-get text-primary"
@@ -122,6 +132,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

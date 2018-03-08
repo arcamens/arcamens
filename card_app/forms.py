@@ -41,6 +41,10 @@ class ListSearchform(forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arc + amens + to + do ...')
 
+class TimelineSearchform(forms.Form):
+    pattern = forms.CharField(required=False, 
+    help_text='Ex: arc + amens + to + do ...')
+
 class CardAttentionForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
@@ -51,6 +55,7 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
+
 
 
 

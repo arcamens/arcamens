@@ -7,6 +7,8 @@ from django.views.generic import View
 from core_app.models import Clipboard
 from django.core.mail import send_mail
 from core_app.views import GuardianView
+from post_app.models import Post
+from timeline_app.models import Timeline
 from core_app.utils import splittokens
 from core_app.models import User
 from card_app.models import Card
@@ -226,6 +228,37 @@ class SelectForkList(GuardianView):
 
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
+
+class SelectForkTimeline(GuardianView):
+    def get(self, request, card_id):
+        user = User.objects.get(id=self.user_id)
+        card = models.Card.objects.get(id=card_id)
+        form = forms.TimelineSearchform()
+        timelines = Timeline.get_user_timelines(user)
+
+        return render(request, 'card_app/select-fork-timeline.html', 
+        {'form':form, 'card': card, 'elems': timelines})
+
+    def post(self, request, card_id):
+        form = forms.TimelineSearchform(request.POST)
+        card = models.Card.objects.get(id=card_id)
+
+        user  = User.objects.get(id=self.user_id)
+        timelines = Timeline.get_user_timelines(user)
+
+        if not form.is_valid():
+            return render(request, 'card_app/select-fork-timeline.html', 
+                  {'form':form, 'elems': timelines, 'card': card})
+
+        timelines = timelines.annotate(text=Concat('name', 'description'))
+
+        # Not sure if its the fastest way to do it.
+        chks = split(' *\++ *', form.cleaned_data['pattern'])
+        timelines = timelines.filter(reduce(operator.and_, 
+        (Q(text__contains=ind) for ind in chks))) 
+
+        return render(request, 'card_app/select-fork-timeline.html', 
+        {'form':form, 'card': card, 'elems': timelines})
 
 class CreateFork(GuardianView):
     """
@@ -974,6 +1007,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return redirect('card_app:view-data', card_id=card.id)
+
 
 
 
