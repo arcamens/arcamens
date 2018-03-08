@@ -18,6 +18,9 @@ urlpatterns = [
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
+    url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
+    url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
+
     url(r'^attach-image/(?P<card_id>.+)/', views.AttachImage.as_view(), name='attach-image'),
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
@@ -60,6 +63,7 @@ urlpatterns = [
     url(r'^request-card-attention/(?P<peer_id>.+)/(?P<card_id>.+)', views.RequestCardAttention.as_view(), name='request-card-attention'),
     url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
 ]
+
 
 
 

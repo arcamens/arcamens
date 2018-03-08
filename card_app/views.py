@@ -8,6 +8,7 @@ from core_app.models import Clipboard
 from django.core.mail import send_mail
 from core_app.views import GuardianView
 from post_app.models import Post
+from post_app.forms import PostForm
 from timeline_app.models import Timeline
 from core_app.utils import splittokens
 from core_app.models import User
@@ -290,7 +291,8 @@ class CreateFork(GuardianView):
 
         if not form.is_valid():
             return render(request, 'card_app/create-fork.html', 
-                {'form':form, 'card': card, 'fork':fork}, status=400)
+                {'form':form, 'ancestor': card.ancestor, 
+                    'card': card, 'fork':fork}, status=400)
 
         fork.save()
 
@@ -302,6 +304,51 @@ class CreateFork(GuardianView):
             'sound', 0, False)
 
         return redirect('card_app:view-data', card_id=fork.id)
+
+class CreatePostFork(GuardianView):
+    """
+    """
+
+    def get(self, request, ancestor_id, card_id, fork_id=None):
+        card = models.Card.objects.get(id=card_id)
+        user = User.objects.get(id=self.user_id)
+        ancestor = Timeline.objects.get(id=ancestor_id)
+        fork = Post.objects.create(user=user, 
+        ancestor=ancestor, parent=card)
+
+        form = PostForm(instance=fork)
+        fork.label = 'Draft.'
+
+        # path = card.path.all()
+        fork.parent = card
+        # fork.path.add(*path, card)
+        fork.save()
+
+        return render(request, 'card_app/create-post-fork.html', 
+        {'form':form, 'post': fork, 'ancestor': ancestor, 'card': card})
+
+    def post(self, request, ancestor_id, card_id, fork_id):
+        card = models.Card.objects.get(id=card_id)
+        fork = Post.objects.get(id=fork_id)
+        form = PostForm(request.POST, instance=fork)
+
+        user = User.objects.get(id=self.user_id)
+
+        if not form.is_valid():
+            return render(request, 'card_app/create-post-fork.html', 
+                {'form':form, 'ancestor': card.ancestor, 
+                    'card': card, 'post': fork}, status=400)
+
+        fork.save()
+
+        # event = models.ECreateFork.objects.create(organization=user.default,
+        # ancestor=card.ancestor, child0=card, child1=fork, user=user)
+        # event.users.add(*card.ancestor.ancestor.members.all())
+
+        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
+            'sound', 0, False)
+
+        return redirect('timeline_app:list-posts', timeline_id=ancestor_id)
 
 class CancelCardCreation(GuardianView):
     def get(self, request, card_id):

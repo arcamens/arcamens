@@ -112,6 +112,9 @@ class Post(PostMixin, models.Model):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
 
+    parent = models.ForeignKey('card_app.Card', 
+    related_name='posts', null=True, blank=True)
+
     ancestor = models.ForeignKey(
     'timeline_app.Timeline', related_name='posts', 
     null=True, blank=True)
@@ -256,6 +259,8 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
+
 
 
 

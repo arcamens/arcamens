@@ -18,7 +18,7 @@ Fork {{card.label|truncatechars:40}} on list..
 <p>
 <a class="e-get" 
 data-shell="#bigModalContent" 
-data-show=""
+data-show="{% url 'card_app:create-post-fork' ind.id card.id %}"
 data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
 href="#" > 
 <span class="glyphicon glyphicon-eye-open"></span>
@@ -62,6 +62,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 

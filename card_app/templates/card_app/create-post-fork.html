@@ -1,0 +1,37 @@
+
+{% extends "post_app/create-post.html" %}
+{% load i18n %}
+
+{% block buttons %}
+<button  type="button" data-form="#form-post-data" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'post_app:cancel-post-creation' post.id %}"
+class="btn btn-default e-get"> 
+     {% trans "Cancel" %}
+</button>
+
+<button  type="button" 
+data-form="#form-post-data" 
+data-shell="#main-view" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell-error="#bigModalContent" 
+data-show="{% url 'card_app:create-post-fork' ancestor.id card.id post.id %}"
+class="btn btn-default e-post"> 
+{% trans "Fork" %}
+</button>
+
+<script>
+
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
