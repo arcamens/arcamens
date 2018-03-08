@@ -341,9 +341,10 @@ class CreatePostFork(GuardianView):
 
         fork.save()
 
-        # event = models.ECreateFork.objects.create(organization=user.default,
-        # ancestor=card.ancestor, child0=card, child1=fork, user=user)
-        # event.users.add(*card.ancestor.ancestor.members.all())
+        event = models.ECreatePostFork.objects.create(organization=user.default,
+        list=card.ancestor, timeline=fork.ancestor, card=card, post=fork, user=user)
+        event.users.add(*fork.ancestor.users.all())
+        event.users.add(*card.ancestor.ancestor.members.all())
 
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
             'sound', 0, False)

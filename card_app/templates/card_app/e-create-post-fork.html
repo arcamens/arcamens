@@ -1,0 +1,46 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a>
+has forked card
+
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.card.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card.label|truncatechars:40}} </a> 
+
+
+to post
+
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label|truncatechars:40}}
+</a>
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

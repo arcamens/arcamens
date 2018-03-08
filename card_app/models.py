@@ -235,6 +235,24 @@ class ECreateFork(Event):
 
     html_template = 'card_app/e-create-fork.html'
 
+class ECreatePostFork(Event):
+    """
+    """
+
+    list = models.ForeignKey('list_app.List', 
+    related_name='e_create_post_fork0', blank=True)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_create_post_fork1', blank=True)
+
+    post = models.ForeignKey('post_app.Post', 
+    related_name='e_create_post_fork2', blank=True)
+
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_create_post_fork3', blank=True)
+
+    html_template = 'card_app/e-create-post-fork.html'
+
 class EUpdateCard(Event):
     """
     """
@@ -351,6 +369,7 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
 
 
 
