@@ -44,7 +44,7 @@ class PostLink(GuardianView):
                 It can't be accessed now.", status=400)
 
         attachments = post.postfilewrapper_set.all()
-        workers = post.workers.all()
+        # workers = post.workers.all()
 
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
@@ -57,10 +57,9 @@ class PostLink(GuardianView):
 
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'attachments': attachments, 
-        'tags': post.tags.all(), 'workers': workers,
-        'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'queues': json.dumps(queues),
-         'settings': settings})
+        'tags': post.tags.all(), 'user': user, 'default': user.default, 
+        'organization': user.default, 'organizations': organizations, 
+        'queues': json.dumps(queues), 'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -452,6 +451,7 @@ class RequestPostAttention(GuardianView):
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
+
 
 
 
