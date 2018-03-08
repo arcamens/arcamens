@@ -1,25 +1,40 @@
 # Intro
 
-# The problems
 
-# Timelines
+## Timelines
+
+## Timeline Control
+
+### Add/Remove Members
 
 ## Posts
 
-## Post comments
+### Post/tasks
+
+### Post/Attachments
+
+### Post/Comments
+
+### Post/Tags
+
+##  Boards
+
+### Board Management
+
+### Lists
+
+### Cards
+
+### Card/Tasks
+
+### Card/Tags
+
+## Card/Forks
+
+## Filters
+
+## Task Control
+
+# Business workflows
 
 
-# Boards
-
-## Lists
-
-
-## Cards
-
-## Card Forks
-
-## Post forks
-
-# Tasks
-
-# Search 
