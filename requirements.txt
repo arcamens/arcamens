@@ -9,3 +9,4 @@ git+ssh://git@bitbucket.org/arcamens/django-paybills.git
 git+ssh://git@bitbucket.org/winstroll/django-slock.git
 git+ssh://git@github.com/arcamens/django-secure-storage.git
 git+ssh://git@bitbucket.org/arcamens/django-scrolls.git
+mysqlclient

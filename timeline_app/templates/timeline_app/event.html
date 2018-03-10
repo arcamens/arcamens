@@ -1,13 +1,8 @@
 {% load i18n %}
 
 <div style="font-size:90%;">
-<p>
 {% block content %}
 {% endblock %}
-<a style="color:green;" class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:seen-event' event.id %}" href="#">
-Seen </a>
-</p>
 
 </div>
 
@@ -17,6 +12,7 @@ $(function () {
     $('[data-toggle="popover"]').popover()
 })
 </script>
+
 
 
 

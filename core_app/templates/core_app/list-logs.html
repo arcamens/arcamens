@@ -13,8 +13,9 @@
 <div class="modal-body">
 <div class="container-fluid pre-scrollable">
 {% for ind in events %}
-
+<p>
 {{ind.html | safe}}
+</p>
 {% endfor %}
 </div>
 
@@ -45,6 +46,7 @@ data-show="{% url 'core_app:list-logs'  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

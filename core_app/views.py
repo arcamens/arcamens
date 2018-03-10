@@ -283,7 +283,7 @@ class ListEvents(GuardianView):
         events = user.events.filter(organization=user.default)
         events = events.order_by('-created')
         count = events.count()
-        events = events.values('html')
+        events = events.values('html', 'id')
 
         return render(request, 'core_app/list-events.html', 
         {'events': events, 'user': user, 
