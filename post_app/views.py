@@ -530,10 +530,41 @@ class RequestPostAttention(GuardianView):
         user.name, user.email, url, form.cleaned_data['message'])
 
         send_mail('%s %s' % (user.default.name, 
-        user.name), msg, settings.EMAIL_HOST_USER, [peer.email], fail_silently=False)
+        user.name), msg, user.name, [peer.email], fail_silently=False)
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
 
+class AlertPostWorkers(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+        user = User.objects.get(id=self.user_id)
+
+        form = forms.AlertPostWorkersForm()
+        return render(request, 'post_app/alert-post-workers.html', 
+        {'post': post, 'form': form, 'user': user})
+
+    def post(self, request, post_id):
+        user = User.objects.get(id=self.user_id)
+        post = models.Post.objects.get(id=post_id)
+        form = forms.AlertPostWorkersForm(request.POST)
+
+        if not form.is_valid():
+            return render(request,'post_app/alert-post-workers.html', 
+                    {'user': user, 'post': post, 'form': form})    
+
+        url  = reverse('post_app:post-link', 
+        kwargs={'post_id': post.id})
+
+        url = '%s%s' % (settings.LOCAL_ADDR, url)
+        msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
+        user.name, user.email, url, form.cleaned_data['message'])
+
+        for ind in post.workers.values_list('email'):
+            send_mail('%s %s' % (user.default.name, 
+                user.name), msg, user.name, 
+                    [ind[0]], fail_silently=False)
+
+        return HttpResponse(status=200)
 
 

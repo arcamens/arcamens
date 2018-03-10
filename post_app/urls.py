@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^post/(?P<post_id>.+)/', views.Post.as_view(), name='post'),
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
+    url(r'^alert-post-workers/(?P<post_id>.+)/', views.AlertPostWorkers.as_view(), name='alert-post-workers'),
 
     url(r'^done/(?P<post_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<post_id>.+)/', views.Undo.as_view(), name='undo'),
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
 
 ]
+
 
 
 

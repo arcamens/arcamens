@@ -103,6 +103,22 @@ href="#">
 
 {{ind.name}}
 </a>
+
+{% if forloop.last %} 
+<br>
+<a 
+class="e-get text-warning"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'post_app:alert-post-workers' post.id %}"
+
+href="#">
+<span class="glyphicon glyphicon-alert"></span>
+
+Alert workers?</a>
+
+{% endif %}
+
 {% empty %}
 No workers.
 {% endfor %}
@@ -169,6 +185,7 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
+
 
 
 

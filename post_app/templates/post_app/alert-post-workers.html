@@ -6,14 +6,14 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Alert workers on card 
+Alert workers on post 
 <span class="glyphicon glyphicon-file"></span>
 
-{{card.label|truncatechars:40}}</h5>
+{{post.label|truncatechars:40}}</h5>
 </div>
 
 <div class="modal-body">
-<form id="alertCardWorkersForm" enctype="multipart/form-data">
+<form id="alertpostWorkersForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.message  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -26,16 +26,11 @@ Alert workers on card
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#alertCardWorkersForm" 
+<button  type="button" data-form="#alertpostWorkersForm" 
 data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'card_app:alert-card-workers' card.id  %}"
+data-shell-error="#modalContent" data-show="{% url 'post_app:alert-post-workers' post.id  %}"
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
-
-
-
-
-
 
 

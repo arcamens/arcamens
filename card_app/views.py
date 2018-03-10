@@ -1008,8 +1008,7 @@ class RequestCardAttention(GuardianView):
         user.name, user.email, url, form.cleaned_data['message'])
 
         send_mail('%s %s' % (user.default.name, 
-        user.name), msg, settings.EMAIL_HOST_USER, [peer.email], fail_silently=False)
-
+        user.name), msg, user.name, [peer.email], fail_silently=False)
         return redirect('card_app:card-worker-information', 
         peer_id=peer.id, card_id=card.id)
 
@@ -1031,7 +1030,6 @@ class AlertCardWorkers(GuardianView):
         user = User.objects.get(id=self.user_id)
 
         form = forms.AlertCardWorkersForm()
-        print('fuck?')
         return render(request, 'card_app/alert-card-workers.html', 
         {'card': card, 'form': form, 'user': user})
 
@@ -1045,7 +1043,7 @@ class AlertCardWorkers(GuardianView):
                     {'user': user, 'card': card, 'form': form})    
 
         url  = reverse('card_app:card-link', 
-            kwargs={'card_id': card.id})
+        kwargs={'card_id': card.id})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
         msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
@@ -1053,10 +1051,12 @@ class AlertCardWorkers(GuardianView):
 
         for ind in card.workers.values_list('email'):
             send_mail('%s %s' % (user.default.name, 
-                user.name), msg, settings.EMAIL_HOST_USER, 
+                user.name), msg, user.name, 
                     [ind[0]], fail_silently=False)
 
-        return redirect('card_app:view-data', card_id=card.id)
+        return HttpResponse(status=200)
+
+
 
 
 

@@ -37,4 +37,10 @@ class PostAttentionForm(forms.Form):
     required=False, widget=forms.Textarea,
     help_text='(Optional) Be in the meeting 20 min earlier.')
 
+class AlertPostWorkersForm(forms.Form):
+    message = forms.CharField(
+    required=False, widget=forms.Textarea,
+    help_text='Please, take a look at this asap!')
+
+
 
