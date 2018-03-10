@@ -112,6 +112,23 @@ class CreateTimeline(GuardianView):
 class DeleteTimeline(GuardianView):
     def get(self, request,  timeline_id):
         timeline = Timeline.objects.get(id = timeline_id)
+        form = forms.ConfirmTimelineDeletionForm()
+
+        return render(request, 'timeline_app/delete-timeline.html', 
+        {'timeline': timeline, 'form': form})
+
+    def post(self, request, timeline_id):
+        timeline = Timeline.objects.get(id = timeline_id)
+
+        form = forms.ConfirmTimelineDeletionForm(request.POST, 
+        confirm_token=timeline.name)
+
+        if not form.is_valid():
+            return render(request, 
+                'timeline_app/delete-timeline.html', 
+                    {'timeline': timeline, 'form': form}, status=400)
+
+        timeline = Timeline.objects.get(id = timeline_id)
         user     = User.objects.get(id=self.user_id)
         event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
@@ -124,7 +141,6 @@ class DeleteTimeline(GuardianView):
         event.users.add(*timeline.users.all())
         timeline.delete()
 
-            
         return redirect('timeline_app:list-timelines')
 
 class UnbindTimelineUser(GuardianView):
@@ -404,6 +420,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form})
+
 
 
 

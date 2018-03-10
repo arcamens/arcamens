@@ -5,10 +5,10 @@
 
 {% block buttons %}
 
-<button  type="button" data-shell="#main-view" 
-data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+<button  type="button"  
+data-shell="#modalContent"
 data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
-class="btn btn-default e-get"> 
+class="btn btn-danger e-get"> 
 {% trans "Delete" %}
 </button>
 
@@ -20,6 +20,8 @@ class="btn btn-default e-post">
 </button>
 
 {% endblock %}
+
+
 
 
 

@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^post-paginator/(?P<timeline_id>.+)/', views.PostPaginator.as_view(), name='post-paginator'),
 
     url(r'^list-posts/(?P<timeline_id>.+)/', views.ListPosts.as_view(), name='list-posts'),
+    # url(r'^confirm-timeline-deletion/(?P<timeline_id>.+)/', views.ConfirmTimelineDeletion.as_view(), name='confirm-timeline-deletion'),
     url(r'^list-all-posts/(?P<user_id>.+)', views.ListAllPosts.as_view(), name='list-all-posts'),
     url(r'^create-timeline/(?P<organization_id>.+)', views.CreateTimeline.as_view(), name='create-timeline'),
     url(r'^update-timeline/(?P<timeline_id>.+)/', views.UpdateTimeline.as_view(), name='update-timeline'),
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
 
 ]
+
 
 
 

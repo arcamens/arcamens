@@ -31,10 +31,20 @@ class FindEventForm(forms.Form):
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
+class ConfirmTimelineDeletionForm(forms.Form):
+    name = forms.CharField(required=True)
 
+    def __init__(self, *args, confirm_token='', **kwargs):
+        self.confirm_token = confirm_token
 
+        super(ConfirmTimelineDeletionForm, 
+            self).__init__(*args, **kwargs)
 
+    def clean(self):
+        super(ConfirmTimelineDeletionForm, self).clean()
+        name   = self.cleaned_data.get('name')
 
-
-
+        if name != self.confirm_token:
+            raise forms.ValidationError(
+                "The name doesn't match!")
 
