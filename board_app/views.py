@@ -223,6 +223,22 @@ class UpdateBoard(GuardianView):
 class DeleteBoard(GuardianView):
     def get(self, request, board_id):
         board = Board.objects.get(id=board_id)
+        form = forms.ConfirmBoardDeletionForm()
+
+        return render(request, 'board_app/delete-board.html', 
+        {'board': board, 'form': form})
+
+    def post(self, request, board_id):
+        board = Board.objects.get(id=board_id)
+
+        form = forms.ConfirmBoardDeletionForm(request.POST, 
+        confirm_token=board.name)
+
+        if not form.is_valid():
+            return render(request, 
+                'board_app/delete-board.html', 
+                    {'board': board, 'form': form}, status=400)
+
         user  = User.objects.get(id=self.user_id)
 
         event = EDeleteBoard.objects.create(organization=user.default,
@@ -321,5 +337,6 @@ class UnbindBoardUser(GuardianView):
             'sound', 0, False)
 
         return HttpResponse(status=200)
+
 
 

@@ -1,3 +1,4 @@
+from timeline_app.forms import ConfirmTimelineDeletionForm
 from django import forms
 from . import models
 import card_app.models
@@ -22,6 +23,10 @@ class BoardSearchForm(forms.Form):
 
 class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
+
+class ConfirmBoardDeletionForm(ConfirmTimelineDeletionForm):
+    name = forms.CharField(required=True,
+    help_text='Type the board name to confirm!')
 
 
 

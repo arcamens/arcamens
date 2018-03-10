@@ -25,8 +25,11 @@ href="#"> <span class="glyphicon glyphicon-user"></span>
 {% trans "Members" %}</a></li>
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#main-view" 
+<li><a class="e-get" 
 data-show="{% url 'board_app:delete-board' board.id %}" 
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+
 href="#"> <span class="glyphicon glyphicon-remove"></span> 
 {% trans "Delete" %}</a></li>
 <li class="divider"></li>
@@ -38,6 +41,7 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>
 
 </ul>
 </div>
+
 
 
 

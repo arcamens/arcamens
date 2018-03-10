@@ -128,7 +128,6 @@ class DeleteTimeline(GuardianView):
                 'timeline_app/delete-timeline.html', 
                     {'timeline': timeline, 'form': form}, status=400)
 
-        timeline = Timeline.objects.get(id = timeline_id)
         user     = User.objects.get(id=self.user_id)
         event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
@@ -420,6 +419,7 @@ class ManageTimelineUsers(GuardianView):
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form})
+
 
 
 
