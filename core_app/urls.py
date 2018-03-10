@@ -31,15 +31,8 @@ urlpatterns = [
     url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
     url(r'^find/', views.Find.as_view(), name='find'),
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
+    url(r'^export/', views.Export.as_view(), name='export'),
+    url(r'^import/', views.Import.as_view(), name='import'),
 
 ]
-
-
-
-
-
-
-
-
-
 

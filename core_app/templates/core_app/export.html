@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Export/import</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+
+<h1>Export/import</h1>
+
+<form method="get" action="{% url 'core_app:export' %}">
+    <h2>Export timelines</h2>
+    <input type="hidden" name="kind" value="timelines" />
+    <input type="submit" value="Export" />
+</form>
+
+<form method="get" action="{% url 'core_app:export' %}">
+    <h2>Export boards</h2>
+    <input type="hidden" name="kind" value="boards" />
+    <input type="submit" value="Export" />
+</form>
+
+<form method="post" action="{% url 'core_app:import' %}" enctype="multipart/form-data"
+      onsubmit="if(!$('[name=file]', this).val()) {alert('Choose a file'); return false;}; return confirm('Really import timelines?')">
+    <h2>Import timelines</h2>
+    {% csrf_token %}
+    <input type="hidden" name="kind" value="timelines" />
+    <input type="file" name="file" />
+    <input type="submit" value="Import" />
+</form>
+
+<form method="post" action="{% url 'core_app:import' %}" enctype="multipart/form-data"
+      onsubmit="if(!$('[name=file]', this).val()) {alert('Choose a file'); return false;}; return confirm('Really import boards?')">
+    <h2>Import boards</h2>
+    {% csrf_token %}
+    <input type="hidden" name="kind" value="boards" />
+    <input type="file" name="file" />
+    <input type="submit" value="Import" />
+</form>
+
+</body>
+</html>

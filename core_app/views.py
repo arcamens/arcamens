@@ -15,9 +15,11 @@ from django.db.models import Q
 from django.urls import reverse
 from django.conf import settings
 from traceback import print_exc
+from itertools import chain
 from core_app import ws
 from . import models
 from . import forms
+import core_app
 import random
 import json
 
@@ -529,41 +531,35 @@ class ListAllTasks(GuardianView):
         user=me, organization=me.default)
 
         form        = forms.GlobalTaskFilterForm(instance=filter)
-        assignments = me.assignments.filter(
+        posts = me.assignments.filter(
         ancestor__organization=me.default)
 
-        tasks = me.tasks.filter(
+        cards = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
 
-        total = assignments.count() + tasks.count()
+        total = posts.count() + cards.count()
         
-        tasks = Card.collect_cards(tasks, 
+        cards = Card.collect_cards(cards, 
         filter.pattern, filter.done)
 
-        assignments = Post.collect_posts(assignments, 
+        posts = Post.collect_posts(posts, 
         filter.pattern, filter.done)
 
-        count       = assignments.count() + tasks.count()
-        tasks       = tasks.values('done', 'label', 'id')
-        assignments = assignments.values('done', 'label', 'id')
+        count = posts.count() + cards.count()
+        cards = cards.values('done', 'label', 'id')
+        posts = posts.values('done', 'label', 'id')
 
         # If i instantiate the form here it stops working
         # correctly when filtering the cards/posts
         # form  = forms.GlobalTaskFilterForm(instance=filter)
+        tasks = chain(cards, posts)
 
         return render(request, 'core_app/list-all-tasks.html', 
-        {'assignments': assignments, 'total': total, 'count': count, 
+        {'total': total, 'count': count, 
         'form': form, 'tasks': tasks})
 
     def post(self, request):
-        me          = User.objects.get(id=self.user_id)
-        assignments = me.assignments.filter(ancestor__organization=me.default)
-
-        tasks = me.tasks.filter(
-        ancestor__ancestor__organization=me.default)
-
-        total = assignments.count() + tasks.count()
-
+        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
 
@@ -571,23 +567,33 @@ class ListAllTasks(GuardianView):
 
         if not form.is_valid():
             return render(request, 'core_app/list-all-tasks.html', 
-                {'assignments': assignments, 'form': form, 'total': total,
-                    'count': count, 'tasks': tasks}, status=400)
+                {'form': form, 'total': 0,
+                    'count': 0}, status=400)
+
         form.save()
 
-        tasks = Card.collect_cards(tasks, 
+        posts = me.assignments.filter(ancestor__organization=me.default)
+
+        cards = me.tasks.filter(
+        ancestor__ancestor__organization=me.default)
+
+        total = posts.count() + cards.count()
+
+
+        cards = Card.collect_cards(cards, 
         filter.pattern, filter.done)
 
-        assignments = Post.collect_posts(assignments, 
+        posts = Post.collect_posts(posts, 
         filter.pattern, filter.done)
 
-        count      = assignments.count() + tasks.count()
-        tasks      = tasks.values('done', 'label', 'id')
-        assigments = assignments.values('done', 'label', 'id')
+        count = posts.count() + cards.count()
+        cards = cards.values('done', 'label', 'id')
+        posts = posts.values('done', 'label', 'id')
+
+        tasks = chain(cards, posts)
 
         return render(request, 'core_app/list-all-tasks.html', 
-        {'assignments': assignments, 'form': form, 'tasks': tasks,
-        'total': total, 'count': count})
+        {'form': form, 'tasks': tasks, 'total': total, 'count': count})
 
 class Find(GuardianView):
     def get(self, request):
@@ -706,7 +712,34 @@ class AllSeen(GuardianView):
             ind.seen(user)
         return redirect('core_app:list-events')
 
+class Export(GuardianView):
+    def get(self, request):
+        if request.GET.get('kind') == 'timelines':
+            user = User.objects.get(id=self.user_id)
+            data = core_app.export.export_timelines(user)
+            response = HttpResponse(data, content_type='application/json')
+            response['Content-Disposition'] = 'attachment; filename=timelines.json'
+            return response
+        elif request.GET.get('kind') == 'boards':
+            user = User.objects.get(id=self.user_id)
+            data = core_app.export.export_boards(user)
+            response = HttpResponse(data, content_type='application/json')
+            response['Content-Disposition'] = 'attachment; filename=boards.json'
+            return response
+        else:
+            return render(request, 'core_app/export.html')
 
+class Import(GuardianView):
+    def post(self, request):
+        user = User.objects.get(id=self.user_id)
+        file = request.FILES['file'].read()
+        if request.POST.get('kind') == 'timelines':
+            core_app.export.import_timelines(user, file)
+            return HttpResponse('OK')
+        elif request.POST.get('kind') == 'boards':
+            core_app.export.import_boards(user, file)
+            return HttpResponse('OK')
+        return HttpResponse('Fail')
 
 
 
