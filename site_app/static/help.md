@@ -1,11 +1,10 @@
 # Intro
 
+## Events
 
 ## Timelines
 
 ## Timeline Control
-
-### Add/Remove Members
 
 ## Posts
 
@@ -19,7 +18,7 @@
 
 ##  Boards
 
-### Board Management
+### Board Control
 
 ### Lists
 
@@ -29,12 +28,19 @@
 
 ### Card/Tags
 
-## Card/Forks
+### Card/Forks
 
 ## Filters
 
-## Task Control
+### Task Filter
+
+### Content Filter
 
 # Business workflows
 
+## Timeline Usage
+
+## Board Usage
+
+## Timelines x Boards
 

@@ -62,9 +62,9 @@ No attachment.
 </div>
 
 <div class="col-md-3">
-<h4> 
+<h5> 
 <b> # </b>
-Tags </h4>
+Tags </h5>
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in post.tags.all %}
@@ -86,10 +86,10 @@ No tags.
 </div>
 
 <div class="col-md-3">
-<h4> 
+<h5> 
 <span class="glyphicon glyphicon-user"></span>
 
-Workers </h4>
+Workers </h5>
 
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in post.workers.all %}
@@ -103,7 +103,6 @@ href="#">
 
 {{ind.name}}
 </a>
-<br>
 {% empty %}
 No workers.
 {% endfor %}
@@ -170,6 +169,7 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
+
 
 
 
