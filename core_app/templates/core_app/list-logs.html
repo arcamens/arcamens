@@ -7,10 +7,19 @@
 <h4>  
 <span class="glyphicon glyphicon-bell"></span>
 
-{{organization.name}}'s Events <span class="badge">{{count}}</span></h4>
+{{organization.name}}'s Logs <span class="badge">{{count}}</span></h4>
 </div>
 
 <div class="modal-body">
+<div class="container-fluid pre-scrollable">
+{% for ind in events %}
+
+{{ind.html | safe}}
+{% endfor %}
+</div>
+
+
+<hr>
 <form id="listLogsForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.start  size='md' %}
@@ -36,6 +45,7 @@ data-show="{% url 'core_app:list-logs'  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

@@ -699,7 +699,7 @@ class ListLogs(GuardianView):
         events = events.order_by('-created')
         count  = events.count()
         events = events.values('html')
-        return render(request, 'core_app/list-events.html', 
+        return render(request, 'core_app/list-logs.html', 
         {'user': user, 'form': form, 'events':events, 
         'count': count,'organization': user.default})
 
@@ -740,6 +740,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 
