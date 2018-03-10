@@ -25,6 +25,13 @@ at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 
 {% endif %}
 
+{% if post.parent %}
+from card <a class="e-get" href="#"
+data-show="{% url 'card_app:view-data' post.parent.id %}"
+data-shell="#main-view" > 
+<span class="glyphicon glyphicon-file"></span> {{post.parent.label|truncatechars:60}} </a>
+{% endif %}
+
 </div>
 </div>
 
@@ -163,6 +170,7 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
+
 
 
 
