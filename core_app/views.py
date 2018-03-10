@@ -19,7 +19,7 @@ from itertools import chain
 from core_app import ws
 from . import models
 from . import forms
-import core_app
+import core_app.export
 import random
 import json
 
@@ -740,6 +740,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 
