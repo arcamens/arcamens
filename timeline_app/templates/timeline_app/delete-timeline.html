@@ -12,7 +12,6 @@
 <div class="modal-body">
 <p class="text-danger"> The content will no longer be avaiable!</p>
 
-<b> Type the timeline name to confirm! </b>
 <form id="confirmTimelineDeletionForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' %}

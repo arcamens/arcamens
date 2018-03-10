@@ -32,7 +32,8 @@ class UserSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
 class ConfirmTimelineDeletionForm(forms.Form):
-    name = forms.CharField(required=True)
+    name = forms.CharField(required=True,
+    help_text='Type the timeline name to confirm!')
 
     def __init__(self, *args, confirm_token='', **kwargs):
         self.confirm_token = confirm_token
