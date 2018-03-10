@@ -13,12 +13,6 @@ import operator
 # Create your models here.
 
 class PostMixin(object):
-    def save(self, *args, **kwargs):
-        self.html = markdown(self.data, 
-            extensions=[TableExtension(),
-                'markdown.extensions.tables'])
-        super(PostMixin, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         return reverse('post_app:post', 
         kwargs={'post_id': self.id})
@@ -73,7 +67,7 @@ class PostMixin(object):
         return posts
 
     def __str__(self):
-        return self.label
+        return self.description
 
 class PostFileWrapperMixin(object):
     def duplicate(self, post=None):
@@ -126,20 +120,12 @@ class Post(PostMixin, models.Model):
     'core_app.Tag', related_name='posts', 
     null=True, blank=True, symmetrical=False)
 
-    # workers = models.ManyToManyField('core_app.User', 
-    # related_name='assignments', blank=True, 
-    # symmetrical=False)
+    workers = models.ManyToManyField('core_app.User', 
+    related_name='assignments', blank=True, 
+    symmetrical=False)
 
-    label = models.CharField(null=True, blank=False, 
-    verbose_name=_("Label"), help_text='Short description ...', 
-    max_length=626)
-
-    html = models.TextField(null=True, blank=True)
-
-    data = models.TextField(blank=True, verbose_name=_("Data"), 
-    help_text='Markdown content.', default='')
-
-    task = models.BooleanField(blank=False, default=False)
+    label = models.TextField(null=True, default='',
+    blank=True, verbose_name=_("Content"))
 
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
@@ -212,7 +198,6 @@ class EDeletePost(EDeletePostMixin, Event):
     post_label = models.CharField(null=True,
     blank=True, max_length=30)
     html_template = 'post_app/e-delete-post.html'
-    task = models.BooleanField(blank=False, default=False)
 
 class ECutPost(ECutPostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
@@ -228,6 +213,36 @@ class EUpdatePost(EUpdatePostMixin, Event):
     related_name='e_update_post', blank=True)
     post = models.ForeignKey('Post', blank=True)
     html_template = 'post_app/e-update-post.html'
+
+class EAssignPost(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_assign_post0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_assign_post1', blank=True)
+
+    peer = models.ForeignKey('core_app.User', 
+    related_name='e_assign_post2', blank=True)
+
+    html_template = 'post_app/e-assign-post.html'
+
+class EUnassignPost(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_unassign_post0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_unassign_post1', blank=True)
+
+    peer = models.ForeignKey('core_app.User', 
+    related_name='e_unassign_post2', blank=True)
+
+    html_template = 'post_app/e-unassign-post.html'
 
 class EBindTagPost(Event):
     """
@@ -259,9 +274,6 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
-
-
-
 
 
 

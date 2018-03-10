@@ -12,7 +12,7 @@ data-callback="$('#modal').modal('toggle');"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.post.label}} {% if event.post.task %} <b> *Task* </b> {% endif %}</a>  
+{{event.post.label}} </a>  
 
 with {{event.tag.name}} on timeline 
 
@@ -27,7 +27,6 @@ data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
-
 
 
 

@@ -1,5 +1,5 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
-PostFileWrapper, EDeletePost, EBindTagPost, \
+PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost
 from core_app.models import Clipboard, Tag, User
 from django.shortcuts import render, redirect
@@ -44,7 +44,7 @@ class PostLink(GuardianView):
                 It can't be accessed now.", status=400)
 
         attachments = post.postfilewrapper_set.all()
-        # workers = post.workers.all()
+        workers = post.workers.all()
 
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
@@ -57,9 +57,10 @@ class PostLink(GuardianView):
 
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'attachments': attachments, 
-        'tags': post.tags.all(), 'user': user, 'default': user.default, 
-        'organization': user.default, 'organizations': organizations, 
-        'queues': json.dumps(queues), 'settings': settings})
+        'tags': post.tags.all(), 'workers': workers,
+        'user': user, 'default': user.default, 'organization': user.default,
+        'organizations': organizations, 'queues': json.dumps(queues),
+         'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -123,7 +124,7 @@ class UpdatePost(GuardianView):
 
         # Notify workers of the event, in case the post
         # is on a timeline whose worker is not on.
-        # event.users.add(*record.workers.all())
+        event.users.add(*record.workers.all())
 
         ws.client.publish('timeline%s' % record.ancestor.id, 
             'sound', 0, False)
@@ -177,9 +178,7 @@ class DeletePost(GuardianView):
         user  = User.objects.get(id=self.user_id)
 
         event = EDeletePost.objects.create(organization=user.default,
-        timeline=post.ancestor, post_label=post.label, 
-        task=post.task, user=user)
-
+        timeline=post.ancestor, post_label=post.label, user=user)
         users = post.ancestor.users.all()
         event.users.add(*users)
 
@@ -196,13 +195,21 @@ class ListAssignments(GuardianView):
     def get(self, request, user_id):
         user = User.objects.get(id=self.user_id)
 
-        posts = models.Post.get_allowed_posts(user)
-        posts = posts.filter(task=True)
-
+        posts = user.assignments.filter(done=False, ancestor__isnull=False)
         total = posts.count()
 
         return render(request, 'post_app/list-assignments.html', 
         {'posts': posts, 'user':user, 'total': total})
+
+class PostWorkerInformation(GuardianView):
+    def get(self, request, peer_id, post_id):
+        event = EAssignPost.objects.filter(post__id=post_id,
+        peer__id=peer_id).last()
+
+        return render(request, 
+        'post_app/post-worker-information.html',  
+        {'peer': event.peer, 'post': event.post, 
+        'created': event.created, 'user':event.user})
 
 class PostTagInformation(GuardianView):
     def get(self, request, tag_id, post_id):
@@ -211,6 +218,82 @@ class PostTagInformation(GuardianView):
 
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
+
+class UnassignPostUser(GuardianView):
+    def get(self, request, post_id, user_id):
+        user = User.objects.get(id=user_id)
+        post = models.Post.objects.get(id=post_id)
+        post.workers.remove(user)
+        post.save()
+
+        me = User.objects.get(id=self.user_id)
+
+        event = EUnassignPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, user=me, peer=user)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
+
+        ws.client.publish('timeline%s' % post.ancestor.id, 
+            'sound', 0, False)
+
+        return HttpResponse(status=200)
+
+class AssignPostUser(GuardianView):
+    def get(self, request, post_id, user_id):
+        user = User.objects.get(id=user_id)
+        post = models.Post.objects.get(id=post_id)
+        post.workers.add(user)
+        post.save()
+        me = User.objects.get(id=self.user_id)
+
+        event = EAssignPost.objects.create(
+        organization=me.default, ancestor=post.ancestor, 
+        post=post, user=me, peer=user)
+        event.users.add(*post.ancestor.users.all())
+        event.save()
+
+        ws.client.publish('timeline%s' % post.ancestor.id, 
+            'sound', 0, False)
+
+        return HttpResponse(status=200)
+
+
+class ManagePostWorkers(GuardianView):
+    def get(self, request, post_id):
+        me = User.objects.get(id=self.user_id)
+        post = models.Post.objects.get(id=post_id)
+
+        included = post.workers.all()
+        excluded = me.default.users.exclude(assignments=post)
+
+        return render(request, 'post_app/manage-post-workers.html', 
+        {'included': included, 'excluded': excluded, 'post': post,
+        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+
+    def post(self, request, post_id):
+        form = forms.UserSearchForm(request.POST)
+
+        me = User.objects.get(id=self.user_id)
+        post = models.Post.objects.get(id=post_id)
+        included = post.workers.all()
+        excluded = me.default.users.exclude(assignments=post)
+
+        if not form.is_valid():
+            return render(request, 'post_app/manage-post-workers.html', 
+                {'included': included, 'excluded': excluded,
+                    'me': me, 'organization': me.default, 'post': post,
+                        'form':forms.UserSearchForm()}, status=400)
+
+        included = included.filter(
+        name__contains=form.cleaned_data['pattern'])
+
+        excluded = excluded.filter(
+        name__contains=form.cleaned_data['pattern'])
+
+        return render(request, 'post_app/manage-post-workers.html', 
+        {'included': included, 'excluded': excluded, 'post': post,
+        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
@@ -451,9 +534,6 @@ class RequestPostAttention(GuardianView):
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
-
-
-
 
 
 

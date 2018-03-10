@@ -3,8 +3,7 @@
 
 <div id="post-{{post.id}}">
 
-<div class="panel {% if post.task %} panel-danger {% else %} panel-default {% endif %}" >
-
+<div class="panel panel-default" >
 <div class="panel-heading clearfix" > 
 
 <div style="word-wrap: break-word;"> 
@@ -21,15 +20,6 @@ data-shell="#main-view" >
 
 at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
 
-{% if post.parent %}
-from card
-<a class="e-get" href="#"
-data-show="{% url 'card_app:view-data' post.parent.id %}"
-data-shell="#main-view" > 
-<span class="glyphicon glyphicon-file"></span> {{post.parent.label|truncatechars:60}} </a>
-
-{% endif %}
-
 {% if post.done %}
 (Done)
 
@@ -41,17 +31,17 @@ data-shell="#main-view" >
 <div class="panel-body" >
 <div style="word-wrap: break-word;"> 
 
+<pre style="background-color:#F6E4E1;font-size:120%">
 {{post.label}} 
-{{post.html | safe}} 
-
+</pre>
 </div>
 
 <div class="row">
-<div class="col-md-6">
-<h5> 
+<div class="col-md-3">
+<h4> 
 <span class="glyphicon glyphicon-file"></span>
 
-Attachments </h5>
+Attachments </h4>
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in post.postfilewrapper_set.all %}
@@ -64,10 +54,10 @@ No attachment.
 </div>
 </div>
 
-<div class="col-md-6">
-<h5> 
+<div class="col-md-3">
+<h4> 
 <b> # </b>
-Tags </h5>
+Tags </h4>
 <div class="pre-scrollable" style="font-size:80%">
 
 {% for ind in post.tags.all %}
@@ -77,7 +67,8 @@ data-shell="#modalContent"
 data-callback="$('#modal').modal('show');" 
 class="e-get"
 href="#">
-<b> # </b>
+<span class="glyphicon glyphicon-tag"></span>
+
 {{ind.name}}
 </a>
 
@@ -87,6 +78,31 @@ No tags.
 </div>
 </div>
 
+<div class="col-md-3">
+<h4> 
+<span class="glyphicon glyphicon-user"></span>
+
+Workers </h4>
+
+<div class="pre-scrollable" style="font-size:80%">
+{% for ind in post.workers.all %}
+<a 
+data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
+data-shell="#modalContent" 
+data-callback="$('#modal').modal('show');" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-user"></span>
+
+{{ind.name}}
+</a>
+<br>
+{% empty %}
+No workers.
+{% endfor %}
+</div>
+
+</div>
 
 </div> 
 
@@ -105,8 +121,8 @@ class="text-warning e-get">
 
 <a href="#"
 data-callback="$('#modal').modal('show');" 
-data-shell="#modalContent" data-show=""
-class="text-info e-get"><span class="glyphicon glyphicon-random"> </span> Fork </a>
+data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
+class="text-info e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
 <a  href="#"
 data-callback="$('#bigModal').modal('show');" 
@@ -147,9 +163,6 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
-
-
-
 
 
 

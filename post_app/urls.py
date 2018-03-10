@@ -18,8 +18,12 @@ urlpatterns = [
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
 
     url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assigments'),
+    url(r'^post-worker-information/(?P<peer_id>.+)/(?P<post_id>.+)/', views.PostWorkerInformation.as_view(), name='post-worker-information'),
     url(r'^post-tag-information/(?P<tag_id>.+)/(?P<post_id>.+)/', views.PostTagInformation.as_view(), name='post-tag-information'),
 
+    url(r'^manage-post-workers/(?P<post_id>.+)/', views.ManagePostWorkers.as_view(), name='manage-post-workers'),
+    url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
+    url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
     url(r'^setup-post-filter/(?P<timeline_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
     url(r'^setup-global-posts-filter/', views.SetupGlobalPostFilter.as_view(), name='setup-global-post-filter'),
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
@@ -31,8 +35,6 @@ urlpatterns = [
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
 
 ]
-
-
 
 
 

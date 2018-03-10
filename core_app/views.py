@@ -529,9 +529,8 @@ class ListAllTasks(GuardianView):
         user=me, organization=me.default)
 
         form        = forms.GlobalTaskFilterForm(instance=filter)
-
-        posts = Post.get_allowed_posts(me)
-        assignments = posts.filter(task=True)
+        assignments = me.assignments.filter(
+        ancestor__organization=me.default)
 
         tasks = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
@@ -558,8 +557,7 @@ class ListAllTasks(GuardianView):
 
     def post(self, request):
         me          = User.objects.get(id=self.user_id)
-        posts       = Post.get_allowed_posts(me)
-        assignments = posts.filter(task=True)
+        assignments = me.assignments.filter(ancestor__organization=me.default)
 
         tasks = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
@@ -707,7 +705,6 @@ class AllSeen(GuardianView):
         for ind in events:
             ind.seen(user)
         return redirect('core_app:list-events')
-
 
 
 

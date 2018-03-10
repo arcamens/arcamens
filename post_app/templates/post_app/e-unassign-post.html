@@ -3,22 +3,24 @@
 
 {% block content %}
 
-Post <span style="color:red"> <span class="glyphicon glyphicon-file"></span>
-{{event.post_label}}</span> deleted on timeline
-
-<a class="e-get"
-data-shell="#main-view"
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
-<span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
-
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
-<span class="glyphicon glyphicon-user"></span>
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} </a> unassigned from
 
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label}} </a>  by 
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
+
 
 
 
