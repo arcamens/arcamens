@@ -86,6 +86,11 @@ class SwitchOrganization(AuthenticatedView):
             'subscribe organization%s' % user.default.id, 0, False)
 
         user.save()
+        # When user updates organization, it tells all the other
+        # tabs to restart the UI.
+        ws.client.publish('user%s' % user.id, 
+            'restart', 0, False)
+
         return redirect('core_app:index')
 
 class UpdateUserInformation(GuardianView):
@@ -150,6 +155,7 @@ class UpdateOrganization(GuardianView):
                 {'organization': record, 'form': form})
 
         form.save()
+
         return redirect('core_app:index')
 
 class DeleteOrganization(GuardianView):
@@ -740,6 +746,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 
