@@ -11,8 +11,51 @@ Available {{timeline.name}}'s users </h5>
 </div>
 
 <div class="modal-body">
-{% include 'timeline_app/manage-timeline-users-list-choices.html' %}
+<div class="pre-scrollable">
+<table class="table table-condensed table-bordered">
 
+{% for ind in included %}
+<tr id="user-choice-{{ind.id}}" style="font-size:80%">
+<td style="width:70px;height:80">
+<img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
+</td>
+
+<td> 
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
+
+<p><a href="#"> {{ind.email}} </a> </p>
+
+<a class="e-get" style="color:red"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Remove</a>  
+
+</td>
+</tr>
+{% endfor %}
+
+{% for ind in excluded %}
+<tr id="user-choice-{{ind.id}}" style="font-size:80%">
+<td style="width:70px;height:80">
+     <img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
+</td>
+<td> 
+<span class="glyphicon glyphicon-user"></span> {{ind.name}}  
+
+<p><a href="#"> {{ind.email}} </a> </p>
+
+<a class="e-get"
+data-callback="$('#user-choice-{{ind.id}}').remove();"
+data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> Bind </a> 
+
+</td>
+{% endfor %}
+
+</table>
+</div>
+
+<br>
 
 <form id="bind-timeline-search-form" enctype="multipart/form-data">
 {% csrf_token %}
@@ -33,13 +76,5 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-
-
-
-
-
-
-
 
 
