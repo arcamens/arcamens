@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models.functions import Concat
-from django.db.models import Q, F, Exists, OuterRef
+from django.db.models import Q, F, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
@@ -742,7 +742,7 @@ class ManageCardWorkers(GuardianView):
         included = card.workers.all()
         excluded = me.default.users.exclude(tasks=card)
         total = included.count() + excluded.count()
-        
+
         return render(request, 'card_app/manage-card-workers.html', 
         {'included': included, 'excluded': excluded, 'card': card,
         'me': me, 'organization': me.default, 'total': total, 
@@ -1055,6 +1055,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 
