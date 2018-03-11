@@ -18,8 +18,7 @@ Available {{post.label|truncatechars:"60"}} post's workers </h5>
 {{ind.name}}  
 <br>
 
-<a href="#">  
-<small> {{ind.email}} </small> </a>  <br>
+<small> {{ind.email}} </small>   <br>
 <b style="font-size:60%"> All post/tasks: {{ind.assignments.count}}
 </b>
 
@@ -40,8 +39,7 @@ data-show="{% url 'post_app:unassign-post-user' post.id ind.id %}" href="#">
 {{ind.name}}  
 <br>
 
-<a href="#">  
-<small> {{ind.email}} </small> </a> 
+<small> {{ind.email}} </small>  
 <br>
 <b style="font-size:60%"> All post/tasks:: {{ind.assignments.count}}</b>
 <br>
@@ -90,6 +88,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 
