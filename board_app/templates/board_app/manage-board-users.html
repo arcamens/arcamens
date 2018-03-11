@@ -6,7 +6,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available {{board.name}}'s users </h5>
+Available board <span class="glyphicon glyphicon-th"></span> {{board.name|truncatechars:60}}'s users </h5>
 </div>
 
 <div class="modal-body">
@@ -78,6 +78,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 
