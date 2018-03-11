@@ -27,18 +27,25 @@ class CreatePostComment(GuardianView):
         if not form.is_valid():
             return render(request, 'comment_app/list-comments.html',
                 {'form': form, 'post':post, 'records': records}, status=400)
+
         record      = form.save(commit = False)
         record.post = post
         record.user = user
         record.save()
 
-        event = models.ECreatePostComment.objects.create(organization=user.default,
-        comment=record, post=post, user=user)
-
-        event.users.add(*post.ancestor.users.all())
+        event = models.ECreatePostComment.objects.create(
+        organization=user.default,comment=record, post=post, user=user)
+    
+        scope = post.ancestor.users.all() | post.workers.all()
+        event.users.add(*scope)
 
         ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+            'alert-event', 0, False)
+
+        # Just workers of the card will get notified through sound.
+        for ind in post.workers.values_list('id'):
+            ws.client.publish('user%s' % ind, 
+                'sound', 0, False)
 
         return redirect('comment_app:list-comments', 
 
@@ -52,6 +59,7 @@ class ECreatePostComment(GuardianView):
         event = models.ECreatePostComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

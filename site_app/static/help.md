@@ -10,11 +10,17 @@
 
 ### Post/tasks
 
+#### Post E-mail/Notifications
+
 ### Post/Attachments
 
 ### Post/Comments
 
 ### Post/Tags
+
+## Timeline/Filters
+
+## Post/Filters
 
 ##  Boards
 
@@ -26,15 +32,19 @@
 
 ### Card/Tasks
 
+#### Card E-mail/Notifications
+
 ### Card/Tags
 
 ### Card/Forks
 
-## Filters
+## Board/Filters
 
-### Task Filter
+## List/Filters
 
-### Content Filter
+### General Task/Filter
+
+### General Content/Filter
 
 # Business workflows
 
@@ -43,4 +53,5 @@
 ## Board Usage
 
 ## Timelines x Boards
+
 

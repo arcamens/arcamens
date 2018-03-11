@@ -1,9 +1,12 @@
 <script>
 function alertEvent() {
+    $('a.eventsButton').addClass('new-events');
+}
+
+function alertSound() {
     var audio = new Audio('/static/event-alert.mp3');
     audio.play();
 
-    $('a.eventsButton').addClass('new-events');
 }
 
 var wsbroker = '{{settings.WS_HOST}}';  // mqtt websocket enabled broker
@@ -62,10 +65,16 @@ function onMessageArrived(message) {
     } else if(args[0] == "restart") {
         location.reload();
         console.log('Restarting ...' + args);
+    } else if(args[0] == "alert-event") {
+        alertEvent();
+        console.log('Alert ...' + args);
+    } else if(args[0] == "alert-sound") {
+        alertSound();
+        console.log('Alert ...' + args);
     } else if(args[0] == 'sound') {
         alertEvent();
+        alertSound();
         console.log('Playinng sound!');
-
     }
 
 }
@@ -87,9 +96,5 @@ function start() {
 
 start()
 </script>
-
-
-
-
 
 
