@@ -23,7 +23,7 @@ Available board <span class="glyphicon glyphicon-th"></span> {{board.name|trunca
 <td> 
 <span class="glyphicon glyphicon-user"></span> {{ind.name}}  
 
-<p><a href="#"> {{ind.email}} </a> </p>
+<p> {{ind.email}} </a> </p>
 
 <a class="e-get" style="color:red"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
@@ -42,7 +42,7 @@ data-show="{% url 'board_app:unbind-board-user' board.id ind.id %}" href="#">
 <td> 
 <span class="glyphicon glyphicon-user"></span> {{ind.name}}  
 
-<p><a href="#"> {{ind.email}} </a> </p>
+<p> {{ind.email}}  </p>
 
 <a class="e-get"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
