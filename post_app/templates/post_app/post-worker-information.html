@@ -16,6 +16,25 @@ Assigned by <span class="glyphicon glyphicon-user"></span>
  at {{created}}
 </p>
 
+<p>
+<b> Cards/Tasks: {{peer.tasks.count}} </b>
+</p>
+
+<p>
+<b> Posts/Tasks: {{peer.assignments.count}} </b>
+</p>
+
+<p>
+<b> Total: {{peer.assignments.count|add:peer.tasks.count}} </b>
+</p>
+
+{% if not peer in post.ancestor.users.all %}
+<p class="text-warning"> *Not in 
+<span class="glyphicon glyphicon-eye-open"></span>
+{{post.ancestor.name}}*  </p>
+
+{% endif %}
+
 <a 
 data-show="{% url 'post_app:request-post-attention' peer.id post.id %}"
 data-shell="#modalContent" 
@@ -29,5 +48,6 @@ href="#"> Request attention through e-mail? </a>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
