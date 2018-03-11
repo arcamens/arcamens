@@ -17,15 +17,11 @@ Binded by <span class="glyphicon glyphicon-user"></span>
 </p>
 
 <p>
-<b> Cards/Tasks: {{peer.tasks.count}} </b>
+<b> Active/Tasks: {{active_tasks}} </b>
 </p>
 
 <p>
-<b> Posts/Tasks: {{peer.assignments.count}} </b>
-</p>
-
-<p>
-<b> Total: {{peer.assignments.count|add:peer.tasks.count}} </b>
+<b> Done/Tasks {{done_tasks}} </b>
 </p>
 
 {% if not peer in card.ancestor.ancestor.members.all %}
@@ -46,6 +42,7 @@ href="#"> Request attention through e-mail? </a>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

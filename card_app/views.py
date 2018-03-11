@@ -977,9 +977,18 @@ class CardWorkerInformation(GuardianView):
         event = models.EBindCardWorker.objects.filter(child__id=card_id,
         peer__id=peer_id).last()
 
+        active_posts = event.peer.assignments.filter(done=False)
+        done_posts = event.peer.assignments.filter(done=True)
+
+        active_cards = event.peer.tasks.filter(done=False)
+        done_cards = event.peer.tasks.filter(done=True)
+
+        active_tasks = active_posts.count() + active_cards.count()
+        done_tasks = done_posts.count() + done_cards.count()
+
         return render(request, 'card_app/card-worker-information.html', 
-        {'peer': event.peer, 'created': event.created, 
-        'user':event.user, 'card': event.child})
+        {'peer': event.peer, 'created': event.created, 'active_tasks': active_tasks,
+        'done_tasks': done_tasks, 'user':event.user, 'card': event.child})
 
 class RequestCardAttention(GuardianView):
     def get(self, request, peer_id, card_id):
@@ -1055,6 +1064,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

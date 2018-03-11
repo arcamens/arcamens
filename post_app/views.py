@@ -207,9 +207,19 @@ class PostWorkerInformation(GuardianView):
         event = EAssignPost.objects.filter(post__id=post_id,
         peer__id=peer_id).last()
 
+        active_posts = event.peer.assignments.filter(done=False)
+        done_posts = event.peer.assignments.filter(done=True)
+
+        active_cards = event.peer.tasks.filter(done=False)
+        done_cards = event.peer.tasks.filter(done=True)
+
+        active_tasks = active_posts.count() + active_cards.count()
+        done_tasks = done_posts.count() + done_cards.count()
+
         return render(request, 
         'post_app/post-worker-information.html',  
-        {'peer': event.peer, 'post': event.post, 
+        {'peer': event.peer, 'active_tasks': active_tasks, 
+         'post': event.post,  'done_tasks': done_tasks,
         'created': event.created, 'user':event.user})
 
 class PostTagInformation(GuardianView):
