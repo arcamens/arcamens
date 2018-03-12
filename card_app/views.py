@@ -701,13 +701,16 @@ class ManageCardRelations(GuardianView):
         included = card.relations.filter(done=False)
 
         cards = models.Card.get_allowed_cards(me)
+        total = cards.count()
         cards = cards.filter(done=False)
 
         excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
+        count = excluded.count() + included.count()
 
         return render(request, 'card_app/manage-card-relations.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':forms.CardSearchForm()})
+        {'included': included, 'excluded': excluded, 'card': card, 
+        'total': total, 'count': count, 'me': me, 
+        'organization': me.default,'form':forms.CardSearchForm()})
 
     def post(self, request, card_id):
         form = forms.CardSearchForm(request.POST)
@@ -721,6 +724,8 @@ class ManageCardRelations(GuardianView):
 
         included = card.relations.all()
         cards = models.Card.get_allowed_cards(me)
+        total = cards.count()
+
         excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
         included = models.Card.collect_cards(included, 
@@ -728,10 +733,11 @@ class ManageCardRelations(GuardianView):
 
         excluded = models.Card.collect_cards(excluded, 
         form.cleaned_data['pattern'], form.cleaned_data['done']) 
+        count = excluded.count() + included.count()
 
         return render(request, 'card_app/manage-card-relations.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,'form':form})
+        {'included': included, 'excluded': excluded, 'card': card, 
+        'count': count, 'total': total, 'me': me, 'form':form})
 
 
 class ManageCardWorkers(GuardianView):
@@ -1057,6 +1063,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 
