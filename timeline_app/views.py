@@ -389,39 +389,37 @@ class ManageTimelineUsers(GuardianView):
         timeline = Timeline.objects.get(id=timeline_id)
 
         included = timeline.users.all()
-        users = me.default.users.all()
+        users    = me.default.users.all()
         excluded = users.exclude(timelines=timeline)
+        total    = included.count() + excluded.count()
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'organization': me.default,'form':forms.UserSearchForm(), 
+        'count': total, 'total': total,})
 
     def post(self, request, timeline_id):
         form = forms.UserSearchForm(request.POST)
+        me   = User.objects.get(id=self.user_id)
 
-        me = User.objects.get(id=self.user_id)
         timeline = Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
         excluded = User.objects.exclude(timelines=timeline)
-
+        total = included.count() + excluded.count()
+        
         if not form.is_valid():
             return render(request, 'timeline_app/manage-timeline-users.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'timeline': timeline,
+                {'me': me, 'timeline': timeline, 'count': 0, 'total': total,
                         'form':forms.UserSearchForm()}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['name'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        included = User.collect_users(included, form.cleaned_data['name'])
+        excluded = User.collect_users(excluded, form.cleaned_data['name'])
+        count = included.count() + excluded.count()
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
-        'me': me, 'organization': me.default,'form':form})
-
-
-
+        'me': me, 'organization': me.default,'form':form, 
+        'count': count, 'total': total,})
 
 
 

@@ -7,7 +7,9 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available timeline <span class="glyphicon glyphicon-eye-open"></span> {{timeline.name|truncatechars:60}}'s users </h5>
+Available timeline <span class="glyphicon glyphicon-eye-open"></span> {{timeline.name|truncatechars:60}}'s users 
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
 </div>
 
 <div class="modal-body">
@@ -67,7 +69,7 @@ data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href=
 <div class="modal-footer">
 
 <button  type="button" data-form="#bind-timeline-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="manageTimelineUsersSearch"
 data-shell-error="#modalContent" data-show="{% url 'timeline_app:manage-timeline-users' timeline.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -76,6 +78,16 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
+<script>
+$('#id_name').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#manageTimelineUsersSearch').click();
+        return false;
+    }
+});
+</script>
+
 
 
 

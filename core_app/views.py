@@ -193,7 +193,7 @@ class ListUsers(GuardianView):
         form  = forms.UserFilterForm(instance=filter)
 
         return render(request, 'core_app/list-users.html', 
-        {'users': users, 'owner': organization.owner, 'total': count, 
+        {'users': users, 'owner': organization.owner, 'total': total, 
         'form': form, 'count': count, 'organization': organization})
 
     def post(self, request, organization_id):
@@ -744,6 +744,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 

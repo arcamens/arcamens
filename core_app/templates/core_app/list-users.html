@@ -12,7 +12,7 @@ data-show="{% url 'core_app:invite-organization-user' organization.id %}">
 <span class="glyphicon glyphicon-plus"></span> </a>
 
 {{organization.name}}'s Members  
-<span class="badge">{{users.count}}/{{total.count}}</span> </h4>
+<span class="badge">{{count}}/{{total}}</span> </h4>
 
 {% endblock %}
 </div>
@@ -91,4 +91,5 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
