@@ -181,47 +181,45 @@ class ListUsers(GuardianView):
     def get(self, request, organization_id):
         me           = User.objects.get(id=self.user_id)
         organization = Organization.objects.get(id=organization_id)
-        total        = organization.users.all()
         filter, _    = UserFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        total = organization.users.all()
+        users = organization.users.all()
+        total = users.count()
 
-        users = total.filter(Q(
-        name__contains=filter.pattern) | Q(
-        email__contains=filter.pattern))
+        users = User.collect_users(users, filter.pattern)
+        count = users.count()
 
         form  = forms.UserFilterForm(instance=filter)
 
         return render(request, 'core_app/list-users.html', 
-        {'users': users, 'owner': organization.owner, 'total': total, 'form': form,
-        'organization': organization})
+        {'users': users, 'owner': organization.owner, 'total': count, 
+        'form': form, 'count': count, 'organization': organization})
 
     def post(self, request, organization_id):
         me           = User.objects.get(id=self.user_id)
         organization = Organization.objects.get(id=organization_id)
 
-        total        = organization.users.all()
         filter, _    = UserFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        total = organization.users.all()
+        users = organization.users.all()
+        total = users.count()
+
         form  = forms.UserFilterForm(request.POST, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-users.html', 
-                {'users': total, 'owner': organization.owner, 
+                {'count': 0, 'owner': organization.owner, 
                     'total': total, 'form': form,
                         'organization': organization}, status=400)
   
         form.save()
-
-        users = total.filter(Q(
-        name__contains=filter.pattern) | Q(
-        email__contains=filter.pattern))
+        users = User.collect_users(users, filter.pattern)
+        count = users.count()
 
         return render(request, 'core_app/list-users.html', 
-        {'users': users, 'owner': organization.owner, 
+        {'users': users, 'owner': organization.owner, 'count': count,
         'total': total, 'form': form, 'organization': organization})
 
 class ManageUserTags(GuardianView):
@@ -746,6 +744,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 

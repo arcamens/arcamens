@@ -1,10 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
+from core_app.utils import splittokens
 from slock.models import BasicUser
 from paybills.models import Service
 from django.db.models import Q
 from functools import reduce
+from functools import reduce
+import operator
 from django.db import models
 import operator
 from datetime import datetime
@@ -102,6 +105,18 @@ class User(UserMixin, BasicUser):
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)
     expiration = models.DateField(null=True)
+
+    @classmethod
+    def collect_users(cls, users, pattern):
+        chks, tags = splittokens(pattern)
+
+        for ind in tags:
+            users = users.filter(Q(tags__name__startswith=ind))
+
+        users = users.filter(reduce(operator.and_, 
+        (Q(name__contains=ind) | Q(email__contains=ind) 
+        for ind in chks))) if chks else users
+        return users
 
     def __str__(self):
         return self.name
@@ -266,6 +281,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
