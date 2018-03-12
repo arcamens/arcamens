@@ -550,8 +550,8 @@ class ListAllTasks(GuardianView):
         filter.pattern, filter.done)
 
         count = posts.count() + cards.count()
-        cards = cards.values('done', 'label', 'id')
-        posts = posts.values('done', 'label', 'id')
+        cards = cards.only('done', 'label', 'id')
+        posts = posts.only('done', 'label', 'id')
 
         # If i instantiate the form here it stops working
         # correctly when filtering the cards/posts
@@ -591,8 +591,8 @@ class ListAllTasks(GuardianView):
         filter.pattern, filter.done)
 
         count = posts.count() + cards.count()
-        cards = cards.values('done', 'label', 'id')
-        posts = posts.values('done', 'label', 'id')
+        cards = cards.only('done', 'label', 'id')
+        posts = posts.only('done', 'label', 'id')
 
         tasks = chain(cards, posts)
 
@@ -744,6 +744,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 
