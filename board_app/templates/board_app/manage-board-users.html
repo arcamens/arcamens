@@ -6,7 +6,9 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available board <span class="glyphicon glyphicon-th"></span> {{board.name|truncatechars:60}}'s users </h5>
+Available board <span class="glyphicon glyphicon-th"></span> {{board.name|truncatechars:60}}'s users 
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
 </div>
 
 <div class="modal-body">
@@ -69,7 +71,7 @@ data-show="{% url 'board_app:bind-board-user' board.id ind.id %}" href="#">
 <div class="modal-footer">
 
 <button  type="button" data-form="#bind-board-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="manageBoardUsersSearch"
 data-shell-error="#modalContent" data-show="{% url 'board_app:manage-board-users' board.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -79,6 +81,13 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
 
-
+<script>
+$('#id_name').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#manageBoardUsersSearch').click();
+        return false;
+    }
+});
+</script>
 
 

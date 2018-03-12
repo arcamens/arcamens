@@ -136,13 +136,15 @@ class ManageBoardUsers(GuardianView):
         board = Board.objects.get(id=board_id)
 
         included = board.members.all()
-
         users = me.default.users.all()
         excluded = users.exclude(boards=board)
 
+        total = included.count() + excluded.count()
+
         return render(request, 'board_app/manage-board-users.html', 
         {'included': included, 'excluded': excluded, 'board': board,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'count': total, 'total': total, 
+        'form':forms.UserSearchForm()})
 
     def post(self, request, board_id):
         form = forms.UserSearchForm(request.POST)
@@ -153,22 +155,20 @@ class ManageBoardUsers(GuardianView):
 
         users = me.default.users.all()
         excluded = users.exclude(boards=board)
+        total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'board_app/manage-board-users.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'board': board,
+                {'me': me, 'board': board, 'total': total, 'count': 0,
                         'form':forms.UserSearchForm()}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['name'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        included = User.collect_users(included, form.cleaned_data['name'])
+        excluded = User.collect_users(excluded, form.cleaned_data['name'])
+        count = included.count() + excluded.count()
 
         return render(request, 'board_app/manage-board-users.html', 
         {'included': included, 'excluded': excluded, 'board': board,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'total': total, 'count': count, 'form':form})
 
 class PasteLists(GuardianView):
     def get(self, request, board_id):
@@ -337,6 +337,7 @@ class UnbindBoardUser(GuardianView):
             'sound', 0, False)
 
         return HttpResponse(status=200)
+
 
 
 
