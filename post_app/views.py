@@ -277,10 +277,12 @@ class ManagePostWorkers(GuardianView):
 
         included = post.workers.all()
         excluded = me.default.users.exclude(assignments=post)
+        total    = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'count': total, 'total': total, 'me': me, 
+        'form':forms.UserSearchForm()})
 
     def post(self, request, post_id):
         form = forms.UserSearchForm(request.POST)
@@ -289,22 +291,20 @@ class ManagePostWorkers(GuardianView):
         post = models.Post.objects.get(id=post_id)
         included = post.workers.all()
         excluded = me.default.users.exclude(assignments=post)
+        total    = included.count() + excluded.count()
 
         if not form.is_valid():
-            return render(request, 'post_app/manage-post-workers.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'post': post,
-                        'form':forms.UserSearchForm()}, status=400)
+            return render(request, 'post_app/manage-post-workers.html',  
+                {'me': me, 'total': total, 'count': 0, 'post': post, 
+                    'form':form}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['pattern'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['pattern'])
+        included = User.collect_users(included, form.cleaned_data['pattern'])
+        excluded = User.collect_users(excluded, form.cleaned_data['pattern'])
+        count = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm()})
+        'me': me, 'form':form, 'total': total, 'count': 0,})
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
@@ -577,6 +577,7 @@ class AlertPostWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

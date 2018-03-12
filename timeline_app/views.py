@@ -410,7 +410,7 @@ class ManageTimelineUsers(GuardianView):
         if not form.is_valid():
             return render(request, 'timeline_app/manage-timeline-users.html', 
                 {'me': me, 'timeline': timeline, 'count': 0, 'total': total,
-                        'form':forms.UserSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         included = User.collect_users(included, form.cleaned_data['name'])
         excluded = User.collect_users(excluded, form.cleaned_data['name'])
