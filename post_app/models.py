@@ -58,10 +58,10 @@ class PostMixin(object):
         posts = posts.filter(Q(done=done))
 
         for ind in tags:
-            posts = posts.filter(Q(tags__name__startswith=ind))
+            posts = posts.filter(Q(tags__name__istartswith=ind))
 
         posts = posts.filter(reduce(operator.and_, 
-        (Q(label__contains=ind) | Q(user__name__contains=ind) 
+        (Q(label__icontains=ind) | Q(user__name__icontains=ind) 
         for ind in chks))) if chks else posts
 
         return posts
@@ -274,6 +274,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

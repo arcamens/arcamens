@@ -111,10 +111,10 @@ class User(UserMixin, BasicUser):
         chks, tags = splittokens(pattern)
 
         for ind in tags:
-            users = users.filter(Q(tags__name__startswith=ind))
+            users = users.filter(Q(tags__name__istartswith=ind))
 
         users = users.filter(reduce(operator.and_, 
-        (Q(name__contains=ind) | Q(email__contains=ind) 
+        (Q(name__icontains=ind) | Q(email__icontains=ind) 
         for ind in chks))) if chks else users
         return users
 
@@ -281,6 +281,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
