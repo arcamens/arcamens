@@ -759,23 +759,16 @@ class ManageCardWorkers(GuardianView):
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-workers.html', 
-                {'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 'card': card,
-                        'form':forms.UserSearchForm(), 'total': total,
-                            'count': total,}, status=400)
+                {'me': me, 'card': card, 'form':form, 'total': total, 
+                    'count': total,}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['pattern'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['pattern'])
-
+        included = User.collect_users(included, form.cleaned_data['pattern'])
+        excluded = User.collect_users(excluded, form.cleaned_data['pattern'])
         count = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-workers.html', 
         {'included': included, 'excluded': excluded, 'card': card, 'total': total,
-        'count': count, 'me': me, 'organization': me.default,
-        'form':forms.UserSearchForm()})
+        'count': count, 'me': me, 'form':form})
 
 class UnbindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
@@ -1064,6 +1057,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 
