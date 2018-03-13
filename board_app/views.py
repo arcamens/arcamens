@@ -187,8 +187,7 @@ class PasteLists(GuardianView):
 
         clipboard.lists.clear()
 
-        ws.client.publish('board%s' % board.id, 
-            'sound', 0, False)
+        board.ws_sound()
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -214,8 +213,7 @@ class UpdateBoard(GuardianView):
         board=record, user=me)
         event.users.add(*record.members.all())
 
-        ws.client.publish('board%s' % record.id, 
-            'sound', 0, False)
+        record.ws_sound()
 
         return redirect('list_app:list-lists', 
         board_id=record.id)
@@ -245,8 +243,7 @@ class DeleteBoard(GuardianView):
         board_name=board.name, user=user)
         event.users.add(*board.members.all())
 
-        ws.client.publish('board%s' % board.id, 
-            'sound', 0, False)
+        board.ws_sound()
 
         board.delete()
 
@@ -302,14 +299,14 @@ class BindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
-        ws.client.publish('board%s' % board.id, 
-            'sound', 0, False)
+        board.ws_sound()
 
         ws.client.publish('user%s' % user.id, 
             'subscribe board%s' % board.id, 0, False)
 
         ws.client.publish('user%s' % user.id, 
             'sound', 0, False)
+
 
         return HttpResponse(status=200)
 
@@ -327,8 +324,7 @@ class UnbindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
-        ws.client.publish('board%s' % board.id, 
-            'sound', 0, False)
+        board.ws_sound()
 
         ws.client.publish('user%s' % user.id, 
             'unsubscribe board%s' % board.id, 0, False)
@@ -337,6 +333,7 @@ class UnbindBoardUser(GuardianView):
             'sound', 0, False)
 
         return HttpResponse(status=200)
+
 
 
 

@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from core_app import ws
 
 class PinMixin(object):
     def get_absolute_url(self):
@@ -21,6 +22,14 @@ class PinMixin(object):
             return self.list.name
 
 class BoardMixin:
+    def ws_alert(self):
+        ws.client.publish('board%s' % self.id, 
+            'alert-event', 0, False)
+
+    def ws_sound(self):
+        ws.client.publish('board%s' % self.id, 
+            'sound', 0, False)
+
     @classmethod
     def get_user_boards(cls, user):
         boards = user.boards.filter(organization=user.default)
@@ -40,4 +49,5 @@ class EUpdateBoardMixin(object):
 
 class ECreateBoardMixin(object):
     pass
+
 
