@@ -35,12 +35,11 @@ href="#" >
 <form id="find-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
 
-{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.pattern  size='md'  %}
 
-{% bootstrap_field form.type  size='md' %}
+{% bootstrap_field form.type   %}
 
-{% bootstrap_field form.done  size='md' %}
-
+{% bootstrap_field form.done  size='md'  %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -66,6 +65,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 
