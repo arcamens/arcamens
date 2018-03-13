@@ -568,14 +568,6 @@ class ListAllTasks(GuardianView):
         user=me, organization=me.default)
 
         form = forms.GlobalTaskFilterForm(request.POST, instance=filter)
-
-        if not form.is_valid():
-            return render(request, 'core_app/list-all-tasks.html', 
-                {'form': form, 'total': 0,
-                    'count': 0}, status=400)
-
-        form.save()
-
         posts = me.assignments.filter(ancestor__organization=me.default)
 
         cards = me.tasks.filter(
@@ -583,6 +575,12 @@ class ListAllTasks(GuardianView):
 
         total = posts.count() + cards.count()
 
+        if not form.is_valid():
+            return render(request, 'core_app/list-all-tasks.html', 
+                {'form': form, 'total': total,
+                    'count': 0}, status=400)
+
+        form.save()
 
         cards = Card.collect_cards(cards, 
         filter.pattern, filter.done)
@@ -607,29 +605,20 @@ class Find(GuardianView):
         user=me, organization=me.default)
         form  = forms.GlobalFilterForm(instance=filter)
 
-        total, elems = self.on_posts(me, filter) \
-        if filter.type == 'P' else self.on_cards(me, filter)
+        posts = Post.get_allowed_posts(me)
+        cards = Card.get_allowed_cards(me)
+        total = posts.count() + cards.count()
 
-        count = elems.count()
+        posts = Post.collect_posts(posts, filter.pattern, filter.done)
+        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        count = posts.count() + cards.count()
+
+        cards = cards.only('done', 'label', 'id')
+        posts = posts.only('done', 'label', 'id')
+        elems = chain(cards, posts)
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'elems':  elems, 'total': total, 'count': count})
-
-    def on_posts(self, me, filter):
-        posts = Post.get_allowed_posts(me)
-        total = posts.count()
-        posts = Post.collect_posts(posts, filter.pattern, filter.done)
-
-        posts = posts.only('done', 'label', 'id')
-        return total, posts
-
-    def on_cards(self, me, filter):
-        cards = Card.get_allowed_cards(me)
-        total = cards.count()
-        cards = Card.collect_cards(cards, filter.pattern, filter.done)
-        cards = cards.only('done', 'label', 'id')
-
-        return total, cards
 
     def post(self, request):
         me        = User.objects.get(id=self.user_id)
@@ -638,16 +627,22 @@ class Find(GuardianView):
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
 
-        # If the form is not valid then prints nothing.
+        posts = Post.get_allowed_posts(me)
+        cards = Card.get_allowed_cards(me)
+        total = posts.count() + cards.count()
+
         if not form.is_valid():
             return render(request, 'core_app/find.html', 
-                {'form': form, }, status=400)
+                {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
 
-        total, elems = self.on_posts(me, filter) \
-        if filter.type == 'P' else self.on_cards(me, filter)
+        posts = Post.collect_posts(posts, filter.pattern, filter.done)
+        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        count = posts.count() + cards.count()
 
-        count = elems.count()
+        cards = cards.only('done', 'label', 'id')
+        posts = posts.only('done', 'label', 'id')
+        elems = chain(cards, posts)
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'elems':  elems, 'total': total, 'count': count})
@@ -744,6 +739,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 

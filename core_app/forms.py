@@ -39,10 +39,6 @@ class GlobalFilterForm(forms.ModelForm):
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
-        widgets = {
-            'type':  forms.RadioSelect(),
-        }
-
 class GlobalTaskFilterForm(forms.ModelForm):
     class Meta:
         model  = models.GlobalTaskFilter
@@ -62,6 +58,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 

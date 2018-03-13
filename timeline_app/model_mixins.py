@@ -1,9 +1,17 @@
 from django.core.urlresolvers import reverse
+from core_app import ws
 
 class TimelineMixin(object):
     """
     Mixins.
     """
+    def ws_alert(self):
+        ws.client.publish('timeline%s' % self.id, 
+            'alert-event', 0, False)
+
+    def ws_sound(self):
+        ws.client.publish('timeline%s' % self.id, 
+            'sound', 0, False)
 
     @classmethod
     def get_user_timelines(cls, user):
@@ -25,6 +33,7 @@ class ECreateTimelineMixin(object):
 
 class EBindTimelineUserMixin(object):
     pass
+
 
 
 

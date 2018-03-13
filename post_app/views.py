@@ -1,6 +1,6 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
-PostFilter, GlobalPostFilter, ECutPost, EArchivePost
+PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User
 from django.shortcuts import render, redirect
@@ -95,9 +95,7 @@ class CreatePost(GuardianView):
         users = ancestor.users.all()
         event.users.add(*users)
 
-        ws.client.publish('timeline%s' % ancestor.id, 
-            'sound', 0, False)
-
+        post.ancestor.ws_sound()
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor_id)
@@ -127,8 +125,7 @@ class UpdatePost(GuardianView):
         # is on a timeline whose worker is not on.
         event.users.add(*record.workers.all())
 
-        ws.client.publish('timeline%s' % record.ancestor.id, 
-            'sound', 0, False)
+        record.ancestor.ws_sound()
 
         return redirect('post_app:post', 
         post_id=record.id)
@@ -186,8 +183,7 @@ class DeletePost(GuardianView):
         ancestor = post.ancestor
         post.delete()
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
@@ -234,19 +230,23 @@ class UnassignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
         user = User.objects.get(id=user_id)
         post = models.Post.objects.get(id=post_id)
-        post.workers.remove(user)
-        post.save()
+        me   = User.objects.get(id=self.user_id)
 
-        me = User.objects.get(id=self.user_id)
+        post.ancestor.ws_sound()
 
         event = EUnassignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
+
         event.users.add(*post.ancestor.users.all())
+        
+        # As posts can be assigned to users off the timeline.
+        # We make sure them get the evvent.
+        event.users.add(*post.workers.all())
         event.save()
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.workers.remove(user)
+        post.save()
 
         return HttpResponse(status=200)
 
@@ -254,21 +254,22 @@ class AssignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
         user = User.objects.get(id=user_id)
         post = models.Post.objects.get(id=post_id)
+        me = User.objects.get(id=self.user_id)
+
         post.workers.add(user)
         post.save()
-        me = User.objects.get(id=self.user_id)
 
         event = EAssignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
+
         event.users.add(*post.ancestor.users.all())
+        event.users.add(*post.workers.all())
         event.save()
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return HttpResponse(status=200)
-
 
 class ManagePostWorkers(GuardianView):
     def get(self, request, post_id):
@@ -358,8 +359,7 @@ class CutPost(GuardianView):
         timeline      = post.ancestor
 
         # Should have an event, missing creating event.
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         post.ancestor = None
         post.save()
@@ -387,9 +387,12 @@ class CopyPost(GuardianView):
         user=user, organization=user.default)
         clipboard.posts.add(copy)
 
-        # should have event, missing creation of event.
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        event = ECopyPost.objects.create(organization=user.default,
+        timeline=post.ancestor, post=post, user=user)
+        users = post.ancestor.users.all()
+        event.users.add(*users)
+
+        post.ancestor.ws_sound()
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -409,9 +412,7 @@ class Done(GuardianView):
         users = post.ancestor.users.all()
         event.users.add(*users)
 
-        # Missing event.
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return redirect('post_app:post', 
         post_id=post.id)
@@ -467,8 +468,7 @@ class UnbindPostTag(GuardianView):
         event.users.add(*post.ancestor.users.all())
         event.save()
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return HttpResponse(status=200)
 
@@ -487,8 +487,7 @@ class BindPostTag(GuardianView):
         event.users.add(*post.ancestor.users.all())
         event.save()
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return HttpResponse(status=200)
 
@@ -507,8 +506,7 @@ class Undo(GuardianView):
 
         user = User.objects.get(id=self.user_id)
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return redirect('post_app:post', 
         post_id=post.id)
@@ -577,6 +575,7 @@ class AlertPostWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

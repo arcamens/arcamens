@@ -8,11 +8,18 @@ from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
 from core_app.utils import splittokens
 from functools import reduce
+from core_app import ws
 import operator
 
 # Create your models here.
 
 class PostMixin(object):
+    def ws_alert(self):
+        pass
+
+    def ws_sound(self):
+        pass
+
     def get_absolute_url(self):
         return reverse('post_app:post', 
         kwargs={'post_id': self.id})
@@ -207,6 +214,13 @@ class ECutPost(ECutPostMixin, Event):
     related_name='e_cut_post1', blank=True)
     html_template = 'post_app/e-cut-post.html'
 
+class ECopyPost(ECutPostMixin, Event):
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_copy_post', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_copy_post1', blank=True)
+    html_template = 'post_app/e-copy-post.html'
 
 class EUpdatePost(EUpdatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
@@ -274,6 +288,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

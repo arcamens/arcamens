@@ -221,8 +221,6 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
 
-    type = models.CharField(max_length=1, choices=CHOICES, default='C')
-
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards/posts?.')
 
@@ -281,6 +279,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

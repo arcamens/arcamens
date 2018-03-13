@@ -39,16 +39,9 @@ class CreatePostComment(GuardianView):
         scope = post.ancestor.users.all() | post.workers.all()
         event.users.add(*scope)
 
-        ws.client.publish('timeline%s' % post.ancestor.id, 
-            'alert-event', 0, False)
-
-        # Just workers of the card will get notified through sound.
-        for ind in post.workers.values_list('id'):
-            ws.client.publish('user%s' % ind, 
-                'sound', 0, False)
+        post.ancestor.ws_sound()
 
         return redirect('comment_app:list-comments', 
-
         post_id=post.id)
 
 class ECreatePostComment(GuardianView):
@@ -59,6 +52,7 @@ class ECreatePostComment(GuardianView):
         event = models.ECreatePostComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
