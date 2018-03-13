@@ -71,11 +71,8 @@ class CreateBoard(GuardianView):
         event.users.add(user)
         event.save()
 
-        ws.client.publish('user%s' % user.id, 
-            'subscribe board%s' % board.id, 0, False)
-
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
+        user.ws_subscribe_board(board.id)
+        user.ws_sound()
 
         return redirect('board_app:list-boards')
 
@@ -243,6 +240,8 @@ class DeleteBoard(GuardianView):
         board_name=board.name, user=user)
         event.users.add(*board.members.all())
 
+        # Need to unsubscribe or it may misbehave.
+        user.ws_unsubscribe_board(board.id)
         board.ws_sound()
 
         board.delete()
@@ -301,12 +300,8 @@ class BindBoardUser(GuardianView):
 
         board.ws_sound()
 
-        ws.client.publish('user%s' % user.id, 
-            'subscribe board%s' % board.id, 0, False)
-
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
-
+        user.ws_subscribe_board(board.id)
+        user.ws_sound()
 
         return HttpResponse(status=200)
 
@@ -326,11 +321,8 @@ class UnbindBoardUser(GuardianView):
 
         board.ws_sound()
 
-        ws.client.publish('user%s' % user.id, 
-            'unsubscribe board%s' % board.id, 0, False)
-
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
+        user.ws_unsubscribe_board(board.id)
+        user.ws_sound()
 
         return HttpResponse(status=200)
 

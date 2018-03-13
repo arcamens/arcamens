@@ -90,22 +90,10 @@ class CreateTimeline(GuardianView):
         event = ECreateTimeline.objects.create(organization=user.default,
         timeline=record, user=user)
 
-        # Wondering if organization admins should be notified of this
-        # event. The same behavior for board creation too.
         event.users.add(user)
 
-        ws.client.publish('user%s' % user.id, 
-            'subscribe timeline%s' % record.id, 0, False)
-
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
-
-        # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # channel    = connection.channel()
-        
-        # channel.queue_bind(exchange=str(organization.id),
-        # queue=str(user.id), routing_key=str(record.id))
-        # connection.close()
+        user.ws_subscribe_timeline(record.id)
+        user.ws_sound()
 
         return redirect('timeline_app:list-timelines')
 
@@ -132,8 +120,8 @@ class DeleteTimeline(GuardianView):
         event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
-        ws.client.publish('timeline%s' % timeline.id, 
-            'sound', 0, False)
+        user.ws_unsubscribe_timeline(record.id)
+        user.ws_sound()
 
         # should tell users to unsubscribe here.
         # it may hide bugs.
@@ -155,20 +143,17 @@ class UnbindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        ws.client.publish('timeline%s' % timeline.id, 
-            'sound', 0, False)
+        timeline.ws_sound()
 
         # When user is removed from timline then it
         # gets unsubscribed from the timeline.
-        ws.client.publish('user%s' % user.id, 
-            'unsubscribe timeline%s' % timeline.id, 0, False)
+        user.ws_unsubscribe_timeline(timeline.id)
 
         # As said before, order of events cant be determined
         # when dispatched towards two queues. It might
         # happen of sound event being dispatched before subscribe event.
         # So, we warrant soud to happen.
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
+        user.ws_sound()
 
         return HttpResponse(status=200)
 
@@ -194,11 +179,7 @@ class UpdateTimeline(GuardianView):
 
         event.users.add(*record.users.all())
 
-        ws.client.publish('timeline%s' % record.id, 
-            'subscribe timeline%s' % record.id, 0, False)
-
-        ws.client.publish('timeline%s' % record.id, 
-            'sound', 0, False)
+        record.ws_sound()
 
         return redirect('timeline_app:list-posts', 
         timeline_id=record.id)
@@ -222,9 +203,8 @@ class PastePosts(GuardianView):
         event.users.add(*users)
         event.save()
 
-        ws.client.publish('timeline%s' % timeline.id, 
-            'sound', 0, False)
-    
+        timeline.ws_sound()
+
         clipboard.posts.clear()
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
@@ -291,24 +271,6 @@ class ListTimelines(CashierView):
         {'user': user, 'children': children, 'total': total,
         'organization':user.default, 'filter': filter})
 
-class UnbindUser(GuardianView):
-    def get(self, request, organization_id, user_id):
-        user = User.objects.get(id=user_id)
-
-        return redirect('timeline_app:list-users', 
-        organization_id=organization.id)
-
-class CheckEvent(GuardianView):
-    def get(self, request, user_id):
-        user = User.objects.get(
-        id=self.user_id)
-
-        try:
-            event = user.events.latest('id')
-        except Exception:
-            return HttpResponse(status=400)
-        return HttpResponse(str(event.id), status=200)
-
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
         user = User.objects.get(id=user_id)
@@ -324,11 +286,8 @@ class BindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        ws.client.publish('timeline%s' % timeline.id, 
-            'sound', 0, False)
-
-        ws.client.publish('user%s' % user.id, 
-            'subscribe timeline%s' % timeline.id, 0, False)
+        timeline.ws_sound()
+        user.ws_subscribe_timeline(timeline.id)
 
         # it seems i cant warrant the order the events will be dispatched
         # to the queue, if it is userid queue or timelineid queue
@@ -336,8 +295,7 @@ class BindTimelineUser(GuardianView):
         # user queue to warrant the event sound being dispatched.
         # obs: if i'll abandon sound when user interacts it is not
         # necessary.
-        ws.client.publish('user%s' % user.id, 
-            'sound', 0, False)
+        user.ws_sound()
 
         return HttpResponse(status=200)
 
@@ -420,6 +378,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 

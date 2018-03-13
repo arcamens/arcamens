@@ -7,12 +7,37 @@ from paybills.models import Service
 from django.db.models import Q
 from functools import reduce
 from functools import reduce
+from core_app import ws
 import operator
 from django.db import models
 import operator
 from datetime import datetime
 
 class UserMixin(object):
+    def ws_alert(self):
+        ws.client.publish('user%s' % self.id, 
+            'alert-event', 0, False)
+
+    def ws_sound(self):
+        ws.client.publish('user%s' % self.id, 
+            'sound', 0, False)
+
+    def ws_subscribe_board(self, id):
+        ws.client.publish('user%s' % self.id, 
+            'subscribe board%s' % id, 0, False)
+
+    def ws_unsubscribe_board(self, id):
+        ws.client.publish('user%s' % self.id, 
+            'unsubscribe board%s' % id, 0, False)
+
+    def ws_subscribe_timeline(self, id):
+        ws.client.publish('user%s' % self.id, 
+            'subscribe timeline%s' % id, 0, False)
+
+    def ws_unsubscribe_timeline(self, id):
+        ws.client.publish('user%s' % self.id, 
+            'unsubscribe timeline%s' % id, 0, False)
+
     def get_user_url(self):
         return reverse('core_app:user', 
         kwargs={'user_id': self.id})
@@ -279,6 +304,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 
