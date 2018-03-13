@@ -110,7 +110,3 @@ class EPasteList(Event, ECreateBoardMixin):
 
 
 
-
-
-
-
