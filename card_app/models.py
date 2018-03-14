@@ -52,7 +52,8 @@ class CardMixin(object):
             cards = cards.filter(Q(tags__name__istartswith=ind))
 
         cards = cards.filter(reduce(operator.and_, 
-        (Q(label__icontains=ind) | Q(owner__name__icontains=ind) 
+        (Q(label__icontains=ind) | Q(owner__name__icontains=ind) |
+        Q(data__icontains=ind)
         for ind in chks))) if chks else cards
 
         return cards
@@ -369,6 +370,7 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
 
 
 
