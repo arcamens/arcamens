@@ -1016,7 +1016,7 @@ class RequestCardAttention(GuardianView):
         user.name, user.email, url, form.cleaned_data['message'])
 
         send_mail('%s %s' % (user.default.name, 
-        user.name), msg, user.name, [peer.email], fail_silently=False)
+        user.name), msg, user.email, [peer.email], fail_silently=False)
         return redirect('card_app:card-worker-information', 
         peer_id=peer.id, card_id=card.id)
 
@@ -1059,10 +1059,11 @@ class AlertCardWorkers(GuardianView):
 
         for ind in card.workers.values_list('email'):
             send_mail('%s %s' % (user.default.name, 
-                user.name), msg, user.name, 
+                user.name), msg, user.email, 
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

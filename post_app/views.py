@@ -539,7 +539,7 @@ class RequestPostAttention(GuardianView):
         user.name, user.email, url, form.cleaned_data['message'])
 
         send_mail('%s %s' % (user.default.name, 
-        user.name), msg, user.name, [peer.email], fail_silently=False)
+        user.name), msg, user.email, [peer.email], fail_silently=False)
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
@@ -571,10 +571,11 @@ class AlertPostWorkers(GuardianView):
 
         for ind in post.workers.values_list('email'):
             send_mail('%s %s' % (user.default.name, 
-                user.name), msg, user.name, 
+                user.name), msg, user.email, 
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 
