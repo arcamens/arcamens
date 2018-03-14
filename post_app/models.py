@@ -74,7 +74,7 @@ class PostMixin(object):
         return posts
 
     def __str__(self):
-        return self.description
+        return self.label
 
 class PostFileWrapperMixin(object):
     def duplicate(self, post=None):
@@ -288,6 +288,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 
