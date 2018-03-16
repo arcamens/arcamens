@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from card_app.models import Card
 from post_app.models import Post
 from django.db.models import Q
+from jsim.jscroll import JScroll
 from django.urls import reverse
 from django.conf import settings
 from traceback import print_exc
@@ -698,8 +699,11 @@ class ListLogs(GuardianView):
         events = events.order_by('-created')
         count  = events.count()
         events = events.values('html')
+
+        events = JScroll(user.id, 'core_app/list-logs-scroll.html', events)
+
         return render(request, 'core_app/list-logs.html', 
-        {'user': user, 'form': form, 'events':events, 
+        {'user': user, 'form': form, 'events':events.as_div(), 
         'count': count,'organization': user.default})
 
 class AllSeen(GuardianView):
@@ -739,6 +743,7 @@ class Import(GuardianView):
             core_app.export.import_boards(user, file)
             return HttpResponse('OK')
         return HttpResponse('Fail')
+
 
 
 

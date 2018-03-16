@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load jscrolls %}
 {% load bootstrap3 %}
 
 <div class="modal-header">
@@ -11,14 +10,7 @@
 </div>
 
 <div class="modal-body">
-<div class="container-fluid pre-scrollable">
-{% for ind in events %}
-<p>
-{{ind.html | safe}}
-</p>
-{% endfor %}
-</div>
-
+{{ events | safe}}
 
 <hr>
 <form id="listLogsForm" enctype="multipart/form-data">
@@ -46,6 +38,7 @@ data-show="{% url 'core_app:list-logs'  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 
