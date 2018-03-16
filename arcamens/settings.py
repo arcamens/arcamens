@@ -74,7 +74,7 @@ INSTALLED_APPS = [
     'site_app', 
     'list_app', 
     'card_app', 
-    'jscrolls',
+    'jsim',
     'snippet_app',
     'note_app',
     'bootstrap3',
@@ -175,6 +175,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

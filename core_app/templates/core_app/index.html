@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {% load i18n %}
+{% load jsim %}
+
 <html lang="en">
 <head>
 <title>Arcamens</title>
@@ -17,8 +19,6 @@
 // <script src="/static/jquery-ui.js"> </script>
 -->
 
-<script src="/static/e-get.js"> </script>
-<script src="/static/e-post.js"> </script>
 <link rel="stylesheet" href="/static/main.css">
 
 {% include 'core_app/event-hooker.html' %}
@@ -44,6 +44,8 @@ $(function () {
 </head>
 
 <body>
+{% jsim %}
+
 <nav class="navbar navbar-inverse" style="background-color:#071152">
 <div class="container-fluid">
 <div class="navbar-header">
@@ -73,34 +75,10 @@ $(function () {
 <div id="main-view" class="container-fluid">
 </div>
 
-
-<div class="modal fade" id="modal" role="dialog">
-<div class="modal-dialog modal-sm">
-<div id="modalContent" class="modal-content">
-</div>
-</div>
-</div>
-
-<div class="modal fade" id="view-data-modal" role="dialog">
-<div class="modal-dialog modal-lg">
-<div id="view-data-modalContent" class="modal-content">
-</div>
-</div>
-</div>
-
-<div class="modal fade" id="bigModal" role="dialog">
-<div class="modal-dialog modal-lg">
-<div id="bigModalContent" class="modal-content">
-</div>
-</div>
-</div>
-
-{% include 'core_app/modal-error.html' %}
-{% include 'core_app/modal-wait.html' %}
-
 </body>
 
 </html>
+
 
 
 

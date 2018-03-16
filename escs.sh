@@ -366,8 +366,8 @@ git fetch -p
 ##############################################################################
 # create, first, release, test, tag.
 
-git tag -a 0.0.1 -m 'Initial release'
-git push origin : 0.0.1
+git tag -a 1.0.0 -m 'Initial release'
+git push origin : 1.0.0
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -595,6 +595,7 @@ git fetch -p
 git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
+
 
 
 
