@@ -364,10 +364,10 @@ git push origin :alpha
 git fetch -p 
 
 ##############################################################################
-# create, first, release, test, tag.
+# create releases.
 
-git tag -a 1.0.0 -m 'Initial release'
-git push origin : 1.0.0
+git tag -a 1.0.1 -m 'Getting list-logs view to work with pagination.'
+git push origin : 1.0.1
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -580,6 +580,12 @@ ps aux | grep mana
 # install django-slock
 
 cd ~/projects/django-slock-code
+python setup.py install
+rm -fr build
+##############################################################################
+# install django-jsim
+
+cd ~/projects/django-jsim-code
 python setup.py install
 rm -fr build
 

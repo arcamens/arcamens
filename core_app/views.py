@@ -616,10 +616,12 @@ class Find(GuardianView):
 
         cards = cards.only('done', 'label', 'id')
         posts = posts.only('done', 'label', 'id')
-        elems = chain(cards, posts)
+        elems = cards.union(posts).order_by('id')
+
+        elems = JScroll(me.id, 'core_app/find-scroll.html', elems)
 
         return render(request, 'core_app/find.html', 
-        {'form': form, 'elems':  elems, 'total': total, 'count': count})
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
     def post(self, request):
         me        = User.objects.get(id=self.user_id)
@@ -643,10 +645,11 @@ class Find(GuardianView):
 
         cards = cards.only('done', 'label', 'id')
         posts = posts.only('done', 'label', 'id')
-        elems = chain(cards, posts)
+        elems = cards.union(posts).order_by('id')
+        elems = JScroll(me.id, 'core_app/find-scroll.html', elems)
 
         return render(request, 'core_app/find.html', 
-        {'form': form, 'elems':  elems, 'total': total, 'count': count})
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
 
 class ListClipboard(GuardianView):
