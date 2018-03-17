@@ -31,8 +31,13 @@ urlpatterns = [
     url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
     url(r'^find/', views.Find.as_view(), name='find'),
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
+    url(r'^delete-all-clipboard/', views.DeleteAllClipboard.as_view(), name='delete-all-clipboard'),
+    url(r'^confirm-clipboard-deletion/', views.ConfirmClipboardDeletion.as_view(), name='confirm-clipboard-deletion'),
+
     url(r'^export/', views.Export.as_view(), name='export'),
     url(r'^import/', views.Import.as_view(), name='import'),
 
 ]
+
+
 

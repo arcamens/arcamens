@@ -357,8 +357,8 @@ git fetch -p
 git tag -a 1.0.1 -m 'Getting list-logs view to work with pagination.'
 git push origin : 1.0.1
 
-git tag -a 1.0.2 -m 'Getting list-logs view to work with pagination.'
-git push origin : 1.0.2
+git tag -a 1.0.3 -m 'Fixing bug with list_app.CreateView.'
+git push origin : 1.0.3
 
 ##############################################################################
 cd ~/projects/arcamens-code

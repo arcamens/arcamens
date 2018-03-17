@@ -747,16 +747,23 @@ class Import(GuardianView):
             return HttpResponse('OK')
         return HttpResponse('Fail')
 
+class ConfirmClipboardDeletion(GuardianView):
+    def get(self, request):
+        return render(request, 'core_app/confirm-clipboard-deletion.html')
 
+class DeleteAllClipboard(GuardianView):
+    def get(self, request):
+        user         = User.objects.get(id=self.user_id)
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
 
+        cards = clipboard.cards.all()
+        lists = clipboard.lists.all()
+        posts = clipboard.posts.all()
+        cards.delete()
+        lists.delete()
+        posts.delete()
 
-
-
-
-
-
-
-
-
+        return redirect('core_app:list-clipboard')
 
 
