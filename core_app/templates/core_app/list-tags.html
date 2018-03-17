@@ -43,15 +43,11 @@ No tags.
 </div>
 
 <div class="modal-footer">
-<button  type="button" 
-data-shell="#modalContent" 
-data-show="{% url 'core_app:update-organization' organization.id  %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<button  type="button" href="{% url 'core_app:update-organization' organization.id  %}"
+class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
-<button  type="button" data-form="#list-tag-search-form"
-data-shell="#modalContent" id="searchTags"
-data-show="{% url 'core_app:list-tags'  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+<button  type="button" data-form="#list-tag-search-form" id="searchTags"
+href="{% url 'core_app:list-tags'  %}" class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
@@ -67,6 +63,7 @@ $('#id_name').keypress(function(e){
     }
 });
 </script>
+
 
 
 

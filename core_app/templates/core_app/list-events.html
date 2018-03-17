@@ -31,16 +31,15 @@ Seen </a>
 
 <div class="modal-footer">
 <div class="pull-left">
-<a class="text-warning e-get"
-data-show="{% url 'core_app:all-seen' %}"
-data-shell="#modalContent"
-href="#"> <span class="glyphicon glyphicon-bell"></span> All seen?</a>
+<a class="text-warning s-modal" href="{% url 'core_app:all-seen' %}"> 
+<span class="glyphicon glyphicon-bell"></span> All seen?</a>
 </div>
 <br>
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

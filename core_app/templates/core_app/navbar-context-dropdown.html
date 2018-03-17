@@ -8,10 +8,8 @@
 
 
 <ul class="dropdown-menu">
-<li><a class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:create-organization' user.id %}" 
-data-callback="$('#modal').modal('show');" 
-href="#"> <span class="glyphicon glyphicon-plus"></span> 
+<li><a class="s-modal" href="{% url 'core_app:create-organization' user.id %}"> 
+<span class="glyphicon glyphicon-plus"></span> 
 {% trans "Organization" %}</a></li>
 
 {% if organizations %}
@@ -29,9 +27,9 @@ href="#"> <span class="glyphicon glyphicon-plus"></span>
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
 <span class="glyphicon glyphicon-user"></span> {{user.name}} 
 <span class="caret"></span></a>
+
 <ul class="dropdown-menu">
-<li><a class="e-get" data-shell="#modalContent" data-show="{% url 'core_app:update-user-information' %}"
-data-callback="$('#modal').modal('show');" href="#">
+<li><a class="s-modal" href="{% url 'core_app:update-user-information' %}">
 <span class="glyphicon glyphicon-edit"></span>{% trans "Settings" %}</a></li>
 
 <li class="divider"></li>
@@ -43,20 +41,14 @@ data-callback="$('#modal').modal('show');" href="#">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Upgrade" %}</a></li>
 
 <li class="divider"></li>
-<li class="hidden-xs"><a class="e-get" 
-data-show = "{% url 'core_app:list-clipboard' %}"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');"
-href="#"><span class="glyphicon glyphicon-magnet"></span> 
-{% trans "Clipboard" %}</a></li>
+
+<li><a class="s-modal" href = "{% url 'core_app:list-clipboard' %}">
+<span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 <li class="divider"></li>
 
 
 <li>
-<a href="#" 
-class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:list-logs'  %}" 
-data-callback="$('#modal').modal('show');">
+<a class="s-modal" href="{% url 'core_app:list-logs'  %}">
 <span class="glyphicon glyphicon-bell"></span> Logs 
 </a>
 </li>
@@ -68,6 +60,7 @@ data-callback="$('#modal').modal('show');">
 
 
 </ul>
+
 
 
 

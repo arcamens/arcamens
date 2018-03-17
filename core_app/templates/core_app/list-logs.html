@@ -32,21 +32,9 @@
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#listLogsForm"
-data-shell="#modalContent" 
-data-show="{% url 'core_app:list-logs'  %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+<button  type="button" data-form="#listLogsForm" href="{% url 'core_app:list-logs'  %}"
+class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 </div>
-
-
-
-
-
-
-
-
-
-
 
 

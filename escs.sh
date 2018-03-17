@@ -355,8 +355,7 @@ git push origin :gamma
 git fetch -p 
 
 ##############################################################################
-
-# delete, alpha, branch.
+# delete alpha branch.
 
 cd ~/projects/arcamens-code
 git branch -d alpha

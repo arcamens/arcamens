@@ -49,32 +49,16 @@ data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#">
 </div>
 
 <div class="modal-footer">
-<button  type="button" 
-data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' me.default.id  %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<button  type="button" href="{% url 'core_app:list-users' me.default.id  %}"
+class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
-<button  type="button" data-form="#bind-user-search-form" 
-data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+<button  type="button" data-form="#bind-user-search-form" href="{% url 'core_app:manage-user-tags' user.id  %}"
+class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <button type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 

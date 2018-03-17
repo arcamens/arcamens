@@ -32,10 +32,8 @@ Find Cards/Posts
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#find-card-search-form" 
-data-shell="#bigModalContent" id="filterAllData"
-data-shell-error="#bigModalContent" data-show="{% url 'core_app:find'  %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+<button  type="button" data-form="#find-card-search-form" id="filterAllData" href="{% url 'core_app:find'  %}"
+class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
@@ -49,6 +47,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 
