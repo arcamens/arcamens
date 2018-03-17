@@ -53,10 +53,11 @@ class CreateList(GuardianView):
 
     def post(self, request, board_id):
         form = forms.ListForm(request.POST)
+        board = Board.objects.get(id=board_id)
 
         if not form.is_valid():
             return render(request, 'list_app/create-list.html',
-                        {'form': form, }, status=400)
+                        {'form': form, 'board': board}, status=400)
 
 
         list          = form.save(commit=False)
@@ -226,6 +227,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 

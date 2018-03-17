@@ -7,7 +7,7 @@ rm -fr ~/projects/arcamens-code/static/media
 git status
 git add *
 git commit -a
-git push -u origin alpha
+git push -u origin staging
 ##############################################################################
 # push arcamens alpha branch.
 cd ~/projects/arcamens-code
@@ -600,6 +600,7 @@ git fetch -p
 git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
+
 
 
 

@@ -241,8 +241,8 @@ class DeleteBoard(GuardianView):
         event.users.add(*board.members.all())
 
         # Need to unsubscribe or it may misbehave.
-        user.ws_unsubscribe_board(board.id)
         board.ws_sound()
+        user.ws_unsubscribe_board(board.id)
 
         board.delete()
 
@@ -325,6 +325,7 @@ class UnbindBoardUser(GuardianView):
         user.ws_sound()
 
         return HttpResponse(status=200)
+
 
 
 
