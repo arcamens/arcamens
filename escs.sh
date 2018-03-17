@@ -56,11 +56,11 @@ git add *
 git commit -a
 git push -u origin beta
 ##############################################################################
-# merge, dev, into, master:
+# merge staging into master.
 git checkout master
-git merge development
+git merge staging
 git push -u origin master
-git checkout development
+git checkout staging
 ##############################################################################
 # checkout all.
 
