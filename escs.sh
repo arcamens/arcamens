@@ -20,17 +20,6 @@ git commit -a
 git push -u origin gamma
 
 ##############################################################################
-# push arcamens development branch.
-cd ~/projects/arcamens-code
-# clean up all .pyc files. 
-find . -name "*.pyc" -exec rm -f {} \;
-rm -fr ~/projects/arcamens-code/static/media
-git status
-git add *
-git commit -a
-git push -u origin development
-##############################################################################
-
 # push arcamens on master.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
@@ -367,6 +356,10 @@ git fetch -p
 
 git tag -a 1.0.1 -m 'Getting list-logs view to work with pagination.'
 git push origin : 1.0.1
+
+git tag -a 1.0.2 -m 'Getting list-logs view to work with pagination.'
+git push origin : 1.0.2
+
 ##############################################################################
 cd ~/projects/arcamens-code
 
