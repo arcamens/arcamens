@@ -51,6 +51,13 @@ git merge staging
 git push -u origin master
 git checkout staging
 ##############################################################################
+# merge master into staging.
+git checkout staging
+git merge master
+git push -u origin staging
+git checkout staging
+
+##############################################################################
 # checkout all.
 
 git checkout *
@@ -354,11 +361,20 @@ git fetch -p
 ##############################################################################
 # create releases.
 
+git checkout master
 git tag -a 1.0.1 -m 'Getting list-logs view to work with pagination.'
 git push origin : 1.0.1
+git checkout staging
 
+git checkout master
 git tag -a 1.0.3 -m 'Fixing bug with list_app.CreateView.'
 git push origin : 1.0.3
+git checkout staging
+
+git checkout master
+git tag -a 1.0.4 -m 'Fixing bug with clipboard clear button. It deletes all cards/posts/lists now.'
+git push origin : 1.0.4
+git checkout staging
 
 ##############################################################################
 cd ~/projects/arcamens-code
@@ -593,6 +609,7 @@ git fetch -p
 git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
+
 
 
 
