@@ -15,7 +15,42 @@ Available {{card.label|truncatechars:15}} card's relations
 
 <div class="modal-body">
 
-{% include 'card_app/manage-card-relations-list-options.html' %}
+<div class="pre-scrollable">
+
+{% for ind in included %}
+<p id="unrelate-card{{ind.id}}">
+<a class="e-get" style="color:red"
+data-callback="$('#unrelate-card{{ind.id}}').remove();"
+data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="{{ind.get_link_url}}"> 
+<span class="glyphicon glyphicon-remove"></span></a> 
+
+<a href="{{ind.get_link_url}}" target="_blank">
+{% if ind.done %} (Done) {% endif %}
+{{ind.label}}
+</a>
+</p>
+{% endfor %}
+
+{% for ind in excluded %}
+<p id="relate-card{{ind.id}}">
+<a class="e-get" 
+data-callback="$('#relate-card{{ind.id}}').remove();"
+data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span></a> 
+
+<a href="{{ind.get_link_url}}" target="_blank">
+{% if ind.done %} (Done) {% endif %}
+{{ind.label}}
+</a>
+
+</p>
+
+{% endfor %}
+
+</div>
+<br> 
+
+
 
 <form id="relate-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
@@ -58,6 +93,7 @@ $('#id_pattern').keypress(function(e){
     }
 });
 </script>
+
 
 
 
