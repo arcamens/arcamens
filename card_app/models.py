@@ -23,6 +23,10 @@ class CardMixin(object):
         return reverse('card_app:view-data', 
                     kwargs={'card_id': self.id})
 
+    def get_link_url(self):
+        return reverse('card_app:card-link', 
+                    kwargs={'card_id': self.id})
+
     def duplicate(self, list=None):
         card          = Card.objects.get(id=self.id)
         card.pk       = None
@@ -370,6 +374,7 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
 
 
 

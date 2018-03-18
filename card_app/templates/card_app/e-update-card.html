@@ -11,7 +11,7 @@
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
-href="#"> 
+href="{{event.child.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 
 {{event.child.label|truncatechars:40}} </a> on list
@@ -26,6 +26,7 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

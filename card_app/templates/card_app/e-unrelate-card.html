@@ -11,7 +11,7 @@
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'card_app:view-data' event.child0.id %}" 
-href="#"> 
+href="{{event.child0.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.child0.label|truncatechars:40}} </a> 
 
@@ -21,7 +21,7 @@ from
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'card_app:view-data' event.child1.id %}" 
-href="#"> 
+href="{{event.child1.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.child1.label|truncatechars:40}}
 </a>
@@ -29,6 +29,7 @@ href="#">
 at {{event.created}}
 
 {% endblock %}
+
 
 
 

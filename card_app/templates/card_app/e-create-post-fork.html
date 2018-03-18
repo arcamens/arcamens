@@ -11,7 +11,7 @@ has forked card
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.card.id %}" 
-href="#"> 
+href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.card.label|truncatechars:40}} </a> 
 
@@ -22,7 +22,7 @@ to post
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" 
-href="#"> 
+href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label|truncatechars:40}}
 </a>
@@ -30,6 +30,7 @@ href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
