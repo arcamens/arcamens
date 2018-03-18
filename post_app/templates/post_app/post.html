@@ -151,8 +151,7 @@ data-callback="$('#bigModal').modal('show');"
 data-shell="#bigModalContent" data-show="{% url 'comment_app:list-comments' post.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-comment"></span> Comment </a>
 
-<a class="text-danger e-get" href="#" 
-data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}">
+<a class="text-danger s-modal" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
 {% if post.done %}
@@ -185,6 +184,7 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
+
 
 
 

@@ -576,6 +576,12 @@ class AlertPostWorkers(GuardianView):
 
         return HttpResponse(status=200)
 
+class ConfirmPostDeletion(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+        return render(request, 'post_app/confirm-post-deletion.html', 
+        {'post': post})
+
 
 
 
