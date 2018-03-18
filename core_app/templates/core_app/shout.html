@@ -25,11 +25,11 @@
 </div>
 
 <div class="modal-footer">
-<button  type="button" href="{% url 'core_app:list-events'  %}"
+<button  type="button" data-show="{% url 'core_app:list-events'  %}"
 class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#shoutForm" id="shoutFormButton"
-href="{% url 'core_app:shout'  %}" class="btn btn-default m-post"> {% trans "Shout" %} </button>
+data-show="{% url 'core_app:shout'  %}" class="btn btn-default m-post"> {% trans "Shout" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
@@ -45,6 +45,7 @@ $('#id_name').keypress(function(e){
     }
 });
 </script>
+
 
 
 

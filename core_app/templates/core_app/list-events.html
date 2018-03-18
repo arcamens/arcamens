@@ -31,10 +31,10 @@ Seen </a>
 
 <div class="modal-footer">
 <div class="pull-left">
-<a class="text-warning s-modal" href="{% url 'core_app:all-seen' %}"> 
+<a class="text-warning s-modal" data-show="{% url 'core_app:all-seen' %}" href="#">  
 <span class="glyphicon glyphicon-bell"></span> All seen?</a>
 
-<a href="{% url 'core_app:shout' %}" class="s-modal"> 
+<a data-show="{% url 'core_app:shout' %}" class="s-modal" href="#"> 
 <span class="glyphicon glyphicon-volume-up"></span>
 Shout? </a>
 
@@ -44,6 +44,7 @@ Shout? </a>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

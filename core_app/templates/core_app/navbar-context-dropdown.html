@@ -8,7 +8,7 @@
 
 
 <ul class="dropdown-menu">
-<li><a class="s-modal" href="{% url 'core_app:create-organization' user.id %}"> 
+<li><a class="s-modal" data-show="{% url 'core_app:create-organization' user.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> 
 {% trans "Organization" %}</a></li>
 
@@ -17,7 +17,7 @@
 {% endif %}
 
 {% for ind in organizations %}
-<li><a  href="{% url 'core_app:switch-organization' ind.id %}">
+<li><a data-show="{% url 'core_app:switch-organization' ind.id %}" href="#">
 <span class="glyphicon glyphicon-flag"></span> {{ind.name}}</a></li>
 {% endfor %}
 
@@ -29,7 +29,7 @@
 <span class="caret"></span></a>
 
 <ul class="dropdown-menu">
-<li><a class="s-modal" href="{% url 'core_app:update-user-information' %}">
+<li><a class="s-modal" data-show="{% url 'core_app:update-user-information' %}" href="#">
 <span class="glyphicon glyphicon-edit"></span>{% trans "Settings" %}</a></li>
 
 <li class="divider"></li>
@@ -42,24 +42,25 @@
 
 <li class="divider"></li>
 
-<li><a class="s-modal" href = "{% url 'core_app:list-clipboard' %}">
+<li><a class="s-modal" data-show = "{% url 'core_app:list-clipboard' %}" href="#">
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 <li class="divider"></li>
 
 
 <li>
-<a class="s-modal" href="{% url 'core_app:list-logs'  %}">
+<a class="s-modal" data-show="{% url 'core_app:list-logs'  %}" href="#">
 <span class="glyphicon glyphicon-bell"></span> Logs 
 </a>
 </li>
 
 <li class="divider"></li>
-<li><a  href="{% url 'site_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
+<li><a href="{% url 'site_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
 </ul>
 </li>
 
 
 </ul>
+
 
 
 

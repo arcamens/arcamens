@@ -72,12 +72,13 @@ No cards.
 </div>
 
 <div class="modal-footer">
-<button  type="button"  href="{% url 'core_app:confirm-clipboard-deletion' %}"
+<button  type="button"  data-show="{% url 'core_app:confirm-clipboard-deletion' %}"
 class="btn btn-default s-modal"> {% trans "Delete all?" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 

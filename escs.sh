@@ -376,6 +376,11 @@ git tag -a 1.0.4 -m 'Fixing bug with clipboard clear button. It deletes all card
 git push origin : 1.0.4
 git checkout staging
 
+git checkout master
+git tag -a 1.0.5 -m 'New shout mechanism implemented.'
+git push origin : 1.0.5
+git checkout staging
+
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -609,6 +614,7 @@ git fetch -p
 git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
+
 
 
 
