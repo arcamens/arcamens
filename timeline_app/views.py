@@ -362,7 +362,9 @@ class ManageTimelineUsers(GuardianView):
 
         timeline = Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
-        excluded = User.objects.exclude(timelines=timeline)
+        users    = me.default.users.all()
+        excluded = users.exclude(timelines=timeline)
+
         total = included.count() + excluded.count()
         
         if not form.is_valid():
@@ -378,6 +380,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 
