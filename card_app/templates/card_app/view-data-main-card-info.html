@@ -11,8 +11,12 @@ by  {{card.owner.name}} on list
 <a class="e-get" href="#"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 data-shell="#main-view" > 
-<span class="glyphicon glyphicon-list-alt"></span>
-{{card.ancestor.name}} </a>
+<span class="glyphicon glyphicon-list-alt"> </span>
+{{card.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{card.ancestor.ancestor.name}}
+
+</a>
 
 at <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
 {% if card.done %}
@@ -41,6 +45,7 @@ No attachments...
 
 
 </div>
+
 
 
 
