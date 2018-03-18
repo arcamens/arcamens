@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load listutils %}
+
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>  
+<span class="glyphicon glyphicon-volume-up"></span> Shout to all members?
+</h4>
+
+</div>
+
+<div class="modal-body">
+
+<form id="shoutForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.msg  size='md'  %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+
+</div>
+
+<div class="modal-footer">
+<button  type="button" href="{% url 'core_app:list-users' me.default.id  %}"
+class="btn btn-default s-modal"> {% trans "Back" %} </button>
+
+<button  type="button" data-form="#shoutForm" id="shoutFormButton"
+href="{% url 'core_app:shout'  %}" class="btn btn-default m-post"> {% trans "Shout" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
+
+
+<script>
+$('#id_name').keypress(function(e){
+    if(e.keyCode == 13) {
+        $('#shoutFormButton').click();
+        return false;
+    }
+});
+</script>
+
+
+
+
+
+

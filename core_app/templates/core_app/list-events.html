@@ -33,12 +33,18 @@ Seen </a>
 <div class="pull-left">
 <a class="text-warning s-modal" href="{% url 'core_app:all-seen' %}"> 
 <span class="glyphicon glyphicon-bell"></span> All seen?</a>
+
+<a href="{% url 'core_app:shout' %}" class="s-modal"> 
+<span class="glyphicon glyphicon-volume-up"></span>
+Shout? </a>
+
 </div>
 <br>
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

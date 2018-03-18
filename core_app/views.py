@@ -1,7 +1,7 @@
 from core_app.models import OrganizationService, Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization, GlobalTaskFilter, \
-GlobalFilter, Clipboard, Event
+GlobalFilter, Clipboard, Event, EShout
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from django.shortcuts import render, redirect
@@ -766,4 +766,29 @@ class DeleteAllClipboard(GuardianView):
 
         return redirect('core_app:list-clipboard')
 
+class Shout(GuardianView):
+    def get(self, request):
+        me = User.objects.get(id=self.user_id)
+        form = forms.ShoutForm()
+
+        return render(request, 'core_app/shout.html', {'form': form, 'me': me})
+
+    def post(self, request):
+        me   = User.objects.get(id=self.user_id)
+        form = forms.ShoutForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'core_app/list-users.html', 
+                {'form': form, 'me': me}, status=400)
+
+        event = EShout.objects.create(organization=me.default, 
+        user=me, msg=form.cleaned_data['msg'])
+
+        users = me.default.users.all()
+        event.users.add(*users)
+
+        queue = 'organization%s' % me.default.id
+        ws.client.publish(queue, 'sound', 0, False)
+
+        return redirect('core_app:list-events')
 

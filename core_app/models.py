@@ -129,6 +129,12 @@ class EInviteUser(Event):
     related_name='e_invite_user0', blank=True)
     html_template = 'core_app/e-invite-user.html'
 
+class EShout(Event):
+    msg = models.CharField(null=True,
+    blank=False, verbose_name=_("Msg"),  max_length=256,
+    help_text="No pain no gain!")
+    html_template = 'core_app/e-shout.html'
+
 class EJoinOrganization(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_join_organization0', blank=True)
@@ -229,6 +235,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

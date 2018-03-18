@@ -59,6 +59,9 @@ class UpdateOrganizationForm(forms.ModelForm):
         model = models.Organization
         fields = ( 'name', )
 
+class ShoutForm(forms.Form):
+    msg = forms.CharField(required=False)
+
 
 
 

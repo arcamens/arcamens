@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^list-users/(?P<organization_id>.+)', views.ListUsers.as_view(), name='list-users'),
     url(r'^manage-user-tags/(?P<user_id>.+)', views.ManageUserTags.as_view(), name='manage-user-tags'),
     url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
+    url(r'^shout/', views.Shout.as_view(), name='shout'),
     url(r'^list-logs/', views.ListLogs.as_view(), name='list-logs'),
     url(r'^all-seen/', views.AllSeen.as_view(), name='all-seen'),
 
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^import/', views.Import.as_view(), name='import'),
 
 ]
+
 
 
 
