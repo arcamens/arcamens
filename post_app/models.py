@@ -24,8 +24,8 @@ class PostMixin(object):
         return reverse('post_app:post', 
         kwargs={'post_id': self.id})
 
-    def get_absolute_url(self):
-        return reverse('post_app:post', 
+    def get_link_url(self):
+        return reverse('post_app:post-link', 
                     kwargs={'post_id': self.id})
 
     def get_update_url(self):
@@ -288,6 +288,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

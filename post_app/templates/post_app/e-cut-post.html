@@ -7,7 +7,7 @@ Post
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'post_app:post' event.post.id %}"
-href="#"> 
+href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>
 
@@ -26,6 +26,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

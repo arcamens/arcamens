@@ -10,7 +10,7 @@
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>  
 
@@ -27,6 +27,7 @@ data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="#">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
