@@ -3,7 +3,7 @@
 <a class="e-get" data-shell="#main-view" 
 data-show="{{ind.get_absolute_url}}"
 data-dismiss="modal" 
-href="#" > 
+href="{% url 'card_app:card-link' ind.id %}" > 
 <span class="glyphicon glyphicon-file"></span>
 {% if ind.done %} (Done) {% endif %}
 
@@ -11,4 +11,5 @@ href="#" >
 </p>
 
 {% endfor %}
+
 
