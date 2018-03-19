@@ -37,7 +37,7 @@ data-show="{% url 'post_app:bind-post-tag' post.id ind.id %}" href="#">
 
 <br> 
 
-<form id="bind-post-search-form" enctype="multipart/form-data">
+<form id="tagSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -51,8 +51,8 @@ $('#modal').one('hidden.bs.modal', function () {
 })
 </script>
 
-<button  type="button" data-form="#bind-post-search-form" 
-data-shell="#modalContent" id="filterPostTags"
+<button  type="button" data-form="#tagSearchForm" 
+data-shell="#modalContent" id="tagSearchButton"
 data-shell-error="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -63,19 +63,10 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </div>
 
 <script>
-$('#id_name').keypress(function(e){
-    if(e.keyCode == 13) {
-        $('#filterPostTags').click();
-        return false;
-    }
-});
+$('#tagSearchForm').on('submit', (function(e){
+    e.preventDefault();
+        $('#tagSearchButton').click();
+
+}));
 </script>
-
-
-
-
-
-
-
-
 
