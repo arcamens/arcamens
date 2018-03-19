@@ -454,7 +454,7 @@ class InviteOrganizationUser(GuardianView):
         msg = 'You were invited to %s by %s.' % (organization.name, me.name)
 
         send_mail(msg, '%s %s' % (organization.name, 
-        url), settings.EMAIL_HOST_USER, [email], fail_silently=False)
+        url), 'noreply@arcamens.com', [email], fail_silently=False)
 
         ws.client.publish('organization%s' % organization.id, 
             'sound', 0, False)
