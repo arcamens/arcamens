@@ -1,4 +1,6 @@
 # Models for Snippet post type.
+from html import escape
+
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +11,7 @@ from board_app.models import Event
 
 class SnippetMixin(object):
     def save(self, *args, **kwargs):
-        self.html = markdown(self.data, 
+        self.html = markdown(escape(self.data),
             extensions=[TableExtension(),
                 'markdown.extensions.tables'])
         super(SnippetMixin, self).save(*args, **kwargs)
