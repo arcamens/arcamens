@@ -45,23 +45,22 @@ href="#" >
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#selectForkListForm" 
-data-shell="#modalContent" id="filterLists"
-data-shell-error="#modalContent" data-show="{% url 'card_app:select-fork-timeline'  card.id %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+<button  type="button" data-form="#selectForkListForm" id="selectForkListButton"
+data-show="{% url 'card_app:select-fork-timeline'  card.id %}"
+class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
 
 <script>
-$('#id_pattern').keypress(function(e){
-    if(e.keyCode == 13) {
-        $('#filterLists').click();
-        return false;
-    }
-});
+$('#selectForkListForm').on('submit', (function(e){
+    e.preventDefault();
+        $('#selectForkListButton').click();
+
+}));
 </script>
+
 
 
 

@@ -30,11 +30,8 @@ Binded by <span class="glyphicon glyphicon-user"></span>
 {{card.ancestor.ancestor.name}}*  </p>
 {% endif %}
 
-<a 
-data-show="{% url 'card_app:request-card-attention' peer.id card.id %}"
-data-shell="#modalContent" 
-class="e-get"
-href="#"> Request attention through e-mail? </a>
+<a data-show="{% url 'card_app:request-card-attention' peer.id card.id %}"
+class="s-modal" href="#"> Request attention through e-mail? </a>
 </div>
 
 <div class="modal-footer">
@@ -42,6 +39,7 @@ href="#"> Request attention through e-mail? </a>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

@@ -31,18 +31,13 @@ data-show="{% url 'list_app:list-lists' board.id %}">
 {% endif %}
 
 
-<button class="btn btn-warning e-get" 
-data-shell="#bigModalContent" 
-data-callback="$('#bigModal').modal('show');" 
-type="button"
+<button class="btn btn-warning b-modal" type="button" 
 data-show="{% url 'card_app:create-card' list.id %}">
 <span class="glyphicon glyphicon-plus"></span>  {% trans "Card" %}
 </button>
 
-<button class="btn btn-default e-get" 
-data-shell="#modalContent" type="button"
-data-show="{% url 'card_app:setup-card-filter' list.id %}"  
-data-callback="$('#modal').modal('toggle');">
+<button class="btn btn-default s-modal" type="button" 
+data-show="{% url 'card_app:setup-card-filter' list.id %}" >
 
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
@@ -62,6 +57,7 @@ Filter </strike>
 
 </div>
 </div>
+
 
 
 

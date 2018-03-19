@@ -10,13 +10,9 @@ class="btn btn-default e-get">
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" 
-data-form="#form-post-data" 
-data-shell="#main-view" 
-data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" 
-data-show="{% url 'card_app:create-post-fork' ancestor.id card.id post.id %}"
-class="btn btn-default e-post"> 
+<button  type="button" data-form="#form-post-data" 
+data-shell="#main-view" data-show="{% url 'card_app:create-post-fork' ancestor.id card.id post.id %}"
+class="btn btn-default m-post-close"> 
 {% trans "Fork" %}
 </button>
 
@@ -26,6 +22,7 @@ class="btn btn-default e-post">
 
 
 {% endblock %}
+
 
 
 

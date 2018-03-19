@@ -64,10 +64,9 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#bind-card-search-form" 
-data-shell="#modalContent" id="filterCardWorkers"
-data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-workers' card.id  %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+<button  type="button" data-form="#bind-card-search-form" id="filterCardWorkers"
+data-show="{% url 'card_app:manage-card-workers' card.id  %}"
+class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <script>
 $('#modal').one('hidden.bs.modal', function () {
@@ -90,6 +89,7 @@ $('#bind-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

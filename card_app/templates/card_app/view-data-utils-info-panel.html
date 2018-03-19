@@ -11,10 +11,7 @@
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in workers %}
 <a 
-data-show="{% url 'card_app:card-worker-information' ind.id card.id %}"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-class="e-get"
+data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="s-modal"
 href="#">
 <span class="glyphicon glyphicon-user"></span>
 
@@ -23,14 +20,8 @@ href="#">
 
 {% if forloop.last %} 
 <br>
-<a 
-class="e-get text-warning"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:alert-card-workers' card.id %}"
-
-href="#">
-<span class="glyphicon glyphicon-alert"></span>
+<a data-show="{% url 'card_app:alert-card-workers' card.id %}" 
+class="s-modal text-warning"  href="#"> <span class="glyphicon glyphicon-alert"></span>
 
 Alert workers?</a>
 
@@ -44,12 +35,8 @@ No workers...
 <hr>
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in tags %}
-<a 
-data-show="{% url 'card_app:card-tag-information' ind.id card.id %}"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-class="e-get"
-href="#">
+<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}"
+class="s-modal" href="#">
 <b># </b>
 
 {{ind.name}}
@@ -66,16 +53,9 @@ No tags...
 
 <div class="pre-scrollable" style="font-size:80%">
 {% for ind in snippets %}
-<a 
-data-show="{% url 'snippet_app:snippet' ind.id %}"
-data-shell="#bigModalContent" 
-data-callback="$('#bigModal').modal('show');" 
-class="e-get"
-href="#">
+<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#">
 <span class="glyphicon glyphicon-book"></span>
-
-{{ind.title}}
-</a>
+{{ind.title}} </a>
 <br>
 {% empty %}
 No notes...
@@ -86,6 +66,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 

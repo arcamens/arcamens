@@ -7,10 +7,8 @@
 <button  type="button" id="updateCard"
 data-form="#form-card-data" 
 data-shell="#main-view" 
-data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" 
 data-show="{% url 'card_app:update-card' card.id %}"
-class="btn btn-default e-post"> 
+class="btn btn-default m-post-close"> 
 {% trans "Update" %}
 </button>
 
@@ -23,6 +21,7 @@ $('#form-card-data').on('submit', (function(e){
 </script>
 
 {% endblock %}
+
 
 
 
