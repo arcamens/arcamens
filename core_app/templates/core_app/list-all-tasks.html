@@ -53,15 +53,11 @@ href="#" data-show="{% url 'core_app:list-all-tasks'  %}" class="btn btn-default
 </button>
 </div>
 
-
 <script>
-$('#id_pattern').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#task-search-form').on('submit', (function(e){
+    e.preventDefault();
         $('#filterAllTasks').click();
-        return false;
-    }
-});
+
+}));
 </script>
-
-
 

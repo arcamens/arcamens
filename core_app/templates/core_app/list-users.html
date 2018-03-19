@@ -78,13 +78,14 @@ data-show="{% url 'core_app:list-users' organization.id  %}" class="btn btn-defa
 </div>
 
 <script>
-$('#id_pattern').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#list-user-search-form').on('submit', (function(e){
+    e.preventDefault();
         $('#filterUsers').click();
-        return false;
-    }
-});
+
+}));
 </script>
+
+
 
 
 

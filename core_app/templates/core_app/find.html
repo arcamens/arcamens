@@ -38,21 +38,11 @@ class="btn btn-default m-post"> {% trans "Filter" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
-
 <script>
-$('#id_pattern').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#find-card-search-form').on('submit', (function(e){
+    e.preventDefault();
         $('#filterAllData').click();
-        return false;
-    }
-});
+
+}));
 </script>
-
-
-
-
-
-
-
-
 
