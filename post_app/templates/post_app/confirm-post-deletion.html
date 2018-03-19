@@ -23,7 +23,7 @@ data-dismiss="modal">Cancel</button>
 <button  id="createpost" type="button" 
 data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
 data-shell-error="#modalContent" data-show="{% url 'post_app:delete-post' post.id %}"
-class="btn btn-default e-get"> 
+class="btn btn-danger e-get"> 
      {% trans "Delete" %}
 </button>
 

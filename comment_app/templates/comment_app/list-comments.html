@@ -42,41 +42,32 @@ On {{ind.created}}</em>
 </div>
 
 <div class="modal-footer" >
-<form id="form-post-comment-data" enctype="multipart/form-data" onsubmit="return false;">
+<form id="postCommentForm" enctype="multipart/form-data">
 {% csrf_token %}
 
-<div id="inputPostComment">
 {% bootstrap_field form.data layout='inline' size='sm' %}
 {% bootstrap_field form.file layout='inline' size='sm' %}
-
-</div>
-
-{% block buttons %}
-<button  id="sendPostComment" type="button" 
-data-form="#form-post-comment-data" 
-data-shell="#bigModalContent" 
-data-shell-error="#bigModalContent" 
-data-show="{% url 'comment_app:create-comment' post.id %}"
-class="btn btn-default e-post">  {% trans "Send" %} </button>
-{% endblock %}
-
+{% bootstrap_form_errors form type='non_fields' %}
 </form>
 
+
+<button  id="sendPostComment" type="button" 
+data-form="#postCommentForm" 
+data-show="{% url 'comment_app:create-comment' post.id %}"
+class="btn btn-default m-post">  {% trans "Send" %} </button>
+
+
 <script>
-$('#inputPostComment').keypress(function(e){
-    if(e.keyCode == 13)
+$('#postCommentForm').on('submit', (function(e){
+    e.preventDefault();
         $('#sendPostComment').click();
-    e.stopPropagation();
-});
+
+}));
 $('#id_data').focus();
 </script>
 
 
 </div>
-
-
-
-
 
 
 

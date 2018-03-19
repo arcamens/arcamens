@@ -7,17 +7,12 @@ from timeline_app.models import Event
 import timeline_app.models
 
 class PostComment(models.Model):
-    post = models.ForeignKey('post_app.Post', 
-    null=True, blank=True)
+    post = models.ForeignKey('post_app.Post', null=True, blank=False)
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+    data = models.CharField(null=True, blank=False, max_length=256)
 
-    user = models.ForeignKey('core_app.User', 
-    null=True, blank=True)
-
-    data = models.CharField(null=True,
-    blank=False, max_length=256)
-
-    file = models.FileField(
-    null=True, blank=True, verbose_name='Document')
+    file = models.FileField(null=True, blank=True, 
+    verbose_name='Document')
 
     created = models.DateTimeField(
     auto_now=True, null=True)
@@ -34,4 +29,5 @@ class ECreatePostComment(Event):
     comment = models.ForeignKey('PostComment', blank=True)
     post    = models.ForeignKey('post_app.Post', blank=True)
     html_template = 'comment_app/e-create-comment.html'
+
 

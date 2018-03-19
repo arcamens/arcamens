@@ -86,13 +86,13 @@ data-dismiss="modal">Close</button>
 </div>
 
 <script>
-$('#id_pattern').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#relate-card-search-form').on('submit', (function(e){
+    e.preventDefault();
         $('#filterCardRelations').click();
-        return false;
-    }
-});
+
+}));
 </script>
+
 
 
 

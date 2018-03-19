@@ -17,7 +17,7 @@ Available {{card.label|truncatechars:20}} card's tags
 
 {% include 'card_app/manage-card-tags-list-options.html' %}
 
-<form id="bind-card-search-form" enctype="multipart/form-data">
+<form id="tagSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -32,10 +32,9 @@ $('#modal').one('hidden.bs.modal', function () {
 })
 </script>
 
-<button  type="button" data-form="#bind-card-search-form" 
-data-shell="#modalContent" id="filterCardTags"
-data-shell-error="#modalContent" data-show="{% url 'card_app:manage-card-tags' card.id  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+<button  type="button" data-form="#tagSearchForm" id="filterCardTags" 
+data-show="{% url 'card_app:manage-card-tags' card.id  %}"
+class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
@@ -45,12 +44,11 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 
 <script>
-$('#id_name').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#tagSearchForm').on('submit', (function(e){
+    e.preventDefault();
         $('#filterCardTags').click();
-        return false;
-    }
-});
+
+}));
 </script>
 
 

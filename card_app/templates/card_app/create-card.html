@@ -35,21 +35,22 @@ class="btn btn-default e-get">
 </button>
 
 <button  id="createCard" type="button" data-form="#form-card-data" 
-data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
-class="btn btn-default e-post"> 
+data-shell="#main-view"  data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
+class="btn btn-default m-post-close"> 
      {% trans "Create" %}
 </button>
 
 
 <script>
-
-$('#id_label').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#form-card-data').on('submit', (function(e){
+    e.preventDefault();
         $('#createCard').click();
-        return false;
-    }
-});
+
+}));
+</script>
+
+
+<script>
 
 /*
 $('#bigModal').one('hidden.bs.modal', function () {
@@ -77,6 +78,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
 
 {% endblock %}
 </div>
+
 
 
 
