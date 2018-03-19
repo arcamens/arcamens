@@ -109,7 +109,7 @@ class ManageUserBoards(GuardianView):
             return render(request, 'board_app/manage-user-boards.html', 
                 {'user': user, 'included': included, 'excluded': excluded,
                     'me': me, 'organization': me.default, 
-                        'form':forms.BoardSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         boards = boards.filter(Q(
         name__contains=form.cleaned_data['name']) | Q(
@@ -125,7 +125,7 @@ class ManageUserBoards(GuardianView):
 
         return render(request, 'board_app/manage-user-boards.html', 
         {'user': user, 'included': included, 'excluded': excluded,
-        'me': me, 'organization': me.default,'form':forms.BoardSearchForm()})
+        'me': me, 'organization': me.default,'form':form})
 
 class ManageBoardUsers(GuardianView):
     def get(self, request, board_id):
@@ -325,6 +325,7 @@ class UnbindBoardUser(GuardianView):
         user.ws_sound()
 
         return HttpResponse(status=200)
+
 
 
 

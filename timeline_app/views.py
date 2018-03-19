@@ -323,7 +323,7 @@ class ManageUserTimelines(GuardianView):
             return render(request, 'timeline_app/manage-user-timelines.html', 
                 {'user': user, 'included': included, 'excluded': excluded,
                     'me': me, 'organization': me.default, 
-                        'form':forms.BindTimelinesForm()}, status=400)
+                        'form':form}, status=400)
 
         timelines = timelines.filter(Q(
         name__contains=form.cleaned_data['name']) | Q(
@@ -339,7 +339,7 @@ class ManageUserTimelines(GuardianView):
 
         return render(request, 'timeline_app/manage-user-timelines.html', 
         {'user': user, 'included': included, 'excluded': excluded,
-        'me': me, 'organization': me.default,'form':forms.BindTimelinesForm()})
+        'me': me, 'organization': me.default,'form':form})
 
 class ManageTimelineUsers(GuardianView):
     def get(self, request, timeline_id):
@@ -380,6 +380,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 

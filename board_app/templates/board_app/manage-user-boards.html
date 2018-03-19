@@ -64,7 +64,7 @@ class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
 <button  type="button" data-form="#bind-board-search-form" 
-data-shell="#modalContent" 
+data-shell="#modalContent" id="searchBoardsButton"
 data-shell-error="#modalContent" data-show="{% url 'board_app:manage-user-boards' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -73,6 +73,14 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
+<script>
+$('#bind-board-search-form').on('submit', (function(e){
+    e.preventDefault();
+        $('#searchBoardsButton').click();
+
+}));
+</script>
 
 
 

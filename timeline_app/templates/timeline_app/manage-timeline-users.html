@@ -80,13 +80,13 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </div>
 
 <script>
-$('#id_name').keypress(function(e){
-    if(e.keyCode == 13) {
+$('#bind-timeline-search-form').on('submit', (function(e){
+    e.preventDefault();
         $('#manageTimelineUsersSearch').click();
-        return false;
-    }
-});
+
+}));
 </script>
+
 
 
 

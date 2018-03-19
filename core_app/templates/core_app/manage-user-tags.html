@@ -41,7 +41,7 @@ data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#">
 
 <br> 
 
-<form id="bind-user-search-form" enctype="multipart/form-data">
+<form id="tagSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -52,7 +52,7 @@ data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#">
 <button  type="button" data-show="{% url 'core_app:list-users' me.default.id  %}" href="#"
 class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
-<button  type="button" data-form="#bind-user-search-form" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
+<button  type="button" id="tagSearchButton" data-form="#tagSearchForm" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <button type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -61,5 +61,13 @@ class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 </div>
 
+
+<script>
+$('#tagSearchForm').on('submit', (function(e){
+    e.preventDefault();
+        $('#tagSearchButton').click();
+
+}));
+</script>
 
 
