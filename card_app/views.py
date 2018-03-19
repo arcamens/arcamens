@@ -1028,10 +1028,6 @@ class CardTagInformation(GuardianView):
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
 
-class PreviewCard(GuardianView):
-    def get(self, request, card_id):
-        pass
-
 class AlertCardWorkers(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
@@ -1063,6 +1059,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

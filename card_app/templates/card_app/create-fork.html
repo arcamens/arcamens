@@ -10,13 +10,9 @@ class="btn btn-default e-get">
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" 
-data-form="#form-card-data" 
-data-shell="#main-view" 
-data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" 
+<button  type="button" data-form="#form-card-data" data-shell="#main-view" 
 data-show="{% url 'card_app:create-fork' ancestor.id card.id fork.id %}"
-class="btn btn-default e-post"> 
+class="btn btn-default m-post-close"> 
 {% trans "Fork" %}
 </button>
 
@@ -47,6 +43,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
 
 
 {% endblock %}
+
 
 
 

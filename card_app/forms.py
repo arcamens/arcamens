@@ -8,7 +8,9 @@ class CardFilterForm(forms.ModelForm):
         'board', 'list')
 
 class CardForm(forms.ModelForm):
-    data = forms.CharField(strip=False, widget=forms.Textarea)
+    data = forms.CharField(strip=False, 
+    required=False, widget=forms.Textarea)
+
     class Meta:
         model  = models.Card
         fields = ('label', 'data')
@@ -56,6 +58,7 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
+
 
 
 

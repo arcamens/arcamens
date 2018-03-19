@@ -26,12 +26,11 @@ Alert workers on card
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#alertCardWorkersForm" 
-data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'card_app:alert-card-workers' card.id  %}"
-class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
+<button  type="button" data-form="#alertCardWorkersForm" data-show="{% url 'card_app:alert-card-workers' card.id  %}"
+class="btn btn-default m-post-close"> {% trans "Send e-mail" %} </button>
 
 </div>
+
 
 
 

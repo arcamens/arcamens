@@ -16,14 +16,13 @@ data-show="{% url 'card_app:cut-card' card.id %}">
 <span class="glyphicon glyphicon-scissors"></span> 
 </button>
 
-<button class="btn btn-info e-get" 
-data-shell="#bigModalContent"  type="button"
-data-show="{% url 'note_app:list-notes' card.id %}" 
-data-callback="$('#bigModal').modal('toggle');" >
+<button class="btn btn-info b-modal" type="button"
+data-show="{% url 'note_app:list-notes' card.id %}" >
 <span class="glyphicon glyphicon-comment"></span> 
 {% trans "Notes" %}</button>
 
 </div>
+
 
 
 

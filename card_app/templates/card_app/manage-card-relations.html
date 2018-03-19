@@ -69,10 +69,8 @@ $('#bigModal').one('hidden.bs.modal', function () {
 </script>
 
 <button  type="button" data-form="#relate-card-search-form" 
-data-shell="#bigModalContent"  data-shell-error="#bigModalContent" 
-id="filterCardRelations"
-data-show="{% url 'card_app:manage-card-relations' card.id  %}"
-class="btn btn-default e-post"> {% trans "Search" %} </button>
+id="filterCardRelations" data-show="{% url 'card_app:manage-card-relations' card.id  %}"
+class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <script>
 $('#modal').one('hidden.bs.modal', function () {
@@ -92,6 +90,7 @@ $('#relate-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

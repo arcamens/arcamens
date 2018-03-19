@@ -12,8 +12,6 @@ urlpatterns = [
     url(r'^select-fork-list/(?P<card_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
     url(r'^select-fork-timeline/(?P<card_id>.+)/', views.SelectForkTimeline.as_view(), name='select-fork-timeline'),
 
-    url(r'^preview-card/(?P<card_id>.+)/', views.PreviewCard.as_view(), name='preview-card'),
-
     url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
@@ -63,6 +61,7 @@ urlpatterns = [
     url(r'^request-card-attention/(?P<peer_id>.+)/(?P<card_id>.+)', views.RequestCardAttention.as_view(), name='request-card-attention'),
     url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
 ]
+
 
 
 
