@@ -58,6 +58,14 @@ git push -u origin staging
 git checkout staging
 
 ##############################################################################
+# merge master into stable.
+git checkout stable
+git merge master
+git push -u origin stable
+git checkout master
+
+
+##############################################################################
 # checkout all.
 
 git checkout *
@@ -381,6 +389,12 @@ git tag -a 1.0.5 -m 'New shout mechanism implemented.'
 git push origin : 1.0.5
 git checkout staging
 
+
+git checkout master
+git tag -a 1.0.11 -m 'Bug fixes, getting to work with jsim.'
+git push origin : 1.0.11
+git checkout staging
+
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -615,8 +629,24 @@ git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
 
+##############################################################################
+# create C316 branch.
+cd ~/projects/arcamens-code
+git branch -a
+git checkout -b C316
+git push --set-upstream origin C316
 
-
+##############################################################################
+# merge C316 into staging.
+git checkout staging
+git merge C316
+git push -u origin staging
+##############################################################################
+# delete C316 branch.
+cd ~/projects/arcamens-code
+git branch -d C316
+git push origin :C316
+git fetch -p 
 
 
 

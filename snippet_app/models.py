@@ -1,5 +1,4 @@
 # Models for Snippet post type.
-from html import escape
 
 from django.db import models
 from django.db.models import Q
@@ -11,9 +10,11 @@ from board_app.models import Event
 
 class SnippetMixin(object):
     def save(self, *args, **kwargs):
-        self.html = markdown(escape(self.data),
-            extensions=[TableExtension(),
-                'markdown.extensions.tables', 'markdown.extensions.codehilite'])
+        self.html = markdown(self.data,
+        extensions=[TableExtension(), 'markdown.extensions.tables', 
+        'markdown.extensions.codehilite'], safe_mode=True,  
+         enable_attributes=False)
+
         super(SnippetMixin, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -50,7 +51,7 @@ class Snippet(SnippetMixin, models.Model):
     default='Draft', verbose_name=_("Title"), 
     max_length=626)
 
-    data = models.TextField(null=True,
+    data = models.TextField(null=True, 
     blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
 
@@ -104,6 +105,8 @@ class EUpdateSnippet(Event):
 
     def __str__(self):
         return self.user.name
+
+
 
 
 

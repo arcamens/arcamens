@@ -1,5 +1,3 @@
-from html import escape
-
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
@@ -16,9 +14,10 @@ import operator
 
 class CardMixin(object):
     def save(self, *args, **kwargs):
-        self.html = markdown(escape(self.data),
-            extensions=[TableExtension(),
-                'markdown.extensions.tables', 'markdown.extensions.codehilite'])
+        self.html = markdown(self.data,
+        extensions=[TableExtension(), 'markdown.extensions.tables', 
+        'markdown.extensions.codehilite'], safe_mode=True,  
+        enable_attributes=False)
         super(CardMixin, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -376,6 +375,8 @@ class EArchiveCard(Event):
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'
+
+
 
 
 
