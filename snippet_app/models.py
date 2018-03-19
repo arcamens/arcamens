@@ -13,7 +13,7 @@ class SnippetMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(escape(self.data),
             extensions=[TableExtension(),
-                'markdown.extensions.tables'])
+                'markdown.extensions.tables', 'markdown.extensions.codehilite'])
         super(SnippetMixin, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -18,7 +18,7 @@ class CardMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(escape(self.data),
             extensions=[TableExtension(),
-                'markdown.extensions.tables'])
+                'markdown.extensions.tables', 'markdown.extensions.codehilite'])
         super(CardMixin, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
