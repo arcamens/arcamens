@@ -647,9 +647,15 @@ cd ~/projects/arcamens-code
 git branch -d C316
 git push origin :C316
 git fetch -p 
-
-
-
+##############################################################################
+# fetch remote branch
+git pull
+git checkout C162
+##############################################################################
+# merge C162 into staging.
+git checkout staging
+git merge C162
+git push -u origin staging
 
 
 

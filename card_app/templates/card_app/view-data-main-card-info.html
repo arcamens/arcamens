@@ -12,9 +12,9 @@ by  {{card.owner.name}} on list
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-list-alt"> </span>
-{{card.ancestor.name}}
-<span class="glyphicon glyphicon-arrow-right"></span>
 {{card.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{card.ancestor.name}}
 
 </a>
 
@@ -45,6 +45,7 @@ No attachments...
 
 
 </div>
+
 
 
 
