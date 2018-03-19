@@ -1,4 +1,6 @@
 # Models for Note post type.
+from html import escape
+
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -9,9 +11,9 @@ from board_app.models import Event
 
 class NoteMixin(object):
     def save(self, *args, **kwargs):
-        self.html = markdown(self.data, 
+        self.html = markdown(escape(self.data),
             extensions=[TableExtension(),
-                'markdown.extensions.tables'])
+                'markdown.extensions.tables', 'markdown.extensions.codehilite'])
         super(NoteMixin, self).save(*args, **kwargs)
 
     def __str__(self):
