@@ -4,7 +4,6 @@ import core_app.models
 class SignupForm(forms.Form):
     name         = forms.CharField()
     email        = forms.EmailField()
-    recover_email = forms.EmailField()
 
     password     = forms.CharField()
     organization = forms.CharField()
@@ -52,6 +51,7 @@ class ServiceForm(forms.Form):
 class RedefinePasswordForm(forms.Form):
     password = forms.CharField()
     retype   = forms.CharField()
+
 
 
 

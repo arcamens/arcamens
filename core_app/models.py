@@ -49,9 +49,6 @@ class Invite(models.Model):
     null=True, blank=True)
 
 class User(UserMixin, BasicUser):
-    recover_email = models.EmailField(max_length=70, 
-    null=True, blank=False, unique=True)
-
     organizations = models.ManyToManyField(
     'Organization', related_name='users', 
     null=True, blank=True, symmetrical=False)
@@ -235,6 +232,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
 
 
 

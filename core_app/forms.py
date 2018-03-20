@@ -29,8 +29,7 @@ class UserForm(site_app.forms.UserForm):
     class Meta:
         model  = models.User
         fields = ('name', 'avatar', 
-        'email', 'password', 'description', 
-        'recover_email')
+        'email', 'password', 'description')
 
         widgets = {
         'password': forms.PasswordInput()}
@@ -66,6 +65,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 
