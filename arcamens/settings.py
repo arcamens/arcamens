@@ -35,6 +35,7 @@ DEFAULT_ERR = 'core_app/default-error.html'
 LOGOUT_VIEW = 'site_app:logged-out'
 LOGGED_VIEW = 'core_app:index'
 
+PAYBILLS_USER = 'core_app.User'
 DEBUG_PAYPAL_IPN_DOMAIN = get_addr(8000)
 PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
@@ -176,6 +177,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
