@@ -436,7 +436,10 @@ class InviteOrganizationUser(GuardianView):
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
         user, _  = User.objects.get_or_create(email=email)
-        
+
+        if user.organizations.filter(id=self.user_id).exists():
+            return HttpResponse("The user is already a member!", status=403)
+
         # need to be improved.
         token  = 'invite%s' % random.randint(1000, 10000)
         invite = Invite.objects.create(
@@ -791,4 +794,5 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
 
