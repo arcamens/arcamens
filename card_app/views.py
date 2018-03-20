@@ -49,7 +49,7 @@ class CardLink(GuardianView):
 
         if on_clipboard:
             return HttpResponse("This card is on clipboard! \
-               It can't be accessed.", status=400)
+               It can't be accessed.", status=403)
 
         user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.all()
@@ -90,7 +90,7 @@ class ListCards(GuardianView):
 
         if not list.ancestor:
             return HttpResponse("This list is on clipboard!\
-                It can't be accessed now.", status=400)
+                It can't be accessed now.", status=403)
 
         user = core_app.models.User.objects.get(id=self.user_id)
         pins = user.pin_set.filter(organization=user.default)
@@ -1059,6 +1059,7 @@ class AlertCardWorkers(GuardianView):
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
+
 
 
 

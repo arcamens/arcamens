@@ -194,8 +194,12 @@ class PastePosts(GuardianView):
         user=user, organization=user.default)
 
         posts = clipboard.posts.all()
-        posts.update(ancestor=timeline)
 
+        if not posts.exists():
+            return HttpResponse("There is no post on \
+                the clipboard.", status=403)
+
+        posts.update(ancestor=timeline)
         event = EPastePost(
         organization=user.default, timeline=timeline, user=user)
         event.save(hcache=False)
@@ -380,6 +384,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 

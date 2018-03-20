@@ -5,6 +5,7 @@ from core_app.models import Clipboard, User
 from board_app.models import Board, Pin
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
+from django.http import HttpResponse
 from django.db.models import Q
 import board_app.models
 import card_app.models
@@ -139,6 +140,11 @@ class PasteCards(GuardianView):
         user=user, organization=user.default)
 
         cards = clipboard.cards.all()
+
+        if not cards.exists():
+            return HttpResponse("There is no card on \
+                the clipboard.", status=403)
+
         cards.update(ancestor=list)
 
         event = EPasteCard(
@@ -227,6 +233,7 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
 
 
 

@@ -175,6 +175,11 @@ class PasteLists(GuardianView):
         user=user, organization=user.default)
 
         lists = clipboard.lists.all()
+
+        if not lists.exists():
+            return HttpResponse("There is no list on \
+                the clipboard.", status=403)
+
         lists.update(ancestor=board)
 
         event = EPasteList.objects.create(
@@ -325,6 +330,7 @@ class UnbindBoardUser(GuardianView):
         user.ws_sound()
 
         return HttpResponse(status=200)
+
 
 
 
