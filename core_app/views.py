@@ -163,10 +163,38 @@ class DeleteOrganization(GuardianView):
     def get(self, request,  organization_id):
         organization = Organization.objects.get(id = organization_id)
         user         = User.objects.get(id=self.user_id)
+        form = forms.ConfirmOrganizationDeletionForm()
+
+        return render(request, 
+            'core_app/delete-organization.html', 
+                {'organization': organization, 'form': form})
+
+    def post(self, request, organization_id):
+        organization = Organization.objects.get(id = organization_id)
+
+        form = forms.ConfirmOrganizationDeletionForm(request.POST, 
+        confirm_token=organization.name)
+
+        if not form.is_valid():
+            return render(request, 
+                'core_app/delete-organization.html', 
+                    {'organization': organization, 'form': form}, status=400)
+
+        user     = User.objects.get(id=self.user_id)
+        # event    = EDeleteOrganization.objects.create(organization=user.default,
+        # organization_name=organization.name, user=user)
+# 
+        # user.ws_unsubscribe_organization(organization.id)
+        # user.ws_sound()
+
+        # should tell users to unsubscribe here.
+        # it may hide bugs.
+        # event.users.add(*organization.users.all())
+        # organization.delete()
 
         if user.owned_organizations.count() == 1:
             return HttpResponse("You can't delete \
-                this organization..", status=400)
+                this organization..", status=403)
 
         # First remove the reference otherwise
         # the user gets deleted in cascade due to the
@@ -794,5 +822,6 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
 
 

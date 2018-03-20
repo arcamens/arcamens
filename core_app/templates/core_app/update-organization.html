@@ -24,9 +24,8 @@ data-callback="$('#modal').modal('show');">
 
 {% block buttons %}
 <button  type="button" 
-data-callback="window.location='{% url 'core_app:index' %}';" 
 data-show="{% url 'core_app:delete-organization' organization.id %}"
-class="btn btn-default e-get"> 
+class="btn btn-danger s-modal"> 
 {% trans "Delete" %}
 </button>
 
@@ -38,6 +37,7 @@ class="btn btn-default e-post">
 </button>
 
 {% endblock %}
+
 
 
 

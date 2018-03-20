@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from timeline_app.forms import ConfirmTimelineDeletionForm
 from django import forms
 from . import models
 import site_app.forms
@@ -61,6 +62,10 @@ class UpdateOrganizationForm(forms.ModelForm):
 
 class ShoutForm(forms.Form):
     msg = forms.CharField(required=False)
+
+class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
+    name = forms.CharField(required=True,
+    help_text='Type the organization name to confirm!')
 
 
 
