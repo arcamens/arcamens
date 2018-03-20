@@ -132,7 +132,7 @@ class Post(PostMixin, models.Model):
     symmetrical=False)
 
     label = models.TextField(null=True, default='',
-    blank=True, verbose_name=_("Content"))
+    blank=False, verbose_name=_("Content"))
 
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
@@ -288,6 +288,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

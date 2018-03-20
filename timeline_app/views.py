@@ -120,7 +120,7 @@ class DeleteTimeline(GuardianView):
         event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
-        user.ws_unsubscribe_timeline(record.id)
+        user.ws_unsubscribe_timeline(timeline.id)
         user.ws_sound()
 
         # should tell users to unsubscribe here.
@@ -380,6 +380,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 

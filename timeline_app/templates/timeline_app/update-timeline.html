@@ -2,24 +2,21 @@
 {% extends "timeline_app/create-timeline.html" %}
 {% load i18n %}
 
-
 {% block buttons %}
 
-<button  type="button"  
-data-shell="#modalContent"
-data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
-class="btn btn-danger e-get"> 
+<button  type="button" data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
+class="btn btn-danger s-modal"> 
 {% trans "Delete" %}
 </button>
 
 <button  type="button" data-form="#form-timeline-data" 
-data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'timeline_app:update-timeline' timeline.id %}"
-class="btn btn-default e-post"> 
+data-shell="#main-view" data-show="{% url 'timeline_app:update-timeline' timeline.id %}"
+class="btn btn-default m-post-close"> 
 {% trans "Update" %}
 </button>
 
 {% endblock %}
+
 
 
 

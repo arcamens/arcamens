@@ -14,23 +14,18 @@ data-shell="#main-view" data-show="" href="#">
 </a>
 </li>
 
-<li><a class="e-get" data-shell="#modalContent" 
-data-show="{% url 'timeline_app:update-timeline' timeline.id %}" 
-data-toggle="modal" data-target="#modal" 
+<li><a class="s-modal"  data-show="{% url 'timeline_app:update-timeline' timeline.id %}" 
 href="#"> <span class="glyphicon glyphicon-cog"></span> 
 Settings</a></li>
 
 <li class="divider"></li>
 
-<li><a class="e-get" 
-data-shell="#modalContent" data-callback="$('#modal').modal('show');"
-data-show="{% url 'timeline_app:manage-timeline-users' timeline.id %}" href="#">
+<li><a class="s-modal" data-show="{% url 'timeline_app:manage-timeline-users' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-user"></span>  {% trans "Members" %}</a></li>
 
 <li class="divider"></li>
 
-<li> <a class="e-get" data-shell="#modalContent" data-show="{% url 'post_app:setup-post-filter' timeline.id %}"
-data-callback="$('#modal').modal('show');" href="#">
+<li> <a class="s-modal" data-show="{% url 'post_app:setup-post-filter' timeline.id %}" href="#">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter
@@ -43,8 +38,7 @@ Filter </strike>
 </a></li>
 
 
-<li> <a class="e-get" data-shell="#bigModalContent" data-callback="$('#bigModal').modal('show');" 
-data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
+<li> <a class="b-modal" data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Post" %}</a></li>
 
 <li><a class="e-get" data-shell="#main-view" 
@@ -52,6 +46,7 @@ data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
 </ul>
+
 
 
 

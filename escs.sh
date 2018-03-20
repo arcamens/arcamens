@@ -657,6 +657,8 @@ git checkout staging
 git merge C162
 git push -u origin staging
 
-
+git branch -d C162
+git push origin :C162
+git fetch -p 
 
 

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['0.0.0.0']
 
 # When the user is not authenticated it is redirected by slock AuthenticatedView.
 AUTH_ERR = 'core_app/unauthorized.html'
+DEFAULT_ERR = 'core_app/default-error.html'
 LOGOUT_VIEW = 'site_app:logged-out'
 LOGGED_VIEW = 'core_app:index'
 
@@ -175,6 +176,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

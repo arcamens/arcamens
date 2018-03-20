@@ -22,36 +22,8 @@
 </form>
 
 <div class="modal-footer">
-<button  type="button" data-form="#setup-timeline-filter-form" 
-data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'timeline_app:setup-timeline-filter' organization.id  %}"
-class="btn btn-default e-post"> {% trans "Setup" %} </button>
+<button  type="button" data-form="#setup-timeline-filter-form" data-shell="#main-view"  
+data-show="{% url 'timeline_app:setup-timeline-filter' organization.id  %}"
+class="btn btn-default m-post-close"> {% trans "Setup" %} </button>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

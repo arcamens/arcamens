@@ -10,14 +10,13 @@
 <li class="divider"></li>
 
 
-<li class="e-get" data-shell="#modalContent" data-show="{% url 'timeline_app:create-timeline' organization.id %}">
-<a data-toggle="modal" data-target="#modal" href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "timeline" %}</a></li>
+<li>
+<a  class="s-modal" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
+href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Timeline" %}</a></li>
 
 <li>
-<a href="#" 
-class="e-get" data-shell="#modalContent" 
+<a href="#" class="s-modal" data-shell="#modalContent" 
 data-show="{% url 'timeline_app:setup-timeline-filter' organization.id %}" 
-data-callback="$('#modal').modal('show');">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter
@@ -40,6 +39,7 @@ data-show="{% url 'timeline_app:list-all-posts' user.id %}"
 href="#"><span class="glyphicon glyphicon-globe"></span> Posts</a></li>
 
 </ul>
+
 
 
 

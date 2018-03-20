@@ -7,8 +7,7 @@
 {{organization.name|slice:":20"}}'s Posts: <span class="badge">{{posts.count}}/{{total}}</span></b></a>
 </li>
 
-<li data-toggle="tooltip" title="Up">
-<a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
+<li> <a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
 data-shell="#main-view" data-show="" href="#">
 <span class="glyphicon glyphicon glyphicon-arrow-up clip"></span> Up
 </a>
@@ -16,9 +15,7 @@ data-shell="#main-view" data-show="" href="#">
 
 <li class="divider"></li>
 
-<li> <a class="e-get" data-shell="#modalContent" 
-data-show="{% url 'post_app:setup-global-post-filter' %}"
-data-callback="$('#modal').modal('show');" href="#">
+<li> <a class="s-modal" data-show="{% url 'post_app:setup-global-post-filter' %}" href="#">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter
@@ -26,12 +23,12 @@ Filter
 <strike> 
 <span class="glyphicon glyphicon-filter"></span> 
 Filter </strike>
-
 {% endif %}
 
 </a></li>
 
 </ul>
+
 
 
 
