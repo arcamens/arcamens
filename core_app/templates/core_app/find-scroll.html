@@ -3,7 +3,7 @@
 <a class="e-get" data-shell="#main-view" 
 data-show="{{ind.get_absolute_url}}"
 data-callback="$('#bigModal').modal('toggle');" 
-href="{% url 'card_app:card-link' ind.id %}" > 
+href="{{ind.get_link_url}}" > 
 <span class="glyphicon glyphicon-file"></span>
 {% if ind.done %} (Done) {% endif %}
 
@@ -11,6 +11,8 @@ href="{% url 'card_app:card-link' ind.id %}" >
 </p>
 
 {% endfor %}
+
+
 
 
 

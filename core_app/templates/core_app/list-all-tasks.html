@@ -18,7 +18,7 @@ Tasks <span class="badge">{{count}}/{{total}}</span></h4>
 data-shell="#main-view"
 data-callback="$('#bigModal').modal('toggle');" 
 data-show="{{ind.get_absolute_url}}"
-class="e-get text-warning" href="{% url 'card_app:card-link' ind.id %}">
+class="e-get text-warning" href="{{ind.get_link_url}}">
 <span class="glyphicon glyphicon-file"></span> 
 {% if ind.done %}
 (Done)
@@ -60,4 +60,5 @@ $('#task-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
