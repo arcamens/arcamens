@@ -249,7 +249,7 @@ class RecoverAccount(LoginView):
         url = '%s%s' % (settings.LOCAL_ADDR, url)
 
         send_mail('Account recover %s' % user.name,
-        '%s' % url, settings.EMAIL_HOST_USER, [email],
+        '%s' % url, 'noreply@arcamens.com', [email],
         fail_silently=False)
 
         return render(request, 'site_app/recover-mail-sent.html', 
