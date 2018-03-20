@@ -2,120 +2,72 @@
 <li>
 
 <!-- If the card has no ancestor then it is on clipboard -->
-{% if card.ancestor %}
 <a data-shell="#main-view" 
 class="e-get text-success"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
-{% else %}
-<a 
-class="e-get text-success disabled"
-href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
-
-{% endif %}
 
 <li>
-<a 
-data-shell="#bigModalContent"
-class="e-get text-warning"
-data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:update-card' card.id %}"
+
+<a class="b-modal text-warning"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
 
 <li>
-<a 
-data-shell="#bigModalContent"
-class="e-get text-info"
-data-show="{% url 'note_app:list-notes' card.id %}" 
-data-callback="$('#bigModal').modal('toggle');" 
+<a class="b-modal text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
 href="#"><span class="glyphicon glyphicon-comment"></span> Notes</a></li>
 
 <li>
 
 <li>
-<a 
-data-shell="#bigModalContent"
-class="e-get text-info"
-data-show="{% url 'snippet_app:create-snippet' card.id %}" 
-data-callback="$('#bigModal').modal('toggle');" 
+<a class="b-modal text-info" data-show="{% url 'snippet_app:create-snippet' card.id %}" 
 href="#"><span class="glyphicon glyphicon-plus"></span> Snippet</a></li>
 
 <li>
 
-<a 
-data-shell="#modalContent"
-class="e-get text-default"
-data-show="{% url 'card_app:manage-card-workers' card.id %}" 
-data-callback="$('#modal').modal('toggle');" 
-href="#"><span class="glyphicon glyphicon-user"></span> Workers</a></li>
+<a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
+data-callback="$('#modal').modal('toggle');" href="#">
+<span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
 {% if card.done %}
 <li>
-<a 
-data-shell="#main-view"
-class="e-get text-warning"
-data-show="{% url 'card_app:undo'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-ok"></span> Undo</a></li>
-
+<a data-shell="#main-view"class="e-get text-warning"
+data-show="{% url 'card_app:undo'  card.id %}" href="#">
+<span class="glyphicon glyphicon-ok"></span> Undo</a></li>
 {% else %}
 <li>
-<a 
-data-shell="#main-view"
-class="e-get text-warning"
-data-show="{% url 'card_app:done'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-ok"></span> Done</a></li>
-
+<a data-shell="#main-view"class="e-get text-warning"
+data-show="{% url 'card_app:done'  card.id %}" href="#">
+<span class="glyphicon glyphicon-ok"></span> Done</a></li>
 {% endif %}
 
 <li>
-<a 
-data-shell="#modalContent"
-class="e-get text-default"
-data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
-data-callback="$('#modal').modal('toggle');" 
-href="#"><b>#</b> Tags</a></li>
+<a class="s-modal text-default" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
+data-callback="$('#modal').modal('toggle');"  href="#">
+<b>#</b> Tags</a></li> 
 
 <li>
-<a 
-data-shell="#modalContent"
-data-callback="$('#modal').modal('toggle');" 
-
-class="e-get text-danger"
-data-show="{% url 'card_app:confirm-card-deletion'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+<a class="s-modal text-danger" data-show="{% url 'card_app:confirm-card-deletion'  card.id %}"  href="#">
+<span class="glyphicon glyphicon-remove"></span> Delete</a></li>
 
 <li>
-<a 
-data-shell="#modalContent"
-class="e-get text-warning"
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:select-fork-list'  card.id %}" 
+<a class="s-modal text-warning" data-show="{% url 'card_app:select-fork-list'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
 <li>
-<a 
-data-shell="#modalContent"
-class="e-get text-warning"
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
+<a class="s-modal text-warning" data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Post</a></li>
 
 <li>
 
-<a 
-data-shell="#bigModalContent"
-class="e-get text-primary"
-data-callback="$('#bigModal').modal('toggle');" 
+<a class="s-modal text-primary"
 data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-link"></span> Relate</a></li>
 
 <li>
-<a 
-data-shell="#main-view"
-class="e-get text-warning"
-data-show="{% url 'card_app:cut-card' card.id %}"
-href="#"><span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
+<a data-shell="#main-view" class="e-get text-warning"
+data-show="{% url 'card_app:cut-card' card.id %}" href="#">
+<span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
 
 <li>
 <a 
@@ -132,26 +84,5 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
