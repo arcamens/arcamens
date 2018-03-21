@@ -585,11 +585,12 @@ class ListAllTasks(GuardianView):
         filter.pattern, filter.done)
 
         count = cards.count()
-        tasks = cards.only('done', 'label', 'id').order_by('id')
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'core_app/list-all-tasks-scroll.html', cards)
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'total': total, 'count': count, 
-        'form': form, 'tasks': tasks})
+        'form': form, 'elems': elems.as_div()})
 
     def post(self, request):
         me        = User.objects.get(id=self.user_id)
@@ -614,11 +615,11 @@ class ListAllTasks(GuardianView):
         filter.pattern, filter.done)
 
         count = cards.count()
-        cards = cards.only('done', 'label', 'id')
-        tasks = cards.only('done', 'label', 'id').order_by('id')
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'core_app/list-all-tasks-scroll.html', cards)
 
         return render(request, 'core_app/list-all-tasks.html', 
-        {'form': form, 'tasks': tasks, 'total': total, 'count': count})
+        {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
 
 class Find(GuardianView):
     def get(self, request):
@@ -804,6 +805,7 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
 
 
 
