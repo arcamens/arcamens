@@ -10,18 +10,8 @@
 </div>
 
 <div class="modal-body">
-<div class="container-fluid pre-scrollable">
-{% for ind in events %}
-
-<p>
-{{ind.html | safe}}
-
-<a style="color:green;" class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:seen-event' ind.id %}" href="#">
-Seen </a>
-</p>
-
-{% endfor %}
+<div class="container-fluid">
+{{ elems | safe}}
 </div>
 
 </div>
@@ -44,6 +34,7 @@ Shout? </a>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

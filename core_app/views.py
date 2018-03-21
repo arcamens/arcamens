@@ -325,10 +325,12 @@ class ListEvents(GuardianView):
         events = user.events.filter(organization=user.default)
         events = events.order_by('-created')
         count = events.count()
-        events = events.values('html', 'id')
+        events = events.values('html', 'id').order_by('id')
+
+        elems = JScroll(user.id, 'core_app/list-events-scroll.html', events)
 
         return render(request, 'core_app/list-events.html', 
-        {'events': events, 'user': user, 
+        {'elems': elems.as_div(), 'user': user, 
          'organization': user.default, 'count': count})
 
 class ListTags(GuardianView):
@@ -715,7 +717,7 @@ class ListLogs(GuardianView):
 
         events = events.order_by('-created')
         count  = events.count()
-        events = events.values('html')
+        events = events.values('html').order_by('id')
 
         events = JScroll(user.id, 'core_app/list-logs-scroll.html', events)
 
@@ -805,6 +807,7 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
 
 
 

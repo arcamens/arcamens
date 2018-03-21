@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% for ind in elems %}
+
+<p>
+{{ind.html | safe}}
+
+<a style="color:green;" class="e-get" data-shell="#modalContent" 
+data-show="{% url 'core_app:seen-event' ind.id %}" href="#">
+Seen </a>
+</p>
+
+{% endfor %}
+
