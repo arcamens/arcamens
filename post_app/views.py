@@ -354,7 +354,7 @@ class SetupGlobalPostFilter(GuardianView):
     def post(self, request):
         user   = User.objects.get(id=self.user_id)
         record = GlobalPostFilter.objects.get(
-        user__id=self.user_id)
+        user__id=self.user_id, organization=user.default)
 
         form = forms.GlobalPostFilterForm(request.POST, instance=record)
 
@@ -654,6 +654,7 @@ class SetupAssignmentFilter(GuardianView):
                    {'user': user, 'form': form}, status=400)
         form.save()
         return redirect('post_app:list-assignments', user_id=user.id)
+
 
 
 
