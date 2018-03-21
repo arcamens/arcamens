@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
 
-    url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assigments'),
+    url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assignments'),
     url(r'^post-worker-information/(?P<peer_id>.+)/(?P<post_id>.+)/', views.PostWorkerInformation.as_view(), name='post-worker-information'),
     url(r'^post-tag-information/(?P<tag_id>.+)/(?P<post_id>.+)/', views.PostTagInformation.as_view(), name='post-tag-information'),
 
@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
     url(r'^setup-post-filter/(?P<timeline_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
     url(r'^setup-global-posts-filter/', views.SetupGlobalPostFilter.as_view(), name='setup-global-post-filter'),
+    url(r'^setup-assignment-filter/', views.SetupAssignmentFilter.as_view(), name='setup-assignment-filter'),
+
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
     url(r'^copy-post/(?P<post_id>.+)/', views.CopyPost.as_view(), name='copy-post'),
     url(r'^manage-post-tags/(?P<post_id>.+)/', views.ManagePostTags.as_view(), name='manage-post-tags'),
@@ -38,5 +40,7 @@ urlpatterns = [
     url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
 
 ]
+
+
 
 

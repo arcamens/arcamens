@@ -634,13 +634,6 @@ class SetupCardFilter(GuardianView):
         return redirect('card_app:list-cards', list_id=list_id)
 
 
-class ListTasks(GuardianView):
-    def get(self, request):
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        return render(request, 'card_app/list-tasks.html', 
-        {'tasks': user.tasks.all()})
-
 class PinCard(GuardianView):
     def get(self, request, card_id):
         user = core_app.models.User.objects.get(id=self.user_id)
@@ -1100,6 +1093,7 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.child)
         event.ancestor.ancestor.ws_sound()
+
 
 
 

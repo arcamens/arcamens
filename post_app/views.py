@@ -1,6 +1,6 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
-PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost
+PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, AssignmentFilter
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.shortcuts import render, redirect
@@ -192,11 +192,21 @@ class ListAssignments(GuardianView):
     def get(self, request, user_id):
         user = User.objects.get(id=self.user_id)
 
-        posts = user.assignments.filter(done=False, ancestor__isnull=False)
-        total = posts.count()
+        filter, _ = AssignmentFilter.objects.get_or_create(
+        user=user, organization=user.default)
+
+        posts      = user.assignments.all()
+        total      = posts.count()
+
+        posts      = models.Post.collect_posts(posts, 
+        filter.pattern, filter.done) if filter.status \
+        else posts.filter(done=False)
+
+        posts = posts.order_by('-created')
+        count = posts.count()
 
         return render(request, 'post_app/list-assignments.html', 
-        {'posts': posts, 'user':user, 'total': total})
+        {'posts': posts, 'user':user, 'total': total, 'count': count})
 
 class PostWorkerInformation(GuardianView):
     def get(self, request, peer_id, post_id):
@@ -617,4 +627,31 @@ class UndoClipboard(GuardianView):
         user=user, organization=user.default)
 
         clipboard.posts.remove(event.post)
+
+class SetupAssignmentFilter(GuardianView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+
+        filter = AssignmentFilter.objects.get(
+        user__id=self.user_id, organization=user.default)
+
+        return render(request, 'post_app/setup-assignment-filter.html', 
+        {'form': forms.AssignmentFilterForm(instance=filter), 
+        'user': user})
+
+    def post(self, request):
+        user = User.objects.get(id=self.user_id)
+
+        record = AssignmentFilter.objects.get(
+        user__id=self.user_id, organization=user.default)
+
+        form = forms.AssignmentFilterForm(request.POST, instance=record)
+
+        if not form.is_valid():
+            return render(request, 'post_app/setup-assignment-filter.html',
+                   {'user': user, 'form': form}, status=400)
+        form.save()
+        return redirect('post_app:list-assignments', user_id=user.id)
+
+
 

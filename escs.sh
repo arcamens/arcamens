@@ -395,6 +395,11 @@ git tag -a 1.0.11 -m 'Bug fixes, getting to work with jsim.'
 git push origin : 1.0.11
 git checkout staging
 
+git checkout master
+git tag -a 1.1.0 -m 'Bug fixes, implementing undoing clipboard operations.'
+git push origin : 1.1.0
+git checkout staging
+
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -660,5 +665,6 @@ git push -u origin staging
 git branch -d C162
 git push origin :C162
 git fetch -p 
+
 
 

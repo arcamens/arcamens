@@ -1,20 +1,20 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<form id="setup-timeline-filter-form" enctype="multipart/form-data">
+<form id="setup-post-filter-form" enctype="multipart/form-data">
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-filter"></span>
-
-{{organization.name}}'s Filter</h5>
+Assignments's filter</h5>
 </div>
 
 <div class="modal-body">
 {% csrf_token %}
 
 {% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.done  size='md' %}
 {% bootstrap_field form.status  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -22,9 +22,10 @@
 </form>
 
 <div class="modal-footer">
-<button  type="button" data-form="#setup-timeline-filter-form" data-shell="#main-view"  
-data-show="{% url 'timeline_app:setup-timeline-filter' organization.id  %}"
-class="btn btn-default m-post-close"> {% trans "Setup" %} </button>
+<button  type="button" data-form="#setup-post-filter-form" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'post_app:setup-assignment-filter'  %}"
+class="btn btn-default e-post"> {% trans "Setup" %} </button>
 </div>
 
 

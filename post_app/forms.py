@@ -17,6 +17,11 @@ class PostFilterForm(forms.ModelForm):
         model  = models.PostFilter
         exclude = ('user', 'timeline')
 
+class AssignmentFilterForm(forms.ModelForm):
+    class Meta:
+        model  = models.AssignmentFilter
+        exclude = ('user', 'organization')
+
 class GlobalPostFilterForm(forms.ModelForm):
     class Meta:
         model  = models.GlobalPostFilter
@@ -41,6 +46,8 @@ class AlertPostWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='Please, take a look at this asap!')
+
+
 
 
 

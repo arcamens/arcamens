@@ -81,4 +81,17 @@ normalize_events(events)
 events = EUpdateNote.objects.all()
 normalize_events(events)
 ##############################################################################
+# testing https://staging.arcamens.com/card_app/card-link/350/
+# bug with queryset.union when the latter queryset type is Model.objects.none().
+
+from card_app.models import Card
+from post_app.models import Post
+
+cards = Card.objects.all()
+post = Post.objects.none()
+
+all = cards.union(post)
+all
+
+
 

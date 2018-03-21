@@ -3,8 +3,8 @@
 <ul class="nav nav-pills" style="background:#DADDDD;">
 
 <li class="disabled">
-<a  href="#"> <b><span class="glyphicon glyphicon-tag"></span>  
-Assignments: <span class="badge">{{total}}</span> </b></a>
+<a  href="#"> <b><span class="glyphicon glyphicon-tasks"></span>  
+Assignments: <span class="badge">{{count}}/{{total}}</span> </b></a>
 </li>
 
 <li data-toggle="tooltip" title="Up">
@@ -15,8 +15,27 @@ Up
 </a>
 </li>
 
+<li>
+<a href="#" class="s-modal" data-shell="#modalContent" 
+data-show="{% url 'post_app:setup-assignment-filter' %}" 
+{% if filter.status %}
+<span class="glyphicon glyphicon-filter"></span> 
+Filter
+{% else %}
+<strike> 
+<span class="glyphicon glyphicon-filter"></span> 
+Filter </strike>
+
+{% endif %}
+
+</a>
+</li>
 
 </ul>
+
+
+
+
 
 
 

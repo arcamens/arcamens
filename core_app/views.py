@@ -575,29 +575,17 @@ class ListAllTasks(GuardianView):
         filter, _ = GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        form        = forms.GlobalTaskFilterForm(instance=filter)
-        posts = me.assignments.filter(
-        ancestor__organization=me.default)
-
+        form  = forms.GlobalTaskFilterForm(instance=filter)
         cards = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
 
-        total = posts.count() + cards.count()
+        total = cards.count()
         
         cards = Card.collect_cards(cards, 
         filter.pattern, filter.done)
 
-        posts = Post.collect_posts(posts, 
-        filter.pattern, filter.done)
-
-        count = posts.count() + cards.count()
-        cards = cards.only('done', 'label', 'id')
-        posts = posts.only('done', 'label', 'id')
-
-        # If i instantiate the form here it stops working
-        # correctly when filtering the cards/posts
-        # form  = forms.GlobalTaskFilterForm(instance=filter)
-        tasks = chain(cards, posts)
+        count = cards.count()
+        tasks = cards.only('done', 'label', 'id').order_by('id')
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'total': total, 'count': count, 
@@ -609,12 +597,11 @@ class ListAllTasks(GuardianView):
         user=me, organization=me.default)
 
         form = forms.GlobalTaskFilterForm(request.POST, instance=filter)
-        posts = me.assignments.filter(ancestor__organization=me.default)
 
         cards = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
 
-        total = posts.count() + cards.count()
+        total = cards.count()
 
         if not form.is_valid():
             return render(request, 'core_app/list-all-tasks.html', 
@@ -626,14 +613,9 @@ class ListAllTasks(GuardianView):
         cards = Card.collect_cards(cards, 
         filter.pattern, filter.done)
 
-        posts = Post.collect_posts(posts, 
-        filter.pattern, filter.done)
-
-        count = posts.count() + cards.count()
+        count = cards.count()
         cards = cards.only('done', 'label', 'id')
-        posts = posts.only('done', 'label', 'id')
-
-        tasks = chain(cards, posts)
+        tasks = cards.only('done', 'label', 'id').order_by('id')
 
         return render(request, 'core_app/list-all-tasks.html', 
         {'form': form, 'tasks': tasks, 'total': total, 'count': count})
@@ -646,19 +628,14 @@ class Find(GuardianView):
         user=me, organization=me.default)
         form  = forms.GlobalFilterForm(instance=filter)
 
-        posts = Post.get_allowed_posts(me)
         cards = Card.get_allowed_cards(me)
-        total = posts.count() + cards.count()
+        total = cards.count()
 
-        posts = Post.collect_posts(posts, filter.pattern, filter.done)
         cards = Card.collect_cards(cards, filter.pattern, filter.done)
-        count = posts.count() + cards.count()
+        count = cards.count()
 
-        cards = cards.only('done', 'label', 'id')
-        posts = posts.only('done', 'label', 'id')
-        elems = cards.union(posts).order_by('id')
-
-        elems = JScroll(me.id, 'core_app/find-scroll.html', elems)
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'core_app/find-scroll.html', cards)
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
@@ -670,23 +647,19 @@ class Find(GuardianView):
 
         form  = forms.GlobalFilterForm(request.POST, instance=filter)
 
-        posts = Post.get_allowed_posts(me)
         cards = Card.get_allowed_cards(me)
-        total = posts.count() + cards.count()
+        total = cards.count()
 
         if not form.is_valid():
             return render(request, 'core_app/find.html', 
                 {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
 
-        posts = Post.collect_posts(posts, filter.pattern, filter.done)
         cards = Card.collect_cards(cards, filter.pattern, filter.done)
-        count = posts.count() + cards.count()
+        count =  cards.count()
 
-        cards = cards.only('done', 'label', 'id')
-        posts = posts.only('done', 'label', 'id')
-        elems = cards.union(posts).order_by('id')
-        elems = JScroll(me.id, 'core_app/find-scroll.html', elems)
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'core_app/find-scroll.html', cards)
 
         return render(request, 'core_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
@@ -831,6 +804,8 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
+
 
 
 

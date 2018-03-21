@@ -179,6 +179,27 @@ class GlobalPostFilter(GlobalFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
+class AssignmentFilter(GlobalFilterMixin, models.Model):
+    pattern = models.CharField(max_length=255, default='',
+    blank=True, help_text='Example: victor + \
+    #arcamens + #suggestion ...')
+
+    user = models.ForeignKey('core_app.User', 
+    null=True, blank=True)
+
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
+
+    status = models.BooleanField(blank=True, 
+    default=False, help_text='Filter On/Off.')
+
+    done = models.BooleanField(blank=True, 
+    default=False, help_text='Done posts.')
+
+    class Meta:
+        unique_together = ('user', 'organization', )
+
+
 class PostFileWrapper(PostFileWrapperMixin, models.Model):
     post = models.ForeignKey('Post', 
     null=True, on_delete=models.CASCADE, blank=True)
@@ -288,6 +309,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

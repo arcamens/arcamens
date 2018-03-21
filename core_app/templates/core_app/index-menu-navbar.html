@@ -85,7 +85,7 @@ class="e-get" data-shell="#bigModalContent"
 data-show="{% url 'core_app:list-all-tasks' %}" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell="#bigModalContent">
-<span class="glyphicon glyphicon-tasks"></span> All Tasks 
+<span class="glyphicon glyphicon-tasks"></span> Card/Tasks 
 </a>
 </li>
 
@@ -94,13 +94,14 @@ data-shell="#bigModalContent">
 class="e-get" data-shell="#bigModalContent" 
 data-show="{% url 'core_app:find' %}" 
 data-callback="$('#bigModal').modal('show');">
-<span class="glyphicon glyphicon-search"></span> Find
+<span class="glyphicon glyphicon-search"></span> Find/Cards
 </a>
 </li>
 
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 

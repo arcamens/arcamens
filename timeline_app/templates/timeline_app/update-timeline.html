@@ -2,6 +2,12 @@
 {% extends "timeline_app/create-timeline.html" %}
 {% load i18n %}
 
+{% block title %}
+<h5 class="modal-title">
+<span class="glyphicon glyphicon-eye-open"></span>
+Update {{timeline.name}}</h5>
+{% endblock %}
+
 {% block buttons %}
 
 <button  type="button" data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
@@ -16,6 +22,8 @@ class="btn btn-default m-post-close">
 </button>
 
 {% endblock %}
+
+
 
 
 

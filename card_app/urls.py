@@ -50,7 +50,6 @@ urlpatterns = [
     url(r'^manage-card-workers/(?P<card_id>.+)/', views.ManageCardWorkers.as_view(), name='manage-card-workers'),
     url(r'^bind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.BindCardWorker.as_view(), name='bind-card-worker'),
     url(r'^unbind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.UnbindCardWorker.as_view(), name='unbind-card-worker'),
-    url(r'^list-tasks/', views.ListTasks.as_view(), name='list-tasks'),
     url(r'^pin-card/(?P<card_id>.+)/', views.PinCard.as_view(), name='pin-card'),
     url(r'^relate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.RelateCard.as_view(), name='relate-card'),
     url(r'^unrelate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.UnrelateCard.as_view(), name='unrelate-card'),
@@ -63,5 +62,6 @@ urlpatterns = [
     url(r'^undo-clipboard/(?P<card_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
 
 ]
+
 
 
