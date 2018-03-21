@@ -4,7 +4,7 @@
 
 <li class="disabled">
 <a  href="#"> <b><span class="glyphicon glyphicon-flag"></span>  
-{{organization.name|slice:":20"}}'s Posts: <span class="badge">{{posts.count}}/{{total}}</span></b></a>
+{{organization.name|slice:":20"}}'s Posts: <span class="badge">{{count}}/{{total}}</span></b></a>
 </li>
 
 <li> <a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
@@ -28,6 +28,7 @@ Filter </strike>
 </a></li>
 
 </ul>
+
 
 
 

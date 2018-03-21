@@ -60,9 +60,12 @@ class ListAllPosts(ListPosts):
         filter.pattern, filter.done) if filter.status \
         else posts.filter(done=False)
 
+        count = posts.count()
+        elems = JScroll(user.id, 'timeline_app/list-all-posts-scroll.html', posts)
+
         return render(request, 'timeline_app/list-all-posts.html', 
-        {'user':user, 'posts':posts, 'total': total, 'filter': filter, 
-        'organization': user.default})
+        {'user':user, 'posts':posts, 'total': total, 'count': count, 'filter': filter, 
+        'organization': user.default, 'elems':elems.as_window()})
 
 class CreateTimeline(GuardianView):
     """

@@ -3,15 +3,7 @@
 {% include "timeline_app/list-all-posts-menu.html" %}
 <br>
 
-{% for ind in posts %}
-    <div id="post-{{ind.id}}">
-            <script>
-            $(document).ready(function() {
-                $('#post-' + {{ind.id}}).load("{{ind.get_absolute_url}}");
-            });
-            </script>
-    </div>
-{% endfor %}
+{{ elems | safe }}
 
 
 

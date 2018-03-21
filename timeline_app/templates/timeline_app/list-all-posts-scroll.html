@@ -1,0 +1,15 @@
+{% load i18n %}
+
+{% for ind in elems %}
+    <div id="post-shell-{{ind.id}}">
+        {% include "post_app/post.html" with post=ind %}
+
+    </div>
+{% endfor %}
+
+
+
+
+
+
+
