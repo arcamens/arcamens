@@ -1,0 +1,22 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+Organization <a href="{% url 'core_app:index' %}"> 
+<span class="glyphicon glyphicon-flag"></span>
+{{event.organization.name}}</a>  updated by 
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> on {{event.created}}
+<b class="text-warning"> *Reload the page!* </b>
+
+{% endblock %}
+
+
+
+
+
+
+

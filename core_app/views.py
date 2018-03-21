@@ -1,7 +1,7 @@
 from core_app.models import OrganizationService, Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization, GlobalTaskFilter, \
-GlobalFilter, Clipboard, Event, EShout
+GlobalFilter, Clipboard, Event, EShout, EUpdateOrganization
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from django.shortcuts import render, redirect
@@ -142,12 +142,16 @@ class CreateOrganization(AuthenticatedView):
 
 class UpdateOrganization(GuardianView):
     def get(self, request, organization_id):
+        user = User.objects.get(id=self.user_id)
+
         organization = Organization.objects.get(id=organization_id)
         return render(request, 
         'core_app/update-organization.html',{'organization': organization, 
         'form': forms.UpdateOrganizationForm(instance=organization)})
 
     def post(self, request, organization_id):
+        user = User.objects.get(id=self.user_id)
+
         record  = Organization.objects.get(id=organization_id)
         form    = forms.UpdateOrganizationForm(request.POST, instance=record)
 
@@ -156,6 +160,11 @@ class UpdateOrganization(GuardianView):
                 {'organization': record, 'form': form})
 
         form.save()
+
+        event = EUpdateOrganization.objects.create(
+        organization=user.default, user=user)
+        event.users.add(*record.users.all())
+        record.ws_sound()
 
         return redirect('core_app:index')
 
@@ -822,6 +831,7 @@ class Shout(GuardianView):
         ws.client.publish(queue, 'sound', 0, False)
 
         return redirect('core_app:list-events')
+
 
 
 

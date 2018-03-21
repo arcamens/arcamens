@@ -73,3 +73,12 @@ class EventMixin:
         self.signers.add(user)
         self.save(hcache=False)
 
+class OrganizationMixin(object):
+    def ws_alert(self):
+        ws.client.publish('organization%s' % self.id, 
+            'alert-event', 0, False)
+
+    def ws_sound(self):
+        ws.client.publish('organization%s' % self.id, 
+            'sound', 0, False)
+

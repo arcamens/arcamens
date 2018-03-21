@@ -5,7 +5,7 @@ from paybills.models import Service
 from django.db import models
 from datetime import datetime
 
-class Organization(models.Model):
+class Organization(OrganizationMixin, models.Model):
     name     = models.CharField(null=True,
     blank=False, verbose_name=_("Name"),  max_length=256)
     expiration = models.DateTimeField(blank=True, null=True)
@@ -232,6 +232,10 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization')
+
+class EUpdateOrganization(Event):
+    html_template = 'core_app/e-update-organization.html'
+
 
 
 
