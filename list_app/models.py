@@ -104,6 +104,18 @@ class ECutList(Event):
 
     html_template = 'list_app/e-cut-list.html'
 
+class ECopyList(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('board_app.Board', 
+    related_name='e_copy_list0', blank=True)
+
+    child = models.ForeignKey('List', 
+    related_name='e_copy_list1', blank=True)
+
+    html_template = 'list_app/e-copy-list.html'
+
 class EPasteCard(Event):
     """
     """
@@ -116,6 +128,7 @@ class EPasteCard(Event):
     symmetrical=False)
 
     html_template = 'list_app/e-paste-card.html'
+
 
 
 

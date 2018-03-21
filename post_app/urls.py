@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
+    url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
 
 ]
+
 

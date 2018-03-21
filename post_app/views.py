@@ -2,14 +2,14 @@ from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
-from core_app.models import Clipboard, Tag, User
+from core_app.models import Clipboard, Tag, User, Event
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from timeline_app.models import Timeline
+from timeline_app.models import Timeline, EPastePost
 from django.conf import settings
 from core_app import ws
 from . import forms
@@ -583,8 +583,38 @@ class ConfirmPostDeletion(GuardianView):
         {'post': post})
 
 
+class UndoClipboard(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+        user = User.objects.get(id=self.user_id)
+        event0 = post.e_copy_post1.last()
+        event1 = post.e_cut_post1.last()
 
+        # Then it is a copy because there is no event
+        # mapped to it. A copy contains no e_copy_post1 nor
+        # e_cut_post1.
+        if not (event0 and event1):
+            post.delete()
+        else:
+            self.undo_cut(event1)
 
+        return redirect('core_app:list-clipboard')
 
+    def undo_cut(self, event):
+        user = User.objects.get(id=self.user_id)
 
+        event.post.ancestor = event.timeline
+        event.post.save()
+
+        event1 = EPastePost(
+        organization=user.default, timeline=event.timeline, user=user)
+        event1.save(hcache=False)
+        event1.posts.add(event.post)
+        event1.users.add(*event.timeline.users.all())
+        event1.save()
+        
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        clipboard.posts.remove(event.post)
 

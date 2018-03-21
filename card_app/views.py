@@ -13,7 +13,7 @@ from timeline_app.models import Timeline
 from core_app.utils import splittokens
 from core_app.models import User
 from card_app.models import Card
-from list_app.models import List
+from list_app.models import List, EPasteCard
 from functools import reduce
 from itertools import chain
 import board_app.models
@@ -409,6 +409,10 @@ class CopyCard(GuardianView):
         clipboard, _    = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
         clipboard.cards.add(copy)
+
+        event = models.ECopyCard.objects.create(organization=user.default,
+        ancestor=card.ancestor, child=card, user=user)
+        event.users.add(*card.ancestor.ancestor.members.all())
 
         # Missing event.
         ws.client.publish('board%s' % card.ancestor.ancestor.id, 
@@ -1061,19 +1065,41 @@ class AlertCardWorkers(GuardianView):
         return HttpResponse(status=200)
 
 
+class UndoClipboard(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        user = User.objects.get(id=self.user_id)
+        event0 = card.e_copy_card1.last()
+        event1 = card.e_cut_card1.last()
 
+        # Then it is a copy because there is no event
+        # mapped to it. A copy contains no e_copy_card1 nor
+        # e_cut_card1.
+        if not (event0 and event1):
+            card.delete()
+        else:
+            self.undo_cut(event1)
 
+        return redirect('core_app:list-clipboard')
 
+    def undo_cut(self, event):
+        user = User.objects.get(id=self.user_id)
 
+        event.child.ancestor = event.ancestor
+        event.child.save()
 
+        event1 = EPasteCard(
+        organization=user.default, ancestor=event.ancestor, user=user)
+        event1.save(hcache=False)
+        event1.cards.add(event.child)
+        event1.users.add(*event.ancestor.ancestor.members.all())
+        event1.save()
+        
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
 
-
-
-
-
-
-
-
+        clipboard.cards.remove(event.child)
+        event.ancestor.ancestor.ws_sound()
 
 
 

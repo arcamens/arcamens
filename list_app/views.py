@@ -1,8 +1,8 @@
 from django.views.generic import View
 from list_app.models import ListFilter, EDeleteList, List, ECreateList, \
-EUpdateList, EPasteCard, ECutList
+EUpdateList, EPasteCard, ECutList, ECopyList
 from core_app.models import Clipboard, User
-from board_app.models import Board, Pin
+from board_app.models import Board, Pin, EPasteList
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.http import HttpResponse
@@ -200,7 +200,10 @@ class CopyList(GuardianView):
         user=user, organization=user.default)
         clipboard.lists.add(copy)
 
-        # missing event.
+        event = ECopyList.objects.create(organization=user.default,
+        ancestor=list.ancestor, child=list, user=user)
+        event.users.add(*list.ancestor.members.all())
+
         ws.client.publish('board%s' % list.ancestor.id, 
             'sound', 0, False)
 
@@ -233,6 +236,42 @@ class SetupListFilter(GuardianView):
                         'board': record.board}, status=400)
         form.save()
         return redirect('list_app:list-lists', board_id=board_id)
+
+class UndoClipboard(GuardianView):
+    def get(self, request, list_id):
+        list = List.objects.get(id=list_id)
+        user = User.objects.get(id=self.user_id)
+        event0 = list.e_copy_list1.last()
+        event1 = list.e_cut_list1.last()
+
+        # Then it is a copy because there is no event
+        # mapped to it. A copy contains no e_copy_list1 nor
+        # e_cut_list1.
+        if not (event0 and event1):
+            list.delete()
+        else:
+            self.undo_cut(event1)
+
+        return redirect('core_app:list-clipboard')
+
+    def undo_cut(self, event):
+        user = User.objects.get(id=self.user_id)
+
+        event.child.ancestor = event.ancestor
+        event.child.save()
+
+        event1 = EPasteList(
+        organization=user.default, board=event.ancestor, user=user)
+        event1.save(hcache=False)
+        event1.lists.add(event.child)
+        event1.users.add(*event.ancestor.members.all())
+        event1.save()
+        
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=user, organization=user.default)
+
+        clipboard.lists.remove(event.child)
+        event.ancestor.ws_sound()
 
 
 

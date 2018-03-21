@@ -12,8 +12,10 @@ urlpatterns = [
     url(r'^cut-list/(?P<list_id>.+)/', views.CutList.as_view(), name='cut-list'),
     url(r'^copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
     url(r'^setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
+    url(r'^undo-clipboard/(?P<list_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
 
 ]
+
 
 
 
