@@ -175,7 +175,7 @@ class GlobalFilter(GlobalFilterMixin, models.Model):
     blank=True)
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards/posts?.')
+    default=False, help_text='Done cards?.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -207,7 +207,7 @@ class GlobalTaskFilter(models.Model):
     blank=True)
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards/posts?.')
+    default=False, help_text='Done cards?.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -235,6 +235,7 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
 class EUpdateOrganization(Event):
     html_template = 'core_app/e-update-organization.html'
+
 
 
 
