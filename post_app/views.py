@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from timeline_app.models import Timeline, EPastePost
 from django.conf import settings
+from jsim.jscroll import JScroll
 from core_app import ws
 from . import forms
 from . import models
@@ -202,11 +203,12 @@ class ListAssignments(GuardianView):
         filter.pattern, filter.done) if filter.status \
         else posts.filter(done=False)
 
-        posts = posts.order_by('-created')
+        posts = posts.order_by('id')
         count = posts.count()
+        elems = JScroll(user.id, 'post_app/list-assignments-scroll.html', posts)
 
         return render(request, 'post_app/list-assignments.html', 
-        {'posts': posts, 'user':user, 'total': total, 'count': count})
+        {'elems': elems.as_window(), 'user':user, 'total': total, 'count': count})
 
 class PostWorkerInformation(GuardianView):
     def get(self, request, peer_id, post_id):
@@ -652,6 +654,8 @@ class SetupAssignmentFilter(GuardianView):
                    {'user': user, 'form': form}, status=400)
         form.save()
         return redirect('post_app:list-assignments', user_id=user.id)
+
+
 
 
 
