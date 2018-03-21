@@ -818,8 +818,16 @@ class SetupPassword(GuardianView):
                 {'user': user, 'form': form})
 
     def post(self, request):
-        pass
+        user = User.objects.get(id=self.user_id)
+        form = forms.PasswordForm(request.POST, confirm_token=user.password)
 
+        if not form.is_valid():
+            return render(request, 'core_app/setup-password.html', 
+                    {'user': user, 'form': form}, status=400)
+    
+        user.password = form.cleaned_data['retype']
+        user.save()
 
+        return redirect('core_app:update-user-information')
 
 

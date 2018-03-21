@@ -86,12 +86,3 @@ class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     help_text='Type the organization name to confirm!')
 
 
-
-
-
-
-
-
-
-
-
