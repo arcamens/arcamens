@@ -3,15 +3,5 @@
 {% include "timeline_app/list-posts-menu-timeline.html" %}
 <br>
 
-{% for ind in posts %}
-    <div id="post-shell-{{ind.id}}">
-        {% include "post_app/post.html" with post=ind %}
-
-    </div>
-{% endfor %}
-
-
-
-
-
+{{ elems | safe }}
 

@@ -6,6 +6,7 @@ from core_app.views import GuardianView, CashierView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
+from jsim.jscroll import JScroll
 from django.db.models import Q
 from core_app import ws
 import post_app.models
@@ -37,9 +38,11 @@ class ListPosts(GuardianView):
         else posts.filter(done=False)
 
         posts = posts.order_by('-created')
+        count = posts.count()
+        elems = JScroll(user.id, 'timeline_app/list-posts-scroll.html', posts)
 
         return render(request, 'timeline_app/list-posts.html', 
-        {'timeline':timeline, 'total': total, 'posts':posts, 'filter': filter})
+        {'timeline':timeline, 'count': count, 'total': total, 'elems':elems.as_window(), 'filter': filter})
 
 class ListAllPosts(ListPosts):
     """
@@ -384,6 +387,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 
