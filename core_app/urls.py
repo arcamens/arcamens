@@ -12,7 +12,6 @@ urlpatterns = [
 
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
-    url(r'^event-paginator/', views.EventPaginator.as_view(), name='event-paginator'),
     url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
     url(r'^update-organization/(?P<organization_id>.+)/', views.UpdateOrganization.as_view(), name='update-organization'),
     url(r'^delete-organization/(?P<organization_id>.+)/', views.DeleteOrganization.as_view(), name='delete-organization'),
@@ -40,6 +39,7 @@ urlpatterns = [
     url(r'^import/', views.Import.as_view(), name='import'),
 
 ]
+
 
 
 

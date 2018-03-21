@@ -299,23 +299,6 @@ class ManageUserTags(GuardianView):
         {'included': included, 'excluded': excluded, 'user': user,
         'me': me, 'organization': me.default,'form':form})
 
-class EventPaginator(GuardianView):
-    def get(self, request):
-        user      = User.objects.get(id=self.user_id)
-        events    = user.default.events.all().order_by('-created')[10:]
-
-        page      = request.GET.get('page', 1)
-        paginator = Paginator(events, 4)
-
-        try:
-            events = paginator.page(page)
-        except EmptyPage:
-            return HttpResponse('')
-
-        return render(request, 'core_app/event-paginator.html', 
-        {'events': events, 'user': user,})
-
-
 class ListEvents(GuardianView):
     """
     """
