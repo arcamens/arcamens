@@ -18,10 +18,8 @@
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.email  size='md' %}
 
-{% bootstrap_field form.avatar  size='md' %}
 {% bootstrap_field form.description  size='md' %}
-{% bootstrap_field form.password  size='md' %}
-{% bootstrap_field form.retype  size='md' %}
+{% bootstrap_field form.avatar  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -31,6 +29,13 @@
 </div>
 
 <div class="modal-footer">
+<div class="pull-left">
+<a href="#" data-show="{% url 'core_app:setup-password'  %}" class="s-modal"> 
+Set a new password?
+
+</a>
+</div>
+<br>
 <button  type="button" data-form="#update-user-information-form" 
 data-callback="window.location.replace('{% url 'core_app:index' %}');" 
 data-shell-error="#modalContent" data-show="{% url 'core_app:update-user-information'  %}"
@@ -39,6 +44,7 @@ class="btn btn-default e-post">
 </button>
 
 </div>
+
 
 
 

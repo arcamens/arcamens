@@ -808,9 +808,17 @@ class Shout(GuardianView):
 
         return redirect('core_app:list-events')
 
+class SetupPassword(GuardianView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        form = forms.PasswordForm()
 
+        return render(request, 
+            'core_app/setup-password.html', 
+                {'user': user, 'form': form})
 
-
+    def post(self, request):
+        pass
 
 
 

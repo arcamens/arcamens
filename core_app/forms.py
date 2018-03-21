@@ -25,14 +25,33 @@ class TagSearchForm(forms.Form):
 class OrganizationInviteForm(forms.Form):
     email = forms.EmailField(help_text="Insert user E-mail.")
 
-class UserForm(site_app.forms.UserForm):
+class UserForm(forms.ModelForm):
     class Meta:
         model  = models.User
-        fields = ('name', 'avatar', 
-        'email', 'password', 'description')
+        fields = ('name', 'avatar', 'email', 'description')
 
-        widgets = {
-        'password': forms.PasswordInput()}
+class PasswordForm(forms.Form):
+    retype = forms.CharField(required=True, widget=forms.PasswordInput())
+    password = forms.CharField(required=True, widget=forms.PasswordInput())
+    old = forms.CharField(required=True, widget=forms.PasswordInput())
+
+    def __init__(self, *args, confirm_token='', **kwargs):
+        self.confirm_token = confirm_token
+        super(PasswordForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(PasswordForm, self).clean()
+        retype   = self.cleaned_data.get('retype')
+        password = self.cleaned_data.get('password')
+        old = self.cleaned_data.get('old')
+
+        if old != self.confirm_token:
+            raise forms.ValidationError(
+                     "Wrong existing password!")
+
+        if retype != password :
+            raise forms.ValidationError(
+                "    Password doesn't match!")
 
 class GlobalFilterForm(forms.ModelForm):
     class Meta:
@@ -65,6 +84,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 

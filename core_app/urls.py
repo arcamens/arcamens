@@ -34,11 +34,13 @@ urlpatterns = [
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
     url(r'^delete-all-clipboard/', views.DeleteAllClipboard.as_view(), name='delete-all-clipboard'),
     url(r'^confirm-clipboard-deletion/', views.ConfirmClipboardDeletion.as_view(), name='confirm-clipboard-deletion'),
+    url(r'^setup-password/', views.SetupPassword.as_view(), name='setup-password'),
 
     url(r'^export/', views.Export.as_view(), name='export'),
     url(r'^import/', views.Import.as_view(), name='import'),
 
 ]
+
 
 
 
