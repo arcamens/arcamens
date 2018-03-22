@@ -308,7 +308,7 @@ class ListEvents(GuardianView):
         events = user.events.filter(organization=user.default)
         events = events.order_by('-created')
         count = events.count()
-        events = events.values('html', 'id').order_by('id')
+        events = events.values('html', 'id').order_by('-created')
 
         elems = JScroll(user.id, 'core_app/list-events-scroll.html', events)
 
@@ -700,7 +700,7 @@ class ListLogs(GuardianView):
 
         events = events.order_by('-created')
         count  = events.count()
-        events = events.values('html').order_by('id')
+        events = events.values('html').order_by('-created')
 
         events = JScroll(user.id, 'core_app/list-logs-scroll.html', events)
 
@@ -812,6 +812,7 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
 
