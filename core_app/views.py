@@ -157,7 +157,7 @@ class UpdateOrganization(GuardianView):
 
         if not form.is_valid():
             return render(request, 'core_app/update-organization.html',
-                {'organization': record, 'form': form})
+                {'organization': record, 'form': form}, status=400)
 
         form.save()
 
@@ -812,5 +812,6 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
