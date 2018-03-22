@@ -37,8 +37,11 @@ urlpatterns = [
 
     url(r'^export/', views.Export.as_view(), name='export'),
     url(r'^import/', views.Import.as_view(), name='import'),
+    url(r'^disabled-account/$', views.DisabledAccount.as_view(), name='disabled-account'),
+    url(r'^fix-account-debits/$', views.FixAccountDebits.as_view(), name='fix-account-debits'),
 
 ]
+
 
 
 

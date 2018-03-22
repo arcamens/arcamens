@@ -2,7 +2,7 @@ from timeline_app.models import Timeline, ECreateTimeline, EDeleteTimeline, \
 EUnbindTimelineUser, EUpdateTimeline, EPastePost, TimelineFilter, EBindTimelineUser
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
-from core_app.views import GuardianView, CashierView
+from core_app.views import GuardianView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
@@ -264,7 +264,7 @@ class TimelinePaginator(GuardianView):
     def get(self, request):
         pass
 
-class ListTimelines(CashierView):
+class ListTimelines(GuardianView):
     """
     """
 
@@ -391,6 +391,7 @@ class ManageTimelineUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'timeline': timeline,
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
+
 
 
 

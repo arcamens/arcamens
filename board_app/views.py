@@ -1,4 +1,4 @@
-from core_app.views import GuardianView, CashierView
+from core_app.views import GuardianView
 from board_app.models import BoardFilter, ECreateBoard, Board, Pin, \
 EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser
 from django.shortcuts import render, redirect
@@ -18,7 +18,7 @@ import re
 
 # Create your views here.
 
-class ListBoards(CashierView):
+class ListBoards(GuardianView):
     """
     """
 
@@ -330,6 +330,7 @@ class UnbindBoardUser(GuardianView):
         user.ws_sound()
 
         return HttpResponse(status=200)
+
 
 
 

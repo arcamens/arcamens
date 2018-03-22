@@ -32,27 +32,25 @@ class GuardianView(AuthenticatedView):
 
         if not user.default.owner.enabled:
             return HttpResponse("Disabled organization \
-                account!", status=400)
+                account!", status=403)
 
         return super(GuardianView, self).delegate(
             request, *args, **kwargs)
 
-class DisabledAccount(View):
-    def get(self, request, user_id):
-        user = User.objects.get(id=user_id)
-            
-
-class CashierView(AuthenticatedView):
-    def delegate(self, request, *args, **kwargs):
+class DisabledAccount(AuthenticatedView):
+    def get(self, request):
         user = User.objects.get(id=self.user_id)
 
-        if not user.default.owner.enabled:
-            return render(request, 'core_app/disabled-account.html', 
-                {'user': user, 'organizations': user.default})
+        return render(request, 'core_app/disabled-account.html', 
+        {'user': user})
 
-        return super(CashierView, self).delegate(
-            request, *args, **kwargs)
-        
+class FixAccountDebits(AuthenticatedView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+
+        return render(request, 'core_app/fix-account-debits.html', 
+        {'user': user})
+
 class Index(AuthenticatedView):
     """
     """
@@ -61,6 +59,14 @@ class Index(AuthenticatedView):
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
     
+        # It should check if the default account is owned by the user.
+        # if it is owned and it is disabled then he should be redirected
+        # to payment-settings view to fix his payment situation.
+        if not user.default.owner.enabled:
+            if user.default.owner == user:
+                return redirect('core_app:fix-account-debits')
+            return redirect('core_app:disabled-account')
+
         # can be improved.
         queues = list(map(lambda ind: 'timeline%s' % ind, 
         user.timelines.values_list('id')))
@@ -810,6 +816,7 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
 
