@@ -306,7 +306,6 @@ class ListEvents(GuardianView):
     def get(self, request):
         user   = User.objects.get(id=self.user_id)
         events = user.events.filter(organization=user.default)
-        events = events.order_by('-created')
         count = events.count()
         events = events.values('html', 'id').order_by('-created')
 
@@ -698,7 +697,6 @@ class ListLogs(GuardianView):
         events = user.seen_events.filter(created__lte=end,
         created__gte=start, organization=user.default)
 
-        events = events.order_by('-created')
         count  = events.count()
         events = events.values('html').order_by('-created')
 
