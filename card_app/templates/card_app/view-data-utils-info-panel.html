@@ -8,7 +8,7 @@
 <h5> <span class="glyphicon glyphicon-user"></span> Workers</h5>
 <hr>
 
-<div class="pre-scrollable" style="font-size:80%">
+<div class="pre-scrollable" style="font-size:90%">
 {% for ind in workers %}
 <a 
 data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="s-modal"
@@ -33,7 +33,7 @@ No workers...
 <div class="col-md-4">
 <h5> <b>#</b> Tags</h5>
 <hr>
-<div class="pre-scrollable" style="font-size:80%">
+<div class="pre-scrollable" style="font-size:90%">
 {% for ind in tags %}
 <a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}"
 class="s-modal" href="#">
@@ -51,7 +51,7 @@ No tags...
 <h5> <span class="glyphicon glyphicon-book"></span> Snippets</h5>
 <hr>
 
-<div class="pre-scrollable" style="font-size:80%">
+<div class="pre-scrollable" style="font-size:90%">
 {% for ind in snippets %}
 <a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#">
 <span class="glyphicon glyphicon-book"></span>
@@ -66,6 +66,7 @@ No notes...
 </div>
 </div>
 </div>
+
 
 
 
