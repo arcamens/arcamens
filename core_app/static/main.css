@@ -1,3 +1,8 @@
+.board-ancestor {
+font-size:93%;
+background-color:#DCD6D8;
+}
+
 
 .board {
 font-size:93%;
@@ -42,4 +47,5 @@ body {
 
 background-color:#C7C7C7;
 }
+
 
