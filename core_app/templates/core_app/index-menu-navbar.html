@@ -45,22 +45,12 @@ href="#"><span class="glyphicon glyphicon-bell"></span>
 {% trans "Events" %}</a></li>
 
 <li>
-<a href="#" 
-class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:list-users' user.default.id %}" 
-data-toggle="modal" data-target="#modal">
-<span class="glyphicon glyphicon-user"></span> Members 
-</a>
-</li>
+<a href="#" class="s-modal"  data-show="{% url 'core_app:list-users' user.default.id %}">
+<span class="glyphicon glyphicon-user"></span> Members  </a> </li>
 
 <li>
-<a href="#" 
-class="e-get" data-shell="#modalContent" 
-data-show="{% url 'core_app:update-organization' user.default.id %}" 
-data-toggle="modal" data-target="#modal">
-<span class="glyphicon glyphicon-cog"></span> Settings 
-</a>
-</li>
+<a href="#" class="s-modal"  data-show="{% url 'core_app:update-organization' user.default.id %}">
+<span class="glyphicon glyphicon-cog"></span> Settings </a></li>
 
 <li>
 <a data-show="{% url 'timeline_app:list-timelines' %}" class="e-get" 
@@ -101,6 +91,7 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 
