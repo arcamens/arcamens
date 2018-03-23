@@ -10,10 +10,10 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 
 <p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="#">
 <em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} </a> <br>
+</p> 
 
 <small> By  <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
 {{board.owner}} </a> at {{board.created}} </small>
-</p> 
 
 </div> 
 
