@@ -38,6 +38,10 @@ class BoardMixin:
     def get_ancestor_url(self):
         return reverse('board_app:list-boards')
 
+    def get_link_url(self):
+        return reverse('board_app:board-link', 
+                    kwargs={'board_id': self.id})
+
 class EBindBoardUserMixin(object):
     pass
 
@@ -49,5 +53,6 @@ class EUpdateBoardMixin(object):
 
 class ECreateBoardMixin(object):
     pass
+
 
 

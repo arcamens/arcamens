@@ -1,0 +1,19 @@
+{% extends 'core_app/index.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block initializer %}
+<script>
+$(document).ready(function() {
+    $('#main-view').load("{% url 'list_app:list-lists' board.id %}");
+});
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+{% endblock %}
+
+
+

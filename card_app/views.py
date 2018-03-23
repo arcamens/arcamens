@@ -1095,5 +1095,3 @@ class UndoClipboard(GuardianView):
         event.ancestor.ancestor.ws_sound()
 
 
-
-

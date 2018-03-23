@@ -8,7 +8,7 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 <span class="glyphicon glyphicon-paperclip"></span> </a> </div>
 
 
-<p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="#">
+<p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="{{board.get_link_url}}">
 <em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} </a> <br>
 </p> 
 
@@ -19,6 +19,7 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 
 
 </div>
+
 
 
 

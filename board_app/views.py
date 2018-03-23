@@ -1,10 +1,11 @@
 from core_app.views import GuardianView
 from board_app.models import BoardFilter, ECreateBoard, Board, Pin, \
-EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser
+EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser, Board
 from django.shortcuts import render, redirect
 from core_app.models import Clipboard, User, Organization
 from django.http import HttpResponse
 from django.views.generic import View
+from django.conf import settings
 from django.db.models import Q
 import core_app.models
 import board_app.models
@@ -12,8 +13,8 @@ from core_app import ws
 import card_app.models
 from . import models
 from . import forms
-from . import models
-from . import forms
+import json
+
 import re
 
 # Create your views here.
@@ -331,11 +332,32 @@ class UnbindBoardUser(GuardianView):
 
         return HttpResponse(status=200)
 
+class BoardLink(GuardianView):
+    """
+    """
 
+    def get(self, request, board_id):
+        board = Board.objects.get(id=board_id)
+        # on_clipboard = not (board.ancestor and board.ancestor.ancestor)
+# 
+        # if on_clipboard:
+            # return HttpResponse("This board is on clipboard! \
+               # It can't be accessed.", status=403)
 
+        user = core_app.models.User.objects.get(id=self.user_id)
+        pins = user.pin_set.all()
+        organizations = user.organizations.exclude(id=user.default.id)
 
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
 
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
 
+        return render(request, 'board_app/board-link.html', 
+        {'board': board, 'user': user, 'pins': pins,
+        'default': user.default, 'organizations': organizations, 
+        'queues': json.dumps(queues), 'settings': settings})
 
 
 
