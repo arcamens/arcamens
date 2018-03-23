@@ -20,23 +20,6 @@ urlpatterns = [
     url(r'^manage-timeline-users/(?P<timeline_id>.+)/', views.ManageTimelineUsers.as_view(), name='manage-timeline-users'),
     url(r'^bind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.BindTimelineUser.as_view(), name='bind-timeline-user'),
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
+    url(r'^timeline-link/(?P<timeline_id>.+)/', views.TimelineLink.as_view(), name='timeline-link'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

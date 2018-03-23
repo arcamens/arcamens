@@ -6,6 +6,7 @@ from core_app.views import GuardianView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
+from django.conf import settings
 from jsim.jscroll import JScroll
 from django.db.models import Q
 from core_app import ws
@@ -13,6 +14,7 @@ import post_app.models
 import operator
 from . import forms
 from . import models
+import json
 # Create your views here.
 
 class PostPaginator(GuardianView):
@@ -392,13 +394,27 @@ class ManageTimelineUsers(GuardianView):
         'me': me, 'organization': me.default,'form':form, 
         'count': count, 'total': total,})
 
+class TimelineLink(GuardianView):
+    """
+    """
 
+    def get(self, request, timeline_id):
+        record = Timeline.objects.get(id=timeline_id)
 
+        user = User.objects.get(id=self.user_id)
+        pins = user.pin_set.all()
+        organizations = user.organizations.exclude(id=user.default.id)
 
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
 
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
 
-
-
+        return render(request, 'timeline_app/timeline-link.html', 
+        {'timeline': record, 'user': user, 'pins': pins,
+        'default': user.default, 'organizations': organizations, 
+        'queues': json.dumps(queues), 'settings': settings})
 
 
 
