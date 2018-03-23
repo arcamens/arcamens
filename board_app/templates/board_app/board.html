@@ -3,43 +3,23 @@
 <div class="panel panel-default board" >
 <div class="panel-body text-center">
 
-<div class="pull-right">
-<a class=" e-get text-warning"  href="#" 
-data-shell="#pins" 
-data-show="{% url 'board_app:pin-board' board.id %}">
-<span class="glyphicon glyphicon-paperclip"></span> </a>
-</div>
+<div class="pull-right"> <a class=" e-get text-default"  href="#" 
+data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a> </div>
 
-<div style="word-wrap: break-word;"> 
-<p><em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} 
-<br>
-<span class="text-info"> {{board.description}} </span>
+
+<p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="#">
+<em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} </a> <br>
+
+<small> By  <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
+{{board.owner}} </a> at {{board.created}} </small>
 </p> 
 
 </div> 
 
-<div class="pull-left">
-<a class=" e-get text-warning"  href="#" 
-data-shell="#pins" 
-data-show="">
-</a>
-</div>
-
-<div class="btn-group btn-group-xs">
-
-<button class="btn btn-success e-get" 
-data-shell="#main-view" 
-type="button"
-data-show="{% url 'list_app:list-lists' board.id %}">
-<span class="glyphicon glyphicon-list-alt"></span> 
-{% trans "Lists" %}</button>
-
 
 </div>
 
-</div>
-
-</div>
 
 
 

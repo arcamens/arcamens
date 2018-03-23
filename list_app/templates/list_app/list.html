@@ -1,57 +1,42 @@
 {% load i18n %}
 
 <div class="panel panel-default list" >
-
 <div class="panel-body text-center">
-<div class="pull-right">
-<a class=" e-get text-warning"  href="#" 
-data-shell="#pins" 
-data-show="{% url 'list_app:pin-list' list.id %}">
-<span class="glyphicon glyphicon-paperclip"></span> </a>
+
+<div class="pull-right"> <a class=" e-get text-default"  href="#" 
+data-shell="#pins"  data-show="{% url 'list_app:pin-list' list.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a> 
 </div>
 
-<div style="word-wrap: break-word;"> 
-<p><em > <span class="glyphicon glyphicon-list-alt"></span> List </em> {{list.name}}
-<br>
-<span class="text-info"> {{list.description}} </span>
+<div class="pull-left"> <a class=" e-get text-default"  href="#" 
+data-shell="#main-view" data-show="{% url 'list_app:copy-list' list.id %}">
+<span class="glyphicon glyphicon-copy"></span></a> 
+
+<a class=" e-get text-warning"  href="#" data-shell="#main-view" data-show="{% url 'list_app:cut-list' list.id %}">
+<span class="glyphicon glyphicon-scissors"></span> </a> 
+
+</div>
+
+<p> <a class="e-get" data-shell="#main-view" 
+data-show="{% url 'card_app:list-cards' list.id %}" href="#">
+<em ><span class="glyphicon glyphicon-list-alt"></span> List </em>{{list.name}} 
+</a>
+
+{% if list.description %}
+<br>{{list.description}}
+{% endif %}
 
 </p>
 
-</div> 
+<small> By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
+{{board.owner}} </a> at {{board.created}} </small>
 
-
-<div class="btn-group btn-group-xs">
-<button class="btn btn-default e-get"  
-type="button" 
-data-shell="#main-view" 
-data-show="{% url 'list_app:copy-list' list.id %}">
-<span class="glyphicon glyphicon-copy"></span> 
-</button>
-
-<button class="btn btn-warning e-get"  
-type="button" 
-data-shell="#main-view" 
-data-show="{% url 'list_app:cut-list' list.id %}">
-<span class="glyphicon glyphicon-scissors"></span> 
-</button>
-
-<button class="btn btn-success e-get" 
-data-shell="#main-view" 
-type="button"
-data-show="{% url 'card_app:list-cards' list.id %} ">
-<span class="glyphicon glyphicon-file"></span> 
-{% trans "Cards" %}</button>
-
-
-</button>
-
-
-</div>
 
 </div>
 
 
 </div>
+
 
 
 

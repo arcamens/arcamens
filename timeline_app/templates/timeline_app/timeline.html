@@ -7,32 +7,23 @@ style="background-color:#DCDFF2">
 <p> <span class="glyphicon glyphicon glyphicon-eye-open clip">
 </span> 
 
-<a class="e-get" href="#" 
-data-shell="#main-view" 
-data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
+<a class="e-get" href="#" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
 {{timeline.name}} </a>
-<br>
 
-<span class="text-info" style="font-size:70%;word-wrap: break-word;"> 
-
-{% if timeline.description %}
-{{timeline.description}}<br>
-{% endif %}
-
-By <a class="e-get" href="#"
-data-show=""
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('show');" 
-> 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
-{{timeline.owner}}
-</a> at {{timeline.created}}
-</span>
-
+{% if timeline.description %} <br>{{timeline.description}} {% endif %}
 </p>
 
+<small>
+
+By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
+{{timeline.owner}} </a> at {{timeline.created}}
+</small>
+
+
 </div>
 </div>
+
+
 
 
 

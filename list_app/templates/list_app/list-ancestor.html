@@ -2,10 +2,10 @@
 
 <div class="panel panel-defaul list-ancestor" >
 <div class="panel-body text-center">
-<p> <em > 
-<b>
-<span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} 
-</b>
+
+<p> <em> <b> <span class="glyphicon glyphicon-th"></span> Board </em>
+{{board.name}}  </b>
+
 <span class="badge">{{lists.count}}/{{total.count}}</span>
 <br>
 <span class="text-info"> {{board.description}} </span>
@@ -13,7 +13,6 @@
 </p>
 
 <div class="btn-group btn-group-xs">
-
 <button class="btn btn-success e-get" 
 data-shell="#main-view" type="button"
 data-show="{% url 'board_app:list-boards' %}">
@@ -50,6 +49,7 @@ Filter </strike>
 
 </div>
 </div>
+
 
 
 

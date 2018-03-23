@@ -1,40 +1,52 @@
 .board-ancestor {
-font-size:93%;
+word-wrap: 
+break-word;
 background-color:#DCD6D8;
 }
 
 
 .board {
-font-size:93%;
+word-wrap: 
+break-word;
+
 background-color:#C0B8A9;
 }
 
 .list-ancestor {
-font-size:93%;
+word-wrap: 
+break-word;
+
 background-color:#C0B8A9;
 
 }
 
 .list {
-font-size:93%;
+word-wrap: 
+break-word;
+
 background-color:#F8FCB1;
 
 }
 
 .card-ancestor {
-font-size:93%;
+word-wrap: 
+break-word;
+
 background-color:#F8FCB1;
 
 }
 
 .card {
-font-size:93%;
+word-wrap: 
+break-word;
+
 background-color:#F4F0E5;
 
 }
 
 .fork {
-font-size:93%;
+word-wrap: 
+break-word;
 
 }
 
