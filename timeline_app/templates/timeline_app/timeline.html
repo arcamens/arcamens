@@ -1,6 +1,4 @@
-<div class="panel panel-default" 
-style="background-color:#DCDFF2">
-
+<div class="panel panel-default timeline" >
 
 <div class="panel-body text-center">
 
@@ -8,13 +6,8 @@ style="background-color:#DCDFF2">
 </span> 
 
 <a class="e-get" href="#" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
-{{timeline.name}} </a>
-
-<span class="text-info">
-{% if timeline.description %} <br>{{timeline.description}} {% endif %}
-</span>
-
-</p>
+{{timeline.name}} 
+<br>{{timeline.description}}</a></p>
 
 <small>
 

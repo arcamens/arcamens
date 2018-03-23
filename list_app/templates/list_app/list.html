@@ -20,11 +20,8 @@ data-shell="#main-view" data-show="{% url 'list_app:copy-list' list.id %}">
 <p> <a class="e-get" data-shell="#main-view" 
 data-show="{% url 'card_app:list-cards' list.id %}" href="#">
 <em ><span class="glyphicon glyphicon-list-alt"></span> List </em>{{list.name}} 
-</a>
 
-<span class="text-info">
-{% if list.description %} <br>{{list.description}} {% endif %}
-</span>
+<br>{{list.description}}</a>
 
 </p>
 
