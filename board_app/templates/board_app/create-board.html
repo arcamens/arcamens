@@ -7,7 +7,9 @@
 {% csrf_token %}
 
 {% block title %}
-<h4> Create board </h4>
+<h5> 
+<span class="glyphicon glyphicon glyphicon-th"></span>
+Board </h5>
 {% endblock %}
 
 </div>
@@ -33,6 +35,7 @@ data-show="{% url 'board_app:create-board' %}"
 class="btn btn-default e-post">  {% trans "Create" %} </button>
 {% endblock %}
 </div>
+
 
 
 

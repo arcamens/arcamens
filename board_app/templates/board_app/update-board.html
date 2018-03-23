@@ -3,7 +3,9 @@
 {% load i18n %}
 
 {% block title %}
-<h4> Update Board </h4>
+<h5> 
+<span class="glyphicon glyphicon glyphicon-cog"></span>
+{{board.name}}'s settings </h5>
 {% endblock %}
 
 
@@ -18,6 +20,7 @@ class="btn btn-default e-post">
 {% trans "Update" %}
 </button>
 {% endblock %}
+
 
 
 

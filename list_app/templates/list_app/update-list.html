@@ -2,7 +2,9 @@
 {% extends "list_app/create-list.html" %}
 {% load i18n %}
 {% block title %}
-<h4> Update {{list.name}} </h4>
+<h5>
+<span class="glyphicon glyphicon-cog"></span> {{list.name}}'s settings
+ </h5>
 {% endblock %}
 
 
@@ -17,6 +19,7 @@ class="btn btn-default e-post">
 {% trans "Update" %}
 </button>
 {% endblock %}
+
 
 
 
