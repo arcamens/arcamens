@@ -1,8 +1,9 @@
 {% load static %}
 
 <div class="panel panel-default">
-<div class="panel-heading" style="font-size:80%">
+<div class="panel-heading">
 
+<small>
 <span class="glyphicon glyphicon-file"></span> 
 
 
@@ -23,7 +24,7 @@ at <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.crea
 (Done)
 
 {% endif %}
-
+</small>
 </div>
 
 <div class="panel-body">
@@ -45,6 +46,7 @@ No attachments...
 
 
 </div>
+
 
 
 
