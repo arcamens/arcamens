@@ -6,6 +6,7 @@ from board_app.models import Board, Pin, EPasteList
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.http import HttpResponse
+from django.conf import settings
 from django.db.models import Q
 import board_app.models
 import card_app.models
@@ -15,6 +16,7 @@ from . import models
 from . import forms
 import core_app.models
 from core_app import ws
+import json
 
 # Create your views here.
 
@@ -273,7 +275,27 @@ class UndoClipboard(GuardianView):
         clipboard.lists.remove(event.child)
         event.ancestor.ws_sound()
 
+class ListLink(GuardianView):
+    """
+    """
 
+    def get(self, request, list_id):
+        record = List.objects.get(id=list_id)
+
+        user = core_app.models.User.objects.get(id=self.user_id)
+        pins = user.pin_set.all()
+        organizations = user.organizations.exclude(id=user.default.id)
+
+        queues = list(map(lambda ind: 'timeline%s' % ind, 
+        user.timelines.values_list('id')))
+
+        queues.extend(map(lambda ind: 'board%s' % ind, 
+        user.boards.values_list('id')))
+
+        return render(request, 'list_app/list-link.html', 
+        {'list': record, 'user': user, 'pins': pins,
+        'default': user.default, 'organizations': organizations, 
+        'queues': json.dumps(queues), 'settings': settings})
 
 
 

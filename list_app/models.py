@@ -18,6 +18,10 @@ class ListMixin(object):
     def get_ancestor_url(self):
         return reverse('board_app:list-boards')
 
+    def get_link_url(self):
+        return reverse('list_app:list-link', 
+                    kwargs={'list_id': self.id})
+
 class List(ListMixin, models.Model):
     """    
     """
@@ -128,6 +132,7 @@ class EPasteCard(Event):
     symmetrical=False)
 
     html_template = 'list_app/e-paste-card.html'
+
 
 
 

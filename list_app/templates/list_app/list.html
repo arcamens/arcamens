@@ -18,7 +18,7 @@ data-shell="#main-view" data-show="{% url 'list_app:copy-list' list.id %}">
 </div>
 
 <p> <a class="e-get" data-shell="#main-view" 
-data-show="{% url 'card_app:list-cards' list.id %}" href="#">
+data-show="{% url 'card_app:list-cards' list.id %}" href="{{list.get_link_url}}">
 <em ><span class="glyphicon glyphicon-list-alt"></span> List </em>{{list.name}} 
 
 <br>{{list.description}}</a>
@@ -33,6 +33,7 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="#">
 
 
 </div>
+
 
 
 
