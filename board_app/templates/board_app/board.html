@@ -9,7 +9,12 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 
 
 <p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="{{board.get_link_url}}">
-<em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} </a> <br>
+<em ><span class="glyphicon glyphicon-th"></span> Board </em>{{board.name}} </a> 
+
+<span class="text-info">
+{% if board.description %} <br>{{board.description}} {% endif %}
+</span>
+
 </p> 
 
 <small> By  <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">

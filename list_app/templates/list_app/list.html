@@ -22,7 +22,9 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="#">
 <em ><span class="glyphicon glyphicon-list-alt"></span> List </em>{{list.name}} 
 </a>
 
+<span class="text-info">
 {% if list.description %} <br>{{list.description}} {% endif %}
+</span>
 
 </p>
 
@@ -34,6 +36,7 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="#">
 
 
 </div>
+
 
 
 

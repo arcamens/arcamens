@@ -10,7 +10,10 @@ style="background-color:#DCDFF2">
 <a class="e-get" href="#" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
 {{timeline.name}} </a>
 
+<span class="text-info">
 {% if timeline.description %} <br>{{timeline.description}} {% endif %}
+</span>
+
 </p>
 
 <small>
@@ -22,6 +25,7 @@ By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owne
 
 </div>
 </div>
+
 
 
 
