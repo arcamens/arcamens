@@ -1,6 +1,6 @@
 <li>
 
-<a class="e-get" 
+<a class="e-get pin-board" 
 data-callback-error="$('#modalError').modal('toggle');" 
 data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#">
@@ -8,12 +8,11 @@ data-show="{{ ind.get_absolute_url }}" href="#">
 <button type="button" class="close" 
 onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
 
-<span style="color:#666055">
 <span class="glyphicon glyphicon-th"></span> 
 {{ind.board.name}}
-</span>
 
 </a>
 
 </li>
+
 

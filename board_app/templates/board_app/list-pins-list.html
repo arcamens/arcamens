@@ -1,12 +1,11 @@
 <li >
 
-<a class="e-get" 
+<a class="e-get pin-list" 
 data-callback-error="$('#modalError').modal('toggle');" 
 data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#">
 
-<span style="color:#925F05">
-<button type="button" class="close" 
+<button type="button" class="close pin-list" 
 onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
  <span class="glyphicon glyphicon-list-alt"> </span>
 {{ind.list.ancestor.name}}
@@ -15,6 +14,7 @@ onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropaga
 </a>
 
 </li>
+
 
 
 

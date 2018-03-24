@@ -9,14 +9,14 @@ background-color:#DCD6D8;
 word-wrap: 
 break-word;
 
-background-color:#C0B8A9;
+background-color:#B2BFD1;
 }
 
 .list-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#C0B8A9;
+background-color:#B2BFD1;
 
 }
 
@@ -24,7 +24,22 @@ background-color:#C0B8A9;
 word-wrap: 
 break-word;
 
-background-color:#F8FCB1;
+background-color:#CFCAB0;
+
+}
+
+.pin-list {
+color:#82742A;
+
+}
+
+.pin-card {
+color:#5E666F;
+
+}
+
+.pin-board {
+color:#3669AD;
 
 }
 
@@ -32,7 +47,7 @@ background-color:#F8FCB1;
 word-wrap: 
 break-word;
 
-background-color:#F8FCB1;
+background-color:#CFCAB0;
 
 }
 
@@ -72,3 +87,4 @@ background-color:#DCDFF2;
 .modal-header  {
     word-wrap: break-word;
 }
+
