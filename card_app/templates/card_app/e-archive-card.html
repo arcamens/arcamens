@@ -14,7 +14,7 @@ href="{{event.child.get_link_url}}">
 <a class="e-get"
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  by 
 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
@@ -22,31 +22,5 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

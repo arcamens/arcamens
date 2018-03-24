@@ -23,13 +23,14 @@ from board
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
+data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-th"></span>
 {{event.ancestor.name}} </a> 
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

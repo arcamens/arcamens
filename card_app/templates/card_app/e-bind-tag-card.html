@@ -20,13 +20,14 @@ as {{event.tag.name}} on list
 <a class="e-get"
 data-shell="#main-view"
 data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="#"> 
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 {{event.ancestor.name}}
 </a>  
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
