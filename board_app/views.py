@@ -187,6 +187,7 @@ class PasteLists(GuardianView):
         organization=user.default, board=board, user=user)
         event.lists.add(*lists)
         event.users.add(*board.members.all())
+        event.save()
 
         clipboard.lists.clear()
 
@@ -358,6 +359,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
