@@ -62,7 +62,7 @@ class ListAllPosts(ListPosts):
         filter.pattern, filter.done) if filter.status \
         else posts.filter(done=False)
 
-        posts = posts.order_by('id')
+        posts = posts.order_by('-created')
         count = posts.count()
         elems = JScroll(user.id, 'timeline_app/list-all-posts-scroll.html', posts)
 
@@ -415,6 +415,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
