@@ -71,12 +71,20 @@ git checkout master
 git checkout *
 
 ##############################################################################
-
 # merge, beta, into, alpha:
-git checkout alpha
-git merge beta
-git push -u origin alpha
-git checkout beta
+git checkout staging
+git merge alpha
+git push -u origin staging
+
+git checkout master
+git merge staging
+git push -u origin master
+git checkout staging
+
+git branch -d alpha
+git push origin :alpha
+git fetch -p 
+
 
 ##############################################################################
 # merge, beta, into, master:
@@ -400,6 +408,11 @@ git tag -a 1.1.0 -m 'Bug fixes, implementing undoing clipboard operations.'
 git push origin : 1.1.0
 git checkout staging
 
+git checkout master
+git tag -a 1.1.2 -m 'Improvement of colors and design.'
+git push origin : 1.1.2
+git checkout staging
+
 ##############################################################################
 cd ~/projects/arcamens-code
 
@@ -665,6 +678,7 @@ git push -u origin staging
 git branch -d C162
 git push origin :C162
 git fetch -p 
+
 
 
 
