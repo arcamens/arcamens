@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
-from core_app.utils import splittokens, SqLike
+from core_app.utils import SqLike
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
@@ -56,7 +56,7 @@ class CardMixin(object):
         'c': lambda ind: Q(created__icontains=ind),
         'l': lambda ind: Q(label__icontains=ind),
         'd': lambda ind: Q(data__icontains=ind),
-        's': lambda ind: Q(snippets_label__icontains=ind),
+        's': lambda ind: Q(snippets_label__icontains=ind) | Q(snippets_data__icontains=ind),
         'n': lambda ind: Q(note__data__icontains=ind),
         't': lambda ind: Q(tags__name__icontains=ind),
         

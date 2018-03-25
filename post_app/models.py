@@ -3,10 +3,10 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
+from core_app.utils import SqLike
 from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
-from core_app.utils import splittokens
 from functools import reduce
 from core_app import ws
 import operator
@@ -58,19 +58,22 @@ class PostMixin(object):
 
     @classmethod
     def collect_posts(cls, posts, pattern, done=False):
-        """
-        Return all posts from a timeline that match pattern.
-        """
-        chks, tags = splittokens(pattern)
-        posts = posts.filter(Q(done=done))
-
-        for ind in tags:
-            posts = posts.filter(Q(tags__name__istartswith=ind))
-
-        posts = posts.filter(reduce(operator.and_, 
-        (Q(label__icontains=ind) | Q(user__name__icontains=ind) 
-        for ind in chks))) if chks else posts
-
+        fields = {
+        'o': lambda ind: Q(user__name__icontains=ind),
+        'w': lambda ind: Q(workers__name__icontains=ind),
+        'c': lambda ind: Q(created__icontains=ind),
+        'l': lambda ind: Q(label__icontains=ind),
+        't': lambda ind: Q(tags__name__icontains=ind),
+        'm': lambda ind: Q(postcomment_set__data__icontains=ind),
+        
+        }
+        
+        default = lambda ind: Q(label__icontains=ind)  
+        sqlike  = SqLike(fields, default)
+        posts = posts.filter(done=done)
+        sql   = sqlike.build(pattern)
+        sql   = reduce(operator.and_, sql)
+        posts = posts.filter(sql) 
         return posts
 
     def __str__(self):
@@ -309,6 +312,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 
