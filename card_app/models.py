@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
-from core_app.utils import splittokens
+from core_app.utils import splittokens, SqLike
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
@@ -50,16 +50,25 @@ class CardMixin(object):
 
     @classmethod
     def collect_cards(cls, cards, pattern, done=False):
-        chks, tags = splittokens(pattern)
+        fields = {
+        'o': lambda ind: Q(owner__name__icontains=ind),
+        'w': lambda ind: Q(workers__name__icontains=ind),
+        'c': lambda ind: Q(created__icontains=ind),
+        'l': lambda ind: Q(label__icontains=ind),
+        'd': lambda ind: Q(data__icontains=ind),
+        's': lambda ind: Q(snippets_label__icontains=ind),
+        'n': lambda ind: Q(note__data__icontains=ind),
+        't': lambda ind: Q(tags__name__icontains=ind),
+        
+        }
+        
+        default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
+        sqlike  = SqLike(fields, default)
 
         cards = cards.filter(Q(done=done))
-        for ind in tags:
-            cards = cards.filter(Q(tags__name__istartswith=ind))
-
-        cards = cards.filter(reduce(operator.and_, 
-        (Q(label__icontains=ind) | Q(owner__name__icontains=ind) |
-        Q(data__icontains=ind)
-        for ind in chks))) if chks else cards
+        sql   = sqlike.build(pattern)
+        sql   = reduce(operator.and_, sql)
+        cards = cards.filter(sql) 
 
         return cards
 
@@ -388,4 +397,5 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 

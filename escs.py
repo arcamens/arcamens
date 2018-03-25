@@ -92,6 +92,58 @@ post = Post.objects.none()
 
 all = cards.union(post)
 all
+##############################################################################
+from django.db.models import Q
+from re import split
+from functools import reduce
+import operator
 
+class SqLike:
+    def __init__(self, fields, default):
+        self.fields         = fields
+        self.default = default
+
+    def build(self, data):
+        tokens = split(' *\+ *', data)
+        sql    = []
+        for ind in tokens:
+            sql.append(self.fmt(ind))
+        return sql
+
+    def fmt(self, pair):
+        pair = pair.split(':')
+        q = self.fields.get(pair[0], self.default)
+        sql = q(pair[-1])
+        return sql
+
+    def join(self, sql):
+        return chks, tags
+
+fields = {
+    'o': lambda ind: Q(owner__name__icontains=ind),
+    'w': lambda ind: Q(workers__name__icontains=ind),
+    'c': lambda ind: Q(created__icontains=ind),
+    'l': lambda ind: Q(label__icontains=ind),
+    'd': lambda ind: Q(data__icontains=ind),
+    's': lambda ind: Q(snippets_label__icontains=ind),
+    'n': lambda ind: Q(note__data__icontains=ind),
+    't': lambda ind: Q(tags__name__icontains=ind),
+
+}
+
+default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
+
+sqlike = SqLike(fields, default)
+stmt = sqlike.build('l:this + d:cool')
+stmt
+
+stmt = sqlike.build('test')
+stmt
+
+x = 'foo:bar'
+x.split(':')
+
+y = 'foo'
+y.split(':')
 
 
