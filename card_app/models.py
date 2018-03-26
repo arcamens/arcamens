@@ -50,18 +50,41 @@ class CardMixin(object):
 
     @classmethod
     def collect_cards(cls, cards, pattern, done=False):
+        owner   = lambda ind: Q(owner__name__icontains=ind)
+        worker  = lambda ind: Q(workers__name__icontains=ind)
+        created = lambda ind: Q(created__icontains=ind)
+        label   = lambda ind: Q(label__icontains=ind)
+        data    = lambda ind: Q(data__icontains=ind)
+
+        snippet = lambda ind: Q(snippets_label__icontains=ind) | Q(
+        snippets_data__icontains=ind)
+
+        note  = lambda ind: Q(note__data__icontains=ind)
+        tag   = lambda ind: Q(tags__name__icontains=ind)
+        list  = lambda ind: Q(ancestor__name__icontains=ind)
+        board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
+
         fields = {
-        'o': lambda ind: Q(owner__name__icontains=ind),
-        'w': lambda ind: Q(workers__name__icontains=ind),
-        'c': lambda ind: Q(created__icontains=ind),
-        'l': lambda ind: Q(label__icontains=ind),
-        'd': lambda ind: Q(data__icontains=ind),
-        's': lambda ind: Q(snippets_label__icontains=ind) | Q(snippets_data__icontains=ind),
-        'n': lambda ind: Q(note__data__icontains=ind),
-        't': lambda ind: Q(tags__name__icontains=ind),
-        'i': lambda ind: Q(ancestor__name__icontains=ind),
-        'b': lambda ind: Q(ancestor__ancestor__name__icontains=ind),
-        
+        'o': owner,
+        'w': worker,
+        'c': created,
+        'l': label,
+        'd': data,
+        's': snippet,
+        'n': note,
+        't': tag, 
+        'i': list,
+        'b': board,
+        'owner': owner,
+        'worker': worker,
+        'created': created,
+        'label': label,
+        'data': data,
+        'snippet': snippet,
+        'note': note,
+        'tag': tag,
+        'list': list,
+        'board': board
         }
         
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
