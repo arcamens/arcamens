@@ -13,10 +13,11 @@ class SqLike:
         return sql
 
     def fmt(self, pair):
-        pair = pair.split(':')
-        q = self.fields.get(pair[0], self.default)
-        sql = q(pair[-1])
-        return sql
+        pair = pair.split(':', 2)
+        q    = self.fields[pair[0]] if len(pair) > 1 \
+        else self.default
+
+        return q(pair[-1])
 
 def splittokens(data):
     tokens     = split(' *\+ *', data)

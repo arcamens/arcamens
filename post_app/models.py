@@ -64,7 +64,7 @@ class PostMixin(object):
         'c': lambda ind: Q(created__icontains=ind),
         'l': lambda ind: Q(label__icontains=ind),
         't': lambda ind: Q(tags__name__icontains=ind),
-        'm': lambda ind: Q(postcomment_set__data__icontains=ind),
+        'm': lambda ind: Q(postcomment__data__icontains=ind),
         
         }
         
@@ -312,6 +312,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 
