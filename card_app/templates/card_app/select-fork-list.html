@@ -42,10 +42,18 @@ href="#" >
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
+<div class="pull-left">
+<a class="e-get text-warning"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' card.ancestor.id card.id %}"
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href="#" > 
+<span class="glyphicon glyphicon-random"></span>  On the same list?</a>
 </div>
+
+</div>
+
 </div>
 
 <div class="modal-footer">
+
 <button  type="button" data-form="#selectForkListForm" id="selectForkListButton"
 data-show="{% url 'card_app:select-fork-list'  card.id %}"
 class="btn btn-default m-post"> {% trans "Filter" %} </button>
@@ -60,4 +68,5 @@ $('#selectForkListForm').on('submit', (function(e){
 
 }));
 </script>
+
 
