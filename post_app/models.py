@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
-from core_app.utils import SqLike
+from core_app.utils import SqLike, SqNode
 from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
@@ -70,29 +70,20 @@ class PostMixin(object):
         timeline = lambda ind: Q(ancestor__name__icontains=ind)
         comment  = lambda ind: Q(postcomment__data__icontains=ind)
 
-        fields = {
-        'o': user,
-        'w': worker,
-        'c': created,
-        'l': label,
-        't': tag, 
-        'i': timeline,
-        'm': comment,
-        'owner': user,
-        'worker': worker,
-        'created': created,
-        'label': label,
-        'tag': tag,
-        'comment': comment,
-        'timeline': timeline,
-        }
-
         default = lambda ind: Q(label__icontains=ind)  
-        sqlike  = SqLike(fields, default)
-        posts = posts.filter(done=done)
-        sql   = sqlike.build(pattern)
-        sql   = reduce(operator.and_, sql)
-        posts = posts.filter(sql) 
+
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('o', 'owner'), user),
+        SqNode(('w', 'worker'), worker, chain=True), 
+        SqNode(('c', 'created'), created),
+        SqNode(('l', 'label'), label),
+        SqNode(('t', 'tag'), tag, chain=True),
+        SqNode(('m', 'comment'), comment),
+        SqNode(('i', 'timeline'), timeline),)
+
+        posts = posts.filter(Q(done=done))
+        sqlike.feed(pattern)
+        posts = sqlike.run(posts)
         return posts
 
     def __str__(self):
@@ -331,6 +322,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

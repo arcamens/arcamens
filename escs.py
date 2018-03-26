@@ -145,5 +145,126 @@ x.split(':')
 
 y = 'foo'
 y.split(':')
+##############################################################################
+from django.db.models import Q
+from re import split
+from functools import reduce
+import operator
 
+class SqLike:
+    def __init__(self, fields, default):
+        self.fields         = fields
+        self.default = default
+        self.sql    = {
+        'default':[]
+        }
+    def build(self, data):
+        tokens = split(' *\+ *', data)
+        tokens = map(lambda ind: ind.split(':', 2), tokens)
+        for ind in tokens:
+            self.fmt(ind)
+        return self.sql
+    def fmt(self, ind):
+        seq, q = (self.sql.setdefault(ind[0], []), self.fields[ind[0]])\
+        if len(ind) > 1 else (sql['default'], self.default)
+        seq.append(q(ind[-1]))
+
+
+fields = {
+    'o': lambda ind: Q(owner__name__icontains=ind),
+    'w': lambda ind: Q(workers__name__icontains=ind),
+    'c': lambda ind: Q(created__icontains=ind),
+    'l': lambda ind: Q(label__icontains=ind),
+    'd': lambda ind: Q(data__icontains=ind),
+    's': lambda ind: Q(snippets_label__icontains=ind),
+    'n': lambda ind: Q(note__data__icontains=ind),
+    't': lambda ind: Q(tags__name__icontains=ind),
+
+}
+
+default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
+
+sqlike = SqLike(fields, default)
+stmt = sqlike.build('l:this + d:cool')
+print(stmt)
+##############################################################################
+from django.db.models import Q
+from re import split
+from functools import reduce
+from operator import and_, or_
+
+class SqNode:
+    def __init__(self, tokens, rule, op=and_):
+        self.rule = rule
+        self.tokens = tokens
+        self.op = op
+        self.seq = [Q()]
+
+    def add(self, value):
+        self.seq.append(self.rule(value))
+
+    def build(self):
+        return reduce(self.op, self.seq)
+
+class SqLike:
+    def __init__(self, node, *args, op=and_):
+        self.args  = args
+        self.node = node
+        self.op = op
+
+        self.sql = {
+        }
+
+        self.default = []
+
+        for indi in args:
+            for indj in indi.tokens:
+                self.sql[indj] = indi
+
+    def build(self):
+        sql = []
+        for ind in self.sql.values():
+            sql.append(ind.build())
+        return reduce(self.op, sql)
+
+    def feed(self, data):
+        tokens = split(' *\+ *', data)
+        tokens = map(lambda ind: ind.split(':', 2), tokens)
+
+        for ind in tokens:
+            if len(ind) > 1:
+                self.sql[ind[0]].add(ind[1])
+            else:
+                self.node.add(ind[0])
+        return self.build()
+
+owner   = lambda ind: Q(owner__name__icontains=ind) | Q(
+owner__email__icontains=ind)
+
+worker  = lambda ind: Q(workers__name__icontains=ind) | Q(    
+workers__email__icontains=ind)
+
+created = lambda ind: Q(created__icontains=ind)
+label   = lambda ind: Q(label__icontains=ind)
+data    = lambda ind: Q(data__icontains=ind)
+
+snippet = lambda ind: Q(snippets_label__icontains=ind) | Q(
+snippets_data__icontains=ind)
+
+note  = lambda ind: Q(note__data__icontains=ind)
+tag   = lambda ind: Q(tags__name__icontains=ind)
+list  = lambda ind: Q(ancestor__name__icontains=ind)
+board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
+default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
+
+sqlike = SqLike(SqNode(None, default),
+SqNode(('o', 'owner'), owner),
+SqNode(('l', 'label'), label),
+SqNode(('d', 'data'), data),
+SqNode(('w', 'worker'), worker, or_), 
+SqNode(('c', 'created'), created))
+
+
+stmt = sqlike.feed('l:this + d:cool + d:nice + shit + w:iury + w:victor')
+print(stmt)
 

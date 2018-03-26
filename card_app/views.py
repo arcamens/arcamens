@@ -10,7 +10,6 @@ from core_app.views import GuardianView
 from post_app.models import Post
 from post_app.forms import PostForm
 from timeline_app.models import Timeline
-from core_app.utils import splittokens
 from core_app.models import User
 from card_app.models import Card
 from list_app.models import List, EPasteCard
@@ -1093,5 +1092,6 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.child)
         event.ancestor.ancestor.ws_sound()
+
 
 

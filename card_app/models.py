@@ -2,13 +2,13 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
-from core_app.utils import SqLike
+from core_app.utils import SqLike, SqNode
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
 from markdown import markdown
 from functools import reduce
-import operator
+from operator import and_, or_
 
 # Create your models here.
 
@@ -67,38 +67,23 @@ class CardMixin(object):
         tag   = lambda ind: Q(tags__name__icontains=ind)
         list  = lambda ind: Q(ancestor__name__icontains=ind)
         board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
-
-        fields = {
-        'o': owner,
-        'w': worker,
-        'c': created,
-        'l': label,
-        'd': data,
-        's': snippet,
-        'n': note,
-        't': tag, 
-        'i': list,
-        'b': board,
-        'owner': owner,
-        'worker': worker,
-        'created': created,
-        'label': label,
-        'data': data,
-        'snippet': snippet,
-        'note': note,
-        'tag': tag,
-        'list': list,
-        'board': board
-        }
-        
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
-        sqlike  = SqLike(fields, default)
+
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('o', 'owner'), owner),
+        SqNode(('w', 'worker'), worker, chain=True), 
+        SqNode(('c', 'created'), created),
+        SqNode(('l', 'label'), label),
+        SqNode(('d', 'data'), data),
+        SqNode(('s', 'snippet'), snippet),
+        SqNode(('n', 'note'), note),
+        SqNode(('t', 'tag'), tag, chain=True),
+        SqNode(('i', 'list'), list),
+        SqNode(('b', 'board'), board),)
 
         cards = cards.filter(Q(done=done))
-        sql   = sqlike.build(pattern)
-        sql   = reduce(operator.and_, sql)
-        cards = cards.filter(sql) 
-
+        sqlike.feed(pattern)
+        cards = sqlike.run(cards)
         return cards
 
     def __str__(self):
@@ -426,6 +411,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

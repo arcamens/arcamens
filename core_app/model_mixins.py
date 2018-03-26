@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
-from core_app.utils import splittokens
-from core_app.utils import SqLike
+from core_app.utils import SqLike, SqNode
 from django.db.models import Q
 from functools import reduce
 from core_app import ws
@@ -38,21 +37,24 @@ class UserMixin(object):
 
     @classmethod
     def collect_users(cls, users, pattern):
-        fields = {
-        'e': lambda ind: Q(email__icontains=ind),
-        'n': lambda ind: Q(name__icontains=ind),
-        'd': lambda ind: Q(description__icontains=ind),
-        't': lambda ind: Q(tags__name__icontains=ind),
-        }
+        email = lambda ind: Q(email__icontains=ind)
+        name  = lambda ind: Q(name__icontains=ind)
+        desc  = lambda ind: Q(description__icontains=ind)
+        tag   = lambda ind: Q(tags__name__icontains=ind)
+        
 
         default = lambda ind: Q(email__icontains=ind) | Q(name__icontains=ind)
-        sqlike  = SqLike(fields, default)
 
-        sql   = sqlike.build(pattern)
-        sql   = reduce(operator.and_, sql)
-        users = users.filter(sql) 
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('m', 'email'), email),
+        SqNode(('n', 'name'), name), 
+        SqNode(('t', 'tag'), tag), 
+        SqNode(('d', 'description'), desc),)
 
+        sqlike.feed(pattern)
+        users = sqlike.run(users)
         return users
+
 
     def __str__(self):
         return self.name
@@ -88,5 +90,7 @@ class OrganizationMixin(object):
     def ws_sound(self):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
+
+
 
 
