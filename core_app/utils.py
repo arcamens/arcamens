@@ -1,10 +1,9 @@
 from re import split
 
 from django.db.models import Q
-from re import split
-from itertools import chain
 from functools import reduce
 from operator import and_, or_
+from re import split
 
 class SqNode:
     def __init__(self, tokens, rule, op=and_, chain=False):
@@ -41,10 +40,16 @@ class SqLike:
         pairs = map(lambda ind: ind.split(':', 2), pairs)
 
         for ind in pairs:
-            if len(ind) > 1:
-                self.sql[ind[0]].add(ind[1])
-            else:
-                self.node.add(ind[0])
+            self.build(ind)
+
+    def build(self, pair):
+        pair[0]  = pair[0].strip().rstrip()
+        pair[-1] = pair[-1].strip().rstrip()
+
+        if len(pair) > 1:
+            self.sql[pair[0]].add(pair[1])
+        else:
+            self.node.add(pair[0])
 
     def run(self, queryset):
         for ind in self.args:
