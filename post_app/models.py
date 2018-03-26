@@ -58,17 +58,31 @@ class PostMixin(object):
 
     @classmethod
     def collect_posts(cls, posts, pattern, done=False):
+        user   = lambda ind: Q(user__name__icontains=ind)
+        worker  = lambda ind: Q(workers__name__icontains=ind)
+        created = lambda ind: Q(created__icontains=ind)
+        label   = lambda ind: Q(label__icontains=ind)
+        tag   = lambda ind: Q(tags__name__icontains=ind)
+        timeline  = lambda ind: Q(ancestor__name__icontains=ind)
+        comment = lambda ind: Q(postcomment__data__icontains=ind)
+
         fields = {
-        'o': lambda ind: Q(user__name__icontains=ind),
-        'w': lambda ind: Q(workers__name__icontains=ind),
-        'c': lambda ind: Q(created__icontains=ind),
-        'l': lambda ind: Q(label__icontains=ind),
-        't': lambda ind: Q(tags__name__icontains=ind),
-        'm': lambda ind: Q(postcomment__data__icontains=ind),
-        'e': lambda ind: Q(ancestor__name__icontains=ind),
-        
+        'o': user,
+        'w': worker,
+        'c': created,
+        'l': label,
+        't': tag, 
+        'i': timeline,
+        'm': comment,
+        'owner': user,
+        'worker': worker,
+        'created': created,
+        'label': label,
+        'tag': tag,
+        'comment': comment,
+        'timeline': timeline,
         }
-        
+
         default = lambda ind: Q(label__icontains=ind)  
         sqlike  = SqLike(fields, default)
         posts = posts.filter(done=done)
@@ -313,6 +327,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 
