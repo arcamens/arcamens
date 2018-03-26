@@ -65,6 +65,7 @@ class PostMixin(object):
         'l': lambda ind: Q(label__icontains=ind),
         't': lambda ind: Q(tags__name__icontains=ind),
         'm': lambda ind: Q(postcomment__data__icontains=ind),
+        'e': lambda ind: Q(ancestor__name__icontains=ind),
         
         }
         
