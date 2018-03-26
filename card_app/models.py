@@ -59,8 +59,8 @@ class CardMixin(object):
         's': lambda ind: Q(snippets_label__icontains=ind) | Q(snippets_data__icontains=ind),
         'n': lambda ind: Q(note__data__icontains=ind),
         't': lambda ind: Q(tags__name__icontains=ind),
-        'b': lambda ind: Q(ancestor__name__icontains=ind),
-        'i': lambda ind: Q(ancestor___ancestor__name__icontains=ind),
+        'i': lambda ind: Q(ancestor__name__icontains=ind),
+        'b': lambda ind: Q(ancestor__ancestor__name__icontains=ind),
         
         }
         
@@ -399,5 +399,6 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
