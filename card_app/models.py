@@ -50,8 +50,12 @@ class CardMixin(object):
 
     @classmethod
     def collect_cards(cls, cards, pattern, done=False):
-        owner   = lambda ind: Q(owner__name__icontains=ind)
-        worker  = lambda ind: Q(workers__name__icontains=ind)
+        owner   = lambda ind: Q(owner__name__icontains=ind) | Q(
+        owner__email__icontains=ind)
+
+        worker  = lambda ind: Q(workers__name__icontains=ind) | Q(    
+        workers__email__icontains=ind)
+
         created = lambda ind: Q(created__icontains=ind)
         label   = lambda ind: Q(label__icontains=ind)
         data    = lambda ind: Q(data__icontains=ind)

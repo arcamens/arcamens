@@ -58,13 +58,17 @@ class PostMixin(object):
 
     @classmethod
     def collect_posts(cls, posts, pattern, done=False):
-        user   = lambda ind: Q(user__name__icontains=ind)
-        worker  = lambda ind: Q(workers__name__icontains=ind)
-        created = lambda ind: Q(created__icontains=ind)
-        label   = lambda ind: Q(label__icontains=ind)
-        tag   = lambda ind: Q(tags__name__icontains=ind)
-        timeline  = lambda ind: Q(ancestor__name__icontains=ind)
-        comment = lambda ind: Q(postcomment__data__icontains=ind)
+        user = lambda ind: Q(user__name__icontains=ind) | Q(
+        user__email__icontains=ind)
+
+        worker = lambda ind: Q(workers__name__icontains=ind) | Q(    
+        workers__email__icontains=ind)
+
+        created  = lambda ind: Q(created__icontains=ind)
+        label    = lambda ind: Q(label__icontains=ind)
+        tag      = lambda ind: Q(tags__name__icontains=ind)
+        timeline = lambda ind: Q(ancestor__name__icontains=ind)
+        comment  = lambda ind: Q(postcomment__data__icontains=ind)
 
         fields = {
         'o': user,
