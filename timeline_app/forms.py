@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from sqlike.forms import SqLikeForm
 from django import forms
 from . import models
 
@@ -28,8 +29,8 @@ class FindEventForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
 
-class UserSearchForm(forms.Form):
-    name = forms.CharField(required=False)
+class UserSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False)
 
 class ConfirmTimelineDeletionForm(forms.Form):
     name = forms.CharField(required=True,
@@ -48,4 +49,5 @@ class ConfirmTimelineDeletionForm(forms.Form):
         if name != self.confirm_token:
             raise forms.ValidationError(
                 "The name doesn't match!")
+
 

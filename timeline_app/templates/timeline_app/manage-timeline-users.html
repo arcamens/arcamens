@@ -61,7 +61,7 @@ data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href=
 
 <form id="bind-timeline-search-form" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 </div>
@@ -85,6 +85,7 @@ $('#bind-timeline-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

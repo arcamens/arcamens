@@ -370,7 +370,8 @@ class ManageTimelineUsers(GuardianView):
         'count': total, 'total': total,})
 
     def post(self, request, timeline_id):
-        form = forms.UserSearchForm(request.POST)
+        sqlike = User.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
         me   = User.objects.get(id=self.user_id)
 
         timeline = Timeline.objects.get(id=timeline_id)
@@ -385,8 +386,8 @@ class ManageTimelineUsers(GuardianView):
                 {'me': me, 'timeline': timeline, 'count': 0, 'total': total,
                         'form':form}, status=400)
 
-        included = User.collect_users(included, form.cleaned_data['name'])
-        excluded = User.collect_users(excluded, form.cleaned_data['name'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
         count = included.count() + excluded.count()
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
@@ -415,6 +416,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
