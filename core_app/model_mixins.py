@@ -36,21 +36,22 @@ class UserMixin(object):
         kwargs={'user_id': self.id})
 
     @classmethod
-    def collect_users(cls, users, pattern):
+    def from_sqlike(cls):
         email = lambda ind: Q(email__icontains=ind)
         name  = lambda ind: Q(name__icontains=ind)
         desc  = lambda ind: Q(description__icontains=ind)
         tag   = lambda ind: Q(tags__name__icontains=ind)
-        
-
         default = lambda ind: Q(email__icontains=ind) | Q(name__icontains=ind)
-
         sqlike = SqLike(SqNode(None, default),
         SqNode(('m', 'email'), email),
         SqNode(('n', 'name'), name), 
         SqNode(('t', 'tag'), tag), 
         SqNode(('d', 'description'), desc),)
+        return sqlike
 
+    @classmethod
+    def collect_users(cls, users, pattern):
+        sqlike = cls.from_sqlike()
         sqlike.feed(pattern)
         users = sqlike.run(users)
         return users
@@ -90,6 +91,7 @@ class OrganizationMixin(object):
     def ws_sound(self):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
+
 
 
 
