@@ -249,8 +249,8 @@ class ListUsers(GuardianView):
 
         users = organization.users.all()
         total = users.count()
-
-        form  = forms.UserFilterForm(request.POST, instance=filter)
+        sqlike = User.from_sqlike()
+        form  = forms.UserFilterForm(request.POST, sqlike=sqlike, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-users.html', 
@@ -259,7 +259,8 @@ class ListUsers(GuardianView):
                         'organization': organization}, status=400)
   
         form.save()
-        users = User.collect_users(users, filter.pattern)
+
+        users = sqlike.run(users)
         count = users.count()
 
         return render(request, 'core_app/list-users.html', 
@@ -829,6 +830,7 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
 

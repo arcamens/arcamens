@@ -54,13 +54,13 @@ class PasswordForm(forms.Form):
             raise forms.ValidationError(
                 "    Password doesn't match!")
 
-class CardFilterFormMixin:
+class SqlikeForm:
     def __init__(self, *args, sqlike=None, **kwargs):
         self.sqlike = sqlike
-        super(CardFilterFormMixin, self).__init__(*args, **kwargs)
+        super(SqlikeForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        super(CardFilterFormMixin, self).clean()
+        super(SqlikeForm, self).clean()
         pattern = self.cleaned_data.get('pattern')
 
         try:
@@ -69,17 +69,17 @@ class CardFilterFormMixin:
             raise forms.ValidationError(
                 "Invalid attribute: %s " % exc)
 
-class GlobalFilterForm(CardFilterFormMixin, forms.ModelForm):
+class GlobalFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
-class GlobalTaskFilterForm(CardFilterFormMixin, forms.ModelForm):
+class GlobalTaskFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalTaskFilter
         exclude = ('user', 'organization')
 
-class UserFilterForm(forms.ModelForm):
+class UserFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.UserFilter
         exclude = ('user', 'organization')
@@ -100,6 +100,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 

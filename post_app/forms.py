@@ -1,5 +1,5 @@
 from django import forms
-from core_app.forms import CardFilterFormMixin
+from core_app.forms import SqlikeForm
 from . import models
 
 class PostForm(forms.ModelForm):
@@ -13,17 +13,17 @@ class PostFileWrapperForm(forms.ModelForm):
         model  = models.PostFileWrapper
         exclude = ('post', )
 
-class PostFilterForm(CardFilterFormMixin, forms.ModelForm):
+class PostFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.PostFilter
         exclude = ('user', 'timeline')
 
-class AssignmentFilterForm(CardFilterFormMixin, forms.ModelForm):
+class AssignmentFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.AssignmentFilter
         exclude = ('user', 'organization')
 
-class GlobalPostFilterForm(CardFilterFormMixin, forms.ModelForm):
+class GlobalPostFilterForm(SqlikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalPostFilter
         exclude = ('user', 'organization')
@@ -47,6 +47,7 @@ class AlertPostWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='Please, take a look at this asap!')
+
 
 
 
