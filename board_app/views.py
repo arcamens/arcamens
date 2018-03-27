@@ -145,7 +145,8 @@ class ManageBoardUsers(GuardianView):
         'form':forms.UserSearchForm()})
 
     def post(self, request, board_id):
-        form = forms.UserSearchForm(request.POST)
+        sqlike = User.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
@@ -160,8 +161,8 @@ class ManageBoardUsers(GuardianView):
                 {'me': me, 'board': board, 'total': total, 'count': 0,
                         'form':forms.UserSearchForm()}, status=400)
 
-        included = User.collect_users(included, form.cleaned_data['name'])
-        excluded = User.collect_users(excluded, form.cleaned_data['name'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
         count = included.count() + excluded.count()
 
         return render(request, 'board_app/manage-board-users.html', 
@@ -359,6 +360,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 

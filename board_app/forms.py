@@ -1,4 +1,5 @@
 from timeline_app.forms import ConfirmTimelineDeletionForm
+from sqlike.forms import SqLikeForm
 from django import forms
 from . import models
 import card_app.models
@@ -21,12 +22,13 @@ class BindUsersForm(forms.Form):
 class BoardSearchForm(forms.Form):
     name = forms.CharField(required=False)
 
-class UserSearchForm(forms.Form):
-    name = forms.CharField(required=False)
+class UserSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False)
 
 class ConfirmBoardDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the board name to confirm!')
+
 
 
 
