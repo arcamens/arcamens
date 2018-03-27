@@ -1,6 +1,7 @@
 .board-ancestor {
 word-wrap: 
 break-word;
+
 background-color:#DCD6D8;
 }
 
@@ -9,14 +10,14 @@ background-color:#DCD6D8;
 word-wrap: 
 break-word;
 
-background-color:#B2BFD1;
+background-color:#A9B7CA;
 }
 
 .list-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#B2BFD1;
+background-color:#A9B7CA;
 
 }
 
@@ -24,7 +25,7 @@ background-color:#B2BFD1;
 word-wrap: 
 break-word;
 
-background-color:#D5D0B9;
+background-color:#C9C2A4;
 
 }
 
@@ -47,7 +48,7 @@ color:#3669AD;
 word-wrap: 
 break-word;
 
-background-color:#D5D0B9;
+background-color:#C9C2A4;
 
 }
 
@@ -80,13 +81,14 @@ background-color:#C7C7C7;
 word-wrap: 
 break-word;
 
-background-color:#BCB0B0;
+background-color:#94BCBC;
 
 }
 
 .modal-header  {
     word-wrap: break-word;
 }
+
 
 
 
