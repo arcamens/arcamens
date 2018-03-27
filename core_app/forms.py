@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from timeline_app.forms import ConfirmTimelineDeletionForm
+from card_app.models import Card
 from django import forms
 from . import models
 import site_app.forms
@@ -53,12 +54,27 @@ class PasswordForm(forms.Form):
             raise forms.ValidationError(
                 "    Password doesn't match!")
 
-class GlobalFilterForm(forms.ModelForm):
+class CardFilterFormMixin:
+    def __init__(self, *args, sqlike=None, **kwargs):
+        self.sqlike = sqlike
+        super(CardFilterFormMixin, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(CardFilterFormMixin, self).clean()
+        pattern = self.cleaned_data.get('pattern')
+
+        try:
+            self.sqlike.feed(pattern)
+        except KeyError as exc:
+            raise forms.ValidationError(
+                "Invalid attribute: %s " % exc)
+
+class GlobalFilterForm(CardFilterFormMixin, forms.ModelForm):
     class Meta:
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
-class GlobalTaskFilterForm(forms.ModelForm):
+class GlobalTaskFilterForm(CardFilterFormMixin, forms.ModelForm):
     class Meta:
         model  = models.GlobalTaskFilter
         exclude = ('user', 'organization')
@@ -84,5 +100,6 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 

@@ -332,8 +332,9 @@ class SetupPostFilter(GuardianView):
     def post(self, request, timeline_id):
         record = PostFilter.objects.get(
         timeline__id=timeline_id, user__id=self.user_id)
+        sqlike = models.Post.from_sqlike()
 
-        form     = forms.PostFilterForm(request.POST, instance=record)
+        form     = forms.PostFilterForm(request.POST, sqlike=sqlike, instance=record)
         timeline = Timeline.objects.get(id=timeline_id)
 
         if not form.is_valid():
@@ -356,10 +357,11 @@ class SetupGlobalPostFilter(GuardianView):
         record = GlobalPostFilter.objects.get(
         user__id=self.user_id, organization=user.default)
 
-        form = forms.GlobalPostFilterForm(request.POST, instance=record)
+        sqlike = models.Post.from_sqlike()
+        form = forms.GlobalPostFilterForm(request.POST, sqlike=sqlike, instance=record)
 
         if not form.is_valid():
-            return render(request, 'post_app/setup-global-postfilter.html',
+            return render(request, 'post_app/setup-global-post-filter.html',
                    {'form': form}, status=400)
         form.save()
         return redirect('timeline_app:list-all-posts', user_id=user.id)
@@ -647,13 +649,15 @@ class SetupAssignmentFilter(GuardianView):
         record = AssignmentFilter.objects.get(
         user__id=self.user_id, organization=user.default)
 
-        form = forms.AssignmentFilterForm(request.POST, instance=record)
+        sqlike = models.Post.from_sqlike()
+        form = forms.AssignmentFilterForm(request.POST, sqlike=sqlike, instance=record)
 
         if not form.is_valid():
             return render(request, 'post_app/setup-assignment-filter.html',
                    {'user': user, 'form': form}, status=400)
         form.save()
         return redirect('post_app:list-assignments', user_id=user.id)
+
 
 
 

@@ -57,7 +57,7 @@ class PostMixin(object):
         return posts
 
     @classmethod
-    def collect_posts(cls, posts, pattern, done=False):
+    def from_sqlike(cls):
         user = lambda ind: Q(user__name__icontains=ind) | Q(
         user__email__icontains=ind)
 
@@ -80,7 +80,11 @@ class PostMixin(object):
         SqNode(('t', 'tag'), tag, chain=True),
         SqNode(('m', 'comment'), comment),
         SqNode(('i', 'timeline'), timeline),)
+        return sqlike
 
+    @classmethod
+    def collect_posts(cls, posts, pattern, done=False):
+        sqlike = cls.from_sqlike()
         posts = posts.filter(Q(done=done))
         sqlike.feed(pattern)
         posts = sqlike.run(posts)
@@ -322,6 +326,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

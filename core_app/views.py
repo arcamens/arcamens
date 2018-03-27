@@ -571,8 +571,11 @@ class ListAllTasks(GuardianView):
 
         total = cards.count()
         
-        cards = Card.collect_cards(cards, 
-        filter.pattern, filter.done)
+        sqlike = Card.from_sqlike()
+        sqlike.feed(filter.pattern)
+
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
 
         count = cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
@@ -587,7 +590,9 @@ class ListAllTasks(GuardianView):
         filter, _ = GlobalTaskFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        form = forms.GlobalTaskFilterForm(request.POST, instance=filter)
+        sqlike = Card.from_sqlike()
+        form   = forms.GlobalTaskFilterForm(
+            request.POST, sqlike=sqlike, instance=filter)
 
         cards = me.tasks.filter(
         ancestor__ancestor__organization=me.default)
@@ -601,8 +606,8 @@ class ListAllTasks(GuardianView):
 
         form.save()
 
-        cards = Card.collect_cards(cards, 
-        filter.pattern, filter.done)
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
 
         count = cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
@@ -622,6 +627,12 @@ class Find(GuardianView):
         cards = Card.get_allowed_cards(me)
         total = cards.count()
 
+        sqlike = Card.from_sqlike()
+        sqlike.feed(filter.pattern)
+
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
+
         cards = Card.collect_cards(cards, filter.pattern, filter.done)
         count = cards.count()
 
@@ -636,7 +647,8 @@ class Find(GuardianView):
         filter, _ = GlobalFilter.objects.get_or_create(
         user=me, organization=me.default)
 
-        form  = forms.GlobalFilterForm(request.POST, instance=filter)
+        sqlike = Card.from_sqlike()
+        form  = forms.GlobalFilterForm(request.POST, sqlike=sqlike, instance=filter)
 
         cards = Card.get_allowed_cards(me)
         total = cards.count()
@@ -646,7 +658,8 @@ class Find(GuardianView):
                 {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
 
-        cards = Card.collect_cards(cards, filter.pattern, filter.done)
+        cards  = cards.filter(Q(done=filter.done))
+        cards  = sqlike.run(cards)
         count =  cards.count()
 
         cards = cards.only('done', 'label', 'id').order_by('id')
@@ -816,6 +829,7 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
 

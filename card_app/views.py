@@ -605,12 +605,11 @@ class EArchiveCard(GuardianView):
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-        list = list_app.models.List.objects.get(id=list_id)
+        user   = core_app.models.User.objects.get(id=self.user_id)
+        list   = list_app.models.List.objects.get(id=list_id)
 
-        filter = models.CardFilter.objects.get(
-        user__id=self.user_id, organization__id=user.default.id,
-        list__id=list_id)
+        filter = models.CardFilter.objects.get(user__id=self.user_id, 
+        organization__id=user.default.id, list__id=list_id)
 
         return render(request, 'card_app/setup-card-filter.html', 
         {'form': forms.CardFilterForm(instance=filter), 
@@ -619,17 +618,19 @@ class SetupCardFilter(GuardianView):
     def post(self, request, list_id):
         user = core_app.models.User.objects.get(id=self.user_id)
 
-        filter = models.CardFilter.objects.get(
-        user__id=self.user_id, organization__id=user.default.id,
-        list__id=list_id)
+        filter = models.CardFilter.objects.get(user__id=self.user_id, 
+        organization__id=user.default.id, list__id=list_id)
+        list   = list_app.models.List.objects.get(id=list_id)
 
-        form   = forms.CardFilterForm(request.POST, instance=filter)
+        sqlike = models.Card.from_sqlike()
+        form   = forms.CardFilterForm(request.POST, 
+            sqlike=sqlike, instance=filter)
 
         if not form.is_valid():
-            return render(request, 'card_app/setup-filter.html',
-                   {'card': record, 'form': form, 
-                        'list': record.list}, status=400)
+            return render(request, 'card_app/setup-card-filter.html',
+                   {'form': form, 'list': list}, status=400)
         form.save()
+
         return redirect('card_app:list-cards', list_id=list_id)
 
 
@@ -709,7 +710,9 @@ class ManageCardRelations(GuardianView):
         'organization': me.default,'form':forms.CardSearchForm()})
 
     def post(self, request, card_id):
-        form = forms.CardSearchForm(request.POST)
+        sqlike = models.Card.from_sqlike()
+
+        form = forms.CardSearchForm(request.POST, sqlike=sqlike)
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
@@ -724,11 +727,12 @@ class ManageCardRelations(GuardianView):
 
         excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
-        included = models.Card.collect_cards(included, 
-        form.cleaned_data['pattern'], form.cleaned_data['done']) 
+        included = included.filter(Q(done=form.cleaned_data['done']))
+        included = sqlike.run(included)
 
-        excluded = models.Card.collect_cards(excluded, 
-        form.cleaned_data['pattern'], form.cleaned_data['done']) 
+        excluded = excluded.filter(Q(done=form.cleaned_data['done']))
+        excluded = sqlike.run(excluded)
+
         count = excluded.count() + included.count()
 
         return render(request, 'card_app/manage-card-relations.html', 
@@ -1092,6 +1096,7 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.child)
         event.ancestor.ancestor.ws_sound()
+
 
 
 
