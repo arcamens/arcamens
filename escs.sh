@@ -428,18 +428,6 @@ git rm -r --cached ./*/migrations/
 git rm --cached db.sqlite3
 git add .gitignore
 ##############################################################################
-# install django-jdrop.
-cd ~/projects/django-jdrop-code
-python setup.py install
-
-# uninstall django-jdrop.
-pip uninstall django-jdrop
-y
-
-pip install paho-mqtt
-pip install pika
-
-##############################################################################
 
 wget --post-data='somedata' http://189.84.248.176:8000/register_app/paypal-ipn/
 ##############################################################################
@@ -678,6 +666,13 @@ git push -u origin staging
 git branch -d C162
 git push origin :C162
 git fetch -p 
+##############################################################################
+# install django-sqlike
+
+cd ~/projects/django-sqlike-code
+python setup.py install
+rm -fr build
+
 
 
 

@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from timeline_app.forms import ConfirmTimelineDeletionForm
+from sqlike.forms import SqLikeForm
 from card_app.models import Card
 from django import forms
 from . import models
@@ -54,32 +55,18 @@ class PasswordForm(forms.Form):
             raise forms.ValidationError(
                 "    Password doesn't match!")
 
-class SqlikeForm:
-    def __init__(self, *args, sqlike=None, **kwargs):
-        self.sqlike = sqlike
-        super(SqlikeForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        super(SqlikeForm, self).clean()
-        pattern = self.cleaned_data.get('pattern')
-
-        try:
-            self.sqlike.feed(pattern)
-        except KeyError as exc:
-            raise forms.ValidationError(
-                "Invalid attribute: %s " % exc)
-
-class GlobalFilterForm(SqlikeForm, forms.ModelForm):
+class GlobalFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalFilter
         exclude = ('user', 'organization')
 
-class GlobalTaskFilterForm(SqlikeForm, forms.ModelForm):
+class GlobalTaskFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalTaskFilter
         exclude = ('user', 'organization')
 
-class UserFilterForm(SqlikeForm, forms.ModelForm):
+class UserFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.UserFilter
         exclude = ('user', 'organization')
@@ -100,6 +87,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 

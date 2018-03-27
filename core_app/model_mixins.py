@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
-from core_app.utils import SqLike, SqNode
+from sqlike.parser import SqLike, SqNode
 from django.db.models import Q
 from functools import reduce
 from core_app import ws
@@ -91,6 +91,7 @@ class OrganizationMixin(object):
     def ws_sound(self):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
+
 
 
 

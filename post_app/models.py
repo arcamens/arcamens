@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
-from core_app.utils import SqLike, SqNode
+from sqlike.parser import SqLike, SqNode
 from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
@@ -326,6 +326,7 @@ class EUnbindTagPost(Event):
     related_name='e_unbind_tag_post2', blank=True)
 
     html_template = 'post_app/e-unbind-tag-post.html'
+
 
 
 

@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User, GlobalFilterMixin
-from core_app.utils import SqLike, SqNode
+from sqlike.parser import SqLike, SqNode
 from board_app.models import Board
 from django.db.models import Q
 from django.db import models
@@ -416,6 +416,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

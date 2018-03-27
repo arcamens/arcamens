@@ -1,8 +1,8 @@
 from django import forms
-from core_app.forms import SqlikeForm
+from sqlike.forms import SqLikeForm
 from . import models
 
-class CardFilterForm(SqlikeForm, forms.ModelForm):
+class CardFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.CardFilter
         exclude = ('user', 'organization', 
@@ -26,12 +26,12 @@ class FileWrapperForm(forms.ModelForm):
         model  = models.FileWrapper
         exclude = ('card', )
 
-class UserSearchForm(SqlikeForm, forms.Form):
+class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: victor + #arcamens \
     + #suggestion ...')
 
-class CardSearchForm(SqlikeForm, forms.Form):
+class CardSearchForm(SqLikeForm, forms.Form):
     done = forms.BooleanField(required=False)
 
     pattern = forms.CharField(required=False, 
@@ -59,6 +59,8 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
+
+
 
 
 

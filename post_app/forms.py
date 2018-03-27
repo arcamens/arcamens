@@ -1,5 +1,5 @@
 from django import forms
-from core_app.forms import SqlikeForm
+from sqlike.forms import SqLikeForm
 from . import models
 
 class PostForm(forms.ModelForm):
@@ -13,22 +13,22 @@ class PostFileWrapperForm(forms.ModelForm):
         model  = models.PostFileWrapper
         exclude = ('post', )
 
-class PostFilterForm(SqlikeForm, forms.ModelForm):
+class PostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.PostFilter
         exclude = ('user', 'timeline')
 
-class AssignmentFilterForm(SqlikeForm, forms.ModelForm):
+class AssignmentFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.AssignmentFilter
         exclude = ('user', 'organization')
 
-class GlobalPostFilterForm(SqlikeForm, forms.ModelForm):
+class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalPostFilter
         exclude = ('user', 'organization')
 
-class UserSearchForm(SqlikeForm, forms.Form):
+class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: victor + #arcamens + #suggestion ...')
 
@@ -44,6 +44,9 @@ class AlertPostWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='Please, take a look at this asap!')
+
+
+
 
 
 
