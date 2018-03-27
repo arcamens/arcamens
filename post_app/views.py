@@ -298,7 +298,8 @@ class ManagePostWorkers(GuardianView):
         'form':forms.UserSearchForm()})
 
     def post(self, request, post_id):
-        form = forms.UserSearchForm(request.POST)
+        sqlike = models.Post.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
@@ -311,8 +312,8 @@ class ManagePostWorkers(GuardianView):
                 {'me': me, 'total': total, 'count': 0, 'post': post, 
                     'form':form}, status=400)
 
-        included = User.collect_users(included, form.cleaned_data['pattern'])
-        excluded = User.collect_users(excluded, form.cleaned_data['pattern'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
         count = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-workers.html', 
@@ -657,6 +658,7 @@ class SetupAssignmentFilter(GuardianView):
                    {'user': user, 'form': form}, status=400)
         form.save()
         return redirect('post_app:list-assignments', user_id=user.id)
+
 
 
 

@@ -28,15 +28,12 @@ class GlobalPostFilterForm(SqlikeForm, forms.ModelForm):
         model  = models.GlobalPostFilter
         exclude = ('user', 'organization')
 
-class UserSearchForm(forms.Form):
+class UserSearchForm(SqlikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: victor + #arcamens + #suggestion ...')
 
 class TagSearchForm(forms.Form):
     name = forms.CharField(required=False)
-
-class AssignPostForm(forms.Form):
-    email = forms.EmailField()
 
 class PostAttentionForm(forms.Form):
     message = forms.CharField(

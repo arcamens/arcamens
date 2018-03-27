@@ -26,7 +26,7 @@ class FileWrapperForm(forms.ModelForm):
         model  = models.FileWrapper
         exclude = ('card', )
 
-class UserSearchForm(forms.Form):
+class UserSearchForm(SqlikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: victor + #arcamens \
     + #suggestion ...')
@@ -59,6 +59,7 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
+
 
 
 

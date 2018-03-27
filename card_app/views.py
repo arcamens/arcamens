@@ -755,7 +755,8 @@ class ManageCardWorkers(GuardianView):
         'count': total, 'form':forms.UserSearchForm()})
 
     def post(self, request, card_id):
-        form = forms.UserSearchForm(request.POST)
+        sqlike = User.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
@@ -768,8 +769,8 @@ class ManageCardWorkers(GuardianView):
                 {'me': me, 'card': card, 'form':form, 'total': total, 
                     'count': total,}, status=400)
 
-        included = User.collect_users(included, form.cleaned_data['pattern'])
-        excluded = User.collect_users(excluded, form.cleaned_data['pattern'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
         count = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-workers.html', 
@@ -1096,6 +1097,7 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.child)
         event.ancestor.ancestor.ws_sound()
+
 
 
 
