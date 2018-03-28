@@ -8,55 +8,43 @@
 <h4> 
 <span class="glyphicon glyphicon-search"></span>
 
-Find <h4>
+Find/Cards 
+<span class="badge">{{count}}/{{total}}</span><h4>
 </div>
 
 <div class="modal-body">
 
-<div class="pre-scrollable">
-{% for ind in cards %}
-<a class="e-get" data-shell="#main-view" 
-data-show="{% url 'card_app:view-data' ind.id %}"
-data-dismiss="modal" 
-href="#" > 
-<span class="glyphicon glyphicon-file"></span>
-{{ind.label|truncatechars:40}} </a> 
-<br>
-
-{% endfor %}
-</div>
+{{elems | safe}}
 
 <hr>
 <form id="find-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
 
-{% bootstrap_field form.pattern  size='md' %}
-{% bootstrap_field form.done  size='md' %}
+{% bootstrap_field form.pattern  size='md'  %}
 
+{% bootstrap_field form.done  size='md'  %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
+</div>
 
 </div>
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#find-card-search-form" 
-data-show="{% url 'card_app:find'  %}" class="btn btn-default m-post"> {% trans "Search" %} </button>
+<button  type="button" data-form="#find-card-search-form" id="filterAllData" data-show="{% url 'card_app:find'  %}"
+class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
+<script>
+$('#find-card-search-form').on('submit', (function(e){
+    e.preventDefault();
+        $('#filterAllData').click();
 
-
-
-
-
-
-
-
-
-
+}));
+</script>
 
 
 

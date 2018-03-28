@@ -2,6 +2,16 @@ from django import forms
 from sqlike.forms import SqLikeForm
 from . import models
 
+class GlobalCardFilterForm(SqLikeForm, forms.ModelForm):
+    class Meta:
+        model  = models.GlobalCardFilter
+        exclude = ('user', 'organization')
+
+class GlobalTaskFilterForm(SqLikeForm, forms.ModelForm):
+    class Meta:
+        model  = models.GlobalTaskFilter
+        exclude = ('user', 'organization')
+
 class CardFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.CardFilter
@@ -59,18 +69,5 @@ class AlertCardWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

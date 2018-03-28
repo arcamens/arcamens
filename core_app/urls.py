@@ -12,7 +12,6 @@ urlpatterns = [
 
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
-    url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
     url(r'^update-organization/(?P<organization_id>.+)/', views.UpdateOrganization.as_view(), name='update-organization'),
     url(r'^delete-organization/(?P<organization_id>.+)/', views.DeleteOrganization.as_view(), name='delete-organization'),
     url(r'^list-users/(?P<organization_id>.+)', views.ListUsers.as_view(), name='list-users'),
@@ -29,7 +28,6 @@ urlpatterns = [
     url(r'^delete-tag/(?P<tag_id>.+)/', views.DeleteTag.as_view(), name='delete-tag'),
     url(r'^event-queues/(?P<tag_id>.+)/', views.EventQueues.as_view(), name='event-queues'),
     url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
-    url(r'^find/', views.Find.as_view(), name='find'),
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
     url(r'^delete-all-clipboard/', views.DeleteAllClipboard.as_view(), name='delete-all-clipboard'),
     url(r'^confirm-clipboard-deletion/', views.ConfirmClipboardDeletion.as_view(), name='confirm-clipboard-deletion'),
@@ -41,6 +39,7 @@ urlpatterns = [
     url(r'^fix-account-debits/$', views.FixAccountDebits.as_view(), name='fix-account-debits'),
 
 ]
+
 
 
 

@@ -4,6 +4,7 @@ from django.db.models import Q, F, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
+from card_app.models import GlobalTaskFilter, GlobalCardFilter
 from core_app.models import Clipboard
 from django.core.mail import send_mail
 from core_app.views import GuardianView
@@ -11,8 +12,8 @@ from post_app.models import Post
 from post_app.forms import PostForm
 from timeline_app.models import Timeline
 from core_app.models import User
-from card_app.models import Card
 from list_app.models import List, EPasteCard
+from jsim.jscroll import JScroll
 from functools import reduce
 from itertools import chain
 import board_app.models
@@ -1097,6 +1098,115 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.child)
         event.ancestor.ancestor.ws_sound()
+
+class ListAllTasks(GuardianView):
+    def get(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalTaskFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        form  = forms.GlobalTaskFilterForm(instance=filter)
+        cards = me.tasks.filter(
+        ancestor__ancestor__organization=me.default)
+
+        total = cards.count()
+        
+        sqlike = models.Card.from_sqlike()
+        sqlike.feed(filter.pattern)
+
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
+
+        count = cards.count()
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'card_app/list-all-tasks-scroll.html', cards)
+
+        return render(request, 'card_app/list-all-tasks.html', 
+        {'total': total, 'count': count, 
+        'form': form, 'elems': elems.as_div()})
+
+    def post(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalTaskFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        sqlike = models.Card.from_sqlike()
+        form   = forms.GlobalTaskFilterForm(
+            request.POST, sqlike=sqlike, instance=filter)
+
+        cards = me.tasks.filter(
+        ancestor__ancestor__organization=me.default)
+
+        total = cards.count()
+
+        if not form.is_valid():
+            return render(request, 'card_app/list-all-tasks.html', 
+                {'form': form, 'total': total,
+                    'count': 0}, status=400)
+
+        form.save()
+
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
+
+        count = cards.count()
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'card_app/list-all-tasks-scroll.html', cards)
+
+        return render(request, 'card_app/list-all-tasks.html', 
+        {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
+class Find(GuardianView):
+    def get(self, request):
+        me    = User.objects.get(id=self.user_id)
+
+        filter, _ = GlobalCardFilter.objects.get_or_create(
+        user=me, organization=me.default)
+        form  = forms.GlobalCardFilterForm(instance=filter)
+
+        cards = models.Card.get_allowed_cards(me)
+        total = cards.count()
+
+        sqlike = models.Card.from_sqlike()
+        sqlike.feed(filter.pattern)
+
+        cards = cards.filter(Q(done=filter.done))
+        cards = sqlike.run(cards)
+
+        cards = models.Card.collect_cards(cards, filter.pattern, filter.done)
+        count = cards.count()
+
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'card_app/find-scroll.html', cards)
+
+        return render(request, 'card_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+    def post(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalCardFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        sqlike = models.Card.from_sqlike()
+        form  = forms.GlobalCardFilterForm(request.POST, sqlike=sqlike, instance=filter)
+
+        cards = models.Card.get_allowed_cards(me)
+        total = cards.count()
+
+        if not form.is_valid():
+            return render(request, 'card_app/find.html', 
+                {'form': form, 'total': total, 'count': 0}, status=400)
+        form.save()
+
+        cards  = cards.filter(Q(done=filter.done))
+        cards  = sqlike.run(cards)
+        count =  cards.count()
+
+        cards = cards.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'card_app/find-scroll.html', cards)
+
+        return render(request, 'card_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
 
 

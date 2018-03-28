@@ -8,14 +8,14 @@ href="#"> <span class="eventsButton">
 <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'core_app:list-all-tasks' %}" 
+data-show="{% url 'card_app:list-all-tasks' %}" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell="#bigModalContent"
 href="#"> 
 <span class="glyphicon glyphicon-tasks">  </span></button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'core_app:find' %}" 
+data-show="{% url 'card_app:find' %}" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell="#bigModalContent"
 href="#"> 
@@ -72,7 +72,7 @@ href="#">
 <li>
 <a href="#" 
 class="e-get" data-shell="#bigModalContent" 
-data-show="{% url 'core_app:list-all-tasks' %}" 
+data-show="{% url 'card_app:list-all-tasks' %}" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell="#bigModalContent">
 <span class="glyphicon glyphicon-tasks"></span> Card/Tasks 
@@ -82,7 +82,7 @@ data-shell="#bigModalContent">
 <li>
 <a href="#" 
 class="e-get" data-shell="#bigModalContent" 
-data-show="{% url 'core_app:find' %}" 
+data-show="{% url 'card_app:find' %}" 
 data-callback="$('#bigModal').modal('show');">
 <span class="glyphicon glyphicon-search"></span> Find/Cards
 </a>
@@ -91,6 +91,7 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 

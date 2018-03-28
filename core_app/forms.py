@@ -55,17 +55,6 @@ class PasswordForm(forms.Form):
             raise forms.ValidationError(
                 "    Password doesn't match!")
 
-
-class GlobalFilterForm(SqLikeForm, forms.ModelForm):
-    class Meta:
-        model  = models.GlobalFilter
-        exclude = ('user', 'organization')
-
-class GlobalTaskFilterForm(SqLikeForm, forms.ModelForm):
-    class Meta:
-        model  = models.GlobalTaskFilter
-        exclude = ('user', 'organization')
-
 class UserFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.UserFilter
@@ -87,6 +76,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 

@@ -159,26 +159,6 @@ class EUnbindUserTag(Event):
     tag = models.ForeignKey('Tag', null=True, blank=True)
     html_template = 'core_app/e-unbind-user-tag.html'
 
-class GlobalFilter(GlobalFilterMixin, models.Model):
-    CHOICES = (
-        ('P', 'Posts'),
-        ('C', 'Cards'),
-    )
-
-    pattern  = models.CharField(max_length=255, blank=True, 
-    default='', help_text='client socket  + #apollo + engine + #bug ...')
-
-    organization = models.ForeignKey('core_app.Organization', 
-    blank=True, null=True)
-
-    user = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
-
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
-
-    class Meta:
-        unique_together = ('user', 'organization', )
 
 class UserFilter(models.Model):
     organization = models.ForeignKey('core_app.Organization', 
@@ -195,24 +175,7 @@ class UserFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization',)
 
-class GlobalTaskFilter(models.Model):
-    pattern  = models.CharField(max_length=255, blank=True, 
-    default='', help_text='Example: ignition mechanism  \
-    + #issue + #car ...')
-
-    organization = models.ForeignKey('core_app.Organization', 
-    blank=True, null=True)
-
-    user = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
-
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
-
-    class Meta:
-        unique_together = ('user', 'organization', )
-
-class Clipboard(GlobalFilterMixin, models.Model):
+class Clipboard(models.Model):
     organization = models.ForeignKey(
     'core_app.Organization', blank=True)
 
@@ -235,6 +198,8 @@ class Clipboard(GlobalFilterMixin, models.Model):
 
 class EUpdateOrganization(Event):
     html_template = 'core_app/e-update-organization.html'
+
+
 
 
 

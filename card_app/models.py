@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from django.core.urlresolvers import reverse
-from core_app.models import Event, User, GlobalFilterMixin
+from core_app.models import Event, User
 from sqlike.parser import SqLike, SqNode
 from board_app.models import Board
 from django.db.models import Q
@@ -144,6 +144,39 @@ class Card(CardMixin, models.Model):
     path = models.ManyToManyField('Card', 
     null=True, related_name='children', blank=True, 
     symmetrical=False)
+
+class GlobalCardFilter(models.Model):
+    pattern  = models.CharField(max_length=255, blank=True, 
+    default='', help_text='client socket  + #apollo + engine + #bug ...')
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    user = models.ForeignKey('core_app.User', null=True, 
+    blank=True)
+
+    done = models.BooleanField(blank=True, 
+    default=False, help_text='Done cards?.')
+
+    class Meta:
+        unique_together = ('user', 'organization', )
+
+class GlobalTaskFilter(models.Model):
+    pattern  = models.CharField(max_length=255, blank=True, 
+    default='', help_text='Example: ignition mechanism  \
+    + #issue + #car ...')
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    user = models.ForeignKey('core_app.User', null=True, 
+    blank=True)
+
+    done = models.BooleanField(blank=True, 
+    default=False, help_text='Done cards?.')
+
+    class Meta:
+        unique_together = ('user', 'organization', )
 
 class CardClipboard(models.Model):
     user = models.ForeignKey('core_app.User', null=True, 
@@ -311,7 +344,7 @@ class EDeleteCard(Event):
 
     html_template = 'card_app/e-delete-card.html'
 
-class CardFilter(GlobalFilterMixin, models.Model):
+class CardFilter(models.Model):
     pattern  = models.CharField(
     max_length=255,  blank=True, default='', 
     help_text='Example: victor + \#arcamens + #suggestion ...')
@@ -416,6 +449,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

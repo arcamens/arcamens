@@ -60,8 +60,12 @@ urlpatterns = [
     url(r'^request-card-attention/(?P<peer_id>.+)/(?P<card_id>.+)', views.RequestCardAttention.as_view(), name='request-card-attention'),
     url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
     url(r'^undo-clipboard/(?P<card_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
+    url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
+    url(r'^find/', views.Find.as_view(), name='find'),
 
 ]
+
+
 
 
 
