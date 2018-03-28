@@ -11,3 +11,5 @@ git+ssh://git@github.com/arcamens/django-secure-storage.git
 git+ssh://git@bitbucket.org/arcamens/django-jsim.git
 mysqlclient
 Pygments
+git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
+
