@@ -8,8 +8,15 @@
 
 <a style="color:green;" class="e-get" data-shell="#modalContent" 
 data-show="{% url 'core_app:seen-event' ind.id %}" href="#">
+<span class="glyphicon glyphicon-ok"></span>
 Seen </a>
+
+<a  href="#" data-show="{% url 'comment_app:list-comments' ind.id %}"
+class="text-info s-modal"><span class="glyphicon glyphicon-comment"></span> Comment </a>
+
 </p>
 
 {% endfor %}
+
+
 

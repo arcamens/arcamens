@@ -8,7 +8,7 @@
 {% block title %}
 <h4 class="modal-title">
 <span class="glyphicon glyphicon-comment"></span>
-Comments on post {{post.label|slice:":30"}}.. 
+Comments on event {{event.label|slice:":30"}}.. 
 <span class="badge">{{records.count}}</span>
 </h4>
 
@@ -42,7 +42,7 @@ On {{ind.created}}</em>
 </div>
 
 <div class="modal-footer" >
-<form id="postCommentForm" enctype="multipart/form-data">
+<form id="eventCommentForm" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.data layout='inline' size='sm' %}
@@ -50,17 +50,20 @@ On {{ind.created}}</em>
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
+<button type="button" 
+data-show="{% url 'core_app:list-events' %}"
+class="btn btn-default s-modal">  Back </button>
 
-<button  id="sendPostComment" type="button" 
-data-form="#postCommentForm" 
-data-show="{% url 'comment_app:create-comment' post.id %}"
+<button  id="sendeventComment" type="button" 
+data-form="#eventCommentForm" 
+data-show="{% url 'comment_app:create-comment' event.id %}"
 class="btn btn-default m-post">  {% trans "Send" %} </button>
 
 
 <script>
-$('#postCommentForm').on('submit', (function(e){
+$('#eventCommentForm').on('submit', (function(e){
     e.preventDefault();
-        $('#sendPostComment').click();
+        $('#sendeventComment').click();
 
 }));
 $('#id_data').focus();
@@ -68,6 +71,7 @@ $('#id_data').focus();
 
 
 </div>
+
 
 
 

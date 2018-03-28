@@ -11,19 +11,20 @@ Comment
 {{event.comment.data | truncatechars:40}}
 </span>
 
- created on post
+ created on target
 
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post.id %}" href="#"> 
+data-show="{% url 'target_app:target' event.target.id %}" href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.post.label}} </a>  by 
+{{event.target.label}} </a>  by 
 
 <span class="glyphicon glyphicon-user"></span> {{user.name}} 
 
 {{event.user}} on {{event.created}}
 
 {% endblock %}
+
 
 
 

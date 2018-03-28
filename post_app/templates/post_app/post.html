@@ -146,11 +146,6 @@ data-callback="$('#modal').modal('show');"
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
-<a  href="#"
-data-callback="$('#bigModal').modal('show');" 
-data-shell="#bigModalContent" data-show="{% url 'comment_app:list-comments' post.id %}"
-class="text-info e-get"><span class="glyphicon glyphicon-comment"></span> Comment </a>
-
 <a class="text-danger s-modal" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
@@ -184,6 +179,7 @@ class="text-info e-get"><b>#</b> Tags </a>
 </div>
 
 </div>
+
 
 
 

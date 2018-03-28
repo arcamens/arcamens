@@ -1,4 +1,4 @@
-# Models for Note post type.
+# Models for Note Event type.
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from timeline_app.models import Event
 import timeline_app.models
 
-class PostComment(models.Model):
-    post = models.ForeignKey('post_app.Post', null=True, blank=False)
+class Comment(models.Model):
+    event = models.ForeignKey('core_app.Event', null=True, blank=False)
     user = models.ForeignKey('core_app.User', null=True, blank=True)
     data = models.CharField(null=True, blank=False, max_length=256)
 
@@ -25,9 +25,14 @@ class PostComment(models.Model):
         return self.data
 
 
-class ECreatePostComment(Event):
-    comment = models.ForeignKey('PostComment', blank=True)
-    post    = models.ForeignKey('post_app.Post', blank=True)
+class ECreateComment(Event):
+    target = models.ForeignKey('Comment', blank=True, 
+    related_name='e_create_comment0')
+
+    event = models.ForeignKey('core_app.Event', blank=True, 
+    related_name='e_create_comment1')
+
     html_template = 'comment_app/e-create-comment.html'
+
 
 
