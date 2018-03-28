@@ -26,8 +26,10 @@ class Comment(models.Model):
 
 
 class ECreateComment(Event):
-    target = models.ForeignKey('Comment', blank=True, 
-    related_name='e_create_comment0')
+    # No need to hold this ref because comment events will
+    # not have comments on it.
+    # target = models.ForeignKey('Comment', blank=True, 
+    # related_name='e_create_comment0')
 
     event = models.ForeignKey('core_app.Event', blank=True, 
     related_name='e_create_comment1')

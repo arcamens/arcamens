@@ -35,7 +35,7 @@ class CreateComment(GuardianView):
 
         target = models.ECreateComment.objects.create(
         organization=user.default,comment=record, 
-        event=event, target=record, user=user)
+        event=event, user=user)
     
         target.users.add(*event.users.all())
         target.save()
