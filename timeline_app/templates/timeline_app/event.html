@@ -3,6 +3,10 @@
 <div style="font-size:90%;">
 {% block content %}
 {% endblock %}
+<br>
+<a  href="#" data-show="{% url 'comment_app:list-comments' event.id %}"
+class="text-info s-modal"><span class="glyphicon glyphicon-comment"></span> 
+Comment? </a>
 
 </div>
 
@@ -12,6 +16,7 @@ $(function () {
     $('[data-toggle="popover"]').popover()
 })
 </script>
+
 
 
 

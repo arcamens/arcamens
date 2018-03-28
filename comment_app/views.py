@@ -33,11 +33,12 @@ class CreateComment(GuardianView):
         record.user = user
         record.save()
 
-        # event = models.ECreateComment.objects.create(
-        # organization=user.default,comment=record, event=event, user=user)
+        target = models.ECreateComment.objects.create(
+        organization=user.default,comment=record, 
+        event=event, target=record, user=user)
     
-        # scope = event.ancestor.users.all() | event.workers.all()
-        # event.users.add(*scope)
+        target.users.add(*event.users.all())
+        target.save()
 
         # event.ancestor.ws_sound()
 
