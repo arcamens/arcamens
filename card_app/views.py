@@ -106,10 +106,15 @@ class ListCards(GuardianView):
         cards.filter(done=False)
 
         workers1 = User.objects.filter(pk=user.pk, tasks=OuterRef('pk'))
-        workers2 = User.objects.filter(tasks=OuterRef('pk'))
-        cards = cards.annotate(has_workers=Exists(workers2))
         cards = cards.annotate(in_workers=Exists(workers1))
-        cards = cards.values('parent', 'label', 'id', 'has_workers', 'in_workers')
+        cards = cards.annotate(c_notes=Count('notes'))
+        cards = cards.annotate(c_workers=Count('workers'))
+        cards = cards.annotate(c_forks=Count('forks'))
+        cards = cards.annotate(c_parents=Count('path'))
+        cards = cards.annotate(c_relations=Count('relations'))
+
+        cards = cards.values('parent', 'label', 'id', 
+        'in_workers', 'c_notes', 'c_workers', 'c_forks', 'c_parents', 'c_relations')
         cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
@@ -1207,6 +1212,8 @@ class Find(GuardianView):
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+
 
 
 
