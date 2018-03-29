@@ -267,4 +267,32 @@ SqNode(('c', 'created'), created))
 
 stmt = sqlike.feed('l:this + d:cool + d:nice + shit + w:iury + w:victor')
 print(stmt)
+##############################################################################
+# create users on victor vps.
+
+from core_app.models import User
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+tee >(python manage.py shell --settings=arcamens.settings)
+
+from core_app.models import User, Organization
+organization = Organization.objects.get(name='Arcamens')
+organization
+
+# create the users.
+for ind in range(200):
+    test = User.objects.create(name='TestUser-%s' % ind, 
+        email='usermail-%s@bar.com' % ind, default=arcamens)
+    test.organizations.add(arcamens)
+
+
+from board_app.models import Board
+board = Board.objects.get(name='Arcamens', organization=organization)
+board.members.add(*organization.users.all())
+
+
+
+
 

@@ -441,10 +441,10 @@ rm -fr build
 
 # access victor server through ssh.
 
-tee -i >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
+tee -i >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 # accept signals.
-tee >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 # run as supervisord.
 supervisord -n -c ../conf/supervisord.conf
@@ -673,7 +673,17 @@ cd ~/projects/django-sqlike-code
 python setup.py install
 rm -fr build
 
+##############################################################################
+# fix migrations.
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+
+git pull
+python manage.py makemigrations paybills slock site_app comment_app post_app card_app
+python manage.py migrate
 
 
 
