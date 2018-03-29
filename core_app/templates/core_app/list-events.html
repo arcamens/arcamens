@@ -14,15 +14,13 @@
 {{ elems | safe}}
 </div>
 
-</div>
-
-
-</div>
-
-<div class="modal-footer">
 <div class="pull-left">
+<a class="s-modal" data-show="{% url 'core_app:list-logs'  %}" href="#">
+<span class="glyphicon glyphicon-info-sign"></span> Logs 
+</a>
+
 <a class="text-warning s-modal" data-show="{% url 'core_app:all-seen' %}" href="#">  
-<span class="glyphicon glyphicon-bell"></span> All seen?</a>
+<span class="glyphicon glyphicon-ok"></span> All seen?</a>
 
 <a data-show="{% url 'core_app:shout' %}" class="s-modal" href="#"> 
 <span class="glyphicon glyphicon-volume-up"></span>
@@ -30,10 +28,18 @@ Shout? </a>
 
 </div>
 <br>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 

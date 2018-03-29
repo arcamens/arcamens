@@ -36,11 +36,13 @@ class CreateComment(GuardianView):
         target = models.ECreateComment.objects.create(
         organization=user.default,comment=record, 
         event=event, user=user)
-    
-        target.users.add(*event.users.all())
+
+        scope = event.users.all() | event.signers.all()
+        target.users.add(*scope)
         target.save()
 
-        # event.ancestor.ws_sound()
+        for ind in scope:
+            ind.ws_sound()
 
         return redirect('comment_app:list-comments', 
         event_id=event.id)
@@ -53,6 +55,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
