@@ -327,6 +327,21 @@ class EUnbindTagPost(Event):
 
     html_template = 'post_app/e-unbind-tag-post.html'
 
+class ECreateCardFork(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_create_card_fork0', blank=True)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_create_card_fork1', blank=True)
+
+    card = models.ForeignKey('card_app.Card', 
+    related_name='e_create_card_fork2', blank=True)
+
+    html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

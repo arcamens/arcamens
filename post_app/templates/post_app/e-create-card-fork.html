@@ -5,15 +5,15 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a>
-has forked card
+has forked post
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child0.id %}" 
-href="{{event.child0.get_link_url}}"> 
+data-show="{% url 'post_app:post' event.post.id %}" 
+href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child0.label|truncatechars:40}} </a> 
+{{event.post.label|truncatechars:40}} </a> 
 
 
 to card
@@ -21,10 +21,10 @@ to card
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child1.id %}" 
-href="{{event.child1.get_link_url}}"> 
+data-show="{% url 'card_app:view-data' event.card.id %}" 
+href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child1.label|truncatechars:40}}
+{{event.card.label|truncatechars:40}}
 </a>
 
 on {{event.created}}

@@ -10,8 +10,8 @@ class="btn btn-default e-get">
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#form-card-data" data-shell="#main-view" id="createFork"
-data-show="{% url 'post_app:create-fork' ancestor.id post.id card.id %}"
+<button  type="button" data-form="#form-card-data" data-shell="#main-view" id="createCardFork"
+data-show="{% url 'post_app:create-card-fork' ancestor.id post.id card.id %}"
 class="btn btn-default m-post-close"> 
 {% trans "Fork" %}
 </button>
@@ -19,13 +19,14 @@ class="btn btn-default m-post-close">
 <script>
 $('#form-post-data').on('submit', (function(e){
     e.preventDefault();
-        $('#createFork').click();
+        $('#createCardFork').click();
 
 }));
 </script>
 
 
 {% endblock %}
+
 
 
 

@@ -663,7 +663,7 @@ class SetupAssignmentFilter(GuardianView):
         return redirect('post_app:list-assignments', user_id=user.id)
 
 
-class CreateFork(GuardianView):
+class CreateCardFork(GuardianView):
     """
     """
 
@@ -698,10 +698,10 @@ class CreateFork(GuardianView):
 
         fork.save()
 
-        # event = models.ECreateFork.objects.create(organization=user.default,
-        # ancestor=post.ancestor, child0=post, child1=fork, user=user)
-        # event.users.add(*post.ancestor.ancestor.members.all())
-# 
+        event = models.ECreateCardFork.objects.create(organization=user.default,
+        ancestor=post.ancestor, post=post, card=fork, user=user)
+        event.users.add(*fork.ancestor.ancestor.members.all())
+
         ws.client.publish('board%s' % fork.ancestor.ancestor.id, 
             'sound', 0, False)
 
