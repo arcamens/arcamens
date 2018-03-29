@@ -38,8 +38,13 @@ urlpatterns = [
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
     url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
+    url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
+    url(r'^create-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
+    url(r'^create-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
 
 ]
+
+
 
 
 

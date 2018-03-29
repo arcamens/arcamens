@@ -111,7 +111,7 @@ class ListCards(GuardianView):
         cards = cards.annotate(c_workers=Count('workers', distinct=True))
         cards = cards.annotate(c_forks=Count('forks', distinct=True))
 
-        cards = cards.values('parent', 'label', 'id', 
+        cards = cards.values('parent', 'parent_post', 'label', 'id', 
         'in_workers', 'c_notes', 'c_workers')
         cards = cards.order_by('-created')
 
@@ -140,9 +140,8 @@ class ViewData(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
-        path = card.path.all()
-        posts = card.posts.all()
-        forks = chain(posts, forks)
+        # path = card.path.all()
+        post_forks = card.post_forks.all()
         # This doesnt work because the board members should be
         # notified of a card being related to other card.
         # It turns out to be reasonable if the a given board card
@@ -155,9 +154,9 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
-        'attachments': attachments, 'user': user, 'workers': workers, 
+        'attachments': attachments, 'post_forks': post_forks, 'user': user, 'workers': workers, 
         'relations': relations, 'snippets': snippets, 'pins': pins, 
-        'tags': tags, 'path': path})
+        'tags': tags})
 
 class ConfirmCardDeletion(GuardianView):
     def get(self, request, card_id):
@@ -280,9 +279,9 @@ class CreateFork(GuardianView):
         form = forms.CardForm(instance=fork)
         fork.label = 'Draft.'
 
-        path = card.path.all()
+        # path = card.path.all()
         fork.parent = card
-        fork.path.add(*path, card)
+        # fork.path.add(*path, card)
         fork.save()
 
         return render(request, 'card_app/create-fork.html', 
@@ -1210,6 +1209,10 @@ class Find(GuardianView):
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+
+
+
 
 
 

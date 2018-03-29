@@ -4,14 +4,14 @@
 <div class="row">
 
 <div class="col-md-4">
-<h5> <span class="glyphicon glyphicon-random"></span> Forks </h5>
+<h5> <span class="glyphicon glyphicon-random"></span> Card Forks </h5>
 <hr>
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in forks %}
 <a href="#" 
 class="e-get" 
-data-shell="#main-view"  type="button"
+data-shell="#main-view"  
 data-show="{{ind.get_absolute_url}}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
 </a> 
@@ -28,7 +28,7 @@ No forks.
 {% for ind in relations %}
 <a href="#" 
 class="e-get" 
-data-shell="#main-view"  type="button"
+data-shell="#main-view"  
 data-show="{% url 'card_app:view-data' ind.id %}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
 </a> 
@@ -38,25 +38,27 @@ No relations.
 {% endfor %}</div></div>
 
 <div class="col-md-4">
-<h5> <span class="glyphicon glyphicon-arrow-up"></span> Parent Cards</h5>
+<h5> <span class="glyphicon glyphicon-random"></span> Post Forks</h5>
 <hr>
 
 <div class="pre-scrollable" style="font-size:90%">
-{% for ind in path %}
+{% for ind in post_forks %}
 <a href="#" 
 class="e-get" 
-data-shell="#main-view"  type="button"
-data-show="{% url 'card_app:view-data' ind.id %}" >
+data-shell="#main-view"  
+data-show="{% url 'post_app:post' ind.id %}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
 </a>
 <br>
 {% empty %}
-No parents...
+No post forks...
 {% endfor %}</div></div>
 
 </div>
 </div>
 </div>
+
+
 
 
 

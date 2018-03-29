@@ -9,9 +9,12 @@ from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from list_app.models import List
 from timeline_app.models import Timeline, EPastePost
 from django.conf import settings
 from jsim.jscroll import JScroll
+from card_app.models import Card
+from card_app.forms import CardForm, ListSearchform
 from core_app import ws
 from . import forms
 from . import models
@@ -660,9 +663,79 @@ class SetupAssignmentFilter(GuardianView):
         return redirect('post_app:list-assignments', user_id=user.id)
 
 
+class CreateFork(GuardianView):
+    """
+    """
 
+    def get(self, request, ancestor_id, post_id, fork_id=None):
+        post = models.Post.objects.get(id=post_id)
+        user = User.objects.get(id=self.user_id)
+        ancestor = List.objects.get(id=ancestor_id)
+        fork = Card.objects.create(owner=user, 
+        ancestor=ancestor, parent_post=post)
 
+        form = CardForm(instance=fork)
+        fork.label = 'Draft.'
 
+        # path = post.path.all()
+        fork.parent_post = post
+        # fork.path.add(*path, post)
+        fork.save()
 
+        return render(request, 'post_app/create-fork.html', 
+        {'form':form, 'post': post, 'ancestor': ancestor, 'card':fork})
+
+    def post(self, request, ancestor_id, post_id, fork_id):
+        post = models.Post.objects.get(id=post_id)
+        fork = Card.objects.get(id=fork_id)
+        form = CardForm(request.POST, instance=fork)
+        user = User.objects.get(id=self.user_id)
+
+        if not form.is_valid():
+            return render(request, 'post_app/create-fork.html', 
+                {'form':form, 'ancestor': post.ancestor, 
+                    'post': post, 'card':fork}, status=400)
+
+        fork.save()
+
+        # event = models.ECreateFork.objects.create(organization=user.default,
+        # ancestor=post.ancestor, child0=post, child1=fork, user=user)
+        # event.users.add(*post.ancestor.ancestor.members.all())
+# 
+        ws.client.publish('board%s' % fork.ancestor.ancestor.id, 
+            'sound', 0, False)
+
+        return redirect('card_app:view-data', card_id=fork.id)
+
+class SelectForkList(GuardianView):
+    def get(self, request, post_id):
+        user = User.objects.get(id=self.user_id)
+        post = models.Post.objects.get(id=post_id)
+        form = ListSearchform()
+        lists = List.objects.filter(ancestor__in=user.boards.all())
+
+        return render(request, 'post_app/select-fork-list.html', 
+        {'form':form, 'post': post, 'elems': lists})
+
+    def post(self, request, post_id):
+        form = forms.ListSearchform(request.POST)
+        post = models.Post.objects.get(id=post_id)
+
+        user  = User.objects.get(id=self.user_id)
+        lists = List.objects.filter(ancestor__in=user.boards.all())
+
+        if not form.is_valid():
+            return render(request, 'post_app/select-fork-list.html', 
+                  {'form':form, 'elems': lists, 'post': post})
+
+        lists = lists.annotate(text=Concat('ancestor__name', 'name'))
+
+        # Not sure if its the fastest way to do it.
+        chks = split(' *\++ *', form.cleaned_data['pattern'])
+        lists = lists.filter(reduce(operator.and_, 
+        (Q(text__contains=ind) for ind in chks))) 
+
+        return render(request, 'post_app/select-fork-list.html', 
+        {'form':form, 'post': post, 'elems': lists})
 
 

@@ -1,7 +1,6 @@
 {% load i18n %}
 
-<div class="panel panel-default {% if card.parent %} fork {% else %} card {% endif %}" >
-
+<div class="panel panel-default {% if card.parent or card.parent_post %} fork {% else %} card {% endif %}" >
 <div class="panel-body text-center" >
 
 <div class="pull-right" >
@@ -27,7 +26,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 {% if card.done %} (Done) {% endif %}
 <em> <span class="glyphicon glyphicon-file"></span> 
-{% if card.parent %} Fork {% else %} Card {% endif %} </em> 
+{% if card.parent or card.parent_post %} Fork {% else %} Card {% endif %} </em> 
 
 {{card.label}} </a> 
 </p>
@@ -49,6 +48,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 
 </div>
+
 
 
 
