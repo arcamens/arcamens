@@ -684,7 +684,16 @@ cd ~/projects/arcamens
 git pull
 python manage.py makemigrations paybills slock site_app comment_app post_app card_app
 python manage.py migrate
+##############################################################################
+# update arcamens on victor vps.
 
+tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
 
-
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+git pull 
+git status
+git log
+sudo supervisorctl restart arcamens
 
