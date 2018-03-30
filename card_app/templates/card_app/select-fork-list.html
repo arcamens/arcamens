@@ -2,32 +2,22 @@
 {% load i18n %}
 
 
-<div id="view-data">
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
-<h4> 
-<span class="glyphicon glyphicon-random"></span>
-Fork {{card.label|truncatechars:40}} on list..
-<h4>
+<h4>  <span class="glyphicon glyphicon-random"></span> Fork {{card.label|truncatechars:40}} on list.. </h4>
 </div>
 
 <div class="modal-body">
 
 <div class="pre-scrollable">
 {% for ind in elems %}
-<p>
-<a class="e-get" 
-data-shell="#bigModalContent" 
-data-show="{% url 'card_app:create-fork' ind.id card.id %}"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
-href="#" > 
+<p> <a class="e-get"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' ind.id card.id %}"
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" href="#" > 
 <span class="glyphicon glyphicon-list-alt"></span>
 
 {{ind.ancestor.name}}
 <span class="glyphicon glyphicon-arrow-right"></span>
-{{ind.name}} </a> 
-</p>
-
+{{ind.name}} </a>  </p>
 {% endfor %}
 
 </div>
@@ -42,15 +32,11 @@ href="#" >
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<div class="pull-left">
 <a class="e-get text-warning"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' card.ancestor.id card.id %}"
 data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href="#" > 
 <span class="glyphicon glyphicon-random"></span>  On the same list?</a>
 </div>
 
-</div>
-
-</div>
 
 <div class="modal-footer">
 
@@ -68,5 +54,6 @@ $('#selectForkListForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
