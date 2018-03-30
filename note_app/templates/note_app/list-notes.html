@@ -31,5 +31,11 @@ class="btn btn-default e-get"> {% trans "Create" %} </button>
 
 </div>
 
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+})
+</script>
+
 
 
