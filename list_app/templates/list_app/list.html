@@ -25,14 +25,15 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="{{list.get_link_url}}"
 
 </p>
 
-<small> By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner}}"  data-content="Score: value">
-{{board.owner}} </a> at {{board.created}} </small>
+<small> By <a href="#" data-toggle="popover" data-trigger="hover" title="{{list.owner.email}}"  data-content="Score: value">
+{{list.owner}} </a> at {{list.created}} </small>
 
 
 </div>
 
 
 </div>
+
 
 
 
