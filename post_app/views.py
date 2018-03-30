@@ -738,4 +738,10 @@ class SelectForkList(GuardianView):
         return render(request, 'post_app/select-fork-list.html', 
         {'form':form, 'post': post, 'elems': lists})
 
+class PostEvents(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+
+        return render(request, 'post_app/post-events.html', 
+        {'elems': events})
 
