@@ -291,8 +291,21 @@ for ind in range(200):
 from board_app.models import Board
 board = Board.objects.get(name='Arcamens', organization=organization)
 board.members.add(*organization.users.all())
+##############################################################################
+# assign all boards to me.
 
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+tee >(python manage.py shell --settings=arcamens.settings)
 
+from core_app.models import User, Organization
+from board_app.models import Board
+user = User.objects.get(name__istartswith='iury')
+boards = Board.objects.filter(organization__name__istartswith='arcamens')
 
+for ind in boards:
+    ind.members.add(user)
 
 
