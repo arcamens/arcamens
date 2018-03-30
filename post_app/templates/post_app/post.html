@@ -38,9 +38,9 @@ data-shell="#main-view" >
 <div class="panel-body" >
 <div style="word-wrap: break-word;"> 
 
-<pre style="background-color:#F6E4E1;font-size:120%">
-{{post.label}} 
-</pre>
+<h5> {{post.label}} </h5>
+
+{{post.html|safe}}
 </div>
 
 <div class="row">
@@ -195,6 +195,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 

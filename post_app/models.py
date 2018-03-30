@@ -14,6 +14,13 @@ import operator
 # Create your models here.
 
 class PostMixin(object):
+    def save(self, *args, **kwargs):
+        self.html = markdown(self.data,
+        extensions=[TableExtension(), 'markdown.extensions.tables', 
+        'markdown.extensions.codehilite'], safe_mode=True,  
+        enable_attributes=False)
+        super(PostMixin, self).save(*args, **kwargs)
+
     def ws_alert(self):
         pass
 
@@ -148,11 +155,15 @@ class Post(PostMixin, models.Model):
     related_name='assignments', blank=True, 
     symmetrical=False)
 
-    label = models.TextField(null=True, default='',
-    blank=False, verbose_name=_("Content"))
+    label = models.CharField(null=True, blank=False, 
+    verbose_name=_("Label"), help_text='Short description,', 
+    max_length=626)
 
     done = models.BooleanField(blank=True, default=False)
     html = models.TextField(null=True, blank=True)
+
+    data = models.TextField(blank=True, verbose_name=_("Data"), 
+    help_text='Markdown content.', default='')
 
 class PostFilter(GlobalFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, default='',
@@ -341,6 +352,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
