@@ -4,10 +4,9 @@
 <div class="panel-heading">
 
 <small>
-<span class="glyphicon glyphicon-file"></span> 
-
-
-by  {{card.owner.name}} on list
+<span class="glyphicon glyphicon-file"></span> Card by 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value">
+<span class="glyphicon glyphicon-user"></span> {{card.owner.name}} </a> on list
 
 <a class="e-get" href="#"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
@@ -60,6 +59,13 @@ No attachments...
 
 
 </div>
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="popover"]').popover();
+
+});
+</script>
 
 
 

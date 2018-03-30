@@ -30,9 +30,11 @@ $(document).ready(function() {
     $('#main-view').load("{% url 'timeline_app:list-timelines' %}");
 });
 
-$(function () {
-    $('[data-toggle="popover"]').popover()
-})
+$(document).ready(function() {
+    $('[data-toggle="popover"]').popover();
+
+});
+
 
 // $(document).ready(function(){
 // $('body').tooltip({
@@ -79,6 +81,7 @@ $(function () {
 </body>
 
 </html>
+
 
 
 
