@@ -59,7 +59,7 @@ class CardLink(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
-        path = card.path.all()
+        # path = card.path.all()
 
         relations = relations.filter(Q(
         ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
@@ -79,7 +79,7 @@ class CardLink(GuardianView):
         'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
         'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations, 'queues': json.dumps(queues),
-         'settings': settings, 'path': path})
+         'settings': settings})
 
 class ListCards(GuardianView):
     """
@@ -1209,6 +1209,7 @@ class Find(GuardianView):
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
 
 
 
