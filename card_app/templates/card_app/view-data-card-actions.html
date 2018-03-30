@@ -14,7 +14,10 @@ href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
 
 <li>
 <a class="b-modal text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
-href="#"><span class="glyphicon glyphicon-comment"></span> Notes</a></li>
+href="#">
+<span class="badge">
+<span class="glyphicon glyphicon-comment"></span> {{card.notes.count}}
+</span> Notes</a></li>
 
 <li>
 
@@ -84,5 +87,6 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
