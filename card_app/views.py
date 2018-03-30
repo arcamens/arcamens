@@ -112,7 +112,7 @@ class ListCards(GuardianView):
         cards = cards.annotate(c_forks=Count('forks', distinct=True))
 
         cards = cards.values('parent', 'parent_post', 'label', 'id', 
-        'in_workers', 'c_notes', 'c_workers')
+        'in_workers', 'c_notes', 'c_workers', 'c_forks')
         cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
@@ -1209,6 +1209,7 @@ class Find(GuardianView):
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
 
 
 

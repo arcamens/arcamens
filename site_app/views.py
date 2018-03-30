@@ -90,7 +90,7 @@ class SignUp(LoginView):
 
         request.session['user_id'] = record.id
 
-        return redirect('site_app:upgrade')
+        return redirect('core_app:index')
 
 class Upgrade(AuthenticatedView):
     def get(self, request):
@@ -288,6 +288,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

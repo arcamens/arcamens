@@ -21,7 +21,7 @@ data-shell="#main-view" data-show="{% url 'card_app:cut-card' card.id %}">
 </div>
 
 
-<p> <a href="#"  class="e-get {% if card.in_workers %} text-danger  {% elif card.c_workers %} text-success  {% endif %}"
+<p> <a href="{% url 'card_app:card-link' card.id %}"  class="e-get {% if card.in_workers %} text-danger  {% elif card.c_workers %} text-success  {% endif %}"
 data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 {% if card.done %} (Done) {% endif %}
@@ -48,6 +48,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 
 </div>
+
 
 
 
