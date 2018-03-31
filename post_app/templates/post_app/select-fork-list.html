@@ -2,13 +2,12 @@
 {% load i18n %}
 
 
-<div id="view-data">
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
 <h4> 
 <span class="glyphicon glyphicon-random"></span>
 Fork {{post.label|truncatechars:40}} on list..
-<h4>
+</h4>
 </div>
 
 <div class="modal-body">
@@ -60,6 +59,7 @@ $('#selectForkListForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
