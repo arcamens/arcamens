@@ -5,31 +5,32 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
 
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has cut list
+{{event.user}} </a> has cut card
 
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:list-cards' event.child.id %}" href="{{event.child.get_link_url}}"> 
-<span class="glyphicon glyphicon-list-alt"></span>
-{{event.child.name|truncatechars:40}}
+data-show="{% url 'card_app:view-data' event.child.id %}" href="{{event.child.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label|truncatechars:40}}
 </a> 
 
  
 
-from board
+from list
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
-<span class="glyphicon glyphicon-th"></span>
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
+<span class="glyphicon glyphicon-list-alt"></span>
 {{event.ancestor.name}} </a> 
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

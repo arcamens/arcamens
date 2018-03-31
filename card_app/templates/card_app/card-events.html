@@ -3,19 +3,22 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4>  
+<h5>  
 <span class="glyphicon glyphicon-bell"></span>
 
-{{post.label|truncatechars:40}}'s Events <span class="badge">{{count}}</span></h4>
+{{card.label|truncatechars:40}}'s Events <span class="badge">{{count}}</span></h5>
 </div>
 
 <div class="modal-body">
 <div class="container-fluid">
+
+<div class="pre-scrollable">
 {% for ind in elems %}
 
 <p> {{ind.html | safe}} </p>
 
 {% endfor %}
+</div>
 
 </div>
 
@@ -29,5 +32,6 @@
      {% trans "Close" %}
 </button>
 </div>
+
 
 

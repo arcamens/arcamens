@@ -30,20 +30,7 @@ urlpatterns = [
     url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
     url(r'^alert-card-workers/(?P<card_id>.+)/', views.AlertCardWorkers.as_view(), name='alert-card-workers'),
 
-    url(r'^e-create-card/(?P<event_id>.+)/', views.ECreateCard.as_view(), name='e-create-card'),
 
-    url(r'^e-create-fork/(?P<event_id>.+)/', views.ECreateFork.as_view(), name='e-create-fork'),
-    url(r'^e-update-card/(?P<event_id>.+)/', views.EUpdateCard.as_view(), name='e-update-card'),
-    url(r'^e-delete-card/(?P<event_id>.+)/', views.EDeleteCard.as_view(), name='e-delete-card'),
-    url(r'^e-cut-card/(?P<event_id>.+)/', views.ECutCard.as_view(), name='e-cut-card'),
-    url(r'^e-relate-card/(?P<event_id>.+)/', views.ERelateCard.as_view(), name='e-relate-card'),
-    url(r'^e-unrelate-card/(?P<event_id>.+)/', views.EUnrelateCard.as_view(), name='e-unrelate-card'),
-    url(r'^e-bind-tag-card/(?P<event_id>.+)/', views.EBindTagCard.as_view(), name='e-bind-tag-card'),
-    url(r'^e-unbind-tag-card/(?P<event_id>.+)/', views.EUnbindTagCard.as_view(), name='e-unbind-tag-card'),
-
-    url(r'^e-bind-card-worker/(?P<event_id>.+)/', views.EBindCardWorker.as_view(), name='e-bind-card-worker'),
-    url(r'^e-unbind-card-worker/(?P<event_id>.+)/', views.EUnbindCardWorker.as_view(), name='e-unbind-card-worker'),
-    url(r'^e-archive-card/(?P<event_id>.+)/', views.EArchiveCard.as_view(), name='e-archive-card'),
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
     url(r'^copy-card/(?P<card_id>.+)/', views.CopyCard.as_view(), name='copy-card'),
     url(r'^setup-card-filter/(?P<list_id>.+)', views.SetupCardFilter.as_view(), name='setup-card-filter'),
@@ -65,6 +52,7 @@ urlpatterns = [
     url(r'^card-events/(?P<card_id>.+)/', views.CardEvents.as_view(), name='card-events'),
 
 ]
+
 
 
 

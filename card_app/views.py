@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View
 from card_app.models import GlobalTaskFilter, GlobalCardFilter
-from core_app.models import Clipboard
+from core_app.models import Clipboard, Event
 from django.core.mail import send_mail
 from core_app.views import GuardianView
 from post_app.models import Post
@@ -515,97 +515,6 @@ class UpdateCard(GuardianView):
         return redirect('card_app:view-data', 
         card_id=record.id)
 
-class EBindCardWorker(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EBindCardWorker.objects.get(id=event_id)
-        return render(request, 'card_app/e-bind-card-worker.html', 
-        {'event':event})
-
-class EUnbindCardWorker(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUnbindCardWorker.objects.get(id=event_id)
-        return render(request, 'card_app/e-unbind-card-worker.html', 
-        {'event':event})
-
-class ECreateCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECreateCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-create-card.html', 
-        {'event':event})
-
-class ECreateFork(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECreateFork.objects.get(id=event_id)
-        return render(request, 'card_app/e-create-fork.html', 
-        {'event':event})
-
-class ERelateCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ERelateCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-relate-card.html', 
-        {'event':event})
-
-class EUnrelateCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUnrelateCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-unrelate-card.html', 
-        {'event':event})
-
-class EUpdateCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUpdateCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-update-card.html', 
-        {'event':event})
-
-
-class EDeleteCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EDeleteCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-delete-card.html', 
-        {'event':event})
-
-class ECutCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECutCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-cut-card.html', 
-        {'event':event})
-
-class EArchiveCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EArchiveCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-archive-card.html', 
-        {'event':event})
-
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
         user   = core_app.models.User.objects.get(id=self.user_id)
@@ -913,26 +822,6 @@ class BindCardTag(GuardianView):
 
         return HttpResponse(status=200)
 
-
-class EBindTagCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EBindTagCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-bind-tag-card.html', 
-        {'event':event})
-
-class EUnbindTagCard(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUnbindTagCard.objects.get(id=event_id)
-        return render(request, 'card_app/e-unbind-tag-card.html', 
-        {'event':event})
-
-
 class Done(GuardianView):
     def get(self, request, card_id):
         card      = models.Card.objects.get(id=card_id)
@@ -1213,20 +1102,20 @@ class Find(GuardianView):
 class CardEvents(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        # lst = [EUnbindTagCard, ECreateCard, EUpdateCard, 
-        # CardFileWrapper, EDeleteCard, EAssignCard, EBindTagCard, EUnassignCard, 
-        # CardFilter, GlobalCardFilter, ECutCard, EArchiveCard, 
-        # ECopyCard, AssignmentFilter]
-# 
-        events = Event.objects.none()
 
-        # for ind in lst:
-            # events = events | ind.objects(
+        rule = Q(erelatecard__child0__id=card.id) | Q(erelatecard__child1__id=card.id) \
+        | Q(eunrelatecard__child0__id=card.id) | Q(eunrelatecard__child1__id=card.id) | \
+        Q(ecreatecard__child__id=card.id) | Q(ebindcardworker__child__id=card.id) | \
+        Q(eunbindcardworker__child__id=card.id) | Q(ecreatefork__child0=card.id) \
+        | Q(ecreatefork__child1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
+        Q(eupdatecard__child__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
+        Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
+        Q(earchivecard__child__id=card.id)
 
-        events = events | card.e_create_card1.all() | card.e_archive_card1.all()
-        
+        events = Event.objects.filter(rule).order_by('-created')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
