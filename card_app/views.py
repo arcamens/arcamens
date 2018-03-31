@@ -1112,7 +1112,7 @@ class CardEvents(GuardianView):
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
         Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)
 
-        events = Event.objects.filter(rule).order_by('-created')
+        events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
 

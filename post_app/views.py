@@ -750,8 +750,7 @@ class PostEvents(GuardianView):
         Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) | \
         Q(epastepost__posts=post.id)
     
-
-        events = Event.objects.filter(rule).order_by('-created')
+        events = Event.objects.filter(rule).order_by('-created').values('html')
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
