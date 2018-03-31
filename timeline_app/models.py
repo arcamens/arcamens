@@ -79,11 +79,12 @@ class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
 
 class EPastePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_create_post0', blank=True)
+    related_name='e_paste_post0', blank=True)
 
     posts = models.ManyToManyField('post_app.Post', null=True,  
-    related_name='e_create_post1', blank=True, symmetrical=False)
+    related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 

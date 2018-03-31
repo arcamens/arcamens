@@ -1210,15 +1210,23 @@ class Find(GuardianView):
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
+class CardEvents(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        # lst = [EUnbindTagCard, ECreateCard, EUpdateCard, 
+        # CardFileWrapper, EDeleteCard, EAssignCard, EBindTagCard, EUnassignCard, 
+        # CardFilter, GlobalCardFilter, ECutCard, EArchiveCard, 
+        # ECopyCard, AssignmentFilter]
+# 
+        events = Event.objects.none()
 
+        # for ind in lst:
+            # events = events | ind.objects(
 
-
-
-
-
-
-
-
+        events = events | card.e_create_card1.all() | card.e_archive_card1.all()
+        
+        return render(request, 'card_app/card-events.html', 
+        {'card': card, 'elems': events})
 
 
 

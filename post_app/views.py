@@ -740,8 +740,18 @@ class SelectForkList(GuardianView):
 
 class PostEvents(GuardianView):
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post  = models.Post.objects.get(id=post_id)
+
+        rules = Q(eunbindtagpost__post__id= post.id) | \
+        Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
+        Q(eassignpost__post__id=post.id) | \
+        Q(ebindtagpost__post__id= post.id) | Q(eunassignpost__post__id= post.id)| \
+        Q(ecutpost__post__id = post.id) | Q(earchivepost__post__id=post.id) |\
+        Q(ecopypost__post__id=post.id)
+
+        events = Event.objects.filter(rules).order_by('-created')
 
         return render(request, 'post_app/post-events.html', 
-        {'elems': events})
+        {'post': post, 'elems': events})
+
 

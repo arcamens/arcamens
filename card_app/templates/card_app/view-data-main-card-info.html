@@ -38,6 +38,13 @@ data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphic
 {% endif %}
 
 </small>
+
+<div class="pull-right">
+<a class="s-modal" href="#"
+data-show="{% url 'card_app:card-events' card.id %}"> 
+<span class="glyphicon glyphicon-bell"></span> </a>
+</div>
+
 </div>
 
 <div class="panel-body">
@@ -66,6 +73,8 @@ $(document).ready(function() {
 
 });
 </script>
+
+
 
 
 

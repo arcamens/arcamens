@@ -32,6 +32,11 @@ data-shell="#main-view" >
 <span class="glyphicon glyphicon-file"></span> {{post.parent.label|truncatechars:60}} </a>
 {% endif %}
 
+<div class="pull-right">
+<a class="s-modal" href="#"
+data-show="{% url 'post_app:post-events' post.id %}"> 
+<span class="glyphicon glyphicon-bell"></span> </a>
+</div>
 </div>
 </div>
 
@@ -195,6 +200,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 

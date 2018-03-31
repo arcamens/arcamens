@@ -237,14 +237,18 @@ class PostFileWrapper(PostFileWrapperMixin, models.Model):
 
 class ECreatePost(ECreatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_create_post', blank=True)
-    post = models.ForeignKey('Post', blank=True)
+    related_name='e_create_post0', blank=True)
+
+    post = models.ForeignKey('Post', blank=True,
+    related_name='e_create_post1')
+
     html_template = 'post_app/e-create-post.html'
 
 class EArchivePost(EArchivePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_archive_post', blank=True)
-    post = models.ForeignKey('Post', blank=True)
+    related_name='e_archive_post0', blank=True)
+    post = models.ForeignKey('Post', blank=True,
+    related_name='e_archive_post1')
     html_template = 'post_app/e-archive-post.html'
 
 class EDeletePost(EDeletePostMixin, Event):
@@ -257,7 +261,7 @@ class EDeletePost(EDeletePostMixin, Event):
 
 class ECutPost(ECutPostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_cut_post', blank=True)
+    related_name='e_cut_post0', blank=True)
 
     post = models.ForeignKey('Post', 
     related_name='e_cut_post1', blank=True)
@@ -265,7 +269,7 @@ class ECutPost(ECutPostMixin, Event):
 
 class ECopyPost(ECutPostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_copy_post', blank=True)
+    related_name='e_copy_post0', blank=True)
 
     post = models.ForeignKey('Post', 
     related_name='e_copy_post1', blank=True)
@@ -273,7 +277,7 @@ class ECopyPost(ECutPostMixin, Event):
 
 class EUpdatePost(EUpdatePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
-    related_name='e_update_post', blank=True)
+    related_name='e_update_post0', blank=True)
     post = models.ForeignKey('Post', blank=True)
     html_template = 'post_app/e-update-post.html'
 
@@ -315,10 +319,10 @@ class EBindTagPost(Event):
     related_name='e_bind_tag_post0', blank=True)
 
     post = models.ForeignKey('Post', 
-    related_name='e_bind_tag_post0', blank=True)
+    related_name='e_bind_tag_post1', blank=True)
 
     tag = models.ForeignKey('core_app.Tag', 
-    related_name='e_bind_tag_post0', blank=True)
+    related_name='e_bind_tag_post2', blank=True)
 
     html_template = 'post_app/e-bind-tag-post.html'
 
@@ -352,6 +356,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
