@@ -1110,11 +1110,12 @@ class CardEvents(GuardianView):
         | Q(ecreatefork__child1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__child__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
-        Q(earchivecard__child__id=card.id)
+        Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)
 
         events = Event.objects.filter(rule).order_by('-created')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

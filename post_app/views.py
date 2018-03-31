@@ -747,12 +747,15 @@ class PostEvents(GuardianView):
         Q(eassignpost__post__id=post.id) | \
         Q(ebindtagpost__post__id= post.id) | Q(eunassignpost__post__id= post.id)| \
         Q(ecutpost__post__id = post.id) | Q(earchivepost__post__id=post.id) |\
-        Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) 
+        Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) | \
+        Q(epastepost__posts=post.id)
+    
 
         events = Event.objects.filter(rule).order_by('-created')
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
