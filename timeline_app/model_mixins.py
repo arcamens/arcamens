@@ -23,6 +23,9 @@ class TimelineMixin(object):
         return reverse('timeline_app:timeline-link', 
                     kwargs={'timeline_id': self.id})
 
+    def __str__(self):
+        return self.name
+
 class EUpdateTimelineMixin(object):
     pass
 
@@ -37,6 +40,7 @@ class ECreateTimelineMixin(object):
 
 class EBindTimelineUserMixin(object):
     pass
+
 
 
 

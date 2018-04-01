@@ -689,11 +689,13 @@ python manage.py migrate
 
 tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
 
+su arcamens
 cd ~/.virtualenv/
-source opus/bin/activate
 cd ~/projects/arcamens
 git pull 
 git status
 git log
+exit
 sudo supervisorctl restart arcamens
+
 

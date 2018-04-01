@@ -42,6 +42,9 @@ class BoardMixin:
         return reverse('board_app:board-link', 
                     kwargs={'board_id': self.id})
 
+    def __str__(self):
+        return self.name
+
 class EBindBoardUserMixin(object):
     pass
 
@@ -53,6 +56,7 @@ class EUpdateBoardMixin(object):
 
 class ECreateBoardMixin(object):
     pass
+
 
 
 
