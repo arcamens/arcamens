@@ -674,28 +674,26 @@ python setup.py install
 rm -fr build
 
 ##############################################################################
-# fix migrations.
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-
-cd ~/.virtualenv/
-source opus/bin/activate
-cd ~/projects/arcamens
-
-git pull
-python manage.py makemigrations paybills slock site_app comment_app post_app card_app
-python manage.py migrate
-##############################################################################
 # update arcamens on victor vps.
 
 tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
 
 su arcamens
 cd ~/.virtualenv/
+source opus/bin/activate
 cd ~/projects/arcamens
 git pull 
 git status
 git log
+
+# Do migrations.
+python manage.py apps
+python manage.py migrate
+
 exit
+
+# Restart the server.
 sudo supervisorctl restart arcamens
+
 
 
