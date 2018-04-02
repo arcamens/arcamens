@@ -13,7 +13,7 @@ Available {{post.label|truncatechars:"60"}} post's workers
 </div>
 
 <div class="modal-body">
-
+<div class="pre-scrollable">
 {% for ind in included %}
 <p class="text-center" id="user-choice-{{ind.id}}">
 <img class="img-responsive center-block"  width="50" height="50"  src="{{ind.avatar.url}}" />
@@ -53,6 +53,7 @@ data-show="{% url 'post_app:assign-post-user' post.id ind.id %}" href="#">
 
 </p>
 {% endfor %}
+</div>
 
 <br> 
 
@@ -89,6 +90,7 @@ $('#assign-post-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

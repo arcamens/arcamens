@@ -13,6 +13,8 @@ Available {{card.label|truncatechars:20}} Workers
 </div>
 
 <div class="modal-body">
+
+<div class="pre-scrollable">
 {% for ind in included %}
 <p class="text-center" id="user-choice-{{ind.id}}">
 <img class="img-responsive center-block"  width="50" height="50"  src="{{ind.avatar.url}}" />
@@ -52,6 +54,7 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 
 </p>
 {% endfor %}
+</div>
 
 <br>
 
@@ -89,6 +92,7 @@ $('#bind-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
