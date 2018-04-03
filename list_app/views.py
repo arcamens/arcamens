@@ -276,16 +276,11 @@ class ListLink(GuardianView):
         pins = user.pin_set.all()
         organizations = user.organizations.exclude(id=user.default.id)
 
-        queues = list(map(lambda ind: 'timeline%s' % ind, 
-        user.timelines.values_list('id')))
-
-        queues.extend(map(lambda ind: 'board%s' % ind, 
-        user.boards.values_list('id')))
-
         return render(request, 'list_app/list-link.html', 
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
-        'queues': json.dumps(queues), 'settings': settings})
+        'settings': settings})
+
 
 
 

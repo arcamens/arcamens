@@ -63,22 +63,14 @@ class CardLink(GuardianView):
         relations = relations.filter(Q(
         ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
 
-
         organizations = user.organizations.exclude(id=user.default.id)
-
-        queues = list(map(lambda ind: 'timeline%s' % ind, 
-        user.timelines.values_list('id')))
-
-        queues.extend(map(lambda ind: 'board%s' % ind, 
-        user.boards.values_list('id')))
 
         return render(request, 'card_app/card-link.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 
         'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
         'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'queues': json.dumps(queues),
-         'settings': settings})
+        'organizations': organizations, 'settings': settings})
 
 class ListCards(GuardianView):
     """
@@ -1095,6 +1087,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

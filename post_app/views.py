@@ -53,18 +53,11 @@ class PostLink(GuardianView):
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
 
-        queues = list(map(lambda ind: 'timeline%s' % ind, 
-        user.timelines.values_list('id')))
-
-        queues.extend(map(lambda ind: 'board%s' % ind, 
-        user.boards.values_list('id')))
-
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'attachments': attachments, 
         'tags': post.tags.all(), 'workers': workers,
         'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'queues': json.dumps(queues),
-         'settings': settings})
+        'organizations': organizations, 'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -758,6 +751,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
