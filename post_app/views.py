@@ -609,7 +609,7 @@ class UndoClipboard(GuardianView):
         # Then it is a copy because there is no event
         # mapped to it. A copy contains no e_copy_post1 nor
         # e_cut_post1.
-        if not (event0 and event1):
+        if not (event0 or event1):
             post.delete()
         else:
             self.undo_cut(event1)

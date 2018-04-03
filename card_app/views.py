@@ -945,7 +945,7 @@ class UndoClipboard(GuardianView):
         # Then it is a copy because there is no event
         # mapped to it. A copy contains no e_copy_card1 nor
         # e_cut_card1.
-        if not (event0 and event1):
+        if not (event0 or event1):
             card.delete()
         else:
             self.undo_cut(event1)

@@ -238,7 +238,7 @@ class UndoClipboard(GuardianView):
         # Then it is a copy because there is no event
         # mapped to it. A copy contains no e_copy_list1 nor
         # e_cut_list1.
-        if not (event0 and event1):
+        if not (event0 or event1):
             list.delete()
         else:
             self.undo_cut(event1)
@@ -286,6 +286,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
