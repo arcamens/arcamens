@@ -24,7 +24,7 @@ class Snippet(GuardianView):
         attachments = snippet.snippetfilewrapper_set.all()
 
         return render(request, 'snippet_app/snippet.html', 
-        {'snippet': snippet, 'attachments': attachments})
+        {'snippet': snippet, 'card': snippet.card, 'attachments': attachments})
 
 
 class CreateSnippet(GuardianView):
@@ -59,8 +59,7 @@ class CreateSnippet(GuardianView):
         organization=user.default, child=card, user=user, snippet=snippet)
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -154,8 +153,7 @@ class UpdateSnippet(GuardianView):
         event.users.add(*record.card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % record.card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(record.card.ancestor.ancestor)
 
         return redirect('snippet_app:snippet', 
         snippet_id=record.id)
@@ -172,11 +170,11 @@ class DeleteSnippet(GuardianView):
         event.users.add(*snippet.card.ancestor.ancestor.members.all())
         snippet.delete()
 
-        ws.client.publish('board%s' % snippet.card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(snippet.card.ancestor.ancestor)
 
         return redirect('card_app:view-data', 
         card_id=snippet.card.id)
+
 
 
 

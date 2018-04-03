@@ -69,8 +69,7 @@ class CreateNote(GuardianView):
         organization=user.default, child=card, user=user, note=note)
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return render(request, 'note_app/preview-note.html',
         {'note': note, 'card': note.card})
@@ -172,8 +171,7 @@ class UpdateNote(GuardianView):
         event.users.add(*record.card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % record.card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(record.card.ancestor.ancestor)
 
         return redirect('note_app:preview-note', 
         note_id=record.id)
@@ -190,8 +188,7 @@ class DeleteNote(GuardianView):
         event.users.add(*note.card.ancestor.ancestor.members.all())
         note.delete()
 
-        ws.client.publish('board%s' % note.card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(note.card.ancestor.ancestor)
 
         return redirect('note_app:list-notes', 
         card_id=note.card.id)
@@ -202,6 +199,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 
