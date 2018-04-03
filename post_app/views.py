@@ -622,8 +622,9 @@ class UndoClipboard(GuardianView):
         event.post.ancestor = event.timeline
         event.post.save()
 
-        event1 = EPastePost(
-        organization=user.default, timeline=event.timeline, user=user)
+        event1 = EPastePost(organization=user.default, 
+        timeline=event.timeline, user=user)
+
         event1.save(hcache=False)
         event1.posts.add(event.post)
         event1.users.add(*event.timeline.users.all())
@@ -757,6 +758,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 

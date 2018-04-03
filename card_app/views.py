@@ -197,8 +197,7 @@ class CreateCard(GuardianView):
         ancestor=card.ancestor, child=card, user=user)
         event.users.add(*ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -303,8 +302,7 @@ class CreateFork(GuardianView):
         ancestor=card.ancestor, child0=card, child1=fork, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -349,8 +347,8 @@ class CreatePostFork(GuardianView):
         event.users.add(*fork.ancestor.users.all())
         event.users.add(*card.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
+        user.ws_sound(fork.ancestor)
 
         return redirect('timeline_app:list-posts', timeline_id=ancestor_id)
 
@@ -371,8 +369,7 @@ class DeleteCard(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         card.delete()
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -384,8 +381,7 @@ class CutCard(GuardianView):
         list          = card.ancestor
 
         # Missing event.
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         card.ancestor = None
         card.save()
@@ -416,8 +412,7 @@ class CopyCard(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
 
         # Missing event.
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -508,8 +503,7 @@ class UpdateCard(GuardianView):
         event.users.add(*record.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % record.ancestor.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(record.ancestor.ancestor)
 
         return redirect('card_app:view-data', 
         card_id=record.id)
@@ -570,11 +564,8 @@ class UnrelateCard(GuardianView):
         event.users.add(*card0.ancestor.ancestor.members.all())
         event.users.add(*card1.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % 
-        card0.ancestor.ancestor.id, 'sound', False)
-
-        ws.client.publish('board%s' % 
-        card1.ancestor.ancestor.id, 'sound', False)
+        user.ws_sound(card0.ancestor.ancestor)
+        user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -594,10 +585,8 @@ class RelateCard(GuardianView):
         event.users.add(*card0.ancestor.ancestor.members.all())
         event.users.add(*card1.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % 
-        card0.ancestor.ancestor.id, 'sound', False)
-        ws.client.publish('board%s' % 
-        card1.ancestor.ancestor.id, 'sound', False)
+        user.ws_sound(card0.ancestor.ancestor)
+        user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -702,8 +691,7 @@ class UnbindCardWorker(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % 
-        card.ancestor.ancestor.id, 'sound', 0, False)
+        me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -721,8 +709,7 @@ class BindCardWorker(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % 
-        card.ancestor.ancestor.id, 'sound', 0, False)
+        me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -789,8 +776,7 @@ class UnbindCardTag(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -816,8 +802,7 @@ class BindCardTag(GuardianView):
         event.users.add(*card.ancestor.ancestor.members.all())
         event.save()
 
-        ws.client.publish('board%s' % card.ancestor.ancestor.id, 
-            'sound', 0, False)
+        me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -837,8 +822,7 @@ class Done(GuardianView):
         event.users.add(*users)
 
         # Missing event.
-        ws.client.publish('board%s' % 
-        card.ancestor.ancestor.id, 'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -857,9 +841,7 @@ class Undo(GuardianView):
         # users = card.ancestor.ancestor.members.all()
         # event.users.add(*users)
 
-        # Missing event.
-        ws.client.publish('board%s' % 
-        card.ancestor.ancestor.id, 'sound', 0, False)
+        user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -987,7 +969,6 @@ class UndoClipboard(GuardianView):
         user=user, organization=user.default)
 
         clipboard.cards.remove(event.child)
-        event.ancestor.ancestor.ws_sound()
 
 class ListAllTasks(GuardianView):
     def get(self, request):
@@ -1114,6 +1095,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
