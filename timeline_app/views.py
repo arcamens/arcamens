@@ -129,7 +129,7 @@ class DeleteTimeline(GuardianView):
         timeline_name=timeline.name, user=user)
 
         user.ws_sound(timeline)
-        user.ws_unsubscribe(timeline)
+        user.ws_unsubscribe(timeline, target=timeline)
 
         # should tell users to unsubscribe here.
         # it may hide bugs.
@@ -151,17 +151,17 @@ class UnbindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        user.ws_sound(timeline)
+        me.ws_sound(timeline)
 
         # When user is removed from timline then it
         # gets unsubscribed from the timeline.
-        user.ws_unsubscribe(timeline)
+        me.ws_unsubscribe(timeline, target=user)
 
         # As said before, order of events cant be determined
         # when dispatched towards two queues. It might
         # happen of sound event being dispatched before subscribe event.
         # So, we warrant soud to happen.
-        user.ws_sound()
+        me.ws_sound(user)
 
         return HttpResponse(status=200)
 
@@ -298,8 +298,8 @@ class BindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        user.ws_sound(timeline)
-        user.ws_subscribe(timeline)
+        me.ws_sound(timeline)
+        me.ws_subscribe(timeline, target=user)
 
         # it seems i cant warrant the order the events will be dispatched
         # to the queue, if it is userid queue or timelineid queue
@@ -307,7 +307,7 @@ class BindTimelineUser(GuardianView):
         # user queue to warrant the event sound being dispatched.
         # obs: if i'll abandon sound when user interacts it is not
         # necessary.
-        user.ws_sound()
+        me.ws_sound(user)
 
         return HttpResponse(status=200)
 
@@ -415,6 +415,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 

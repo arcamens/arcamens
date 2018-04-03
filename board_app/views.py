@@ -71,8 +71,8 @@ class CreateBoard(GuardianView):
         event.users.add(user)
         event.save()
 
-        user.ws_subscribe_board(board.id)
         user.ws_sound()
+        user.ws_subscribe(board)
 
         return redirect('board_app:list-boards')
 
@@ -191,7 +191,7 @@ class PasteLists(GuardianView):
 
         clipboard.lists.clear()
 
-        board.ws_sound()
+        user.ws_sound(board)
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -217,7 +217,7 @@ class UpdateBoard(GuardianView):
         board=record, user=me)
         event.users.add(*record.members.all())
 
-        record.ws_sound()
+        me.ws_sound(record)
 
         return redirect('list_app:list-lists', 
         board_id=record.id)
@@ -248,8 +248,8 @@ class DeleteBoard(GuardianView):
         event.users.add(*board.members.all())
 
         # Need to unsubscribe or it may misbehave.
-        board.ws_sound()
-        user.ws_unsubscribe_board(board.id)
+        user.ws_sound(board)
+        user.ws_unsubscribe(board, target=board)
 
         board.delete()
 
@@ -305,10 +305,13 @@ class BindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
-        board.ws_sound()
+        me.ws_sound(board)
+        me.ws_subscribe(board, target=user)
 
-        user.ws_subscribe_board(board.id)
-        user.ws_sound()
+        # Warrant the user will receive the sound event
+        # because we cant control the order in which
+        # data flows to the different queues.
+        me.ws_sound(target=user)
 
         return HttpResponse(status=200)
 
@@ -326,10 +329,9 @@ class UnbindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.users.add(*board.members.all())
 
-        board.ws_sound()
-
-        user.ws_unsubscribe_board(board.id)
-        user.ws_sound()
+        me.ws_sound(board)
+        me.ws_unsubscribe(board, target=user)
+        me.ws_sound(user)
 
         return HttpResponse(status=200)
 
@@ -359,6 +361,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
