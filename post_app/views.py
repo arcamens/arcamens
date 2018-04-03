@@ -98,7 +98,7 @@ class CreatePost(GuardianView):
         users = ancestor.users.all()
         event.users.add(*users)
 
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor_id)
@@ -128,7 +128,7 @@ class UpdatePost(GuardianView):
         # is on a timeline whose worker is not on.
         event.users.add(*record.workers.all())
 
-        record.ancestor.ws_sound()
+        user.ws_sound(record.ancestor)
 
         return redirect('post_app:post', 
         post_id=record.id)
@@ -186,7 +186,7 @@ class DeletePost(GuardianView):
         ancestor = post.ancestor
         post.delete()
 
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
@@ -246,7 +246,7 @@ class UnassignPostUser(GuardianView):
         post = models.Post.objects.get(id=post_id)
         me   = User.objects.get(id=self.user_id)
 
-        post.ancestor.ws_sound()
+        me.ws_sound(post.ancestor)
 
         event = EUnassignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
@@ -281,7 +281,7 @@ class AssignPostUser(GuardianView):
         event.users.add(*post.workers.all())
         event.save()
 
-        post.ancestor.ws_sound()
+        me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -375,8 +375,7 @@ class CutPost(GuardianView):
         user          = User.objects.get(id=self.user_id)
         timeline      = post.ancestor
 
-        # Should have an event, missing creating event.
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         post.ancestor = None
         post.save()
@@ -409,7 +408,7 @@ class CopyPost(GuardianView):
         users = post.ancestor.users.all()
         event.users.add(*users)
 
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -429,7 +428,7 @@ class Done(GuardianView):
         users = post.ancestor.users.all()
         event.users.add(*users)
 
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         return redirect('post_app:post', 
         post_id=post.id)
@@ -485,7 +484,7 @@ class UnbindPostTag(GuardianView):
         event.users.add(*post.ancestor.users.all())
         event.save()
 
-        post.ancestor.ws_sound()
+        me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -504,7 +503,7 @@ class BindPostTag(GuardianView):
         event.users.add(*post.ancestor.users.all())
         event.save()
 
-        post.ancestor.ws_sound()
+        me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -523,7 +522,7 @@ class Undo(GuardianView):
 
         user = User.objects.get(id=self.user_id)
 
-        post.ancestor.ws_sound()
+        user.ws_sound(post.ancestor)
 
         return redirect('post_app:post', 
         post_id=post.id)
@@ -699,10 +698,15 @@ class CreateCardFork(GuardianView):
 
         event = models.ECreateCardFork.objects.create(organization=user.default,
         ancestor=post.ancestor, post=post, card=fork, user=user)
+
+        # The timeline users and the board users get the event.
+        event.users.add(post.ancestor.users.all())
         event.users.add(*fork.ancestor.ancestor.members.all())
 
-        ws.client.publish('board%s' % fork.ancestor.ancestor.id, 
-            'sound', 0, False)
+        # In this case, it would play sound twice if you're
+        # in both timeline and board.
+        user.ws_sound(fork.ancestor.ancestor)
+        user.ws_sound(post.ancestor)
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -753,6 +757,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
