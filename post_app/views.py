@@ -293,7 +293,7 @@ class ManagePostWorkers(GuardianView):
         'form':forms.UserSearchForm()})
 
     def post(self, request, post_id):
-        sqlike = models.Post.from_sqlike()
+        sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
@@ -751,6 +751,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
