@@ -2,7 +2,7 @@
 
 <a class="e-get pin-card" 
 data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="#">
+data-show="{{ ind.get_absolute_url }}" href="{{ ind.get_link_url }}">
 
 <button type="button" class="close" 
 onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
@@ -13,6 +13,7 @@ onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropaga
 </a>
 
 </li>
+
 
 
 
