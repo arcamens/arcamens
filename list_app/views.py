@@ -73,8 +73,7 @@ class CreateList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', board_id=board.id)
 
@@ -83,16 +82,13 @@ class DeleteList(GuardianView):
         list = List.objects.get(id=list_id)
         user = User.objects.get(id=self.user_id)
 
+        user.ws_sound(list.ancestor)
+
         event = EDeleteList.objects.create(organization=user.default,
         ancestor=list.ancestor, child_name=list.name, user=user)
         event.users.add(*list.ancestor.members.all())
 
         list.delete()
-
-
-        # Missing event.
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
 
         return redirect('list_app:list-lists',
         board_id=list.ancestor.id)
@@ -126,9 +122,7 @@ class UpdateList(GuardianView):
         ancestor=record.ancestor, child=record, user=user)
         event.users.add(*record.ancestor.members.all())
 
-        # Missing event.
-        ws.client.publish('board%s' % record.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(record.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=record.id)
@@ -161,9 +155,7 @@ class PasteCards(GuardianView):
 
         clipboard.cards.clear()
 
-        # missing event.
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(list.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -174,8 +166,7 @@ class CutList(GuardianView):
         user  = User.objects.get(id=self.user_id)
         board = list.ancestor
 
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(list.ancestor)
 
         list.ancestor = None
         list.save()
@@ -205,8 +196,7 @@ class CopyList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.users.add(*list.ancestor.members.all())
 
-        ws.client.publish('board%s' % list.ancestor.id, 
-            'sound', 0, False)
+        user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
@@ -272,7 +262,8 @@ class UndoClipboard(GuardianView):
         user=user, organization=user.default)
 
         clipboard.lists.remove(event.child)
-        event.ancestor.ws_sound()
+
+        user.ws_sound(event.ancestor)
 
 class ListLink(GuardianView):
     """
@@ -295,6 +286,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
