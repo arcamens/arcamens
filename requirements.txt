@@ -12,4 +12,6 @@ git+ssh://git@bitbucket.org/arcamens/django-jsim.git
 mysqlclient
 Pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
+git+ssh://git@bitbucket.org/arcamens/django-wsbells.git
+
 
