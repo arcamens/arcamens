@@ -74,14 +74,12 @@ class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
         user = User.objects.get(id=self.user_id)
 
-        ws.client.publish('user%s' % user.id, 
-            'unsubscribe organization%s' % user.default.id, 0, False)
+        user.ws_unsubscribe(user.default)
 
         user.default = Organization.objects.get(
         id=organization_id)
 
-        ws.client.publish('user%s' % user.id, 
-            'subscribe organization%s' % user.default.id, 0, False)
+        user.ws_subscribe(user.default)
 
         user.save()
         # When user updates organization, it tells all the other
@@ -161,7 +159,8 @@ class UpdateOrganization(GuardianView):
         event = EUpdateOrganization.objects.create(
         organization=user.default, user=user)
         event.users.add(*record.users.all())
-        record.ws_sound()
+
+        user.ws_sound(record)
 
         return redirect('core_app:index')
 
@@ -351,8 +350,8 @@ class DeleteTag(GuardianView):
 
         users = user.default.users.all()
         event.users.add(*users)
-        ws.client.publish('organization%s' % user.default.id, 
-            'sound', 0, False)
+
+        user.ws_sound(user.default)
 
         return HttpResponse(status=200)
 
@@ -381,8 +380,7 @@ class CreateTag(GuardianView):
         users = user.default.users.all()
         event.users.add(*users)
 
-        ws.client.publish('organization%s' % user.default.id, 
-            'sound', 0, False)
+        user.ws_sound(user.default)
 
         return redirect('core_app:list-tags')
 
@@ -400,8 +398,7 @@ class UnbindUserTag(GuardianView):
         users = me.default.users.all()
         event.users.add(*users)
 
-        ws.client.publish('organization%s' % me.default.id, 
-            'sound', 0, False)
+        user.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
@@ -418,8 +415,7 @@ class BindUserTag(GuardianView):
         users = me.default.users.all()
         event.users.add(*users)
 
-        ws.client.publish('organization%s' % me.default.id, 
-            'sound', 0, False)
+        me.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
@@ -471,8 +467,7 @@ class InviteOrganizationUser(GuardianView):
         send_mail(msg, '%s %s' % (organization.name, 
         url), 'noreply@arcamens.com', [email], fail_silently=False)
 
-        ws.client.publish('organization%s' % organization.id, 
-            'sound', 0, False)
+        user.ws_sound(organization)
 
         return redirect('core_app:list-users', 
         organization_id=organization_id)
@@ -507,8 +502,7 @@ class JoinOrganization(View):
         peer=invite.user)
         event.users.add(*organization.users.all())
 
-        ws.client.publish('organization%s' % organization.id, 
-            'sound', 0, False)
+        invite.user.ws_sound(organization)
 
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
@@ -678,9 +672,7 @@ class Shout(GuardianView):
         users = me.default.users.all()
         event.users.add(*users)
 
-        queue = 'organization%s' % me.default.id
-        ws.client.publish(queue, 'sound', 0, False)
-
+        me.ws_sound(me.default)
         return redirect('core_app:list-events')
 
 class SetupPassword(GuardianView):
@@ -704,6 +696,7 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
 
 
 
