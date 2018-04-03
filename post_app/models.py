@@ -6,7 +6,7 @@ from markdown.extensions.tables import TableExtension
 from sqlike.parser import SqLike, SqNode
 from markdown import markdown
 from timeline_app.models import Timeline
-from core_app.models import Event, GlobalFilterMixin
+from core_app.models import Event
 from functools import reduce
 import operator
 
@@ -158,7 +158,7 @@ class Post(PostMixin, models.Model):
     data = models.TextField(blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
 
-class PostFilter(GlobalFilterMixin, models.Model):
+class PostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
@@ -180,7 +180,7 @@ class PostFilter(GlobalFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'timeline', )
 
-class GlobalPostFilter(GlobalFilterMixin, models.Model):
+class GlobalPostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
@@ -200,7 +200,7 @@ class GlobalPostFilter(GlobalFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class AssignmentFilter(GlobalFilterMixin, models.Model):
+class AssignmentFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: victor + \
     #arcamens + #suggestion ...')
@@ -349,6 +349,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

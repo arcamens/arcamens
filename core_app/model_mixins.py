@@ -55,9 +55,6 @@ class UserMixin(UserWS):
     def __str__(self):
         return self.name
 
-class GlobalFilterMixin:
-    pass
-
 class EventMixin:
     def save(self, *args, hcache=True, **kwargs):
         super().save(*args, **kwargs)
@@ -86,6 +83,7 @@ class OrganizationMixin(QueueWS):
     def ws_sound(self):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
+
 
 
 
