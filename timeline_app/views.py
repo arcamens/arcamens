@@ -100,7 +100,7 @@ class CreateTimeline(GuardianView):
 
         event.users.add(user)
 
-        user.ws_subscribe_timeline(record.id)
+        user.ws_subscribe(record)
         user.ws_sound()
 
         return redirect('timeline_app:list-timelines')
@@ -128,8 +128,8 @@ class DeleteTimeline(GuardianView):
         event    = EDeleteTimeline.objects.create(organization=user.default,
         timeline_name=timeline.name, user=user)
 
-        user.ws_unsubscribe_timeline(timeline.id)
-        user.ws_sound()
+        user.ws_sound(timeline)
+        user.ws_unsubscribe(timeline)
 
         # should tell users to unsubscribe here.
         # it may hide bugs.
@@ -151,11 +151,11 @@ class UnbindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        timeline.ws_sound()
+        user.ws_sound(timeline)
 
         # When user is removed from timline then it
         # gets unsubscribed from the timeline.
-        user.ws_unsubscribe_timeline(timeline.id)
+        user.ws_unsubscribe(timeline)
 
         # As said before, order of events cant be determined
         # when dispatched towards two queues. It might
@@ -187,7 +187,7 @@ class UpdateTimeline(GuardianView):
 
         event.users.add(*record.users.all())
 
-        record.ws_sound()
+        user.ws_sound(record)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=record.id)
@@ -215,7 +215,7 @@ class PastePosts(GuardianView):
         event.users.add(*users)
         event.save()
 
-        timeline.ws_sound()
+        user.ws_sound(timeline)
 
         clipboard.posts.clear()
         return redirect('timeline_app:list-posts', 
@@ -298,8 +298,8 @@ class BindTimelineUser(GuardianView):
 
         event.users.add(*timeline.users.all())
 
-        timeline.ws_sound()
-        user.ws_subscribe_timeline(timeline.id)
+        user.ws_sound(timeline)
+        user.ws_subscribe(timeline)
 
         # it seems i cant warrant the order the events will be dispatched
         # to the queue, if it is userid queue or timelineid queue
@@ -415,6 +415,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 
