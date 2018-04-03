@@ -23,6 +23,7 @@ class UserMixin(UserWS):
 
         qnames = self.ws_queues(self.timelines.all())
         qnames.append(self.default.qname())
+        qnames.extend(self.ws_queues(self.boards.all()))
         return qnames
 
     def get_user_url(self):
