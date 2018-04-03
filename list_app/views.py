@@ -15,7 +15,6 @@ import list_app.models
 from . import models
 from . import forms
 import core_app.models
-from core_app import ws
 import json
 
 # Create your views here.
@@ -296,6 +295,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 

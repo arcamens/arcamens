@@ -3,33 +3,27 @@ from django.template.loader import get_template
 from sqlike.parser import SqLike, SqNode
 from django.db.models import Q
 from functools import reduce
-from core_app import ws
+from wsbells.models import UserWS, QueueWS
 import operator
 
-class UserMixin(object):
-    def ws_alert(self):
-        ws.client.publish('user%s' % self.id, 
-            'alert-event', 0, False)
+class UserMixin(UserWS):
+    def ws_alert(self, target=None):
+        target = target if target else self
+        self.ws_cmd(target, 'ws-alert-event')
 
-    def ws_sound(self):
-        ws.client.publish('user%s' % self.id, 
-            'sound', 0, False)
+    def ws_sound(self, target=None):
+        target = target if target else self
+        self.ws_cmd(target, 'ws-sound')
 
-    def ws_subscribe_board(self, id):
-        ws.client.publish('user%s' % self.id, 
-            'subscribe board%s' % id, 0, False)
+    def connected_queues(self):
+        """
+        Return all timelines the user should have 
+        ws client to be subscribed to.
+        """
 
-    def ws_unsubscribe_board(self, id):
-        ws.client.publish('user%s' % self.id, 
-            'unsubscribe board%s' % id, 0, False)
-
-    def ws_subscribe_timeline(self, id):
-        ws.client.publish('user%s' % self.id, 
-            'subscribe timeline%s' % id, 0, False)
-
-    def ws_unsubscribe_timeline(self, id):
-        ws.client.publish('user%s' % self.id, 
-            'unsubscribe timeline%s' % id, 0, False)
+        qnames = self.ws_queues(self.timelines.all())
+        qnames.append(self.default.qname())
+        return qnames
 
     def get_user_url(self):
         return reverse('core_app:user', 
@@ -83,7 +77,7 @@ class EventMixin:
         self.signers.add(user)
         self.save(hcache=False)
 
-class OrganizationMixin(object):
+class OrganizationMixin(QueueWS):
     def ws_alert(self):
         ws.client.publish('organization%s' % self.id, 
             'alert-event', 0, False)
@@ -91,6 +85,7 @@ class OrganizationMixin(object):
     def ws_sound(self):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
+
 
 
 

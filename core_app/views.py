@@ -16,7 +16,6 @@ from django.urls import reverse
 from django.conf import settings
 from traceback import print_exc
 from itertools import chain
-from core_app import ws
 from . import models
 from . import forms
 import core_app.export
@@ -66,16 +65,9 @@ class Index(AuthenticatedView):
                 return redirect('core_app:fix-account-debits')
             return redirect('core_app:disabled-account')
 
-        # can be improved.
-        queues = list(map(lambda ind: 'timeline%s' % ind, 
-        user.timelines.values_list('id')))
-
-        queues.extend(map(lambda ind: 'board%s' % ind, 
-        user.boards.values_list('id')))
-
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'queues': json.dumps(queues),
+        'organizations': organizations,
          'settings': settings})
 
 class SwitchOrganization(AuthenticatedView):
@@ -431,13 +423,6 @@ class BindUserTag(GuardianView):
 
         return HttpResponse(status=200)
 
-class EventQueues(GuardianView):
-    def get(self, request):
-        user = User.objects.get(id=user_id)
-        queues = user.timelines.values_list('id')
-        data = simplejson.dumps(some_data_to_dump)
-        return HttpResponse(data, content_type='application/json')
-
 class InviteOrganizationUser(GuardianView):
     def get(self, request, organization_id):
         user         = User.objects.get(id=self.user_id)
@@ -719,6 +704,8 @@ class SetupPassword(GuardianView):
         user.save()
 
         return redirect('core_app:update-user-information')
+
+
 
 
 

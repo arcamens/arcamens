@@ -6,7 +6,6 @@ import card_app.models
 import core_app.models
 from . import models
 from . import forms
-from core_app import ws
 
 class Snippet(GuardianView):
     def get(self, request, snippet_id):
@@ -178,6 +177,7 @@ class DeleteSnippet(GuardianView):
 
         return redirect('card_app:view-data', 
         card_id=snippet.card.id)
+
 
 
 

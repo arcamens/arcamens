@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
-from core_app import ws
+from wsbells.models import QueueWS
 
-class TimelineMixin(object):
+class TimelineMixin(QueueWS):
     """
     Mixins.
     """
@@ -40,6 +40,7 @@ class ECreateTimelineMixin(object):
 
 class EBindTimelineUserMixin(object):
     pass
+
 
 
 

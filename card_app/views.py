@@ -22,7 +22,6 @@ from . import models
 from . import forms
 import operator
 import core_app.models
-from core_app import ws
 from django.conf import settings
 from re import split
 import operator
@@ -1115,6 +1114,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

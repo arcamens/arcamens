@@ -9,7 +9,6 @@ from django.conf import settings
 from django.db.models import Q
 import core_app.models
 import board_app.models
-from core_app import ws
 import card_app.models
 from . import models
 from . import forms
@@ -360,6 +359,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 

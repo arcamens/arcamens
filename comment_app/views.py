@@ -5,7 +5,6 @@ import timeline_app.models
 import core_app.models
 from . import models
 from . import forms
-from core_app import ws
 
 class ListComments(GuardianView):
     """
@@ -55,6 +54,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

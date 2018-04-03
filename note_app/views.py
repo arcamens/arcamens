@@ -7,7 +7,6 @@ import card_app.models
 import core_app.models
 from . import models
 from . import forms
-from core_app import ws
 
 class Note(GuardianView):
     def get(self, request, note_id):
@@ -203,6 +202,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

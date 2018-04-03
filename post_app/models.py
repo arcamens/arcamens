@@ -8,7 +8,6 @@ from markdown import markdown
 from timeline_app.models import Timeline
 from core_app.models import Event, GlobalFilterMixin
 from functools import reduce
-from core_app import ws
 import operator
 
 # Create your models here.
@@ -20,12 +19,6 @@ class PostMixin(object):
         'markdown.extensions.codehilite'], safe_mode=True,  
         enable_attributes=False)
         super(PostMixin, self).save(*args, **kwargs)
-
-    def ws_alert(self):
-        pass
-
-    def ws_sound(self):
-        pass
 
     def get_absolute_url(self):
         return reverse('post_app:post', 
@@ -356,6 +349,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

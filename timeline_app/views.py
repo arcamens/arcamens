@@ -9,7 +9,6 @@ from django.views.generic import View
 from django.conf import settings
 from jsim.jscroll import JScroll
 from django.db.models import Q
-from core_app import ws
 import post_app.models
 import operator
 from . import forms
@@ -416,6 +415,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'queues': json.dumps(queues), 'settings': settings})
+
 
 
 

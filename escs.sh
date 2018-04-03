@@ -694,6 +694,14 @@ exit
 
 # Restart the server.
 sudo supervisorctl restart arcamens
+##############################################################################
+# install wsbells in virtualenv.
+cd ~/.virtualenvs/
+source opus/bin/activate
+
+cd ~/projects/django-wsbells-code
+python setup.py install
+rm -fr build
 
 
 

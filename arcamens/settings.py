@@ -56,6 +56,11 @@ EMAIL_HOST_PASSWORD = 'arcamenssoftwares'
 # just a workaround.
 LOCAL_ADDR = 'http://0.0.0.0:8000'if DEBUG else 'http://www.arcamens.com'
 
+MQTT_HOST = "127.0.0.1"  
+MQTT_USER = "guest"  
+MQTT_PASS = "guest"  
+MQTT_PORT = 1883
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,7 +86,8 @@ INSTALLED_APPS = [
     'note_app',
     'bootstrap3',
     'blowdb',
-    'slock'
+    'slock',
+    'wsbells'
 ]
 
 MIDDLEWARE = [
@@ -177,6 +183,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
 
 
 

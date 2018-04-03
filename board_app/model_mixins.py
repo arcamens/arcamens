@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from core_app import ws
+from wsbells.models import QueueWS
 
 class PinMixin(object):
     def get_absolute_url(self):
@@ -21,7 +21,7 @@ class PinMixin(object):
         else:
             return self.list.name
 
-class BoardMixin:
+class BoardMixin(QueueWS):
     def ws_alert(self):
         ws.client.publish('board%s' % self.id, 
             'alert-event', 0, False)
@@ -56,6 +56,7 @@ class EUpdateBoardMixin(object):
 
 class ECreateBoardMixin(object):
     pass
+
 
 
 
