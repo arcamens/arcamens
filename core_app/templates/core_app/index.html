@@ -46,10 +46,15 @@ $(document).ready(function() {
 {{user.ws_connection | safe}}
 
 <script>
+$(document).on('ws-bell', function alertSound(e) {
+    var audio = new Audio('/static/event-alert.mp3');
+    audio.play();
+});
 
 $(document).on('ws-sound', function alertSound(e) {
     var audio = new Audio('/static/event-alert.mp3');
     audio.play();
+    $('a.eventsButton').addClass('new-events');
 });
 
 $(document).on('ws-alert-event', function(e) {
@@ -95,6 +100,7 @@ $(document).on('ws-alert-event', function(e) {
 </body>
 
 </html>
+
 
 
 
