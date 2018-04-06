@@ -723,6 +723,9 @@ class RemoveOrganizationUser(GuardianView):
         user.assignments.through.objects.filter(post__ancestor__organization=me.default).delete()
         user.tasks.through.objects.filter(card__ancestor__ancestor__organization=me.default).delete()
 
+        user.organizations.remove(me.default)
+        user.save()
+
         msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
         form.cleaned_data['reason'])
 
