@@ -11,7 +11,7 @@ class OrganizationForm(forms.Form):
     name = forms.CharField()
 
 class RemoveUserForm(forms.Form):
-    reason = forms.CharField(required='False', help_text='You are fired!')
+    reason = forms.CharField(required=False, help_text='You are fired!')
 
 class EventSearchForm(forms.Form):
     pattern = forms.CharField()
