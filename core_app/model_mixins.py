@@ -84,6 +84,8 @@ class OrganizationMixin(QueueWS):
         ws.client.publish('organization%s' % self.id, 
             'sound', 0, False)
 
+    def __str__(self):
+        return self.name
 
 
 

@@ -43,7 +43,7 @@
 </span>
 
 <span style="font-size:70%">
-<a href="" class="s-modal text-danger">
+<a href="#" data-show="{% url 'core_app:remove-organization-user' ind.id %} " class="s-modal text-danger">
 <span class="glyphicon glyphicon-remove"></span> Remove  </a>
 </span>
 
@@ -84,6 +84,7 @@ $('#list-user-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

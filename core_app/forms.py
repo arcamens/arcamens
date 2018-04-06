@@ -10,6 +10,9 @@ import datetime
 class OrganizationForm(forms.Form):
     name = forms.CharField()
 
+class RemoveUserForm(forms.Form):
+    reason = forms.CharField(required='False', help_text='You are fired!')
+
 class EventSearchForm(forms.Form):
     pattern = forms.CharField()
     seen = forms.BooleanField(required=False)
@@ -76,6 +79,7 @@ class ShoutForm(forms.Form):
 class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
+
 
 
 

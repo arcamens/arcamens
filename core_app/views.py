@@ -697,14 +697,34 @@ class SetupPassword(GuardianView):
 
         return redirect('core_app:update-user-information')
 
+class RemoveOrganizationUser(GuardianView):
+    def get(self, request, user_id):
+        me   = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
+        form = forms.RemoveUserForm()
 
+        return render(request, 
+            'core_app/remove-organization-user.html', 
+                {'user': user, 'form': form})
 
+    def post(self, request, user_id):
+        form = forms.RemoveUserForm(request.POST)
 
+        if not form.is_valid():
+            return render(request, 
+                'core_app/remove-organization-user.html', 
+                    {'user': user, 'form': form})
 
+        me   = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
+            
+        msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
+        form.cleaned_data['reason'])
 
+        send_mail('%s notification!' % me.default.name, msg, 
+        'noreply@arcamens.com', [user.email], fail_silently=False)
 
-
-
+        return redirect('core_app:list-users', organization_id=me.default.id)
 
 
 
