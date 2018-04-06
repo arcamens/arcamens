@@ -727,8 +727,8 @@ class RemoveOrganizationUser(GuardianView):
         user.tasks.through.objects.filter(
             card__ancestor__ancestor__organization=me.default).delete()
 
-        # user.organizations.remove(me.default)
-        # user.save()
+        user.organizations.remove(me.default)
+        user.save()
 
         event = ERemoveOrganizationUser.objects.create(organization=me.default, user=me, 
         peer=user, reason=form.cleaned_data['reason'])
