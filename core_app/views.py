@@ -1,6 +1,7 @@
 from core_app.models import OrganizationService, Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
-Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, EUpdateOrganization
+Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
+EUpdateOrganization, ERemoveOrganizationUser
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
@@ -720,11 +721,19 @@ class RemoveOrganizationUser(GuardianView):
         # Make it impossible for the owner to remove himself.
 
         # Remove user from all posts/cards he is assigned to.
-        user.assignments.through.objects.filter(post__ancestor__organization=me.default).delete()
-        user.tasks.through.objects.filter(card__ancestor__ancestor__organization=me.default).delete()
+        user.assignments.through.objects.filter(
+            post__ancestor__organization=me.default).delete()
 
-        user.organizations.remove(me.default)
-        user.save()
+        user.tasks.through.objects.filter(
+            card__ancestor__ancestor__organization=me.default).delete()
+
+        # user.organizations.remove(me.default)
+        # user.save()
+
+        event = ERemoveOrganizationUser.objects.create(organization=me.default, user=me, 
+        peer=user, reason=form.cleaned_data['reason'])
+
+        event.users.add(*me.default.users.all())
 
         msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
         form.cleaned_data['reason'])
@@ -733,6 +742,7 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         return redirect('core_app:list-users', organization_id=me.default.id)
+
 
 
 

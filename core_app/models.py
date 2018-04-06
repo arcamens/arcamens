@@ -199,11 +199,14 @@ class Clipboard(models.Model):
 class EUpdateOrganization(Event):
     html_template = 'core_app/e-update-organization.html'
 
+class ERemoveOrganizationUser(Event):
+    peer = models.ForeignKey('User', null=True, 
+    related_name='e_remove_organization_user0', blank=True)
 
+    reason = models.CharField(null=True, default='',
+    blank=True, max_length=256)
 
-
-
-
+    html_template = 'core_app/e-remove-organization-user.html'
 
 
 
