@@ -270,7 +270,6 @@ print(stmt)
 ##############################################################################
 # create users on victor vps.
 
-from core_app.models import User
 tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 cd ~/.virtualenv/
 source opus/bin/activate
@@ -307,5 +306,35 @@ boards = Board.objects.filter(organization__name__istartswith='arcamens')
 
 for ind in boards:
     ind.members.add(user)
+
+##############################################################################
+# move suggestion list cards to arcamens/backlog.
+
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+tee >(python manage.py shell --settings=arcamens.settings)
+
+from core_app.models import User, Organization
+from board_app.models import Board
+from list_app.models import List
+from timeline_app.models import Timeline
+from post_app.models import Post
+
+lst = List.objects.get(name__startswith='Suggestion', 
+ancestor__organization__name='Arcamens', 
+ancestor__name__startswith='Arcamens')
+
+timeline = Timeline.objects.get(name__icontains='Arcamens/backlog',
+organization__name='Arcamens')
+
+for ind in lst.cards.all():
+    Post.objects.create(label=ind.label, 
+        ancestor=timeline, data=ind.data,user=ind.owner)    
+
+from board_app.models import Board
+board = Board.objects.get(name='Arcamens', organization=organization)
+board.members.add(*organization.users.all())
 
 
