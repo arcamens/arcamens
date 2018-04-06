@@ -84,8 +84,7 @@ class SwitchOrganization(AuthenticatedView):
         user.save()
         # When user updates organization, it tells all the other
         # tabs to restart the UI.
-        ws.client.publish('user%s' % user.id, 
-            'restart', 0, False)
+        user.ws_restart(user.default)
 
         return redirect('core_app:index')
 
@@ -719,20 +718,10 @@ class RemoveOrganizationUser(GuardianView):
         me = User.objects.get(id=self.user_id)
 
         # Make it impossible for the owner to remove himself.
+
         # Remove user from all posts/cards he is assigned to.
-
-        assignments = user.assignments.filter(ancestor__organization=me.default)
-        tasks       = user.tasks.filter(ancestor__ancestor__organization=me.default)
-
-        # It should be improved.
-        for ind in assignments:
-            ind.workers.remove(user)
-
-        for ind in tasks:
-            ind.workers.remove(user)
-
-        user.organizations.remove(me.default)
-        user.save()
+        user.assignments.through.objects.filter(post__ancestor__organization=me.default).delete()
+        user.tasks.through.objects.filter(card__ancestor__ancestor__organization=me.default).delete()
 
         msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
         form.cleaned_data['reason'])
