@@ -709,15 +709,31 @@ class RemoveOrganizationUser(GuardianView):
 
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
+        user = User.objects.get(id=user_id)
 
         if not form.is_valid():
             return render(request, 
                 'core_app/remove-organization-user.html', 
                     {'user': user, 'form': form})
 
-        me   = User.objects.get(id=self.user_id)
-        user = User.objects.get(id=user_id)
-            
+        me = User.objects.get(id=self.user_id)
+
+        # Make it impossible for the owner to remove himself.
+        # Remove user from all posts/cards he is assigned to.
+
+        assignments = user.assignments.filter(ancestor__organization=me.default)
+        tasks       = user.tasks.filter(ancestor__ancestor__organization=me.default)
+
+        # It should be improved.
+        for ind in assignments:
+            ind.workers.remove(user)
+
+        for ind in tasks:
+            ind.workers.remove(user)
+
+        user.organizations.remove(me.default)
+        user.save()
+
         msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
         form.cleaned_data['reason'])
 
