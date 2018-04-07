@@ -15,20 +15,12 @@ class RecoverAccountForm(forms.Form):
             raise forms.ValidationError(
                 "This user doesn't exist!")
 
-class SignupForm(forms.ModelForm):
-    retype = forms.CharField(label='Retype password', 
-    widget=forms.PasswordInput)
-
-    class Meta:
-        model   = core_app.models.User
-        exclude = ('organizations', 'default', 
-        'service', 'expiration')
-
-        widgets = {
-        'password': forms.PasswordInput()}
+class SetPasswordForm(forms.ModelForm):
+    retype = forms.CharField(required=True, widget=forms.PasswordInput())
+    password = forms.CharField(required=True, widget=forms.PasswordInput())
 
     def clean(self):
-        super(SignupForm, self).clean()
+        super(SetPasswordForm, self).clean()
         retype   = self.cleaned_data.get('retype')
         password = self.cleaned_data.get('password')
 
@@ -36,25 +28,22 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError(
                 'Passwords dont match!')
 
+class SignupForm(SetPasswordForm):
+    class Meta:
+        model   = core_app.models.User
+        exclude = ('organizations', 'default', 
+        'service', 'expiration')
+
+        # widgets = {
+        # 'password': forms.PasswordInput()}
+
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
     # paid = forms.BooleanField(required=False)
 
 
-class RedefinePasswordForm(forms.Form):
-    password = forms.CharField()
-    retype   = forms.CharField()
-
-
-
-
-
-
-
-
-
-
-
-
-
+class RedefinePasswordForm(SetPasswordForm):
+    class Meta:
+        model  = core_app.models.User
+        fields = ('password', )
 

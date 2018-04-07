@@ -268,7 +268,7 @@ class RedefinePassword(LoginView):
         # if it doesnt then it just throws an inter server error.
         user   = timeline_app.models.User.objects.get(id = user_id)
         ticket = PasswordTicket.objects.filter(user=user)
-        form   = forms.RedefinePasswordForm(request.POST)
+        form   = forms.RedefinePasswordForm(request.POST, instance=user)
 
         # The logic to check if password matches should be handled
         # in the RedefinePasswordForm.
@@ -279,20 +279,16 @@ class RedefinePassword(LoginView):
         # Delete all password redefinition tickets.
         ticket.delete()
 
+        form.save()
         # Redefine the password.
-        user.password = form.cleaned_data['password']
-        user.save()
+        # user.password = form.cleaned_data['password']
+        # user.save()
 
         # Log the user.
         request.session['user_id'] = user.id
 
         # Redirect to the application.
         return redirect('core_app:index')
-
-
-
-
-
 
 
 
