@@ -88,6 +88,10 @@ class OrganizationMixin(QueueWS):
         return self.name
 
 
+class InviteMixin:
+    def __str__(self):
+        return '%s %s %s' % (self.user.name, 
+            self.token, self.organization.name)
 
 
 
