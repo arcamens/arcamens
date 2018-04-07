@@ -7,7 +7,7 @@ from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
-from slock.forms import PasswordForm
+from slock.forms import UpdatePasswordForm
 from site_app.forms import SignupForm
 from django.views.generic import View
 from django.core.mail import send_mail
@@ -684,7 +684,7 @@ class Shout(GuardianView):
 class UpdatePassword(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
-        form = PasswordForm()
+        form = UpdatePasswordForm()
 
         return render(request, 
             'core_app/update-password.html', 
@@ -692,14 +692,13 @@ class UpdatePassword(GuardianView):
 
     def post(self, request):
         user = User.objects.get(id=self.user_id)
-        form = PasswordForm(request.POST, confirm_token=user.password)
+        form = UpdatePasswordForm(request.POST, instance=user)
 
         if not form.is_valid():
             return render(request, 'core_app/update-password.html', 
                     {'user': user, 'form': form}, status=400)
     
-        user.password = form.cleaned_data['retype']
-        user.save()
+        form.save()
 
         return redirect('core_app:update-user-information')
 
