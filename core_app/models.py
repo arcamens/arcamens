@@ -35,7 +35,7 @@ class OrganizationService(Service):
     def __str__(self):
         return self.name
 
-class Invite(models.Model):
+class Invite(InviteMixin, models.Model):
     # email = models.EmailField(max_length=70, 
     # null=True, blank=False)
 
@@ -207,6 +207,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 
