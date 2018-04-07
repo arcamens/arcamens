@@ -7,6 +7,7 @@ from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
+from site_app.forms import UserForm as SignupForm
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -519,14 +520,14 @@ class SignupFromInvite(View):
         invite = Invite.objects.get(    
         organization__id=organization_id, token=token)
 
-        form = forms.UserForm(instance=invite.user)
+        form = SignupForm(instance=invite.user)
         return render(request, 'core_app/signup-from-invite.html', 
         {'form': form, 'organization': invite.organization, 'token': token})
 
     def post(self, request, organization_id, token):
         invite = Invite.objects.get(    
         organization__id=organization_id, token=token)
-        form = forms.UserForm(request.POST, instance=invite.user)
+        form = SignupForm(request.POST, instance=invite.user)
 
         if not form.is_valid():
             return render(request, 'core_app/signup-from-invite.html', 
@@ -749,6 +750,7 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         return redirect('core_app:list-users', organization_id=me.default.id)
+
 
 
 
