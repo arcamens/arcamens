@@ -57,7 +57,7 @@ class SignUp(LoginView):
     """
 
     def get(self, request):
-        form = forms.UserForm()
+        form = forms.SignupForm()
         return render(request, 'site_app/signup.html', 
         {'form': form,})
 
@@ -68,7 +68,7 @@ class SignUp(LoginView):
         or just be fixed(in case we decide futurely change how we
         charge on opus). 
         """
-        form = forms.UserForm(request.POST, request.FILES)
+        form = forms.SignupForm(request.POST, request.FILES)
 
         if not form.is_valid():
             return render(request, 'site_app/signup.html', 

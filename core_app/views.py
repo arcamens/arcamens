@@ -7,7 +7,7 @@ from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
-from site_app.forms import UserForm as SignupForm
+from site_app.forms import SignupForm
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse

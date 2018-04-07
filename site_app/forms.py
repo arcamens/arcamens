@@ -1,13 +1,6 @@
 from django import forms
 import core_app.models
 
-class SignupForm(forms.Form):
-    name         = forms.CharField()
-    email        = forms.EmailField()
-
-    password     = forms.CharField()
-    organization = forms.CharField()
-
 class RecoverAccountForm(forms.Form):
     email = forms.EmailField()
 
@@ -22,7 +15,7 @@ class RecoverAccountForm(forms.Form):
             raise forms.ValidationError(
                 "This user doesn't exist!")
 
-class UserForm(forms.ModelForm):
+class SignupForm(forms.ModelForm):
     retype = forms.CharField(label='Retype password', 
     widget=forms.PasswordInput)
 
@@ -35,7 +28,7 @@ class UserForm(forms.ModelForm):
         'password': forms.PasswordInput()}
 
     def clean(self):
-        super(UserForm, self).clean()
+        super(SignupForm, self).clean()
         retype   = self.cleaned_data.get('retype')
         password = self.cleaned_data.get('password')
 
