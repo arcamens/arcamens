@@ -680,13 +680,13 @@ class Shout(GuardianView):
         me.ws_sound(me.default)
         return redirect('core_app:list-events')
 
-class SetupPassword(GuardianView):
+class UpdatePassword(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
         form = forms.PasswordForm()
 
         return render(request, 
-            'core_app/setup-password.html', 
+            'core_app/update-password.html', 
                 {'user': user, 'form': form})
 
     def post(self, request):
@@ -694,7 +694,7 @@ class SetupPassword(GuardianView):
         form = forms.PasswordForm(request.POST, confirm_token=user.password)
 
         if not form.is_valid():
-            return render(request, 'core_app/setup-password.html', 
+            return render(request, 'core_app/update-password.html', 
                     {'user': user, 'form': form}, status=400)
     
         user.password = form.cleaned_data['retype']
