@@ -13,10 +13,6 @@ class OrganizationForm(forms.Form):
 class RemoveUserForm(forms.Form):
     reason = forms.CharField(required=False, help_text='You are fired!')
 
-class EventSearchForm(forms.Form):
-    pattern = forms.CharField()
-    seen = forms.BooleanField(required=False)
-
 class EventFilterForm(forms.Form):
     val0  = datetime.date.today()-datetime.timedelta(days=3)
     start = forms.DateTimeField(initial = val0)
@@ -29,11 +25,6 @@ class TagSearchForm(forms.Form):
 
 class OrganizationInviteForm(forms.Form):
     email = forms.EmailField(help_text="Insert user E-mail.")
-
-class UserForm(forms.ModelForm):
-    class Meta:
-        model  = models.User
-        fields = ('name', 'avatar', 'email', 'description')
 
 class PasswordForm(forms.Form):
     retype = forms.CharField(required=True, widget=forms.PasswordInput())
@@ -57,6 +48,11 @@ class PasswordForm(forms.Form):
         if retype != password :
             raise forms.ValidationError(
                 "    Password doesn't match!")
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model  = models.User
+        fields = ('name', 'avatar', 'email', 'description')
 
 class UserFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
