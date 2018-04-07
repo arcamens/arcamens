@@ -445,7 +445,7 @@ class InviteOrganizationUser(GuardianView):
         # the user need to fill information first.
         user, _  = User.objects.get_or_create(email=email)
 
-        if user.organizations.filter(id=self.user_id).exists():
+        if user.organizations.filter(id=me.default.id).exists():
             return HttpResponse("The user is already a member!", status=403)
 
         # need to be improved.
