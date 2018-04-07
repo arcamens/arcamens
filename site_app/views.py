@@ -1,6 +1,7 @@
 from paybills.submitters import ManualForm, SubscriptionForm
 from core_app.models import Organization, OrganizationService
 from slock.views import AuthenticatedView, LogoutView, LoginView
+from slock.forms import SetPasswordForm
 from django.shortcuts import render, redirect
 from site_app.models import PasswordTicket
 from django.core.mail import send_mail
@@ -258,7 +259,7 @@ class RecoverAccount(LoginView):
 class RedefinePassword(LoginView):
     def get(self, request, user_id, token):
         user = timeline_app.models.User.objects.get(id = user_id)
-        form   = forms.RedefinePasswordForm()
+        form = SetPasswordForm()
 
         return render(request, 'site_app/redefine-password.html', 
         {'user': user, 'form': form, 'token': token})
@@ -268,7 +269,7 @@ class RedefinePassword(LoginView):
         # if it doesnt then it just throws an inter server error.
         user   = timeline_app.models.User.objects.get(id = user_id)
         ticket = PasswordTicket.objects.filter(user=user)
-        form   = forms.RedefinePasswordForm(request.POST, instance=user)
+        form   = SetPasswordForm(request.POST, instance=user)
 
         # The logic to check if password matches should be handled
         # in the RedefinePasswordForm.

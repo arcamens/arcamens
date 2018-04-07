@@ -26,28 +26,12 @@ class TagSearchForm(forms.Form):
 class OrganizationInviteForm(forms.Form):
     email = forms.EmailField(help_text="Insert user E-mail.")
 
-class PasswordForm(forms.Form):
-    retype = forms.CharField(required=True, widget=forms.PasswordInput())
-    password = forms.CharField(required=True, widget=forms.PasswordInput())
-    old = forms.CharField(required=True, widget=forms.PasswordInput())
+class ShoutForm(forms.Form):
+    msg = forms.CharField(required=False)
 
-    def __init__(self, *args, confirm_token='', **kwargs):
-        self.confirm_token = confirm_token
-        super(PasswordForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        super(PasswordForm, self).clean()
-        retype   = self.cleaned_data.get('retype')
-        password = self.cleaned_data.get('password')
-        old = self.cleaned_data.get('old')
-
-        if old != self.confirm_token:
-            raise forms.ValidationError(
-                     "Wrong existing password!")
-
-        if retype != password :
-            raise forms.ValidationError(
-                "    Password doesn't match!")
+class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
+    name = forms.CharField(required=True,
+    help_text='Type the organization name to confirm!')
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -68,18 +52,4 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
-
-class ShoutForm(forms.Form):
-    msg = forms.CharField(required=False)
-
-class ConfirmOrganizationDeletionForm(ConfirmTimelineDeletionForm):
-    name = forms.CharField(required=True,
-    help_text='Type the organization name to confirm!')
-
-
-
-
-
-
-
 
