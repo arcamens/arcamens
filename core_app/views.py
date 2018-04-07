@@ -483,12 +483,16 @@ class JoinOrganization(View):
             return redirect('core_app:signup-from-invite', 
                 organization_id=organization_id, token=token)
 
-
         # Delete all the invites for this user.
         organization = Organization.objects.get(id=organization_id)
 
         invite.user.organizations.add(organization)
         invite.user.default = organization
+
+        main = Organization.objects.create(name='Main', 
+        owner=invite.user)
+        invite.user.organizations.add(main)
+
         invite.user.save()
 
         # validates the invite.
@@ -728,6 +732,9 @@ class RemoveOrganizationUser(GuardianView):
             card__ancestor__ancestor__organization=me.default).delete()
 
         user.organizations.remove(me.default)
+
+        if user.default == me.default:
+            user.default = user.organizations.first()
         user.save()
 
         event = ERemoveOrganizationUser.objects.create(organization=me.default, user=me, 
