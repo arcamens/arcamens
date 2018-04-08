@@ -45,6 +45,10 @@ class AlertPostWorkersForm(forms.Form):
     required=False, widget=forms.Textarea,
     help_text='Please, take a look at this asap!')
 
+class ListSearchform(forms.Form):
+    pattern = forms.CharField(required=False, 
+    help_text='Ex: arcamens + todo ...')
+
 
 
 

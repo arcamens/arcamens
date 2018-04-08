@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
+from mdx_gfm import GithubFlavoredMarkdownExtension
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User
 from sqlike.parser import SqLike, SqNode
@@ -15,8 +16,7 @@ from operator import and_, or_
 class CardMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
-        extensions=[TableExtension(), 'markdown.extensions.tables', 
-        'markdown.extensions.codehilite'], safe_mode=True,  
+        extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
         super(CardMixin, self).save(*args, **kwargs)
 
@@ -459,6 +459,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

@@ -1,4 +1,5 @@
 Django==1.11
+py-gfm
 django-bootstrap3
 pillow
 markdown
@@ -13,5 +14,6 @@ mysqlclient
 Pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
 git+ssh://git@bitbucket.org/arcamens/django-wsbells.git
+
 
 

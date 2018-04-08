@@ -3,6 +3,7 @@ PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, AssignmentFilter
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
+from django.db.models.functions import Concat
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.core.urlresolvers import reverse
@@ -15,8 +16,11 @@ from django.conf import settings
 from jsim.jscroll import JScroll
 from card_app.models import Card
 from card_app.forms import CardForm, ListSearchform
+from functools import reduce
+from re import split
 from . import forms
 from . import models
+import operator
 
 import json
 
@@ -767,6 +771,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 

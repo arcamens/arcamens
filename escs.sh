@@ -706,7 +706,9 @@ source opus/bin/activate
 cd ~/projects/django-wsbells-code
 python setup.py install
 rm -fr build
+##############################################################################
+# install py-gfm github flavoured markdown.
 
-
+pip install py-gfm
 
 

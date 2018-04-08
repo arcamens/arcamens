@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
+from mdx_gfm import GithubFlavoredMarkdownExtension
 from sqlike.parser import SqLike, SqNode
 from markdown import markdown
 from timeline_app.models import Timeline
@@ -15,8 +16,7 @@ import operator
 class PostMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
-        extensions=[TableExtension(), 'markdown.extensions.tables', 
-        'markdown.extensions.codehilite'], safe_mode=True,  
+        extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
         super(PostMixin, self).save(*args, **kwargs)
 
@@ -346,6 +346,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
