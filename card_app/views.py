@@ -253,6 +253,22 @@ class SelectForkTimeline(GuardianView):
         return render(request, 'card_app/select-fork-timeline.html', 
         {'form':form, 'card': card, 'elems': timelines})
 
+class PullCardContent(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id, fork_id=None):
+        card       = models.Card.objects.get(id=card_id)
+        user       = User.objects.get(id=self.user_id)
+        fork       = models.Card.objects.get(id=fork_id)
+
+        fork.label = card.label
+        fork.data  = card.data
+        form       = forms.CardForm(instance=fork)
+
+        return render(request, 'card_app/create-fork.html', 
+        {'form':form, 'card': card, 'ancestor': fork.ancestor, 'fork':fork})
+
 class CreateFork(GuardianView):
     """
     """
