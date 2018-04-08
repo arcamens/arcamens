@@ -1096,3 +1096,4 @@ class CardEvents(GuardianView):
 
 
 
+

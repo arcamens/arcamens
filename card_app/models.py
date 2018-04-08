@@ -40,12 +40,20 @@ class CardMixin(object):
 
     @classmethod
     def get_allowed_cards(cls, user):
-        boards = Board.get_user_boards(user)
-        cards  = Card.objects.none()
+        """
+        The user has access to all cards that he is a member
+        of its board or an work of the card.
+        """
 
-        for indi in boards:
-            for indj in indi.lists.all():
-                cards = cards | indj.cards.all()
+        # boards = Board.get_user_boards(user)
+        # cards  = Card.objects.none()
+# 
+        # for indi in boards:
+            # for indj in indi.lists.all():
+                # cards = cards | indj.cards.all()
+
+        cards = Card.objects.filter(
+            Q(ancestor__ancestor__members=user) | Q(workers=user))
         return cards
 
     @classmethod
@@ -452,6 +460,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 
