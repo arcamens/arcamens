@@ -3,6 +3,13 @@
 {% load i18n %}
 
 {% block buttons %}
+<div class="pull-left">
+<a class="b-modal" href="#" data-show="{% url 'card_app:pull-post-content' card.id post.id %}"> 
+<span class="glyphicon glyphicon-download"></span> 
+
+Keep old content? </a>
+</div>
+
 <button  type="button" data-form="#form-post-data" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-show="{% url 'post_app:cancel-post-creation' post.id %}"
@@ -22,6 +29,7 @@ class="btn btn-default m-post-close">
 
 
 {% endblock %}
+
 
 
 

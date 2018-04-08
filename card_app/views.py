@@ -296,6 +296,22 @@ class CreateFork(GuardianView):
 
         return redirect('card_app:view-data', card_id=fork.id)
 
+class PullPostContent(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id, fork_id=None):
+        card       = models.Card.objects.get(id=card_id)
+        user       = User.objects.get(id=self.user_id)
+        fork       = Post.objects.get(id=fork_id)
+
+        fork.label = card.label
+        fork.data  = card.data
+        form       = PostForm(instance=fork)
+
+        return render(request, 'card_app/create-post-fork.html', 
+        {'form':form, 'post': fork, 'ancestor': fork.ancestor, 'card': card})
+
 class CreatePostFork(GuardianView):
     """
     """
@@ -1084,5 +1100,6 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 

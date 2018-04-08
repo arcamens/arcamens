@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
     url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/(?P<fork_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
     url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
-    url(r'^pull-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullContent.as_view(), name='pull-content'),
+    url(r'^pull-card-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
 ]
 

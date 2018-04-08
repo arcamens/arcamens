@@ -654,7 +654,7 @@ class SetupAssignmentFilter(GuardianView):
         return redirect('post_app:list-assignments', user_id=user.id)
 
 
-class PullContent(GuardianView):
+class PullCardContent(GuardianView):
     """
     """
 
@@ -665,7 +665,7 @@ class PullContent(GuardianView):
 
         fork.label = post.label
         fork.data  = post.data
-        fork.save()
+        # fork.save()
         form       = CardForm(instance=fork)
 
         return render(request, 'post_app/create-fork.html', 
