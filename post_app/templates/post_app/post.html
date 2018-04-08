@@ -13,7 +13,7 @@ Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.us
 <span class="glyphicon glyphicon-user"></span> {{post.user.name}} </a> 
 on timeline
 
-<a class="e-get" href="#"
+<a class="e-get" href="{{post.ancestor.get_link_url}}"
 data-show="{% url 'timeline_app:list-posts' post.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
@@ -200,6 +200,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 
