@@ -3,6 +3,13 @@
 {% load i18n %}
 
 {% block buttons %}
+<div class="pull-left">
+<a class="b-modal" href="#" data-show="{% url 'post_app:pull-content' post.id card.id %}"> 
+<span class="glyphicon glyphicon-download"></span> 
+
+Keep old content? </a>
+</div>
+
 <button  type="button" data-form="#form-card-data" 
 data-callback="$('#bigModal').modal('toggle');" 
 data-show="{% url 'card_app:cancel-card-creation' card.id %}"
@@ -26,6 +33,7 @@ $('#form-post-data').on('submit', (function(e){
 
 
 {% endblock %}
+
 
 
 

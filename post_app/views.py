@@ -388,11 +388,10 @@ class CutPost(GuardianView):
 
 class CopyPost(GuardianView):
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
-        user = User.objects.get(id=self.user_id)
-        copy = post.duplicate()
-
-        clipboard, _    = Clipboard.objects.get_or_create(
+        post         = models.Post.objects.get(id=post_id)
+        user         = User.objects.get(id=self.user_id)
+        copy         = post.duplicate()
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
         clipboard.posts.add(copy)
 
@@ -655,6 +654,23 @@ class SetupAssignmentFilter(GuardianView):
         return redirect('post_app:list-assignments', user_id=user.id)
 
 
+class PullContent(GuardianView):
+    """
+    """
+
+    def get(self, request, post_id, fork_id=None):
+        post       = models.Post.objects.get(id=post_id)
+        user       = User.objects.get(id=self.user_id)
+        fork       = Card.objects.get(id=fork_id)
+
+        fork.label = post.label
+        fork.data  = post.data
+        fork.save()
+        form       = CardForm(instance=fork)
+
+        return render(request, 'post_app/create-fork.html', 
+        {'form':form, 'post': post, 'ancestor': fork.ancestor, 'card':fork})
+
 class CreateCardFork(GuardianView):
     """
     """
@@ -694,7 +710,7 @@ class CreateCardFork(GuardianView):
         ancestor=post.ancestor, post=post, card=fork, user=user)
 
         # The timeline users and the board users get the event.
-        event.users.add(post.ancestor.users.all())
+        event.users.add(*post.ancestor.users.all())
         event.users.add(*fork.ancestor.ancestor.members.all())
 
         # In this case, it would play sound twice if you're
@@ -751,6 +767,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 

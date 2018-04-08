@@ -1086,12 +1086,3 @@ class CardEvents(GuardianView):
         {'card': card, 'elems': events})
 
 
-
-
-
-
-
-
-
-
-
