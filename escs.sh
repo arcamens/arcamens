@@ -130,6 +130,7 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
+./stress-db teta 1
 
 # create, arcamens, alpha, branch.
 git checkout -b alpha
@@ -702,6 +703,7 @@ source opus/bin/activate
 cd ~/projects/django-wsbells-code
 python setup.py install
 rm -fr build
+
 
 
 

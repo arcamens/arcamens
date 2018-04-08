@@ -14,13 +14,14 @@ from board_app.models import Board
 from list_app.models import List
 import sys
 
-COUNT = int(sys.argv[1])
-N_ORGS = COUNT
+COUNT    = int(sys.argv[2])
+TOKEN    = sys.argv[1]
+N_ORGS   = COUNT
 N_BOARDS = COUNT
-N_CARDS = COUNT
-N_LISTS = COUNT
-N_USERS = COUNT
-N_ORGS = COUNT
+N_CARDS  = COUNT
+N_LISTS  = COUNT
+N_USERS  = COUNT
+N_ORGS   = COUNT
 
 def create_cards(organization, user, list):
     label = 'Card %s %s %s' % (
@@ -41,7 +42,7 @@ def create_boards(organization, user):
     for ind in range(0, N_BOARDS):
         board = Board.objects.create(organization=organization, 
             owner=user, name='%s Board:%s' % (
-                organization.name, ind.name))
+                organization.name, ind))
         board.members.add(user)
         create_lists(organization, user, board)
 
@@ -49,13 +50,14 @@ def create_users(organization):
     for ind in range(0, N_USERS):
         user = User.objects.create(
             name='%s User:%s' % (organization.name, ind), 
-                email='iOrg:%sUser:%s@arca.com' % (organization.name, ind), 
+                email='Org:%sUser:%s@arca.com' % (organization.name, ind), 
                     password='111', default=organization)
         create_boards(organization, user)
 
 def create_organizations():
     for ind in range(0, N_ORGS):
-        organization = Organization.objects.create(name='Org:%s' % ind)
+        organization = Organization.objects.create(
+            name='%s:%s' % (TOKEN, ind))
         create_users(organization)
 
     
