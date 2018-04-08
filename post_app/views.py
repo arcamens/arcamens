@@ -317,7 +317,7 @@ class ManagePostWorkers(GuardianView):
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'form':form, 'total': total, 'count': 0,})
+        'me': me, 'form':form, 'total': total, 'count': count,})
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
@@ -771,6 +771,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
