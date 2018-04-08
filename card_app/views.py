@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db.models.functions import Concat
-from django.db.models import Q, F, Exists, OuterRef, Count
+from django.db.models import Q, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from django.views.generic import View
 from card_app.models import GlobalTaskFilter, GlobalCardFilter
 from core_app.models import Clipboard, Event
 from django.core.mail import send_mail
@@ -15,7 +14,6 @@ from core_app.models import User
 from list_app.models import List, EPasteCard
 from jsim.jscroll import JScroll
 from functools import reduce
-from itertools import chain
 import board_app.models
 import list_app.models
 from . import models
@@ -24,8 +22,6 @@ import operator
 import core_app.models
 from django.conf import settings
 from re import split
-import operator
-import json
 
 # Create your views here.
 class Card(GuardianView):
@@ -503,7 +499,6 @@ class UpdateCard(GuardianView):
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
         user   = core_app.models.User.objects.get(id=self.user_id)
-        list   = list_app.models.List.objects.get(id=list_id)
 
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
         organization__id=user.default.id, list__id=list_id)
@@ -526,8 +521,8 @@ class SetupCardFilter(GuardianView):
         if not form.is_valid():
             return render(request, 'card_app/setup-card-filter.html',
                    {'form': form, 'list': list}, status=400)
-        form.save()
 
+        form.save()
         return redirect('card_app:list-cards', list_id=list_id)
 
 
@@ -1087,6 +1082,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
