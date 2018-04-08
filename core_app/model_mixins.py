@@ -40,7 +40,7 @@ class UserMixin(UserWS):
         sqlike = SqLike(SqNode(None, default),
         SqNode(('m', 'email'), email),
         SqNode(('n', 'name'), name), 
-        SqNode(('t', 'tag'), tag), 
+        SqNode(('t', 'tag'), tag, chain=True), 
         SqNode(('d', 'description'), desc),)
         return sqlike
 
@@ -92,6 +92,7 @@ class InviteMixin:
     def __str__(self):
         return '%s %s %s' % (self.user.name, 
             self.token, self.organization.name)
+
 
 
 

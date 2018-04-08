@@ -47,7 +47,6 @@ class CardMixin(object):
 
         # boards = Board.get_user_boards(user)
         # cards  = Card.objects.none()
-# 
         # for indi in boards:
             # for indj in indi.lists.all():
                 # cards = cards | indj.cards.all()
@@ -460,6 +459,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

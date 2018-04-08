@@ -213,7 +213,8 @@ class SelectForkList(GuardianView):
         lists = lists.annotate(text=Concat('ancestor__name', 'name'))
 
         # Not sure if its the fastest way to do it.
-        chks = split(' *\++ *', form.cleaned_data['pattern'])
+        chks  = split(' *\++ *', form.cleaned_data['pattern'])
+
         lists = lists.filter(reduce(operator.and_, 
         (Q(text__contains=ind) for ind in chks))) 
 
@@ -244,7 +245,8 @@ class SelectForkTimeline(GuardianView):
         timelines = timelines.annotate(text=Concat('name', 'description'))
 
         # Not sure if its the fastest way to do it.
-        chks = split(' *\++ *', form.cleaned_data['pattern'])
+        chks     = split(' *\++ *', form.cleaned_data['pattern'])
+
         timelines = timelines.filter(reduce(operator.and_, 
         (Q(text__contains=ind) for ind in chks))) 
 
@@ -642,14 +644,14 @@ class ManageCardWorkers(GuardianView):
         'count': total, 'form':forms.UserSearchForm()})
 
     def post(self, request, card_id):
-        sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        sqlike   = User.from_sqlike()
+        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        me = User.objects.get(id=self.user_id)
-        card = models.Card.objects.get(id=card_id)
+        me       = User.objects.get(id=self.user_id)
+        card     = models.Card.objects.get(id=card_id)
         included = card.workers.all()
         excluded = me.default.users.exclude(tasks=card)
-        total = included.count() + excluded.count()
+        total    = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-workers.html', 

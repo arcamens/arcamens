@@ -5,8 +5,7 @@ from . import models
 class PostForm(forms.ModelForm):
     class Meta:
         model  = models.Post
-        exclude = ('user', 'ancestor', 
-            'html', 'parent')
+        exclude = ('user', 'ancestor', 'html', 'parent')
 
 class PostFileWrapperForm(forms.ModelForm):
     class Meta:
@@ -30,10 +29,11 @@ class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
 
 class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
-    help_text='Example: victor + #arcamens + #suggestion ...')
+    help_text='Example: oliveira + mens.com')
 
 class TagSearchForm(forms.Form):
-    name = forms.CharField(required=False)
+    name = forms.CharField(required=False, 
+    help_text='Example: urgent')
 
 class PostAttentionForm(forms.Form):
     message = forms.CharField(
@@ -44,6 +44,7 @@ class AlertPostWorkersForm(forms.Form):
     message = forms.CharField(
     required=False, widget=forms.Textarea,
     help_text='Please, take a look at this asap!')
+
 
 
 

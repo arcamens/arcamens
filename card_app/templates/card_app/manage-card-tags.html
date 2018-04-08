@@ -43,7 +43,7 @@ data-show="{% url 'card_app:bind-card-tag' card.id ind.id %}" href="#">
 
 <form id="tagSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_field form.name  size='md'  %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
@@ -74,6 +74,7 @@ $('#tagSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

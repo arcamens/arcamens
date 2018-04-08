@@ -39,7 +39,7 @@ data-show="{% url 'post_app:bind-post-tag' post.id ind.id %}" href="#">
 
 <form id="tagSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_field form.name  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 </div>
@@ -69,4 +69,5 @@ $('#tagSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 

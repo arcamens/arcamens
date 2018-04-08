@@ -60,7 +60,7 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 
 <form id="bind-card-search-form" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
@@ -92,6 +92,7 @@ $('#bind-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
