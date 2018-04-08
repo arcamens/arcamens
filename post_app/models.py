@@ -45,15 +45,12 @@ class PostMixin(object):
     @classmethod
     def get_allowed_posts(cls, user):
         """
-        Return all posts that a given user has access 
-        regardless if it is the owner.
+        Return all posts that the user is a worker
+        or a member of the timeline
         """
 
-        timelines = Timeline.get_user_timelines(user)
-        posts  = Post.objects.none()
-
-        for ind in timelines:
-            posts = posts | ind.posts.all()
+        posts = Post.objects.filter(
+            Q(ancestor__users=user) | Q(workers=user))
         return posts
 
     @classmethod
@@ -349,6 +346,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
