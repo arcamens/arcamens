@@ -26,7 +26,7 @@ at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 {% endif %}
 
 {% if post.parent %}
-from card <a class="e-get" href="#"
+from card <a class="e-get" href="{{post.parent.get_link_url}}"
 data-show="{% url 'card_app:view-data' post.parent.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-file"></span> {{post.parent.label|truncatechars:60}} </a>
@@ -95,7 +95,7 @@ No tags.
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in post.card_forks.all %}
-<a href="#" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
 <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}} </a> 
 <br>
 {% empty %}
@@ -122,14 +122,8 @@ href="#">
 </a>
 
 {% if forloop.last %} 
-<br>
-<a 
-class="e-get text-warning"
-data-shell="#modalContent" 
-data-callback="$('#modal').modal('toggle');" 
-data-show="{% url 'post_app:alert-post-workers' post.id %}"
-
-href="#">
+<br> <a class="e-get text-warning" data-shell="#modalContent" data-callback="$('#modal').modal('toggle');" 
+data-show="{% url 'post_app:alert-post-workers' post.id %}" href="#">
 <span class="glyphicon glyphicon-alert"></span>
 
 Alert workers?</a>
@@ -152,10 +146,8 @@ No workers.
 <div class="panel-footer">
 {% block footer %}
 
-<a data-show="{% url 'post_app:update-post' post.id %}"
-data-shell="#bigModalContent"  href="#"
-data-callback="$('#bigModal').modal('show');" 
-class="text-warning e-get">
+<a data-show="{% url 'post_app:update-post' post.id %}" data-shell="#bigModalContent"  href="#"
+data-callback="$('#bigModal').modal('show');"  class="text-warning e-get"> 
 <span class="glyphicon glyphicon-edit"></span> Update</a>
 
 <a href="#"
@@ -200,37 +192,6 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
