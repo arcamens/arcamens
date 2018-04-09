@@ -93,6 +93,15 @@ class InviteMixin:
         return '%s %s %s' % (self.user.name, 
             self.token, self.organization.name)
 
+class TagMixin:
+    @classmethod
+    def from_sqlike(cls):
+        default  = lambda ind: Q(name__icontains=ind) | Q(
+        description__icontains=ind)
+
+        sqlike = SqLike(SqNode(None, default))
+        return sqlike
+
 
 
 

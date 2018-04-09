@@ -109,7 +109,7 @@ class Event(EventMixin, models.Model):
     def __str__(self):
         return 'Event'
 
-class Tag(models.Model):
+class Tag(TagMixin, models.Model):
     name = models.CharField(null=True,
     blank=False, max_length=256)
 
@@ -207,6 +207,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 

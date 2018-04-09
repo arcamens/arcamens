@@ -20,8 +20,8 @@ class EventFilterForm(forms.Form):
     val1 = datetime.date.today()+datetime.timedelta(days=1)
     end  = forms.DateTimeField(initial = val1)
 
-class TagSearchForm(forms.Form):
-    name = forms.CharField(required=False, help_text='Example: developer')
+class TagSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False, help_text='Example: developer')
 
 class OrganizationInviteForm(forms.Form):
     email = forms.EmailField(help_text="Insert user E-mail.")
@@ -52,5 +52,6 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 

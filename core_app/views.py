@@ -273,7 +273,8 @@ class ManageUserTags(GuardianView):
         'me': me,'form':forms.TagSearchForm()})
 
     def post(self, request, user_id):
-        form = forms.TagSearchForm(request.POST)
+        sqlike = Tag.from_sqlike()
+        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         user = User.objects.get(id=user_id)
@@ -288,11 +289,8 @@ class ManageUserTags(GuardianView):
                     'organization': me.default, 'user': user,
                         'form':form}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['name'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
 
         return render(request, 'core_app/manage-user-tags.html', 
         {'included': included, 'excluded': excluded, 'user': user,
@@ -750,6 +748,7 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         return redirect('core_app:list-users', organization_id=me.default.id)
+
 
 
 
