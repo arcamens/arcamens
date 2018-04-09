@@ -157,7 +157,7 @@ class Card(CardMixin, models.Model):
 
 class GlobalCardFilter(models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='', help_text='client socket  + #apollo + engine + #bug ...')
+    default='', help_text='tag:issue + owner:iury')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -173,8 +173,7 @@ class GlobalCardFilter(models.Model):
 
 class GlobalTaskFilter(models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
-    default='', help_text='Example: ignition mechanism  \
-    + #issue + #car ...')
+    default='', help_text='Example: bug + rocket + engine')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -357,7 +356,7 @@ class EDeleteCard(Event):
 class CardFilter(models.Model):
     pattern  = models.CharField(
     max_length=255,  blank=True, default='', 
-    help_text='Example: victor + \#arcamens + #suggestion ...')
+    help_text='Example: owner:oliveira  + tag:bug')
 
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
@@ -459,6 +458,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 
