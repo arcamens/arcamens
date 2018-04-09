@@ -321,10 +321,10 @@ class ListTags(GuardianView):
         user      = User.objects.get(id=self.user_id)
         tags = user.default.tags.all()
         form = forms.TagSearchForm()
-
+        total = tags.count()
         return render(request, 'core_app/list-tags.html', 
-        {'tags': tags, 'form': form, 'user': user, 
-        'organization': user.default})
+        {'tags': tags, 'form': form, 'user': user, 'total': total,
+        'count': total, 'organization': user.default})
 
     def post(self, request):
         user = User.objects.get(id=self.user_id)
@@ -332,16 +332,19 @@ class ListTags(GuardianView):
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
         tags = user.default.tags.all()
 
+        total = tags.count()
+    
         if not form.is_valid():
             return render(request, 'core_app/list-tags.html', 
-                {'tags': tags, 'form': form, 'user': user, 
-                    'organization': user.default})
+                {'tags': tags, 'form': form, 'user': user, 'total': total,
+                    'count': 0, 'organization': user.default})
 
-        tags = sqlike.run(tags)
+        tags  = sqlike.run(tags)
+        count = tags.count()
 
         return render(request, 'core_app/list-tags.html', 
         {'tags': tags, 'form': form, 'user': user, 
-        'organization': user.default})
+        'organization': user.default, 'total': total, 'count': count})
 
 class DeleteTag(GuardianView):
     def get(self, request, tag_id):

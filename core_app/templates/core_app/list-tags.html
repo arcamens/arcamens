@@ -10,7 +10,7 @@
 <h4>  
 <a class="e-get" data-show="{% url 'core_app:create-tag' %}" data-shell="#modalContent"
 href="#"> <span class="glyphicon glyphicon-plus"></span></a> 
-{{organization.name}}'s Tags <span class="badge">{{tags.count}}</span></h4>
+{{organization.name}}'s Tags <span class="badge">{{count}}/{{total}}</span></h4>
 </div>
 
 <div class="modal-body">
@@ -58,6 +58,7 @@ $('#tagSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
