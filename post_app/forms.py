@@ -31,9 +31,9 @@ class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: oliveira + mens.com')
 
-class TagSearchForm(forms.Form):
-    name = forms.CharField(required=False, 
-    help_text='Example: urgent')
+class TagSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False, 
+    help_text='Example: feature')
 
 class PostAttentionForm(forms.Form):
     message = forms.CharField(
@@ -48,6 +48,7 @@ class AlertPostWorkersForm(forms.Form):
 class ListSearchform(forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
+
 
 
 

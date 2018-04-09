@@ -442,7 +442,8 @@ class ManagePostTags(GuardianView):
         'organization': me.default,'form':forms.TagSearchForm()})
 
     def post(self, request, post_id):
-        form = forms.TagSearchForm(request.POST)
+        sqlike = Tag.from_sqlike()
+        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
@@ -455,11 +456,8 @@ class ManagePostTags(GuardianView):
                     'organization': me.default, 'post': post,
                         'form':form}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['name'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
@@ -771,6 +769,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
