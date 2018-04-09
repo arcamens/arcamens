@@ -12,12 +12,10 @@
 <div class="pre-scrollable">
 {% for ind in elems %}
 <p> <a class="e-get"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' ind.id card.id %}"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" href="#" > 
-<span class="glyphicon glyphicon-list-alt"></span>
-
-{{ind.ancestor.name}}
-<span class="glyphicon glyphicon-arrow-right"></span>
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" href="{{ind.get_link_url}}" > 
+<span class="glyphicon glyphicon-list-alt"></span> {{ind.ancestor.name}} <span class="glyphicon glyphicon-arrow-right"></span>
 {{ind.name}} </a>  </p>
+
 {% endfor %}
 
 </div>
@@ -33,7 +31,7 @@ data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" href="
 </form>
 
 <a class="e-get text-warning"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' card.ancestor.id card.id %}"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href="#" > 
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href="{{card.ancestor.get_link_url}}" > 
 <span class="glyphicon glyphicon-random"></span>  On the same list?</a>
 </div>
 
@@ -54,6 +52,7 @@ $('#selectForkListForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

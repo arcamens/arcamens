@@ -613,15 +613,12 @@ class RelateCard(GuardianView):
 
 class ManageCardRelations(GuardianView):
     def get(self, request, card_id):
-        me = User.objects.get(id=self.user_id)
-        card = models.Card.objects.get(id=card_id)
-
+        me       = User.objects.get(id=self.user_id)
+        card     = models.Card.objects.get(id=card_id)
         included = card.relations.filter(done=False)
-
-        cards = models.Card.get_allowed_cards(me)
-        total = cards.count()
-        cards = cards.filter(done=False)
-
+        cards    = models.Card.get_allowed_cards(me)
+        total    = cards.count()
+        cards    = cards.filter(done=False)
         excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
         return render(request, 'card_app/manage-card-relations.html', 
@@ -632,11 +629,11 @@ class ManageCardRelations(GuardianView):
     def post(self, request, card_id):
         sqlike = models.Card.from_sqlike()
 
-        form     = forms.CardSearchForm(request.POST, sqlike=sqlike)
-        me       = User.objects.get(id=self.user_id)
-        card     = models.Card.objects.get(id=card_id)
-        cards    = models.Card.get_allowed_cards(me)
-        total    = cards.count()
+        form   = forms.CardSearchForm(request.POST, sqlike=sqlike)
+        me     = User.objects.get(id=self.user_id)
+        card   = models.Card.objects.get(id=card_id)
+        cards  = models.Card.get_allowed_cards(me)
+        total  = cards.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-relations.html', 
@@ -651,8 +648,7 @@ class ManageCardRelations(GuardianView):
 
         excluded = excluded.filter(Q(done=form.cleaned_data['done']))
         excluded = sqlike.run(excluded)
-
-        count = excluded.count() + included.count()
+        count    = excluded.count() + included.count()
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card, 
