@@ -324,7 +324,8 @@ class ListTags(GuardianView):
 
     def post(self, request):
         user = User.objects.get(id=self.user_id)
-        form = forms.TagSearchForm(request.POST)
+        sqlike = Tag.from_sqlike()
+        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
         tags = user.default.tags.all()
 
         if not form.is_valid():
@@ -332,8 +333,7 @@ class ListTags(GuardianView):
                 {'tags': tags, 'form': form, 'user': user, 
                     'organization': user.default})
 
-        tags = tags.filter(
-        name__contains=form.cleaned_data['name'])
+        tags = sqlike.run(tags)
 
         return render(request, 'core_app/list-tags.html', 
         {'tags': tags, 'form': form, 'user': user, 
