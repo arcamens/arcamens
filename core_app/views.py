@@ -267,10 +267,11 @@ class ManageUserTags(GuardianView):
         included = user.tags.filter(organization=me.default)
         excluded = me.default.tags.all()
         excluded = excluded.exclude(users=user)
+        total    = included.count() + excluded.count()
 
         return render(request, 'core_app/manage-user-tags.html', 
-        {'included': included, 'excluded': excluded, 'user': user,
-        'me': me,'form':forms.TagSearchForm()})
+        {'included': included, 'excluded': excluded, 'user': user, 'me': me,
+        'form':forms.TagSearchForm(), 'total': total, 'count': total})
 
     def post(self, request, user_id):
         sqlike = Tag.from_sqlike()
@@ -282,19 +283,22 @@ class ManageUserTags(GuardianView):
         included = user.tags.filter(organization=me.default)
         excluded = me.default.tags.all()
         excluded = excluded.exclude(users=user)
+        total    = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'core_app/manage-user-tags.html', 
-                {'included': included, 'excluded': excluded,
-                    'organization': me.default, 'user': user,
-                        'form':form}, status=400)
+                {'included': included, 'excluded': excluded, 'total': total,
+                    'organization': me.default, 'user': user, 'count': 0,
+                        'form':form, 'me': me}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
+        count = included.count() + excluded.count()
 
         return render(request, 'core_app/manage-user-tags.html', 
         {'included': included, 'excluded': excluded, 'user': user,
-        'me': me, 'organization': me.default,'form':form})
+        'me': me, 'organization': me.default, 'total': total, 
+        'count': count, 'form':form})
 
 class ListEvents(GuardianView):
     """
@@ -748,6 +752,7 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         return redirect('core_app:list-users', organization_id=me.default.id)
+
 
 
 
