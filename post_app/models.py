@@ -197,8 +197,7 @@ class GlobalPostFilter(models.Model):
 
 class AssignmentFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: victor + \
-    #arcamens + #suggestion ...')
+    blank=True, help_text='Example: tag:arcamens + tag:urgent')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
