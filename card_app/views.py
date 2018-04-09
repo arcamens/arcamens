@@ -760,9 +760,8 @@ class ManageCardTags(GuardianView):
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-tags.html', 
-                {'included': included, 'excluded': excluded,
-                    'organization': me.default, 'card': card, 'total': total,
-                        'count': total, 'form':form}, status=400)
+                {'organization': me.default, 'card': card, 'total': total,
+                        'count': 0, 'form':form}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
@@ -1114,6 +1113,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

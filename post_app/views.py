@@ -436,10 +436,12 @@ class ManagePostTags(GuardianView):
 
         included = post.tags.all()
         excluded = me.default.tags.exclude(posts=post)
+        total = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'organization': me.default,'form':forms.TagSearchForm()})
+        'organization': me.default,'form':forms.TagSearchForm(), 
+        'total': total, 'count': total})
 
     def post(self, request, post_id):
         sqlike = Tag.from_sqlike()
@@ -449,19 +451,21 @@ class ManagePostTags(GuardianView):
         post = models.Post.objects.get(id=post_id)
         included = post.tags.all()
         excluded = me.default.tags.exclude(posts=post)
+        total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-tags.html', 
-                {'included': included, 'excluded': excluded,
-                    'organization': me.default, 'post': post,
-                        'form':form}, status=400)
+                {'total': total, 'organization': me.default, 
+                    'post': post, 'form':form, 'count': 0}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
+        count = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-tags.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'organization': me.default,'form':form})
+        {'included': included, 'excluded': excluded, 'post': post, 
+        'total': total, 'count': count, 'me': me, 'form':form, 
+        'organization': me.default, })
 
 class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
@@ -769,6 +773,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 
