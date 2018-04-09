@@ -28,7 +28,7 @@ data-show="{% url 'post_app:unbind-post-tag' post.id ind.id %}" href="#">
 <a class="e-get"
 data-callback="$('#bind-post-tag-{{ind.id}}').remove();"
 data-show="{% url 'post_app:bind-post-tag' post.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> </a>  <b> {{ind.name}}: </b>
+<span class="glyphicon glyphicon-plus"></span> </a>  <b> {{ind.name}} </b>
  {{ind.description}} 
 </p>
 {% endfor %}
