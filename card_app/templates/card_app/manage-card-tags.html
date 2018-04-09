@@ -22,7 +22,7 @@ Available {{card.label|truncatechars:20}} card's tags
 data-callback="$('#unbind-card-tag-{{ind.id}}').remove();"
 data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>  
-<b> {{ind.name}}: </b>
+<b> {{ind.name}} </b>
 {{ind.description}} 
 </p>
 {% endfor %}
@@ -74,6 +74,7 @@ $('#tagSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
