@@ -157,8 +157,7 @@ class Post(PostMixin, models.Model):
 
 class PostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: victor + \
-    #arcamens + #suggestion ...')
+    blank=True, help_text='Example: enginee x-11 + wheels + ,,,')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -179,8 +178,7 @@ class PostFilter(models.Model):
 
 class GlobalPostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: victor + \
-    #arcamens + #suggestion ...')
+    blank=True, help_text='Example: worker:oliveira + worker:victor + tag:feature')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -346,6 +344,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
