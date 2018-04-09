@@ -4,7 +4,7 @@ from django.db.models import Q, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from card_app.models import GlobalTaskFilter, GlobalCardFilter
-from core_app.models import Clipboard, Event
+from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView
 from post_app.models import Post
@@ -749,7 +749,8 @@ class ManageCardTags(GuardianView):
         'total': total, 'count': total})
 
     def post(self, request, card_id):
-        form = forms.TagSearchForm(request.POST)
+        sqlike = Tag.from_sqlike()
+        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
         me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
@@ -763,11 +764,8 @@ class ManageCardTags(GuardianView):
                     'organization': me.default, 'card': card, 'total': total,
                         'count': total, 'form':form}, status=400)
 
-        included = included.filter(
-        name__contains=form.cleaned_data['name'])
-
-        excluded = excluded.filter(
-        name__contains=form.cleaned_data['name'])
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
 
         count = included.count() + excluded.count()
 
@@ -1116,6 +1114,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
