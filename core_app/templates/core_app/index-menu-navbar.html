@@ -1,11 +1,9 @@
 {% load i18n %}
 
-<button type="button" class="navbar-toggle btn btn-info e-get new-events" 
+<button type="button" class="navbar-toggle btn btn-info e-get eventsButton" 
 data-show="{% url 'core_app:list-events' %}" 
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#modalContent"
-href="#"> <span class="eventsButton">
-<span class="glyphicon glyphicon-bell"></span>  </span></button>
+data-callback="$('#modal').modal('toggle');$('.eventsButton').removeClass('new-events')" 
+data-shell="#modalContent" href="#"> <span class="glyphicon glyphicon-bell"></span>  </span></button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
 data-show="{% url 'card_app:list-all-tasks' %}" 
@@ -91,6 +89,7 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
 
 
 

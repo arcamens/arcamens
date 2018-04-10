@@ -66,7 +66,7 @@ break-word;
 
 }
 
-a.new-events  {
+.new-events  {
   color: red;
   font-weight: bold;
 }
@@ -88,6 +88,7 @@ background-color:#A0BCBC;
 .modal-header  {
     word-wrap: break-word;
 }
+
 
 
 

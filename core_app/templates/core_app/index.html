@@ -54,11 +54,11 @@ $(document).on('ws-bell', function alertSound(e) {
 $(document).on('ws-sound', function alertSound(e) {
     var audio = new Audio('/static/event-alert.mp3');
     audio.play();
-    $('a.eventsButton').addClass('new-events');
+    $('.eventsButton').addClass('new-events');
 });
 
 $(document).on('ws-alert-event', function(e) {
-    $('a.eventsButton').addClass('new-events');
+    $('.eventsButton').addClass('new-events');
 });
 
 </script>
@@ -100,6 +100,7 @@ $(document).on('ws-alert-event', function(e) {
 </body>
 
 </html>
+
 
 
 
