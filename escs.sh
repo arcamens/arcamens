@@ -730,4 +730,6 @@ pip install py-gfm
 # (Note that unfortunately disabling this flag seems to have no impact on an embedded YouTube video. I have openened a new question for this.)
 
 # In my android it is autoplay policy.
+# chrome://flags/#autoplay-policy t
+
 
