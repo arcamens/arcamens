@@ -131,7 +131,7 @@ cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
 ##############################################################################
-# run stress-db.
+# stress-db.
 ./stress-db teta 1
 ##############################################################################
 
@@ -720,5 +720,14 @@ rm -fr build
 
 pip install py-gfm
 
+##############################################################################
+# enable autoplay policy user gesture.
 
+# In Chrome this seems to be working now, anno 2017: HTML5 videos play automatically in Chrome (59) on Android (7.1.1).
+# 
+# Note that the videos start muted. You can enable autoplay with sound on Android Chrome by navigating to chrome://flags and set gesture requirement for media playback to disabled (per this answer).
+# 
+# (Note that unfortunately disabling this flag seems to have no impact on an embedded YouTube video. I have openened a new question for this.)
+
+# In my android it is autoplay policy.
 
