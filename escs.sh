@@ -130,7 +130,11 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
+##############################################################################
+# run stress-db.
 ./stress-db teta 1
+##############################################################################
+
 
 # create, arcamens, alpha, branch.
 git checkout -b alpha
@@ -412,6 +416,11 @@ git checkout staging
 git checkout master
 git tag -a 1.1.2 -m 'Improvement of colors and design.'
 git push origin : 1.1.2
+git checkout staging
+
+git checkout master
+git tag -a 1.2.0 
+git push origin : 1.2.0
 git checkout staging
 
 ##############################################################################
@@ -710,5 +719,6 @@ rm -fr build
 # install py-gfm github flavoured markdown.
 
 pip install py-gfm
+
 
 
