@@ -16,10 +16,6 @@ from . import models
 import json
 # Create your views here.
 
-class PostPaginator(GuardianView):
-    def get(self, request, timeline_id):
-        pass
-
 class ListPosts(GuardianView):
     """
     """
@@ -44,30 +40,6 @@ class ListPosts(GuardianView):
 
         return render(request, 'timeline_app/list-posts.html', 
         {'timeline':timeline, 'count': count, 'total': total, 'elems':elems.as_window(), 'filter': filter})
-
-class ListAllPosts(ListPosts):
-    """
-    """
-
-    def get(self, request, user_id):
-        user      = User.objects.get(id=self.user_id)
-        filter, _ = GlobalPostFilter.objects.get_or_create(
-        user=user, organization=user.default)
-
-        posts = Post.get_allowed_posts(user)
-        total = posts.count()
-
-        posts = Post.collect_posts(posts, 
-        filter.pattern, filter.done) if filter.status \
-        else posts.filter(done=False)
-
-        posts = posts.order_by('-created')
-        count = posts.count()
-        elems = JScroll(user.id, 'timeline_app/list-all-posts-scroll.html', posts)
-
-        return render(request, 'timeline_app/list-all-posts.html', 
-        {'user':user, 'posts':posts, 'total': total, 'count': count, 'filter': filter, 
-        'organization': user.default, 'elems':elems.as_window()})
 
 class CreateTimeline(GuardianView):
     """
@@ -409,6 +381,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

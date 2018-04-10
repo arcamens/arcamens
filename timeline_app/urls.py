@@ -4,11 +4,7 @@ from . import views
 
 urlpatterns = [
     # url(r'^timeline/(?P<timeline_id>.+)/', views.Timeline.as_view(), name='timeline'),
-    url(r'^post-paginator/(?P<timeline_id>.+)/', views.PostPaginator.as_view(), name='post-paginator'),
-
     url(r'^list-posts/(?P<timeline_id>.+)/', views.ListPosts.as_view(), name='list-posts'),
-    # url(r'^confirm-timeline-deletion/(?P<timeline_id>.+)/', views.ConfirmTimelineDeletion.as_view(), name='confirm-timeline-deletion'),
-    url(r'^list-all-posts/(?P<user_id>.+)', views.ListAllPosts.as_view(), name='list-all-posts'),
     url(r'^create-timeline/(?P<organization_id>.+)', views.CreateTimeline.as_view(), name='create-timeline'),
     url(r'^update-timeline/(?P<timeline_id>.+)/', views.UpdateTimeline.as_view(), name='update-timeline'),
     url(r'^delete-timeline/(?P<timeline_id>.+)/', views.DeleteTimeline.as_view(), name='delete-timeline'),
@@ -23,3 +19,4 @@ urlpatterns = [
     url(r'^timeline-link/(?P<timeline_id>.+)/', views.TimelineLink.as_view(), name='timeline-link'),
 
 ]
+

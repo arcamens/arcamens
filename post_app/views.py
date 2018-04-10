@@ -343,28 +343,57 @@ class SetupPostFilter(GuardianView):
         form.save()
         return redirect('timeline_app:list-posts', timeline_id=timeline.id)
 
-class SetupGlobalPostFilter(GuardianView):
+class Find(GuardianView):
     def get(self, request):
-        user   = User.objects.get(id=self.user_id)
-        filter = GlobalPostFilter.objects.get(organization=user.default,
-        user__id=self.user_id)
+        me    = User.objects.get(id=self.user_id)
 
-        return render(request, 'post_app/setup-global-post-filter.html', 
-        {'form': forms.GlobalPostFilterForm(instance=filter)})
+        filter, _ = GlobalPostFilter.objects.get_or_create(
+        user=me, organization=me.default)
+        form  = forms.GlobalPostFilterForm(instance=filter)
 
-    def post(self, request):
-        user   = User.objects.get(id=self.user_id)
-        record = GlobalPostFilter.objects.get(
-        user__id=self.user_id, organization=user.default)
+        posts = models.Post.get_allowed_posts(me)
+        total = posts.count()
 
         sqlike = models.Post.from_sqlike()
-        form = forms.GlobalPostFilterForm(request.POST, sqlike=sqlike, instance=record)
+        sqlike.feed(filter.pattern)
+
+        posts = posts.filter(Q(done=filter.done))
+        posts = sqlike.run(posts)
+
+        posts = models.Post.collect_posts(posts, filter.pattern, filter.done)
+        count = posts.count()
+
+        posts = posts.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'post_app/find-scroll.html', posts)
+
+        return render(request, 'post_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+    def post(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalPostFilter.objects.get_or_create(
+        user=me, organization=me.default)
+
+        sqlike = models.Post.from_sqlike()
+        form  = forms.GlobalPostFilterForm(request.POST, sqlike=sqlike, instance=filter)
+
+        posts = models.Post.get_allowed_posts(me)
+        total = posts.count()
 
         if not form.is_valid():
-            return render(request, 'post_app/setup-global-post-filter.html',
-                   {'form': form}, status=400)
+            return render(request, 'post_app/find.html', 
+                {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
-        return redirect('timeline_app:list-all-posts', user_id=user.id)
+
+        posts  = posts.filter(Q(done=filter.done))
+        posts  = sqlike.run(posts)
+        count =  posts.count()
+
+        posts = posts.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'post_app/find-scroll.html', posts)
+
+        return render(request, 'post_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
 class CutPost(GuardianView):
     def get(self, request, post_id):
@@ -773,6 +802,7 @@ class PostEvents(GuardianView):
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
+
 
 
 

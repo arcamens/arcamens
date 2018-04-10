@@ -17,7 +17,14 @@ data-show="{% url 'card_app:find' %}"
 data-callback="$('#bigModal').modal('toggle');" 
 data-shell="#bigModalContent"
 href="#"> 
-<span class="glyphicon glyphicon-search">  </span></button>
+<span class="glyphicon glyphicon-search">  </span> C</button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get" 
+data-show="{% url 'post_app:find' %}" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-shell="#bigModalContent"
+href="#"> 
+<span class="glyphicon glyphicon-search">  </span> P</button>
 
 <button type="button" data-show="{% url 'timeline_app:list-timelines' %}" class="navbar-toggle btn btn-info e-get" 
 href="#"
@@ -80,6 +87,15 @@ data-shell="#bigModalContent">
 <li>
 <a href="#" 
 class="e-get" data-shell="#bigModalContent" 
+data-show="{% url 'post_app:find' %}" 
+data-callback="$('#bigModal').modal('show');">
+<span class="glyphicon glyphicon-search"></span> Find/Posts
+</a>
+</li>
+
+<li>
+<a href="#" 
+class="e-get" data-shell="#bigModalContent" 
 data-show="{% url 'card_app:find' %}" 
 data-callback="$('#bigModal').modal('show');">
 <span class="glyphicon glyphicon-search"></span> Find/Cards
@@ -89,6 +105,8 @@ data-callback="$('#bigModal').modal('show');">
 </ul>
 
 {% include "core_app/navbar-context-dropdown.html" %}
+
+
 
 
 

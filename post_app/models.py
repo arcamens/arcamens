@@ -178,7 +178,7 @@ class PostFilter(models.Model):
 
 class GlobalPostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: worker:oliveira + worker:victor + tag:feature')
+    blank=True, help_text='Example: worker:oliveira + timeline:backlog + tag:git')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -343,6 +343,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

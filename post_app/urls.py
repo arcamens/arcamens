@@ -26,8 +26,8 @@ urlpatterns = [
     url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
     url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
     url(r'^setup-post-filter/(?P<timeline_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
-    url(r'^setup-global-posts-filter/', views.SetupGlobalPostFilter.as_view(), name='setup-global-post-filter'),
     url(r'^setup-assignment-filter/', views.SetupAssignmentFilter.as_view(), name='setup-assignment-filter'),
+    url(r'^find/', views.Find.as_view(), name='find'),
 
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
     url(r'^copy-post/(?P<post_id>.+)/', views.CopyPost.as_view(), name='copy-post'),
@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^pull-card-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
 ]
+
 
 
 
