@@ -51,8 +51,8 @@ class CardMixin(object):
             # for indj in indi.lists.all():
                 # cards = cards | indj.cards.all()
 
-        cards = Card.objects.filter(
-            Q(ancestor__ancestor__members=user) | Q(workers=user))
+        cards = Card.objects.filter(Q(ancestor__ancestor__organization=user.default) &
+            (Q(ancestor__ancestor__members=user) | Q(workers=user)))
         return cards
 
     @classmethod
@@ -458,6 +458,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 
