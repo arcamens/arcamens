@@ -728,8 +728,14 @@ pip install py-gfm
 # Note that the videos start muted. You can enable autoplay with sound on Android Chrome by navigating to chrome://flags and set gesture requirement for media playback to disabled (per this answer).
 # 
 # (Note that unfortunately disabling this flag seems to have no impact on an embedded YouTube video. I have openened a new question for this.)
+##############################################################################
+# bitbucket references.
 
 # In my android it is autoplay policy.
 # chrome://flags/#autoplay-policy t
 
+# I decided NOT to use the following libraries, but to write from scratch:
+# https://bitbucket.org/atlassian/python-bitbucket
+# https://django-oauth-toolkit.readthedocs.io/en/latest/ (for servers?)
+# https://github.com/requests/requests-oauthlib (https://github.com/requests/requests-oauthlib/blob/a116d06dbb69ea5eb4fbe46530af27b12ad6d82c/docs/oauth2_workflow.rst#refreshing-tokens)
 

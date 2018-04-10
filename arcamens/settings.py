@@ -87,7 +87,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'blowdb',
     'slock',
-    'wsbells'
+    'wsbells',
+    'bitbucket_app',
 ]
 
 MIDDLEWARE = [
@@ -183,6 +184,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

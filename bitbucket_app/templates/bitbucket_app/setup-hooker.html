@@ -1,0 +1,38 @@
+{% load bootstrap3 %}
+
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button"  class="close" data-dismiss="modal">&times;</button>
+<h5> Bitbucket Hooker </h5>
+</div>
+
+<div class="modal-body">
+<form id="bitbucketHookerForm" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+</div>
+
+<div class="modal-footer">
+{% block buttons %}
+<button  type="button" data-form="#bitbucketHookerForm" 
+data-show="{% url 'board_app:create-organization' user.id %}"
+class="btn btn-default m-post">  {% trans "Create" %} </button>
+{% endblock %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
