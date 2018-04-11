@@ -11,7 +11,7 @@ import sys
 from django.http import HttpResponse
 
 
-def print_request(request):
+def fmt_request(request):
     headers = ''
     for header, value in request.META.items():
         if not header.startswith('HTTP'):
@@ -40,7 +40,7 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class BitbucketHooker(View):
     def post(self, request):
-        print(fmt_request(request))
+        print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
 
         return HttpResponse(status=200)
