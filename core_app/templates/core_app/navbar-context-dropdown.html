@@ -17,7 +17,7 @@
 {% endif %}
 
 {% for ind in organizations %}
-<li><a href="{% url 'core_app:switch-organization' ind.id %}">
+<li><a href="{% url 'core_app:switch-organization' ind.id %}"> 
 <span class="glyphicon glyphicon-flag"></span> {{ind.name}}</a></li>
 {% endfor %}
 
@@ -53,6 +53,7 @@
 
 
 </ul>
+
 
 
 
