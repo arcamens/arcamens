@@ -43,6 +43,9 @@ class EBitbucketCommit(Event):
     url = models.CharField(null=True, blank=False, 
     max_length=626)
 
+    # card = models.ForeignKey('card_app.Card', null=True, blank=True,
+    # related_name='bitbucket_commits')
+
     note = models.OneToOneField('note_app.Note', null=True, blank=True,
     related_name='commit')
 
