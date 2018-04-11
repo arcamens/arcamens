@@ -69,7 +69,7 @@ class BitbucketHooker(View):
                 card=card, data=self.fmt_commit(commit)))
 
     def fmt_commit(self, commit):
-        return ('Author: {author}', 'Url: {url}', 
+        return ('Author: {author}' 'Url: {url}'
         'Message: {message}').format(author=commit['author'],
         message=commit['message'], url=commit['url'])
         
