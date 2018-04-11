@@ -3,6 +3,10 @@ from django.views.generic import View
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from bitbucket_app.models import BitbucketHooker, BitbucketCommit
+from card_app.models import Card
+from note_app.models import Note
+from re import findall
 import requests
 import json
 import sys
@@ -41,18 +45,35 @@ class Authenticator(GuardianView):
 class BitbucketHooker(View):
     def post(self, request):
         data = json.loads(request.body)
-        print(data, file=sys.stderr)
+        # print(data, file=sys.stderr)
 
         changes = data['push']['changes']
         commits = self.get_commits(changes)
-        print(commits, file=sys.stderr)
+
+        for ind in commits:
+            self.create_notes(ind)
+
+        print('The commits:', commits, file=sys.stderr)
 
         # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
-                
 
         return HttpResponse(status=200)
 
+    def create_notes(self, commit):
+        REGX  ='card_app/card-link/([0-9]+)'
+        cards = findall(REGX, commit['message'])
+
+        for ind in cards:
+            card   = Card.objects.get(id = ind)
+            commit = BitbucketCommit(note=Note.objects.create(
+                card=card, data=self.fmt_commit(commit)))
+
+    def fmt_commit(self, commit):
+        return ('Author: {author}', 'Url: {url}', 
+        'Message: {message}').format(author=commit['author'],
+        message=commit['message'], url=commit['url'])
+        
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
         for ind in changes:
