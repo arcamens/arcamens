@@ -25,8 +25,8 @@ class BitbucketHooker(BitbucketMixin, BasicUser):
     # name = models.CharField(null=True, blank=False, 
     # default='Bitbucket Service', max_length=626)
 
-    repo_url = models.CharField(null=True, blank=False, 
-    max_length=626)
+    repo_url = models.CharField(null=True, 
+    blank=False, default='', max_length=626)
 
 class EBitbucketCommit(models.Model):
     author = models.CharField(null=True, blank=False, 
