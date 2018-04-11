@@ -105,8 +105,9 @@ class BitbucketHandle(View):
         # Not sure about global hookers(the ones that allow cards
         # to be referenced regardless of their boards.
 
-        event = EBitbucketCommit.objects.create(note=Note.objects.create(
-        card=card, data=data), author=commit['author']['raw'], 
+        event = EBitbucketCommit.objects.create(
+        organization=card.ancestor.ancestor, note=Note.objects.create(
+        card=card, data=data, owner=addon), author=commit['author']['raw'], 
         url=commit['links']['html']['href'])
 
         # All the board members get aware of the event.
