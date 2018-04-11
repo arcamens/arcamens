@@ -40,7 +40,7 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class BitbucketHooker(View):
     def post(self, request):
-        print_request(request)
+        print(fmt_request(request))
         # actor = request.POST['actor']
 
         return HttpResponse(status=200)
