@@ -63,28 +63,32 @@ class BitbucketHandle(View):
         # for the organization.
         # Note: It may be better to use full name as identifier.
         repo_url = commits['repository']['links']['html']
+
+        # I should check if it returns None(here just for testing
+        # now it is allowed.
         hooker   = BitbucketHooker.objects.get_or_create(
         name='Bitbucket Service', addon=addon, repo_url=repo_url)
 
         for ind in commits:
-            self.create_refs(hooker, ind)
+            self.create_refs(addon, ind)
 
         # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
 
         return HttpResponse(status=200)
 
-    def create_refs(self, hooker, commit):
+    def create_refs(self, addon, commit):
         print('Data:', commit, file=sys.stderr)
 
         REGX  ='card_app/card-link/([0-9]+)'
         cards = findall(REGX, commit['message'])
         cards = (Card.objects.get(id = ind) for ind in cards)
 
+        # I should check if the card orgs have the hooker.
         for ind in cards:
-            self.create_note(hooker, ind, commit)
+            self.create_note(addon, ind, commit)
 
-    def create_note(self, hooker, card, commit):
+    def create_note(self, addon, card, commit):
         data =  (
         '### Bitbucket commit\n'
         '##### Author: {author}\n'
@@ -105,9 +109,15 @@ class BitbucketHandle(View):
         card=card, data=data), author=commit['author']['raw'], 
         url=commit['links']['html']['href'])
 
+        # All the board members get aware of the event.
         event.users.add(*card.ancestor.ancestor.members.all())
+
+        # The workers should be notified of it as well.
+        event.users.add(*card.workers.all())
         event.save()
-        hooker.ws_sound(card.ancestor.ancestor)
+
+        # I should iterate over the card workers here.
+        addon.ws_sound(card.ancestor.ancestor)
 
     def get_commits(self, changes):
         # It may be the case the commits were truncated.

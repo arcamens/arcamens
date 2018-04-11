@@ -22,12 +22,18 @@ class BitbucketHooker(models.Model):
     # name = models.CharField(null=True, blank=False, 
     # default='Bitbucket Service', max_length=626)
     addon = models.ForeignKey('core_app.User', null=True, blank=True,
-    related_name='hookers')
+    related_name='bitbucket_hookers')
 
     repo_url = models.CharField(null=True, 
     blank=False, default='', max_length=626)
 
 class EBitbucketCommit(models.Model):
+    # Not sure if i should have abitbuckethooker 
+    # foreignkey here. The user actor will
+    # be the bitbucket addon.
+    # We need to add commit_id too, for updating
+    # in case the commit is deleted(not sure yet though).
+
     author = models.CharField(null=True, blank=False, 
     max_length=626)
 
