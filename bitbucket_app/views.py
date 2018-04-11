@@ -67,7 +67,7 @@ class BitbucketHandle(View):
         # I should check if it returns None(here just for testing
         # now it is allowed.
         hooker   = BitbucketHooker.objects.get_or_create(
-        name='Bitbucket Service', addon=addon, repo_url=repo_url)
+            addon=addon, repo_url=repo_url)
 
         for ind in commits:
             self.create_refs(addon, ind)
