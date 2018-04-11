@@ -5,10 +5,7 @@ from core_app.model_mixins import UserMixin
 from django.db import models
 import json
 
-class BitbucketMixin(UserMixin):
-    pass
-
-class BitbucketHooker(BitbucketMixin, BasicUser):
+class BitbucketHooker(UserMixin, BasicUser):
     """
     Service interactions should be modeled using BasicUser class
     with concreate inheritance. 
