@@ -53,8 +53,6 @@ class BitbucketHooker(View):
         for ind in commits:
             self.create_notes(ind)
 
-        print('The commits:', commits, file=sys.stderr)
-
         # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
 
@@ -79,7 +77,7 @@ class BitbucketHooker(View):
         # It may be the case the commits were truncated.
         for ind in changes:
             if ind.get('commits'):
-                return ind
+                yield ind
         
 class SetupHooker(View):
     def post(self, request):
@@ -262,4 +260,5 @@ class SetupHooker(View):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
