@@ -336,5 +336,13 @@ for ind in lst.cards.all():
 from board_app.models import Board
 board = Board.objects.get(name='Arcamens', organization=organization)
 board.members.add(*organization.users.all())
+##############################################################################
+from re import findall
+
+REGX  ='card_app/card-link/([0-9]+)'
+cards = findall(REGX, 'this is a test ee https://staging.arcamens.com/card_app/card-link/500358/ letssee good https://staging.arcamens.com/card_app/card-link/500358/')
+cards
+
+
 
 

@@ -61,6 +61,7 @@ class BitbucketHooker(View):
         return HttpResponse(status=200)
 
     def create_notes(self, commit):
+        print('Data:', commit, file=sys.stderr)
         REGX  ='card_app/card-link/([0-9]+)'
         cards = findall(REGX, commit['message'])
 
