@@ -7,6 +7,32 @@ import requests
 import json
 import sys
 
+# Import.
+from django.http import HttpResponse
+
+
+def print_request(request):
+    headers = ''
+    for header, value in request.META.items():
+        if not header.startswith('HTTP'):
+            continue
+        header = '-'.join([h.capitalize() for h in header[5:].lower().split('_')])
+        headers += '{}: {}\n'.format(header, value)
+
+    return (
+        '{method} HTTP/1.1\n'
+        'Content-Length: {content_length}\n'
+        'Content-Type: {content_type}\n'
+        '{headers}\n\n'
+        '{body}'
+    ).format(
+        method=request.method,
+        content_length=request.META['CONTENT_LENGTH'],
+        content_type=request.META['CONTENT_TYPE'],
+        headers=headers,
+        body=request.body,
+    )
+
 class Authenticator(GuardianView):
     def post(self, request):
         pass
@@ -14,8 +40,10 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class BitbucketHooker(View):
     def post(self, request):
-        print('Payload:', request.POST, file=sys.stderr)
+        print_request(request)
         # actor = request.POST['actor']
+
+        return HttpResponse(status=200)
 
 class SetupHooker(View):
     def post(self, request):
