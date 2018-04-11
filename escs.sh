@@ -685,11 +685,15 @@ python setup.py install
 rm -fr build
 
 ##############################################################################
-# update arcamens on victor vps.
+# Restart supervisor.
 
 tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
+sudo supervisorctl restart arcamens
+##############################################################################
+# run migrations arcamens on victor vps as root.
 
-su arcamens
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens
@@ -703,8 +707,6 @@ python manage.py migrate
 
 exit
 
-# Restart the server.
-sudo supervisorctl restart arcamens
 
 # View uwsgi logs in victor server.
 tail -f ../logs/uwsgi.log
@@ -746,11 +748,24 @@ mysql -u staging -p staging
 
 password ueLa6eer
 ##############################################################################
+# Fixing issue with migrations after renaming model bitbucket_app.
+
+rm -fr app/migrations
+
 # drop tables to solve the problem with unkonwn field in migrations.
+mysql -i -u staging -p staging
+ueLa6eer
 
-DROP TABLE bitbucket_app_bitbuckethooker    
+DROP TABLE bitbucket_app_bitbuckethooker;    
 
-DROP TABLE bitbucket_app_ebitbucketcommit
+DROP TABLE bitbucket_app_ebitbucketcommit;
+
+# Delete the app migrations.
+
+delete from django_migrations where app = 'bitbucket_app';
+
+python manage.py makemigrations bitbucket_app
+python manage.py migrate migrate 
 
 
 
