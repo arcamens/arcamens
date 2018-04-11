@@ -106,7 +106,7 @@ class BitbucketHandle(View):
         # to be referenced regardless of their boards.
 
         event = EBitbucketCommit.objects.create(
-        organization=card.ancestor.ancestor, note=Note.objects.create(
+        organization=card.ancestor.ancestor.organization, note=Note.objects.create(
         card=card, data=data, owner=addon), author=commit['author']['raw'], 
         url=commit['links']['html']['href'])
 
