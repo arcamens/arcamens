@@ -74,33 +74,6 @@ class CreateNote(GuardianView):
         return render(request, 'note_app/preview-note.html',
         {'note': note, 'card': note.card})
 
-class ECreateNote(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECreateNote.objects.get(id=event_id)
-        return render(request, 'note_app/e-create-note.html', 
-        {'event':event})
-
-class EDeleteNote(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EDeleteNote.objects.get(id=event_id)
-        return render(request, 'note_app/e-delete-note.html', 
-        {'event':event})
-
-class EUpdateNote(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUpdateNote.objects.get(id=event_id)
-        return render(request, 'note_app/e-update-note.html', 
-        {'event':event})
-
 class AttachFile(GuardianView):
     """
     """
@@ -199,8 +172,6 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
-
-
 
 
 

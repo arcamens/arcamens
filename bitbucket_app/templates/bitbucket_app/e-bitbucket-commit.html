@@ -1,0 +1,58 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.child.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label|truncatechars:40}} </a> 
+referenced from Bitbucket commit
+<a href="{{event.url}}" target="_blank"> {{event.url}} </a>
+<br>
+
+A note created 
+<a class="e-get"
+data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+data-shell="#bigModalContent" 
+data-show="{% url 'note_app:preview-note' event.note.id %}" 
+href="#"> 
+<span class="glyphicon glyphicon-book"></span> Note </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from bitbucket_app.models import BitbucketHooker, BitbucketCommit
+from bitbucket_app.models import BitbucketHooker, EBitbucketCommit
 from card_app.models import Card
 from note_app.models import Note
 from re import findall
@@ -42,7 +42,7 @@ class Authenticator(GuardianView):
         pass
 
 @method_decorator(csrf_exempt, name='dispatch')
-class BitbucketHooker(View):
+class BitbucketHandle(View):
     def post(self, request):
         data = json.loads(request.body)
         # print(data, file=sys.stderr)
@@ -50,26 +50,31 @@ class BitbucketHooker(View):
         changes = data['push']['changes']
         commits = self.get_commits(changes)
 
+        # Should check here if there is a BitbucketHooker
+        # that exists for the repository.
+        hooker = BitbucketHooker.objects.get_or_create(name='Bitbucket Service')
+
         for ind in commits:
-            self.create_notes(ind)
+            self.create_refs(hooker, ind)
 
         # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
 
         return HttpResponse(status=200)
 
-    def create_notes(self, commit):
+    def create_refs(self, hooker, commit):
         print('Data:', commit, file=sys.stderr)
+
         REGX  ='card_app/card-link/([0-9]+)'
         cards = findall(REGX, commit['message'])
+        cards = (Card.objects.get(id = ind) for ind in cards)
 
         for ind in cards:
-            card   = Card.objects.get(id = ind)
-            commit = BitbucketCommit(note=Note.objects.create(
-                card=card, data=self.fmt_commit(commit)))
+            self.create_note(hooker, ind, commit)
 
-    def fmt_commit(self, commit):
-        return (
+    def create_note(self, hooker, card, commit):
+        data =  (
+        '### Bitbucket commit'
         '##### Author: {author}\n'
         '##### Commit: [{url}]({url})\n' 
         '##### Avatar: [{avatar}]({avatar})\n' 
@@ -78,7 +83,19 @@ class BitbucketHooker(View):
         message=commit['message'], 
         url=commit['links']['html']['href'],
         avatar=commit['author']['user']['links']['html']['href'])
-    
+
+        # Decide if the commit should be attached to the card
+        # (in case the hoorker is related to a board only.)
+        # Not sure about global hookers(the ones that allow cards
+        # to be referenced regardless of their boards.
+
+        event = EBitbucketCommit(note=Note.objects.create(
+        card=card, data=data), author=['author']['raw'], 
+        url=commit['links']['html']['href'])
+
+        event.users.add(*card.ancestor.ancestor.members.all())
+        hooker.ws_sound(card.ancestor.ancestor)
+
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
         for ind in changes:
