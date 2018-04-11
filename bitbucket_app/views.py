@@ -71,8 +71,8 @@ class BitbucketHooker(View):
     def fmt_commit(self, commit):
         return (
         '##### Author: {author}\n'
-        '##### [Commit Url]({url})\n' 
-        '##### [Author Avatar]({avatar})\n' 
+        '##### Commit: [{url}]({url})\n' 
+        '##### Avatar: [{avatar}]({avatar})\n' 
         '##### Message: {message}\n'
         ).format(author=commit['author']['raw'], 
         message=commit['message'], 
