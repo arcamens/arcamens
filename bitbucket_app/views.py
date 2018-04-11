@@ -57,7 +57,7 @@ class BitbucketHandle(View):
         # enabling the bitbucket addon it is necessary
         # to add the Bitbucket Service to the organization
         # as an user. It would be listed there.
-        addon  = User.objects.get_or_create(name='Bitbucket Service')
+        addon, _ = User.objects.get_or_create(name='Bitbucket Service')
 
         # For testing purpose now assume the addon is enabled
         # for the organization.
@@ -66,7 +66,7 @@ class BitbucketHandle(View):
 
         # I should check if it returns None(here just for testing
         # now it is allowed.
-        hooker   = BitbucketHooker.objects.get_or_create(
+        hooker, _ = BitbucketHooker.objects.get_or_create(
             addon=addon, repo_url=repo_url)
 
         for ind in commits:
