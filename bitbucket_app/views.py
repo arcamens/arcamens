@@ -62,7 +62,7 @@ class BitbucketHandle(View):
         # For testing purpose now assume the addon is enabled
         # for the organization.
         # Note: It may be better to use full name as identifier.
-        repo_url = commits['repository']['links']['html']
+        repo_url = data['repository']['links']['html']
 
         # I should check if it returns None(here just for testing
         # now it is allowed.
