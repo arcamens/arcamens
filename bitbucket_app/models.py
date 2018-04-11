@@ -20,7 +20,7 @@ class BitbucketCommit(models.Model):
     url = models.CharField(null=True, blank=False, 
     max_length=626)
 
-    note = models.OneToOneField('mote_app.Note', null=True, 
+    note = models.OneToOneField('note_app.Note', null=True, 
     related_name='commit', blank=True)
 
 
