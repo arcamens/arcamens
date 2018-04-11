@@ -27,7 +27,7 @@ class BitbucketHooker(models.Model):
     repo_url = models.CharField(null=True, 
     blank=False, default='', max_length=626)
 
-class EBitbucketCommit(models.Model):
+class EBitbucketCommit(Event):
     # Not sure if i should have abitbuckethooker 
     # foreignkey here. The user actor will
     # be the bitbucket addon.
