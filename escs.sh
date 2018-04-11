@@ -158,6 +158,7 @@ git checkout beta
 # run arcamens project.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
+
 #####k#########################################################################
 # clone, arcamens, wiki.
 
@@ -738,4 +739,18 @@ pip install py-gfm
 # https://bitbucket.org/atlassian/python-bitbucket
 # https://django-oauth-toolkit.readthedocs.io/en/latest/ (for servers?)
 # https://github.com/requests/requests-oauthlib (https://github.com/requests/requests-oauthlib/blob/a116d06dbb69ea5eb4fbe46530af27b12ad6d82c/docs/oauth2_workflow.rst#refreshing-tokens)
+##############################################################################
+# access arcamens database.
+
+mysql -u staging -p staging
+
+password ueLa6eer
+##############################################################################
+# drop tables to solve the problem with unkonwn field in migrations.
+
+DROP TABLE bitbucket_app_bitbuckethooker    
+
+DROP TABLE bitbucket_app_ebitbucketcommit
+
+
 

@@ -9,6 +9,15 @@ tee >(python manage.py shell --settings=arcamens.settings)
 
 quit()
 ##############################################################################
+# connect to victor vps.
+
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens
+tee >(python manage.py shell --settings=arcamens.settings)
+
+##############################################################################
 
 from django import forms
 f = forms.CharField()
@@ -310,12 +319,6 @@ for ind in boards:
 ##############################################################################
 # move suggestion list cards to arcamens/backlog.
 
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-cd ~/.virtualenv/
-source opus/bin/activate
-cd ~/projects/arcamens
-tee >(python manage.py shell --settings=arcamens.settings)
-
 from core_app.models import User, Organization
 from board_app.models import Board
 from list_app.models import List
@@ -342,7 +345,14 @@ from re import findall
 REGX  ='card_app/card-link/([0-9]+)'
 cards = findall(REGX, 'this is a test ee https://staging.arcamens.com/card_app/card-link/500358/ letssee good https://staging.arcamens.com/card_app/card-link/500358/')
 cards
+##############################################################################
+# check issue with bitbucket_app migrations.
+from bitbucket_app.models import BitbucketHooker
+x = BitbucketHooker.objects.all()
+x
 
-
-
+from django.db import connection
+db_name = connection.settings_dict['NAME']
+db_name
+connection.settings_dict
 
