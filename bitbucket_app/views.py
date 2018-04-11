@@ -71,7 +71,7 @@ class BitbucketHooker(View):
     def fmt_commit(self, commit):
         return ('Author: {author}' 'Url: {url}'
         'Message: {message}').format(author=commit['author'],
-        message=commit['message'], url=commit['url'])
+        message=commit['message'], url=commit['links']['html']['href'])
         
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
