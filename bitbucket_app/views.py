@@ -78,8 +78,9 @@ class BitbucketHooker(View):
         for ind in changes:
             commits = ind.get('commits')
             if commits:
-                yield commits
-        
+                return commits
+        return []
+
 class SetupHooker(View):
     def post(self, request):
         pass
