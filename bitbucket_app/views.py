@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from bitbucket_app.models import BitbucketHooker, EBitbucketCommit
+from core_app.models import User
 from card_app.models import Card
 from note_app.models import Note
 from re import findall
@@ -52,7 +53,18 @@ class BitbucketHandle(View):
 
         # Should check here if there is a BitbucketHooker
         # that exists for the repository.
-        hooker = BitbucketHooker.objects.get_or_create(name='Bitbucket Service')
+        # Note: It may be good to use organization.users for 
+        # enabling the bitbucket addon it is necessary
+        # to add the Bitbucket Service to the organization
+        # as an user. It would be listed there.
+        addon  = User.objects.get_or_create(name='Bitbucket Service')
+
+        # For testing purpose now assume the addon is enabled
+        # for the organization.
+        # Note: It may be better to use full name as identifier.
+        repo_url = commits['repository']['links']['html']
+        hooker   = BitbucketHooker.objects.get_or_create(
+        name='Bitbucket Service', addon=addon, repo_url=repo_url)
 
         for ind in commits:
             self.create_refs(hooker, ind)
@@ -74,7 +86,7 @@ class BitbucketHandle(View):
 
     def create_note(self, hooker, card, commit):
         data =  (
-        '### Bitbucket commit'
+        '### Bitbucket commit\n'
         '##### Author: {author}\n'
         '##### Commit: [{url}]({url})\n' 
         '##### Avatar: [{avatar}]({avatar})\n' 
@@ -94,6 +106,7 @@ class BitbucketHandle(View):
         url=commit['links']['html']['href'])
 
         event.users.add(*card.ancestor.ancestor.members.all())
+        event.save()
         hooker.ws_sound(card.ancestor.ancestor)
 
     def get_commits(self, changes):
@@ -285,5 +298,6 @@ class SetupHooker(View):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 

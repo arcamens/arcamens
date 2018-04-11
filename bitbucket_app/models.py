@@ -5,9 +5,9 @@ from core_app.model_mixins import UserMixin
 from django.db import models
 import json
 
-class BitbucketHooker(UserMixin, BasicUser):
+class BitbucketHooker(models.Model):
     """
-    Service interactions should be modeled using BasicUser class
+    Service interactions should be modeled using user class
     with concreate inheritance. 
 
     An addon that integrates with an extern service acts pretty 
@@ -21,6 +21,8 @@ class BitbucketHooker(UserMixin, BasicUser):
 
     # name = models.CharField(null=True, blank=False, 
     # default='Bitbucket Service', max_length=626)
+    addon = models.ForeignKey('core_app.User', null=True, blank=True,
+    related_name='hookers')
 
     repo_url = models.CharField(null=True, 
     blank=False, default='', max_length=626)
@@ -35,9 +37,11 @@ class EBitbucketCommit(models.Model):
     url = models.CharField(null=True, blank=False, 
     max_length=626)
 
-    note = models.OneToOneField('note_app.Note', null=True, 
-    related_name='commit', blank=True)
+    note = models.OneToOneField('note_app.Note', null=True, blank=True,
+    related_name='commit')
+
     html_template = 'bitbucket_app/e-bitbucket-commit.html'
+
 
 
 
