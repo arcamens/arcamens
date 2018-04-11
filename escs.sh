@@ -706,7 +706,7 @@ exit
 sudo supervisorctl restart arcamens
 
 # View uwsgi logs in victor server.
-less ../logs/uwsgi.log
+tail -f ../logs/uwsgi.log
 ##############################################################################
 # install wsbells in virtualenv.
 cd ~/.virtualenvs/

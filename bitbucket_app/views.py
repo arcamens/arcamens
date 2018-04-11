@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.urls import reverse
 import requests
 import json
+import sys
 
 class Authenticator(GuardianView):
     def post(self, request):
@@ -10,12 +11,12 @@ class Authenticator(GuardianView):
 
 class BitbucketHooker(View):
     def post(self, request):
-        print('Payload:', request.POST)
+        print('Payload:', request.POST, file=sys.stderr)
         # actor = request.POST['actor']
 
 class SetupHooker(View):
     def post(self, request):
-        print('Payload:', request.POST)
+        pass
         # actor = request.POST['actor']
 
 
