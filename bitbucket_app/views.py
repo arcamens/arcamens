@@ -76,8 +76,9 @@ class BitbucketHooker(View):
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
         for ind in changes:
-            if ind.get('commits'):
-                yield ind
+            commits = ind.get('commits')
+            if commits:
+                yield commits
         
 class SetupHooker(View):
     def post(self, request):
