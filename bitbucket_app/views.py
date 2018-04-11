@@ -41,13 +41,24 @@ class Authenticator(GuardianView):
 class BitbucketHooker(View):
     def post(self, request):
         data = json.loads(request.body)
-        print(data, file=sys.stdout)
+        print(data, file=sys.stderr)
+
+        changes = data['push']['changes']
+        commits = self.get_commits(changes)
+        print(commits, file=sys.stderr)
 
         # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
+                
 
         return HttpResponse(status=200)
 
+    def get_commits(self, changes):
+        # It may be the case the commits were truncated.
+        for ind in changes:
+            if ind.get('commits'):
+                return ind
+        
 class SetupHooker(View):
     def post(self, request):
         pass
