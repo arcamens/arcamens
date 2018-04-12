@@ -57,7 +57,7 @@ class BitbucketHandle(View):
             self.create_note(ind, data, 
                 commit['links']['html']['href'])
 
-    def create_note(self, card, commit, url):
+    def create_note(self, card, data, url):
         note  = Note.objects.create(card=card, data=data)
         event = EBitbucketCommit.objects.create(
         organization=card.ancestor.ancestor.organization, 
