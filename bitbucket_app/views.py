@@ -47,6 +47,7 @@ class BitbucketHandle(View):
 
         REGX  ='card_app/card-link/([0-9]+)'
         ids   = findall(REGX, commit['message'])
+        ids   = map(int, ids)
         cards = Card.objects.filter(id__in = ids)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
@@ -280,6 +281,7 @@ class CreateBitbucketHook(GuardianView):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 

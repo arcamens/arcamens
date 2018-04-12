@@ -764,8 +764,12 @@ DROP TABLE bitbucket_app_ebitbucketcommit;
 
 delete from django_migrations where app = 'bitbucket_app';
 
+# Remove the old migrations.
+rm -fr bitbucket_app/migrations
+
 python manage.py makemigrations bitbucket_app
 python manage.py migrate bitbucket_app 
+
 
 
 
