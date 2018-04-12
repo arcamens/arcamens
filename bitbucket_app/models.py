@@ -32,7 +32,7 @@ class EBitbucketCommit(Event):
     # be the bitbucket addon.
     # We need to add commit_id too, for updating
     # in case the commit is deleted(not sure yet though).
-    hook = models.ForeignKey('BitbucketHook', null=False)
+    hook = models.ForeignKey('BitbucketHook', null=True, blank=True)
 
     url = models.CharField(null=True, blank=False, 
     max_length=626)
