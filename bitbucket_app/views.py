@@ -1,12 +1,14 @@
 from core_app.views import GuardianView
+from django.shortcuts import render
 from django.views.generic import View
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from bitbucket_app.models import BitbucketHooker, EBitbucketCommit
+from bitbucket_app.models import BitbucketHook, EBitbucketCommit
 from core_app.models import User
 from card_app.models import Card
 from note_app.models import Note
+from . import forms
 from re import findall
 import requests
 import json
@@ -51,7 +53,7 @@ class BitbucketHandle(View):
         changes = data['push']['changes']
         commits = self.get_commits(changes)
 
-        # Should check here if there is a BitbucketHooker
+        # Should check here if there is a BitbucketHook
         # that exists for the repository.
         # Note: It may be good to use organization.users for 
         # enabling the bitbucket addon it is necessary
@@ -62,12 +64,12 @@ class BitbucketHandle(View):
         # For testing purpose now assume the addon is enabled
         # for the organization.
         # Note: It may be better to use full name as identifier.
-        repo_url = data['repository']['links']['html']
+        address = data['repository']['links']['html']
 
         # I should check if it returns None(here just for testing
         # now it is allowed.
-        hooker, _ = BitbucketHooker.objects.get_or_create(
-            addon=addon, repo_url=repo_url)
+        hook, _ = BitbucketHook.objects.get_or_create(
+            addon=addon, address=address)
 
         for ind in commits:
             self.create_refs(addon, ind)
@@ -84,7 +86,7 @@ class BitbucketHandle(View):
         cards = findall(REGX, commit['message'])
         cards = (Card.objects.get(id = ind) for ind in cards)
 
-        # I should check if the card orgs have the hooker.
+        # I should check if the card orgs have the hook.
         for ind in cards:
             self.create_note(addon, ind, commit)
 
@@ -102,7 +104,7 @@ class BitbucketHandle(View):
 
         # Decide if the commit should be attached to the card
         # (in case the hoorker is related to a board only.)
-        # Not sure about global hookers(the ones that allow cards
+        # Not sure about global hooks(the ones that allow cards
         # to be referenced regardless of their boards.
 
         event = EBitbucketCommit.objects.create(
@@ -128,7 +130,26 @@ class BitbucketHandle(View):
                 return commits
         return []
 
-class SetupHooker(View):
+class ListBitbucketHooks(GuardianView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        return render(request, 'bitbucket_app/list-bitbucket-hooks.html', 
+        {'user': user})
+
+class DeleteBitbucketHook(GuardianView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        return 
+        return redirect('bitbucket_app:list-bitbucket-hooks')
+
+class CreateBitbucketHook(GuardianView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        form = forms.BitbucketHookForm()
+
+        return render(request, 'bitbucket_app/create-bitbucket-hook.html', 
+        {'form':form, 'user': user})
+
     def post(self, request):
         pass
         # actor = request.POST['actor']
@@ -309,6 +330,7 @@ class SetupHooker(View):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 

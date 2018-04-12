@@ -4,10 +4,12 @@ from django import forms
 from . import models
 import card_app.models
 
-class BitbucketHookerForm(forms.ModelForm):
+class BitbucketHookForm(forms.ModelForm):
     class Meta:
-        model  = models.BitbucketHooker
-        fields = ('uuid', )
+        model  = models.BitbucketHook
+        fields = ('address', )
+
+
 
 
 
