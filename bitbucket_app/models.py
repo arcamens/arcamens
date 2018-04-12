@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from slock.models import BasicUser
 from core_app.models import Event
-from core_app.model_mixins import UserMixin
+from wsbells.models import UserWS, QueueWS
 from django.db import models
 import json
 
@@ -26,7 +26,7 @@ class BitbucketHook(models.Model):
     help_text='Example: https://bitbucket.org/team/project/',
     blank=False, default='', max_length=626)
 
-class EBitbucketCommit(Event):
+class EBitbucketCommit(UserWS, Event):
     # Not sure if i should have abitbuckethooker 
     # foreignkey here. The user actor will
     # be the bitbucket addon.

@@ -60,6 +60,7 @@ class BitbucketHandle(View):
 
     def create_note(self, card, data, url):
         note  = Note.objects.create(card=card, data=data)
+
         event = EBitbucketCommit.objects.create(
         organization=card.ancestor.ancestor.organization, 
         note=note, url=url)
@@ -69,9 +70,9 @@ class BitbucketHandle(View):
 
         # The workers should be notified of it as well.
         event.users.add(*card.workers.all())
-        event.save()
+        # event.save()
 
-        # addon.ws_sound(card.ancestor.ancestor)
+        event.ws_cmd(card.ancestor.ancestor, 'ws-sound')
 
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
