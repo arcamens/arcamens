@@ -1,8 +1,11 @@
 {% load i18n %}
 
 <div style="font-size:90%;">
+<div style="word-wrap: break-word;"> 
 {% block content %}
 {% endblock %}
+</div>
+
 <br>
 <a  href="#" data-show="{% url 'comment_app:list-comments' event.id %}"
 class="text-info s-modal"><span class="glyphicon glyphicon-comment"></span> 
@@ -16,6 +19,7 @@ $(function () {
     $('[data-toggle="popover"]').popover()
 })
 </script>
+
 
 
 
