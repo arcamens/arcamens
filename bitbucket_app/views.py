@@ -133,6 +133,9 @@ class BitbucketHandle(View):
 class ListBitbucketHooks(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
+
+        addon = User.objects.get(name='Bitbucket/Webhooks')
+
         return render(request, 'bitbucket_app/list-bitbucket-hooks.html', 
         {'user': user})
 
