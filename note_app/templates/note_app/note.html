@@ -8,8 +8,7 @@
 <p style="font-size:80%"> 
 <span class="glyphicon glyphicon-comment"></span> 
 
-By {{note.owner.name}} at {{note.created}} 
-
+By {{note.owner.name|default_if_none:"Service" }} at {{note.created}} 
 
 </p>
 
@@ -50,6 +49,7 @@ class="text-danger e-get">
 
 </div>
 </div>
+
 
 
 

@@ -19,9 +19,7 @@ class BitbucketHook(models.Model):
     Note: I have to make it disabled for login.
     """
 
-    # name = models.CharField(null=True, blank=False, 
-    # default='Bitbucket Service', max_length=626)
-    addon = models.ForeignKey('core_app.User', null=True, blank=True,
+    organization = models.ForeignKey('core_app.Organization', null=True, blank=True,
     related_name='bitbucket_hooks')
 
     address = models.CharField(null=True, 
@@ -34,23 +32,16 @@ class EBitbucketCommit(Event):
     # be the bitbucket addon.
     # We need to add commit_id too, for updating
     # in case the commit is deleted(not sure yet though).
-
-    author = models.CharField(null=True, blank=False, 
-    max_length=626)
-
-    message = models.CharField(null=True, blank=False, 
-    max_length=626)
+    hook = models.ForeignKey('BitbucketHook', null=False)
 
     url = models.CharField(null=True, blank=False, 
     max_length=626)
-
-    # card = models.ForeignKey('card_app.Card', null=True, blank=True,
-    # related_name='bitbucket_commits')
 
     note = models.OneToOneField('note_app.Note', null=True, blank=True,
     related_name='commit')
 
     html_template = 'bitbucket_app/e-bitbucket-commit.html'
+
 
 
 

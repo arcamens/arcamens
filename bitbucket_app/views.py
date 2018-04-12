@@ -1,5 +1,7 @@
 from core_app.views import GuardianView
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.views.generic import View
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -10,35 +12,16 @@ from card_app.models import Card
 from note_app.models import Note
 from . import forms
 from re import findall
-import requests
 import json
 import sys
 
-# Import.
-from django.http import HttpResponse
-
-
-def fmt_request(request):
-    headers = ''
-    for header, value in request.META.items():
-        if not header.startswith('HTTP'):
-            continue
-        header = '-'.join([h.capitalize() for h in header[5:].lower().split('_')])
-        headers += '{}: {}\n'.format(header, value)
-
-    return (
-        '{method} HTTP/1.1\n'
-        'Content-Length: {content_length}\n'
-        'Content-Type: {content_type}\n'
-        '{headers}\n\n'
-        '{body}'
-    ).format(
-        method=request.method,
-        content_length=request.META['CONTENT_LENGTH'],
-        content_type=request.META['CONTENT_TYPE'],
-        headers=headers,
-        body=request.body,
-    )
+COMMIT_FMT =  (
+  '### Bitbucket commit\n'
+  '##### Author: {author}\n'
+  '##### Commit: [{url}]({url})\n' 
+  '##### Avatar: [{avatar}]({avatar})\n' 
+  '##### Message: {message}\n'
+)
 
 class Authenticator(GuardianView):
     def post(self, request):
@@ -47,70 +30,38 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class BitbucketHandle(View):
     def post(self, request):
-        data = json.loads(request.body)
-        # print(data, file=sys.stderr)
-
+        data    = json.loads(request.body)
+        address = data['repository']['links']['html']
         changes = data['push']['changes']
         commits = self.get_commits(changes)
 
-        # Should check here if there is a BitbucketHook
-        # that exists for the repository.
-        # Note: It may be good to use organization.users for 
-        # enabling the bitbucket addon it is necessary
-        # to add the Bitbucket Service to the organization
-        # as an user. It would be listed there.
-        addon, _ = User.objects.get_or_create(name='Bitbucket Service')
-
-        # For testing purpose now assume the addon is enabled
-        # for the organization.
-        # Note: It may be better to use full name as identifier.
-        address = data['repository']['links']['html']
-
-        # I should check if it returns None(here just for testing
-        # now it is allowed.
-        hook, _ = BitbucketHook.objects.get_or_create(
-            addon=addon, address=address)
-
         for ind in commits:
-            self.create_refs(addon, ind)
+            self.create_refs(address, ind)
 
-        # print(fmt_request(request), file=sys.stdout)
         # actor = request.POST['actor']
 
         return HttpResponse(status=200)
 
-    def create_refs(self, addon, commit):
+    def create_refs(self, address, commit):
         print('Data:', commit, file=sys.stderr)
 
         REGX  ='card_app/card-link/([0-9]+)'
-        cards = findall(REGX, commit['message'])
-        cards = (Card.objects.get(id = ind) for ind in cards)
+        ids   = findall(REGX, commit['message'])
+        cards = Card.objects.filter(id__in = ids)
 
-        # I should check if the card orgs have the hook.
-        for ind in cards:
-            self.create_note(addon, ind, commit)
-
-    def create_note(self, addon, card, commit):
-        data =  (
-        '### Bitbucket commit\n'
-        '##### Author: {author}\n'
-        '##### Commit: [{url}]({url})\n' 
-        '##### Avatar: [{avatar}]({avatar})\n' 
-        '##### Message: {message}\n'
-        ).format(author=commit['author']['raw'], 
-        message=commit['message'], 
-        url=commit['links']['html']['href'],
+        data  = COMMIT_FMT.format(author=commit['author']['raw'], 
+        message=commit['message'], url=commit['links']['html']['href'],
         avatar=commit['author']['user']['links']['html']['href'])
 
-        # Decide if the commit should be attached to the card
-        # (in case the hoorker is related to a board only.)
-        # Not sure about global hooks(the ones that allow cards
-        # to be referenced regardless of their boards.
+        for ind in cards:
+            self.create_note(ind, data, 
+                commit['links']['html']['href'])
 
+    def create_note(self, card, commit, url):
+        note  = Note.objects.create(card=card, data=data)
         event = EBitbucketCommit.objects.create(
-        organization=card.ancestor.ancestor.organization, note=Note.objects.create(
-        card=card, data=data, owner=addon), author=commit['author']['raw'], 
-        url=commit['links']['html']['href'])
+        organization=card.ancestor.ancestor.organization, 
+        note=note, url=url)
 
         # All the board members get aware of the event.
         event.users.add(*card.ancestor.ancestor.members.all())
@@ -119,8 +70,7 @@ class BitbucketHandle(View):
         event.users.add(*card.workers.all())
         event.save()
 
-        # I should iterate over the card workers here.
-        addon.ws_sound(card.ancestor.ancestor)
+        # addon.ws_sound(card.ancestor.ancestor)
 
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
@@ -134,15 +84,12 @@ class ListBitbucketHooks(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
 
-        addon = User.objects.get(name='Bitbucket/Webhooks')
-
         return render(request, 'bitbucket_app/list-bitbucket-hooks.html', 
         {'user': user})
 
 class DeleteBitbucketHook(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
-        return 
         return redirect('bitbucket_app:list-bitbucket-hooks')
 
 class CreateBitbucketHook(GuardianView):

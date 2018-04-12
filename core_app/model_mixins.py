@@ -76,14 +76,6 @@ class EventMixin:
         self.save(hcache=False)
 
 class OrganizationMixin(QueueWS):
-    def ws_alert(self):
-        ws.client.publish('organization%s' % self.id, 
-            'alert-event', 0, False)
-
-    def ws_sound(self):
-        ws.client.publish('organization%s' % self.id, 
-            'sound', 0, False)
-
     def __str__(self):
         return self.name
 
@@ -101,6 +93,7 @@ class TagMixin:
 
         sqlike = SqLike(SqNode(None, default))
         return sqlike
+
 
 
 
