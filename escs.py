@@ -355,4 +355,16 @@ from django.db import connection
 db_name = connection.settings_dict['NAME']
 db_name
 connection.settings_dict
+##############################################################################
+
+from card_app.models import Card
+card = Card.objects.create(label='aks')
+card.id
+
+cards = Card.objects.filter(id__in=[str(card.id)])
+cards.all()
+
+x = Card.objects.get(id='51')
+x
+
 

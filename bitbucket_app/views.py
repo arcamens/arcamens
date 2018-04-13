@@ -47,7 +47,6 @@ class BitbucketHandle(View):
 
         REGX  ='card_app/card-link/([0-9]+)'
         ids   = findall(REGX, commit['message'])
-        ids   = map(int, ids)
         cards = Card.objects.filter(id__in = ids)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
@@ -85,13 +84,17 @@ class BitbucketHandle(View):
 class ListBitbucketHooks(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
+        hooks = user.default.bitbucket_hooks.all()
 
         return render(request, 'bitbucket_app/list-bitbucket-hooks.html', 
-        {'user': user})
+        {'user': user, 'hooks': hooks})
 
 class DeleteBitbucketHook(GuardianView):
-    def get(self, request):
+    def get(self, request, hook_id):
         user = User.objects.get(id=self.user_id)
+        hook = BitbucketHook.objects.get(id=hook_id)
+        hook.delete()
+
         return redirect('bitbucket_app:list-bitbucket-hooks')
 
 class CreateBitbucketHook(GuardianView):
@@ -103,8 +106,18 @@ class CreateBitbucketHook(GuardianView):
         {'form':form, 'user': user})
 
     def post(self, request):
-        pass
-        # actor = request.POST['actor']
+        user = User.objects.get(id=self.user_id)
+        form = forms.BitbucketHookForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 
+                'bitbucket_app/create-bitbucket-hook.html', 
+                    {'form':form, 'user': user})
+
+        record = form.save(commit=False)
+        record.organization = user.default
+        record.save()
+        return redirect('bitbucket_app:list-bitbucket-hooks')
 
 
 # from base64 import b64encode
@@ -282,6 +295,7 @@ class CreateBitbucketHook(GuardianView):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 

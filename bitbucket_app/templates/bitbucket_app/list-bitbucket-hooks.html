@@ -16,6 +16,8 @@ Bitbucket/Hooks </h4>
 
 <div class="pre-scrollable">
 {% for ind in hooks %}
+<p> <a href="#" data-show="{% url 'bitbucket_app:delete-bitbucket-hook' ind.id %}" class="s-modal text-danger"> 
+<span class="glyphicon glyphicon-remove"></span> </a> {{ind.address}} </p>
 {% endfor %}
 
 </div>
@@ -23,12 +25,14 @@ Bitbucket/Hooks </h4>
 </div>
 
 <div class="modal-footer">
-<button  type="button" class="btn btn-default s-modal"> {% trans "Back" %} </button>
+<button  data-show="{% url 'core_app:update-organization' user.default.id %}"
+type="button" class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
