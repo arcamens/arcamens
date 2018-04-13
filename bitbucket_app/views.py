@@ -59,7 +59,6 @@ class BitbucketHandle(View):
 
     def create_note(self, card, data, url):
         note  = Note.objects.create(card=card, data=data)
-
         event = EBitbucketCommit.objects.create(
         organization=card.ancestor.ancestor.organization, 
         note=note, url=url)
@@ -295,6 +294,7 @@ class CreateBitbucketHook(GuardianView):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 
