@@ -769,18 +769,4 @@ rm -fr bitbucket_app/migrations
 
 python manage.py makemigrations bitbucket_app
 python manage.py migrate bitbucket_app 
-##############################################################################
-# paypal buyer email/password
-https://www.sandbox.paypal.com/signin
-
-paypal-sandbox-buyer@portonvictor.org
-password Lv8JDFEc
-##############################################################################
-# paypal merchant email/password
-
-https://www.sandbox.paypal.com/signin
-
-paypal-sandbox-merchant@portonvictor.org
-password Lv8JDFEc
-
 

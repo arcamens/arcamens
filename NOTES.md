@@ -1,11 +1,14 @@
-### Websocket Framework for notification
+# paypal buyer email/password
+https://www.sandbox.paypal.com/signin
 
-http://django-websocket-redis.readthedocs.io/en/latest/introduction.html
+paypal-sandbox-buyer@portonvictor.org
+password Lv8JDFEc
 
-### Paypal merchant account for testing.
+# paypal merchant email/password
 
-paypal-sandbox-merchant@portonvictor.org Lv8JDFEc
+https://www.sandbox.paypal.com/signin
 
-il/cgi-bin/webscr?cmd=_display-ipns-history
+paypal-sandbox-merchant@portonvictor.org
+password Lv8JDFEc
 
-paypal-sandbox-buyer@portonvictor.org Lv8JDFEc for testing
+
