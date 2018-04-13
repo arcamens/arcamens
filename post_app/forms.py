@@ -17,9 +17,9 @@ class PostFilterForm(SqLikeForm, forms.ModelForm):
         model  = models.PostFilter
         exclude = ('user', 'timeline')
 
-class AssignmentFilterForm(SqLikeForm, forms.ModelForm):
+class GlobalAssignmentFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
-        model  = models.AssignmentFilter
+        model  = models.GlobalAssignmentFilter
         exclude = ('user', 'organization')
 
 class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
@@ -48,6 +48,7 @@ class AlertPostWorkersForm(forms.Form):
 class ListSearchform(forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
+
 
 
 

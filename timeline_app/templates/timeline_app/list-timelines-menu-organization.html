@@ -3,7 +3,7 @@
 <ul class="nav nav-pills ul-menu-posts" style="background:#DADDDD;">
 
 <li class="disabled">
- <a href="#"> <span class="glyphicon glyphicon-flag"></span>  <b>
+<a href="#"> <span class="glyphicon glyphicon-flag"></span>  <b>
 {{organization.name}}'s Timelines: <span class="badge">{{children.count}}/{{total.count}}</span></b> </b></a> 
 </li>
 
@@ -29,12 +29,18 @@ Filter </strike>
 
 </a>
 </li>
+<li><a href="#" class="s-modal"  data-show="{% url 'core_app:list-users' user.default.id %}">
+<span class="glyphicon glyphicon-user"></span> Members  </a> </li>
 
-<li><a class="e-get" data-shell="#main-view" 
-data-show="{% url 'post_app:list-assignments' user.id %}" 
-href="#"><span class="glyphicon glyphicon-tasks"></span> Assigments</a></li>
+<li><a href="#" class="s-modal"  data-show="{% url 'core_app:update-organization' user.default.id %}">
+<span class="glyphicon glyphicon-cog"></span> Settings </a></li>
+
+<li><a class="s-modal" data-show = "{% url 'core_app:list-clipboard' %}" href="#">
+<span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
+
 
 
 

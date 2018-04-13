@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
 
-    url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assignments'),
+    # url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assignments'),
     url(r'^post-worker-information/(?P<peer_id>.+)/(?P<post_id>.+)/', views.PostWorkerInformation.as_view(), name='post-worker-information'),
     url(r'^post-tag-information/(?P<tag_id>.+)/(?P<post_id>.+)/', views.PostTagInformation.as_view(), name='post-tag-information'),
 
@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
     url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
     url(r'^setup-post-filter/(?P<timeline_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
-    url(r'^setup-assignment-filter/', views.SetupAssignmentFilter.as_view(), name='setup-assignment-filter'),
+    # url(r'^setup-assignment-filter/', views.SetupAssignmentFilter.as_view(), name='setup-assignment-filter'),
     url(r'^find/', views.Find.as_view(), name='find'),
 
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
@@ -43,15 +43,6 @@ urlpatterns = [
     url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
     url(r'^pull-card-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
+    url(r'^list-all-assignments/', views.ListAllAssignments.as_view(), name='list-all-assignments'),
 ]
-
-
-
-
-
-
-
-
-
-
 

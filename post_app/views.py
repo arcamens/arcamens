@@ -1,6 +1,6 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
-PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, AssignmentFilter
+PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, GlobalAssignmentFilter
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
@@ -188,26 +188,26 @@ class DeletePost(GuardianView):
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
 
-class ListAssignments(GuardianView):
-    def get(self, request, user_id):
-        user = User.objects.get(id=self.user_id)
-
-        filter, _ = AssignmentFilter.objects.get_or_create(
-        user=user, organization=user.default)
-
-        posts      = user.assignments.all()
-        total      = posts.count()
-
-        posts      = models.Post.collect_posts(posts, 
-        filter.pattern, filter.done) if filter.status \
-        else posts.filter(done=False)
-
-        posts = posts.order_by('id')
-        count = posts.count()
-        elems = JScroll(user.id, 'post_app/list-assignments-scroll.html', posts)
-
-        return render(request, 'post_app/list-assignments.html', 
-        {'elems': elems.as_window(), 'user':user, 'total': total, 'count': count})
+# class ListAssignments(GuardianView):
+    # def get(self, request, user_id):
+        # user = User.objects.get(id=self.user_id)
+# 
+        # filter, _ = AssignmentFilter.objects.get_or_create(
+        # user=user, organization=user.default)
+# 
+        # posts      = user.assignments.all()
+        # total      = posts.count()
+# 
+        # posts      = models.Post.collect_posts(posts, 
+        # filter.pattern, filter.done) if filter.status \
+        # else posts.filter(done=False)
+# 
+        # posts = posts.order_by('id')
+        # count = posts.count()
+        # elems = JScroll(user.id, 'post_app/list-assignments-scroll.html', posts)
+# 
+        # return render(request, 'post_app/list-assignments.html', 
+        # {'elems': elems.as_window(), 'user':user, 'total': total, 'count': count})
 
 class PostWorkerInformation(GuardianView):
     def get(self, request, peer_id, post_id):
@@ -662,31 +662,31 @@ class UndoClipboard(GuardianView):
 
         clipboard.posts.remove(event.post)
 
-class SetupAssignmentFilter(GuardianView):
-    def get(self, request):
-        user = User.objects.get(id=self.user_id)
-
-        filter = AssignmentFilter.objects.get(
-        user__id=self.user_id, organization=user.default)
-
-        return render(request, 'post_app/setup-assignment-filter.html', 
-        {'form': forms.AssignmentFilterForm(instance=filter), 
-        'user': user})
-
-    def post(self, request):
-        user = User.objects.get(id=self.user_id)
-
-        record = AssignmentFilter.objects.get(
-        user__id=self.user_id, organization=user.default)
-
-        sqlike = models.Post.from_sqlike()
-        form = forms.AssignmentFilterForm(request.POST, sqlike=sqlike, instance=record)
-
-        if not form.is_valid():
-            return render(request, 'post_app/setup-assignment-filter.html',
-                   {'user': user, 'form': form}, status=400)
-        form.save()
-        return redirect('post_app:list-assignments', user_id=user.id)
+# class SetupAssignmentFilter(GuardianView):
+    # def get(self, request):
+        # user = User.objects.get(id=self.user_id)
+# 
+        # filter = AssignmentFilter.objects.get(
+        # user__id=self.user_id, organization=user.default)
+# 
+        # return render(request, 'post_app/setup-assignment-filter.html', 
+        # {'form': forms.AssignmentFilterForm(instance=filter), 
+        # 'user': user})
+# 
+    # def post(self, request):
+        # user = User.objects.get(id=self.user_id)
+# 
+        # record = AssignmentFilter.objects.get(
+        # user__id=self.user_id, organization=user.default)
+# 
+        # sqlike = models.Post.from_sqlike()
+        # form = forms.AssignmentFilterForm(request.POST, sqlike=sqlike, instance=record)
+# 
+        # if not form.is_valid():
+            # return render(request, 'post_app/setup-assignment-filter.html',
+                   # {'user': user, 'form': form}, status=400)
+        # form.save()
+        # return redirect('post_app:list-assignments', user_id=user.id)
 
 
 class PullCardContent(GuardianView):
@@ -804,16 +804,60 @@ class PostEvents(GuardianView):
         {'post': post, 'elems': events})
 
 
+class ListAllAssignments(GuardianView):
+    def get(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalAssignmentFilter.objects.get_or_create(
+        user=me, organization=me.default)
 
+        form  = forms.GlobalAssignmentFilterForm(instance=filter)
 
+        posts = me.assignments.filter(ancestor__organization=me.default)
 
+        total = posts.count()
+        
+        sqlike = models.Post.from_sqlike()
+        sqlike.feed(filter.pattern)
 
+        posts = posts.filter(Q(done=filter.done))
+        posts = sqlike.run(posts)
 
+        count = posts.count()
+        posts = posts.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'post_app/list-all-assignments-scroll.html', posts)
 
+        return render(request, 'post_app/list-all-assignments.html', 
+        {'total': total, 'count': count, 
+        'form': form, 'elems': elems.as_div()})
 
+    def post(self, request):
+        me        = User.objects.get(id=self.user_id)
+        filter, _ = GlobalAssignmentFilter.objects.get_or_create(
+        user=me, organization=me.default)
 
+        sqlike = models.Post.from_sqlike()
+        form   = forms.GlobalAssignmentFilterForm(
+            request.POST, sqlike=sqlike, instance=filter)
 
+        posts = me.assignments.filter(ancestor__organization=me.default)
+        total = posts.count()
 
+        if not form.is_valid():
+            return render(request, 'post_app/list-all-assignments.html', 
+                {'form': form, 'total': total,
+                    'count': 0}, status=400)
+
+        form.save()
+
+        posts = posts.filter(Q(done=filter.done))
+        posts = sqlike.run(posts)
+
+        count = posts.count()
+        posts = posts.only('done', 'label', 'id').order_by('id')
+        elems = JScroll(me.id, 'post_app/list-all-assignments-scroll.html', posts)
+
+        return render(request, 'post_app/list-all-assignments.html', 
+        {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
 
 
 

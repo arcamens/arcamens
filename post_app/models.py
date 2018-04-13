@@ -195,7 +195,7 @@ class GlobalPostFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class AssignmentFilter(models.Model):
+class GlobalAssignmentFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: tag:arcamens + tag:urgent')
 
@@ -343,6 +343,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
