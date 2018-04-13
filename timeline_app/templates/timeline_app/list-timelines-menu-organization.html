@@ -4,11 +4,8 @@
 
 <li class="disabled">
 <a href="#"> <span class="glyphicon glyphicon-flag"></span>  <b>
-{{organization.name}}'s Timelines: <span class="badge">{{children.count}}/{{total.count}}</span></b> </b></a> 
+{{organization.name}}'s Timelines: <span class="badge">{{children.count}}/{{total.count}}</span></b> </a> 
 </li>
-
-<li class="divider"></li>
-
 
 <li>
 <a  class="s-modal" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
@@ -39,6 +36,7 @@ Filter </strike>
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
 
 
 
