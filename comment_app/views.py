@@ -40,6 +40,7 @@ class CreateComment(GuardianView):
         target.users.add(*scope)
         target.save()
 
+        print(scope)
         for ind in scope:
             ind.ws_sound()
 
@@ -54,6 +55,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
