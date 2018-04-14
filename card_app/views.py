@@ -182,7 +182,7 @@ class CreateCard(GuardianView):
         card.save()
 
         event = models.ECreateCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, child=card, user=user)
+        ancestor=card.ancestor, card=card, user=user)
         event.users.add(*ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
@@ -1097,7 +1097,7 @@ class CardEvents(GuardianView):
 
         rule = Q(erelatecard__child0__id=card.id) | Q(erelatecard__child1__id=card.id) \
         | Q(eunrelatecard__child0__id=card.id) | Q(eunrelatecard__child1__id=card.id) | \
-        Q(ecreatecard__child__id=card.id) | Q(ebindcardworker__child__id=card.id) | \
+        Q(ecreatecard__card__id=card.id) | Q(ebindcardworker__child__id=card.id) | \
         Q(eunbindcardworker__child__id=card.id) | Q(ecreatefork__child0=card.id) \
         | Q(ecreatefork__child1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__child__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
@@ -1107,6 +1107,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
