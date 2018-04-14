@@ -16,7 +16,7 @@ was copied from timeline
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#"> 
+data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.timeline.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
@@ -26,5 +26,6 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="#">
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 

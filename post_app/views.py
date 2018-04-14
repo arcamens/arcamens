@@ -790,7 +790,7 @@ class PostEvents(GuardianView):
     def get(self, request, post_id):
         post  = models.Post.objects.get(id=post_id)
 
-        rule = Q(eunbindtagpost__post__id= post.id) | \
+        query = Q(eunbindtagpost__post__id= post.id) | \
         Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
         Q(eassignpost__post__id=post.id) | \
         Q(ebindtagpost__post__id= post.id) | Q(eunassignpost__post__id= post.id)| \
@@ -798,7 +798,7 @@ class PostEvents(GuardianView):
         Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) | \
         Q(epastepost__posts=post.id)
     
-        events = Event.objects.filter(rule).order_by('-created').values('html')
+        events = Event.objects.filter(query).order_by('-created').values('html')
 
         return render(request, 'post_app/post-events.html', 
         {'post': post, 'elems': events})
@@ -858,6 +858,7 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
 
 
 
