@@ -71,52 +71,16 @@ git checkout master
 git checkout *
 
 ##############################################################################
-# merge, beta, into, alpha:
+# merge alpha into staging.
 git checkout staging
 git merge alpha
 git push -u origin staging
-
-git checkout master
-git merge staging
-git push -u origin master
 git checkout staging
 
 git branch -d alpha
 git push origin :alpha
 git fetch -p 
 
-
-##############################################################################
-# merge, beta, into, master:
-git checkout master
-git merge beta
-git push -u origin master
-git checkout beta
-##############################################################################
-# merge, beta, into, alpha:
-git checkout alpha
-git merge beta
-git push -u origin alpha
-git checkout beta
-##############################################################################
-# merge, alpha, into, master:
-git checkout master
-git merge alpha
-git push -u origin master
-git checkout alpha
-##############################################################################
-# merge, alpha, into, dev:
-git checkout development
-git merge alpha
-git push -u origin development
-git checkout alpha
-
-##############################################################################
-# merge, alpha, into, master:
-git checkout alpha
-git merge master
-git push -u origin alpha
-git checkout alpha
 ##############################################################################
 
 # arcamens, pull.
@@ -769,4 +733,7 @@ rm -fr bitbucket_app/migrations
 
 python manage.py makemigrations bitbucket_app
 python manage.py migrate bitbucket_app 
+##############################################################################
+# backup of the db on victor server.
 
+mysqldump -u staging -p staging > ../mysql.sql
