@@ -87,10 +87,13 @@ class ListCards(GuardianView):
 
         cards = list.cards.all()
         total = cards.count()
+
+        sqlike = models.Card.from_sqlike()
+        sqlike.feed(filter.pattern)
         
-        cards = models.Card.collect_cards(cards, 
-        filter.pattern, filter.done) if filter.status else \
-        cards.filter(done=False)
+        cards = cards.filter(Q(done=filter.done)) \
+        if filter.status else cards.filter(done=False)
+        cards = sqlike.run(cards)
 
         workers1 = User.objects.filter(pk=user.pk, tasks=OuterRef('pk'))
         cards = cards.annotate(in_workers=Exists(workers1))
@@ -1056,8 +1059,6 @@ class Find(GuardianView):
 
         cards = cards.filter(Q(done=filter.done))
         cards = sqlike.run(cards)
-
-        cards = models.Card.collect_cards(cards, filter.pattern, filter.done)
         count = cards.count()
 
         cards = cards.only('done', 'label', 'id').order_by('id')
@@ -1109,6 +1110,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

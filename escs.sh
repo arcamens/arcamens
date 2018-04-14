@@ -717,6 +717,7 @@ password ueLa6eer
 rm -fr app/migrations
 
 # drop tables to solve the problem with unkonwn field in migrations.
+ssh arcamens@staging.arcamens.com
 mysql -i -u staging -p staging
 ueLa6eer
 
@@ -737,3 +738,4 @@ python manage.py migrate bitbucket_app
 # backup of the db on victor server.
 
 mysqldump -u staging -p staging > ../mysql.sql
+

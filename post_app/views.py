@@ -198,10 +198,6 @@ class DeletePost(GuardianView):
         # posts      = user.assignments.all()
         # total      = posts.count()
 # 
-        # posts      = models.Post.collect_posts(posts, 
-        # filter.pattern, filter.done) if filter.status \
-        # else posts.filter(done=False)
-# 
         # posts = posts.order_by('id')
         # count = posts.count()
         # elems = JScroll(user.id, 'post_app/list-assignments-scroll.html', posts)
@@ -360,7 +356,6 @@ class Find(GuardianView):
         posts = posts.filter(Q(done=filter.done))
         posts = sqlike.run(posts)
 
-        posts = models.Post.collect_posts(posts, filter.pattern, filter.done)
         count = posts.count()
 
         posts = posts.only('done', 'label', 'id').order_by('id')
@@ -860,6 +855,7 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
 
 
 

@@ -52,7 +52,7 @@ class CardMixin(object):
                 # cards = cards | indj.cards.all()
 
         cards = Card.objects.filter(Q(ancestor__ancestor__organization=user.default) &
-            (Q(ancestor__ancestor__members=user) | Q(workers=user)))
+            (Q(ancestor__ancestor__members=user) | Q(workers=user))).distinct()
         return cards
 
     @classmethod
@@ -88,15 +88,6 @@ class CardMixin(object):
         SqNode(('i', 'list'), list),
         SqNode(('b', 'board'), board),)
         return sqlike
-
-    @classmethod
-    def collect_cards(cls, cards, pattern, done=False):
-        sqlike = cls.from_sqlike()
-        cards  = cards.filter(Q(done=done))
-
-        sqlike.feed(pattern)
-        cards = sqlike.run(cards)
-        return cards
 
     def __str__(self):
         """
@@ -458,6 +449,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

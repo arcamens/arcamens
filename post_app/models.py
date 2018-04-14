@@ -50,7 +50,7 @@ class PostMixin(object):
         """
 
         posts = Post.objects.filter(Q(ancestor__organization=user.default) &
-            (Q(ancestor__users=user) | Q(workers=user)))
+            (Q(ancestor__users=user) | Q(workers=user))).distinct()
         return posts
 
     @classmethod
@@ -343,6 +343,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
