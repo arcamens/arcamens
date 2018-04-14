@@ -366,5 +366,30 @@ cards.all()
 
 x = Card.objects.get(id='51')
 x
+##############################################################################
+# Bug with django m2m field. When joining two querysets 
+# from the manytomany it doubles the results.
+from core_app.models import Event
+event = Event.objects.all().first()
+event.html
+
+event.users.all() | event.signers.all()
+
+# <QuerySet [<User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>, <User: Iury de oliveira>]>
+>>> 
+
+event.users.all()
+# >>> event.users.all()
+# <QuerySet []>
+# >>> 
+
+event.signers.all()
+# >>> event.signers.all()
+# <QuerySet [<User: Iury de oliveira>]>
+# >>> 
+
+# It should return just one User instance.
+event.users.all() | event.signers.all()
+
 
 

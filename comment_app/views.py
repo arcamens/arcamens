@@ -40,9 +40,8 @@ class CreateComment(GuardianView):
         target.users.add(*scope)
         target.save()
 
-        print(scope)
-        for ind in scope:
-            ind.ws_sound()
+        for ind in target.users.all():
+            user.ws_sound(ind)
 
         return redirect('comment_app:list-comments', 
         event_id=event.id)
