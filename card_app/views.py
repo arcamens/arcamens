@@ -863,7 +863,7 @@ class Undo(GuardianView):
 
 class CardWorkerInformation(GuardianView):
     def get(self, request, peer_id, card_id):
-        event = models.EBindCardWorker.objects.filter(child__id=card_id,
+        event = models.EBindCardWorker.objects.filter(card__id=card_id,
         peer__id=peer_id).last()
 
         active_posts = event.peer.assignments.filter(done=False)
@@ -877,7 +877,7 @@ class CardWorkerInformation(GuardianView):
 
         return render(request, 'card_app/card-worker-information.html', 
         {'peer': event.peer, 'created': event.created, 'active_tasks': active_tasks,
-        'done_tasks': done_tasks, 'user':event.user, 'card': event.child})
+        'done_tasks': done_tasks, 'user':event.user, 'card': event.card})
 
 class RequestCardAttention(GuardianView):
     def get(self, request, peer_id, card_id):
@@ -971,20 +971,20 @@ class UndoClipboard(GuardianView):
     def undo_cut(self, event):
         user = User.objects.get(id=self.user_id)
 
-        event.child.ancestor = event.ancestor
-        event.child.save()
+        event.card.ancestor = event.ancestor
+        event.card.save()
 
         event1 = EPasteCard(
         organization=user.default, ancestor=event.ancestor, user=user)
         event1.save(hcache=False)
-        event1.cards.add(event.child)
+        event1.cards.add(event.card)
         event1.users.add(*event.ancestor.ancestor.members.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
         user=user, organization=user.default)
 
-        clipboard.cards.remove(event.child)
+        clipboard.cards.remove(event.card)
 
 class ListAllTasks(GuardianView):
     def get(self, request):
@@ -1110,6 +1110,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
