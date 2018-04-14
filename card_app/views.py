@@ -521,7 +521,7 @@ class UpdateCard(GuardianView):
         user  = core_app.models.User.objects.get(id=self.user_id)
         event = models.EUpdateCard.objects.create(
         organization=user.default, ancestor=record.ancestor, 
-        child=record, user=user)
+        card=record, user=user)
         event.users.add(*record.ancestor.ancestor.members.all())
         event.save()
 
@@ -1098,9 +1098,9 @@ class CardEvents(GuardianView):
         rule = Q(erelatecard__child0__id=card.id) | Q(erelatecard__child1__id=card.id) \
         | Q(eunrelatecard__child0__id=card.id) | Q(eunrelatecard__child1__id=card.id) | \
         Q(ecreatecard__card__id=card.id) | Q(ebindcardworker__card__id=card.id) | \
-        Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__cad0=card.id) \
+        Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__card0=card.id) \
         | Q(ecreatefork__card1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
-        Q(eupdatecard__child__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
+        Q(eupdatecard__card__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
         Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)
 
