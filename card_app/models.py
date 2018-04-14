@@ -441,7 +441,7 @@ class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_archive_card0', blank=True)
 
-    child = models.ForeignKey('Card', 
+    card = models.ForeignKey('Card', 
     related_name='e_archive_card1', blank=True)
 
     html_template = 'card_app/e-archive-card.html'

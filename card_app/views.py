@@ -828,7 +828,7 @@ class Done(GuardianView):
 
         # cards in the clipboard cant be archived.
         event    = models.EArchiveCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, child=card, user=user)
+        ancestor=card.ancestor, card=card, user=user)
 
         users = card.ancestor.ancestor.members.all()
         event.users.add(*users)
@@ -1102,7 +1102,7 @@ class CardEvents(GuardianView):
         | Q(ecreatefork__card1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__card__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__card__id=card.id) |\
-        Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)
+        Q(earchivecard__card__id=card.id) | Q(epastecard__cards=card.id)
 
         events = Event.objects.filter(rule).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
