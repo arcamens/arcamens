@@ -224,10 +224,10 @@ class ERelateCard(Event):
     ancestor1 = models.ForeignKey('list_app.List', 
     related_name='e_relate_card1', blank=True)
 
-    child0 = models.ForeignKey('Card', 
+    card0 = models.ForeignKey('Card', 
     related_name='e_relate_card2', blank=True)
 
-    child1 = models.ForeignKey('Card', 
+    card1 = models.ForeignKey('Card', 
     related_name='e_relate_card3', blank=True)
 
     html_template = 'card_app/e-relate-card.html'

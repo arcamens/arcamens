@@ -601,7 +601,7 @@ class RelateCard(GuardianView):
 
         event = models.ERelateCard.objects.create(
         organization=user.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, child0=card0, child1=card1, user=user)
+        ancestor1=card1.ancestor, card0=card0, card1=card1, user=user)
 
         event.users.add(*card0.ancestor.ancestor.members.all())
         event.users.add(*card1.ancestor.ancestor.members.all())
@@ -1095,7 +1095,7 @@ class CardEvents(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
 
-        query = Q(erelatecard__child0__id=card.id) | Q(erelatecard__child1__id=card.id) \
+        query = Q(erelatecard__card0__id=card.id) | Q(erelatecard__card1__id=card.id) \
         | Q(eunrelatecard__card0__id=card.id) | Q(eunrelatecard__card1__id=card.id) | \
         Q(ecreatecard__card__id=card.id) | Q(ebindcardworker__card__id=card.id) | \
         Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__card0=card.id) \
