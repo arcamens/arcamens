@@ -191,10 +191,11 @@ class CreateCard(GuardianView):
 
 class SelectForkList(GuardianView):
     def get(self, request, card_id):
-        user = User.objects.get(id=self.user_id)
-        card = models.Card.objects.get(id=card_id)
-        form = forms.ListSearchform()
-        lists = List.objects.filter(ancestor__in=user.boards.all())
+        user   = User.objects.get(id=self.user_id)
+        card   = models.Card.objects.get(id=card_id)
+        form   = forms.ListSearchform()
+        boards = user.boards.filter(organization=user.default)
+        lists  = List.objects.filter(ancestor__in=boards)
 
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
@@ -1108,6 +1109,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

@@ -760,7 +760,9 @@ class SelectForkList(GuardianView):
         user = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         form = ListSearchform()
-        lists = List.objects.filter(ancestor__in=user.boards.all())
+
+        boards = user.boards.filter(organization=user.default)
+        lists  = List.objects.filter(ancestor__in=boards)
 
         return render(request, 'post_app/select-fork-list.html', 
         {'form':form, 'post': post, 'elems': lists})
@@ -858,6 +860,7 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
 
 
 
