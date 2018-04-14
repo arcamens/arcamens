@@ -6,7 +6,7 @@
 <a class="e-get" data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view" data-show="{% url 'card_app:view-data' event.note.card.id %}" href="#"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.note.card.label|truncatechars:40}} </a> referenced from Bitbucket commit 
+{{event.note.card.label|truncatechars:40}} </a> referenced from commit 
 
 <span style="word-wrap: break-word;"> 
 <a href="{{event.url}}" target="_blank"> {{event.url|truncatechars:40}} </a>
@@ -15,6 +15,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' event.note.card.i
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

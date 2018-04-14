@@ -16,7 +16,7 @@ import json
 import sys
 
 COMMIT_FMT =  (
-  '### Bitbucket commit\n'
+  '### Bitbucket Commit\n'
   '##### Author: {author}\n'
   '##### Commit: [{url}]({url})\n' 
   '##### Avatar: [{avatar}]({avatar})\n' 
@@ -294,6 +294,7 @@ class CreateBitbucketHook(GuardianView):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 
