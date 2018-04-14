@@ -413,7 +413,7 @@ class CutCard(GuardianView):
         clipboard.cards.add(card)
 
         event = models.ECutCard.objects.create(organization=user.default,
-        ancestor=list, child=card, user=user)
+        ancestor=list, card=card, user=user)
         event.users.add(*list.ancestor.members.all())
 
         return redirect('card_app:list-cards', 
@@ -1101,7 +1101,7 @@ class CardEvents(GuardianView):
         Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__card0=card.id) \
         | Q(ecreatefork__card1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__card__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
-        Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
+        Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__card__id=card.id) |\
         Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)
 
         events = Event.objects.filter(rule).order_by('-created').values('html')
