@@ -273,7 +273,7 @@ class EBindCardWorker(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_bind_card_worker0', blank=True)
 
-    child = models.ForeignKey('Card', 
+    card = models.ForeignKey('Card', 
     related_name='e_bind_card_worker1', blank=True)
 
     peer = models.ForeignKey('core_app.User', 
