@@ -96,7 +96,7 @@ No tags.
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in post.card_forks.all %}
 <a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
-<span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}} </a> 
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a> 
 <br>
 {% empty %}
 No forks.
@@ -192,6 +192,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 

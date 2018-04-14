@@ -10,7 +10,7 @@
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in forks %}
 <a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
-<span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}}
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}}
 </a> 
 <br>
 {% empty %}
@@ -24,7 +24,7 @@ No forks.
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in relations %}
 <a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view"  data-show="{% url 'card_app:view-data' ind.id %}" >
-<span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:60}} </a> 
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a> 
 <br>
 {% empty %}
 No relations.
@@ -38,7 +38,7 @@ No relations.
 {% for ind in post_forks %}
 <a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view"  
 data-show="{% url 'post_app:post' ind.id %}" > <span class="glyphicon glyphicon-file"></span> 
-{{ind.label|truncatechars:60}} </a>
+{% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a>
 <br>
 {% empty %}
 No post forks...
@@ -47,6 +47,7 @@ No post forks...
 </div>
 </div>
 </div>
+
 
 
 
