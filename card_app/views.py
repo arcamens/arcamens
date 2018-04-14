@@ -305,7 +305,7 @@ class CreateFork(GuardianView):
         fork.save()
 
         event = models.ECreateFork.objects.create(organization=user.default,
-        ancestor=card.ancestor, child0=card, child1=fork, user=user)
+        ancestor=card.ancestor, card0=card, card1=fork, user=user)
         event.users.add(*card.ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
@@ -1098,8 +1098,8 @@ class CardEvents(GuardianView):
         rule = Q(erelatecard__child0__id=card.id) | Q(erelatecard__child1__id=card.id) \
         | Q(eunrelatecard__child0__id=card.id) | Q(eunrelatecard__child1__id=card.id) | \
         Q(ecreatecard__card__id=card.id) | Q(ebindcardworker__card__id=card.id) | \
-        Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__child0=card.id) \
-        | Q(ecreatefork__child1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
+        Q(eunbindcardworker__card__id=card.id) | Q(ecreatefork__cad0=card.id) \
+        | Q(ecreatefork__card1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__child__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__child__id=card.id) |\
         Q(earchivecard__child__id=card.id) | Q(epastecard__cards=card.id)

@@ -303,10 +303,10 @@ class ECreateFork(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_create_fork0', blank=True)
 
-    child0 = models.ForeignKey('Card', 
+    card0 = models.ForeignKey('Card', 
     related_name='e_create_fork1', blank=True)
 
-    child1 = models.ForeignKey('Card', 
+    card1 = models.ForeignKey('Card', 
     related_name='e_create_fork2', blank=True)
 
     html_template = 'card_app/e-create-fork.html'

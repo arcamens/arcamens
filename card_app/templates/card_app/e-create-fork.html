@@ -10,10 +10,10 @@ has forked card
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child0.id %}" 
-href="{{event.child0.get_link_url}}"> 
+data-show="{% url 'card_app:view-data' event.card0.id %}" 
+href="{{event.card0.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child0.label|truncatechars:40}} </a> 
+{{event.card0.label|truncatechars:40}} </a> 
 
 
 to card
@@ -21,15 +21,16 @@ to card
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child1.id %}" 
-href="{{event.child1.get_link_url}}"> 
+data-show="{% url 'card_app:view-data' event.card1.id %}" 
+href="{{event.card1.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.child1.label|truncatechars:40}}
+{{event.card1.label|truncatechars:40}}
 </a>
 
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
