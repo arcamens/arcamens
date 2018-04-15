@@ -96,10 +96,20 @@ class SignUp(LoginView):
 class Upgrade(AuthenticatedView):
     def get(self, request):
         form = forms.ServiceForm()
-        return render(request, 'site_app/upgrade.html', 
-        {'form':form})
+        return render(request, 'site_app/upgrade.html',  {})
 
-class ManualPayment(AuthenticatedView):
+class CustomPayment(AuthenticatedView):
+    """
+    Users just make use of submmiters to start
+    the payment process. It allows a high level of
+    flexibility on how to customize the offering of
+    products.
+    """
+
+    def get(self, request):
+        return render(request, 'site_app/custom-payment.html', {})
+
+class PaypalManualPayment(AuthenticatedView):
     """
     Users just make use of submmiters to start
     the payment process. It allows a high level of
@@ -109,7 +119,7 @@ class ManualPayment(AuthenticatedView):
 
     def get(self, request):
         form = forms.ServiceForm()
-        return render(request, 'site_app/manual-payment.html', 
+        return render(request, 'site_app/paypal-manual-payment.html', 
         {'form':form})
 
     def post(self, request):
@@ -117,7 +127,7 @@ class ManualPayment(AuthenticatedView):
 
         if not form.is_valid():
             return render(request, 
-                'site_app/manual-payment.html', {
+                'site_app/paypal-manual-payment.html', {
                      'form':form}, status=400)
 
         # Fields that are related to generating the
@@ -140,48 +150,48 @@ class ManualPayment(AuthenticatedView):
         manual = ManualForm(user, service, payload)
         return HttpResponse(manual)
 
-class SubscriptionPayment(AuthenticatedView):
-    def get(self, request):
-        form = forms.ServiceForm()
-        return render(request, 'site_app/subscription-payment.html', 
-        {'form':form})
-
-    def post(self, request):
-        form = forms.ServiceForm(request.POST)
-
-        if not form.is_valid():
-            return render(request, 
-                'site_app_app/subscription-payment.html', {
-                     'form':form}, status=400)
-
-        service, _ = OrganizationService.objects.get_or_create(
-        max_users=form.cleaned_data['max_users'], paid=True)
-        user = User.objects.get(id=self.user_id)
-
-        # Ommited now for getting payments delivered 
-        # instantenously.
-        # delta = (datetime.date.today() - user.expiration)
-        # delta = max(delta.days, 90)
-
-        payload = {
-       'item_name': "Organization",
-       'src': 1,
-       'currency_code': 'EUR',
-       'shopping_url': 'http://opus.test.splittask.net:61001',
-       'return': 'http://opus.test.splittask.net:61001',
-       'cancel_return': 'http://opus.test.splittask.net:61001',
-       'image_url': 'http://FIXME.gif',
-       'no_shipping': '1',
-       'a3': service.max_users * 1,
-       'p3': 30,
-       't3': 'D',
-       # 't1': 'D',
-       # 'a1':0,
-       # 'p1': delta
-        }
-    
-        subscription = SubscriptionForm(user, service, payload)
-        return HttpResponse(subscription)
+# class SubscriptionPayment(AuthenticatedView):
+    # def get(self, request):
+        # form = forms.ServiceForm()
+        # return render(request, 'site_app/subscription-payment.html', 
+        # {'form':form})
+# 
+    # def post(self, request):
+        # form = forms.ServiceForm(request.POST)
+# 
+        # if not form.is_valid():
+            # return render(request, 
+                # 'site_app_app/subscription-payment.html', {
+                     # 'form':form}, status=400)
+# 
+        # service, _ = OrganizationService.objects.get_or_create(
+        # max_users=form.cleaned_data['max_users'], paid=True)
+        # user = User.objects.get(id=self.user_id)
+# 
+        # # Ommited now for getting payments delivered 
+        # # instantenously.
+        # # delta = (datetime.date.today() - user.expiration)
+        # # delta = max(delta.days, 90)
+# 
+        # payload = {
+       # 'item_name': "Organization",
+       # 'src': 1,
+       # 'currency_code': 'EUR',
+       # 'shopping_url': 'http://opus.test.splittask.net:61001',
+       # 'return': 'http://opus.test.splittask.net:61001',
+       # 'cancel_return': 'http://opus.test.splittask.net:61001',
+       # 'image_url': 'http://FIXME.gif',
+       # 'no_shipping': '1',
+       # 'a3': service.max_users * 1,
+       # 'p3': 30,
+       # 't3': 'D',
+       # # 't1': 'D',
+       # # 'a1':0,
+       # # 'p1': delta
+        # }
+    # 
+        # subscription = SubscriptionForm(user, service, payload)
+        # return HttpResponse(subscription)
 
 class PayPalIPN(paybills.views.PayPalIPN):
     """
@@ -290,6 +300,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

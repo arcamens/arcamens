@@ -1,79 +1,30 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<title>Organization</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/main.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="/static/main.js"> </script>
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4> <span class="glyphicon glyphicon-credit-card"></span> Payment Settings </h4>
 
-<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/static/icons/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/static/icons/manifest.json">
-<link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
-<link rel="shortcut icon" href="/static/icons/favicon.ico">
-<meta name="apple-mobile-web-app-title" content="Organization">
-<meta name="application-name" content="Organization">
-<meta name="msapplication-config" content="/static/icons/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
-<script src="/static/input-extensions.js"> </script>
-<script src="/static/e-get.js"> </script>
-<script src="/static/e-post.js"> </script>
-
-</head>
-
-<body>
-
-<img class="img-responsive center-block text-center" src="/static/paypal.png"> </img>
-
-<div class="row center-block text-center">
-
-<div class="col-xs-4">
-<a class="e-get" data-shell="#modalContent"
-data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'site_app:manual-payment' %}"
-href="#">
-<h3> <span class="glyphicon glyphicon-plus"></span> {% trans "Manual Payment" %}</a> </h3>
-<p> You'll credit directly from your wallet.</p>
 </div>
+<div class="modal-body">
 
-<div class="col-xs-4">
+<div class="pre-scrollable">
+{% for ind in payments %}
 
-<a class="e-get" data-shell="#modalContent"
-data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'site_app:subscription-payment' %}"
-href="#">
-<h3> <span class="glyphicon glyphicon-plus"></span> {% trans "Subscription Payment" %}</a> </h3>
-<p> It will be debted from your paypal wallet monthly. </p>
-</div>
-
-<div class="col-xs-4">
-
-<h3> 
-<a href="{% url 'site_app:index' %}">
-<span class="glyphicon glyphicon-plus"></span> {% trans "Free" %}</a></h3>
-<p> Allow three users per main account. </p>
-</div>
-
+{% empty %}
+<p> No payments. </p>
+{% endfor %}
 
 </div>
 
-</body>
-</html>
+<p> <b> Total users: {{n_users}}</b> </p>
 
-<div class="modal fade" id="modal" role="dialog">
-<div class="modal-dialog modal-sm">
-<div id="modalContent" class="modal-content">
-</div>
-</div>
-</div>
+<p> <b> Expiration: {{expiration}}</b></p>
+<p> <b> Cash: {{cash}} </b> </p>
 
+<a class="s-modal" data-show="{% url 'site_app:paypal-manual-payment' %}" href="#"> Paypal</a>
+<a class="s-modal" data-show="{% url 'site_app:custom-payment' %}" href="#"> Custom Payment</a>
+
+</div>
 
 
