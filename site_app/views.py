@@ -100,10 +100,6 @@ class Upgrade(AuthenticatedView):
 
 class CustomPayment(AuthenticatedView):
     """
-    Users just make use of submmiters to start
-    the payment process. It allows a high level of
-    flexibility on how to customize the offering of
-    products.
     """
 
     def get(self, request):

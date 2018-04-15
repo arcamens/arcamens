@@ -24,5 +24,8 @@ class SignupForm(SetPasswordForm):
 
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
+    expiration = forms.DateField()
+
     # paid = forms.BooleanField(required=False)
+
 
