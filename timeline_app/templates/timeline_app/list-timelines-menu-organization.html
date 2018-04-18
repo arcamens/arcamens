@@ -13,7 +13,7 @@ href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Timeline" %}</
 
 <li>
 <a href="#" class="s-modal" data-shell="#modalContent" 
-data-show="{% url 'timeline_app:setup-timeline-filter' organization.id %}" 
+data-show="{% url 'timeline_app:setup-timeline-filter' organization.id %}">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter
@@ -36,6 +36,7 @@ Filter </strike>
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
 
 
 
