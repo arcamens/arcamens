@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from mdx_gfm import GithubFlavoredMarkdownExtension
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from board_app.models import Event
@@ -10,8 +11,7 @@ from board_app.models import Event
 class NoteMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
-        extensions=[TableExtension(), 'markdown.extensions.tables', 
-        'markdown.extensions.codehilite'], safe_mode=True,  
+        extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
         super(NoteMixin, self).save(*args, **kwargs)
 
@@ -98,6 +98,7 @@ class EUpdateNote(Event):
 
     def __str__(self):
         return self.user.name
+
 
 
 
