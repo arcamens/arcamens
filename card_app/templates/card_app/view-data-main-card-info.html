@@ -24,17 +24,11 @@ at <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.crea
 
 {% endif %}
 
-{% if card.parent %}
-forked from card
-<a href="{% url 'card_app:card-link' card.parent.id %}" class="e-get" data-shell="#main-view"  target="_blank"
-data-show="{% url 'card_app:view-data' card.parent.id %}" > <span class="glyphicon glyphicon-file"></span> 
-{{card.parent.label|truncatechars:60}} </a>  
-{% elif card.parent_post %}
+{% if card.parent_post %}
 forked from post
 <a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#main-view"  target="_blank"
 data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> 
 {{card.parent_post.label|truncatechars:60}} </a>  
-
 {% endif %}
 
 </small>
@@ -72,6 +66,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

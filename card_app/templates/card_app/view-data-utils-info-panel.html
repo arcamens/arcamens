@@ -1,75 +1,106 @@
-{% load static %}
-
 <div class="panel panel-default">
 <div class="panel-body">
 
 <div class="row">
+
 <div class="col-md-4">
+<h5> <span class="glyphicon glyphicon-arrow-up"></span> Parent Cards </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in path %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}}
+</a> 
+<br>
+{% empty %}
+No parents.
+{% endfor %}</div></div>
+
+<div class="col-md-4">
+<h5> <span class="glyphicon glyphicon-link"></span> Related Cards </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in relations %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view"  data-show="{% url 'card_app:view-data' ind.id %}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a> 
+<br>
+{% empty %}
+No relations.
+{% endfor %}</div></div>
+<div class="col-md-2">
 <h5> <span class="glyphicon glyphicon-user"></span> Workers</h5>
-<hr>
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in workers %}
-<a 
-data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="s-modal"
-href="#">
-<span class="glyphicon glyphicon-user"></span>
-
-{{ind.name}}
-</a>
+<a data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="s-modal" href="#">
+<span class="glyphicon glyphicon-user"></span> {{ind.name}} </a>
 
 {% if forloop.last %} 
 <br>
 <a data-show="{% url 'card_app:alert-card-workers' card.id %}" 
-class="s-modal text-warning"  href="#"> <span class="glyphicon glyphicon-alert"></span>
-
-Alert workers?</a>
-
+class="s-modal text-warning"  href="#"> <span class="glyphicon glyphicon-alert"></span> Alert workers?</a>
 {% endif %}
 {% empty %}
 No workers...
 {% endfor %}</div></div>
 
-<div class="col-md-4">
-<h5> <b>#</b> Tags</h5>
-<hr>
+<div class="col-md-2">
+<h5> <span class="glyphicon glyphicon-tag"></span> Tags</h5>
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in tags %}
-<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}"
-class="s-modal" href="#">
-<b># </b>
-
-{{ind.name}}
-</a>
-
+<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}" class="s-modal" href="#"><b># </b> {{ind.name}} </a>
 {% empty %}
 No tags...
 
 {% endfor %}</div></div>
 
+</div>
+</div>
+</div>
+
+<div class="panel panel-default">
+<div class="panel-body">
+
+<div class="row">
+
 <div class="col-md-4">
-<h5> <span class="glyphicon glyphicon-book"></span> Snippets</h5>
-<hr>
+<h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards  </h5>
 
 <div class="pre-scrollable" style="font-size:90%">
+{% for ind in forks %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}}
+</a> 
+<br>
+{% empty %}
+No forks.
+{% endfor %}</div></div>
+
+<div class="col-md-4">
+<h5> <span class="glyphicon glyphicon-random"></span> Forks/Posts </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in post_forks %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view"  
+data-show="{% url 'post_app:post' ind.id %}" > <span class="glyphicon glyphicon-file"></span> 
+{% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a>
+<br>
+{% empty %}
+No post forks...
+{% endfor %}</div></div>
+
+<div class="col-md-4">
+<h5> <span class="glyphicon glyphicon-book"></span> Snippets</h5>
+<div class="pre-scrollable" style="font-size:90%">
 {% for ind in snippets %}
-<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#">
-<span class="glyphicon glyphicon-book"></span>
-{{ind.title}} </a>
+<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#"> 
+<span class="glyphicon glyphicon-book"></span>{{ind.title}} </a>
 <br>
 {% empty %}
 No snippets...
 {% endfor %}
 </div></div>
-
-
 </div>
 </div>
 </div>
-
-
-
-
-
-
 

@@ -54,7 +54,7 @@ class CardLink(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
-        # path = card.path.all()
+        path = card.path.all()
 
         relations = relations.filter(Q(
         ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
@@ -63,7 +63,7 @@ class CardLink(GuardianView):
 
         return render(request, 'card_app/card-link.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
-        'attachments': attachments, 'user': user, 'workers': workers, 
+        'attachments': attachments, 'user': user, 'workers': workers, 'path': path,
         'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
         'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations, 'settings': settings})
@@ -130,7 +130,7 @@ class ViewData(GuardianView):
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
-        # path = card.path.all()
+        path = card.path.all()
         post_forks = card.post_forks.all()
         # This doesnt work because the board members should be
         # notified of a card being related to other card.
@@ -143,7 +143,7 @@ class ViewData(GuardianView):
         # ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
 
         return render(request, 'card_app/view-data.html', 
-        {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
+        {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
         'attachments': attachments, 'post_forks': post_forks, 'user': user, 'workers': workers, 
         'relations': relations, 'snippets': snippets, 'pins': pins, 
         'tags': tags})
@@ -287,9 +287,9 @@ class CreateFork(GuardianView):
         form = forms.CardForm(instance=fork)
         fork.label = 'Draft.'
 
-        # path = card.path.all()
+        path = card.path.all()
         fork.parent = card
-        # fork.path.add(*path, card)
+        fork.path.add(*path, card)
         fork.save()
 
         return render(request, 'card_app/create-fork.html', 
@@ -1110,6 +1110,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

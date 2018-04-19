@@ -67,9 +67,7 @@ No attachment.
 </div>
 
 <div class="col-md-3">
-<h5> 
-<b> # </b>
-Tags </h5>
+<h5> <span class="glyphicon glyphicon-tag"></span> Tags </h5>
 <div class="pre-scrollable" style="font-size:90%">
 
 {% for ind in post.tags.all %}
@@ -179,7 +177,7 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 <a href="#"
 data-callback="$('#modal').modal('show');" 
 data-shell="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
-class="text-info e-get"><b>#</b> Tags </a>
+class="text-info e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
 <a class="text-warning s-modal" href="#"
 data-show="{% url 'post_app:select-fork-list' post.id %}">
@@ -192,6 +190,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 

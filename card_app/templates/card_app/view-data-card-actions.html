@@ -46,7 +46,7 @@ data-show="{% url 'card_app:done'  card.id %}" href="#">
 <li>
 <a class="s-modal text-default" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
 data-callback="$('#modal').modal('toggle');"  href="#">
-<b>#</b> Tags</a></li> 
+<span class="glyphicon glyphicon-tag"></span> Tags</a></li> 
 
 <li>
 <a class="s-modal text-danger" data-show="{% url 'card_app:confirm-card-deletion'  card.id %}"  href="#">
@@ -87,6 +87,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
