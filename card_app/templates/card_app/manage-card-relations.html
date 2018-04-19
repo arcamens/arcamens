@@ -28,6 +28,12 @@ data-show="{% url 'card_app:unrelate-card' card.id ind.id %}" href="{{ind.get_li
 {% if ind.done %} (Done) {% endif %}
 {{ind.label}}
 </a>
+<br>
+<small> On
+<span class="glyphicon glyphicon-list-alt"></span> {{ind.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{ind.ancestor.name}}</small>
+
 </p>
 {% endfor %}
 
@@ -42,6 +48,11 @@ data-show="{% url 'card_app:relate-card' card.id ind.id %}" href="#">
 {% if ind.done %} (Done) {% endif %}
 {{ind.label}}
 </a>
+<br>
+<small> On
+<span class="glyphicon glyphicon-list-alt"></span> {{ind.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{ind.ancestor.name}}</small>
 
 </p>
 
@@ -90,6 +101,7 @@ $('#relate-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
