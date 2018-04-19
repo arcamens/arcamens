@@ -53,6 +53,7 @@
 <p> ... </p>
 {% endfor %}
 
+
 </div>
 
 <hr>
@@ -64,6 +65,9 @@
 {% bootstrap_form_errors form type='non_fields' %}
 
 </form>
+<a href="#" data-show="{% url 'core_app:list-invites' %}" class="s-modal"> 
+ <span class="glyphicon glyphicon-send"></span> Invites </a>
+
 </div>
 
 <div class="modal-footer">
@@ -84,6 +88,7 @@ $('#list-user-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

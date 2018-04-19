@@ -39,14 +39,15 @@ class Invite(InviteMixin, models.Model):
     # email = models.EmailField(max_length=70, 
     # null=True, blank=False)
 
-    user = models.ForeignKey('core_app.User', null=True, blank=True)
+    user = models.ForeignKey('core_app.User', null=True, 
+    blank=True, related_name='invites')
 
     # should have a count to avoid mail spam.
     token = models.CharField(null=True,
     blank=False, max_length=256)
 
     organization = models.ForeignKey('Organization', 
-    null=True, blank=True)
+    null=True, blank=True, related_name='invites')
 
 class User(UserMixin, BasicUser):
     organizations = models.ManyToManyField(
@@ -207,6 +208,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 

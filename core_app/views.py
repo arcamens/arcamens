@@ -784,4 +784,25 @@ class RemoveOrganizationUser(GuardianView):
 
         return redirect('core_app:list-users', organization_id=me.default.id)
 
+class ListInvites(GuardianView):
+    def get(self, request):
+        me = User.objects.get(id=self.user_id)
+        invites = me.default.invites.all()
+
+        return render(request, 'core_app/list-invites.html', 
+        {'organization': me.default, 'invites': invites})
+
+class CancelInvite(GuardianView):
+    def get(self, request, invite_id):
+        invite = Invite.objects.get(id=invite_id)
+
+        # If there is no more invites sent to this user
+        # and his default org is null then he is not an existing
+        # user.
+        cond = invite.user.invites.exists() and invite.user.default
+        if not cond:
+            invite.user.delete()
+        invite.delete()
+        return redirect('core_app:list-invites')
+
 
