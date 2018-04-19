@@ -17,7 +17,7 @@ class Board(BoardMixin, models.Model):
     labor bugs.', max_length=626)
 
     owner = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
+    blank=True, related_name='owned_boards')
 
     created  = models.DateTimeField(auto_now_add=True, 
     null=True)
@@ -107,6 +107,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

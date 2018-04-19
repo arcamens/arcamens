@@ -10,7 +10,19 @@
 </div>
 
 <div class="modal-body">
-<p class="text-danger"> You're about remove {{user.name}}! </p>
+<p class="text-danger"> You're about remove {{user.name}}! 
+<div class="text-info"> You will own the timelines/boards: </div> </p>
+
+<div class="pre-scrollable">
+{% for ind in timelines %}
+<p> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.name}} </p>
+{% endfor %}
+
+{% for ind in boards %}
+<p> <span class="glyphicon glyphicon-th"></span>  {{ind.name}} </p>
+{% endfor %}
+
+</div>
 
 <form id="actionReasonForm" enctype="multipart/form-data">
 {% csrf_token %}
@@ -26,5 +38,6 @@ data-dismiss="modal">Cancel</button>
 data-show="{% url 'core_app:remove-organization-user' user.id %}" class="btn btn-danger m-post"> 
      {% trans "Remove" %}
 </button>
+
 
 

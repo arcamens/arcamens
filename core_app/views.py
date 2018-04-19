@@ -711,11 +711,18 @@ class RemoveOrganizationUser(GuardianView):
     def get(self, request, user_id):
         me   = User.objects.get(id=self.user_id)
         user = User.objects.get(id=user_id)
-        form = forms.RemoveUserForm()
 
-        return render(request, 
-            'core_app/remove-organization-user.html', 
-                {'user': user, 'form': form})
+        # If i'm the owner then i can't remove myself.
+        # I should delete the organization.
+        if me.default.owner == user:
+            return HttpResponse("You can't remove your self!", status=403)
+
+        form = forms.RemoveUserForm()
+        timelines = user.owned_timelines.filter(organization=me.default)
+        boards = user.owned_boards.filter(organization=me.default)
+
+        return render(request, 'core_app/remove-organization-user.html', 
+        {'user': user, 'form': form, 'timelines': timelines, 'boards': boards})
 
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
@@ -737,6 +744,27 @@ class RemoveOrganizationUser(GuardianView):
         user.tasks.through.objects.filter(
             card__ancestor__ancestor__organization=me.default).delete()
 
+        # Remove as an worker from all timelines.
+        user.timelines.through.objects.filter(
+        timeline__organization=me.default, timeline__users=user).delete()
+
+        user.boards.through.objects.filter(
+        board__organization=me.default, board__members=user).delete()
+
+        timelines = user.owned_timelines.filter(organization=me.default)
+
+        for ind in timelines:
+            ind.owner = me
+            ind.users.add(me)
+            ind.save()
+
+        boards = user.owned_boards.filter(organization=me.default)
+
+        for ind in boards:
+            ind.owner = me
+            ind.members.add(me)
+            ind.save()
+
         user.organizations.remove(me.default)
 
         if user.default == me.default:
@@ -755,10 +783,5 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         return redirect('core_app:list-users', organization_id=me.default.id)
-
-
-
-
-
 
 
