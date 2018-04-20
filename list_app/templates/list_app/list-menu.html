@@ -16,10 +16,9 @@ href="#">
 
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#main-view" 
-data-show="{% url 'list_app:delete-list' list.id %}" 
-href="#"> <span class="glyphicon glyphicon-remove"></span> 
-{% trans "Delete" %}</a></li>
+<li><a class="s-modal"  data-show="{% url 'list_app:confirm-list-deletion' list.id %}" 
+href="#"> <span class="glyphicon glyphicon-remove"></span>  {% trans "Delete" %}</a></li>
+
 <li class="divider"></li>
 
 <li><a class="e-get" data-shell="#main-view" 
@@ -29,6 +28,7 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>
 
 </ul>
 </div>
+
 
 
 

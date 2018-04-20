@@ -1,0 +1,31 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<span class="glyphicon glyphicon-remove"></span> Delete {{list.name|truncatechars:60}}?
+</div>
+
+<div class="modal-body">
+<p class="text-danger"> The content will no longer be avaiable!</p>
+
+</div>
+
+
+<div class="modal-footer">
+<button type="button" class="btn btn-default" 
+data-dismiss="modal">Cancel</button>
+
+<button  id="createCard" type="button" 
+data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
+data-shell-error="#modalContent" data-show="{% url 'list_app:delete-list' list.id %}"
+class="btn btn-danger e-get"> 
+     {% trans "Delete" %}
+</button>
+
+
+<script>
+
+
+

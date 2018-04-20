@@ -77,6 +77,12 @@ class CreateList(GuardianView):
 
         return redirect('list_app:list-lists', board_id=board.id)
 
+class ConfirmListDeletion(GuardianView):
+    def get(self, request, list_id):
+        list = models.List.objects.get(id=list_id)
+        return render(request, 'list_app/confirm-list-deletion.html', 
+        {'list': list})
+
 class DeleteList(GuardianView):
     def get(self, request, list_id):
         list = List.objects.get(id=list_id)
@@ -280,6 +286,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 
