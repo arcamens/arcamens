@@ -1,6 +1,7 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
-PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, GlobalAssignmentFilter
+PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, \
+GlobalAssignmentFilter, EUnarchivePost
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
@@ -544,6 +545,12 @@ class Undo(GuardianView):
 
         user = User.objects.get(id=self.user_id)
 
+        event = EUnarchivePost.objects.create(organization=user.default,
+        timeline=post.ancestor, post=post, user=user)
+
+        users = post.ancestor.users.all()
+        event.users.add(*users)
+
         user.ws_sound(post.ancestor)
 
         return redirect('post_app:post', 
@@ -855,6 +862,7 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
 
 
 

@@ -238,6 +238,13 @@ class EArchivePost(EArchivePostMixin, Event):
     related_name='e_archive_post1')
     html_template = 'post_app/e-archive-post.html'
 
+class EUnarchivePost(EArchivePostMixin, Event):
+    timeline = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_unarchive_post0', blank=True)
+    post = models.ForeignKey('Post', blank=True,
+    related_name='e_unarchive_post1')
+    html_template = 'post_app/e-unarchive-post.html'
+
 class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
@@ -343,6 +350,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
