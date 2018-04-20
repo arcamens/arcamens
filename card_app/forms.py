@@ -52,9 +52,6 @@ class CardFilterForm(SqLikeForm, forms.ModelForm):
         'board', 'list')
 
 class CardForm(forms.ModelForm):
-    data = forms.CharField(strip=False, 
-    required=False, widget=forms.Textarea)
-
     class Meta:
         model  = models.Card
         fields = ('label', 'data')
@@ -68,5 +65,6 @@ class FileWrapperForm(forms.ModelForm):
     class Meta:
         model  = models.FileWrapper
         exclude = ('card', )
+
 
 
