@@ -30,7 +30,7 @@
 
 <ul class="dropdown-menu">
 <li><a class="s-modal" data-show="{% url 'core_app:update-user-information' %}" href="#">
-<span class="glyphicon glyphicon-edit"></span>{% trans "Settings" %}</a></li>
+<span class="glyphicon glyphicon-edit"></span> {% trans "Settings" %}</a></li>
 
 <li class="divider"></li>
 
@@ -38,6 +38,10 @@
 <li class="divider"></li>
 
 <li> <a class="s-modal" data-show="{% url 'site_app:upgrade' %}" href="#"> <span class="glyphicon glyphicon-credit-card"></span> Upgrade</a> </li>
+<li class="divider"></li>
+
+<li> <a class="s-modal" data-show="{% url 'core_app:list-logs'  %}" href="#">
+<span class="glyphicon glyphicon-info-sign"></span> Logs </a> </li>
 
 <li class="divider"></li>
 
@@ -48,6 +52,7 @@
 
 
 </ul>
+
 
 
 

@@ -15,10 +15,10 @@ class RemoveUserForm(forms.Form):
 
 class EventFilterForm(forms.Form):
     val0  = datetime.date.today()-datetime.timedelta(days=3)
-    start = forms.DateTimeField(initial = val0)
+    start = forms.DateField(initial = val0, widget=forms.SelectDateWidget())
 
     val1 = datetime.date.today()+datetime.timedelta(days=1)
-    end  = forms.DateTimeField(initial = val1)
+    end  = forms.DateField(initial = val1, widget=forms.SelectDateWidget())
 
 class TagSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, help_text='Example: developer')
@@ -52,6 +52,7 @@ class UpdateOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = ( 'name', )
+
 
 
 

@@ -591,8 +591,9 @@ class ListLogs(GuardianView):
                 {'user': user, 'form': form,
                      'organization': user.default})
 
-        end    = parse_datetime(str(form.cleaned_data['end']))
-        start  = parse_datetime(str(form.cleaned_data['start']))
+        end    = form.cleaned_data['end']
+        start  = form.cleaned_data['start']
+
         events = user.seen_events.filter(created__lte=end,
         created__gte=start, organization=user.default)
 
@@ -804,5 +805,6 @@ class CancelInvite(GuardianView):
             invite.user.delete()
         invite.delete()
         return redirect('core_app:list-invites')
+
 
 
