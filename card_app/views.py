@@ -851,11 +851,11 @@ class Undo(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
 
         # cards in the clipboard cant be archived.
-        # event    = models.EArchiveCard.objects.create(organization=user.default,
-        # ancestor=card.ancestor, child=card, user=user)
+        event    = models.EUnarchiveCard.objects.create(organization=user.default,
+        ancestor=card.ancestor, card=card, user=user)
 
-        # users = card.ancestor.ancestor.members.all()
-        # event.users.add(*users)
+        users = card.ancestor.ancestor.members.all()
+        event.users.add(*users)
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -1110,6 +1110,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 
