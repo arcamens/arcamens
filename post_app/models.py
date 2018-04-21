@@ -90,6 +90,18 @@ class PostMixin(object):
     def __str__(self):
         return self.label
 
+class PostFilterMixin:
+    def collect(self, posts):
+        sqlike = Post.from_sqlike()
+        sqlike.feed(self.pattern)
+
+        if not self.status:
+            return posts.filter(done=False)
+
+        posts = posts.filter(done=self.done)
+        posts = sqlike.run(posts)
+        return posts
+
 class PostFileWrapperMixin(object):
     def duplicate(self, post=None):
         wrapper       = PostFileWrapper.objects.get(id=self.id)
@@ -155,7 +167,7 @@ class Post(PostMixin, models.Model):
     data = models.TextField(blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
 
-class PostFilter(models.Model):
+class PostFilter(PostFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: enginee x-11 + wheels + ,,,')
 
@@ -350,6 +362,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

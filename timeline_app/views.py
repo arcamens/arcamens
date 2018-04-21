@@ -29,14 +29,8 @@ class ListPosts(GuardianView):
 
         posts      = timeline.posts.all()
         total      = posts.count()
-        sqlike     = Post.from_sqlike()
 
-        sqlike.feed(filter.pattern)
-
-        posts = posts.filter(Q(done=filter.done)) \
-        if filter.status else posts.filter(done=False)
-
-        posts = sqlike.run(posts)
+        posts = filter.collect(posts)
         posts = posts.order_by('-created')
         count = posts.count()
         elems = JScroll(user.id, 'timeline_app/list-posts-scroll.html', posts)
@@ -384,6 +378,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

@@ -94,6 +94,18 @@ class CardMixin(object):
         """
         return self.label
 
+class CardFilterMixin:
+    def collect(self, cards):
+        sqlike = Card.from_sqlike()
+        sqlike.feed(self.pattern)
+
+        if not self.status:
+            return cards.filter(done=False)
+
+        cards = cards.filter(done=self.done)
+        cards = sqlike.run(cards)
+        return cards
+
 class FileWrapperMixin(object):
     def duplicate(self, card=None):
         wrapper       = FileWrapper.objects.get(id=self.id)
@@ -344,7 +356,7 @@ class EDeleteCard(Event):
 
     html_template = 'card_app/e-delete-card.html'
 
-class CardFilter(models.Model):
+class CardFilter(CardFilterMixin, models.Model):
     pattern  = models.CharField(
     max_length=255,  blank=True, default='', 
     help_text='Example: owner:oliveira  + tag:bug')
@@ -457,6 +469,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 
