@@ -67,7 +67,7 @@ class CreateNote(GuardianView):
 
         event = models.ECreateNote.objects.create(
         organization=user.default, child=card, user=user, note=note)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -141,7 +141,7 @@ class UpdateNote(GuardianView):
         organization=user.default, child=record.card, 
         note=record, user=user)
 
-        event.users.add(*record.card.ancestor.ancestor.members.all())
+        event.dispatch(*record.card.ancestor.ancestor.members.all())
         event.save()
 
         user.ws_sound(record.card.ancestor.ancestor)
@@ -158,7 +158,7 @@ class DeleteNote(GuardianView):
         event = models.EDeleteNote.objects.create(organization=user.default,
         child=note.card, note='Note', user=user)
 
-        event.users.add(*note.card.ancestor.ancestor.members.all())
+        event.dispatch(*note.card.ancestor.ancestor.members.all())
         note.delete()
 
         user.ws_sound(note.card.ancestor.ancestor)
@@ -172,6 +172,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

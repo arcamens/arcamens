@@ -71,7 +71,7 @@ class CreateList(GuardianView):
 
         event = ECreateList.objects.create(organization=user.default,
         ancestor=list.ancestor, child=list, user=user)
-        event.users.add(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all())
 
         user.ws_sound(list.ancestor)
 
@@ -92,7 +92,7 @@ class DeleteList(GuardianView):
 
         event = EDeleteList.objects.create(organization=user.default,
         ancestor=list.ancestor, child_name=list.name, user=user)
-        event.users.add(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all())
 
         list.delete()
 
@@ -126,7 +126,7 @@ class UpdateList(GuardianView):
 
         event = EUpdateList.objects.create(organization=user.default,
         ancestor=record.ancestor, child=record, user=user)
-        event.users.add(*record.ancestor.members.all())
+        event.dispatch(*record.ancestor.members.all())
 
         user.ws_sound(record.ancestor)
 
@@ -156,7 +156,7 @@ class PasteCards(GuardianView):
     
         # Workers of the card dont need to be notified of this event
         # because them may not belong to the board at all.
-        event.users.add(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all())
         event.save()
 
         clipboard.cards.clear()
@@ -183,7 +183,7 @@ class CutList(GuardianView):
 
         event = ECutList.objects.create(organization=user.default,
         ancestor=board, child=list, user=user)
-        event.users.add(*board.members.all())
+        event.dispatch(*board.members.all())
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -200,7 +200,7 @@ class CopyList(GuardianView):
 
         event = ECopyList.objects.create(organization=user.default,
         ancestor=list.ancestor, child=list, user=user)
-        event.users.add(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all())
 
         user.ws_sound(list.ancestor)
 
@@ -261,7 +261,7 @@ class UndoClipboard(GuardianView):
         organization=user.default, board=event.ancestor, user=user)
         event1.save(hcache=False)
         event1.lists.add(event.child)
-        event1.users.add(*event.ancestor.members.all())
+        event.dispatch(*event.ancestor.members.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -286,6 +286,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

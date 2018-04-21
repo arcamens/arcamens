@@ -67,6 +67,17 @@ class EventMixin:
         self.html = tmp.render({'event': self})
         super().save()
 
+    def dispatch(self, *args):
+        # Assumes the action owner has
+        # seen the event.
+
+        self.users.add(*args)
+        
+        # The user has seen the event since he
+        # has provoked it.
+        self.signers.add(self.user)
+        self.users.remove(self.user)
+
     def seen(self, user):
         """
         """
@@ -93,6 +104,7 @@ class TagMixin:
 
         sqlike = SqLike(SqNode(None, default))
         return sqlike
+
 
 
 

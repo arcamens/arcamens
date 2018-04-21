@@ -186,7 +186,7 @@ class CreateCard(GuardianView):
 
         event = models.ECreateCard.objects.create(organization=user.default,
         ancestor=card.ancestor, card=card, user=user)
-        event.users.add(*ancestor.ancestor.members.all())
+        event.dispatch(*ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -310,7 +310,7 @@ class CreateFork(GuardianView):
 
         event = models.ECreateFork.objects.create(organization=user.default,
         ancestor=card.ancestor, card0=card, card1=fork, user=user)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -370,8 +370,8 @@ class CreatePostFork(GuardianView):
 
         event = models.ECreatePostFork.objects.create(organization=user.default,
         list=card.ancestor, timeline=fork.ancestor, card=card, post=fork, user=user)
-        event.users.add(*fork.ancestor.users.all())
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*fork.ancestor.users.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
         user.ws_sound(fork.ancestor)
@@ -392,7 +392,7 @@ class DeleteCard(GuardianView):
         user = core_app.models.User.objects.get(id=self.user_id)
         event = models.EDeleteCard.objects.create(organization=user.default,
         ancestor=card.ancestor, label=card.label, user=user)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
         card.delete()
 
         user.ws_sound(card.ancestor.ancestor)
@@ -418,7 +418,7 @@ class CutCard(GuardianView):
 
         event = models.ECutCard.objects.create(organization=user.default,
         ancestor=list, card=card, user=user)
-        event.users.add(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all())
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -435,7 +435,7 @@ class CopyCard(GuardianView):
 
         event = models.ECopyCard.objects.create(organization=user.default,
         ancestor=card.ancestor, card=card, user=user)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
 
         # Missing event.
         user.ws_sound(card.ancestor.ancestor)
@@ -526,7 +526,7 @@ class UpdateCard(GuardianView):
         event = models.EUpdateCard.objects.create(
         organization=user.default, ancestor=record.ancestor, 
         card=record, user=user)
-        event.users.add(*record.ancestor.ancestor.members.all())
+        event.dispatch(*record.ancestor.ancestor.members.all())
         event.save()
 
         user.ws_sound(record.ancestor.ancestor)
@@ -586,8 +586,8 @@ class UnrelateCard(GuardianView):
         ancestor1=card1.ancestor, card0=card0, 
         card1=card1, user=user)
 
-        event.users.add(*card0.ancestor.ancestor.members.all())
-        event.users.add(*card1.ancestor.ancestor.members.all())
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+        event.dispatch(*card1.ancestor.ancestor.members.all())
 
         user.ws_sound(card0.ancestor.ancestor)
         user.ws_sound(card1.ancestor.ancestor)
@@ -607,8 +607,8 @@ class RelateCard(GuardianView):
         organization=user.default, ancestor0=card0.ancestor, 
         ancestor1=card1.ancestor, card0=card0, card1=card1, user=user)
 
-        event.users.add(*card0.ancestor.ancestor.members.all())
-        event.users.add(*card1.ancestor.ancestor.members.all())
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+        event.dispatch(*card1.ancestor.ancestor.members.all())
 
         user.ws_sound(card0.ancestor.ancestor)
         user.ws_sound(card1.ancestor.ancestor)
@@ -707,7 +707,7 @@ class UnbindCardWorker(GuardianView):
         event = models.EUnbindCardWorker.objects.create(
         organization=me.default, ancestor=card.ancestor, 
         card=card, user=me, peer=user)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
         me.ws_sound(card.ancestor.ancestor)
@@ -725,7 +725,7 @@ class BindCardWorker(GuardianView):
         event = models.EBindCardWorker.objects.create(
         organization=me.default, ancestor=card.ancestor, 
         card=card, user=me, peer=user)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
         me.ws_sound(card.ancestor.ancestor)
@@ -783,13 +783,13 @@ class UnbindCardTag(GuardianView):
         # event = models.EUnbindCardTag.objects.create(
         # organization=me.default, ancestor=card.ancestor, 
         # card=card, user=me, peer=user)
-        # event.users.add(*card.ancestor.users.all())
+        # event.dispatch(*card.ancestor.users.all())
         # event.save()
         me = User.objects.get(id=self.user_id)
         event = models.EUnbindTagCard.objects.create(
         organization=me.default, ancestor=card.ancestor, 
         card=card, tag=tag, user=me)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
         me.ws_sound(card.ancestor.ancestor)
@@ -815,7 +815,7 @@ class BindCardTag(GuardianView):
         event = models.EBindTagCard.objects.create(
         organization=me.default, ancestor=card.ancestor, 
         card=card, tag=tag, user=me)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
         me.ws_sound(card.ancestor.ancestor)
@@ -835,7 +835,7 @@ class Done(GuardianView):
         ancestor=card.ancestor, card=card, user=user)
 
         users = card.ancestor.ancestor.members.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         # Missing event.
         user.ws_sound(card.ancestor.ancestor)
@@ -855,7 +855,7 @@ class Undo(GuardianView):
         ancestor=card.ancestor, card=card, user=user)
 
         users = card.ancestor.ancestor.members.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -978,7 +978,7 @@ class UndoClipboard(GuardianView):
         organization=user.default, ancestor=event.ancestor, user=user)
         event1.save(hcache=False)
         event1.cards.add(event.card)
-        event1.users.add(*event.ancestor.ancestor.members.all())
+        event.dispatch(*event.ancestor.ancestor.members.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -1110,6 +1110,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

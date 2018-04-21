@@ -94,7 +94,7 @@ class CreatePost(GuardianView):
         timeline=ancestor, post=post, user=user)
 
         users = ancestor.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(post.ancestor)
 
@@ -120,11 +120,11 @@ class UpdatePost(GuardianView):
         event = EUpdatePost.objects.create(organization=user.default,
         timeline=record.ancestor, post=record, user=user)
 
-        event.users.add(*record.ancestor.users.all())
+        event.dispatch(*record.ancestor.users.all())
 
         # Notify workers of the event, in case the post
         # is on a timeline whose worker is not on.
-        event.users.add(*record.workers.all())
+        event.dispatch(*record.workers.all())
 
         user.ws_sound(record.ancestor)
 
@@ -179,7 +179,7 @@ class DeletePost(GuardianView):
         event = EDeletePost.objects.create(organization=user.default,
         timeline=post.ancestor, post_label=post.label, user=user)
         users = post.ancestor.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         ancestor = post.ancestor
         post.delete()
@@ -246,11 +246,11 @@ class UnassignPostUser(GuardianView):
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
 
-        event.users.add(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all())
         
         # As posts can be assigned to users off the timeline.
         # We make sure them get the evvent.
-        event.users.add(*post.workers.all())
+        event.dispatch(*post.workers.all())
         event.save()
 
         post.workers.remove(user)
@@ -271,8 +271,8 @@ class AssignPostUser(GuardianView):
         organization=me.default, ancestor=post.ancestor, 
         post=post, user=me, peer=user)
 
-        event.users.add(*post.ancestor.users.all())
-        event.users.add(*post.workers.all())
+        event.dispatch(*post.ancestor.users.all())
+        event.dispatch(*post.workers.all())
         event.save()
 
         me.ws_sound(post.ancestor)
@@ -410,7 +410,7 @@ class CutPost(GuardianView):
         event = ECutPost.objects.create(organization=user.default,
         timeline=timeline, post=post, user=user)
         users = timeline.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
@@ -427,7 +427,7 @@ class CopyPost(GuardianView):
         event = ECopyPost.objects.create(organization=user.default,
         timeline=post.ancestor, post=post, user=user)
         users = post.ancestor.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(post.ancestor)
 
@@ -447,7 +447,7 @@ class Done(GuardianView):
         timeline=post.ancestor, post=post, user=user)
 
         users = post.ancestor.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(post.ancestor)
 
@@ -504,7 +504,7 @@ class UnbindPostTag(GuardianView):
         event = EUnbindTagPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=me)
-        event.users.add(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all())
         event.save()
 
         me.ws_sound(post.ancestor)
@@ -523,7 +523,7 @@ class BindPostTag(GuardianView):
         event = EBindTagPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=me)
-        event.users.add(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all())
         event.save()
 
         me.ws_sound(post.ancestor)
@@ -549,7 +549,7 @@ class Undo(GuardianView):
         timeline=post.ancestor, post=post, user=user)
 
         users = post.ancestor.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(post.ancestor)
 
@@ -656,7 +656,7 @@ class UndoClipboard(GuardianView):
 
         event1.save(hcache=False)
         event1.posts.add(event.post)
-        event1.users.add(*event.timeline.users.all())
+        event.dispatch(*event.timeline.users.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -747,8 +747,8 @@ class CreateCardFork(GuardianView):
         ancestor=post.ancestor, post=post, card=fork, user=user)
 
         # The timeline users and the board users get the event.
-        event.users.add(*post.ancestor.users.all())
-        event.users.add(*fork.ancestor.ancestor.members.all())
+        event.dispatch(*post.ancestor.users.all())
+        event.dispatch(*fork.ancestor.ancestor.members.all())
 
         # In this case, it would play sound twice if you're
         # in both timeline and board.
@@ -862,6 +862,7 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
 
 
 

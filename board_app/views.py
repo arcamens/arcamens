@@ -68,7 +68,7 @@ class CreateBoard(GuardianView):
         board=board, user=user)
 
         # Organization admins should be notified?
-        event.users.add(user)
+        event.dispatch(user)
         event.save()
 
         user.ws_sound()
@@ -186,7 +186,7 @@ class PasteLists(GuardianView):
         event = EPasteList.objects.create(
         organization=user.default, board=board, user=user)
         event.lists.add(*lists)
-        event.users.add(*board.members.all())
+        event.dispatch(*board.members.all())
         event.save()
 
         clipboard.lists.clear()
@@ -215,7 +215,7 @@ class UpdateBoard(GuardianView):
         me    = User.objects.get(id=self.user_id)
         event = EUpdateBoard.objects.create(organization=me.default,
         board=record, user=me)
-        event.users.add(*record.members.all())
+        event.dispatch(*record.members.all())
 
         me.ws_sound(record)
 
@@ -245,7 +245,7 @@ class DeleteBoard(GuardianView):
 
         event = EDeleteBoard.objects.create(organization=user.default,
         board_name=board.name, user=user)
-        event.users.add(*board.members.all())
+        event.dispatch(*board.members.all())
 
         # Need to unsubscribe or it may misbehave.
         user.ws_sound(board)
@@ -303,7 +303,7 @@ class BindBoardUser(GuardianView):
         me    = User.objects.get(id=self.user_id)
         event = EBindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
-        event.users.add(*board.members.all())
+        event.dispatch(*board.members.all())
 
         me.ws_sound(board)
         me.ws_subscribe(board, target=user)
@@ -327,7 +327,7 @@ class UnbindBoardUser(GuardianView):
         me = User.objects.get(id=self.user_id)
         event = EUnbindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
-        event.users.add(*board.members.all())
+        event.dispatch(*board.members.all())
 
         me.ws_sound(board)
         me.ws_unsubscribe(board, target=user)
@@ -355,6 +355,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

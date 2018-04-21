@@ -73,7 +73,7 @@ class CreateTimeline(GuardianView):
         event = ECreateTimeline.objects.create(organization=user.default,
         timeline=record, user=user)
 
-        event.users.add(user)
+        event.dispatch(user)
 
         user.ws_subscribe(record)
         user.ws_sound()
@@ -108,7 +108,7 @@ class DeleteTimeline(GuardianView):
 
         # should tell users to unsubscribe here.
         # it may hide bugs.
-        event.users.add(*timeline.users.all())
+        event.dispatch(*timeline.users.all())
         timeline.delete()
 
         return redirect('timeline_app:list-timelines')
@@ -124,7 +124,7 @@ class UnbindTimelineUser(GuardianView):
         event = EUnbindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
 
-        event.users.add(*timeline.users.all())
+        event.dispatch(*timeline.users.all())
 
         me.ws_sound(timeline)
 
@@ -160,7 +160,7 @@ class UpdateTimeline(GuardianView):
         event = EUpdateTimeline.objects.create(
         organization=user.default, timeline=record, user=user)
 
-        event.users.add(*record.users.all())
+        event.dispatch(*record.users.all())
 
         user.ws_sound(record)
 
@@ -187,7 +187,7 @@ class PastePosts(GuardianView):
         organization=user.default, timeline=timeline, user=user)
         event.save(hcache=False)
         event.posts.add(*posts)
-        event.users.add(*users)
+        event.dispatch(*users)
         event.save()
 
         user.ws_sound(timeline)
@@ -271,7 +271,7 @@ class BindTimelineUser(GuardianView):
         event    = EBindTimelineUser.objects.create(organization=me.default,
         timeline=timeline, user=me, peer=user)
 
-        event.users.add(*timeline.users.all())
+        event.dispatch(*timeline.users.all())
 
         me.ws_sound(timeline)
         me.ws_subscribe(timeline, target=user)
@@ -384,6 +384,7 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

@@ -37,7 +37,7 @@ class CreateComment(GuardianView):
         event=event, user=user)
 
         scope = event.users.all() | event.signers.all()
-        target.users.add(*scope)
+        target.dispatch(*scope)
         target.save()
 
         for ind in target.users.all():
@@ -54,6 +54,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

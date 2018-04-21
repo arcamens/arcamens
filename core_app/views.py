@@ -160,7 +160,7 @@ class UpdateOrganization(GuardianView):
 
         event = EUpdateOrganization.objects.create(
         organization=user.default, user=user)
-        event.users.add(*record.users.all())
+        event.dispatch(*record.users.all())
 
         user.ws_sound(record)
 
@@ -196,7 +196,7 @@ class DeleteOrganization(GuardianView):
 
         # should tell users to unsubscribe here.
         # it may hide bugs.
-        # event.users.add(*organization.users.all())
+        # event.dispatch(*organization.users.all())
         # organization.delete()
 
         if user.owned_organizations.count() == 1:
@@ -356,7 +356,7 @@ class DeleteTag(GuardianView):
         tag.delete()
 
         users = user.default.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(user.default)
 
@@ -385,7 +385,7 @@ class CreateTag(GuardianView):
         organization=user.default, user=user, tag=record)
 
         users = user.default.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(user.default)
 
@@ -403,7 +403,7 @@ class UnbindUserTag(GuardianView):
         organization=me.default, user=me, peer=user, tag=tag)
 
         users = me.default.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         user.ws_sound(me.default)
 
@@ -420,7 +420,7 @@ class BindUserTag(GuardianView):
         event = EBindUserTag.objects.create(
         organization=me.default, user=me, peer=user, tag=tag)
         users = me.default.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         me.ws_sound(me.default)
 
@@ -463,7 +463,7 @@ class InviteOrganizationUser(GuardianView):
         event = EInviteUser.objects.create(
         organization=organization, user=me, peer=user)
 
-        event.users.add(me, user)
+        event.dispatch(me, user)
 
         url = reverse('core_app:join-organization', kwargs={
         'organization_id': organization.id, 'token': token})
@@ -511,7 +511,7 @@ class JoinOrganization(View):
 
         event = EJoinOrganization.objects.create(organization=organization, 
         peer=invite.user)
-        event.users.add(*organization.users.all())
+        event.dispatch(*organization.users.all())
 
         invite.user.ws_sound(organization)
 
@@ -682,7 +682,7 @@ class Shout(GuardianView):
         user=me, msg=form.cleaned_data['msg'])
 
         users = me.default.users.all()
-        event.users.add(*users)
+        event.dispatch(*users)
 
         me.ws_sound(me.default)
         return redirect('core_app:list-events')
@@ -775,7 +775,7 @@ class RemoveOrganizationUser(GuardianView):
         event = ERemoveOrganizationUser.objects.create(organization=me.default, user=me, 
         peer=user, reason=form.cleaned_data['reason'])
 
-        event.users.add(*me.default.users.all())
+        event.dispatch(*me.default.users.all())
 
         msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
         form.cleaned_data['reason'])
@@ -805,6 +805,7 @@ class CancelInvite(GuardianView):
             invite.user.delete()
         invite.delete()
         return redirect('core_app:list-invites')
+
 
 
 

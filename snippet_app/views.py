@@ -57,7 +57,7 @@ class CreateSnippet(GuardianView):
 
         event = models.ECreateSnippet.objects.create(
         organization=user.default, child=card, user=user, snippet=snippet)
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.ancestor.ancestor.members.all())
 
         user.ws_sound(card.ancestor.ancestor)
 
@@ -150,7 +150,7 @@ class UpdateSnippet(GuardianView):
         organization=user.default, child=record.card, 
         snippet=record, user=user)
 
-        event.users.add(*record.card.ancestor.ancestor.members.all())
+        event.dispatch(*record.card.ancestor.ancestor.members.all())
         event.save()
 
         user.ws_sound(record.card.ancestor.ancestor)
@@ -167,13 +167,14 @@ class DeleteSnippet(GuardianView):
         event = models.EDeleteSnippet.objects.create(organization=user.default,
         child=snippet.card, snippet=snippet.title, user=user)
 
-        event.users.add(*snippet.card.ancestor.ancestor.members.all())
+        event.dispatch(*snippet.card.ancestor.ancestor.members.all())
         snippet.delete()
 
         user.ws_sound(snippet.card.ancestor.ancestor)
 
         return redirect('card_app:view-data', 
         card_id=snippet.card.id)
+
 
 
 
