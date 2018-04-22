@@ -664,33 +664,6 @@ class UndoClipboard(GuardianView):
 
         clipboard.posts.remove(event.post)
 
-# class SetupAssignmentFilter(GuardianView):
-    # def get(self, request):
-        # user = User.objects.get(id=self.user_id)
-# 
-        # filter = AssignmentFilter.objects.get(
-        # user__id=self.user_id, organization=user.default)
-# 
-        # return render(request, 'post_app/setup-assignment-filter.html', 
-        # {'form': forms.AssignmentFilterForm(instance=filter), 
-        # 'user': user})
-# 
-    # def post(self, request):
-        # user = User.objects.get(id=self.user_id)
-# 
-        # record = AssignmentFilter.objects.get(
-        # user__id=self.user_id, organization=user.default)
-# 
-        # sqlike = models.Post.from_sqlike()
-        # form = forms.AssignmentFilterForm(request.POST, sqlike=sqlike, instance=record)
-# 
-        # if not form.is_valid():
-            # return render(request, 'post_app/setup-assignment-filter.html',
-                   # {'user': user, 'form': form}, status=400)
-        # form.save()
-        # return redirect('post_app:list-assignments', user_id=user.id)
-
-
 class PullCardContent(GuardianView):
     """
     """

@@ -45,6 +45,10 @@ class GlobalTaskFilterForm(SqLikeForm, forms.ModelForm):
         model  = models.GlobalTaskFilter
         exclude = ('user', 'organization')
 
+        widgets = {
+            'options': forms.RadioSelect,
+        }
+
 class CardFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.CardFilter
@@ -65,6 +69,7 @@ class FileWrapperForm(forms.ModelForm):
     class Meta:
         model  = models.FileWrapper
         exclude = ('card', )
+
 
 
 

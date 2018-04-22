@@ -990,15 +990,15 @@ class ListAllTasks(GuardianView):
         user=me, organization=me.default)
 
         form  = forms.GlobalTaskFilterForm(instance=filter)
-        cards = me.tasks.filter(
-        ancestor__ancestor__organization=me.default)
 
+        cards = models.Card.get_allowed_cards(me)
+        cards = cards.filter(Q(workers__isnull=False))
         total = cards.count()
+        cards = filter.get_partial(cards)
         
         sqlike = models.Card.from_sqlike()
         sqlike.feed(filter.pattern)
 
-        cards = cards.filter(Q(done=filter.done))
         cards = sqlike.run(cards)
 
         count = cards.count()
@@ -1018,9 +1018,8 @@ class ListAllTasks(GuardianView):
         form   = forms.GlobalTaskFilterForm(
             request.POST, sqlike=sqlike, instance=filter)
 
-        cards = me.tasks.filter(
-        ancestor__ancestor__organization=me.default)
-
+        cards = models.Card.get_allowed_cards(me)
+        cards = cards.filter(Q(workers__isnull=False))
         total = cards.count()
 
         if not form.is_valid():
@@ -1030,7 +1029,7 @@ class ListAllTasks(GuardianView):
 
         form.save()
 
-        cards = cards.filter(Q(done=filter.done))
+        cards = filter.get_partial(cards)
         cards = sqlike.run(cards)
 
         count = cards.count()
@@ -1107,6 +1106,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

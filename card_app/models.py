@@ -94,6 +94,15 @@ class CardMixin(object):
         """
         return self.label
 
+class GlobalTasksFilterMixin:
+    def get_partial(self, cards):
+        cards = cards.filter(Q(done=self.done))
+        if self.options == '0':
+            return cards.filter(workers=self.user)
+        elif self.options == '1':
+            return cards.filter(owner=self.user)
+        return cards
+
 class CardFilterMixin:
     def collect(self, cards):
         sqlike = Card.from_sqlike()
@@ -174,7 +183,7 @@ class GlobalCardFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class GlobalTaskFilter(models.Model):
+class GlobalTaskFilter(GlobalTasksFilterMixin, models.Model):
     pattern  = models.CharField(max_length=255, blank=True, 
     default='', help_text='Example: bug + rocket + engine')
 
@@ -186,6 +195,17 @@ class GlobalTaskFilter(models.Model):
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards?.')
+
+    CHOICES = (
+        ('0', 'Assigned to Me'),
+        ('1', 'Created by Me'),
+        ('2', 'All Tasks')
+
+
+    )
+
+    options = models.CharField(max_length=6, 
+    choices=CHOICES, default='0')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -469,6 +489,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 
