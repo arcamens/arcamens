@@ -22,6 +22,10 @@ class GlobalAssignmentFilterForm(SqLikeForm, forms.ModelForm):
         model  = models.GlobalAssignmentFilter
         exclude = ('user', 'organization')
 
+        widgets = {
+            'options': forms.RadioSelect,
+        }
+
 class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalPostFilter
@@ -48,6 +52,7 @@ class AlertPostWorkersForm(forms.Form):
 class ListSearchform(forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
+
 
 
 

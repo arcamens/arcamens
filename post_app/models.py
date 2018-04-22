@@ -90,6 +90,15 @@ class PostMixin(object):
     def __str__(self):
         return self.label
 
+class GlobalAssignmentsFilterMixin:
+    def get_partial(self, posts):
+        posts = posts.filter(Q(done=self.done))
+        if self.options == '0':
+            return posts.filter(workers=self.user)
+        elif self.options == '1':
+            return posts.filter(user=self.user)
+        return posts
+
 class PostFilterMixin:
     def collect(self, posts):
         sqlike = Post.from_sqlike()
@@ -207,7 +216,7 @@ class GlobalPostFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class GlobalAssignmentFilter(models.Model):
+class GlobalAssignmentFilter(GlobalAssignmentsFilterMixin, models.Model):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: tag:arcamens + tag:urgent')
 
@@ -219,6 +228,17 @@ class GlobalAssignmentFilter(models.Model):
 
     status = models.BooleanField(blank=True, 
     default=False, help_text='Filter On/Off.')
+
+    CHOICES = (
+        ('0', 'Assigned to Me'),
+        ('1', 'Created by Me'),
+        ('2', 'All Tasks')
+
+
+    )
+
+    options = models.CharField(max_length=6, 
+    choices=CHOICES, default='0')
 
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done posts.')
@@ -362,6 +382,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

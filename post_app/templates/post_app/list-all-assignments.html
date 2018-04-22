@@ -16,6 +16,8 @@ Post/Tasks <span class="badge">{{count}}/{{total}}</span></h4>
 <form id="task-search-form" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.options  size='md' %}
+
 {% bootstrap_field form.done  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
@@ -40,6 +42,7 @@ $('#task-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

@@ -816,14 +816,14 @@ class ListAllAssignments(GuardianView):
 
         form  = forms.GlobalAssignmentFilterForm(instance=filter)
 
-        posts = me.assignments.filter(ancestor__organization=me.default)
-
+        posts = models.Post.get_allowed_posts(me)
+        posts = posts.filter(Q(workers__isnull=False))
         total = posts.count()
+        posts = filter.get_partial(posts)
         
         sqlike = models.Post.from_sqlike()
         sqlike.feed(filter.pattern)
 
-        posts = posts.filter(Q(done=filter.done))
         posts = sqlike.run(posts)
 
         count = posts.count()
@@ -843,7 +843,8 @@ class ListAllAssignments(GuardianView):
         form   = forms.GlobalAssignmentFilterForm(
             request.POST, sqlike=sqlike, instance=filter)
 
-        posts = me.assignments.filter(ancestor__organization=me.default)
+        posts = models.Post.get_allowed_posts(me)
+        posts = posts.filter(Q(workers__isnull=False))
         total = posts.count()
 
         if not form.is_valid():
@@ -853,7 +854,7 @@ class ListAllAssignments(GuardianView):
 
         form.save()
 
-        posts = posts.filter(Q(done=filter.done))
+        posts = filter.get_partial(posts)
         posts = sqlike.run(posts)
 
         count = posts.count()
@@ -862,11 +863,5 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
-
-
-
-
-
-
 
 
