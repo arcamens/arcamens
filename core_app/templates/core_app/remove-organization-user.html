@@ -16,10 +16,14 @@
 <div class="pre-scrollable">
 {% for ind in timelines %}
 <p> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.name}} </p>
+{% empty %}
+<p> No timelines...</p>
 {% endfor %}
 
 {% for ind in boards %}
 <p> <span class="glyphicon glyphicon-th"></span>  {{ind.name}} </p>
+{% empty %}
+<p> No boards...</p>
 {% endfor %}
 
 </div>
@@ -38,6 +42,7 @@ data-dismiss="modal">Cancel</button>
 data-show="{% url 'core_app:remove-organization-user' user.id %}" class="btn btn-danger m-post"> 
      {% trans "Remove" %}
 </button>
+
 
 
 
