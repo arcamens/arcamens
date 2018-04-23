@@ -4,15 +4,15 @@
 data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="{{ ind.get_link_url }}">
 
-<button type="button" class="close" 
-onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
-
 <span class="glyphicon glyphicon-file"></span>
 {{ind.card.label|truncatechars:20}}
+
+<span class="close" onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</span>
 
 </a>
 
 </li>
+
 
 
 

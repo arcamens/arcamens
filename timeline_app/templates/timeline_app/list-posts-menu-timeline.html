@@ -1,10 +1,10 @@
 {% load i18n %}
 
-<ul class="nav nav-pills ul-menu-posts" style="background:#DADDDD;">
+<ul class="nav nav-pills menu-timeline">
 
 <li class="disabled">
 <a  href="#"> <b><span class="glyphicon glyphicon-eye-open"></span>  
-{{timeline.name|slice:":20"}}'s Posts: <span class="badge">{{count}}/{{total}}</span></b> </a>
+{{timeline.name|slice:":20"}}'s Posts <span class="badge">{{count}}/{{total}}</span></b> </a>
 </li>
 
 <li data-toggle="tooltip" title="Up">
@@ -46,6 +46,8 @@ data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
 </ul>
+
+
 
 
 

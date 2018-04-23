@@ -2,7 +2,7 @@
 word-wrap: 
 break-word;
 
-background-color:#DCD6D8;
+background-color:#A9C6F7;
 }
 
 
@@ -10,14 +10,14 @@ background-color:#DCD6D8;
 word-wrap: 
 break-word;
 
-background-color:#A9B7CA;
+background-color:#B4C9F0;
 }
 
 .list-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#A9B7CA;
+background-color:#B4C9F0;
 
 }
 
@@ -25,12 +25,12 @@ background-color:#A9B7CA;
 word-wrap: 
 break-word;
 
-background-color:#C9C2A4;
+background-color:#C9D5EA;
 
 }
 
 .pin-list {
-color:#82742A;
+color:#2A4FA4;
 
 }
 
@@ -40,7 +40,7 @@ color:#5E666F;
 }
 
 .pin-board {
-color:#3669AD;
+color:#05163D;
 
 }
 
@@ -48,7 +48,7 @@ color:#3669AD;
 word-wrap: 
 break-word;
 
-background-color:#C9C2A4;
+background-color:#C9D5EA;
 
 }
 
@@ -73,22 +73,32 @@ break-word;
 
 body {
 
-background-color:#C7C7C7;
+background-color:#93BCFF;
 }
 
-
-.timeline {
-word-wrap: 
-break-word;
-
-background-color:#A0BCBC;
-
-}
 
 .modal-header  {
     word-wrap: break-word;
 }
 
+.menu-timeline  {
+    background:#C2D5F5;
+}
+
+.menu-organization  {
+    background:#A9C6F7;
+}
+
+.menu-timeline  {
+    background:#C2D5F5;
+}
+
+.timeline  {
+    word-wrap: 
+    break-word;
+
+    background:#C2D5F5;
+}
 
 
 

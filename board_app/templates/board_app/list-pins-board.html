@@ -1,19 +1,14 @@
 <li>
 
-<a class="e-get pin-board" 
-data-callback-error="$('#modalError').modal('toggle');" 
-data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="{{ ind.get_link_url }}">
-
-<button type="button" class="close" 
-onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();">&times;</button>
-
-<span class="glyphicon glyphicon-th"></span> 
-{{ind.board.name}}
+<a class="e-get pin-board" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="{{ ind.get_link_url }}"> <span class="glyphicon glyphicon-th"></span>  {{ind.board.name}}
+<span  onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');$(this).stopPropagation();" class="close">
+&times;
+</span>
 
 </a>
-
 </li>
+
 
 
 

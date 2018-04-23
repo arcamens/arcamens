@@ -1,11 +1,10 @@
 {% load i18n %}
 
-<ul class="nav nav-pills ul-menu-posts" style="background:#DADDDD;">
+<ul class="nav nav-pills menu-organization">
 
-<li class="disabled">
-<a href="#"> <span class="glyphicon glyphicon-flag"></span>  <b>
-{{organization.name}}'s Timelines: <span class="badge">{{children.count}}/{{total.count}}</span></b> </a> 
-</li>
+<li>
+<a href="#"> <span class="glyphicon glyphicon-eye-open"></span>  <b>Timelines <span class="badge">
+{{children.count}}/{{total.count}}</span></b> </a> </li>
 
 <li>
 <a  class="s-modal" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
@@ -36,6 +35,8 @@ Filter </strike>
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
+
 
 
 
