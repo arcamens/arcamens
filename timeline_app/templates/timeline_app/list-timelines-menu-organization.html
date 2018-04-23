@@ -7,7 +7,7 @@
 {{children.count}}/{{total.count}}</span></b> </a> </li>
 
 <li>
-<a  class="s-modal" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
+<a  class="s-modal text-warning" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
 href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Timeline" %}</a></li>
 
 <li>
@@ -35,6 +35,7 @@ Filter </strike>
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
 
 
 
