@@ -2,7 +2,7 @@
 word-wrap: 
 break-word;
 
-background-color:#A9C6F7;
+background-color:#C2D5F5;
 }
 
 
@@ -10,14 +10,14 @@ background-color:#A9C6F7;
 word-wrap: 
 break-word;
 
-background-color:#B4C9F0;
+background-color:white;
 }
 
 .list-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#B4C9F0;
+background-color:#C2D5F5;
 
 }
 
@@ -25,7 +25,7 @@ background-color:#B4C9F0;
 word-wrap: 
 break-word;
 
-background-color:#C9D5EA;
+background-color:white;
 
 }
 
@@ -48,7 +48,7 @@ color:#05163D;
 word-wrap: 
 break-word;
 
-background-color:#C9D5EA;
+background-color:#C2D5F5;
 
 }
 
@@ -86,7 +86,7 @@ background-color:#93BCFF;
 }
 
 .menu-organization  {
-    background:#A9C6F7;
+    background:#C2D5F5;
 }
 
 .menu-timeline  {
@@ -97,7 +97,7 @@ background-color:#93BCFF;
     word-wrap: 
     break-word;
 
-    background:#C2D5F5;
+    background:white;
 }
 
 
