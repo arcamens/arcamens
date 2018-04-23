@@ -23,7 +23,7 @@ Create Organization
 {% block buttons %}
 <button  type="button" data-form="#form-organization-data" 
 data-callback="window.location='{% url 'board_app:index' %}';" 
-data-shell-error="#modalContent" 
+data-shell-error="#smallModalContent" 
 data-show="{% url 'board_app:create-organization' user.id %}"
 class="btn btn-default e-post">  {% trans "Create" %} </button>
 {% endblock %}

@@ -73,7 +73,7 @@ No attachment.
 {% for ind in post.tags.all %}
 <a 
 data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
-data-shell="#modalContent" 
+data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
 class="e-get"
 href="#">
@@ -110,7 +110,7 @@ Workers </h5>
 {% for ind in post.workers.all %}
 <a 
 data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
-data-shell="#modalContent" 
+data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
 class="e-get"
 href="#">
@@ -120,7 +120,7 @@ href="#">
 </a>
 
 {% if forloop.last %} 
-<br> <a class="e-get text-warning" data-shell="#modalContent" data-callback="$('#modal').modal('toggle');" 
+<br> <a class="e-get text-warning" data-shell="#smallModalContent" data-callback="$('#modal').modal('toggle');" 
 data-show="{% url 'post_app:alert-post-workers' post.id %}" href="#">
 <span class="glyphicon glyphicon-alert"></span>
 
@@ -150,7 +150,7 @@ data-callback="$('#bigModal').modal('show');"  class="text-warning e-get">
 
 <a href="#"
 data-callback="$('#modal').modal('show');" 
-data-shell="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
+data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
 <a class="text-danger s-modal" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
@@ -176,7 +176,7 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 
 <a href="#"
 data-callback="$('#modal').modal('show');" 
-data-shell="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
+data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
 <a class="text-warning s-modal" href="#"

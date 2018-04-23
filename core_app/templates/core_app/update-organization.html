@@ -15,7 +15,7 @@
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<a href="#" class="e-get" data-shell="#modalContent" data-show="{% url 'core_app:list-tags' %}" data-callback="$('#modal').modal('show');">  
+<a href="#" class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:list-tags' %}" data-callback="$('#modal').modal('show');">  
 <span class="glyphicon glyphicon-tag"></span> Tags </a>
 
 <a href="#" class="s-modal" data-show="{% url 'bitbucket_app:list-bitbucket-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
@@ -28,7 +28,7 @@ Bitbucket/Webhooks</a>
 <button  type="button" data-show="{% url 'core_app:delete-organization' organization.id %}" class="btn btn-danger s-modal">  
 {% trans "Delete" %} </button>
 
-<button  type="button" data-form="#form-organization-data" data-callback="location.reload()"  data-shell-error="#modalContent" 
+<button  type="button" data-form="#form-organization-data" data-callback="location.reload()"  data-shell-error="#smallModalContent" 
 data-show="{% url 'core_app:update-organization' organization.id %}" class="btn btn-default e-post"> {% trans "Update" %}
 </button>
 

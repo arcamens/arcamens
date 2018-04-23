@@ -7,7 +7,7 @@
 <ul class="dropdown-menu" role="menu">
 
 <li><a class="e-get" 
-data-shell="#modalContent" 
+data-shell="#smallModalContent" 
 data-show="{% url 'board_app:update-board' board.id %}" 
 data-callback="$('#modal').modal('show');" 
 href="#"> 
@@ -18,7 +18,7 @@ href="#">
 <li class="divider"></li>
 
 <li><a class="e-get" 
-data-shell="#modalContent" 
+data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
 data-show="{% url 'board_app:manage-board-users' board.id %}" 
 href="#"> <span class="glyphicon glyphicon-user"></span> 
@@ -27,7 +27,7 @@ href="#"> <span class="glyphicon glyphicon-user"></span>
 
 <li><a class="e-get" 
 data-show="{% url 'board_app:delete-board' board.id %}" 
-data-shell="#modalContent" 
+data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
 
 href="#"> <span class="glyphicon glyphicon-remove"></span> 

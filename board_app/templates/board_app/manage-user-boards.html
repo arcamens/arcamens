@@ -58,14 +58,14 @@ data-show="{% url 'board_app:bind-board-user' ind.id user.id %}" href="#">
 {% block buttons %}
 
 <button  type="button" 
-data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:list-users' organization.id  %}"
+data-shell="#smallModalContent" 
+data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users' organization.id  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
 <button  type="button" data-form="#bind-board-search-form" 
-data-shell="#modalContent" id="searchBoardsButton"
-data-shell-error="#modalContent" data-show="{% url 'board_app:manage-user-boards' user.id  %}"
+data-shell="#smallModalContent" id="searchBoardsButton"
+data-shell-error="#smallModalContent" data-show="{% url 'board_app:manage-user-boards' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 

@@ -53,8 +53,8 @@ $('#modal').one('hidden.bs.modal', function () {
 </script>
 
 <button  type="button" data-form="#tagSearchForm" 
-data-shell="#modalContent" id="tagSearchButton"
-data-shell-error="#modalContent" data-show="{% url 'post_app:manage-post-tags' post.id  %}"
+data-shell="#smallModalContent" id="tagSearchButton"
+data-shell-error="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 

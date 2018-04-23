@@ -738,4 +738,7 @@ python manage.py migrate bitbucket_app
 # backup of the db on victor server.
 
 mysqldump -u staging -p staging > ../mysql.sql
+##############################################################################
+
+grep -rl '#smallModalContent' --exclude-dir='.git' ./ | xargs sed -i 's/#smallModalContent/#smallModalContent/g'
 

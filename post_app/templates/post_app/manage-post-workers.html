@@ -72,8 +72,8 @@ $('#modal').one('hidden.bs.modal', function () {
 </script>
 
 <button  type="button" data-form="#assign-post-search-form" 
-data-shell="#modalContent" id="filterPostWorkers"
-data-shell-error="#modalContent" data-show="{% url 'post_app:manage-post-workers' post.id  %}"
+data-shell="#smallModalContent" id="filterPostWorkers"
+data-shell-error="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 

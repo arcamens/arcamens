@@ -27,8 +27,8 @@ Call {{peer.name}} attention on post
 </button>
 
 <button  type="button" data-form="#requestpostAttentionForm" 
-data-shell="#modalContent" 
-data-shell-error="#modalContent" data-show="{% url 'post_app:request-post-attention' peer.id post.id  %}"
+data-shell="#smallModalContent" 
+data-shell-error="#smallModalContent" data-show="{% url 'post_app:request-post-attention' peer.id post.id  %}"
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>

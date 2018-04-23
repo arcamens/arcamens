@@ -24,7 +24,7 @@ data-dismiss="modal">Cancel</button>
 
 <button  id="createCard" type="button" data-form="#confirmboardDeletionForm"
 data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'board_app:delete-board' board.id %}"
+data-shell-error="#smallModalContent" data-show="{% url 'board_app:delete-board' board.id %}"
 class="btn btn-default e-post"> 
      {% trans "Delete" %}
 </button>

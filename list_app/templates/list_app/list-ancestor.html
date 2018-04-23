@@ -20,7 +20,7 @@ data-show="{% url 'board_app:list-boards' %}">
 </button>
 
 <button class="btn btn-warning e-get" 
-data-shell="#modalContent" type="button"
+data-shell="#smallModalContent" type="button"
 data-show="{% url 'list_app:create-list' board.id %}"  
 data-callback="$('#modal').modal('toggle');">
 <span class="glyphicon glyphicon-plus"></span> 
@@ -28,7 +28,7 @@ data-callback="$('#modal').modal('toggle');">
 </button>
 
 <button class="btn btn-default e-get" 
-data-shell="#modalContent" type="button"
+data-shell="#smallModalContent" type="button"
 data-show="{% url 'list_app:setup-list-filter' board.id %}"  
 data-callback="$('#modal').modal('toggle');">
 {% if filter.status %}

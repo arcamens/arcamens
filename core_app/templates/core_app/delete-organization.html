@@ -23,7 +23,7 @@
 data-dismiss="modal">Cancel</button>
 
 <button  id="createCard" type="button" data-form="#confirmOrganizationDeletionForm" data-callback="location.reload()" 
-data-shell-error="#modalContent" data-show="{% url 'core_app:delete-organization' organization.id %}"
+data-shell-error="#smallModalContent" data-show="{% url 'core_app:delete-organization' organization.id %}"
 class="btn btn-danger e-post"> 
      {% trans "Delete" %}
 </button>

@@ -22,7 +22,7 @@ data-dismiss="modal">Cancel</button>
 
 <button  id="createCard" type="button" 
 data-shell="#main-view" data-callback="$('#modal').modal('toggle');" 
-data-shell-error="#modalContent" data-show="{% url 'card_app:delete-card' card.id %}"
+data-shell-error="#smallModalContent" data-show="{% url 'card_app:delete-card' card.id %}"
 class="btn btn-danger e-get"> 
      {% trans "Delete" %}
 </button>
