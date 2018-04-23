@@ -716,7 +716,7 @@ class RemoveOrganizationUser(GuardianView):
         # If i'm the owner then i can't remove myself.
         # I should delete the organization.
         if me.default.owner == user:
-            return HttpResponse("You can't remove your self!", status=403)
+            return HttpResponse("You can't remove the owner!", status=403)
 
         form = forms.RemoveUserForm()
         timelines = user.owned_timelines.filter(organization=me.default)
@@ -805,6 +805,7 @@ class CancelInvite(GuardianView):
             invite.user.delete()
         invite.delete()
         return redirect('core_app:list-invites')
+
 
 
 
