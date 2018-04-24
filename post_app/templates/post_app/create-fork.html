@@ -10,29 +10,20 @@
 Keep old content? </a>
 </div>
 
-<button  type="button" data-form="#form-card-data" 
-data-callback="$('#bigModal').modal('toggle');" 
+<button  type="button" data-callback="$('#bigModal').modal('toggle');" 
 data-show="{% url 'card_app:cancel-card-creation' card.id %}"
 class="btn btn-default e-get"> 
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#form-card-data" data-shell="#main-view" id="createCardFork"
+<button  type="button" data-form="#form-card-data" data-shell="#main-view" 
 data-show="{% url 'post_app:create-card-fork' ancestor.id post.id card.id %}"
 class="btn btn-default m-post-close"> 
 {% trans "Fork" %}
 </button>
 
-<script>
-$('#form-post-data').on('submit', (function(e){
-    e.preventDefault();
-        $('#createCardFork').click();
-
-}));
-</script>
-
-
 {% endblock %}
+
 
 
 

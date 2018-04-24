@@ -56,7 +56,7 @@ $('#modal').one('hidden.bs.modal', function () {
 })
 </script>
 
-<button  type="button" data-form="#tagSearchForm" id="filterCardTags" 
+<button  type="button" data-form="#tagSearchForm"  
 data-show="{% url 'card_app:manage-card-tags' card.id  %}"
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
@@ -65,19 +65,4 @@ class="btn btn-default m-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-
-<script>
-$('#tagSearchForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#filterCardTags').click();
-
-}));
-</script>
-
-
-
-
-
-
 

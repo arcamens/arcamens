@@ -69,8 +69,7 @@ data-show="{% url 'board_app:bind-board-user' board.id ind.id %}" href="#">
 
 <div class="modal-footer">
 
-<button  type="button" data-form="#userSearchForm" 
-data-shell="#smallModalContent" id="searchUsersButton"
+<button  type="button" data-form="#userSearchForm" data-shell="#smallModalContent" 
 data-shell-error="#smallModalContent" data-show="{% url 'board_app:manage-board-users' board.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -79,17 +78,4 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-<script>
-$('#userSearchForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#searchUsersButton').click();
-
-}));
-</script>
-
-
-
-
-
 

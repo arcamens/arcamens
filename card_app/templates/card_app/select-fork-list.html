@@ -38,21 +38,10 @@ data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href=
 
 <div class="modal-footer">
 
-<button  type="button" data-form="#selectForkListForm" id="selectForkListButton"
+<button  type="button" data-form="#selectForkListForm" 
 data-show="{% url 'card_app:select-fork-list'  card.id %}"
 class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
-
-<script>
-$('#selectForkListForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#selectForkListButton').click();
-
-}));
-</script>
-
-
-
 

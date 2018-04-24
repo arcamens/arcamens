@@ -52,8 +52,7 @@ $('#modal').one('hidden.bs.modal', function () {
 })
 </script>
 
-<button  type="button" data-form="#tagSearchForm" 
-data-shell="#smallModalContent" id="tagSearchButton"
+<button  type="button" data-form="#tagSearchForm" data-shell="#smallModalContent" 
 data-shell-error="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -62,16 +61,4 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-<script>
-$('#tagSearchForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#tagSearchButton').click();
-
-}));
-</script>
-
-
-
-
 

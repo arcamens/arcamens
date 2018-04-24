@@ -10,8 +10,7 @@
 Keep old content? </a>
 </div>
 
-<button  type="button" data-form="#form-card-data" 
-data-callback="$('#bigModal').modal('toggle');" 
+<button  type="button" data-callback="$('#bigModal').modal('toggle');" 
 data-show="{% url 'card_app:cancel-card-creation' fork.id %}"
 class="btn btn-default e-get"> 
      {% trans "Cancel" %}
@@ -23,41 +22,8 @@ class="btn btn-default m-post-close">
 {% trans "Fork" %}
 </button>
 
-<script>
-
-/*
-$('#bigModal').one('hidden.bs.modal', function () {
-    var formData = new FormData($('#form-card-data')[0]);
-
-    $.ajax({
-    url: "{% url 'card_app:create-card' card.id fork.id %}",  //Server script to process data
-    type: 'POST',
-    data: formData,
-    cache: false,
-    success: function(data) {
-        $('#main-view').load('{% url 'card_app:view-data' fork.id  %}');
-
-    },
-
-    contentType: false,
-    processData: false
-    });
-
-})
-*/
-
-</script>
-
-<script>
-$('#form-card-data').on('submit', (function(e){
-    e.preventDefault();
-        $('#createFork').click();
-
-}));
-</script>
-
-
 {% endblock %}
+
 
 
 

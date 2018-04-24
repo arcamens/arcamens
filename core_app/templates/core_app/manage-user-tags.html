@@ -54,7 +54,7 @@ data-show="{% url 'core_app:bind-user-tag' user.id ind.id %}" href="#">
 <button  type="button" data-show="{% url 'core_app:list-users' me.default.id  %}" href="#"
 class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
-<button  type="button" id="tagSearchButton" data-form="#tagSearchForm" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
+<button  type="button" data-form="#tagSearchForm" data-show="{% url 'core_app:manage-user-tags' user.id  %}"
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <button type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -62,16 +62,4 @@ class="btn btn-default m-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-
-<script>
-$('#tagSearchForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#tagSearchButton').click();
-
-}));
-</script>
-
-
-
 

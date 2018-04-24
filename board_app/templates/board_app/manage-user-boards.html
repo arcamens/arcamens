@@ -63,8 +63,7 @@ data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users' or
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
-<button  type="button" data-form="#bind-board-search-form" 
-data-shell="#smallModalContent" id="searchBoardsButton"
+<button  type="button" data-form="#bind-board-search-form" data-shell="#smallModalContent" 
 data-shell-error="#smallModalContent" data-show="{% url 'board_app:manage-user-boards' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -73,21 +72,4 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-<script>
-$('#bind-board-search-form').on('submit', (function(e){
-    e.preventDefault();
-        $('#searchBoardsButton').click();
-
-}));
-</script>
-
-
-
-
-
-
-
-
-
 

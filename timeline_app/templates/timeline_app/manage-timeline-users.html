@@ -67,7 +67,7 @@ data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href=
 
 <div class="modal-footer">
 
-<button type="button" data-form="#bind-timeline-search-form" id="manageTimelineUsersSearch"
+<button type="button" data-form="#bind-timeline-search-form" 
 data-show="{% url 'timeline_app:manage-timeline-users' timeline.id  %}"
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
@@ -76,14 +76,4 @@ class="btn btn-default m-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
-<script>
-$('#bind-timeline-search-form').on('submit', (function(e){
-    e.preventDefault();
-        $('#manageTimelineUsersSearch').click();
-
-}));
-</script>
-
-
 
