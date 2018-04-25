@@ -53,6 +53,11 @@ class UpdateOrganizationForm(forms.ModelForm):
         model = models.Organization
         fields = ( 'name', )
 
+class UserSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False,
+    help_text='tag:developer + tag:python')
+
+
 
 
 

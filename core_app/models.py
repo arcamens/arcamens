@@ -14,6 +14,10 @@ class Organization(OrganizationMixin, models.Model):
     related_name='owned_organizations', blank=True)
     created = models.DateTimeField(auto_now=True, null=True)
 
+    admins = models.ManyToManyField(
+    'User', related_name='managed_organizations', 
+    null=True, blank=True, symmetrical=False)
+
 class OrganizationService(Service):
     """
     Fill here with basic  info 
@@ -208,6 +212,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 

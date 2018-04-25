@@ -713,11 +713,6 @@ class RemoveOrganizationUser(GuardianView):
         me   = User.objects.get(id=self.user_id)
         user = User.objects.get(id=user_id)
 
-        # If i'm the owner then i can't remove myself.
-        # I should delete the organization.
-        if me.default.owner == user:
-            return HttpResponse("You can't remove the owner!", status=403)
-
         form = forms.RemoveUserForm()
         timelines = user.owned_timelines.filter(organization=me.default)
         boards = user.owned_boards.filter(organization=me.default)
@@ -728,15 +723,30 @@ class RemoveOrganizationUser(GuardianView):
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
         user = User.objects.get(id=user_id)
+        me   = User.objects.get(id=self.user_id)
+
+        # If i'm the owner then i can't remove myself.
+        # I should delete the organization.
+
+        if me.default.owner == user:
+            return HttpResponse("You can't remove the owner!", status=403)
+
+        is_admin = me.default.admins.filter(id=user.id).exists()
+        me_owner = me.default.owner == me
+        me_admin = me.default.admins.filter(id=me.id).exists()
+
+        # If the user is an admin and i'm not the owner.
+        if is_admin and not me_owner:
+            return HttpResponse("Only owner can do that!", status=403)
+
+        # If i'm not admin and the user is regular.
+        if not me_admin:
+            return HttpResponse("Only admins can do that!", status=403)
 
         if not form.is_valid():
             return render(request, 
                 'core_app/remove-organization-user.html', 
                     {'user': user, 'form': form})
-
-        me = User.objects.get(id=self.user_id)
-
-        # Make it impossible for the owner to remove himself.
 
         # Remove user from all posts/cards he is assigned to.
         user.assignments.through.objects.filter(
@@ -806,7 +816,113 @@ class CancelInvite(GuardianView):
         invite.delete()
         return redirect('core_app:list-invites')
 
+class ManageOrganizationAdmins(GuardianView):
+    def get(self, request):
+        me = User.objects.get(id=self.user_id)
+
+        included = me.default.admins.all()
+        users    = me.default.users.all()
+        excluded = users.exclude(id__in=included)
+        total    = included.count() + excluded.count()
+
+        return render(request, 'core_app/manage-organization-admins.html', 
+        {'included': included, 'excluded': excluded,
+        'me': me, 'organization': me.default,'form':forms.UserSearchForm(), 
+        'count': total, 'total': total,})
+
+    def post(self, request):
+        sqlike = User.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        me   = User.objects.get(id=self.user_id)
+
+        included = me.default.admins.all()
+        users    = me.default.users.all()
+        excluded = users.exclude(id__in=included)
+        total    = included.count() + excluded.count()
+        
+        if not form.is_valid():
+            return render(request, 'core_app/manage-organization-admins.html', 
+                {'me': me, 'count': 0, 'total': total, 'organization': me.default,
+                        'form':form}, status=400)
+
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
+        count = included.count() + excluded.count()
+
+        return render(request, 'core_app/manage-organization-admins.html', 
+        {'included': included, 'excluded': excluded, 
+        'me': me, 'organization': me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class BindOrganizationAdmin(GuardianView):
+    def get(self, request, organization_id, user_id):
+        user = User.objects.get(id=user_id)
+        me    = User.objects.get(id=self.user_id)
+        organization = Organization.objects.get(id=organization_id)
+
+        if organization.owner != me:
+            return HttpResponse("Just owner can do that!", status=403)
+
+        organization.admins.add(user)
+        organization.save()
+
+        # me    = User.objects.get(id=self.user_id)
+        # event = EBindOrganizationUser.objects.create(organization=me.default,
+        # organization=organization, user=me, peer=user)
+# 
+        # event.dispatch(*organization.users.all())
+# 
+        # me.ws_sound(organization)
+        # me.ws_subscribe(organization, target=user)
+
+        # it seems i cant warrant the order the events will be dispatched
+        # to the queue, if it is userid queue or organizationid queue
+        # then i have to just send again the sound event to the 
+        # user queue to warrant the event sound being dispatched.
+        # obs: if i'll abandon sound when user interacts it is not
+        # necessary.
+        # me.ws_sound(user)
+
+        return HttpResponse(status=200)
+
+class UnbindOrganizationAdmin(GuardianView):
+    def get(self, request, organization_id, user_id):
+        user = User.objects.get(id=user_id)
+        me = User.objects.get(id=self.user_id)
+
+        organization = Organization.objects.get(id=organization_id)
+
+        if organization.owner == user:
+            return HttpResponse("You can't remove the owner!", status=403)
+
+        if organization.owner != me:
+            return HttpResponse("No permission for that!", status=403)
 
 
+        organization.admins.remove(user)
+        organization.save()
+
+        # me    = User.objects.get(id=self.user_id)
+        # event = EUnbindOrganizationUser.objects.create(organization=me.default,
+        # organization=organization, user=me, peer=user)
+# 
+        # event.dispatch(*organization.users.all())
+# 
+        # me.ws_sound(organization)
+
+        # When user is removed from timline then it
+        # gets unsubscribed from the organization.
+        # The logged user is sending the event
+        # to the user queue that is going to receive
+        # the unsubscribe evvent.
+        # me.ws_unsubscribe(organization, target=user)
+
+        # As said before, order of events cant be determined
+        # when dispatched towards two queues. It might
+        # happen of sound event being dispatched before subscribe event.
+        # So, we warrant sound to happen.
+        # me.ws_sound(user)
+
+        return HttpResponse(status=200)
 
 

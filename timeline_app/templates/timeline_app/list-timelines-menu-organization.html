@@ -22,11 +22,22 @@ Filter
 Filter </strike>
 
 {% endif %}
+</a></li>
 
+<li>
+<a href="#" class="e-get" data-shell="#smallModalContent" 
+data-show="{% url 'core_app:list-tags' %}" data-callback="$('#modal').modal('show');">
+<span class="glyphicon glyphicon-tag"></span> Tags
 </a>
+
 </li>
+
 <li><a href="#" class="s-modal"  data-show="{% url 'core_app:list-users' user.default.id %}">
 <span class="glyphicon glyphicon-user"></span> Members  </a> </li>
+
+<li>
+<a class="s-modal" href="#" data-show="{% url 'core_app:manage-organization-admins' %}">
+<span class="glyphicon glyphicon-user"></span> Admins </a> </li>
 
 <li><a href="#" class="s-modal"  data-show="{% url 'core_app:update-organization' user.default.id %}">
 <span class="glyphicon glyphicon-cog"></span> Settings </a></li>
@@ -35,6 +46,7 @@ Filter </strike>
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 </ul>
+
 
 
 
