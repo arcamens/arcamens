@@ -15,7 +15,7 @@ class RegisterProcessMixin:
 
         self.signup_url = '%s%s' % (settings.LOCAL_ADDR, signup_url)
 
-        send_mail('Confirmm your account', '%s' % self.signup_url, 
+        send_mail('Confirm your account', '%s' % self.signup_url, 
         'noreply@splittask.net', [self.user.email], fail_silently=False)
         super().save(*args, **kwargs)
 

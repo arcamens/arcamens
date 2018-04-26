@@ -3,7 +3,7 @@ from core_app.models import Organization
 from slock.views import AuthenticatedView, LogoutView, LoginView
 from slock.forms import SetPasswordForm
 from django.shortcuts import render, redirect
-from site_app.models import PasswordTicket
+from site_app.models import PasswordTicket, RegisterProcess
 from django.core.mail import send_mail
 from django.views.generic import View
 from django.http import HttpResponse
