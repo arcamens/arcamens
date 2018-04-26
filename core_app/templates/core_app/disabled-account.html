@@ -19,7 +19,7 @@
   <div class="jumbotron">
     <h1>Opus</h1> 
 
-<h4 class="text-warning"> Your default organization account was disabled. 
+<h4 class="text-warning"> Your default organization <b> {{user.default.name}}</b>'s account was disabled. 
 <br>
 <small> Set other organization as default! </small>
 </h4> 
@@ -29,7 +29,7 @@
 <br>
 
 <div class="pull-right">
-<a href="#"> Switch default organization </a>
+<a href="{% url 'core_app:switch-organization' other.id %}" > Switch default organization? </a>
 
 </div>
 
@@ -39,7 +39,5 @@
 
 </body>
 </html>
-
-
 
 

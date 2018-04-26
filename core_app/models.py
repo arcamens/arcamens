@@ -113,7 +113,6 @@ class OrganizationMixin(QueueWS):
     def __str__(self):
         return self.name
 
-
 class InviteMixin:
     def save(self, *args, **kwargs):
         self.token  = 'invite%s' % random.randint(1000, 10000)

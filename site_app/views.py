@@ -79,9 +79,7 @@ class SignUp(LoginView):
         # has a field named enabled, it is False for default
         # unless it is a free plan whose record is created by us.
         record         = form.save(commit=False)
-        service        = OrganizationService.objects.get(paid=False)
-        record.service = service
-        record.enabled = True
+        # record.enabled = True
 
         record.save()
         organization   = Organization.objects.create(name='Main', owner=record)
@@ -89,8 +87,19 @@ class SignUp(LoginView):
         record.organizations.add(organization)
         record.save()
 
-        request.session['user_id'] = record.id
+        process = RegisterProcess.objects.create(user=record)
 
+        return render(request, 
+            'site_app/confirm-email.html', {'user': record})
+
+class EnableAccount(View):
+    def get(self, request, user_id, token):
+        process = RegisterProcess.objects.get(user__id=user_id, token=token)
+        process.user.enabled = True
+        process.user.save()
+        process.delete()
+
+        request.session['user_id'] = user_id
         return redirect('core_app:index')
 
 class Upgrade(AuthenticatedView):

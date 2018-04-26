@@ -38,20 +38,6 @@ class GuardianView(AuthenticatedView):
         return super(GuardianView, self).delegate(
             request, *args, **kwargs)
 
-class DisabledAccount(AuthenticatedView):
-    def get(self, request):
-        user = User.objects.get(id=self.user_id)
-
-        return render(request, 'core_app/disabled-account.html', 
-        {'user': user})
-
-class FixAccountDebits(AuthenticatedView):
-    def get(self, request):
-        user = User.objects.get(id=self.user_id)
-
-        return render(request, 'core_app/fix-account-debits.html', 
-        {'user': user})
-
 class Index(AuthenticatedView):
     """
     """
@@ -60,18 +46,37 @@ class Index(AuthenticatedView):
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
     
-        # It should check if the default account is owned by the user.
-        # if it is owned and it is disabled then he should be redirected
-        # to payment-settings view to fix his payment situation.
+        if hasattr(user, 'register_process'):
+            return render(request, 
+                'site_app/confirm-email.html', {'user': user})
+
         if not user.default.owner.enabled:
-            if user.default.owner == user:
-                return redirect('core_app:fix-account-debits')
-            return redirect('core_app:disabled-account')
+            if user.default.owner != user:
+                return redirect('core_app:disabled-account')
+            else:
+                self.create_issue(user)
 
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations,
          'settings': settings})
+
+    def create_issue(self, user):
+        event = EDisabledAccount.objects.create(
+        organization=user.default, user=user)
+
+        event.users.add(user)
+
+        # Sound wouldnt work here.
+        # user.default.ws_sound()
+
+class DisabledAccount(AuthenticatedView):
+    def get(self, request):
+        user = User.objects.get(id=self.user_id)
+        other = user.owned_organizations.first()
+
+        return render(request, 'core_app/disabled-account.html', 
+        {'user': user, 'other': other})
 
 class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):

@@ -14,17 +14,7 @@ urlpatterns = [
     url(r'^paypal-ipn/', views.PayPalIPN.as_view(), name='paypal-ipn'),
     url(r'^recover-account/', views.RecoverAccount.as_view(), name='recover-account'),
     url(r'^redefine-password/(?P<user_id>.+)/(?P<token>.+)/', views.RedefinePassword.as_view(), name='redefine-password'),
+    url(r'^enable-account/(?P<user_id>.+)/(?P<token>.+)/', views.EnableAccount.as_view(), name='enable-account'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
 
