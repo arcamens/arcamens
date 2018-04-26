@@ -1,4 +1,4 @@
-from core_app.models import OrganizationService, Organization, User, \
+from core_app.models import Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
 EUpdateOrganization, ERemoveOrganizationUser
@@ -428,25 +428,28 @@ class BindUserTag(GuardianView):
 
 class InviteOrganizationUser(GuardianView):
     def get(self, request, organization_id):
-        user         = User.objects.get(id=self.user_id)
-        organization = Organization.objects.get(id=organization_id)
+        user = User.objects.get(id=self.user_id)
 
         return render(request, 'core_app/invite-organization-user.html', 
         {'form': forms.OrganizationInviteForm(), 'user': user})
 
     def post(self, request, organization_id):
-        organization = Organization.objects.get(id=organization_id)
-        form         = forms.OrganizationInviteForm(request.POST)
+        me = User.objects.get(id=self.user_id)
+
+        if not me.default.admins.filter(id=me.id).exists():
+            return HttpResponse("Only admins can do that!", status=403)
+
+        if me.default.owner.is_max_users():
+            return HttpResponse("Max users limit was arrived!\
+                You need to upgrade your plan!", status=403)
+
+        form = forms.OrganizationInviteForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'core_app/invite-organization-user.html',
                   {'form': form, 'organization': organization}, status=400)
 
         email = form.cleaned_data['email']
-
-        # If the user doesn't exist
-        # we send him an email invite.
-        me = User.objects.get(id=self.user_id)
 
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
@@ -455,29 +458,42 @@ class InviteOrganizationUser(GuardianView):
         if user.organizations.filter(id=me.default.id).exists():
             return HttpResponse("The user is already a member!", status=403)
 
-        # need to be improved.
-        token  = 'invite%s' % random.randint(1000, 10000)
+        # If there is already an invite just tell him it was sent.
+        is_member = user.invites.filter(
+            organization=me.default).exists()
+
+        if is_member:
+            return HttpResponse("The user was already invited!", status=403)
+
         invite = Invite.objects.create(
-        organization=organization, user=user, token=token)
+            organization=me.default, peer=me, user=user)
+
+        invite.send_email()
 
         event = EInviteUser.objects.create(
-        organization=organization, user=me, peer=user)
+        organization=me.default, user=me, peer=user)
+        event.dispatch(*me.default.users.all())
 
-        event.dispatch(me, user)
-
-        url = reverse('core_app:join-organization', kwargs={
-        'organization_id': organization.id, 'token': token})
-
-        url = '%s%s' % (settings.LOCAL_ADDR, url)
-        msg = 'You were invited to %s by %s.' % (organization.name, me.name)
-
-        send_mail(msg, '%s %s' % (organization.name, 
-        url), 'noreply@arcamens.com', [email], fail_silently=False)
-
-        user.ws_sound(organization)
+        me.ws_sound(me.default)
 
         return redirect('core_app:list-users', 
-        organization_id=organization_id)
+        organization_id=me.default.id)
+
+class ResendInvite(GuardianView):
+    def get(self, request, invite_id):
+        me = User.objects.get(id=self.user_id)
+
+        if not me.default.admins.filter(id=me.id).exists():
+            return HttpResponse("Only admins can do that!", status=403)
+
+        invite = Invite.objects.get(id=invite_id)
+        invite.send_email()
+
+        return redirect('core_app:list-users', 
+        organization_id=invite.organization.id)
+
+        # return render(request, 
+            # 'core_app/resend-invite.html', {'invite': invite})
 
 class JoinOrganization(View):
     def get(self, request, organization_id, token):
@@ -541,8 +557,6 @@ class SignupFromInvite(View):
                     'token': token}, status=400)
 
         record = form.save(commit=False)
-        service        = OrganizationService.objects.get(paid=False)
-        record.service = service
         record.enabled = True
         record.save()
 
@@ -924,5 +938,6 @@ class UnbindOrganizationAdmin(GuardianView):
         # me.ws_sound(user)
 
         return HttpResponse(status=200)
+
 
 

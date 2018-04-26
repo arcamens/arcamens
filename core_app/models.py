@@ -1,9 +1,149 @@
 from django.utils.translation import ugettext_lazy as _
-from core_app.model_mixins import *
 from slock.models import BasicUser
-from paybills.models import Service
+from paybills.models import BasicItem
 from django.db import models
 from datetime import datetime
+from django.core.urlresolvers import reverse
+from django.template.loader import get_template
+from sqlike.parser import SqLike, SqNode
+from django.db.models import Q
+from wsbells.models import UserWS, QueueWS
+from django.core.mail import send_mail
+from django.conf import settings
+import random
+
+class UserMixin(UserWS):
+    def ws_alert(self, target=None):
+        target = target if target else self
+        self.ws_cmd(target, 'ws-alert-event')
+
+    def ws_sound(self, target=None):
+        target = target if target else self
+        self.ws_cmd(target, 'ws-sound')
+
+    def connected_queues(self):
+        """
+        Return all timelines the user should have 
+        ws client to be subscribed to.
+        """
+
+        qnames = self.ws_queues(self.timelines.all())
+        qnames.append(self.default.qname())
+        qnames.extend(self.ws_queues(self.boards.all()))
+        return qnames
+
+    def get_user_url(self):
+        return reverse('core_app:user', 
+        kwargs={'user_id': self.id})
+
+    @classmethod
+    def from_sqlike(cls):
+        email = lambda ind: Q(email__icontains=ind)
+        name  = lambda ind: Q(name__icontains=ind)
+        desc  = lambda ind: Q(description__icontains=ind)
+        tag   = lambda ind: Q(tags__name__icontains=ind)
+        default = lambda ind: Q(email__icontains=ind) | Q(name__icontains=ind)
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('m', 'email'), email),
+        SqNode(('n', 'name'), name), 
+        SqNode(('t', 'tag'), tag, chain=True), 
+        SqNode(('d', 'description'), desc),)
+        return sqlike
+
+    @classmethod
+    def collect_users(cls, users, pattern):
+        sqlike = cls.from_sqlike()
+        sqlike.feed(pattern)
+        users = sqlike.run(users)
+        return users
+
+    def n_acc_users(self):
+        orgs    = self.owned_organizations.all()
+        users   = self.__class__.objects.filter(organizations=orgs)
+        n_users = users.count()
+        return n_users
+
+    def is_max_users(self):
+        """
+        Tells if owner account has achieved its limit of users
+        in the account.
+        """
+
+        u_orgs       = self.owned_organizations.all()
+        n_users      = User.objects.filter(organizations=u_orgs).count()
+        n_invites    = Invite.objects.filter(organization__in=u_orgs).count()
+        count        = n_users + n_invites
+        return count >= self.max_users
+
+    def __str__(self):
+        return '%s %s' % (self.name, self.email)
+
+class EventMixin:
+    def save(self, *args, hcache=True, **kwargs):
+        super().save(*args, **kwargs)
+
+        if hcache and self.html_template:
+            self.create_html_cache()
+
+    def create_html_cache(self):
+        tmp       = get_template(self.html_template)
+        self.html = tmp.render({'event': self})
+        super().save()
+
+    def dispatch(self, *args):
+        # Assumes the action owner has
+        # seen the event.
+
+        self.users.add(*args)
+        
+        # The user has seen the event since he
+        # has provoked it.
+        self.signers.add(self.user)
+        self.users.remove(self.user)
+
+    def seen(self, user):
+        """
+        """
+
+        self.users.remove(user)
+        self.signers.add(user)
+        self.save(hcache=False)
+
+class OrganizationMixin(QueueWS):
+    def __str__(self):
+        return self.name
+
+
+class InviteMixin:
+    def save(self, *args, **kwargs):
+        self.token  = 'invite%s' % random.randint(1000, 10000)
+
+        invite_url = reverse('core_app:join-organization', kwargs={
+        'organization_id': self.organization.id, 'token': self.token})
+
+        self.invite_url = '%s%s' % (settings.LOCAL_ADDR, invite_url)
+        super().save(*args, **kwargs)
+
+    def send_email(self):
+        msg = 'You were invited to %s by %s.' % (
+        self.organization.name, self.peer.name)
+
+        send_mail(msg, '%s %s' % (self.organization.name, 
+        self.invite_url), 'noreply@splittask.net', [self.user.email], 
+        fail_silently=False)
+
+    def __str__(self):
+        return '%s %s %s' % (self.user.name, 
+            self.token, self.organization.name)
+
+class TagMixin:
+    @classmethod
+    def from_sqlike(cls):
+        default  = lambda ind: Q(name__icontains=ind) | Q(
+        description__icontains=ind)
+
+        sqlike = SqLike(SqNode(None, default))
+        return sqlike
 
 class Organization(OrganizationMixin, models.Model):
     name     = models.CharField(null=True,
@@ -18,40 +158,57 @@ class Organization(OrganizationMixin, models.Model):
     'User', related_name='managed_organizations', 
     null=True, blank=True, symmetrical=False)
 
-class OrganizationService(Service):
+class Service(BasicItem):
     """
-    Fill here with basic  info 
-    about the product that has to be sent
-    to paypal.
+    This is the product thats being purchased.
     """
 
-    max_organizations = models.IntegerField(
-    null=True, default=15)
+    # The price should be calculated taking into account
+    # User.expiration and current User.max_users attrs.
+    price = models.IntegerField(null=True, default=0)
 
-    max_users = models.IntegerField(
-    null=True, default=15)
+    # This is the max number of users that our customer
+    # will purchase for a period of time. There is a difference
+    # between current number of users and max_users. If the customer
+    # attempt to add more users to his account than the max then he is
+    # asked to upgrade his limits. This way i think we may be able
+    # to implement subscription.
+    max_users = models.IntegerField(null=True, default=3,
+    help_text="Max users until the expiration.")
 
-    name = models.CharField(null=True, default='Paid BasicService',
-    blank=False, max_length=256)
+    expiration = models.DateField(null=True, default=datetime.now,
+    blank=False, help_text="Example: year-month-day")
 
-    paid = models.BooleanField(blank=True, default=False)
+    total = models.FloatField(null=True, default=0)
+    paid  = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return self.name
+        return ('Paid: {paid}' 
+        'Price: {price}' 
+        'Expiration: {expiration}' 
+        'Max Users: {max_users}').format(paid=self.paid, 
+            price=self.price, expiration=self.expiration, 
+                max_users=self.max_users)
 
 class Invite(InviteMixin, models.Model):
     # email = models.EmailField(max_length=70, 
     # null=True, blank=False)
-
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True, related_name='invites')
+
+    peer = models.ForeignKey('core_app.User', null=True, 
+    blank=True, related_name='sent_invites')
 
     # should have a count to avoid mail spam.
     token = models.CharField(null=True,
     blank=False, max_length=256)
 
+    invite_url = models.CharField(null=True,
+    blank=False, max_length=256)
+
     organization = models.ForeignKey('Organization', 
     null=True, blank=True, related_name='invites')
+    created = models.DateTimeField(auto_now=True, null=True)
 
 class User(UserMixin, BasicUser):
     organizations = models.ManyToManyField(
@@ -71,11 +228,6 @@ class User(UserMixin, BasicUser):
     default = models.ForeignKey('Organization', 
     null=True, blank=True)
 
-    # This field will be checked when user attempts to create
-    # organization/add members to the organization.
-    service = models.ForeignKey(
-    'paybills.Service', null=True, blank=True)
-
     description = models.TextField(null=True,
     blank=False, verbose_name=_("Description"), 
     help_text='Position, Skills, Goals, ..', 
@@ -88,6 +240,8 @@ class User(UserMixin, BasicUser):
 
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)
+    max_users  = models.IntegerField(null=True, default=3)
+    paid       = models.BooleanField(blank=True, default=False)
     expiration = models.DateField(null=True)
 
     def __str__(self):
@@ -212,6 +366,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 

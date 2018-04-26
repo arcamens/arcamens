@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from core_app.models import  User, Event
 from timeline_app.model_mixins import *
-from paybills.models import Service
 from django.db import models
 from django.db.models import Q
 import datetime
@@ -84,6 +83,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 

@@ -36,13 +36,15 @@ urlpatterns = [
     url(r'^import/', views.Import.as_view(), name='import'),
     url(r'^disabled-account/$', views.DisabledAccount.as_view(), name='disabled-account'),
     url(r'^fix-account-debits/$', views.FixAccountDebits.as_view(), name='fix-account-debits'),
-    url(r'^remove-organization-user(?P<user_id>.+)', views.RemoveOrganizationUser.as_view(), name='remove-organization-user'),
+    url(r'^remove-organization-user/(?P<user_id>.+)', views.RemoveOrganizationUser.as_view(), name='remove-organization-user'),
     url(r'^cancel-invite/(?P<invite_id>.+)', views.CancelInvite.as_view(), name='cancel-invite'),
     url(r'^list-invites/', views.ListInvites.as_view(), name='list-invites'),
     url(r'^manage-organization-admins/', views.ManageOrganizationAdmins.as_view(), name='manage-organization-admins'),
     url(r'^bind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.BindOrganizationAdmin.as_view(), name='bind-organization-admin'),
     url(r'^unbind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.UnbindOrganizationAdmin.as_view(), name='unbind-organization-admin'),
+    url(r'^resend-invite/(?P<invite_id>.+)', views.ResendInvite.as_view(), name='resend-invite'),
 
 ]
+
 
 

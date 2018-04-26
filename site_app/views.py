@@ -1,5 +1,5 @@
 from paybills.submitters import ManualForm, SubscriptionForm
-from core_app.models import Organization, OrganizationService
+from core_app.models import Organization
 from slock.views import AuthenticatedView, LogoutView, LoginView
 from slock.forms import SetPasswordForm
 from django.shortcuts import render, redirect
@@ -296,6 +296,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

@@ -7,10 +7,6 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
 django.setup()
 
-from core_app.models import OrganizationService
-free_service = OrganizationService.objects.create(name='Free Service', paid=False)
-
-paid_service = OrganizationService.objects.create(name='Paid Service', paid=True, max_users=100)
 
 # your imports, e.g. Django models
 from django.contrib.auth.models import User
@@ -32,17 +28,15 @@ organization0 = Organization.objects.create(name='Arcamens' )
 
 user0  = User.objects.create(name='Victor Porton',  email='porton@narod.ru', password='111', default=organization0)
 # queue0 = channel.queue_declare(queue=str(user0.id), durable=True)
-user0.service = free_service
 user0.enabled = True
 organization0.owner = user0
-organization0.save()
 user0.organizations.add(organization0)
 user0.save()
 
 organization1 = Organization.objects.create(name='Splittask' )
 user1 = User.objects.create(name='Iury de oliveira',  email='ioliveira@id.uff.br', password='111', default=organization1)
 organization1.owner = user1
-organization1.save()
+
 
 # user0.organizations.add(organization1)
 user0.organizations.add(organization1)
@@ -50,9 +44,16 @@ user0.organizations.add(organization1)
 user0.save()
 
 # queue1 = channel.queue_declare(queue=str(user1.id), durable=True)
-user1.service = free_service
 user1.enabled = True
 user1.save()
+
+organization0.admins.add(user0)
+organization0.admins.add(user1)
+organization1.admins.add(user0)
+organization1.admins.add(user1)
+
+organization0.save()
+organization1.save()
 
 user1.organizations.add(organization1)
 # user1.organizations.add(organization0)
@@ -68,23 +69,6 @@ label= 'This is a card label and it should be used with caution.'
 for ind in range(50):
     Card.objects.create(owner=user1, 
         label=label * randint(0, 10), ancestor=list)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
