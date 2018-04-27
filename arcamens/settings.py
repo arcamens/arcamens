@@ -63,6 +63,10 @@ MQTT_USER = "guest"
 MQTT_PASS = "guest"  
 MQTT_PORT = 1883
 
+NOCAPTCHA = True
+RECAPTCHA_PUBLIC_KEY = '6Lfz3lUUAAAAAJh0h0dNMWqgx-rGZR_aY9FJRecP'
+RECAPTCHA_PRIVATE_KEY = '6Lfz3lUUAAAAAEdgDWRrN2yLPVDR1pyNhW_6UPil'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -90,6 +94,7 @@ INSTALLED_APPS = [
     'blowdb',
     'slock',
     'wsbells',
+    'captcha',
     'bitbucket_app',
 ]
 
@@ -186,6 +191,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
 
 
 

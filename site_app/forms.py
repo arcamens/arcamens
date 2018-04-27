@@ -1,4 +1,5 @@
 from slock.forms import SetPasswordForm
+from captcha.fields import ReCaptchaField
 from django import forms
 import core_app.models
 
@@ -17,6 +18,8 @@ class RecoverAccountForm(forms.Form):
                 "This user doesn't exist!")
 
 class SignupForm(SetPasswordForm):
+    captcha = ReCaptchaField()
+
     class Meta:
         model   = core_app.models.User
         exclude = ('organizations', 'default', 
@@ -27,6 +30,7 @@ class ServiceForm(forms.Form):
     expiration = forms.DateField()
 
     # paid = forms.BooleanField(required=False)
+
 
 
 
