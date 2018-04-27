@@ -26,6 +26,10 @@ class Board(BoardMixin, models.Model):
     null=True, related_name='boards', blank=True, 
     symmetrical=False)
 
+    admins = models.ManyToManyField('core_app.User', 
+    null=True, related_name='managed_boards', blank=True, 
+    symmetrical=False)
+
     # done = models.BooleanField(blank=True, default=False)
 
     organization = models.ForeignKey('core_app.Organization', 
@@ -107,6 +111,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

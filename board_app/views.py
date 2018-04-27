@@ -168,6 +168,47 @@ class ManageBoardUsers(GuardianView):
         {'included': included, 'excluded': excluded, 'board': board,
         'me': me, 'total': total, 'count': count, 'form':form})
 
+class ManageBoardAdmins(GuardianView):
+    def get(self, request, board_id):
+        me = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
+
+        included = board.admins.all()
+        excluded = board.members.exclude(id__in=included)
+
+        total = included.count() + excluded.count()
+
+        return render(request, 'board_app/manage-board-admins.html', 
+        {'included': included, 'excluded': excluded, 'board': board,
+        'me': me, 'count': total, 'total': total, 
+        'form':forms.UserSearchForm()})
+
+    def post(self, request, board_id):
+        me = User.objects.get(id=self.user_id)
+
+        sqlike = User.from_sqlike()
+        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
+
+        board = Board.objects.get(id=board_id)
+
+        included = board.admins.all()
+        excluded = board.members.exclude(id__in=included)
+
+        total = included.count() + excluded.count()
+
+        if not form.is_valid():
+            return render(request, 'board_app/manage-board-admins.html', 
+                {'me': me, 'board': board, 'total': total, 'count': 0,
+                        'form':forms.UserSearchForm()}, status=400)
+
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
+        count = included.count() + excluded.count()
+
+        return render(request, 'board_app/manage-board-admins.html', 
+        {'included': included, 'excluded': excluded, 'board': board,
+        'me': me, 'total': total, 'count': count, 'form':form})
+
 class PasteLists(GuardianView):
     def get(self, request, board_id):
         board        = Board.objects.get(id=board_id)
@@ -335,6 +376,50 @@ class UnbindBoardUser(GuardianView):
 
         return HttpResponse(status=200)
 
+class BindBoardAdmin(GuardianView):
+    def get(self, request, board_id, user_id):
+        me    = User.objects.get(id=self.user_id)
+        user = User.objects.get(id=user_id)
+        board = Board.objects.get(id=board_id)
+
+        board.admins.add(user)
+        board.save()
+
+        # event = EBindBoardUser.objects.create(organization=me.default,
+        # board=board, user=me, peer=user)
+        # event.dispatch(*board.admins.all())
+
+        # me.ws_sound(board)
+        # me.ws_subscribe(board, target=user)
+
+        # Warrant the user will receive the sound event
+        # because we cant control the order in which
+        # data flows to the different queues.
+        # me.ws_sound(target=user)
+
+        return HttpResponse(status=200)
+
+class UnbindBoardAdmin(GuardianView):
+    def get(self, request, board_id, user_id):
+        me = User.objects.get(id=self.user_id)
+
+        # This code shows up in board_app.views?
+        # something is odd.
+        user = User.objects.get(id=user_id)
+        board = Board.objects.get(id=board_id)
+        board.admins.remove(user)
+        board.save()
+
+        # event = EUnbindBoardUser.objects.create(organization=me.default,
+        # board=board, user=me, peer=user)
+        # event.dispatch(*board.admins.all())
+
+        # me.ws_sound(board)
+        # me.ws_unsubscribe(board, target=user)
+        # me.ws_sound(user)
+
+        return HttpResponse(status=200)
+
 class BoardLink(GuardianView):
     """
     """
@@ -355,6 +440,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

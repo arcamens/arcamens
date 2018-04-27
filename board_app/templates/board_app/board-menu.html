@@ -26,6 +26,14 @@ href="#"> <span class="glyphicon glyphicon-user"></span>
 <li class="divider"></li>
 
 <li><a class="e-get" 
+data-shell="#smallModalContent" 
+data-callback="$('#modal').modal('show');" 
+data-show="{% url 'board_app:manage-board-admins' board.id %}" 
+href="#"> <span class="glyphicon glyphicon-user"></span> 
+{% trans "Admins" %}</a></li>
+<li class="divider"></li>
+
+<li><a class="e-get" 
 data-show="{% url 'board_app:delete-board' board.id %}" 
 data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
@@ -48,6 +56,7 @@ href="#"> <span class="glyphicon glyphicon-book"></span>
 
 </ul>
 </div>
+
 
 
 
