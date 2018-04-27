@@ -660,7 +660,7 @@ tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 cd ~/.virtualenv/
 source opus/bin/activate
-cd ~/projects/arcamens
+cd ~/projects/arcamens-code
 git pull 
 git status
 git log
@@ -741,4 +741,24 @@ mysqldump -u staging -p staging > ../mysql.sql
 ##############################################################################
 
 grep -rl '#smallModalContent' --exclude-dir='.git' ./ | xargs sed -i 's/#smallModalContent/#smallModalContent/g'
+
+##############################################################################
+DROP TABLE bitbucket_app_ebitbucketcommit;
+
+delete from django_migrations where app = 'core_app';
+delete from django_migrations where app = 'paybills';
+
+DROP TABLE paybills_paymentprocess;
+DROP TABLE paybills_paymentsuccess;
+DROP TABLE paybills_service                 ;
+DROP TABLE paybills_subscriptionpayment     ;
+DROP TABLE paybills_subscriptionprocess     ;
+DROP TABLE paybills_subscriptionsuccess     ;
+DROP TABLE paybills_unsubscriptionsuccess ;
+##############################################################################
+# create missing column in mysql, fix issues with migrations.
+
+alter table core_app_user add column max_users INT NULL DEFAULT 3;
+
+
 
