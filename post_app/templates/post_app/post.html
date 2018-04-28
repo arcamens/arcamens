@@ -145,20 +145,20 @@ No workers.
 {% block footer %}
 
 <a data-show="{% url 'post_app:update-post' post.id %}" data-shell="#bigModalContent"  href="#"
-data-callback="$('#bigModal').modal('show');"  class="text-warning e-get"> 
+data-callback="$('#bigModal').modal('show');"  class="e-get"> 
 <span class="glyphicon glyphicon-edit"></span> Update</a>
 
 <a href="#"
 data-callback="$('#modal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
-class="text-info e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
+class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
-<a class="text-danger s-modal" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
+<a class="s-modal" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
 {% if post.done %}
 <a href="#" data-shell="#post-{{post.id}}" data-show="{% url 'post_app:undo' post.id %}"
-class="text-warning text-default  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
+class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
 
 {% else %}
 
@@ -166,7 +166,7 @@ class="text-warning text-default  e-get"><span class="glyphicon glyphicon-ok"></
 class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
 
-<a class="text-info e-get"  href="#"
+<a class="e-get"  href="#"
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
 <span class="glyphicon glyphicon-copy"></span> Copy </a>
 
@@ -177,9 +177,9 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 <a href="#"
 data-callback="$('#modal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
-class="text-info e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
+class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
-<a class="text-warning s-modal" href="#"
+<a class="s-modal" href="#"
 data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-random"></span> Fork/Card </a>
 
@@ -190,6 +190,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 

@@ -8,13 +8,13 @@
 </li>
 
 <li data-toggle="tooltip" title="Up">
-<a class="e-get text-success" data-show="{% url 'timeline_app:list-timelines' %}"
+<a class="e-get" data-show="{% url 'timeline_app:list-timelines' %}"
 data-shell="#main-view" data-show="" href="#">
 <span class="glyphicon glyphicon glyphicon-arrow-up clip"></span> Up
 </a>
 </li>
 
-<li> <a class="b-modal text-warning" data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
+<li> <a class="b-modal" data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Post" %}</a></li>
 
 <li><a class="s-modal"  data-show="{% url 'timeline_app:update-timeline' timeline.id %}" 
@@ -45,6 +45,7 @@ data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
 </ul>
+
 
 
 

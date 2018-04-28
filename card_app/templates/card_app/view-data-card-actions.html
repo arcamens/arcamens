@@ -3,13 +3,13 @@
 
 <!-- If the card has no ancestor then it is on clipboard -->
 <a data-shell="#main-view" 
-class="e-get text-success"
+class="e-get"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
 
 <li>
 
-<a class="b-modal text-warning"data-show="{% url 'card_app:update-card' card.id %}"
+<a class="b-modal"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
 
 <li>
@@ -44,7 +44,7 @@ data-show="{% url 'card_app:done'  card.id %}" href="#">
 {% endif %}
 
 <li>
-<a class="s-modal text-default" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
+<a class="s-modal" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
 data-callback="$('#modal').modal('toggle');"  href="#">
 <span class="glyphicon glyphicon-tag"></span> Tags</a></li> 
 
@@ -53,17 +53,17 @@ data-callback="$('#modal').modal('toggle');"  href="#">
 <span class="glyphicon glyphicon-remove"></span> Delete</a></li>
 
 <li>
-<a class="s-modal text-warning" data-show="{% url 'card_app:select-fork-list'  card.id %}" 
+<a class="s-modal" data-show="{% url 'card_app:select-fork-list'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
 <li>
-<a class="s-modal text-warning" data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
+<a class="s-modal" data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Post</a></li>
 
 <li>
 
-<a class="s-modal text-primary"
+<a class="s-modal"
 data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-link"></span> Relate</a></li>
 
@@ -75,7 +75,7 @@ data-show="{% url 'card_app:cut-card' card.id %}" href="#">
 <li>
 <a 
 data-shell="#main-view"
-class="e-get text-default"
+class="e-get"
 data-show="{% url 'card_app:copy-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-scissors"></span> Copy</a></li>
 
@@ -87,6 +87,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
