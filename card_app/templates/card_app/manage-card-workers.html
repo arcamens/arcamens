@@ -21,9 +21,7 @@ Available {{card.label|truncatechars:20}}'s Workers
 {{ind.name}}  
 <br>
 
-<small> {{ind.email}} </small>   <br>
-<b style="font-size:60%"> All card/tasks: {{ind.tasks.count}}
-</b>
+<small> {{ind.email}} </small>   
 
 <br>
 
@@ -43,8 +41,6 @@ data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#">
 <br>
 
 <small> {{ind.email}} </small>  
-<br>
-<b style="font-size:60%">All card/tasks: {{ind.tasks.count}}</b>
 <br>
 
 <a class="e-get" style="color:green;font-size:70%"
@@ -92,6 +88,7 @@ $('#bind-card-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 
