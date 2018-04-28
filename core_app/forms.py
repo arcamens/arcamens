@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from timeline_app.forms import ConfirmTimelineDeletionForm
+from slock.forms import SetPasswordForm
 from sqlike.forms import SqLikeForm
 from card_app.models import Card
 from django import forms
@@ -57,6 +58,12 @@ class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='tag:developer + tag:python')
 
+
+class SignupForm(SetPasswordForm):
+    class Meta:
+        model   = models.User
+        exclude = ('organizations', 'default', 'service', 
+        'expiration', 'max_users', 'paid')
 
 
 

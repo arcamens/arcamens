@@ -8,7 +8,7 @@ from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
 from django.shortcuts import render, redirect
 from slock.views import AuthenticatedView
 from slock.forms import UpdatePasswordForm
-from site_app.forms import SignupForm
+from core_app.forms import SignupForm
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -945,6 +945,7 @@ class UnbindOrganizationAdmin(GuardianView):
         # me.ws_sound(user)
 
         return HttpResponse(status=200)
+
 
 
 

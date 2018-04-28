@@ -23,13 +23,14 @@ class SignupForm(SetPasswordForm):
     class Meta:
         model   = core_app.models.User
         exclude = ('organizations', 'default', 
-        'service', 'expiration', 'max_users', 'paid')
+        'expiration', 'max_users', 'paid')
 
 class ServiceForm(forms.Form):
     max_users = forms.IntegerField()
     expiration = forms.DateField()
 
     # paid = forms.BooleanField(required=False)
+
 
 
 
