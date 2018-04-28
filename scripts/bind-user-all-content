@@ -22,16 +22,16 @@ from timeline_app.models import Timeline
 import sys
 
 organization = Organization.objects.get(owner__email__istartswith=sys.argv[1])
-user = User.objects.get(email=sys[1])
+user = User.objects.get(email__istartswith=sys[2])
 user.organizations.add(organization)
 
-boards = Board.objects.filter(organization__name__istartswith=sys.argv[2])
+boards = Board.objects.filter(organization__name__istartswith=sys.argv[3])
 
 for ind in boards:
    ind.members.add(user)
 
 user = User.objects.get(name__istartswith='iury')
-timelines = Timeline.objects.filter(organization__name__istartswith=sys.argv[2])
+timelines = Timeline.objects.filter(organization__name__istartswith=sys.argv[3])
 
 for ind in timelines:
    ind.users.add(user)
