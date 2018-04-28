@@ -760,5 +760,10 @@ DROP TABLE paybills_unsubscriptionsuccess ;
 
 alter table core_app_user add column max_users INT NULL DEFAULT 3;
 
+#####k#########################################################################
+# bind user to all boards/timelines joinall command.
+
+python manage.py restore_ownership port arca ioli
+
 
 
