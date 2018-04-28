@@ -533,7 +533,7 @@ class JoinOrganization(View):
 
         # The user should be Arcamens Service(thinking about it later).
         event = EJoinOrganization.objects.create(organization=organization, 
-        peer=invite.user, user=inite.user)
+        peer=invite.user, user=invite.user)
         event.dispatch(*organization.users.all())
 
         invite.user.ws_sound(organization)
