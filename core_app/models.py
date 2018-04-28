@@ -70,7 +70,7 @@ class UserMixin(UserWS):
         """
 
         u_orgs       = self.owned_organizations.all()
-        n_users      = User.objects.filter(organizations=u_orgs).count()
+        n_users      = User.objects.filter(organizations__in=u_orgs).distinct().count()
         n_invites    = Invite.objects.filter(organization__in=u_orgs).count()
         count        = n_users + n_invites
         return count >= self.max_users
@@ -365,6 +365,7 @@ class ERemoveOrganizationUser(Event):
     blank=True, max_length=256)
 
     html_template = 'core_app/e-remove-organization-user.html'
+
 
 
 
