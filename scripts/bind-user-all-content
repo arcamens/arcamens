@@ -21,7 +21,7 @@ from board_app.models import Board
 from timeline_app.models import Timeline
 import sys
 
-organization = Organization.objects.get(owner__email=sys.argv[1])
+organization = Organization.objects.get(owner__email__istartswith=sys.argv[1])
 user = User.objects.get(email=sys[1])
 user.organizations.add(organization)
 
@@ -31,7 +31,7 @@ for ind in boards:
    ind.members.add(user)
 
 user = User.objects.get(name__istartswith='iury')
-timelines = Timeline.objects.filter(organization__name__istartswith=sys.argv[3])
+timelines = Timeline.objects.filter(organization__name__istartswith=sys.argv[2])
 
 for ind in timelines:
    ind.users.add(user)
