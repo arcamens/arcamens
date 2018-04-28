@@ -22,7 +22,7 @@ from timeline_app.models import Timeline
 import sys
 
 organization = Organization.objects.get(owner__email__istartswith=sys.argv[1])
-user = User.objects.get(email__istartswith=sys[2])
+user = User.objects.get(email__istartswith=sys.argv[2])
 user.organizations.add(organization)
 
 boards = Board.objects.filter(organization__name__istartswith=sys.argv[3])
