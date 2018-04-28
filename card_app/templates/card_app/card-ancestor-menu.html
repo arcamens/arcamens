@@ -1,0 +1,43 @@
+{% load i18n %}
+
+
+<div class="btn-group btn-group-xs">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+<span class="glyphicon glyphicon-wrench"></span>  </a>
+<ul class="dropdown-menu" role="menu">
+
+<li><a class="e-get" data-shell="#smallModalContent"  data-show="{% url 'list_app:update-list' list.id %}" 
+data-callback="$('#modal').modal('show');"  href="#"> 
+<span class="glyphicon glyphicon-cog"></span> 
+{% trans "Settings" %}</a></li>
+
+<li class="divider"></li>
+
+<li><a class="s-modal"  data-show="{% url 'list_app:confirm-list-deletion' list.id %}" 
+href="#"> <span class="glyphicon glyphicon-remove"></span>  {% trans "Delete" %}</a></li>
+
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:paste-cards' list.id %}" 
+href="#"> <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
+
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

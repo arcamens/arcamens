@@ -1,12 +1,14 @@
 {% load i18n %}
 
+<div class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+<span class="glyphicon glyphicon-wrench"></span> 
 
-<div class="btn-group btn-group-xs">
-<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-<span class="caret"></span> </button>
+  </a>
+
 <ul class="dropdown-menu" role="menu">
 
-<li><a class="e-get" 
+<li><a class="e-get"  
 data-shell="#smallModalContent" 
 data-show="{% url 'board_app:update-board' board.id %}" 
 data-callback="$('#modal').modal('show');" 
@@ -47,32 +49,6 @@ data-show="{% url 'board_app:paste-lists' board.id %}"
 href="#"> <span class="glyphicon glyphicon-paste"></span> 
 {% trans "Paste" %}</a></li>
 
-<li class="divider"></li>
-
-<li><a class="e-get" data-shell="#main-view" 
-data-show="{% url 'board_app:paste-lists' board.id %}" 
-href="#"> <span class="glyphicon glyphicon-book"></span> 
-{% trans "Wiki" %}</a></li>
-
 </ul>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
