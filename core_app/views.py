@@ -139,6 +139,7 @@ class CreateOrganization(AuthenticatedView):
 
         user.organizations.add(organization)
         user.default = organization
+        organization.admins.add(user)
         user.save()
         return redirect('core_app:index')
 
@@ -943,6 +944,7 @@ class UnbindOrganizationAdmin(GuardianView):
         # me.ws_sound(user)
 
         return HttpResponse(status=200)
+
 
 
 
