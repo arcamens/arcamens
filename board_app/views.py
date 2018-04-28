@@ -437,9 +437,10 @@ class BoardLink(GuardianView):
         organizations = user.organizations.exclude(id=user.default.id)
 
         return render(request, 'board_app/board-link.html', 
-        {'board': board, 'user': user, 'pins': pins,
+        {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

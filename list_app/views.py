@@ -283,9 +283,10 @@ class ListLink(GuardianView):
         organizations = user.organizations.exclude(id=user.default.id)
 
         return render(request, 'list_app/list-link.html', 
-        {'list': record, 'user': user, 'pins': pins,
+        {'list': record, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

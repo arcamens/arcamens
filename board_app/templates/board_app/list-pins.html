@@ -4,10 +4,8 @@
 <ul class="nav nav-pills" id="pinned-cards" style="font-size:80%">
 
 
-<li><a class="e-get" style="color:black"
-data-shell="#main-view"
-data-show="{% url 'board_app:list-boards' %}" href="#">
-<span class="glyphicon glyphicon-flag"></span> {{user.default.name}}</a></li>
+<li><a class="e-get disabled" style="color:black; pointer-events: none;" href="#">
+<span class="glyphicon glyphicon-paperclip"></span> Pins:</a></li>
 
 {% for ind in pins %}
 
@@ -34,5 +32,6 @@ data-show="{% url 'board_app:list-boards' %}" href="#">
 // });
 // </script>
 -->
+
 
 
