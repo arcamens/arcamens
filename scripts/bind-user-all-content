@@ -30,7 +30,6 @@ boards = Board.objects.filter(organization__name__istartswith=sys.argv[3])
 for ind in boards:
    ind.members.add(user)
 
-user = User.objects.get(name__istartswith='iury')
 timelines = Timeline.objects.filter(organization__name__istartswith=sys.argv[3])
 
 for ind in timelines:
