@@ -531,8 +531,9 @@ class JoinOrganization(View):
         organization=organization, user=invite.user)
         invites.delete()
 
+        # The user should be Arcamens Service(thinking about it later).
         event = EJoinOrganization.objects.create(organization=organization, 
-        peer=invite.user)
+        peer=invite.user, user=inite.user)
         event.dispatch(*organization.users.all())
 
         invite.user.ws_sound(organization)
