@@ -6,7 +6,10 @@
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
 {% csrf_token %}
 {% block title %}
-<h4> Create list </h4>
+<h5> 
+<span class="glyphicon glyphicon glyphicon-list-alt"></span>
+List </h5>
+
 {% endblock %}
 
 </div>
@@ -28,6 +31,7 @@
 data-show="{% url 'list_app:create-list' board.id %}" class="btn btn-default m-post-close">  {% trans "Create" %} </button>
 {% endblock %}
 </div>
+
 
 
 
