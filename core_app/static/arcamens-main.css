@@ -96,6 +96,9 @@ background-color:#F5EAEA;
     background:#C7E1C8;
 }
 
+#pinned-cards a {
+padding: 4px !important;
+}
 
 
 
