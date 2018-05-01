@@ -144,6 +144,26 @@ class TagMixin:
         sqlike = SqLike(SqNode(None, default))
         return sqlike
 
+class Node(models.Model):
+    """    
+    """
+    organization = models.ForeignKey('core_app.Organization', 
+    related_name='nodes', null=True, blank=True)
+
+    name = models.CharField(null=True, blank=False,
+    verbose_name=_("Name"), help_text='Example: /projects/labor/bugs, \
+    Management, Blackdawn Team, ...', max_length=250)
+
+    description = models.CharField(blank=True, default='', 
+    verbose_name=_("Description"), help_text='Example: Deals with \
+    labor bugs.', max_length=626)
+
+    owner = models.ForeignKey('core_app.User', null=True, 
+    blank=True, related_name='owned_boards')
+
+    created  = models.DateTimeField(auto_now_add=True, 
+    null=True)
+
 class Organization(OrganizationMixin, models.Model):
     name     = models.CharField(null=True,
     blank=False, verbose_name=_("Name"),  max_length=256)
@@ -366,11 +386,21 @@ class ERemoveOrganizationUser(Event):
 
     html_template = 'core_app/e-remove-organization-user.html'
 
+class NodeFilter(models.Model):
+    pattern = models.CharField(max_length=255, blank=True, 
+    default='')
 
+    user         = models.ForeignKey('core_app.User', null=True, blank=True)
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
 
+    status = models.BooleanField(blank=True, default=False, 
+    help_text='Filter On/Off.')
 
-
-
+    # It warrants there will exist only one user and organization
+    # filter. If we decide to permit more filters..
+    class Meta:
+        unique_together = ('user', 'organization',)
 
 
 

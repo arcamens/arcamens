@@ -1,5 +1,5 @@
 from core_app.views import GuardianView
-from board_app.models import BoardFilter, ECreateBoard, Board, Pin, \
+from board_app.models import ECreateBoard, Board, Pin, \
 EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser, Board
 from django.shortcuts import render, redirect
 from core_app.models import Clipboard, User, Organization
@@ -17,28 +17,6 @@ import json
 import re
 
 # Create your views here.
-
-class ListBoards(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user  = User.objects.get(id=self.user_id)
-
-        total = user.boards.filter(
-        organization__id=user.default.id)
-        pins = user.pin_set.filter(organization=user.default)
-
-        filter, _ = BoardFilter.objects.get_or_create(
-        user=user, organization=user.default)
-
-        boards = total.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern))) if filter.status else \
-        total
-
-        return render(request, 'board_app/list-boards.html', 
-        {'boards': boards, 'total': total, 'user': user, 'pins': pins, 'filter': filter,
-        'organization': user.default})
 
 class CreateBoard(GuardianView):
     """
@@ -74,7 +52,7 @@ class CreateBoard(GuardianView):
         user.ws_sound()
         user.ws_subscribe(board)
 
-        return redirect('board_app:list-boards')
+        return redirect('list_app:list-lists', board_id=board.id)
 
 
 class PinBoard(GuardianView):
@@ -296,30 +274,6 @@ class DeleteBoard(GuardianView):
 
         return redirect('board_app:list-boards')
 
-class SetupBoardFilter(GuardianView):
-    def get(self, request, organization_id):
-        filter = BoardFilter.objects.get(
-        user__id=self.user_id, organization__id=organization_id)
-        organization = Organization.objects.get(id=organization_id)
-
-        return render(request, 'board_app/setup-board-filter.html', 
-        {'form': forms.BoardFilterForm(instance=filter), 
-        'organization': organization})
-
-    def post(self, request, organization_id):
-        record = BoardFilter.objects.get(
-        organization__id=organization_id, user__id=self.user_id)
-
-        form         = forms.BoardFilterForm(request.POST, instance=record)
-        organization = Organization.objects.get(id=organization_id)
-
-        if not form.is_valid():
-            return render(request, 'board_app/setup-board-filter.html',
-                   {'board': record, 'form': form, 
-                        'organization': organization}, status=400)
-        form.save()
-        return redirect('board_app:list-boards')
-
 class ListPins(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
@@ -440,13 +394,6 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
-
-
-
-
-
-
-
 
 
 

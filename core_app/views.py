@@ -1,7 +1,7 @@
 from core_app.models import Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
-EUpdateOrganization, ERemoveOrganizationUser
+EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
@@ -946,7 +946,53 @@ class UnbindOrganizationAdmin(GuardianView):
 
         return HttpResponse(status=200)
 
+class ListNodes(GuardianView):
+    """
+    """
 
+    def get(self, request):
+        user  = User.objects.get(id=self.user_id)
+        nodes = Node.objects.filter(Q(organization__id=user.default.id
+        ) & Q(board__members=user) | Q(timeline__users=user))
 
+        nodes = nodes.order_by('-created')
+        total = nodes.count()
 
+        pins = user.pin_set.filter(organization=user.default)
+
+        filter, _ = NodeFilter.objects.get_or_create(
+        user=user, organization=user.default)
+
+        nodes = nodes.filter((Q(name__icontains=filter.pattern) | \
+        Q(description__icontains=filter.pattern))) if filter.status else nodes
+        count = nodes.count()
+
+        return render(request, 'core_app/list-nodes.html', 
+        {'nodes': nodes, 'user': user, 'pins': pins, 'total': total, 
+        'count': count, 'organization': user.default, 'filter': filter})
+
+class SetupNodeFilter(GuardianView):
+    def get(self, request, organization_id):
+        filter = NodeFilter.objects.get(user__id=self.user_id, 
+        organization__id=organization_id)
+
+        organization = Organization.objects.get(id=organization_id)
+
+        return render(request, 'core_app/setup-node-filter.html', 
+        {'form': forms.NodeFilterForm(instance=filter), 
+        'organization': organization})
+
+    def post(self, request, organization_id):
+        record = NodeFilter.objects.get(
+        organization__id=organization_id, user__id=self.user_id)
+
+        form         = forms.NodeFilterForm(request.POST, instance=record)
+        organization = Organization.objects.get(id=organization_id)
+
+        if not form.is_valid():
+            return render(request, 'core_app/setup-node-filter.html',
+                   {'node': record, 'form': form, 
+                        'organization': organization}, status=400)
+        form.save()
+        return redirect('core_app:list-nodes')
 

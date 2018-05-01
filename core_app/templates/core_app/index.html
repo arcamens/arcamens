@@ -26,7 +26,7 @@
 {% block initializer %}
 <script>
 $(document).ready(function() {
-    $('#main-view').load("{% url 'timeline_app:list-timelines' %}");
+    $('#main-view').load("{% url 'core_app:list-nodes' %}");
 });
 
 $(document).ready(function() {
@@ -94,6 +94,7 @@ $(document).on('ws-alert-event', function(e) {
 </body>
 
 </html>
+
 
 
 

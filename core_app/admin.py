@@ -5,6 +5,8 @@ from . import models
 admin.site.register(models.User)
 admin.site.register(models.Organization)
 admin.site.register(models.Invite)
+admin.site.register(models.NodeFilter)
+
 
 
 

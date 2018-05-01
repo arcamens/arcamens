@@ -2,12 +2,8 @@
 
 <div class="panel-body text-center">
 
-<p> 
-
-
-
-<a class="e-get" href="{{timeline.get_link_url}}" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
-<span class="glyphicon glyphicon glyphicon-eye-open clip"></span>  {{timeline.name}} 
+<p> <a class="e-get" href="{{timeline.get_link_url}}" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
+<span class="glyphicon glyphicon glyphicon-eye-open clip"></span> Timeline {{timeline.name}} 
 <br>{{timeline.description}}</a></p>
 
 <small>
@@ -19,6 +15,8 @@ By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owne
 
 </div>
 </div>
+
+
 
 
 

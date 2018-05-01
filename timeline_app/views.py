@@ -1,5 +1,5 @@
 from timeline_app.models import Timeline, ECreateTimeline, EDeleteTimeline, \
-EUnbindTimelineUser, EUpdateTimeline, EPastePost, TimelineFilter, EBindTimelineUser
+EUnbindTimelineUser, EUpdateTimeline, EPastePost, EBindTimelineUser
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
 from core_app.views import GuardianView
@@ -29,6 +29,7 @@ class ListPosts(GuardianView):
 
         posts      = timeline.posts.all()
         total      = posts.count()
+        pins = user.pin_set.filter(organization=user.default)
 
         posts = filter.collect(posts)
         posts = posts.order_by('-created')
@@ -36,7 +37,8 @@ class ListPosts(GuardianView):
         elems = JScroll(user.id, 'timeline_app/list-posts-scroll.html', posts)
 
         return render(request, 'timeline_app/list-posts.html', 
-        {'timeline':timeline, 'count': count, 'total': total, 'elems':elems.as_window(), 'filter': filter})
+        {'timeline':timeline, 'count': count, 'total': total, 
+        'elems':elems.as_window(), 'filter': filter, 'pins': pins})
 
 class CreateTimeline(GuardianView):
     """
@@ -72,7 +74,7 @@ class CreateTimeline(GuardianView):
         user.ws_subscribe(record)
         user.ws_sound()
 
-        return redirect('timeline_app:list-timelines')
+        return redirect('timeline_app:list-posts', timeline_id=record.id)
 
 class DeleteTimeline(GuardianView):
     def get(self, request,  timeline_id):
@@ -105,7 +107,7 @@ class DeleteTimeline(GuardianView):
         event.dispatch(*timeline.users.all())
         timeline.delete()
 
-        return redirect('timeline_app:list-timelines')
+        return redirect('core_app:list-nodes')
 
 class UnbindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
@@ -190,30 +192,6 @@ class PastePosts(GuardianView):
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
 
-class SetupTimelineFilter(GuardianView):
-    def get(self, request, organization_id):
-        filter = TimelineFilter.objects.get(
-        user__id=self.user_id, organization__id=organization_id)
-        organization = Organization.objects.get(id=organization_id)
-
-        return render(request, 'timeline_app/setup-timeline-filter.html', 
-        {'form': forms.TimelineFilterForm(instance=filter), 
-        'organization': organization})
-
-    def post(self, request, organization_id):
-        record = TimelineFilter.objects.get(
-        organization__id=organization_id, user__id=self.user_id)
-
-        form   = forms.TimelineFilterForm(request.POST, instance=record)
-        organization = Organization.objects.get(id=organization_id)
-
-        if not form.is_valid():
-            return render(request, 'timeline_app/setup-timeline-filter.html',
-                   {'timeline': record, 'form': form, 
-                        'organization': organization}, status=400)
-        form.save()
-        return redirect('timeline_app:list-timelines')
-
 class ListEvents(GuardianView):
     """
     """
@@ -229,28 +207,6 @@ class ListEvents(GuardianView):
         return render(request, 'timeline_app/list-events.html',
         {'user': user, 'events': events, 'form': form, 
         'total': total, 'organization': user.default})
-
-class TimelinePaginator(GuardianView):
-    def get(self, request):
-        pass
-
-class ListTimelines(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user      = User.objects.get(id=self.user_id)
-        filter, _ = TimelineFilter.objects.get_or_create(
-        user=user, organization=user.default)
-
-        total = user.timelines.filter(organization=user.default)
-        children = total.filter(Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern) if filter.status \
-        else Q(organization=user.default))
-
-        return render(request, 'timeline_app/list-timelines.html', 
-        {'user': user, 'children': children, 'total': total,
-        'organization':user.default, 'filter': filter})
 
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
@@ -378,17 +334,6 @@ class TimelineLink(GuardianView):
         {'timeline': record, 'user': user, 'pins': pins,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
-
-
-
-
-
-
-
-
-
-
-
 
 
 

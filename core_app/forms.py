@@ -65,6 +65,12 @@ class SignupForm(SetPasswordForm):
         exclude = ('organizations', 'default', 'service', 
         'expiration', 'max_users', 'paid')
 
+class NodeFilterForm(forms.ModelForm):
+    class Meta:
+        model  = models.NodeFilter
+        exclude = ('user', 'organization')
+
+
 
 
 

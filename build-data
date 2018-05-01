@@ -16,7 +16,7 @@ User.objects.create_superuser('admin', 'admin@example.com', 'itrocksalot')
 # channel    = connection.channel()
 
 from core_app.models import User, Organization
-from timeline_app.models import Timeline, TimelineFilter
+from timeline_app.models import Timeline
 
 from core_app.models import Organization
 from card_app.models import Card
@@ -69,6 +69,7 @@ label= 'This is a card label and it should be used with caution.'
 for ind in range(50):
     Card.objects.create(owner=user1, 
         label=label * randint(0, 10), ancestor=list)
+
 
 
 

@@ -8,26 +8,8 @@ class TimelineForm(forms.ModelForm):
         model  = models.Timeline
         exclude = ('owner', 'organization', 'users')
 
-class FilterForm(forms.Form):
-    pattern = forms.CharField()
-
-class FindUserForm(forms.Form):
-    pattern = forms.CharField()
-
-class TimelineFilterForm(forms.ModelForm):
-    class Meta:
-        model  = models.TimelineFilter
-        exclude = ('user', 'organization')
-
 class BindTimelinesForm(forms.Form):
     name = forms.CharField(required=False)
-
-# class ListUsersSearchForm(forms.Form):
-    # pattern = forms.CharField(required=False)
-
-class FindEventForm(forms.Form):
-    pattern = forms.CharField()
-    seen = forms.BooleanField(required=False)
 
 class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
@@ -49,5 +31,6 @@ class ConfirmTimelineDeletionForm(forms.Form):
         if name != self.confirm_token:
             raise forms.ValidationError(
                 "The name doesn't match!")
+
 
 

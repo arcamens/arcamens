@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
     url(r'^create-organization/(?P<user_id>.+)/', views.CreateOrganization.as_view(), name='create-organization'),
     url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
-
+    url(r'^setup-node-filter/(?P<organization_id>.+)', views.SetupNodeFilter.as_view(), name='setup-node-filter'),
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
     url(r'^update-organization/(?P<organization_id>.+)/', views.UpdateOrganization.as_view(), name='update-organization'),
@@ -42,8 +42,11 @@ urlpatterns = [
     url(r'^bind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.BindOrganizationAdmin.as_view(), name='bind-organization-admin'),
     url(r'^unbind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.UnbindOrganizationAdmin.as_view(), name='unbind-organization-admin'),
     url(r'^resend-invite/(?P<invite_id>.+)', views.ResendInvite.as_view(), name='resend-invite'),
+    url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 
 ]
+
+
 
 
 

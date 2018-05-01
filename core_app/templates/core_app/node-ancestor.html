@@ -1,15 +1,18 @@
 {% load i18n %}
 
-<div class="panel panel-default board-ancestor" >
+<div class="panel panel-default node-ancestor" >
 
 <div class="panel-body text-center">
+<div class="pull-right">
+{% include 'core_app/node-ancestor-menu.html' %}
+</div>
 
 <p><b> 
-<span class="glyphicon glyphicon-th"></span> Boards
+<span class="glyphicon glyphicon-flag"></span> {{organization}}
 
 </b>
 
-<span class="badge">{{boards.count}}/{{total.count}}</span>
+<span class="badge">{{count}}/{{total}}</span>
 
 </p>
 
@@ -24,7 +27,7 @@ data-callback="$('#modal').modal('toggle');" >
 
 <a class="e-get" 
 data-shell="#smallModalContent" href="#" 
-data-show="{% url 'board_app:setup-board-filter' organization.id %}"  
+data-show="{% url 'core_app:setup-node-filter' organization.id %}"  
 data-callback="$('#modal').modal('toggle');">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
@@ -42,4 +45,6 @@ Filter </strike>
 </div>
 
 </div>
+
+
 
