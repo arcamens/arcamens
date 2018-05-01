@@ -1,6 +1,9 @@
 <div class="panel panel-default timeline" >
 
 <div class="panel-body text-center">
+<div class="pull-right"> <a class=" e-get text-default"  href="#" 
+data-shell="#pins"  data-show="{% url 'timeline_app:pin-timeline' timeline.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a> </div>
 
 <p> <a class="e-get" href="{{timeline.get_link_url}}" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
 <span class="glyphicon glyphicon glyphicon-eye-open clip"></span> Timeline {{timeline.name}} 
@@ -15,6 +18,7 @@ By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owne
 
 </div>
 </div>
+
 
 
 

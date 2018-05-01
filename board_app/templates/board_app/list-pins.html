@@ -15,6 +15,8 @@
 {% include 'board_app/list-pins-list.html' %}
 {% elif ind.card%}
 {% include 'board_app/list-pins-card.html' %}
+{% elif ind.timeline %}
+{% include 'timeline_app/list-pins-timeline.html' %}
 {% endif %}
 
 {% endfor %}
@@ -32,6 +34,7 @@
 // });
 // </script>
 -->
+
 
 
 

@@ -9,6 +9,9 @@ class PinMixin(object):
         elif self.card:
             return reverse('card_app:view-data', 
                 kwargs={'card_id': self.card.id})
+        elif self.timeline:
+            return reverse('timeline_app:list-posts', 
+                kwargs={'timeline_id': self.timeline.id})
         else:
             return reverse('card_app:list-cards', 
                 kwargs={'list_id': self.list.id})
@@ -20,6 +23,9 @@ class PinMixin(object):
         elif self.card:
             return reverse('card_app:card-link', 
                 kwargs={'card_id': self.card.id})
+        elif self.timeline:
+            return reverse('timeline_app:list-posts', 
+                kwargs={'timeline_id': self.timeline.id})
         else:
             return reverse('list_app:list-link', 
                 kwargs={'list_id': self.list.id})
@@ -59,6 +65,7 @@ class EUpdateBoardMixin(object):
 
 class ECreateBoardMixin(object):
     pass
+
 
 
 

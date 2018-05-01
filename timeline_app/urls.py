@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^bind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.BindTimelineUser.as_view(), name='bind-timeline-user'),
     url(r'^unbind-timeline-user/(?P<timeline_id>.+)/(?P<user_id>.+)/', views.UnbindTimelineUser.as_view(), name='unbind-timeline-user'),
     url(r'^timeline-link/(?P<timeline_id>.+)/', views.TimelineLink.as_view(), name='timeline-link'),
+    url(r'^pin-timeline/(?P<timeline_id>.+)/', views.PinTimeline.as_view(), name='pin-timeline'),
 
 ]
-
 

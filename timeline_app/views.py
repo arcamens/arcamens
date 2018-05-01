@@ -3,6 +3,7 @@ EUnbindTimelineUser, EUpdateTimeline, EPastePost, EBindTimelineUser
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
 from core_app.views import GuardianView
+from board_app.models import Pin
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
@@ -335,6 +336,12 @@ class TimelineLink(GuardianView):
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
 
-
+class PinTimeline(GuardianView):
+    def get(self, request, timeline_id):
+        user  = User.objects.get(id=self.user_id)
+        timeline = Timeline.objects.get(id=timeline_id)
+        pin   = Pin.objects.create(user=user, 
+        organization=user.default, timeline=timeline)
+        return redirect('board_app:list-pins')
 
 
