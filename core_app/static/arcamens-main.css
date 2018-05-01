@@ -2,29 +2,21 @@
 word-wrap: 
 break-word;
 
-background-color:#C2D5F5;
+background-color:#CBCED2;
 }
-
-.board-ancestor {
-word-wrap: 
-break-word;
-
-background-color:#C2D5F5;
-}
-
 
 .board {
 word-wrap: 
 break-word;
 
-background-color:white;
+background-color:#D0D6E8;
 }
 
 .list-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#C2D5F5;
+background-color:#D0D6E8;
 
 }
 
@@ -32,12 +24,12 @@ background-color:#C2D5F5;
 word-wrap: 
 break-word;
 
-background-color:white;
+background-color:#EEE7C3;
 
 }
 
 .pin-list {
-color:#2A4FA4;
+color:#887925;
 
 }
 
@@ -47,15 +39,20 @@ color:#5E666F;
 }
 
 .pin-board {
-color:#05163D;
+color:#5366A0;
 
 }
+.pin-timeline {
+color:#295C2C;
+
+}
+
 
 .card-ancestor {
 word-wrap: 
 break-word;
 
-background-color:#C2D5F5;
+background-color:#EEE7C3;
 
 }
 
@@ -79,8 +76,7 @@ break-word;
 }
 
 body {
-
-background-color:#93BCFF;
+background-color:#F5EAEA;
 }
 
 
@@ -88,24 +84,18 @@ background-color:#93BCFF;
     word-wrap: break-word;
 }
 
-.menu-timeline  {
-    background:#C2D5F5;
-}
-
-.menu-organization  {
-    background:#C2D5F5;
-}
 
 .menu-timeline  {
-    background:#C2D5F5;
+    background:#C7E1C8;
 }
 
 .timeline  {
     word-wrap: 
     break-word;
 
-    background:white;
+    background:#C7E1C8;
 }
+
 
 
 
