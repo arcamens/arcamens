@@ -272,7 +272,7 @@ class DeleteBoard(GuardianView):
 
         board.delete()
 
-        return redirect('board_app:list-boards')
+        return redirect('core_app:list-nodes')
 
 class ListPins(GuardianView):
     def get(self, request):
@@ -394,6 +394,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 
