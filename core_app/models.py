@@ -10,6 +10,7 @@ from django.db.models import Q
 from wsbells.models import UserWS, QueueWS
 from django.core.mail import send_mail
 from django.conf import settings
+from os.path import join
 import random
 
 class UserMixin(UserWS):
@@ -252,7 +253,7 @@ class User(UserMixin, BasicUser):
     help_text='Position, Skills, Goals, ..', 
     max_length=256)
 
-    avatar = models.ImageField(default=settings.MEDIA_ROOT,
+    avatar = models.ImageField(default=join(settings.MEDIA_ROOT, 'user.png'),
     verbose_name='Your avatar.', help_text='', blank=False)
 
     enabled = models.BooleanField(blank=True, default=False)
