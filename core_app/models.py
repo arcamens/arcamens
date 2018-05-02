@@ -253,7 +253,7 @@ class User(UserMixin, BasicUser):
     help_text='Position, Skills, Goals, ..', 
     max_length=256)
 
-    avatar = models.ImageField(default=join(settings.MEDIA_ROOT, 'user.png'),
+    avatar = models.ImageField(default='user.png',
     verbose_name='Your avatar.', help_text='', blank=False)
 
     enabled = models.BooleanField(blank=True, default=False)
