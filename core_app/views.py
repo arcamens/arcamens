@@ -952,8 +952,8 @@ class ListNodes(GuardianView):
 
     def get(self, request):
         user  = User.objects.get(id=self.user_id)
-        nodes = Node.objects.filter(Q(organization__id=user.default.id
-        ) & Q(board__members=user) | Q(timeline__users=user))
+        nodes = Node.objects.filter(organization__id=user.default.id) 
+        nodes = nodes.filter(Q(board__members=user) | Q(timeline__users=user))
 
         nodes = nodes.order_by('-created')
         total = nodes.count()
@@ -995,4 +995,5 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
