@@ -952,10 +952,12 @@ class ListNodes(GuardianView):
 
     def get(self, request):
         user  = User.objects.get(id=self.user_id)
-        nodes = Node.objects.filter(organization__id=user.default.id) 
+        nodes = Node.objects.filter(Q(board__organization=user.default) 
+        | Q(timeline__organization=user.default)) 
+
         nodes = nodes.filter(Q(board__members=user) | Q(timeline__users=user))
 
-        nodes = nodes.order_by('-created')
+        nodes = nodes.order_by('-indexer')
         total = nodes.count()
 
         pins = user.pin_set.filter(organization=user.default)
@@ -963,8 +965,12 @@ class ListNodes(GuardianView):
         filter, _ = NodeFilter.objects.get_or_create(
         user=user, organization=user.default)
 
-        nodes = nodes.filter((Q(name__icontains=filter.pattern) | \
-        Q(description__icontains=filter.pattern))) if filter.status else nodes
+        query = Q(board__name__icontains=filter.pattern) | \
+        Q(board__description__icontains=filter.pattern) | \
+        Q(timeline__name__icontains=filter.pattern) | \
+        Q(timeline__description__icontains=filter.pattern)
+
+        nodes = nodes.filter(query) if filter.status else nodes
         count = nodes.count()
 
         return render(request, 'core_app/list-nodes.html', 
@@ -995,5 +1001,6 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 

@@ -6,7 +6,7 @@ from . import models
 class TimelineForm(forms.ModelForm):
     class Meta:
         model  = models.Timeline
-        exclude = ('owner', 'organization', 'users')
+        exclude = ('owner', 'organization', 'users', 'node')
 
 class BindTimelinesForm(forms.Form):
     name = forms.CharField(required=False)
@@ -31,6 +31,7 @@ class ConfirmTimelineDeletionForm(forms.Form):
         if name != self.confirm_token:
             raise forms.ValidationError(
                 "The name doesn't match!")
+
 
 
 

@@ -148,22 +148,8 @@ class TagMixin:
 class Node(models.Model):
     """    
     """
-    organization = models.ForeignKey('core_app.Organization', 
-    related_name='nodes', null=True, blank=True)
 
-    name = models.CharField(null=True, blank=False,
-    verbose_name=_("Name"), help_text='Example: /projects/labor/bugs, \
-    Management, Blackdawn Team, ...', max_length=250)
-
-    description = models.CharField(blank=True, default='', 
-    verbose_name=_("Description"), help_text='Example: Deals with \
-    labor bugs.', max_length=626)
-
-    owner = models.ForeignKey('core_app.User', null=True, 
-    blank=True, related_name='owned_boards')
-
-    created  = models.DateTimeField(auto_now_add=True, 
-    null=True)
+    indexer = models.AutoField(primary_key=True)
 
 class Organization(OrganizationMixin, models.Model):
     name     = models.CharField(null=True,
@@ -402,6 +388,7 @@ class NodeFilter(models.Model):
     # filter. If we decide to permit more filters..
     class Meta:
         unique_together = ('user', 'organization',)
+
 
 
 

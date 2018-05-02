@@ -12,9 +12,9 @@
 <div class="col-sm-3">
 <div id="node-{{ind.id}}">
 {% if ind.board %}
-    {% include "board_app/board.html" with board=ind %} 
+    {% include "board_app/board.html" with board=ind.board %} 
 {% else %}
-    {% include "timeline_app/timeline.html" with timeline=ind %} 
+    {% include "timeline_app/timeline.html" with timeline=ind.timeline %} 
 {% endif %}
 </div>
 </div>
@@ -28,9 +28,9 @@
 <div class="col-sm-3">
 <div id="node-{{indj.id}}"> 
 {% if indj.board %}
-    {% include "board_app/board.html" with board=indj %} 
+    {% include "board_app/board.html" with board=indj.board %} 
 {% else %}
-    {% include "timeline_app/timeline.html" with timeline=indj %} 
+    {% include "timeline_app/timeline.html" with timeline=indj.timeline %} 
 {% endif %}
 
 </div>

@@ -8,7 +8,7 @@ class BoardForm(forms.ModelForm):
     class Meta:
         model  = models.Board
         exclude = ('owner', 'main', 'admins',
-        'members', 'organization')
+        'members', 'organization', 'node')
 
 class BindUsersForm(forms.Form):
     email = forms.EmailField()
@@ -23,6 +23,7 @@ class UserSearchForm(SqLikeForm, forms.Form):
 class ConfirmBoardDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the board name to confirm!')
+
 
 
 
