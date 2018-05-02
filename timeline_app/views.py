@@ -75,7 +75,7 @@ class CreateTimeline(GuardianView):
         user.ws_subscribe(record)
         user.ws_sound()
 
-        return redirect('timeline_app:list-posts', timeline_id=record.id)
+        return redirect('core_app:list-nodes')
 
 class DeleteTimeline(GuardianView):
     def get(self, request,  timeline_id):
@@ -343,5 +343,6 @@ class PinTimeline(GuardianView):
         pin   = Pin.objects.create(user=user, 
         organization=user.default, timeline=timeline)
         return redirect('board_app:list-pins')
+
 
 
