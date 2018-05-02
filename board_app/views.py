@@ -52,7 +52,7 @@ class CreateBoard(GuardianView):
         user.ws_sound()
         user.ws_subscribe(board)
 
-        return redirect('list_app:list-lists', board_id=board.id)
+        return redirect('core_app:list-nodes')
 
 
 class PinBoard(GuardianView):
@@ -394,6 +394,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 

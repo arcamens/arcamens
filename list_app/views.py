@@ -75,7 +75,7 @@ class CreateList(GuardianView):
 
         user.ws_sound(list.ancestor)
 
-        return redirect('card_app:list-cards', list_id=list.id)
+        return redirect('list_app:list-lists', board_id=board_id)
 
 class ConfirmListDeletion(GuardianView):
     def get(self, request, list_id):
@@ -286,6 +286,7 @@ class ListLink(GuardianView):
         {'list': record, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 
