@@ -27,10 +27,12 @@ class UserMixin(UserWS):
         Return all timelines the user should have 
         ws client to be subscribed to.
         """
-
-        qnames = self.ws_queues(self.timelines.all())
+        timelines = self.timelines.filter(organization=self.default)
+        qnames    = self.ws_queues(timelines)
         qnames.append(self.default.qname())
-        qnames.extend(self.ws_queues(self.boards.all()))
+
+        boards = self.boards.filter(organization=self.default)
+        qnames.extend(self.ws_queues(boards))
         return qnames
 
     def get_user_url(self):
@@ -388,6 +390,7 @@ class NodeFilter(models.Model):
     # filter. If we decide to permit more filters..
     class Meta:
         unique_together = ('user', 'organization',)
+
 
 
 
