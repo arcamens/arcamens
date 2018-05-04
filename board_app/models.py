@@ -57,7 +57,9 @@ class BoardMixin(QueueWS):
                     kwargs={'board_id': self.id})
 
     def save(self, *args, **kwargs):
-        self.node = Node.objects.create()
+        # The node objects should be created just once.
+        if not self.pk:
+            self.node = Node.objects.create()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -104,7 +106,7 @@ class Board(BoardMixin, models.Model):
     symmetrical=False)
 
     node = models.OneToOneField('core_app.Node', 
-    null=True, related_name='board')
+    null=False, related_name='board')
 
     # done = models.BooleanField(blank=True, default=False)
 
@@ -171,6 +173,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

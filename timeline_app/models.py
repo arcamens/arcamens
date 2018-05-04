@@ -29,7 +29,8 @@ class TimelineMixin(QueueWS):
                     kwargs={'timeline_id': self.id})
 
     def save(self, *args, **kwargs):
-        self.node = Node.objects.create()
+        if not self.pk:
+            self.node = Node.objects.create()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -71,7 +72,7 @@ class Timeline(TimelineMixin, models.Model):
     null=True)
 
     node = models.OneToOneField('core_app.Node', 
-    null=True, related_name='timeline')
+    null=False, related_name='timeline')
 
 class EDeleteTimeline(Event, EDeleteTimelineMixin):
     timeline_name = models.CharField(null=True,
@@ -110,6 +111,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 
