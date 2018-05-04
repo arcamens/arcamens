@@ -148,8 +148,8 @@ class Post(PostMixin, models.Model):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
 
-    parent = models.ForeignKey('card_app.Card', 
-    related_name='post_forks', null=True, blank=True)
+    # parent = models.ForeignKey('card_app.Card', 
+    # related_name='post_forks', null=True, blank=True)
 
     ancestor = models.ForeignKey(
     'timeline_app.Timeline', related_name='posts', 
@@ -382,6 +382,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 

@@ -128,7 +128,7 @@ class ViewData(GuardianView):
         snippets = card.snippets.all()
         relations = card.relations.all()
         path = card.path.all()
-        post_forks = card.post_forks.all()
+        # post_forks = card.post_forks.all()
         # This doesnt work because the board members should be
         # notified of a card being related to other card.
         # It turns out to be reasonable if the a given board card
@@ -141,7 +141,7 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
-        'attachments': attachments, 'post_forks': post_forks, 'user': user, 'workers': workers, 
+        'attachments': attachments, 'user': user, 'workers': workers, 
         'relations': relations, 'snippets': snippets, 'pins': pins, 
         'tags': tags})
 
@@ -1106,6 +1106,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

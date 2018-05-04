@@ -838,3 +838,4 @@ class ListAllAssignments(GuardianView):
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
 
 
+
