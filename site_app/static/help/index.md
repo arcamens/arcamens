@@ -2,11 +2,17 @@
 
 ### Events
 
+### Organization Creation
+
 ### Timeline Creation
 
 ### Post Creation
 
-### Timeline Users
+### Organization Invites
+
+### Organization Admins
+
+### Timeline Members
 
 ### Post Task Creation
 
@@ -14,9 +20,13 @@
 
 ### Post Tags
 
+### Event Comments
+
 ### Post Filter
 
 ### Timeline Filter
+
+### Timeline Deletion/Renaming
 
 ###  Boards
 
@@ -44,6 +54,10 @@
 
 ### Post Forks
 
+### Post Task Search
+
+### Card Task Search
+
 ### Post Search
 
 ### Card Search
@@ -54,5 +68,9 @@
 
 ### Bitbucket Integration
 
+### Timeline/Board Filter
 
+### Organization User Removal
+
+### Organization Deletion/Renaming
 
