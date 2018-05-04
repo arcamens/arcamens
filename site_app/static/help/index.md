@@ -28,15 +28,15 @@
 
 ### Timeline Deletion/Renaming
 
-###  Boards
+###  Board Creation
 
-### Board Members
-
-### Lists
+### List Creation
 
 ### Card Creation
 
 ### Card Tags
+
+### Board Members
 
 ### Card's Text Colors
 
