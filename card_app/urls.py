@@ -10,17 +10,17 @@ urlpatterns = [
     url(r'^card-tag-information/(?P<tag_id>.+)/(?P<card_id>.+)/', views.CardTagInformation.as_view(), name='card-tag-information'),
     url(r'^card-link/(?P<card_id>.+)/', views.CardLink.as_view(), name='card-link'),
     url(r'^select-fork-list/(?P<card_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
-    url(r'^select-fork-timeline/(?P<card_id>.+)/', views.SelectForkTimeline.as_view(), name='select-fork-timeline'),
+    # url(r'^select-fork-timeline/(?P<card_id>.+)/', views.SelectForkTimeline.as_view(), name='select-fork-timeline'),
 
     url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
-    url(r'^pull-post-content/(?P<card_id>.+)/(?P<fork_id>.+)/', views.PullPostContent.as_view(), name='pull-post-content'),
+    # url(r'^pull-post-content/(?P<card_id>.+)/(?P<fork_id>.+)/', views.PullPostContent.as_view(), name='pull-post-content'),
     url(r'^pull-card-content/(?P<card_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
 
-    url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
-    url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
+    # url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
+    # url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
 
     url(r'^attach-image/(?P<card_id>.+)/', views.AttachImage.as_view(), name='attach-image'),
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^card-events/(?P<card_id>.+)/', views.CardEvents.as_view(), name='card-events'),
 
 ]
+
 
 
 

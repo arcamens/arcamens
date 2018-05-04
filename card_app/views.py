@@ -98,7 +98,7 @@ class ListCards(GuardianView):
         cards = cards.annotate(c_workers=Count('workers', distinct=True))
         cards = cards.annotate(c_forks=Count('forks', distinct=True))
 
-        cards = cards.values('parent', 'parent_post', 'label', 'id', 
+        cards = cards.values('parent', 'label', 'id', 
         'in_workers', 'c_notes', 'c_workers', 'c_forks')
         cards = cards.order_by('-created')
 
@@ -1106,6 +1106,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

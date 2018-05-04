@@ -160,8 +160,8 @@ class Card(CardMixin, models.Model):
     parent = models.ForeignKey('self', null=True, related_name='forks',
     blank=True)
 
-    parent_post = models.ForeignKey('post_app.Post', null=True, 
-    related_name='card_forks', blank=True)
+    # parent_post = models.ForeignKey('post_app.Post', null=True, 
+    # related_name='card_forks', blank=True)
 
     path = models.ManyToManyField('Card', 
     null=True, related_name='children', blank=True, 
@@ -489,6 +489,7 @@ class ECopyCard(Event):
     related_name='e_copy_card1', blank=True)
 
     html_template = 'card_app/e-copy-card.html'
+
 
 
 

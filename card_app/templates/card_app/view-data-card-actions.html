@@ -19,7 +19,6 @@ href="#">
 <span class="glyphicon glyphicon-comment"></span> {{card.notes.count}}
 </span> Notes</a></li>
 
-<li>
 
 <li>
 <a class="b-modal text-info" data-show="{% url 'snippet_app:create-snippet' card.id %}" 
@@ -57,11 +56,6 @@ data-callback="$('#modal').modal('toggle');"  href="#">
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
-<li>
-<a class="s-modal" data-show="{% url 'card_app:select-fork-timeline'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-random"></span> Fork/Post</a></li>
-
-<li>
 
 <a class="s-modal"
 data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
@@ -87,6 +81,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
