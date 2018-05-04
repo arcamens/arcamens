@@ -281,8 +281,8 @@ class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
 
-    post_label = models.CharField(null=True,
-    blank=True, max_length=30)
+    post_label = models.TextField(null=True, blank=True)
+
     html_template = 'post_app/e-delete-post.html'
 
 class ECutPost(ECutPostMixin, Event):
