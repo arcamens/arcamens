@@ -76,7 +76,7 @@ class Timeline(TimelineMixin, models.Model):
 
 class EDeleteTimeline(Event, EDeleteTimelineMixin):
     timeline_name = models.CharField(null=True,
-    blank=False, max_length=50)
+    blank=False, max_length=250)
 
     html_template = 'timeline_app/e-delete-timeline.html'
 
@@ -111,6 +111,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 

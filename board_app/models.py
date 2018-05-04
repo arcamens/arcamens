@@ -160,7 +160,7 @@ class ECreateBoard(Event, ECreateBoardMixin):
 
 
 class EDeleteBoard(Event):
-    board_name = models.CharField(max_length=255, 
+    board_name = models.CharField(max_length=250, 
     blank=True, null=True)
     html_template = 'board_app/e-delete-board.html'
 
@@ -173,6 +173,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 
