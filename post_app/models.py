@@ -281,7 +281,8 @@ class EDeletePost(EDeletePostMixin, Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
 
-    post_label = models.TextField(null=True, blank=True)
+    post_label = models.CharField(null=True, 
+    blank=False, max_length=626)
 
     html_template = 'post_app/e-delete-post.html'
 
@@ -382,6 +383,7 @@ class ECreateCardFork(Event):
     related_name='e_create_card_fork2', blank=True)
 
     html_template = 'post_app/e-create-card-fork.html'
+
 
 
 
