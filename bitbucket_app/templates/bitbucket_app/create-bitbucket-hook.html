@@ -9,12 +9,20 @@ Bitbucket Webhook </h5>
 </div>
 
 <div class="modal-body">
+<p class="text-info">
+Insert your Bitbucket Project URL below.
+</p>
+
 <form id="bitbuckethookForm" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.address  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
+
+<p class="text-warning">
+It is necessary to add a Webhook for push events to your repository.
+</p>
 
 </div>
 
@@ -26,6 +34,7 @@ Bitbucket Webhook </h5>
 class="btn btn-default m-post">  {% trans "Create" %} </button>
 {% endblock %}
 </div>
+
 
 
 
