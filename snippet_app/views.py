@@ -96,9 +96,9 @@ class DetachFile(GuardianView):
     def get(self, request, filewrapper_id):
         filewrapper = models.SnippetFileWrapper.objects.get(id=filewrapper_id)
         filewrapper.delete()
-        attachments = filewrapper.snippet.filewrapper_set.all()
+        attachments = filewrapper.snippet.snippetfilewrapper_set.all()
 
-        form = forms.FileWrapperForm()
+        form = forms.SnippetFileWrapperForm()
         return render(request, 'snippet_app/attach-file.html', 
         {'snippet':filewrapper.snippet, 'form': form, 'attachments': attachments})
 
