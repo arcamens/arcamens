@@ -31,7 +31,7 @@ $('#form-snippet-attachment-file-data').change(function(){
 <div class="panel panel-default" >
 <div class="panel-body">
 {% for ind in attachments %}
-<a class="e-get" data-shell="#div-snippet-attachments" 
+<a class="e-get" data-shell="#div-snippet-attachments" href="#"
 data-show="{% url 'snippet_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
 <br>
@@ -40,6 +40,7 @@ No file chosen.
 {% endfor %}
 </div>
 </div>
+
 
 
 

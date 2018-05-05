@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from markdown import markdown
 from board_app.models import Event
 
@@ -106,7 +108,9 @@ class EUpdateSnippet(Event):
     def __str__(self):
         return self.user.name
 
-
-
+# Signals.
+@receiver(pre_delete, sender=SnippetFileWrapper)
+def delete_filewrapper(sender, instance, **kwargs):
+    instance.file.delete(save=False)
 
 

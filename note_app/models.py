@@ -90,11 +90,8 @@ class EDeleteNote(Event):
 
 
 class EUpdateNote(Event):
-    child = models.ForeignKey('card_app.Card', 
-    blank=True)
-
-    note = models.ForeignKey('Note', 
-    blank=True)
+    child = models.ForeignKey('card_app.Card', blank=True)
+    note = models.ForeignKey('Note', blank=True)
 
     html_template = 'note_app/e-update-note.html'
 

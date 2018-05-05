@@ -5,7 +5,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-book"></span> 
-snippet by {{snippet.owner.name}} at {{snippet.created}}
+Snippet by {{snippet.owner.name}} at {{snippet.created}}
 
 </div>
 
@@ -54,6 +54,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
     $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
 })
 </script>
+
 
 
 

@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from board_app.views import GuardianView
+from django.http import HttpResponse
 import board_app.models
 import card_app.models
 import core_app.models
@@ -63,33 +64,6 @@ class CreateSnippet(GuardianView):
 
         return redirect('card_app:view-data', card_id=card.id)
 
-class ECreateSnippet(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.ECreateSnippet.objects.get(id=event_id)
-        return render(request, 'snippet_app/e-create-snippet.html', 
-        {'event':event})
-
-class EDeleteSnippet(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EDeleteSnippet.objects.get(id=event_id)
-        return render(request, 'snippet_app/e-delete-snippet.html', 
-        {'event':event})
-
-class EUpdateSnippet(GuardianView):
-    """
-    """
-
-    def get(self, request, event_id):
-        event = models.EUpdateSnippet.objects.get(id=event_id)
-        return render(request, 'snippet_app/e-update-snippet.html', 
-        {'event':event})
-
 class AttachFile(GuardianView):
     """
     """
@@ -132,7 +106,8 @@ class UpdateSnippet(GuardianView):
     def get(self, request, snippet_id):
         snippet = models.Snippet.objects.get(id=snippet_id)
         return render(request, 'snippet_app/update-snippet.html',
-        {'snippet': snippet, 'form': forms.SnippetForm(instance=snippet),})
+        {'snippet': snippet, 'card': snippet.card, 
+        'form': forms.SnippetForm(instance=snippet),})
 
     def post(self, request, snippet_id):
         record  = models.Snippet.objects.get(id=snippet_id)
@@ -140,7 +115,8 @@ class UpdateSnippet(GuardianView):
 
         if not form.is_valid():
             return render(request, 'snippet_app/update-snippet.html',
-                        {'form': form, 'snippet':record, }, status=400)
+                {'form': form, 'card': snippet.card, 
+                    'snippet':record, }, status=400)
 
         record.save()
 
@@ -175,10 +151,12 @@ class DeleteSnippet(GuardianView):
         return redirect('card_app:view-data', 
         card_id=snippet.card.id)
 
+class CancelSnippetCreation(GuardianView):
+    def get(self, request, snippet_id):
+        snippet = models.Snippet.objects.get(id = snippet_id)
+        snippet.delete()
 
-
-
-
+        return HttpResponse(status=200)
 
 
 

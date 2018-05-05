@@ -30,7 +30,20 @@ $('#div-snippet-attachments').load("{% url 'snippet_app:attach-file' snippet.id 
 
 
 <div class="modal-footer">
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+})
+</script>
+
 {% block buttons %}
+<button  type="button" 
+data-callback="$('#bigModal').modal('toggle');" 
+data-show="{% url 'snippet_app:cancel-snippet-creation' snippet.id %}"
+class="btn btn-default e-get"> 
+     {% trans "Cancel" %}
+</button>
+
 <button  type="button" data-form="#form-snippet-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
 data-shell-error="#bigModalContent" data-show="{% url 'snippet_app:create-snippet' card.id snippet.id %}"
@@ -40,6 +53,7 @@ class="btn btn-default e-post">
 
 {% endblock %}
 </div>
+
 
 
 
