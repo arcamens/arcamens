@@ -39,6 +39,7 @@ class CreateBoard(GuardianView):
         board.owner = user
 
         board.members.add(user)
+        board.admins.add(user)
         board.organization = user.default
         board.save()
 
@@ -394,6 +395,7 @@ class BoardLink(GuardianView):
         {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
         'default': user.default, 'organizations': organizations, 
         'settings': settings})
+
 
 
 
