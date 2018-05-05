@@ -65,10 +65,11 @@ class ImageWrapperForm(forms.ModelForm):
         model  = models.ImageWrapper
         exclude = ('card', )
 
-class FileWrapperForm(forms.ModelForm):
+class CardFileWrapperForm(forms.ModelForm):
     class Meta:
-        model  = models.FileWrapper
+        model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 

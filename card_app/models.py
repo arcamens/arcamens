@@ -1,6 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
 from markdown.extensions.tables import TableExtension
 from mdx_gfm import GithubFlavoredMarkdownExtension
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.core.urlresolvers import reverse
 from core_app.models import Event, User
 from sqlike.parser import SqLike, SqNode
@@ -34,7 +36,7 @@ class CardMixin(object):
         card.ancestor = list
         card.save()
 
-        for ind in self.filewrapper_set.all():
+        for ind in self.cardfilewrapper_set.all():
             ind.duplicate(list)
         return card
 
@@ -115,9 +117,9 @@ class CardFilterMixin:
         cards = sqlike.run(cards)
         return cards
 
-class FileWrapperMixin(object):
+class CardFileWrapperMixin(object):
     def duplicate(self, card=None):
-        wrapper       = FileWrapper.objects.get(id=self.id)
+        wrapper       = CardFileWrapper.objects.get(id=self.id)
         wrapper.pk    = None
         wrapper.card  = card
         wrapper.save()
@@ -227,7 +229,7 @@ class ImageWrapper(models.Model):
     file = models.ImageField(
     verbose_name='', help_text='')
 
-class FileWrapper(FileWrapperMixin, models.Model):
+class CardFileWrapper(CardFileWrapperMixin, models.Model):
     """
     """
 
@@ -490,24 +492,8 @@ class ECopyCard(Event):
 
     html_template = 'card_app/e-copy-card.html'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Signals.
+@receiver(pre_delete, sender=CardFileWrapper)
+def delete_filewrapper(sender, instance, **kwargs):
+    instance.file.delete(save=False)
 

@@ -50,7 +50,7 @@ class CardLink(GuardianView):
         pins = user.pin_set.all()
         forks = card.forks.all()
         workers = card.workers.all()
-        attachments = card.filewrapper_set.all()
+        attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
@@ -123,7 +123,7 @@ class ViewData(GuardianView):
         pins = user.pin_set.filter(organization=user.default)
         forks = card.forks.all()
         workers = card.workers.all()
-        attachments = card.filewrapper_set.all()
+        attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
         snippets = card.snippets.all()
         relations = card.relations.all()
@@ -472,15 +472,15 @@ class AttachFile(GuardianView):
 
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        attachments = card.filewrapper_set.all()
-        form = forms.FileWrapperForm()
+        attachments = card.cardfilewrapper_set.all()
+        form = forms.CardFileWrapperForm()
         return render(request, 'card_app/attach-file.html', 
         {'card':card, 'form': form, 'attachments': attachments})
 
     def post(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        attachments = card.filewrapper_set.all()
-        form = forms.FileWrapperForm(request.POST, request.FILES)
+        attachments = card.cardfilewrapper_set.all()
+        form = forms.CardFileWrapperForm(request.POST, request.FILES)
 
         if not form.is_valid():
             return render(request, 'card_app/attach-file.html', 
@@ -495,11 +495,11 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = models.FileWrapper.objects.get(id=filewrapper_id)
+        filewrapper = models.CardFileWrapper.objects.get(id=filewrapper_id)
         filewrapper.delete()
-        attachments = filewrapper.card.filewrapper_set.all()
+        attachments = filewrapper.card.cardfilewrapper_set.all()
 
-        form = forms.FileWrapperForm()
+        form = forms.CardFileWrapperForm()
         return render(request, 'card_app/attach-file.html', 
         {'card':filewrapper.card, 'form': form, 'attachments': attachments})
 
@@ -1106,6 +1106,7 @@ class CardEvents(GuardianView):
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
+
 
 
 

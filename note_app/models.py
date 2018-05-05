@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from mdx_gfm import GithubFlavoredMarkdownExtension
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
@@ -100,10 +102,8 @@ class EUpdateNote(Event):
         return self.user.name
 
 
-
-
-
-
-
-
+# Signals.
+@receiver(pre_delete, sender=NoteFileWrapper)
+def delete_filewrapper(sender, instance, **kwargs):
+    instance.file.delete(save=False)
 

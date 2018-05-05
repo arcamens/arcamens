@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from mdx_gfm import GithubFlavoredMarkdownExtension
 from sqlike.parser import SqLike, SqNode
 from markdown import markdown
@@ -384,35 +386,8 @@ class ECreateCardFork(Event):
 
     html_template = 'post_app/e-create-card-fork.html'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Signals.
+@receiver(pre_delete, sender=PostFileWrapper)
+def delete_filewrapper(sender, instance, **kwargs):
+    instance.file.delete(save=False)
 

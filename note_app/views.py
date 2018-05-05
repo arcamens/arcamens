@@ -106,9 +106,9 @@ class DetachFile(GuardianView):
     def get(self, request, filewrapper_id):
         filewrapper = models.NoteFileWrapper.objects.get(id=filewrapper_id)
         filewrapper.delete()
-        attachments = filewrapper.note.filewrapper_set.all()
+        attachments = filewrapper.note.notefilewrapper_set.all()
 
-        form = forms.FileWrapperForm()
+        form = forms.NoteFileWrapperForm()
         return render(request, 'note_app/attach-file.html', 
         {'note':filewrapper.note, 'form': form, 'attachments': attachments})
 
@@ -172,6 +172,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 
