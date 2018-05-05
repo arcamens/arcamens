@@ -37,9 +37,10 @@ LOGGED_VIEW = 'core_app:index'
 
 PAYBILLS_USER = 'core_app.User'
 # DEBUG_PAYPAL_IPN_DOMAIN = get_addr(8000)
-DEBUG_PAYPAL_IPN_DOMAIN = '0.0.0.0:8000'
+DEBUG_PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
+DEBUG_PAYPAL = True
 
-PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
+PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
@@ -196,6 +197,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

@@ -60,6 +60,7 @@ user1.organizations.add(organization1)
 
 board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
 board.members.add(user1)
+board.admins.add(user1)
 
 list = List.objects.create(owner=user1, name='Alpha', ancestor=board)
 from random import randint
