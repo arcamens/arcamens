@@ -166,7 +166,7 @@ class Organization(OrganizationMixin, models.Model):
     'User', related_name='managed_organizations', 
     null=True, blank=True, symmetrical=False)
 
-class Service(BasicItem):
+class Period(BasicItem):
     """
     This is the product thats being purchased.
     """
@@ -184,7 +184,7 @@ class Service(BasicItem):
     max_users = models.IntegerField(null=True, default=3,
     help_text="Max users until the expiration.")
 
-    expiration = models.DateField(null=True, default=datetime.now,
+    expiration = models.DateField(null=True, 
     blank=False, help_text="Example: year-month-day")
 
     total = models.FloatField(null=True, default=0)
@@ -390,6 +390,7 @@ class NodeFilter(models.Model):
     # filter. If we decide to permit more filters..
     class Meta:
         unique_together = ('user', 'organization',)
+
 
 
 

@@ -8,26 +8,56 @@
 </div>
 <div class="modal-body">
 
-<div class="pre-scrollable">
-{% for ind in payments %}
+<h4> Current state </h4>
+<p>Expiration: {{ me.expiration }}<br>
+Max users: {{ me.max_users }}</p>
 
+<h4> Purchases </h4>
+<div class="pre-scrollable">
+{% for ind in items %}
+<p> 
+Max Users: {{ind.period.max_users}} 
+<br>
+Total: {{ind.period.total}} {{CURRENCY_CODE}}
+<br>
+Expiration: {{ind.period.expiration}}
+<br>
+Type: {% if ind.period.paid %} Plan Paid {% else %}  Plan Free {% endif %}
+<br>
+Date: {{ind.period.created}}
+<br>
+
+{% if ind.payment_process.success %}
+<small class="text-success"> Paid successfully! </small>
+{% endif %}
+<p>
 {% empty %}
-<p> No payments. </p>
+<p> No items. </p>
 {% endfor %}
 
 </div>
 
+</div>
 
-<p> <b> Total users: {{n_users}}</b> </p>
-
-<p> <b> Expiration: {{expiration}}</b></p>
-<p> <b> Cash: {{cash}} </b> </p>
+<div class="modal-footer">
 
 <div class="text-center">
-<h4> <a class="s-modal" data-show="{% url 'site_app:paypal-manual-payment' %}" href="#"> Paypal </a> 
- <a class="s-modal" data-show="{% url 'site_app:custom-payment' %}" href="#"> Custom </a> </h4>
+ <a class="s-modal" data-show="{% url 'site_app:paypal-manual-payment' %}" href="#"> Paypal </a> 
+<a class="s-modal" data-show="{% url 'site_app:custom-payment' %}" href="#"> Custom </a> 
+
+{% if me.paid %}
+<a class="s-modal" data-show="{% url 'site_app:confirm-downgrade-free' %}" href="#"> Downgrade Free </a> 
+{% endif %}
 </div>
 
 </div>
+
+
+
+
+
+
+
+
 
 

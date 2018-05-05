@@ -43,6 +43,11 @@ PAYPAL_IPN_DOMAIN = 'http://arcamens.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
+# Max users per account for free plan.
+FREE_MAX_USERS = 3
+USER_COST      = 10
+CURRENCY_CODE  = 'USD'
+
 WS_HOST = '127.0.0.1'
 WS_PORT = 15675
 WS_USE_SSL = 'false'
@@ -191,6 +196,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

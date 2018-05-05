@@ -15,6 +15,11 @@ urlpatterns = [
     url(r'^recover-account/', views.RecoverAccount.as_view(), name='recover-account'),
     url(r'^redefine-password/(?P<user_id>.+)/(?P<token>.+)/', views.RedefinePassword.as_view(), name='redefine-password'),
     url(r'^enable-account/(?P<user_id>.+)/(?P<token>.+)/', views.EnableAccount.as_view(), name='enable-account'),
+    url(r'^custom-payment/', views.CustomPayment.as_view(), name='custom-payment'),
+    url(r'^confirm-downgrade-free/', views.ConfirmDowngradeFree.as_view(), name='confirm-downgrade-free'),
+    url(r'^downgrade-free/', views.DowngradeFree.as_view(), name='downgrade-free'),
+    url(r'^calculate-period-cost/', views.CalculatePeriodCost.as_view(), name='calculate-period-cost'),
 
 ]
+
 
