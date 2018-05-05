@@ -227,9 +227,9 @@ class PaypalManualPayment(AuthenticatedView):
         'currency_code': settings.CURRENCY_CODE,
         'amount': cost,
         'quantity': 1,
-        'shopping_url': 'https://staging.splittask.net',
-        'return': 'https://staging.splittask.net',
-        'cancel_return': 'https://staging.splittask.net',
+        'shopping_url': 'https://staging.arcamens.com',
+        'return': 'https://staging.arcamens.com',
+        'cancel_return': 'https://staging.arcamens.com',
         # 'image_url': 'http://FIXME.gif',
         'no_shipping': '1'}
 
