@@ -117,6 +117,11 @@ class UnbindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
         user = User.objects.get(id=user_id)
         timeline = Timeline.objects.get(id=timeline_id)
+
+        if timeline.owner == user:
+            return HttpResponse("You can't remove \
+                the timeline owner!", status=403)
+
         timeline.users.remove(user)
         timeline.save()
 
@@ -357,5 +362,6 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
