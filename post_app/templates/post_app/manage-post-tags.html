@@ -48,7 +48,7 @@ data-show="{% url 'post_app:bind-post-tag' post.id ind.id %}" href="#">
 <div class="modal-footer">
 <script>
 $('#modal').one('hidden.bs.modal', function () {
-    $('#post-{{post.id}}').load('{% url 'post_app:post' post.id  %}');
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
 })
 </script>
 
@@ -61,4 +61,5 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 

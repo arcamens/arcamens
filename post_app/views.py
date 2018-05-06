@@ -36,7 +36,6 @@ class Post(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=400)
 
-
         user = User.objects.get(id=self.user_id)
 
         boardpins = user.boardpin_set.filter(organization=user.default)
@@ -46,7 +45,8 @@ class Post(GuardianView):
 
         return render(request, 'post_app/post.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
+        'cardpins': cardpins, 'tags': post.tags.all(), 
+        'timelinepins': timelinepins, 'user': user, })
 
 class PostLink(GuardianView):
     """
@@ -69,9 +69,9 @@ class PostLink(GuardianView):
 
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'user': user,  'default': user.default, 
-        'organization': user.default, 'organizations': organizations, 
-        'settings': settings})
+        'timelinepins': timelinepins, 'cardpins': cardpins, 'user': user, 
+        'default': user.default, 'organization': user.default, 
+        'organizations': organizations, 'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -137,7 +137,7 @@ class UpdatePost(GuardianView):
 
         user.ws_sound(record.ancestor)
 
-        return redirect('post_app:post', 
+        return redirect('post_app:refresh-post', 
         post_id=record.id)
 
 
@@ -460,7 +460,7 @@ class Done(GuardianView):
 
         user.ws_sound(post.ancestor)
 
-        return redirect('post_app:post', 
+        return redirect('post_app:refresh-post', 
         post_id=post.id)
 
 class ManagePostTags(GuardianView):
@@ -562,7 +562,7 @@ class Undo(GuardianView):
 
         user.ws_sound(post.ancestor)
 
-        return redirect('post_app:post', 
+        return redirect('post_app:refresh-post', 
         post_id=post.id)
 
 
@@ -860,6 +860,25 @@ class Unpin(GuardianView):
         pin.delete()
         return redirect('board_app:list-pins')
 
+class RefreshPost(GuardianView):
+    """
+    Used to update a post view after changing its data.
+    """
 
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+        user = User.objects.get(id=self.user_id)
 
+        if not post.ancestor:
+            return HttpResponse("This post is on clipboard!\
+                It can't be accessed now.", status=400)
+
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
+        return render(request, 'post_app/post-data.html', 
+        {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
+        'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
 
