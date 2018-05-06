@@ -319,10 +319,13 @@ class BindBoardUser(GuardianView):
 
 class UnbindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
-        # This code shows up in board_app.views?
-        # something is odd.
         user = User.objects.get(id=user_id)
         board = Board.objects.get(id=board_id)
+
+        if board.owner == user:
+            return HttpResponse("You can't remove \
+                the board owner!", status=403)
+
         board.members.remove(user)
         board.save()
 
@@ -406,6 +409,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 
