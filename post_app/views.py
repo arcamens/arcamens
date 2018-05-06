@@ -36,10 +36,17 @@ class Post(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=400)
 
-        # attachments = post.postfilewrapper_set.all()
-        # workers = post.workers.all()
+
+        user = User.objects.get(id=self.user_id)
+
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         return render(request, 'post_app/post.html', 
-        {'post':post, })
+        {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
+        'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
 
 class PostLink(GuardianView):
     """
@@ -52,17 +59,19 @@ class PostLink(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=400)
 
-        attachments = post.postfilewrapper_set.all()
-        workers = post.workers.all()
-
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
 
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         return render(request, 'post_app/post-link.html', 
-        {'post':post, 'attachments': attachments, 
-        'tags': post.tags.all(), 'workers': workers,
-        'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations, 'settings': settings})
+        {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
+        'cardpins': cardpins, 'user': user,  'default': user.default, 
+        'organization': user.default, 'organizations': organizations, 
+        'settings': settings})
 
 class CreatePost(GuardianView):
     """
@@ -836,6 +845,21 @@ class ListAllAssignments(GuardianView):
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
+
+class PinPost(GuardianView):
+    def get(self, request, post_id):
+        user  = User.objects.get(id=self.user_id)
+        post = Post.objects.get(id=post_id)
+        pin   = PostPin.objects.create(user=user, 
+        organization=user.default, post=post)
+        return redirect('board_app:list-pins')
+
+class Unpin(GuardianView):
+    def get(self, request, pin_id):
+        pin = PostPin.objects.get(id=pin_id)
+        pin.delete()
+        return redirect('board_app:list-pins')
+
 
 
 

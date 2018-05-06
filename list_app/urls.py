@@ -15,8 +15,10 @@ urlpatterns = [
     url(r'^undo-clipboard/(?P<list_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
     url(r'^list-link/(?P<list_id>.+)/', views.ListLink.as_view(), name='list-link'),
     url(r'^confirm-list-deletion/(?P<list_id>.+)/', views.ConfirmListDeletion.as_view(), name='confirm-list-deletion'),
+    url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 
 

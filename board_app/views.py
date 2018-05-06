@@ -1,5 +1,5 @@
 from core_app.views import GuardianView
-from board_app.models import ECreateBoard, Board, Pin, \
+from board_app.models import ECreateBoard, Board, BoardPin, \
 EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser, Board
 from django.shortcuts import render, redirect
 from core_app.models import Clipboard, User, Organization
@@ -60,7 +60,8 @@ class PinBoard(GuardianView):
     def get(self, request, board_id):
         user  = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
-        pin   = Pin.objects.create(user=user, 
+
+        pin   = BoardPin.objects.create(user=user, 
         organization=user.default, board=board)
         return redirect('board_app:list-pins')
 
@@ -278,13 +279,18 @@ class DeleteBoard(GuardianView):
 class ListPins(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
-        pins = user.pin_set.filter(organization=user.default)
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         return render(request, 'board_app/list-pins.html', 
-        {'user': user, 'pins': pins})
+        {'user': user, 'boardpins': boardpins, 'listpins': listpins, 
+        'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
-        pin = Pin.objects.get(id=pin_id)
+        pin = BoardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
 
@@ -388,17 +394,18 @@ class BoardLink(GuardianView):
                # It can't be accessed.", status=403)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         organizations = user.organizations.exclude(id=user.default.id)
 
         return render(request, 'board_app/board-link.html', 
-        {'board': board, 'user': user, 'pins': pins, 'organization': user.default,
-        'default': user.default, 'organizations': organizations, 
+        {'board': board, 'user': user, 'organization': user.default,
+        'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
+        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
-
-
-
-
 
 
 

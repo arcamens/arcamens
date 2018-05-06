@@ -51,6 +51,22 @@ class ECreateTimelineMixin(object):
 class EBindTimelineUserMixin(object):
     pass
 
+class TimelinePinMixin(object):
+    def get_absolute_url(self):
+        return reverse('timeline_app:list-posts', 
+            kwargs={'timeline_id': self.timeline.id})
+
+class TimelinePin(TimelinePinMixin, models.Model):
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    timeline = models.ForeignKey('timeline_app.Timeline', null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'organization', 'timeline')
+
 class Timeline(TimelineMixin, models.Model):
     users = models.ManyToManyField('core_app.User', null=True,  
     related_name='timelines', blank=True, symmetrical=False)
@@ -111,6 +127,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 

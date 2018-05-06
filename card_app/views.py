@@ -3,7 +3,7 @@ from django.db.models.functions import Concat
 from django.db.models import Q, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from card_app.models import GlobalTaskFilter, GlobalCardFilter
+from card_app.models import GlobalTaskFilter, GlobalCardFilter, CardPin
 from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView
@@ -47,7 +47,11 @@ class CardLink(GuardianView):
                It can't be accessed.", status=403)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         forks = card.forks.all()
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
@@ -64,7 +68,8 @@ class CardLink(GuardianView):
         return render(request, 'card_app/card-link.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 'path': path,
-        'relations': relations, 'snippets': snippets, 'pins': pins, 'tags': tags,
+        'relations': relations, 'snippets': snippets, 'tags': tags, 'boardpins': boardpins,
+        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations, 'settings': settings})
 
@@ -80,7 +85,10 @@ class ListCards(GuardianView):
                 It can't be accessed now.", status=403)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.filter(organization=user.default)
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         filter, _ = models.CardFilter.objects.get_or_create(
         user=user, organization=user.default, list=list)
@@ -104,7 +112,8 @@ class ListCards(GuardianView):
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
-        'pins': pins, 'user': user, 'board': list.ancestor, 'count': count})
+        'boardpins': boardpins, 'listpins':listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
+        'user': user, 'board': list.ancestor, 'count': count})
 
 class ViewData(GuardianView):
     def get(self, request, card_id):
@@ -120,7 +129,11 @@ class ViewData(GuardianView):
                It can't be accessed.", status=400)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.filter(organization=user.default)
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         forks = card.forks.all()
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
@@ -141,9 +154,9 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
-        'attachments': attachments, 'user': user, 'workers': workers, 
-        'relations': relations, 'snippets': snippets, 'pins': pins, 
-        'tags': tags})
+        'attachments': attachments, 'user': user, 'workers': workers,  'timelinepins': timelinepins,
+        'relations': relations, 'snippets': snippets, 'listpins': listpins, 'boardpins': boardpins,
+        'cardpins': cardpins, 'tags': tags})
 
 class ConfirmCardDeletion(GuardianView):
     def get(self, request, card_id):
@@ -565,8 +578,10 @@ class PinCard(GuardianView):
     def get(self, request, card_id):
         user = core_app.models.User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
-        pin  = board_app.models.Pin.objects.create(user=user, 
+
+        pin  = CardPin.objects.create(user=user, 
         organization=user.default, card=card)
+
         return redirect('board_app:list-pins')
 
 class UnrelateCard(GuardianView):
@@ -1107,20 +1122,9 @@ class CardEvents(GuardianView):
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class Unpin(GuardianView):
+    def get(self, request, pin_id):
+        pin = CardPin.objects.get(id=pin_id)
+        pin.delete()
+        return redirect('board_app:list-pins')
 

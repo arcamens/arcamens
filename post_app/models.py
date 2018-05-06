@@ -391,3 +391,19 @@ class ECreateCardFork(Event):
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
 
+class PostPinMixin(object):
+    def get_absolute_url(self):
+        return reverse('post_app:post', 
+            kwargs={'post_id': self.post.id})
+
+class PostPin(PostPinMixin, models.Model):
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    post = models.ForeignKey('post_app.Post', null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'organization', 'post')
+

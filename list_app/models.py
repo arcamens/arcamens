@@ -22,6 +22,22 @@ class ListMixin(object):
         return reverse('list_app:list-link', 
                     kwargs={'list_id': self.id})
 
+class ListPinMixin(object):
+    def get_absolute_url(self):
+        return reverse('card_app:list-cards', 
+            kwargs={'list_id': self.list.id})
+
+class ListPin(ListPinMixin, models.Model):
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    list = models.ForeignKey('list_app.List', null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'organization', 'list')
+
 class List(ListMixin, models.Model):
     """    
     """
@@ -132,6 +148,7 @@ class EPasteCard(Event):
     symmetrical=False)
 
     html_template = 'list_app/e-paste-card.html'
+
 
 
 

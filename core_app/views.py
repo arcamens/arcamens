@@ -960,7 +960,10 @@ class ListNodes(GuardianView):
         nodes = nodes.order_by('-indexer')
         total = nodes.count()
 
-        pins = user.pin_set.filter(organization=user.default)
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         filter, _ = NodeFilter.objects.get_or_create(
         user=user, organization=user.default)
@@ -974,8 +977,9 @@ class ListNodes(GuardianView):
         count = nodes.count()
 
         return render(request, 'core_app/list-nodes.html', 
-        {'nodes': nodes, 'user': user, 'pins': pins, 'total': total, 
-        'count': count, 'organization': user.default, 'filter': filter})
+        {'nodes': nodes, 'boardpins': boardpins, 'listpins': listpins, 'user': user, 'total': total, 
+        'count': count, 'organization': user.default, 'filter': filter, 
+        'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class SetupNodeFilter(GuardianView):
     def get(self, request, organization_id):
@@ -1001,6 +1005,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

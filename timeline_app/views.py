@@ -1,9 +1,8 @@
 from timeline_app.models import Timeline, ECreateTimeline, EDeleteTimeline, \
-EUnbindTimelineUser, EUpdateTimeline, EPastePost, EBindTimelineUser
+EUnbindTimelineUser, EUpdateTimeline, EPastePost, EBindTimelineUser, TimelinePin
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
 from core_app.views import GuardianView
-from board_app.models import Pin
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
@@ -30,7 +29,10 @@ class ListPosts(GuardianView):
 
         posts      = timeline.posts.all()
         total      = posts.count()
-        pins = user.pin_set.filter(organization=user.default)
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         posts = filter.collect(posts)
         posts = posts.order_by('-created')
@@ -38,8 +40,9 @@ class ListPosts(GuardianView):
         elems = JScroll(user.id, 'timeline_app/list-posts-scroll.html', posts)
 
         return render(request, 'timeline_app/list-posts.html', 
-        {'timeline':timeline, 'count': count, 'total': total, 
-        'elems':elems.as_window(), 'filter': filter, 'pins': pins})
+        {'timeline':timeline, 'count': count, 'total': total, 'timelinepins': timelinepins,
+        'elems':elems.as_window(), 'filter': filter, 'boardpins': boardpins,
+        'listpins': listpins, 'cardpins': cardpins})
 
 class CreateTimeline(GuardianView):
     """
@@ -328,21 +331,31 @@ class TimelineLink(GuardianView):
         record = Timeline.objects.get(id=timeline_id)
 
         user = User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         organizations = user.organizations.exclude(id=user.default.id)
 
         return render(request, 'timeline_app/timeline-link.html', 
-        {'timeline': record, 'user': user, 'pins': pins,
-        'default': user.default, 'organizations': organizations, 
+        {'timeline': record, 'user': user, 'boardpins': boardpins, 'default': user.default,
+        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
+        'organization': user.default, 'organizations': organizations, 
         'settings': settings})
 
 class PinTimeline(GuardianView):
     def get(self, request, timeline_id):
         user  = User.objects.get(id=self.user_id)
         timeline = Timeline.objects.get(id=timeline_id)
-        pin   = Pin.objects.create(user=user, 
+        pin   = TimelinePin.objects.create(user=user, 
         organization=user.default, timeline=timeline)
         return redirect('board_app:list-pins')
 
+class Unpin(GuardianView):
+    def get(self, request, pin_id):
+        pin = TimelinePin.objects.get(id=pin_id)
+        pin.delete()
+        return redirect('board_app:list-pins')
 
 

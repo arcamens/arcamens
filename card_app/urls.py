@@ -53,14 +53,8 @@ urlpatterns = [
     url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
     url(r'^find/', views.Find.as_view(), name='find'),
     url(r'^card-events/(?P<card_id>.+)/', views.CardEvents.as_view(), name='card-events'),
+    url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
-
-
-
-
-
-
-
 
 

@@ -125,6 +125,22 @@ class CardFileWrapperMixin(object):
         wrapper.save()
         return wrapper
 
+class CardPinMixin(object):
+    def get_absolute_url(self):
+        return reverse('card_app:view-data', 
+            kwargs={'card_id': self.card.id})
+
+class CardPin(CardPinMixin, models.Model):
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    card = models.ForeignKey('card_app.Card', null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'organization', 'card')
+
 class Card(CardMixin, models.Model):
     """    
     """
@@ -496,4 +512,5 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 

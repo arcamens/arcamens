@@ -6,42 +6,10 @@ from wsbells.models import QueueWS
 from django.db.models import Q
 from django.db import models
 
-class PinMixin(object):
+class BoardPinMixin(object):
     def get_absolute_url(self):
-        if self.board:
-            return reverse('list_app:list-lists', 
-                kwargs={'board_id': self.board.id})
-        elif self.card:
-            return reverse('card_app:view-data', 
-                kwargs={'card_id': self.card.id})
-        elif self.timeline:
-            return reverse('timeline_app:list-posts', 
-                kwargs={'timeline_id': self.timeline.id})
-        else:
-            return reverse('card_app:list-cards', 
-                kwargs={'list_id': self.list.id})
-
-    def get_link_url(self):
-        if self.board:
-            return reverse('board_app:board-link', 
-                kwargs={'board_id': self.board.id})
-        elif self.card:
-            return reverse('card_app:card-link', 
-                kwargs={'card_id': self.card.id})
-        elif self.timeline:
-            return reverse('timeline_app:list-posts', 
-                kwargs={'timeline_id': self.timeline.id})
-        else:
-            return reverse('list_app:list-link', 
-                kwargs={'list_id': self.list.id})
-
-    def get_target_name(self):
-        if self.board:
-            return self.board.name
-        elif self.card:
-            return self.card.label
-        else:
-            return self.list.name
+        return reverse('list_app:list-lists', 
+            kwargs={'board_id': self.board.id})
 
 class BoardMixin(QueueWS):
     @classmethod
@@ -110,30 +78,16 @@ class Board(BoardMixin, models.Model):
 
     # done = models.BooleanField(blank=True, default=False)
 
-class Pin(PinMixin, models.Model):
-    user = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
+class BoardPin(BoardPinMixin, models.Model):
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
 
-    organization = models.ForeignKey('core_app.Organization', blank=True,
-    null=True)
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
 
-    # I should use concrete inheritance here.
-    board = models.ForeignKey('board_app.Board', 
-    null=True, blank=True)
-
-    list = models.ForeignKey('list_app.List', 
-    null=True, blank=True)
-
-    card = models.ForeignKey('card_app.Card', 
-    null=True, blank=True)
-
-    timeline = models.ForeignKey('timeline_app.Timeline', 
-    null=True, blank=True)
+    board = models.ForeignKey('board_app.Board', null=True, blank=True)
 
     class Meta:
-        unique_together = (('user', 'organization', 'board'), 
-        ('user', 'organization', 'timeline'), ('user', 'organization', 'list'), 
-        ('user', 'organization', 'card'))
+        unique_together = ('user', 'organization', 'board')
 
 class EBindBoardUser(Event, EBindBoardUserMixin):
     board = models.ForeignKey('Board', 
@@ -158,7 +112,6 @@ class ECreateBoard(Event, ECreateBoardMixin):
     related_name='e_create_board', blank=True)
     html_template = 'board_app/e-create-board.html'
 
-
 class EDeleteBoard(Event):
     board_name = models.CharField(max_length=250, 
     blank=True, null=True)
@@ -173,13 +126,4 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
-
-
-
-
-
-
-
-
-
 

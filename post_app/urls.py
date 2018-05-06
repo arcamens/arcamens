@@ -43,6 +43,10 @@ urlpatterns = [
     url(r'^pull-card-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
     url(r'^list-all-assignments/', views.ListAllAssignments.as_view(), name='list-all-assignments'),
+    url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
+    url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
+
 ]
+
 
 

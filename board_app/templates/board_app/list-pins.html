@@ -7,18 +7,43 @@
 <li><a class="e-get disabled" style="color:black; pointer-events: none;" href="#">
 <span class="glyphicon glyphicon-paperclip"></span> Pins:</a></li>
 
-{% for ind in pins %}
+{% for ind in boardpins %}
+<li> <a class="e-get pin-board" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-th"></span>  {{ind.board.name}}
+<span  onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();" class="close">
+&times; </span> </a>
+</li>
 
-{% if ind.board %}
-{% include 'board_app/list-pins-board.html' %}
-{% elif ind.list %}
-{% include 'board_app/list-pins-list.html' %}
-{% elif ind.card%}
-{% include 'board_app/list-pins-card.html' %}
-{% elif ind.timeline %}
-{% include 'timeline_app/list-pins-timeline.html' %}
-{% endif %}
+{% endfor %}
 
+{% for ind in listpins %}
+<li > <a class="e-get pin-list" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-list-alt"> </span>
+{{ind.list.ancestor.name}} <span class="glyphicon glyphicon-arrow-right"></span> {{ind.list.name}}
+<span class="close" onclick="$('#pins').load('{% url 'list_app:unpin' ind.id %}');event.stopPropagation();">&times;</span> </a>
+</li>
+
+{% endfor %}
+
+{% for ind in cardpins %}
+<li> <a class="e-get pin-card" 
+data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#">
+<span class="glyphicon glyphicon-file"></span>
+{{ind.card.label|truncatechars:20}}
+
+<span class="close" onclick="$('#pins').load('{% url 'card_app:unpin' ind.id %}');event.stopPropagation();">&times;</span> </a>
+</li>
+{% endfor %}
+
+{% for ind in timelinepins %}
+<li>
+<a class="e-get pin-timeline" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.timeline.name}}
+<span  onclick="$('#pins').load('{% url 'timeline_app:unpin' ind.id %}');event.stopPropagation();" class="close">
+&times;
+</span> </a>
+</li>
 {% endfor %}
 
 </ul>
@@ -34,6 +59,7 @@
 // });
 // </script>
 -->
+
 
 
 

@@ -2,7 +2,8 @@ from django.views.generic import View
 from list_app.models import ListFilter, EDeleteList, List, ECreateList, \
 EUpdateList, EPasteCard, ECutList, ECopyList
 from core_app.models import Clipboard, User
-from board_app.models import Board, Pin, EPasteList
+from board_app.models import Board, EPasteList
+from list_app.models import ListPin
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.http import HttpResponse
@@ -27,7 +28,11 @@ class ListLists(GuardianView):
         user = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
         total = board.lists.all()
-        pins  = user.pin_set.filter(organization=user.default)
+
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         filter, _ = ListFilter.objects.get_or_create(
         user=user, organization=user.default, board=board)
@@ -38,7 +43,8 @@ class ListLists(GuardianView):
 
         return render(request, 'list_app/list-lists.html', 
         {'lists': lists, 'user': user, 'board': board, 'organization': user.default,
-        'total': total, 'pins': pins, 'filter': filter})
+        'total': total, 'filter': filter, 'boardpins': boardpins,
+        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class CreateList(GuardianView):
     """
@@ -103,7 +109,7 @@ class PinList(GuardianView):
     def get(self, request, list_id):
         user = User.objects.get(id=self.user_id)
         list = List.objects.get(id=list_id)
-        pin  = Pin.objects.create(user=user, 
+        pin  = ListPin.objects.create(user=user, 
         organization=user.default, list=list)
         return redirect('board_app:list-pins')
 
@@ -279,22 +285,22 @@ class ListLink(GuardianView):
         record = List.objects.get(id=list_id)
 
         user = core_app.models.User.objects.get(id=self.user_id)
-        pins = user.pin_set.all()
+        boardpins = user.boardpin_set.filter(organization=user.default)
+        listpins = user.listpin_set.filter(organization=user.default)
+        cardpins = user.cardpin_set.filter(organization=user.default)
+        timelinepins = user.timelinepin_set.filter(organization=user.default)
+
         organizations = user.organizations.exclude(id=user.default.id)
 
         return render(request, 'list_app/list-link.html', 
-        {'list': record, 'user': user, 'pins': pins, 'organization': user.default,
-        'default': user.default, 'organizations': organizations, 
+        {'list': record, 'user': user, 'organization': user.default,
+        'default': user.default, 'organizations': organizations, 'boardpins': boardpins,
+        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
 
-
-
-
-
-
-
-
-
-
-
+class Unpin(GuardianView):
+    def get(self, request, pin_id):
+        pin = ListPin.objects.get(id=pin_id)
+        pin.delete()
+        return redirect('board_app:list-pins')
 
