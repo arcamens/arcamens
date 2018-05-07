@@ -361,9 +361,13 @@ class UnbindBoardUser(GuardianView):
 class BindBoardAdmin(GuardianView):
     def get(self, request, board_id, user_id):
         me    = User.objects.get(id=self.user_id)
-        user = User.objects.get(id=user_id)
         board = Board.objects.get(id=board_id)
 
+        # Just the owner can add/remove admins.
+        if board.owner != me:
+            return HttpResponse("Just the owner can do that!", status=403)
+
+        user = User.objects.get(id=user_id)
         board.admins.add(user)
         board.save()
 
@@ -384,11 +388,15 @@ class BindBoardAdmin(GuardianView):
 class UnbindBoardAdmin(GuardianView):
     def get(self, request, board_id, user_id):
         me = User.objects.get(id=self.user_id)
+        board = Board.objects.get(id=board_id)
+
+        # Just the owner can add/remove admins.
+        if board.owner != me:
+            return HttpResponse("Just the owner can do that!", status=403)
 
         # This code shows up in board_app.views?
         # something is odd.
         user = User.objects.get(id=user_id)
-        board = Board.objects.get(id=board_id)
         board.admins.remove(user)
         board.save()
 
