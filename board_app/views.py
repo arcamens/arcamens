@@ -387,8 +387,15 @@ class BindBoardAdmin(GuardianView):
 
 class UnbindBoardAdmin(GuardianView):
     def get(self, request, board_id, user_id):
-        me = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
+        user = User.objects.get(id=user_id)
+
+        # The owner admin status cant be removed.
+        if board.owner == user:
+            return HttpResponse("You can't \
+                remove the owner!", status=403)
+
+        me = User.objects.get(id=self.user_id)
 
         # Just the owner can add/remove admins.
         if board.owner != me:
@@ -396,7 +403,6 @@ class UnbindBoardAdmin(GuardianView):
 
         # This code shows up in board_app.views?
         # something is odd.
-        user = User.objects.get(id=user_id)
         board.admins.remove(user)
         board.save()
 
