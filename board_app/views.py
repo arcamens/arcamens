@@ -296,13 +296,17 @@ class Unpin(GuardianView):
 
 class BindBoardUser(GuardianView):
     def get(self, request, board_id, user_id):
-        user = User.objects.get(id=user_id)
-        board = Board.objects.get(id=board_id)
+        user     = User.objects.get(id=user_id)
+        board    = Board.objects.get(id=board_id)
+        me       = User.objects.get(id=self.user_id)
+        me_admin = board.admins.filter(id=me.id).exists()
+
+        if not me_admin:
+            return HttpResponse("Just admins can add users!", status=403)
 
         board.members.add(user)
         board.save()
 
-        me    = User.objects.get(id=self.user_id)
         event = EBindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
         event.dispatch(*board.members.all())
@@ -326,10 +330,24 @@ class UnbindBoardUser(GuardianView):
             return HttpResponse("You can't remove \
                 the board owner!", status=403)
 
+        me       = User.objects.get(id=self.user_id)
+        is_admin = board.admins.filter(id=user.id).exists()
+        me_admin = board.admins.filter(id=self.user_id).exists()
+
+        me_owner = board.owner == me
+
+        # In order to remove an user it is necessary to be an admin.
+        if not me_admin:
+            return HttpResponse("Just admins can do that!", status=403)
+
+        if is_admin and not me_owner:
+            return HttpResponse("Just the owner can do that!", status=403)
+
+        # We make sure the user is no longer an admin at all.
         board.members.remove(user)
+        board.admins.remove(user)
         board.save()
 
-        me = User.objects.get(id=self.user_id)
         event = EUnbindBoardUser.objects.create(organization=me.default,
         board=board, user=me, peer=user)
         event.dispatch(*board.members.all())
@@ -409,6 +427,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 
