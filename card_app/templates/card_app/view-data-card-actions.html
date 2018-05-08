@@ -21,10 +21,6 @@ href="#">
 
 
 <li>
-<a class="b-modal text-info" data-show="{% url 'snippet_app:create-snippet' card.id %}" 
-href="#"><span class="glyphicon glyphicon-plus"></span> Snippet</a></li>
-
-<li>
 
 <a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
 data-callback="$('#modal').modal('toggle');" href="#">
@@ -81,6 +77,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

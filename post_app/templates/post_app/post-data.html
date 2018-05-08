@@ -48,23 +48,18 @@ data-show="{% url 'post_app:post-events' post.id %}">
 {{post.html|safe}}
 </div>
 
-<div class="row">
-<div class="col-md-3">
-<h5> 
-<span class="glyphicon glyphicon-file"></span>
-
-Attachments </h5>
-<div class="pre-scrollable" style="font-size:90%">
-
+<span style="font-size:90%">
 {% for ind in post.postfilewrapper_set.all %}
 <a href="{{ ind.file.url }}" target="_blank">
 <span class="glyphicon glyphicon-file"></span>
 {{ind.file.name}} </a>
+
 {% empty %}
-No attachment.
+No attachments...
 {% endfor %}
-</div>
-</div>
+</span>
+
+<div class="row">
 
 <div class="col-md-3">
 <h5> <span class="glyphicon glyphicon-tag"></span> Tags </h5>
@@ -84,21 +79,7 @@ href="#">
 
 {% empty %}
 No tags.
-{% endfor %}
-</div>
-</div>
-
-<div class="col-md-3">
-<h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards </h5>
-
-<div class="pre-scrollable" style="font-size:90%">
-{% for ind in post.card_forks.all %}
-<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
-<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:60}} </a> 
-<br>
-{% empty %}
-No forks.
-{% endfor %}</div></div>
+{% endfor %} </div> </div>
 
 <div class="col-md-3">
 <h5> 
@@ -131,9 +112,20 @@ Alert workers?</a>
 {% empty %}
 No workers.
 {% endfor %}
-</div>
+</div></div>
 
-</div>
+<div class="col-md-6">
+<h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in post.card_forks.all %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}} </a> 
+<br>
+{% empty %}
+No forks.
+{% endfor %}</div></div>
+
 
 </div> 
 
@@ -166,6 +158,9 @@ class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </
 class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
 
+<a class="b-modal text-info" data-show="{% url 'snippet_app:create-snippet' post.id %}" 
+href="#"><span class="glyphicon glyphicon-plus"></span> Snippet</a>
+
 <a class="e-get"  href="#"
 data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
 <span class="glyphicon glyphicon-copy"></span> Copy </a>
@@ -190,6 +185,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 
