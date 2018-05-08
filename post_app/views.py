@@ -34,7 +34,7 @@ class Post(GuardianView):
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
-                It can't be accessed now.", status=400)
+                It can't be accessed now.", status=403)
 
         user = User.objects.get(id=self.user_id)
 
@@ -57,7 +57,7 @@ class PostLink(GuardianView):
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
-                It can't be accessed now.", status=400)
+                It can't be accessed now.", status=403)
 
         user = User.objects.get(id=self.user_id)
         organizations = user.organizations.exclude(id=user.default.id)
@@ -118,7 +118,12 @@ class UpdatePost(GuardianView):
 
     def post(self, request, post_id):
         record  = models.Post.objects.get(id=post_id)
-        form    = forms.PostForm(request.POST, request.FILES, instance=record)
+
+        if not record.ancestor:
+            return HttpResponse("Can't update! On \
+                someone clipboard.", status=403)
+
+        form = forms.PostForm(request.POST, request.FILES, instance=record)
 
         if not form.is_valid():
             return render(request, 'post_app/update-post.html',
@@ -881,4 +886,5 @@ class RefreshPost(GuardianView):
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
+
 

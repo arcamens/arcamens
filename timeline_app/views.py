@@ -75,8 +75,8 @@ class CreateTimeline(GuardianView):
 
         event.dispatch(user)
 
-        user.ws_subscribe(record)
-        user.ws_sound()
+        user.ws_subscribe(record, target=user)
+        # user.ws_sound()
 
         return redirect('core_app:list-nodes')
 
@@ -362,6 +362,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

@@ -50,8 +50,8 @@ class CreateBoard(GuardianView):
         event.dispatch(user)
         event.save()
 
-        user.ws_sound()
-        user.ws_subscribe(board)
+        # user.ws_sound()
+        user.ws_subscribe(board, target=user)
 
         return redirect('core_app:list-nodes')
 
@@ -441,6 +441,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 
