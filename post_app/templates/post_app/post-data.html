@@ -59,6 +59,14 @@ No attachments...
 {% endfor %}
 </span>
 
+{% for ind in post.snippets.all %}
+
+{{ind.html|safe}}
+
+{% empty %}
+No snippets...
+{% endfor %}
+
 <div class="row">
 
 <div class="col-md-3">

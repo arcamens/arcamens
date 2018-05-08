@@ -5,8 +5,7 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-{% bootstrap_field form.title  size='md' %}
-
+<h5> <span class="glyphicon glyphicon-file"></span> Snippet
 </div>
 
 <div class="modal-body">
@@ -32,8 +31,9 @@ $('#div-snippet-attachments').load("{% url 'snippet_app:attach-file' snippet.id 
 <div class="modal-footer">
 <script>
 $('#bigModal').one('hidden.bs.modal', function () {
-    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
 })
+
 </script>
 
 {% block buttons %}
@@ -46,13 +46,14 @@ class="btn btn-default e-get">
 
 <button  type="button" data-form="#form-snippet-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" data-show="{% url 'snippet_app:create-snippet' card.id snippet.id %}"
+data-shell-error="#bigModalContent" data-show="{% url 'snippet_app:create-snippet' post.id snippet.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
 

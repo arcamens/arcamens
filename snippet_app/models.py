@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
+from mdx_gfm import GithubFlavoredMarkdownExtension
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from markdown import markdown
@@ -13,9 +14,8 @@ from board_app.models import Event
 class SnippetMixin(object):
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
-        extensions=[TableExtension(), 'markdown.extensions.tables', 
-        'markdown.extensions.codehilite'], safe_mode=True,  
-         enable_attributes=False)
+        extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
+        enable_attributes=False)
 
         super(SnippetMixin, self).save(*args, **kwargs)
 
@@ -52,10 +52,6 @@ class Snippet(SnippetMixin, models.Model):
     owner = models.ForeignKey('core_app.User', 
     null=True, blank=True)
 
-    title = models.CharField(null=True, blank=False, 
-    default='Draft', verbose_name=_("Title"), 
-    max_length=626)
-
     data = models.TextField(null=True, 
     blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
@@ -66,12 +62,8 @@ class Snippet(SnippetMixin, models.Model):
     html = models.TextField(null=True, blank=True)
 
 class ECreateSnippet(Event):
-    child = models.ForeignKey('post_app.Post', 
-    blank=True)
-
-    snippet = models.ForeignKey('Snippet', 
-    blank=True)
-
+    child = models.ForeignKey('post_app.Post', blank=True)
+    snippet = models.ForeignKey('Snippet', blank=True)
     html_template = 'snippet_app/e-create-snippet.html'
 
     def __str__(self):
@@ -89,8 +81,6 @@ class EDeleteSnippet(Event):
     def __str__(self):
         return self.user.name
 
-
-
 class EUpdateSnippet(Event):
     child = models.ForeignKey('post_app.Post', 
     blank=True)
@@ -107,6 +97,5 @@ class EUpdateSnippet(Event):
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
-
 
 

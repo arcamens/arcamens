@@ -7,12 +7,13 @@ class SnippetForm(forms.ModelForm):
 
     class Meta:
         model  = models.Snippet
-        exclude = ('card', 'owner')
+        exclude = ('post', 'owner')
 
 class SnippetFileWrapperForm(forms.ModelForm):
     class Meta:
         model  = models.SnippetFileWrapper
         exclude = ('snippet', )
+
 
 
 
