@@ -3,6 +3,12 @@
 {% load i18n %}
 
 {% block buttons %}
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
+})
+</script>
+
       <button  type="button" data-form="#form-post-data" id="updatePost"
       data-shell="#post-{{post.id}}" data-callback="$('#bigModal').modal('toggle');" 
       data-shell-error="#bigModalContent" data-show="{% url 'post_app:update-post' post.id %}"
@@ -11,6 +17,7 @@
       </button>
 
 {% endblock %}
+
 
 
 

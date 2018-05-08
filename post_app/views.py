@@ -159,6 +159,11 @@ class AttachFile(GuardianView):
 
     def post(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Post was put on clipboard!\
+                can't attach file now.", status=403)
+
         attachments = post.postfilewrapper_set.all()
         form = forms.PostFileWrapperForm(request.POST, request.FILES)
 
@@ -176,6 +181,11 @@ class DetachFile(GuardianView):
 
     def get(self, request, filewrapper_id):
         filewrapper = PostFileWrapper.objects.get(id=filewrapper_id)
+
+        if not filewrapper.post.ancestor:
+            return HttpResponse("Post was put on clipboard!\
+                can't dettach file now.", status=403)
+
         filewrapper.delete()
         attachments = filewrapper.post.postfilewrapper_set.all()
 
@@ -186,7 +196,10 @@ class DetachFile(GuardianView):
 class DeletePost(GuardianView):
     def get(self, request, post_id):
         post = models.Post.objects.get(id = post_id)
-        # post.delete()
+
+        if not post.ancestor:
+            return HttpResponse("On clipboard, can't \
+                delete now!", status=403)
 
         user  = User.objects.get(id=self.user_id)
 
@@ -250,8 +263,13 @@ class PostTagInformation(GuardianView):
 
 class UnassignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
-        user = User.objects.get(id=user_id)
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("On clipboard! Can't \
+                unassign user.", status=403)
+
+        user = User.objects.get(id=user_id)
         me   = User.objects.get(id=self.user_id)
 
         me.ws_sound(post.ancestor)
@@ -274,8 +292,13 @@ class UnassignPostUser(GuardianView):
 
 class AssignPostUser(GuardianView):
     def get(self, request, post_id, user_id):
-        user = User.objects.get(id=user_id)
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("On clipboard! Can't \
+                assign user.", status=403)
+
+        user = User.objects.get(id=user_id)
         me = User.objects.get(id=self.user_id)
 
         post.workers.add(user)
@@ -407,9 +430,14 @@ class Find(GuardianView):
 
 class CutPost(GuardianView):
     def get(self, request, post_id):
-        post          = models.Post.objects.get(id=post_id)
-        user          = User.objects.get(id=self.user_id)
-        timeline      = post.ancestor
+        post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Already on someone \
+                clipboard!", status=403)
+
+        user     = User.objects.get(id=self.user_id)
+        timeline = post.ancestor
 
         user.ws_sound(post.ancestor)
 
@@ -431,7 +459,12 @@ class CutPost(GuardianView):
 
 class CopyPost(GuardianView):
     def get(self, request, post_id):
-        post         = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Already on someone \
+                clipboard!", status=403)
+
         user         = User.objects.get(id=self.user_id)
         copy         = post.duplicate()
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -450,7 +483,12 @@ class CopyPost(GuardianView):
 
 class Done(GuardianView):
     def get(self, request, post_id):
-        post      = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Can't archive post now, \
+                it is on clipboard.", status=403)
+
         post.done = True
         post.save()
 
@@ -508,8 +546,13 @@ class ManagePostTags(GuardianView):
 
 class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Post on clipboard! \
+                Can't unbind tag.", status=403)
+
+        tag = Tag.objects.get(id=tag_id)
         post.tags.remove(tag)
         post.save()
 
@@ -527,8 +570,13 @@ class UnbindPostTag(GuardianView):
 
 class BindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
-        tag = Tag.objects.get(id=tag_id)
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Post on clipboard! \
+                Can't unbind tag.", status=403)
+
+        tag = Tag.objects.get(id=tag_id)
         post.tags.add(tag)
         post.save()
 
@@ -553,7 +601,12 @@ class CancelPostCreation(GuardianView):
 
 class Undo(GuardianView):
     def get(self, request, post_id):
-        post      = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Post on clipboard! \
+                Can't unarchive post.", status=403)
+
         post.done = False
         post.save()
 
@@ -701,6 +754,11 @@ class CreateCardFork(GuardianView):
 
     def get(self, request, ancestor_id, post_id, fork_id=None):
         post = models.Post.objects.get(id=post_id)
+
+        if not post.ancestor:
+            return HttpResponse("Post on clipboard! \
+                Can't fork now.", status=403)
+
         user = User.objects.get(id=self.user_id)
         ancestor = List.objects.get(id=ancestor_id)
         fork = Card.objects.create(owner=user, 
@@ -886,5 +944,6 @@ class RefreshPost(GuardianView):
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
+
 
 
