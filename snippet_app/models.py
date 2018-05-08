@@ -19,16 +19,19 @@ class SnippetMixin(object):
 
         super(SnippetMixin, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        url = reverse('post_comment_app:comment', 
+        kwargs={'comment_id': self.id})
+        return url
+
     def __str__(self):
-        """
-        """
-        return self.label
+        return self.data
 
 class SnippetFileWrapperMixin(object):
-    def duplicate(self, card=None):
+    def duplicate(self, post=None):
         wrapper       = SnippetFileWrapper.objects.get(id=self.id)
         wrapper.pk    = None
-        wrapper.card  = card
+        wrapper.post  = post
         wrapper.save()
         return wrapper
 
@@ -43,7 +46,7 @@ class SnippetFileWrapper(SnippetFileWrapperMixin, models.Model):
     verbose_name='', help_text='')
 
 class Snippet(SnippetMixin, models.Model):
-    card = models.ForeignKey('card_app.Card', 
+    post = models.ForeignKey('post_app.Post', 
     null=True, related_name='snippets', blank=True)
 
     owner = models.ForeignKey('core_app.User', 
@@ -62,16 +65,8 @@ class Snippet(SnippetMixin, models.Model):
 
     html = models.TextField(null=True, blank=True)
 
-    def get_absolute_url(self):
-        url = reverse('card_comment_app:comment', 
-        kwargs={'comment_id': self.id})
-        return url
-
-    def __str__(self):
-        return self.data
-
 class ECreateSnippet(Event):
-    child = models.ForeignKey('card_app.Card', 
+    child = models.ForeignKey('post_app.Post', 
     blank=True)
 
     snippet = models.ForeignKey('Snippet', 
@@ -83,7 +78,7 @@ class ECreateSnippet(Event):
         return self.user.name
 
 class EDeleteSnippet(Event):
-    child = models.ForeignKey('card_app.Card', 
+    child = models.ForeignKey('post_app.Post', 
     blank=True)
 
     snippet = models.CharField(null=True, blank=False, 
@@ -97,7 +92,7 @@ class EDeleteSnippet(Event):
 
 
 class EUpdateSnippet(Event):
-    child = models.ForeignKey('card_app.Card', 
+    child = models.ForeignKey('post_app.Post', 
     blank=True)
 
     snippet = models.ForeignKey('Snippet', 
@@ -112,5 +107,6 @@ class EUpdateSnippet(Event):
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
