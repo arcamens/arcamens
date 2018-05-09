@@ -48,19 +48,6 @@ data-show="{% url 'post_app:post-events' post.id %}">
 {{post.html|safe}}
 </div>
 
-<span style="font-size:90%">
-{% for ind in post.postfilewrapper_set.all %}
-<a href="{{ ind.file.url }}" target="_blank">
-<span class="glyphicon glyphicon-file"></span>
-{{ind.file.name}} </a>
-
-{% empty %}
-No attachments...
-{% endfor %}
-</span>
-
-<br>
-
 {% for ind in post.snippets.all %}
 <a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#"> 
 <span class="glyphicon glyphicon-book"></span>{{ind.title}} </a>
@@ -69,6 +56,22 @@ No snippets...
 {% endfor %}
 
 <div class="row">
+<div class="col-md-3">
+<h5> 
+<span class="glyphicon glyphicon-file"></span>
+
+Attachments </h5>
+<div class="pre-scrollable" style="font-size:90%">
+
+{% for ind in post.postfilewrapper_set.all %}
+<a href="{{ ind.file.url }}" target="_blank">
+<span class="glyphicon glyphicon-file"></span>
+{{ind.file.name}} </a>
+{% empty %}
+No attachment.
+{% endfor %}
+</div>
+</div>
 
 <div class="col-md-3">
 <h5> <span class="glyphicon glyphicon-tag"></span> Tags </h5>
@@ -123,7 +126,7 @@ No workers.
 {% endfor %}
 </div></div>
 
-<div class="col-md-6">
+<div class="col-md-3">
 <h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards </h5>
 
 <div class="pre-scrollable" style="font-size:90%">
@@ -194,15 +197,4 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
 

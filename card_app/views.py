@@ -58,7 +58,7 @@ class CardLink(GuardianView):
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
-        snippets = card.snippets.all()
+        # snippets = card.snippets.all()
         relations = card.relations.all()
         path = card.path.all()
 
@@ -70,7 +70,7 @@ class CardLink(GuardianView):
         return render(request, 'card_app/card-link.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': user, 'workers': workers, 'path': path,
-        'relations': relations, 'snippets': snippets, 'tags': tags, 'boardpins': boardpins,
+        'relations': relations, 'tags': tags, 'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations, 'settings': settings})
@@ -138,7 +138,7 @@ class ViewData(GuardianView):
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
-        snippets = card.snippets.all()
+        # snippets = card.snippets.all()
         relations = card.relations.all()
         path = card.path.all()
         # post_forks = card.post_forks.all()
@@ -155,7 +155,7 @@ class ViewData(GuardianView):
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
         'attachments': attachments, 'user': user, 'workers': workers,  'timelinepins': timelinepins,
-        'relations': relations, 'snippets': snippets, 'listpins': listpins, 'boardpins': boardpins,
+        'relations': relations, 'listpins': listpins, 'boardpins': boardpins,
         'cardpins': cardpins, 'tags': tags})
 
 class ConfirmCardDeletion(GuardianView):
@@ -1270,5 +1270,6 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 

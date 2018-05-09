@@ -20,7 +20,7 @@ Snippet by {{snippet.owner.name}} at {{snippet.created}}
 
 <div  style="font-size:80%">
 {% for ind in snippet.snippetfilewrapper_set.all %}
-<a href="#">
+<a href="{{ ind.file.url }}">
 <span class="glyphicon glyphicon-file"></span>
 {{ind.file.name}} 
 </a>
