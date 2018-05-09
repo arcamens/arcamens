@@ -52,6 +52,10 @@ class Snippet(SnippetMixin, models.Model):
     owner = models.ForeignKey('core_app.User', 
     null=True, blank=True)
 
+    title = models.CharField(null=True, blank=False, 
+    default='', verbose_name=_("Title"), 
+    max_length=626)
+
     data = models.TextField(null=True, 
     blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
@@ -97,5 +101,6 @@ class EUpdateSnippet(Event):
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 

@@ -147,7 +147,7 @@ class DeleteSnippet(GuardianView):
 
         user.ws_sound(snippet.post.ancestor)
 
-        return redirect('post_app:post-data', 
+        return redirect('post_app:refresh-post', 
         post_id=snippet.post.id)
 
 class CancelSnippetCreation(GuardianView):
@@ -156,6 +156,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 

@@ -51,9 +51,10 @@ class="btn btn-default e-get"> {% trans "Remove" %} </button>
 
 <script>
 $('#bigModal').one('hidden.bs.modal', function () {
-    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
+
 
 
 

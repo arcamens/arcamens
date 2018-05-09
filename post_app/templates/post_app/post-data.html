@@ -59,10 +59,11 @@ No attachments...
 {% endfor %}
 </span>
 
+<br>
+
 {% for ind in post.snippets.all %}
-
-{{ind.html|safe}}
-
+<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#"> 
+<span class="glyphicon glyphicon-book"></span>{{ind.title}} </a>
 {% empty %}
 No snippets...
 {% endfor %}
@@ -193,6 +194,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 </div>
 
 </div>
+
 
 
 
