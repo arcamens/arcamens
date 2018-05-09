@@ -45,9 +45,8 @@ class="btn btn-default e-get">
 </button>
 
 <button  type="button" data-form="#form-snippet-data" 
-data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" data-show="{% url 'snippet_app:create-snippet' post.id snippet.id %}"
-class="btn btn-default e-post"> 
+data-shell="#post-{{post.id}}"  data-show="{% url 'snippet_app:create-snippet' post.id snippet.id %}"
+class="btn btn-default m-post-close"> 
      {% trans "Create" %}
 </button>
 
