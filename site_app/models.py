@@ -16,7 +16,7 @@ class RegisterProcessMixin:
         self.signup_url = '%s%s' % (settings.LOCAL_ADDR, signup_url)
 
         send_mail('Confirm your account', '%s' % self.signup_url, 
-        'noreply@splittask.net', [self.user.email], fail_silently=False)
+        'noreply@arcamens.com', [self.user.email], fail_silently=False)
         super().save(*args, **kwargs)
 
 class PasswordTicket(models.Model):
@@ -41,6 +41,7 @@ class RegisterProcess(RegisterProcessMixin, models.Model):
 
     signup_url = models.CharField(null=True,
     blank=False, max_length=256)
+
 
 
 
