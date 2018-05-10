@@ -84,6 +84,10 @@ background-color:#F5EAEA;
     word-wrap: break-word;
 }
 
+.modal-body  {
+    word-wrap: break-word;
+}
+
 
 .menu-timeline  {
     background:#C7E1C8;
@@ -99,6 +103,7 @@ background-color:#F5EAEA;
 #pinned-cards a {
 padding: 4px !important;
 }
+
 
 
 
