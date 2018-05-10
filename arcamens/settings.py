@@ -37,6 +37,7 @@ LOGGED_VIEW = 'core_app:index'
 
 PAYBILLS_USER = 'core_app.User'
 
+CURRENCY_CODE = 'USD'
 PAYPAL_URL = 'https://www.sandbox.paypal.com'
 PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
 PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
