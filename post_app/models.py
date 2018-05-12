@@ -81,14 +81,6 @@ class PostMixin(object):
         SqNode(('i', 'timeline'), timeline),)
         return sqlike
 
-    @classmethod
-    def collect_posts(cls, posts, pattern, done=False):
-        sqlike = cls.from_sqlike()
-        posts = posts.filter(Q(done=done))
-        sqlike.feed(pattern)
-        posts = sqlike.run(posts)
-        return posts
-
     def __str__(self):
         return self.label
 
@@ -103,14 +95,15 @@ class GlobalAssignmentsFilterMixin:
 
 class PostFilterMixin:
     def collect(self, posts):
-        sqlike = Post.from_sqlike()
-        sqlike.feed(self.pattern)
+        posts = posts.filter(done=False)
 
         if not self.status:
-            return posts.filter(done=False)
+            return posts
 
-        posts = posts.filter(done=self.done)
+        sqlike = Post.from_sqlike()
+        sqlike.feed(self.pattern)
         posts = sqlike.run(posts)
+
         return posts
 
 class PostFileWrapperMixin(object):
@@ -406,4 +399,5 @@ class PostPin(PostPinMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', 'post')
+
 

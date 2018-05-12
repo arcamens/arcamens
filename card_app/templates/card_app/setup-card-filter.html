@@ -14,7 +14,6 @@
 {% csrf_token %}
 
 {% bootstrap_field form.pattern  size='md' %}
-{% bootstrap_field form.done  size='md' %}
 
 {% bootstrap_field form.status  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -27,5 +26,6 @@
 data-shell="#main-view" data-show="{% url 'card_app:setup-card-filter' list.id  %}"
 class="btn btn-default m-post-close"> {% trans "Setup" %} </button>
 </div>
+
 
 

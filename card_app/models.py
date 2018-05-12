@@ -107,13 +107,14 @@ class GlobalTasksFilterMixin:
 
 class CardFilterMixin:
     def collect(self, cards):
+        cards = cards.filter(done=False)
+
+        if not self.status: 
+            return cards
+
         sqlike = Card.from_sqlike()
         sqlike.feed(self.pattern)
 
-        if not self.status:
-            return cards.filter(done=False)
-
-        cards = cards.filter(done=self.done)
         cards = sqlike.run(cards)
         return cards
 
@@ -412,8 +413,8 @@ class CardFilter(CardFilterMixin, models.Model):
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
 
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
+    # done = models.BooleanField(blank=True, 
+    # default=False, help_text='Done cards?.')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -512,5 +513,6 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
