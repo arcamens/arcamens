@@ -38,10 +38,9 @@ data-show="{% url 'snippet_app:update-snippet' snippet.id %}"
 data-shell="#bigModalContent" 
 class="btn btn-default e-get"> {% trans "Update" %} </button>
 
-<button  type="button" 
-data-show="{% url 'snippet_app:delete-snippet' snippet.id %}"
+<button  type="button" data-show="{% url 'snippet_app:delete-snippet' snippet.id %}"
 data-callback="$('#bigModal').modal('toggle');" 
-data-shell="#main-view" 
+data-shell="#post-{{post.id}}" 
 class="btn btn-default e-get"> {% trans "Remove" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -54,6 +53,9 @@ $('#bigModal').one('hidden.bs.modal', function () {
     $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
+
+
+
 
 
 
