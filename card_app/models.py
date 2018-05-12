@@ -72,7 +72,7 @@ class CardMixin(object):
         snippet = lambda ind: Q(snippets_label__icontains=ind) | Q(
         snippets_data__icontains=ind)
 
-        note  = lambda ind: Q(note__data__icontains=ind)
+        note  = lambda ind: Q(notes__data__icontains=ind)
         tag   = lambda ind: Q(tags__name__icontains=ind)
         list  = lambda ind: Q(ancestor__name__icontains=ind)
         board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
@@ -84,7 +84,6 @@ class CardMixin(object):
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('d', 'data'), data),
-        SqNode(('s', 'snippet'), snippet),
         SqNode(('n', 'note'), note),
         SqNode(('t', 'tag'), tag, chain=True),
         SqNode(('i', 'list'), list),

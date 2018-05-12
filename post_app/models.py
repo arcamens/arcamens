@@ -77,7 +77,7 @@ class PostMixin(object):
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('t', 'tag'), tag, chain=True),
-        SqNode(('m', 'comment'), comment),
+        SqNode(('s', 'snippets'), snippet),
         SqNode(('i', 'timeline'), timeline),)
         return sqlike
 
