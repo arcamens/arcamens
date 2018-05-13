@@ -6,4 +6,5 @@ register = template.Library()
 
 @register.simple_tag(name='avatar')
 def avatar(file):
-    return (file and file.url) or settings.STATIC_URL + 'user.png'
+    return file.url if file else settings.STATIC_URL + 'user.png'
+
