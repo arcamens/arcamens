@@ -1,6 +1,36 @@
 ## Intro
 
-### Arcamens Boards
+Arcamens implements kanban boards and timelines, the aim of arcamens is being as flexible
+as possible. It allows better dealing with high payloads of information and better sharing of 
+information. Arcamens is ideal for all kind of teams whose motto is simplicity and power.
+
+The boards, lists and cards are displayed in a tree-like manner it allows a succinct perspective
+of the information that is relevant to the board team.
+
+![arcamens-boards-0](/static/site_app/help/arcamens-boards-0.png)
+
+After accessing the board it is shown its lists.
+
+![arcamens-boards-1](/static/site_app/help/arcamens-boards-1.png)
+
+Once a list is accessed by clicking on its link name it displays all the cards
+that it holds.
+
+![arcamens-boards-2](/static/site_app/help/arcamens-boards-2.png)
+
+Arcamens boards allow one to deal with a high amount of cards in a very advantageous manner
+because information is more visible. It allows one to pin certain lists that are often used
+thus allowing quick access of content.
+
+Pinning an element is as easy as clicking on the clip icon as shown below:
+
+![arcamens-boards-3](/static/site_app/help/arcamens-boards-3.png)
+
+**Note:** You can pin boards, lists, cards or timelines.
+
+Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than
+the usual drag&drop approach.  You can cut several cards, these will stay on the clipboard
+when you're ready just paste them somewhere.
 
 ### Board Creation
 
