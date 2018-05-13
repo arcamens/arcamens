@@ -33,6 +33,13 @@ class BoardMixin(QueueWS):
     def __str__(self):
         return self.name
 
+    def set_ownership(self, user):
+        self.owner = user
+        self.members.add(user)
+        self.admins.add(user)
+        self.save()
+    
+
 class EBindBoardUserMixin(object):
     pass
 
@@ -126,4 +133,5 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 

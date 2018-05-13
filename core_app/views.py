@@ -774,19 +774,11 @@ class RemoveOrganizationUser(GuardianView):
         user.boards.through.objects.filter(
         board__organization=me.default, board__members=user).delete()
 
-        timelines = user.owned_timelines.filter(organization=me.default)
+        for ind in user.owned_timelines.filter(organization=me.default):
+            ind.set_ownership(me)
 
-        for ind in timelines:
-            ind.owner = me
-            ind.users.add(me)
-            ind.save()
-
-        boards = user.owned_boards.filter(organization=me.default)
-
-        for ind in boards:
-            ind.owner = me
-            ind.members.add(me)
-            ind.save()
+        for ind in user.owned_boards.filter(organization=me.default):
+            ind.set_ownership(me)
 
         user.organizations.remove(me.default)
 
@@ -996,6 +988,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

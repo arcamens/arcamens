@@ -17,16 +17,15 @@ class Command(BaseCommand):
         user = User.objects.get(email__istartswith=kwargs['user-email'])
         user.organizations.add(organization)
 
-        boards = Board.objects.filter(organization=organization)
-        for ind in boards:
-           ind.members.add(user)
+        for ind in Board.objects.filter(organization=organization):
+           ind.set_ownership(user)
         
-        timelines = Timeline.objects.filter(organization=organization)
-        for ind in timelines:
-           ind.users.add(user)
+        for ind in Timeline.objects.filter(organization=organization):
+           ind.set_ownership(user)
         
         self.stdout.write('User binded to all boards/timelines!')
     
     
+
 
 
