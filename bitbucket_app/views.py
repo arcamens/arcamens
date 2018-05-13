@@ -1,3 +1,4 @@
+from django.conf import settings
 from core_app.views import GuardianView
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -58,10 +59,13 @@ class BitbucketHandle(View):
                 commit['links']['html']['href'])
 
     def create_note(self, card, data, url):
-        note  = Note.objects.create(card=card, data=data)
+        bitbot, _ = User.objects.get_or_create(
+        email=settings.BITBUCKET_BOT_EMAIL, name=settings.BITBUCKET_BOT_NAME)
+
+        note  = Note.objects.create(card=card, data=data, owner=bitbot)
         event = EBitbucketCommit.objects.create(
         organization=card.ancestor.ancestor.organization, 
-        note=note, url=url)
+        note=note, url=url, user=bitbot)
 
         # All the board members get aware of the event.
         event.users.add(*card.ancestor.ancestor.members.all())
@@ -294,6 +298,7 @@ class CreateBitbucketHook(GuardianView):
                                                                 # hook_uuid=data['uuid'])
 # 
         # return tracker.pk
+
 
 
 

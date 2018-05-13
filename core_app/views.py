@@ -1,7 +1,7 @@
 from core_app.models import Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
-EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter
+EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, EDisabledAccount
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from post_app.models import Post
 from django.db.models import Q
+from datetime import date
 from jsim.jscroll import JScroll
 from django.urls import reverse
 from django.conf import settings
@@ -31,7 +32,8 @@ class GuardianView(AuthenticatedView):
     def delegate(self, request, *args, **kwargs):
         user = User.objects.get(id=self.user_id)
 
-        if not user.default.owner.enabled:
+        # Allow just the owner of the account to perform operations.
+        if not user.default.owner.enabled and user != user.default.owner:
             return HttpResponse("Disabled organization \
                 account!", status=403)
 
@@ -53,19 +55,28 @@ class Index(AuthenticatedView):
         if not user.default.owner.enabled:
             if user.default.owner != user:
                 return redirect('core_app:disabled-account')
-            else:
-                self.create_issue(user)
+
+        # Check expiration just if it is a paid plan.
+        if user.default.owner.paid:
+            if user.default.owner.expiration <= date.today():
+                self.on_expiration(user)
 
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations,
          'settings': settings})
 
-    def create_issue(self, user):
-        event = EDisabledAccount.objects.create(
-        organization=user.default, user=user)
+    def on_expiration(self, user):
+        user.default.owner.enabled = False
+        user.default.owner.save()
 
-        event.users.add(user)
+        arcabot, _ = User.objects.get_or_create(
+        email=settings.ARCAMENS_BOT_EMAIL, name=settings.ARCAMENS_BOT_NAME)
+
+        reason = 'Your accounnt expiration has ran over!'
+        event = EDisabledAccount.objects.create(
+        organization=user.default, user=arcabot, reason=reason)
+        event.dispatch(user)
 
         # Sound wouldnt work here.
         # user.default.ws_sound()
@@ -1005,6 +1016,8 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
+
 
 
 

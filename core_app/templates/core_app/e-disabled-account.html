@@ -1,0 +1,16 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+Organization <a href="{% url 'core_app:index' %}"> 
+<span class="glyphicon glyphicon-flag"></span>
+{{event.organization.name}}</a>  was disabled! 
+<b> {{event.reason}} </b>
+
+{% endblock %}
+
+
+
+
+

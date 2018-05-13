@@ -391,9 +391,10 @@ class NodeFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization',)
 
+class EDisabledAccount(Event):
+    reason = models.CharField(max_length=255, 
+    blank=True, default = '')
 
-
-
-
+    html_template = 'core_app/e-disabled-account.html'
 
 

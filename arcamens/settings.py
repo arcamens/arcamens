@@ -29,6 +29,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0']
 
+# The addon bots settings.
+ARCAMENS_BOT_EMAIL = 'arcabot@arcamens.com'
+ARCAMENS_BOT_NAME = 'Arcamens Service'
+
+BITBUCKET_BOT_EMAIL = 'bitbot@arcamens.com'
+BITBUCKET_BOT_NAME = 'Bitbucket Service'
+
 # When the user is not authenticated it is redirected by slock AuthenticatedView.
 AUTH_ERR = 'core_app/unauthorized.html'
 DEFAULT_ERR = 'core_app/default-error.html'
@@ -196,6 +203,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
