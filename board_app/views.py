@@ -179,7 +179,7 @@ class ManageBoardAdmins(GuardianView):
         if not form.is_valid():
             return render(request, 'board_app/manage-board-admins.html', 
                 {'me': me, 'board': board, 'total': total, 'count': 0,
-                        'form':forms.UserSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
@@ -441,6 +441,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 
