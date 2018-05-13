@@ -8,7 +8,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available {{board.name|truncatechars:20}}'s Admins 
+{{board.name|truncatechars:20}}'s Admins 
 <span class="badge">{{count}}/{{total}}</span>
 </h5>
 </div>
@@ -22,16 +22,14 @@ Available {{board.name|truncatechars:20}}'s Admins
 {{ind.name}}  
 <br>
 
-<small> {{ind.email}} </small>   <br>
-<b style="font-size:60%"> All card/tasks: {{ind.tasks.count}}
-</b>
+<small> {{ind.email}} </small>   
 
 <br>
 
-<a class="e-get" style="color:red;font-size:70%"
+<a class="e-get" style="color:red; font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
-data-show="{% url 'board_app:unbind-board-admin' board.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-remove"></span> Unbind</a>  
+data-show="{% url 'board_app:unbind-board-admin' board.id ind.id %}"  href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Remove</a>  
 
 </p>
 
@@ -45,19 +43,17 @@ data-show="{% url 'board_app:unbind-board-admin' board.id ind.id %}" href="#">
 
 <small> {{ind.email}} </small>  
 <br>
-<b style="font-size:60%">All card/tasks: {{ind.tasks.count}}</b>
-<br>
 
 <a class="e-get" style="color:green;font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
 data-show="{% url 'board_app:bind-board-admin' board.id ind.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> Bind </a> 
+<span class="glyphicon glyphicon-plus"></span> Add </a> 
 
 </p>
 {% endfor %}
 </div>
 
-<br> 
+<br>
 <form id="userSearchForm" enctype="multipart/form-data">
 
 {% csrf_token %}
@@ -79,7 +75,6 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
 
 
 
