@@ -22,7 +22,7 @@ href="#">
 <li><a class="e-get" 
 data-shell="#smallModalContent" 
 data-callback="$('#modal').modal('show');" 
-data-show="{% url 'board_app:manage-board-users' board.id %}" 
+data-show="{% url 'board_app:manage-board-members' board.id %}" 
 href="#"> <span class="glyphicon glyphicon-user"></span> 
 {% trans "Members" %}</a></li>
 <li class="divider"></li>
@@ -51,4 +51,5 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>
 
 </ul>
 </div>
+
 

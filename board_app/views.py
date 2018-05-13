@@ -107,7 +107,7 @@ class ManageUserBoards(GuardianView):
         {'user': user, 'included': included, 'excluded': excluded,
         'me': me, 'organization': me.default,'form':form})
 
-class ManageBoardUsers(GuardianView):
+class ManageBoardMembers(GuardianView):
     def get(self, request, board_id):
         me = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
@@ -118,7 +118,7 @@ class ManageBoardUsers(GuardianView):
 
         total = included.count() + excluded.count()
 
-        return render(request, 'board_app/manage-board-users.html', 
+        return render(request, 'board_app/manage-board-members.html', 
         {'included': included, 'excluded': excluded, 'board': board,
         'me': me, 'count': total, 'total': total, 
         'form':forms.UserSearchForm()})
@@ -136,15 +136,15 @@ class ManageBoardUsers(GuardianView):
         total = included.count() + excluded.count()
 
         if not form.is_valid():
-            return render(request, 'board_app/manage-board-users.html', 
+            return render(request, 'board_app/manage-board-members.html', 
                 {'me': me, 'board': board, 'total': total, 'count': 0,
-                        'form':forms.UserSearchForm()}, status=400)
+                        'form':form}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
         count = included.count() + excluded.count()
 
-        return render(request, 'board_app/manage-board-users.html', 
+        return render(request, 'board_app/manage-board-members.html', 
         {'included': included, 'excluded': excluded, 'board': board,
         'me': me, 'total': total, 'count': count, 'form':form})
 
@@ -441,6 +441,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 

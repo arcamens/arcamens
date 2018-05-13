@@ -1,8 +1,24 @@
 ## Intro
 
+### Arcamens Boards
+
+### Board Creation
+
+### List Creation
+
+### Card Creation
+
 ### Events
 
+### Board Permissions
+
+#### Admins
+
+#### Members
+
 ### Organization Creation
+
+### Timelines
 
 ### Timeline Creation
 
@@ -24,15 +40,11 @@
 
 ### Post Filter
 
+### List Filter
+
+### Board Filter
+
 ### Timeline Filter
-
-### Timeline Deletion/Renaming
-
-###  Board Creation
-
-### List Creation
-
-### Card Creation
 
 ### Card Tags
 
@@ -43,10 +55,6 @@
 ### Card Task Creation
 
 ### Card E-mail/Notifications
-
-### Board Filter
-
-### List Filter
 
 ### Card Filter
 
@@ -66,11 +74,14 @@
 
 ### Card Task Search
 
-### Bitbucket Integration
+### Timeline Settings
 
-### Timeline/Board Filter
+### Board Settings
+
+### Bitbucket Integration
 
 ### Organization User Removal
 
-### Organization Deletion/Renaming
+### Organization Settings
+
 
