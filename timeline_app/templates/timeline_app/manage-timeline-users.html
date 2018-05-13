@@ -1,6 +1,7 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% load static %}
+{% load avatar %}
 
 
 <div class="modal-header">
@@ -17,7 +18,7 @@ Available {{timeline.name|truncatechars:20}}'s Members
 <div class="pre-scrollable">
 {% for ind in included %}
 <p class="text-center" id="user-choice-{{ind.id}}">
-<img class="img-responsive center-block"  width="50" height="50"  src="{{ind.avatar.url}}" />
+<img class="img-responsive center-block"  width="50" height="50"  src="{% avatar ind.avatar %}" />
 {{ind.name}}  
 <br>
 
@@ -38,7 +39,7 @@ data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" hre
 
 {% for ind in excluded %}
 <p class="text-center" id="user-choice-{{ind.id}}">
-<img class="img-responsive center-block"  width="50" height="50"  src="{{ind.avatar.url}}" />
+<img class="img-responsive center-block"  width="50" height="50"  src="{% avatar ind.avatar %}" />
 {{ind.name}}  
 <br>
 

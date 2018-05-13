@@ -1,6 +1,7 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% load static %}
+{% load avatar %}
 
 
 <div class="modal-header">
@@ -19,7 +20,7 @@ Available {{organization.name|truncatechars:60}}'s Admins
 {% for ind in included %}
 <tr id="user-choice-{{ind.id}}" style="font-size:80%">
 <td style="width:70px;height:80">
-<img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
+<img style="margin:auto" class="img-responsive" src="{% avatar ind.avatar %}" />
 </td>
 
 <td> 
@@ -39,7 +40,7 @@ data-show="{% url 'core_app:unbind-organization-admin' organization.id ind.id %}
 {% for ind in excluded %}
 <tr id="user-choice-{{ind.id}}" style="font-size:80%">
 <td style="width:70px;height:80">
-     <img style="margin:auto" class="img-responsive" src="{{ind.avatar.url}}" />
+     <img style="margin:auto" class="img-responsive" src="{% avatar ind.avatar %}" />
 </td>
 <td> 
 <span class="glyphicon glyphicon-user"></span> {{ind.name}}  
