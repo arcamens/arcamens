@@ -56,30 +56,10 @@ class Index(AuthenticatedView):
             if user.default.owner != user:
                 return redirect('core_app:disabled-account')
 
-        # Check expiration just if it is a paid plan.
-        if user.default.owner.paid:
-            if user.default.owner.expiration <= date.today():
-                self.on_expiration(user)
-
         return render(request, 'core_app/index.html', 
         {'user': user, 'default': user.default, 'organization': user.default,
         'organizations': organizations,
          'settings': settings})
-
-    def on_expiration(self, user):
-        user.default.owner.enabled = False
-        user.default.owner.save()
-
-        arcabot, _ = User.objects.get_or_create(
-        email=settings.ARCAMENS_BOT_EMAIL, name=settings.ARCAMENS_BOT_NAME)
-
-        reason = 'Your accounnt expiration has ran over!'
-        event = EDisabledAccount.objects.create(
-        organization=user.default, user=arcabot, reason=reason)
-        event.dispatch(user)
-
-        # Sound wouldnt work here.
-        # user.default.ws_sound()
 
 class DisabledAccount(AuthenticatedView):
     def get(self, request):
@@ -1016,6 +996,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

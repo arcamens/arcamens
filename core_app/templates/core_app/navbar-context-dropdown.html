@@ -1,9 +1,11 @@
 {% load i18n %}
+{% load static %}
 
 <ul class="nav navbar-nav navbar-right">
 <li class="dropdown">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
 <span class="glyphicon glyphicon-flag"></span> {{organization.name}}
+
 <span class="caret"></span></a>
 
 
@@ -25,7 +27,10 @@
 
 <li class="dropdown">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-<span class="glyphicon glyphicon-user"></span> {{user.name}} 
+<span class="glyphicon glyphicon-user"></span>
+{% if not user.enabled %} 
+(Disabled) {{user.name}} 
+{% endif %}
 <span class="caret"></span></a>
 
 <ul class="dropdown-menu">
@@ -34,7 +39,7 @@
 
 <li class="divider"></li>
 
-<li><a  href="" target="_blank"><span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
+<li><a  href="{% static 'site_app/help/index.html' %}" target="_blank"><span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
 <li class="divider"></li>
 
 <li> <a class="s-modal" data-show="{% url 'site_app:upgrade' %}" href="#"> <span class="glyphicon glyphicon-credit-card"></span> Upgrade</a> </li>
@@ -50,6 +55,8 @@
 
 
 </ul>
+
+
 
 
 
