@@ -45,7 +45,55 @@ You would get:
 
 ![board-creation-1](/static/site_app/help/board-creation-1.png)
 
+One may find it necessary to have boards that are related to the same pproject, in such situations
+it is possble to set your boards description with a slug to group them according to their project.
+
+Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
+You could come up with boards description like:
+
+
+
+    Arcamens/Github
+    Arcamens/Bitbucket
+    
+
+Then you setup your board filter with a pattern like:
+
+
+    Arcamens/
+    
+
+It would display just boards that meet that slug.
+
+**See:** Link to board filters.
+
 ### List Creation
+
+Lists are placed inside boards, After accessing the board link name you can
+create new lists for the board.
+
+For suck click on +List link button.
+
+![list-creation-0](/static/site_app/help/list-creation-0.png)
+
+You would get:
+
+![list-creation-1](/static/site_app/help/list-creation-1.png)
+
+You can set slugs for lists as well, you could handle a project with many plugins
+using the approach of setting slugs for each one of your project plugins as follows:
+
+
+    Bitbucket/Todo
+    Github/Todo
+    Bitbucket/Doing
+    Github/Doing
+    
+    ...
+    
+
+It allows designing your project workflow without creating multiple
+boards for its plugins.
 
 ### Card Creation
 
