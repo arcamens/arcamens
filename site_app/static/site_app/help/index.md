@@ -168,6 +168,8 @@ You can search users by using tag, email or name attributes.
 
 **See:** Advanced User Search
 
+After binding/unbinding a given user to a board he/she will get notified of it.
+
 ### Tag Creation
 
 You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed
@@ -219,6 +221,9 @@ Then you'll be able to manage the card tags:
 If you add/remove a tag to a card then everyone who is related to the card will get notified. 
 The card board members and card workers.
 
+You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
+It is useful when your organization has many tags.
+
 ### Card Task Search
 
 ### Card Search
@@ -227,7 +232,41 @@ The card board members and card workers.
 
 ### Timelines
 
+Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks.
+Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
+it allows one to setup a timeline to be used as a scrum board backlog.
+
+
 ### Timeline Creation
+
+For creating a timeline just click on Home at the navbar then on the wrench icon at the organization
+toolbar:
+
+![timeline-creation-0](/static/site_app/help/timeline-creation-0.png)
+
+You would get:
+
+![timeline-creation-1](/static/site_app/help/timeline-creation-1.png)
+
+Notice that you can associate timelines to a given project by setting up a common slug.
+You could fill the above fields with:
+
+**Name:** Notes
+
+**Description:** Arcamens/
+
+Or you could do:
+
+**Name:** Arcamens/Notes
+
+**Description:** Notes on arcamens project.
+
+There are many ways of grouping boards and timelines, feel free to pick up the
+best one for you. You don't need to pick a description for your boards/timelines at all.
+
+**See:** Collection Filters
+
+After filling the fields you would get your timeline being listed altogether with your boards.
 
 ### Post Creation
 
@@ -251,17 +290,9 @@ The card board members and card workers.
 
 ### Post Filter
 
-### List Filter
-
-### Board Filter
-
-### Timeline Filter
-
-### Board Members
+### Collection Filter
 
 ### Card's Text Colors
-
-### Card Task Creation
 
 ### Card E-mail/Notifications
 
