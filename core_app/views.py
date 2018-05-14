@@ -547,7 +547,7 @@ class SignupFromInvite(View):
     def post(self, request, organization_id, token):
         invite = Invite.objects.get(    
         organization__id=organization_id, token=token)
-        form = SignupForm(request.POST, instance=invite.user)
+        form = SignupForm(request.POST, request.FILES, instance=invite.user)
 
         if not form.is_valid():
             return render(request, 'core_app/signup-from-invite.html', 
@@ -988,6 +988,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

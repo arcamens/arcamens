@@ -40,7 +40,7 @@
 
 <h3> Invited to join {{organization.name}} </h3>
 
-<form id="form-user-data" method="post" action="{% url 'core_app:signup-from-invite' organization.id token %}">
+<form id="form-user-data" method="post" enctype="multipart/form-data" action="{% url 'core_app:signup-from-invite' organization.id token %}">
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
@@ -58,6 +58,7 @@
 </form>
 </div>
 </body>
+
 
 
 
