@@ -1,19 +1,21 @@
 ## Intro
 
 Arcamens was designed to allow a high level of communication and collaboration by teams.
-It implements so called Kanban Boards and Timelines, the latter can be used for multiple purposes. 
-They can be used to delegate isolated tasks, share information, events, questions and even store information that is
+It implements so called Kanban Boards and Timelines.
+Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is
 pertinent to a project.
 
-The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and better organization of 
-information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.
+The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates
+better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.
 
-The boards, lists and cards are structured in a tree-like manner it allows a succinct perspective
+The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective
 of the information that is relevant to the board team.
+
+The following image displays an example set of boards:
 
 ![arcamens-boards-0](/static/site_app/help/arcamens-boards-0.png)
 
-After accessing the board it is shown its lists.
+After accessing the board, its lists are shown.
 
 ![arcamens-boards-1](/static/site_app/help/arcamens-boards-1.png)
 
@@ -38,7 +40,8 @@ when you're ready just paste them somewhere.
 
 ### Board Creation
 
-You can create as many boards as you desire. For creating a new board just click on Home at the navbar then
+You can create as many boards as you desire. For creating a new board just click on Home at the navbar
+and then use the popup menu by clicking the wrench icon shown at this image:
 
 ![board-creation-0](/static/site_app/help/board-creation-0.png)
 
@@ -47,7 +50,7 @@ You would get:
 ![board-creation-1](/static/site_app/help/board-creation-1.png)
 
 One may find it necessary to have boards that are related to the same project, in such situations
-it is possble to set their descriptions with a slug to group them according to their project.
+it is possible to set their descriptions with a slug to group them according to their project.
 
 Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
 You could come up with boards description like:
@@ -58,7 +61,7 @@ You could come up with boards description like:
     Arcamens/Bitbucket
     
 
-Then you setup your board filter with a pattern like:
+Then you can use your board filter with a pattern like:
 
 
     Arcamens/
@@ -97,6 +100,8 @@ It allows designing your project workflow without creating multiple
 boards for its plugins.
 
 ### Card Creation
+
+Card are the entities which contain actual information pieces.
 
 Cards are created inside lists, after accessing a list just click on +Card:
 
