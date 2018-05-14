@@ -89,32 +89,39 @@ Events dialog but you can still access it through your logs.</p>
 <p><img alt="card-workers-0" src="/static/site_app/help/card-workers-0.png" /></p>
 <p>You would get:</p>
 <p><img alt="card-workers-1" src="/static/site_app/help/card-workers-1.png" /></p>
-<p>You can search users for attributes like name, e-mail or tags.</p>
-<pre><code>tag:developer
-</code></pre>
-<p>Would list all organization users who were tagged with developer. You can combine tags as well.</p>
-<pre><code>tag:developer + tag:python
-</code></pre>
-<p>You can combine tags but mix them with other kind of attributes like name or email.</p>
-<pre><code>tag:dev + @arcamens.com
-</code></pre>
-<p>Would list all workers that were tagged as developer and the email matches @arcamens.com.</p>
-<p><img alt="card-workers-2" src="/static/site_app/help/card-workers-2.png" /></p>
-<p>Notice that if you did:</p>
-<pre><code>tag:dev + oliveira
-</code></pre>
-<p>It would list all users with the tag dev and have the string oliveira
-appearing either in the name or email attributes. When you want to limit the
-search to be performed under a given attribute like email you could do:</p>
-<pre><code>tag:dev + email:oliveira
-</code></pre>
+<p>Type a string that matches either the user name or email then hit enter.</p>
+<p><strong>See:</strong> Advanced User Search</p>
 <h3>Board Permissions</h3>
-<h4>Admins</h4>
-<h4>Members</h4>
+<p>A board will have a owner(the one who has created it), admins and members. The owner
+is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board
+but members aren't allowed to remove peers.</p>
+<p>For adding new members to the board(assuming you're the owner or an admin), just access the board 
+then click on the wrench icon:</p>
+<p><img alt="board-permissions-0" src="/static/site_app/help/board-permissions-0.png" /></p>
+<p>Then click on Members, you would get:</p>
+<p><img alt="board-permissions-1" src="/static/site_app/help/board-permissions-1.png" /></p>
+<p>You can search users by using tag, email or name attributes.</p>
+<p><strong>See:</strong> Advanced User Search</p>
 <h3>Tag Creation</h3>
+<p>You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed
+to create new tags, when a tag is created an event is fired and everyone in the organization gets aware of it.</p>
+<p>Click on the wrench icon on the organization menu:</p>
+<p><img alt="tag-creation-0" src="/static/site_app/help/tag-creation-0.png" /></p>
+<p>Then click on Tags:</p>
+<p><img alt="tag-creation-1" src="/static/site_app/help/tag-creation-1.png" /></p>
+<p>You would get:</p>
+<p><img alt="tag-creation-2" src="/static/site_app/help/tag-creation-2.png" /></p>
+<p>Notice that if your organization has many tags then you can look up a given tag by its name or description.
+Just insert the pattern and hit enter then you'll get all tags that match the criterea.</p>
+<p>Clicking on the plus sign it gives you:</p>
+<p><img alt="tag-creation-3" src="/static/site_app/help/tag-creation-3.png" /></p>
+<p>Fill the tag name and description and then click on Create.</p>
+<p><img alt="tag-creation-4" src="/static/site_app/help/tag-creation-4.png" /></p>
 <h3>Card Tags</h3>
 <p>Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
 You can create as many tags as you find necessary for your organization.</p>
+<h3>Card Task Search</h3>
+<h3>Card Search</h3>
 <h3>Organization Creation</h3>
 <h3>Timelines</h3>
 <h3>Timeline Creation</h3>
@@ -122,9 +129,11 @@ You can create as many tags as you find necessary for your organization.</p>
 <h3>Organization Invites</h3>
 <h3>Organization Admins</h3>
 <h3>Timeline Members</h3>
-<h3>Post Task Creation</h3>
+<h3>Post Workers</h3>
 <h3>Post E-mail/Notifications</h3>
 <h3>Post Tags</h3>
+<h3>Post Task Search</h3>
+<h3>Post Search</h3>
 <h3>Event Comments</h3>
 <h3>Post Filter</h3>
 <h3>List Filter</h3>
@@ -137,12 +146,28 @@ You can create as many tags as you find necessary for your organization.</p>
 <h3>Card Filter</h3>
 <h3>Card Forks</h3>
 <h3>Post Forks</h3>
-<h3>Post Task Search</h3>
-<h3>Card Task Search</h3>
-<h3>Post Search</h3>
-<h3>Card Search</h3>
-<h3>Post Task Search</h3>
-<h3>Card Task Search</h3>
+<h3>Advanced User Search</h3>
+<p>You can search users for attributes like name, e-mail or tags.</p>
+<pre><code>tag:developer
+</code></pre>
+<p>Would list all organization users who were tagged with developer. You can combine tags as well.</p>
+<pre><code>tag:developer + tag:python
+</code></pre>
+<p>You can combine tags but mix them with other kind of attributes like name or email.</p>
+<pre><code>tag:dev + @arcamens.com
+</code></pre>
+<p>Would list all workers that were tagged as developer and the email matches @arcamens.com.</p>
+<p><img alt="advanced-user-search-0" src="/static/site_app/help/advanced-user-search-0.png" /></p>
+<p>Notice that if you did:</p>
+<pre><code>tag:dev + oliveira
+</code></pre>
+<p>It would list all users with the tag dev and have the string oliveira
+appearing either in the name or email attributes. When you want to limit the
+search to be performed under a given attribute like email you could do:</p>
+<pre><code>tag:dev + email:oliveira
+</code></pre>
+<h3>Advanced Card Search</h3>
+<h3>Advanced Post Search</h3>
 <h3>Timeline Settings</h3>
 <h3>Board Settings</h3>
 <h3>Bitbucket Integration</h3>

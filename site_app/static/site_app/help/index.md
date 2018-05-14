@@ -150,54 +150,66 @@ You would get:
 
 ![card-workers-1](/static/site_app/help/card-workers-1.png)
 
-You can search users for attributes like name, e-mail or tags.
+Type a string that matches either the user name or email then hit enter.
 
-    tag:developer
- 
-
-Would list all organization users who were tagged with developer. You can combine tags as well.
-
-
-    tag:developer + tag:python 
-
-
-You can combine tags but mix them with other kind of attributes like name or email.
-
-
-    tag:dev + @arcamens.com
-
-Would list all workers that were tagged as developer and the email matches @arcamens.com.
-
-
-![card-workers-2](/static/site_app/help/card-workers-2.png)
-
-Notice that if you did:
-
-
-    tag:dev + oliveira
-
-
-It would list all users with the tag dev and have the string oliveira
-appearing either in the name or email attributes. When you want to limit the
-search to be performed under a given attribute like email you could do:
-
-
-    tag:dev + email:oliveira
-
-
+**See:** Advanced User Search
 
 ### Board Permissions
 
-#### Admins
+A board will have a owner(the one who has created it), admins and members. The owner
+is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board
+but members aren't allowed to remove peers.
 
-#### Members
+For adding new members to the board(assuming you're the owner or an admin), just access the board 
+then click on the wrench icon:
+
+![board-permissions-0](/static/site_app/help/board-permissions-0.png)
+
+Then click on Members, you would get:
+
+![board-permissions-1](/static/site_app/help/board-permissions-1.png)
+
+You can search users by using tag, email or name attributes.
+
+**See:** Advanced User Search
 
 ### Tag Creation
+
+You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed
+to create new tags, when a tag is created an event is fired and everyone in the organization gets aware of it.
+
+Click on the wrench icon on the organization menu:
+
+![tag-creation-0](/static/site_app/help/tag-creation-0.png)
+
+Then click on Tags:
+
+
+![tag-creation-1](/static/site_app/help/tag-creation-1.png)
+
+You would get:
+
+![tag-creation-2](/static/site_app/help/tag-creation-2.png)
+
+Notice that if your organization has many tags then you can look up a given tag by its name or description.
+Just insert the pattern and hit enter then you'll get all tags that match the criterea.
+
+Clicking on the plus sign it gives you:
+
+![tag-creation-3](/static/site_app/help/tag-creation-3.png)
+
+Fill the tag name and description and then click on Create.
+
+![tag-creation-4](/static/site_app/help/tag-creation-4.png)
 
 ### Card Tags
 
 Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
 You can create as many tags as you find necessary for your organization.
+
+### Card Task Search
+
+### Card Search
 
 ### Organization Creation
 
@@ -213,11 +225,15 @@ You can create as many tags as you find necessary for your organization.
 
 ### Timeline Members
 
-### Post Task Creation
+### Post Workers
 
 ### Post E-mail/Notifications
 
 ### Post Tags
+
+### Post Task Search
+
+### Post Search
 
 ### Event Comments
 
@@ -243,17 +259,45 @@ You can create as many tags as you find necessary for your organization.
 
 ### Post Forks
 
-### Post Task Search
+### Advanced User Search
 
-### Card Task Search
+You can search users for attributes like name, e-mail or tags.
 
-### Post Search
+    tag:developer
+ 
 
-### Card Search
+Would list all organization users who were tagged with developer. You can combine tags as well.
 
-### Post Task Search
 
-### Card Task Search
+    tag:developer + tag:python 
+
+
+You can combine tags but mix them with other kind of attributes like name or email.
+
+
+    tag:dev + @arcamens.com
+
+Would list all workers that were tagged as developer and the email matches @arcamens.com.
+
+
+![advanced-user-search-0](/static/site_app/help/advanced-user-search-0.png)
+
+Notice that if you did:
+
+
+    tag:dev + oliveira
+
+
+It would list all users with the tag dev and have the string oliveira
+appearing either in the name or email attributes. When you want to limit the
+search to be performed under a given attribute like email you could do:
+
+
+    tag:dev + email:oliveira
+
+### Advanced Card Search
+
+### Advanced Post Search
 
 ### Timeline Settings
 
