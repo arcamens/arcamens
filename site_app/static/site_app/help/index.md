@@ -1,10 +1,15 @@
 ## Intro
 
-Arcamens implements kanban boards and timelines, the aim of arcamens is being as flexible
-as possible. It allows better dealing with high payloads of information and better sharing of 
+Arcamens implements so called Kanban Boards and Timelines, the latter can be used for multiple purposes. 
+They can be used to delegate isolated tasks, share information, events, questions and even store information that is
+pertinent to a project.
+
+
+The aim of arcamens is being as flexible
+as possible. It allows better dealing with high payloads of information and better organization of 
 information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.
 
-The boards, lists and cards are displayed in a tree-like manner it allows a succinct perspective
+The boards, lists and cards are structured in a tree-like manner it allows a succinct perspective
 of the information that is relevant to the board team.
 
 ![arcamens-boards-0](/static/site_app/help/arcamens-boards-0.png)
@@ -97,7 +102,28 @@ boards for its plugins.
 
 ### Card Creation
 
+Cards are created inside lists, after accessing a list just click on +Card:
+
+![card-creation-0](/static/site_app/help/card-creation-0.png)
+
+You would get:
+
+![card-creation-1](/static/site_app/help/card-creation-1.png)
+
+The card label field is used to give a short description of the task, the data field
+can contain markdown content and should be used when the content is too long.
+After filling the fields and creating your task, you would get the view of the card:
+
+![card-creation-2](/static/site_app/help/card-creation-2.png)
+
+**Note:** Click on Up to get back to the card list.
+
+
 ### Events
+
+### Card Tags
+
+### Card Workers
 
 ### Board Permissions
 
@@ -134,8 +160,6 @@ boards for its plugins.
 ### Board Filter
 
 ### Timeline Filter
-
-### Card Tags
 
 ### Board Members
 
