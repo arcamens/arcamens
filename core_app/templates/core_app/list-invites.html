@@ -19,7 +19,7 @@
 
 <a href="#" data-show="{% url 'core_app:cancel-invite' ind.id %}" class="s-modal">
 <span class="text-danger glyphicon glyphicon-remove"></span> </a>
-{{ind.user.email}} 
+{{ind.peer.email}} 
 <a href="#" data-show="{% url 'core_app:resend-invite' ind.id %}" class="s-modal">
 Resend</a>
 <br>
@@ -39,4 +39,5 @@ class="btn btn-default s-modal"> Back </button>
 </button>
 
 </div>
+
 
