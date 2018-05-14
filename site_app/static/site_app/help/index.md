@@ -38,10 +38,7 @@ when you're ready just paste them somewhere.
 
 ### Board Creation
 
-You can create as many boards as necessary, it is even possible to add a short description
-that can be used to group a given set of boards that are related to a specific project.
-
-For creating a new board just click on Home at the navbar then
+You can create as many boards as you desire. For creating a new board just click on Home at the navbar then
 
 ![board-creation-0](/static/site_app/help/board-creation-0.png)
 
@@ -50,7 +47,7 @@ You would get:
 ![board-creation-1](/static/site_app/help/board-creation-1.png)
 
 One may find it necessary to have boards that are related to the same project, in such situations
-it is possble to set your boards description with a slug to group them according to their project.
+it is possble to set their descriptions with a slug to group them according to their project.
 
 Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
 You could come up with boards description like:
@@ -76,7 +73,7 @@ It would display just boards that meet that slug.
 Lists are placed inside boards, After accessing the board link name you can
 create new lists for the board.
 
-For suck click on +List link button.
+For such click on +List link button.
 
 ![list-creation-0](/static/site_app/help/list-creation-0.png)
 
@@ -117,6 +114,10 @@ After filling the fields and creating your task, you would get the view of the c
 
 **Note:** Click on Up to get back to the card list.
 
+You can change all attributes for the card there, whenever an attribute is changed
+then an event is fired. All users who are related to the card will get notified.
+These users are those who belong to the card board or are assigned to the card.
+
 ### Events
 
 Whenever an user creates or updates content then an event is fired. The events
@@ -143,6 +144,42 @@ After a card is created it can be assigned to someone for its execution by click
 You would get:
 
 ![card-workers-1](/static/site_app/help/card-workers-1.png)
+
+You can search users for attributes like name, e-mail or tags.
+
+    tag:developer
+ 
+
+Would list all organization users who were tagged with developer. You can combine tags as well.
+
+
+    tag:developer + tag:python 
+
+
+You can combine tags but mix them with other kind of attributes like name or email.
+
+
+    tag:dev + @arcamens.com
+
+Would list all workers that were tagged as developer and the email matches @arcamens.com.
+
+
+![card-workers-2](/static/site_app/help/card-workers-2.png)
+
+Notice that if you did:
+
+
+    tag:dev + oliveira
+
+
+It would list all users with the tag dev and have the string oliveira
+appearing either in the name or email attributes. When you want to limit the
+search to be performed under a given attribute like email you could do:
+
+
+    tag:dev + email:oliveira
+
+
 
 ### Board Permissions
 

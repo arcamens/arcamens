@@ -23,14 +23,12 @@ thus allowing quick access of content.</p>
 the usual drag&amp;drop approach.  You can cut several cards, these will stay on the clipboard
 when you're ready just paste them somewhere.</p>
 <h3>Board Creation</h3>
-<p>You can create as many boards as necessary, it is even possible to add a short description
-that can be used to group a given set of boards that are related to a specific project.</p>
-<p>For creating a new board just click on Home at the navbar then</p>
+<p>You can create as many boards as you desire. For creating a new board just click on Home at the navbar then</p>
 <p><img alt="board-creation-0" src="/static/site_app/help/board-creation-0.png" /></p>
 <p>You would get:</p>
 <p><img alt="board-creation-1" src="/static/site_app/help/board-creation-1.png" /></p>
 <p>One may find it necessary to have boards that are related to the same project, in such situations
-it is possble to set your boards description with a slug to group them according to their project.</p>
+it is possble to set their descriptions with a slug to group them according to their project.</p>
 <p>Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
 You could come up with boards description like:</p>
 <pre><code>Arcamens/Github
@@ -44,7 +42,7 @@ Arcamens/Bitbucket
 <h3>List Creation</h3>
 <p>Lists are placed inside boards, After accessing the board link name you can
 create new lists for the board.</p>
-<p>For suck click on +List link button.</p>
+<p>For such click on +List link button.</p>
 <p><img alt="list-creation-0" src="/static/site_app/help/list-creation-0.png" /></p>
 <p>You would get:</p>
 <p><img alt="list-creation-1" src="/static/site_app/help/list-creation-1.png" /></p>
@@ -69,6 +67,9 @@ can contain markdown content and should be used when the content is too long.
 After filling the fields and creating your task, you would get the view of the card:</p>
 <p><img alt="card-creation-2" src="/static/site_app/help/card-creation-2.png" /></p>
 <p><strong>Note:</strong> Click on Up to get back to the card list.</p>
+<p>You can change all attributes for the card there, whenever an attribute is changed
+then an event is fired. All users who are related to the card will get notified.
+These users are those who belong to the card board or are assigned to the card.</p>
 <h3>Events</h3>
 <p>Whenever an user creates or updates content then an event is fired. The events
 are means of knowing what is going on with your teams.</p>
@@ -85,6 +86,25 @@ Events dialog but you can still access it through your logs.</p>
 <p><img alt="card-workers-0" src="/static/site_app/help/card-workers-0.png" /></p>
 <p>You would get:</p>
 <p><img alt="card-workers-1" src="/static/site_app/help/card-workers-1.png" /></p>
+<p>You can search users for attributes like name, e-mail or tags.</p>
+<pre><code>tag:developer
+</code></pre>
+<p>Would list all organization users who were tagged with developer. You can combine tags as well.</p>
+<pre><code>tag:developer + tag:python
+</code></pre>
+<p>You can combine tags but mix them with other kind of attributes like name or email.</p>
+<pre><code>tag:dev + @arcamens.com
+</code></pre>
+<p>Would list all workers that were tagged as developer and the email matches @arcamens.com.</p>
+<p><img alt="card-workers-2" src="/static/site_app/help/card-workers-2.png" /></p>
+<p>Notice that if you did:</p>
+<pre><code>tag:dev + oliveira
+</code></pre>
+<p>It would list all users with the tag dev and have the string oliveira
+appearing either in the name or email attributes. When you want to limit the
+search to be performed under a given attribute like email you could do:</p>
+<pre><code>tag:dev + email:oliveira
+</code></pre>
 <h3>Board Permissions</h3>
 <h4>Admins</h4>
 <h4>Members</h4>
