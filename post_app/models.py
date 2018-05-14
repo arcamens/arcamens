@@ -68,6 +68,8 @@ class PostMixin(object):
         tag      = lambda ind: Q(tags__name__icontains=ind)
         timeline = lambda ind: Q(ancestor__name__icontains=ind)
         comment  = lambda ind: Q(postcomment__data__icontains=ind)
+        snippet  = lambda ind: Q(snippets_label__icontains=ind) | Q(
+        snippets_data__icontains=ind)
 
         default = lambda ind: Q(label__icontains=ind)  
 
@@ -399,5 +401,6 @@ class PostPin(PostPinMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', 'post')
+
 
 

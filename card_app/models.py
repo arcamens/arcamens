@@ -69,9 +69,6 @@ class CardMixin(object):
         label   = lambda ind: Q(label__icontains=ind)
         data    = lambda ind: Q(data__icontains=ind)
 
-        snippet = lambda ind: Q(snippets_label__icontains=ind) | Q(
-        snippets_data__icontains=ind)
-
         note  = lambda ind: Q(notes__data__icontains=ind)
         tag   = lambda ind: Q(tags__name__icontains=ind)
         list  = lambda ind: Q(ancestor__name__icontains=ind)
@@ -512,6 +509,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

@@ -2,7 +2,7 @@
 
 Arcamens implements kanban boards and timelines, the aim of arcamens is being as flexible
 as possible. It allows better dealing with high payloads of information and better sharing of 
-information. Arcamens is ideal for all kind of teams whose motto is simplicity and power.
+information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.
 
 The boards, lists and cards are displayed in a tree-like manner it allows a succinct perspective
 of the information that is relevant to the board team.
@@ -33,6 +33,17 @@ the usual drag&drop approach.  You can cut several cards, these will stay on the
 when you're ready just paste them somewhere.
 
 ### Board Creation
+
+You can create as many boards as necessary, it is even possible to add a short description
+that can be used to group a given set of boards that are related to a specific project.
+
+For creating a new board just click on Home at the navbar then
+
+![board-creation-0](/static/site_app/help/board-creation-0.png)
+
+You would get:
+
+![board-creation-1](/static/site_app/help/board-creation-1.png)
 
 ### List Creation
 
@@ -113,5 +124,6 @@ when you're ready just paste them somewhere.
 ### Organization User Removal
 
 ### Organization Settings
+
 
 
