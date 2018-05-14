@@ -346,6 +346,19 @@ search to be performed under a given attribute like email you could do:
 
 ### Board Settings
 
+You can rename boards by accessing its settings form. For such just access the board
+then click on the wrench icon:
+
+![board-settings-0](/static/site_app/help/board-settings-0.png)
+
+Click on Settings then you get:
+
+![board-settings-1](/static/site_app/help/board-settings-1.png)
+
+From there you can rename or change its description.
+
+### Board Deletion
+
 ### Bitbucket Integration
 
 ### Organization User Removal
