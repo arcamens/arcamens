@@ -1,12 +1,11 @@
 ## Intro
 
-Arcamens implements so called Kanban Boards and Timelines, the latter can be used for multiple purposes. 
+Arcamens was designed to allow a high level of communication and collaboration by teams.
+It implements so called Kanban Boards and Timelines, the latter can be used for multiple purposes. 
 They can be used to delegate isolated tasks, share information, events, questions and even store information that is
 pertinent to a project.
 
-
-The aim of arcamens is being as flexible
-as possible. It allows better dealing with high payloads of information and better organization of 
+The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and better organization of 
 information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.
 
 The boards, lists and cards are structured in a tree-like manner it allows a succinct perspective
@@ -50,7 +49,7 @@ You would get:
 
 ![board-creation-1](/static/site_app/help/board-creation-1.png)
 
-One may find it necessary to have boards that are related to the same pproject, in such situations
+One may find it necessary to have boards that are related to the same project, in such situations
 it is possble to set your boards description with a slug to group them according to their project.
 
 Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
@@ -118,18 +117,45 @@ After filling the fields and creating your task, you would get the view of the c
 
 **Note:** Click on Up to get back to the card list.
 
-
 ### Events
 
-### Card Tags
+Whenever an user creates or updates content then an event is fired. The events
+are means of knowing what is going on with your teams.
+
+![events-9](/static/site_app/help/events-0.png)
+
+The kind of action that was performed can be commented out thus giving constructive criticism about your peers
+work.
+
+Events will carry links to the objects that are related to the user action. You can left click on the links
+and inspect the cards, lists, etc in the same browser tab or just middle click and open them in new browser
+tabs.
+
+When you finished checking an user action you can mark the event as seen then it will be no longer listed in the
+Events dialog but you can still access it through your logs.
 
 ### Card Workers
+
+After a card is created it can be assigned to someone for its execution by clicking on Workers:
+
+![card-workers-0](/static/site_app/help/card-workers-0.png)
+
+You would get:
+
+![card-workers-1](/static/site_app/help/card-workers-1.png)
 
 ### Board Permissions
 
 #### Admins
 
 #### Members
+
+### Tag Creation
+
+### Card Tags
+
+Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
+You can create as many tags as you find necessary for your organization.
 
 ### Organization Creation
 
@@ -197,5 +223,6 @@ After filling the fields and creating your task, you would get the view of the c
 
 ### Organization Settings
 
+### Logs
 
 
