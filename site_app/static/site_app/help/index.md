@@ -200,7 +200,24 @@ Fill the tag name and description and then click on Create.
 ### Card Tags
 
 Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
-You can create as many tags as you find necessary for your organization.
+For tagging a given card just access the card by clicking on its label link.
+
+![card-tags-0](/static/site_app/help/card-tags-0.png)
+
+Then you'll view the card attributes.
+
+![card-tags-1](/static/site_app/help/card-tags-1.png)
+
+Click on Tags button at the card toolbar:
+
+![card-tags-2](/static/site_app/help/card-tags-2.png)
+
+Then you'll be able to manage the card tags:
+
+![card-tags-3](/static/site_app/help/card-tags-3.png)
+
+If you add/remove a tag to a card then everyone who is related to the card will get notified. 
+The card board members and card workers.
 
 ### Card Task Search
 
