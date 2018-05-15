@@ -353,6 +353,24 @@ From there you can search users from your organization that match a given criter
 
 ### Post E-mail/Notifications
 
+When a post has workers who were assigned it may be interesting to call attention
+of these workers through e-mail. A link for the post would be sent through e-mail
+with a message.
+
+![post-email-notification-0](/static/site_app/help/post-email-notification-0.png)
+
+You can click on the worker name and then:
+
+![post-email-notification-1](/static/site_app/help/post-email-notification-1.png)
+
+After clicking on Request attention through e-mail you would be prompted with:
+
+![post-email-notification-2](/static/site_app/help/post-email-notification-2.png)
+
+Fill the form and send the e-mail notification.
+
+You can as well send notification to all post workers by clicking on Alert Workers.
+
 ### Post Task Search
 
 ### Post Search
