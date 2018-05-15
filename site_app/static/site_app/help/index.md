@@ -236,7 +236,6 @@ Timelines are great for sharing information, storing notes regarding a project a
 Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
 it allows one to setup a timeline to be used as a scrum board backlog.
 
-
 ### Timeline Creation
 
 For creating a timeline just click on Home at the navbar then on the wrench icon at the organization
@@ -267,6 +266,22 @@ best one for you. You don't need to pick a description for your boards/timelines
 **See:** Collection Filters
 
 After filling the fields you would get your timeline being listed altogether with your boards.
+
+### Posts
+
+Timeline posts can be used for multiple purposes, they can convey information about events,
+tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet
+can contain a title and markdown content. 
+
+Tasks that demand one to collect information regarding a given subject can be delegated by using posts. 
+The person attaches the missing information to the post as a snippet.
+
+![post-0](/static/site_app/help/post-0.png)
+
+Some tasks arent directly related to a specific project these tasks
+can be delegated to a team or user by using a post.
+
+![post-1](/static/site_app/help/post-1.png)
 
 ### Post Creation
 
@@ -366,5 +381,6 @@ From there you can rename or change its description.
 ### Organization Settings
 
 ### Logs
+
 
 
