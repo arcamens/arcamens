@@ -331,6 +331,42 @@ Then you would get:
 
 ### Organization Invites
 
+An organization can contain as many users as your account plan allows. Users are invited to an organization
+through e-mail. When the user is already an arcamens user then it is enough to click on the link that was sent
+then join the organization. In the case his e-mail isn't belonging to an arcamens account then he will have to fill
+a quick form in order to join the invite organization.
+
+In order to send an invite just click Home at the navbar then go to the organization menu and click on the
+wrench icon:
+
+![organization-invites-0](/static/site_app/help/organization-invites-0.png)
+
+Click on Members then you get;
+
+![organization-invites-1](/static/site_app/help/organization-invites-1.png)
+
+Which would list all your organization members.
+
+Click on the plus sign at the top:
+
+![organization-invites-2](/static/site_app/help/organization-invites-2.png)
+
+Then fill the field with the peer e-mail to whom you would like to join your organization.
+
+![organization-invites-3](/static/site_app/help/organization-invites-3.png)
+
+You can check all invites that were sent by clicking on:
+
+![organization-invites-4](/static/site_app/help/organization-invites-4.png)
+
+You would have listed all invites:
+
+![organization-invites-5](/static/site_app/help/organization-invites-5.png)
+
+You can cancel invites or just resend the invite link. Notice that your account invites
+can't override your account max users limit. The invites sum up with regular users and should
+be lesser or equal your account max users limit.
+
 ### Organization Admins
 
 ### Timeline Members
