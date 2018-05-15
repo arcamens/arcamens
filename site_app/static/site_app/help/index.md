@@ -317,6 +317,18 @@ The worker name will be listed on the post.
 
 ### Post Tags
 
+It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post
+is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users
+and post workers.
+
+Click on Tags entry at the post toolbar:
+
+![post-tags-0](/static/site_app/help/post-tags-0.png)
+
+Then you would get:
+
+![post-tags-1](/static/site_app/help/post-tags-1.png)
+
 ### Organization Invites
 
 ### Organization Admins
