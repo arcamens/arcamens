@@ -335,6 +335,21 @@ Then you would get:
 
 ### Timeline Members
 
+Users of a timeline get notification from all events that happen with the timeline. Whenever an user
+is binded/unbinded to a timeline everyone who is in the timeline gets notified.
+
+For binding/unbinding users to a timeline just access the timeline then:
+
+![timeline-members-0](/static/site_app/help/timeline-members-0.png)
+
+Then you would get:
+
+![timeline-members-1](/static/site_app/help/timeline-members-1.png)
+
+From there you can search users from your organization that match a given criterea.
+
+**See:** Advanced User Search
+
 
 ### Post E-mail/Notifications
 
