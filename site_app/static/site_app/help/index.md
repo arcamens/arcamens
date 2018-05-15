@@ -285,6 +285,20 @@ can be delegated to a team or user by using a post.
 
 ### Post Creation
 
+After a timeline is created just access it then click on +Post at the timeline toolbar:
+
+![post-creation-0](/static/site_app/help/post-creation-0.png)
+
+You would get:
+
+![post-creation-1](/static/site_app/help/post-creation-1.png)
+
+Posts can have a short title that holds a description of the post content and
+a markdown content.
+
+After pressing Create the post will be created and every timeline user will get notified
+of the post creation.
+
 ### Organization Invites
 
 ### Organization Admins
