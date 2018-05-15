@@ -299,17 +299,32 @@ a markdown content.
 After pressing Create the post will be created and every timeline user will get notified
 of the post creation.
 
+### Post Workers
+
+You can mention peers on a post, assign them to execute some task that's described over a timeline post.
+A post becomes a task when there is at least a worker that is assigned to it.
+
+Click on the Assign entry at the post toolbar in order to assign it to someone:
+
+![post-workers-0](/static/site_app/help/post-workers-0.png)
+
+Then you would get:
+
+![post-workers-1](/static/site_app/help/post-workers-1.png)
+
+Once you bind/unbind a worker to a post then the worker gets notified of it.
+The worker name will be listed on the post.
+
+### Post Tags
+
 ### Organization Invites
 
 ### Organization Admins
 
 ### Timeline Members
 
-### Post Workers
 
 ### Post E-mail/Notifications
-
-### Post Tags
 
 ### Post Task Search
 
