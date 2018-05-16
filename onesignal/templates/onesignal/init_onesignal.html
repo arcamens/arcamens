@@ -13,24 +13,10 @@
      console.log("The user's subscription state is now:",isSubscribed);
 
      OneSignal.push(function() {
-          OneSignal.sendTag("email", "{{device_email}}");
+          OneSignal.sendTag("device_id", "device-{{device_id}}");
      });
 
-     OneSignal.getUserId(function(onesignal_id) {
-          $.get({ 
-          url: "{% url 'onesignal:update-uuid' %}",
-          data: {
-          onesignal_id : onesignal_id,
-          device_id: {{device_id}},
-          }},
-          
-          function(data) {
-              console.log("Updated onesignal_id!");
-          });
-          
-          console.log("OneSignal User ID:", onesignal_id);
-      });
-   });
+    });
  });
 
 </script>

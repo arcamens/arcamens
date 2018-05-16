@@ -29,7 +29,7 @@ urlpatterns = [
      url(r'^post_app/', include('post_app.urls', namespace='post_app')), 
      url(r'^timeline_app/', include('timeline_app.urls', namespace='timeline_app')),
      url(r'^paybills/', include('paybills.urls', namespace='paybills')), 
-     url(r'^onesignal/', include('onesignal.urls', namespace='onesignal')), 
+     # url(r'^onesignal/', include('onesignal.urls', namespace='onesignal')), 
     url(r'^board_app/', include('board_app.urls', namespace='board_app')),
     url(r'^card_app/', include('card_app.urls', namespace='card_app')),
     url(r'^snippet_app/', include('snippet_app.urls', namespace='snippet_app')),
@@ -43,6 +43,7 @@ urlpatterns = [
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 

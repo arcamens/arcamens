@@ -1,44 +1,43 @@
 from django.db import models
 from django.http import HttpResponse
 from django.template.loader import get_template
-from requests.exceptions import HTTPError
-from onesignalclient.app_client import OneSignalAppClient
-from onesignalclient.notification import Notification
 from django.conf import settings
+import requests
 import random
+import json
 
 # Create your models here.
 class GroupSignal(models.Model):
     class Meta:
         abstract = True
 
-    def push(self, title, message, devices=[]):
-        client = OneSignalAppClient(app_id=settings.ONE_SIGNAL_APPID, 
-        app_api_key=settings.ONE_SIGNAL_API_KEY)
+    def push(self, heading, message, devices):
+        url = 'https://onesignal.com/api/v1/notifications'
 
-        notification = Notification(settings.ONE_SIGNAL_APPID, 
-        Notification.DEVICES_MODE)
+        targets = [{"field": "tag", "key": "device_id", 
+        "relation": "=", 'value':'device-%s' % ind } for ind in devices]
 
-        notification.include_player_ids = devices
+        payload = {
+        'app_id': settings.ONE_SIGNAL_APPID, 
+        "filters": targets,
+        'heading': heading,
+        "contents": {"en": message}}
+        
+        auth    = "Basic %s" % settings.ONE_SIGNAL_API_KEY
+        headers = {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": auth}
 
-        notification.contents = {'en': message }
-        notification.headings = {'en': title}
-
-        try:
-            client.create_notification(notification)
-        except HTTPError as excpt:
-            pass
+        req = requests.post(url, data=json.dumps(payload), headers=headers)
 
 class Device(models.Model):
-    onesignal_id = models.CharField(null=True, blank=True, max_length=256)
-
     class Meta:
         abstract = True
 
     def init_onesignal(self):
         context = {
         'ONE_SIGNAL_APPID': settings.ONE_SIGNAL_APPID, 
-        'device_id':  self.id, 'device_email': self.email}
+        'device_id':  self.id}
 
         tmp     = get_template('onesignal/init_onesignal.html')
         html    = tmp.render(context)
