@@ -12,6 +12,9 @@ from django.conf import settings
 from onesignal.models import Device
 from os.path import join
 import random
+from requests.exceptions import HTTPError
+from onesignalclient.app_client import OneSignalAppClient
+from onesignalclient.notification import Notification
 
 class UserMixin(Device):
     class Meta:
@@ -73,6 +76,21 @@ class EventMixin(models.Model):
         if hcache and self.html_template:
             self.create_html_cache()
 
+    def notificate(self):
+        client = OneSignalAppClient(app_id=settings.ONE_SIGNAL_APPID, 
+        app_api_key=settings.ONE_SIGNAL_API_KEY)
+
+        notification = Notification(settings.ONE_SIGNAL_APPID, 
+        Notification.DEVICES_MODE)
+
+        print(list(self.users.values_list('onesignal_id', flat=True)))
+        notification.include_player_ids = list(self.users.values_list('onesignal_id', flat=True))
+
+        try:
+            client.create_notification(notification)
+        except HTTPError as excpt:
+            pass
+        
     def create_html_cache(self):
         tmp       = get_template(self.html_template)
         self.html = tmp.render({'event': self})
@@ -88,6 +106,7 @@ class EventMixin(models.Model):
         # has provoked it.
         self.signers.add(self.user)
         self.users.remove(self.user)
+        self.notificate()
 
     def seen(self, user):
         """
@@ -387,6 +406,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

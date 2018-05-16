@@ -391,5 +391,22 @@ event.signers.all()
 # It should return just one User instance.
 event.users.all() | event.signers.all()
 
+event.users.values_list('onesignal_id')
+list(Event.objects.all().values_list('users__onesignal_id', flat=True))
+##############################################################################
+
+from requests.exceptions import HTTPError
+from onesignalclient.app_client import OneSignalAppClient
+from onesignalclient.notification import Notification
+from django.conf import settings
+
+client = OneSignalAppClient(app_id=settings.ONE_SIGNAL_APPID, 
+app_api_key=settings.ONE_SIGNAL_API_KEY)
+
+notification = Notification(settings.ONE_SIGNAL_APPID, 
+Notification.DEVICES_MODE)
+notification.include_player_ids = ['c54c38a0-a4c6-49d2-bf66-35481bf9fbdb']
+notification
+client.create_notification(notification)
 
 

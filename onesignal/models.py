@@ -19,13 +19,7 @@ class Notification:
     def fmt_message(self):
         pass
 
-# class SignalToken(models.Model):
-    # token = models.CharField(null=True, blank=True, max_length=256)
-
 class Device(models.Model):
-    # signal_token = models.OneToOneField('onesignal.SignalToken', 
-    # null=True, blank=True, related_name='device')
-
     onesignal_id = models.CharField(null=True, blank=True, max_length=256)
 
     class Meta:
