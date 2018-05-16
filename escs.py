@@ -405,8 +405,54 @@ app_api_key=settings.ONE_SIGNAL_API_KEY)
 
 notification = Notification(settings.ONE_SIGNAL_APPID, 
 Notification.DEVICES_MODE)
-notification.include_player_ids = ['c54c38a0-a4c6-49d2-bf66-35481bf9fbdb']
+notification.include_player_ids = ['d09804ed-e996-43b7-a7f4-578738c57cc1']
+notification
+dir(notification)
+notification.get_payload_for_request()
+client.create_notification(notification)
+
+
+notification = Notification(settings.ONE_SIGNAL_APPID, 
+Notification.DEVICES_MODE)
+notification.include_player_ids = ['ioliveira@id.uff.br']
 notification
 client.create_notification(notification)
+
+client.get_headers()
+##############################################################################
+# Example that describes how to send a notification through onesignal.
+
+import requests
+import json
+
+url = 'https://onesignal.com/api/v1/notifications'
+
+headers = {'Content-Type': 'application/json; charset=utf-8', 'Authorization': 'Basic YjQ5NDc3MWItYzNjNS00MmZhLWEyNTYtZTk5YjJkYjkwZTY4'}
+
+payload = {'app_id': 'e4387e31-b5c1-493a-8a28-f56bfed98c27', 'contents': {'en': 'Default message.'}, 'content_available': False, 'include_player_ids': ['d09804ed-e996-43b7-a7f4-578738c57cc1']}
+
+req = requests.post(url, data=json.dumps(payload), headers=headers)
+req
+req.text
+
+payload = {
+    'app_id': settings.ONE_SIGNAL_APPID, 
+    'contents': {'en': 'Default message.'}, 
+    'content_available': False, 
+    'include_player_ids': ['d09804ed-e996-43b7-a7f4-578738c57cc1']
+}
+
+payload
+
+auth = "Basic %s" % settings.ONE_SIGNAL_API_KEY
+
+headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": auth
+}
+
+req = requests.post(url, data=json.dumps(payload), headers=headers)
+req
+req.text
 
 

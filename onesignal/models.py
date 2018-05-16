@@ -38,10 +38,11 @@ class Device(models.Model):
     def init_onesignal(self):
         context = {
         'ONE_SIGNAL_APPID': settings.ONE_SIGNAL_APPID, 
-        'device_id':  self.id}
+        'device_id':  self.id, 'device_email': self.email}
 
         tmp     = get_template('onesignal/init_onesignal.html')
         html    = tmp.render(context)
         return html
+
 
 
