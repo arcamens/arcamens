@@ -90,7 +90,7 @@ class EventMixin(GroupSignal):
         self.users.remove(self.user)
 
         devices = self.users.filter(default=self.organization)
-        devices = devices.values_list('onesignal_id', flat=True)
+        devices = devices.values_list('email', flat=True)
         devices = list(devices)
 
         self.push('Arcamens Notification', 'An event occurred', devices)

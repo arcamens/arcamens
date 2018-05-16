@@ -11,7 +11,11 @@
   OneSignal.push(function() {
      OneSignal.on('subscriptionChange', function (isSubscribed) {
      console.log("The user's subscription state is now:",isSubscribed);
-     OneSignal.setEmail('{{device_email}}');
+
+     OneSignal.push(function() {
+          OneSignal.sendTag("email", "{{device_email}}");
+     });
+
      OneSignal.getUserId(function(onesignal_id) {
           $.get({ 
           url: "{% url 'onesignal:update-uuid' %}",
