@@ -31,15 +31,6 @@ class Device(models.Model):
     class Meta:
         abstract = True
 
-    @classmethod
-    def update_uuid(cls, request):
-        device = cls.objects.get(id=request.GET['device_id'])
-        device.onesignal_id = request.GET['onesignal_id']
-        device.save()
-
-        print('Uuid updated  successfully!')
-        return HttpResponse(statu=200)
-
     def init_onesignal(self):
         context = {
         'ONE_SIGNAL_APPID': settings.ONE_SIGNAL_APPID, 

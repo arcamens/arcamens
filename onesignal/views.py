@@ -1,13 +1,21 @@
 from django.views.generic import View
 from django.shortcuts import render
 from django.http import HttpResponse
-from onesignal.models import SignalToken
+from django.apps import apps
+from django.conf import settings
 
 # Create your views here.
 class UpdateUuid(View):
-    def get(self, request, token, uuid):
-        token = SignalToken.objects.get(token=token)
-        token.device.uuid = uuid
-        token.device.save()
+    def get(self, request):
+        Device = apps.get_model(settings.ONE_SIGNAL_DEVICE_APP, 
+        settings.ONE_SIGNAL_DEVICE_MODEL)
+
+        device = Device.objects.get(id=request.GET.get['device_id'])
+        device.onesignal_id = request.GET.get['onesignal_id']
+        device.save()
+
+        print('Uuid updated  successfully!')
+        return HttpResponse(statu=200)
 
         return HttpResponse(statu=200)
+

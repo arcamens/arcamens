@@ -16,7 +16,7 @@
           url: "{% url 'onesignal:update-uuid' %}",
           data: {
           onesignal_id : onesignal_id,
-          user_id: {{device_id}},
+          device_id: {{device_id}},
           }},
           
           function(data) {
