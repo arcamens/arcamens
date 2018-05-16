@@ -83,8 +83,8 @@ class EventMixin(models.Model):
         notification = Notification(settings.ONE_SIGNAL_APPID, 
         Notification.DEVICES_MODE)
 
-        print(list(self.users.values_list('onesignal_id', flat=True)))
-        notification.include_player_ids = list(self.users.values_list('onesignal_id', flat=True))
+        notification.include_player_ids = list(
+            self.users.values_list('onesignal_id', flat=True))
 
         try:
             client.create_notification(notification)

@@ -73,17 +73,17 @@ class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
         user = User.objects.get(id=self.user_id)
 
-        user.ws_unsubscribe(user.default)
+        # user.ws_unsubscribe(user.default)
 
         user.default = Organization.objects.get(
         id=organization_id)
 
-        user.ws_subscribe(user.default)
+        # user.ws_subscribe(user.default)
 
         user.save()
         # When user updates organization, it tells all the other
         # tabs to restart the UI.
-        user.ws_restart(user.default)
+        # user.ws_restart(user.default)
 
         return redirect('core_app:index')
 
@@ -988,6 +988,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
