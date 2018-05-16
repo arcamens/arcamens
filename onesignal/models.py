@@ -11,7 +11,7 @@ class GroupSignal(models.Model):
     class Meta:
         abstract = True
 
-    def push(self, heading, message, devices):
+    def push(self, data, devices):
         url = 'https://onesignal.com/api/v1/notifications'
 
         targets = [{"field": "tag", "key": "device_id", 
@@ -19,10 +19,10 @@ class GroupSignal(models.Model):
 
         payload = {
         'app_id': settings.ONE_SIGNAL_APPID, 
-        "filters": targets,
-        'heading': heading,
-        "contents": {"en": message}}
-        
+        "filters": targets}
+
+        payload.update(data)
+
         auth    = "Basic %s" % settings.ONE_SIGNAL_API_KEY
         headers = {
         "Content-Type": "application/json; charset=utf-8",
