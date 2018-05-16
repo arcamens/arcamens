@@ -29,7 +29,6 @@ data-show="{% url 'post_app:list-all-assignments' %}" data-callback="$('#bigModa
 data-show="{% url 'card_app:list-all-tasks' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-tasks">  </span> T/C</button>
 
-<div class="collapse navbar-collapse" id="myNavbar">
 
 <ul class="nav navbar-nav">
 <li class="hidden-xs"><a data-show="{% url 'core_app:list-nodes' %}" class="e-get" 
@@ -54,8 +53,11 @@ data-callback="$('#bigModal').modal('show');"> <span class="glyphicon glyphicon-
 
 </ul>
 
+<div class="collapse navbar-collapse" id="myNavbar">
+
 {% include "core_app/navbar-context-dropdown.html" %}
 </div>
+
 
 
 
