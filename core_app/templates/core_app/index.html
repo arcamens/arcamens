@@ -43,7 +43,7 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 
-{{user.ws_connection | safe}}
+{{user.init_onesignal | safe}}
 
 <script>
 $(document).on('ws-bell', function alertSound(e) {
@@ -94,6 +94,7 @@ $(document).on('ws-alert-event', function(e) {
 </body>
 
 </html>
+
 
 
 

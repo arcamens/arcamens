@@ -15,6 +15,7 @@ from paybills.misc import get_addr
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 ONE_SIGNAL_APPID = '4bf2882d-2754-4630-8dea-55749170e4a4'
+ONE_SIGNAL_API_KEY = 'MWU5NTYyNjUtZDIyNi00ZjJkLTg4NDYtZDE2MWNlYWUyY2Fl'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAYMENTS_REALM = 'arcamens123'

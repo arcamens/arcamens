@@ -155,6 +155,10 @@ django-admin startproject arcamens arcamens-code
 cd ~/projects/arcamens-code
 python manage.py startapp core_app
 ##############################################################################
+# create onesignal app.
+cd ~/projects/arcamens-code
+python manage.py startapp onesignal
+##############################################################################
 # create, help_app, app.
 cd ~/projects/arcamens-code
 python manage.py startapp help_app
@@ -764,7 +768,13 @@ alter table core_app_user add column max_users INT NULL DEFAULT 3;
 # bind user to all boards/timelines joinall command.
 
 python manage.py restore_ownership port arca ioli
+##############################################################################
+# Switch to one signal.
 
+cd ~/projects/arcamens-code
+git branch -a
+git checkout -b C476
+git push --set-upstream origin C476
 
-
+git push origin C476
 

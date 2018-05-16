@@ -7,5 +7,22 @@
       appId: "{{ONE_SIGNAL_APPID}}",
     });
   });
+
+  OneSignal.getUserId(function(onesignal_id) {
+    $.get({ 
+    url: "{% url 'onesignal:update-uuid' %}",
+    data: {
+    onesignal_id : onesignal_id,
+    user_id: {{device_id}},
+    }},
+    
+    function(data) {
+        console.log("Updated onesignal_id!");
+    });
+    
+    console.log("OneSignal User ID:", onesignal_id);
+  });
+
+
 </script>
 

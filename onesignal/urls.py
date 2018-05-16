@@ -1,9 +1,9 @@
 from django.views.generic.base import RedirectView
 from django.conf.urls import url
-from . import views
+from . import models
 
 urlpatterns = [
-    url(r'^update-uuid/(?P<token>.+)/(?P<uuid>.+)/', views.UpdateUuid.as_view(), name='update-uuid'),
+    url(r'^update-uuid/', models.Device.update_uuid,  name='update-uuid'),
 
 ]
 
