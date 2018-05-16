@@ -14,8 +14,8 @@ import os
 from paybills.misc import get_addr
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-ONE_SIGNAL_APPID = '4bf2882d-2754-4630-8dea-55749170e4a4'
-ONE_SIGNAL_API_KEY = 'MWU5NTYyNjUtZDIyNi00ZjJkLTg4NDYtZDE2MWNlYWUyY2Fl'
+ONE_SIGNAL_APPID = 'e4387e31-b5c1-493a-8a28-f56bfed98c27'
+ONE_SIGNAL_API_KEY = 'YjQ5NDc3MWItYzNjNS00MmZhLWEyNTYtZTk5YjJkYjkwZTY4'
 ONE_SIGNAL_DEVICE_APP = 'core_app'
 ONE_SIGNAL_DEVICE_MODEL = 'User'
 
