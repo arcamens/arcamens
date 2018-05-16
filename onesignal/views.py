@@ -15,7 +15,5 @@ class UpdateUuid(View):
         device.save()
 
         print('Uuid updated  successfully!')
-        return HttpResponse(statu=200)
-
-        return HttpResponse(statu=200)
+        return HttpResponse(status=200)
 
