@@ -9,12 +9,9 @@ from sqlike.parser import SqLike, SqNode
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
-from onesignal.models import Device
+from onesignal.models import Device, GroupSignal
 from os.path import join
 import random
-from requests.exceptions import HTTPError
-from onesignalclient.app_client import OneSignalAppClient
-from onesignalclient.notification import Notification
 
 class UserMixin(Device):
     class Meta:
@@ -66,7 +63,7 @@ class UserMixin(Device):
     def __str__(self):
         return '%s %s' % (self.name, self.email)
 
-class EventMixin(models.Model):
+class EventMixin(GroupSignal):
     class Meta:
         abstract = True
 
@@ -76,23 +73,6 @@ class EventMixin(models.Model):
         if hcache and self.html_template:
             self.create_html_cache()
 
-    def notificate(self):
-        client = OneSignalAppClient(app_id=settings.ONE_SIGNAL_APPID, 
-        app_api_key=settings.ONE_SIGNAL_API_KEY)
-
-        notification = Notification(settings.ONE_SIGNAL_APPID, 
-        Notification.DEVICES_MODE)
-
-        notification.include_player_ids = list(
-            self.users.values_list('onesignal_id', flat=True))
-
-        notification.contents = {'en': 'A new event occurred!' }
-        notification.headings = {'en': 'Arcamens Notification'}
-        try:
-            client.create_notification(notification)
-        except HTTPError as excpt:
-            pass
-        
     def create_html_cache(self):
         tmp       = get_template(self.html_template)
         self.html = tmp.render({'event': self})
@@ -108,7 +88,12 @@ class EventMixin(models.Model):
         # has provoked it.
         self.signers.add(self.user)
         self.users.remove(self.user)
-        self.notificate()
+
+        devices = self.users.filter(default=self.organization)
+        devices = devices.values_list('onesignal_id', flat=True)
+        devices = list(devices)
+
+        self.push('Arcamens Notification', 'An event occurred', devices)
 
     def seen(self, user):
         """
@@ -408,6 +393,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
