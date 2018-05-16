@@ -13,8 +13,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 from paybills.misc import get_addr
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ONE_SIGNAL_APPID = '4bf2882d-2754-4630-8dea-55749170e4a4'
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAYMENTS_REALM = 'arcamens123'
 PAYPAL_ID = 'CDA2QQH9TQ44C' #PayPal account ID` to `arcamens/settings.py`
 
@@ -105,7 +107,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'blowdb',
     'slock',
-    'wsbells',
+    'onesignal',
     'captcha',
     'bitbucket_app',
 ]
@@ -203,6 +205,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

@@ -79,7 +79,7 @@ class CreateList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.dispatch(*list.ancestor.members.all())
 
-        user.ws_sound(list.ancestor)
+        # user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', board_id=board_id)
 
@@ -94,7 +94,7 @@ class DeleteList(GuardianView):
         list = List.objects.get(id=list_id)
         user = User.objects.get(id=self.user_id)
 
-        user.ws_sound(list.ancestor)
+        # user.ws_sound(list.ancestor)
 
         event = EDeleteList.objects.create(organization=user.default,
         ancestor=list.ancestor, child_name=list.name, user=user)
@@ -134,7 +134,7 @@ class UpdateList(GuardianView):
         ancestor=record.ancestor, child=record, user=user)
         event.dispatch(*record.ancestor.members.all())
 
-        user.ws_sound(record.ancestor)
+        # user.ws_sound(record.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=record.id)
@@ -167,7 +167,7 @@ class PasteCards(GuardianView):
 
         clipboard.cards.clear()
 
-        user.ws_sound(list.ancestor)
+        # user.ws_sound(list.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -178,7 +178,7 @@ class CutList(GuardianView):
         user  = User.objects.get(id=self.user_id)
         board = list.ancestor
 
-        user.ws_sound(list.ancestor)
+        # user.ws_sound(list.ancestor)
 
         list.ancestor = None
         list.save()
@@ -208,7 +208,7 @@ class CopyList(GuardianView):
         ancestor=list.ancestor, child=list, user=user)
         event.dispatch(*list.ancestor.members.all())
 
-        user.ws_sound(list.ancestor)
+        # user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
@@ -275,7 +275,7 @@ class UndoClipboard(GuardianView):
 
         clipboard.lists.remove(event.child)
 
-        user.ws_sound(event.ancestor)
+        # user.ws_sound(event.ancestor)
 
 class ListLink(GuardianView):
     """
@@ -303,4 +303,5 @@ class Unpin(GuardianView):
         pin = ListPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 

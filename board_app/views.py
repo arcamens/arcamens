@@ -51,7 +51,7 @@ class CreateBoard(GuardianView):
         event.save()
 
         # user.ws_sound()
-        user.ws_subscribe(board, target=user)
+        # user.ws_subscribe(board, target=user)
 
         return redirect('core_app:list-nodes')
 
@@ -212,7 +212,7 @@ class PasteLists(GuardianView):
 
         clipboard.lists.clear()
 
-        user.ws_sound(board)
+        # user.ws_sound(board)
 
         return redirect('list_app:list-lists', 
         board_id=board.id)
@@ -238,7 +238,7 @@ class UpdateBoard(GuardianView):
         board=record, user=me)
         event.dispatch(*record.members.all())
 
-        me.ws_sound(record)
+        # me.ws_sound(record)
 
         return redirect('list_app:list-lists', 
         board_id=record.id)
@@ -269,8 +269,8 @@ class DeleteBoard(GuardianView):
         event.dispatch(*board.members.all())
 
         # Need to unsubscribe or it may misbehave.
-        user.ws_sound(board)
-        user.ws_unsubscribe(board, target=board)
+        # user.ws_sound(board)
+        # user.ws_unsubscribe(board, target=board)
 
         board.delete()
 
@@ -311,13 +311,13 @@ class BindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.dispatch(*board.members.all())
 
-        me.ws_sound(board)
-        me.ws_subscribe(board, target=user)
+        # me.ws_sound(board)
+        # me.ws_subscribe(board, target=user)
 
         # Warrant the user will receive the sound event
         # because we cant control the order in which
         # data flows to the different queues.
-        me.ws_sound(target=user)
+        # me.ws_sound(target=user)
 
         return HttpResponse(status=200)
 
@@ -352,9 +352,9 @@ class UnbindBoardUser(GuardianView):
         board=board, user=me, peer=user)
         event.dispatch(*board.members.all())
 
-        me.ws_sound(board)
-        me.ws_unsubscribe(board, target=user)
-        me.ws_sound(user)
+        # me.ws_sound(board)
+        # me.ws_unsubscribe(board, target=user)
+        # me.ws_sound(user)
 
         return HttpResponse(status=200)
 
@@ -441,6 +441,7 @@ class BoardLink(GuardianView):
         'default': user.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 

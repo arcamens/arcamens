@@ -40,8 +40,8 @@ class CreateComment(GuardianView):
         target.dispatch(*scope)
         target.save()
 
-        for ind in target.users.all():
-            user.ws_sound(ind)
+        # for ind in target.users.all():
+            # user.ws_sound(ind)
 
         return redirect('comment_app:list-comments', 
         event_id=event.id)
@@ -54,6 +54,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 

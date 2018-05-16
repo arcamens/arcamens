@@ -159,7 +159,7 @@ class UpdateOrganization(GuardianView):
         organization=user.default, user=user)
         event.dispatch(*record.users.all())
 
-        user.ws_sound(record)
+        # user.ws_sound(record)
 
         return redirect('core_app:index')
 
@@ -355,7 +355,7 @@ class DeleteTag(GuardianView):
         users = user.default.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(user.default)
+        # user.ws_sound(user.default)
 
         return HttpResponse(status=200)
 
@@ -384,7 +384,7 @@ class CreateTag(GuardianView):
         users = user.default.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(user.default)
+        # user.ws_sound(user.default)
 
         return redirect('core_app:list-tags')
 
@@ -402,7 +402,7 @@ class UnbindUserTag(GuardianView):
         users = me.default.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(me.default)
+        # user.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
@@ -419,7 +419,7 @@ class BindUserTag(GuardianView):
         users = me.default.users.all()
         event.dispatch(*users)
 
-        me.ws_sound(me.default)
+        # me.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
@@ -471,7 +471,7 @@ class InviteOrganizationUser(GuardianView):
         organization=me.default, user=me, peer=user)
         event.dispatch(*me.default.users.all())
 
-        me.ws_sound(me.default)
+        # me.ws_sound(me.default)
 
         return redirect('core_app:list-users', 
         organization_id=me.default.id)
@@ -527,7 +527,7 @@ class JoinOrganization(View):
         peer=invite.user, user=invite.user)
         event.dispatch(*organization.users.all())
 
-        invite.user.ws_sound(organization)
+        # invite.user.ws_sound(organization)
 
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
@@ -696,7 +696,7 @@ class Shout(GuardianView):
         users = me.default.users.all()
         event.dispatch(*users)
 
-        me.ws_sound(me.default)
+        # me.ws_sound(me.default)
         return redirect('core_app:list-events')
 
 class UpdatePassword(GuardianView):
@@ -988,6 +988,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

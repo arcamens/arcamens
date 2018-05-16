@@ -7,33 +7,15 @@ from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from sqlike.parser import SqLike, SqNode
 from django.db.models import Q
-from wsbells.models import UserWS, QueueWS
 from django.core.mail import send_mail
 from django.conf import settings
+from onesignal.models import Device
 from os.path import join
 import random
 
-class UserMixin(UserWS):
-    def ws_alert(self, target=None):
-        target = target if target else self
-        self.ws_cmd(target, 'ws-alert-event')
-
-    def ws_sound(self, target=None):
-        target = target if target else self
-        self.ws_cmd(target, 'ws-sound')
-
-    def connected_queues(self):
-        """
-        Return all timelines the user should have 
-        ws client to be subscribed to.
-        """
-        timelines = self.timelines.filter(organization=self.default)
-        qnames    = self.ws_queues(timelines)
-        qnames.append(self.default.qname())
-
-        boards = self.boards.filter(organization=self.default)
-        qnames.extend(self.ws_queues(boards))
-        return qnames
+class UserMixin(Device):
+    class Meta:
+        abstract = True
 
     def get_user_url(self):
         return reverse('core_app:user', 
@@ -81,7 +63,10 @@ class UserMixin(UserWS):
     def __str__(self):
         return '%s %s' % (self.name, self.email)
 
-class EventMixin:
+class EventMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def save(self, *args, hcache=True, **kwargs):
         super().save(*args, **kwargs)
 
@@ -112,11 +97,17 @@ class EventMixin:
         self.signers.add(user)
         self.save(hcache=False)
 
-class OrganizationMixin(QueueWS):
+class OrganizationMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.name
 
-class InviteMixin:
+class InviteMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def save(self, *args, **kwargs):
         self.token  = 'invite%s' % random.randint(1000, 10000)
 
@@ -138,7 +129,10 @@ class InviteMixin:
         return '%s %s %s' % (self.user.name, 
             self.token, self.organization.name)
 
-class TagMixin:
+class TagMixin(models.Model):
+    class Meta:
+        abstract = True
+
     @classmethod
     def from_sqlike(cls):
         default  = lambda ind: Q(name__icontains=ind) | Q(
@@ -153,7 +147,7 @@ class Node(models.Model):
 
     indexer = models.AutoField(primary_key=True)
 
-class Organization(OrganizationMixin, models.Model):
+class Organization(OrganizationMixin):
     name     = models.CharField(null=True,
     blank=False, verbose_name=_("Name"),  max_length=256)
     expiration = models.DateTimeField(blank=True, null=True)
@@ -198,7 +192,7 @@ class Period(BasicItem):
             price=self.price, expiration=self.expiration, 
                 max_users=self.max_users)
 
-class Invite(InviteMixin, models.Model):
+class Invite(InviteMixin):
     # email = models.EmailField(max_length=70, 
     # null=True, blank=False)
     user = models.ForeignKey('core_app.User', null=True, 
@@ -252,10 +246,7 @@ class User(UserMixin, BasicUser):
     paid       = models.BooleanField(blank=True, default=False)
     expiration = models.DateField(null=True)
 
-    def __str__(self):
-        return self.name
-
-class Event(EventMixin, models.Model):
+class Event(EventMixin):
     users = models.ManyToManyField('core_app.User', null=True,  
     related_name='events', blank=True, symmetrical=False)
 
@@ -276,7 +267,7 @@ class Event(EventMixin, models.Model):
     def __str__(self):
         return 'Event'
 
-class Tag(TagMixin, models.Model):
+class Tag(TagMixin):
     name = models.CharField(null=True,
     blank=False, max_length=256)
 
@@ -396,5 +387,6 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 

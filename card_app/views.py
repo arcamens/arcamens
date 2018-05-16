@@ -198,7 +198,7 @@ class CreateCard(GuardianView):
         ancestor=card.ancestor, card=card, user=user)
         event.dispatch(*ancestor.ancestor.members.all())
 
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -331,7 +331,7 @@ class CreateFork(GuardianView):
         ancestor=card.ancestor, card0=card, card1=fork, user=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
 
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -401,8 +401,8 @@ class CreatePostFork(GuardianView):
         event.dispatch(*fork.ancestor.users.all())
         event.dispatch(*card.ancestor.ancestor.members.all())
 
-        user.ws_sound(card.ancestor.ancestor)
-        user.ws_sound(fork.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(fork.ancestor)
 
         return redirect('timeline_app:list-posts', timeline_id=ancestor_id)
 
@@ -431,7 +431,7 @@ class DeleteCard(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
         card.delete()
 
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -452,7 +452,7 @@ class CutCard(GuardianView):
         list = card.ancestor
 
         # Missing event.
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         card.ancestor = None
         card.save()
@@ -492,7 +492,7 @@ class CopyCard(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         # Missing event.
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -610,7 +610,7 @@ class UpdateCard(GuardianView):
         event.dispatch(*record.ancestor.ancestor.members.all())
         event.save()
 
-        user.ws_sound(record.ancestor.ancestor)
+        # user.ws_sound(record.ancestor.ancestor)
 
         return redirect('card_app:view-data', 
         card_id=record.id)
@@ -681,8 +681,8 @@ class UnrelateCard(GuardianView):
         event.dispatch(*card0.ancestor.ancestor.members.all())
         event.dispatch(*card1.ancestor.ancestor.members.all())
 
-        user.ws_sound(card0.ancestor.ancestor)
-        user.ws_sound(card1.ancestor.ancestor)
+        # user.ws_sound(card0.ancestor.ancestor)
+        # user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -711,8 +711,8 @@ class RelateCard(GuardianView):
         event.dispatch(*card0.ancestor.ancestor.members.all())
         event.dispatch(*card1.ancestor.ancestor.members.all())
 
-        user.ws_sound(card0.ancestor.ancestor)
-        user.ws_sound(card1.ancestor.ancestor)
+        # user.ws_sound(card0.ancestor.ancestor)
+        # user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -820,7 +820,7 @@ class UnbindCardWorker(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
-        me.ws_sound(card.ancestor.ancestor)
+        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -847,7 +847,7 @@ class BindCardWorker(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
-        me.ws_sound(card.ancestor.ancestor)
+        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -920,7 +920,7 @@ class UnbindCardTag(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
-        me.ws_sound(card.ancestor.ancestor)
+        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -955,7 +955,7 @@ class BindCardTag(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
-        me.ws_sound(card.ancestor.ancestor)
+        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -984,7 +984,7 @@ class Done(GuardianView):
         event.dispatch(*users)
 
         # Missing event.
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -1012,7 +1012,7 @@ class Undo(GuardianView):
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)
 
-        user.ws_sound(card.ancestor.ancestor)
+        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -1270,6 +1270,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
