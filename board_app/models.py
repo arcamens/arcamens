@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from core_app.models import  User, Organization, Event, Node
 from django.core.urlresolvers import reverse
-from wsbells.models import QueueWS
+from onesignal.models import GroupSignal
 from django.db.models import Q
 from django.db import models
 
@@ -11,7 +11,10 @@ class BoardPinMixin(object):
         return reverse('list_app:list-lists', 
             kwargs={'board_id': self.board.id})
 
-class BoardMixin(QueueWS):
+class BoardMixin(GroupSignal):
+    class Meta:
+        abstract = True
+
     @classmethod
     def get_user_boards(cls, user):
         boards = user.boards.filter(organization=user.default)
@@ -52,7 +55,7 @@ class EUpdateBoardMixin(object):
 class ECreateBoardMixin(object):
     pass
 
-class Board(BoardMixin, models.Model):
+class Board(BoardMixin):
     """    
     """
     organization = models.ForeignKey('core_app.Organization', 
@@ -133,5 +136,6 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 

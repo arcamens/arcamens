@@ -1,22 +1,14 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from wsbells.models import QueueWS
 from core_app.models import  User, Event, Node
 from django.db import models
 from django.db.models import Q
+from onesignal.models import GroupSignal
 import datetime
 
-class TimelineMixin(QueueWS):
-    """
-    Mixins.
-    """
-    def ws_alert(self):
-        ws.client.publish('timeline%s' % self.id, 
-            'alert-event', 0, False)
-
-    def ws_sound(self):
-        ws.client.publish('timeline%s' % self.id, 
-            'sound', 0, False)
+class TimelineMixin(GroupSignal):
+    class Meta:
+        abstract = True
 
     @classmethod
     def get_user_timelines(cls, user):
@@ -72,7 +64,7 @@ class TimelinePin(TimelinePinMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', 'timeline')
 
-class Timeline(TimelineMixin, models.Model):
+class Timeline(TimelineMixin):
     users = models.ManyToManyField('core_app.User', null=True,  
     related_name='timelines', blank=True, symmetrical=False)
     organization = models.ForeignKey('core_app.Organization', 
@@ -132,6 +124,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 

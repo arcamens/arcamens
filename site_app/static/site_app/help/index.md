@@ -173,6 +173,8 @@ You can search users by using tag, email or name attributes.
 
 **See:** Advanced User Search
 
+After binding/unbinding a given user to a board he/she will get notified of it.
+
 ### Tag Creation
 
 You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed
@@ -205,7 +207,27 @@ Fill the tag name and description and then click on Create.
 ### Card Tags
 
 Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
-You can create as many tags as you find necessary for your organization.
+For tagging a given card just access the card by clicking on its label link.
+
+![card-tags-0](/static/site_app/help/card-tags-0.png)
+
+Then you'll view the card attributes.
+
+![card-tags-1](/static/site_app/help/card-tags-1.png)
+
+Click on Tags button at the card toolbar:
+
+![card-tags-2](/static/site_app/help/card-tags-2.png)
+
+Then you'll be able to manage the card tags:
+
+![card-tags-3](/static/site_app/help/card-tags-3.png)
+
+If you add/remove a tag to a card then everyone who is related to the card will get notified. 
+The card board members and card workers.
+
+You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
+It is useful when your organization has many tags.
 
 ### Card Task Search
 
@@ -215,21 +237,180 @@ You can create as many tags as you find necessary for your organization.
 
 ### Timelines
 
+Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks.
+Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
+it allows one to setup a timeline to be used as a scrum board backlog.
+
 ### Timeline Creation
+
+For creating a timeline just click on Home at the navbar then on the wrench icon at the organization
+toolbar:
+
+![timeline-creation-0](/static/site_app/help/timeline-creation-0.png)
+
+You would get:
+
+![timeline-creation-1](/static/site_app/help/timeline-creation-1.png)
+
+Notice that you can associate timelines to a given project by setting up a common slug.
+You could fill the above fields with:
+
+**Name:** Notes
+
+**Description:** Arcamens/
+
+Or you could do:
+
+**Name:** Arcamens/Notes
+
+**Description:** Notes on arcamens project.
+
+There are many ways of grouping boards and timelines, feel free to pick up the
+best one for you. You don't need to pick a description for your boards/timelines at all.
+
+**See:** Collection Filters
+
+After filling the fields you would get your timeline being listed altogether with your boards.
+
+### Posts
+
+Timeline posts can be used for multiple purposes, they can convey information about events,
+tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet
+can contain a title and markdown content. 
+
+Tasks that demand one to collect information regarding a given subject can be delegated by using posts. 
+The person attaches the missing information to the post as a snippet.
+
+![post-0](/static/site_app/help/post-0.png)
+
+Some tasks arent directly related to a specific project these tasks
+can be delegated to a team or user by using a post.
+
+![post-1](/static/site_app/help/post-1.png)
 
 ### Post Creation
 
+After a timeline is created just access it then click on +Post at the timeline toolbar:
+
+![post-creation-0](/static/site_app/help/post-creation-0.png)
+
+You would get:
+
+![post-creation-1](/static/site_app/help/post-creation-1.png)
+
+Posts can have a short title that holds a description of the post content and
+a markdown content.
+
+After pressing Create the post will be created and every timeline user will get notified
+of the post creation.
+
+### Post Workers
+
+You can mention peers on a post, assign them to execute some task that's described over a timeline post.
+A post becomes a task when there is at least a worker that is assigned to it.
+
+Click on the Assign entry at the post toolbar in order to assign it to someone:
+
+![post-workers-0](/static/site_app/help/post-workers-0.png)
+
+Then you would get:
+
+![post-workers-1](/static/site_app/help/post-workers-1.png)
+
+Once you bind/unbind a worker to a post then the worker gets notified of it.
+The worker name will be listed on the post.
+
+### Post Tags
+
+It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post
+is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users
+and post workers.
+
+Click on Tags entry at the post toolbar:
+
+![post-tags-0](/static/site_app/help/post-tags-0.png)
+
+Then you would get:
+
+![post-tags-1](/static/site_app/help/post-tags-1.png)
+
 ### Organization Invites
+
+An organization can contain as many users as your account plan allows. Users are invited to an organization
+through e-mail. When the user is already an arcamens user then it is enough to click on the link that was sent
+then join the organization. In the case his e-mail isn't belonging to an arcamens account then he will have to fill
+a quick form in order to join the invite organization.
+
+In order to send an invite just click Home at the navbar then go to the organization menu and click on the
+wrench icon:
+
+![organization-invites-0](/static/site_app/help/organization-invites-0.png)
+
+Click on Members then you get;
+
+![organization-invites-1](/static/site_app/help/organization-invites-1.png)
+
+Which would list all your organization members.
+
+Click on the plus sign at the top:
+
+![organization-invites-2](/static/site_app/help/organization-invites-2.png)
+
+Then fill the field with the peer e-mail to whom you would like to join your organization.
+
+![organization-invites-3](/static/site_app/help/organization-invites-3.png)
+
+You can check all invites that were sent by clicking on:
+
+![organization-invites-4](/static/site_app/help/organization-invites-4.png)
+
+You would have listed all invites:
+
+![organization-invites-5](/static/site_app/help/organization-invites-5.png)
+
+You can cancel invites or just resend the invite link. Notice that your account invites
+can't override your account max users limit. The invites sum up with regular users and should
+be lesser or equal your account max users limit.
 
 ### Organization Admins
 
 ### Timeline Members
 
-### Post Workers
+Users of a timeline get notification from all events that happen with the timeline. Whenever an user
+is binded/unbinded to a timeline everyone who is in the timeline gets notified.
+
+For binding/unbinding users to a timeline just access the timeline then:
+
+![timeline-members-0](/static/site_app/help/timeline-members-0.png)
+
+Then you would get:
+
+![timeline-members-1](/static/site_app/help/timeline-members-1.png)
+
+From there you can search users from your organization that match a given criterea.
+
+**See:** Advanced User Search
+
 
 ### Post E-mail/Notifications
 
-### Post Tags
+When a post has workers who were assigned it may be interesting to call attention
+of these workers through e-mail. A link for the post would be sent through e-mail
+with a message.
+
+![post-email-notification-0](/static/site_app/help/post-email-notification-0.png)
+
+You can click on the worker name and then:
+
+![post-email-notification-1](/static/site_app/help/post-email-notification-1.png)
+
+After clicking on Request attention through e-mail you would be prompted with:
+
+![post-email-notification-2](/static/site_app/help/post-email-notification-2.png)
+
+Fill the form and send the e-mail notification.
+
+You can as well send notification to all post workers by clicking on Alert Workers.
 
 ### Post Task Search
 
@@ -239,17 +420,9 @@ You can create as many tags as you find necessary for your organization.
 
 ### Post Filter
 
-### List Filter
-
-### Board Filter
-
-### Timeline Filter
-
-### Board Members
+### Collection Filter
 
 ### Card's Text Colors
-
-### Card Task Creation
 
 ### Card E-mail/Notifications
 
@@ -303,6 +476,19 @@ search to be performed under a given attribute like email you could do:
 
 ### Board Settings
 
+You can rename boards by accessing its settings form. For such just access the board
+then click on the wrench icon:
+
+![board-settings-0](/static/site_app/help/board-settings-0.png)
+
+Click on Settings then you get:
+
+![board-settings-1](/static/site_app/help/board-settings-1.png)
+
+From there you can rename or change its description.
+
+### Board Deletion
+
 ### Bitbucket Integration
 
 ### Organization User Removal
@@ -310,5 +496,6 @@ search to be performed under a given attribute like email you could do:
 ### Organization Settings
 
 ### Logs
+
 
 

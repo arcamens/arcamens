@@ -105,7 +105,7 @@ class CreatePost(GuardianView):
         users = ancestor.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor_id)
@@ -140,7 +140,7 @@ class UpdatePost(GuardianView):
         # is on a timeline whose worker is not on.
         event.dispatch(*record.workers.all())
 
-        user.ws_sound(record.ancestor)
+        # user.ws_sound(record.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=record.id)
@@ -211,7 +211,7 @@ class DeletePost(GuardianView):
         ancestor = post.ancestor
         post.delete()
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
@@ -272,7 +272,7 @@ class UnassignPostUser(GuardianView):
         user = User.objects.get(id=user_id)
         me   = User.objects.get(id=self.user_id)
 
-        me.ws_sound(post.ancestor)
+        # me.ws_sound(post.ancestor)
 
         event = EUnassignPost.objects.create(
         organization=me.default, ancestor=post.ancestor, 
@@ -312,7 +312,7 @@ class AssignPostUser(GuardianView):
         event.dispatch(*post.workers.all())
         event.save()
 
-        me.ws_sound(post.ancestor)
+        # me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -439,7 +439,7 @@ class CutPost(GuardianView):
         user     = User.objects.get(id=self.user_id)
         timeline = post.ancestor
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         post.ancestor = None
         post.save()
@@ -476,7 +476,7 @@ class CopyPost(GuardianView):
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -501,7 +501,7 @@ class Done(GuardianView):
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
@@ -564,7 +564,7 @@ class UnbindPostTag(GuardianView):
         event.dispatch(*post.ancestor.users.all())
         event.save()
 
-        me.ws_sound(post.ancestor)
+        # me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -588,7 +588,7 @@ class BindPostTag(GuardianView):
         event.dispatch(*post.ancestor.users.all())
         event.save()
 
-        me.ws_sound(post.ancestor)
+        # me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -618,7 +618,7 @@ class Undo(GuardianView):
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
@@ -797,8 +797,8 @@ class CreateCardFork(GuardianView):
 
         # In this case, it would play sound twice if you're
         # in both timeline and board.
-        user.ws_sound(fork.ancestor.ancestor)
-        user.ws_sound(post.ancestor)
+        # user.ws_sound(fork.ancestor.ancestor)
+        # user.ws_sound(post.ancestor)
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -944,6 +944,7 @@ class RefreshPost(GuardianView):
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
+
 
 
 
