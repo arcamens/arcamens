@@ -86,6 +86,8 @@ class EventMixin(models.Model):
         notification.include_player_ids = list(
             self.users.values_list('onesignal_id', flat=True))
 
+        notification.contents = {'en': 'A new event occurred!' }
+        notification.headings = {'en': 'Arcamens Notification'}
         try:
             client.create_notification(notification)
         except HTTPError as excpt:
