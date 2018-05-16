@@ -8,21 +8,25 @@
     });
   });
 
-  OneSignal.getUserId(function(onesignal_id) {
-    $.get({ 
-    url: "{% url 'onesignal:update-uuid' %}",
-    data: {
-    onesignal_id : onesignal_id,
-    user_id: {{device_id}},
-    }},
-    
-    function(data) {
-        console.log("Updated onesignal_id!");
-    });
-    
-    console.log("OneSignal User ID:", onesignal_id);
-  });
-
+  OneSignal.push(function() {
+     OneSignal.on('subscriptionChange', function (isSubscribed) {
+     console.log("The user's subscription state is now:",isSubscribed);
+     OneSignal.getUserId(function(onesignal_id) {
+          $.get({ 
+          url: "{% url 'onesignal:update-uuid' %}",
+          data: {
+          onesignal_id : onesignal_id,
+          user_id: {{device_id}},
+          }},
+          
+          function(data) {
+              console.log("Updated onesignal_id!");
+          });
+          
+          console.log("OneSignal User ID:", onesignal_id);
+      });
+   });
+ });
 
 </script>
 
