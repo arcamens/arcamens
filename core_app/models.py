@@ -92,8 +92,7 @@ class EventMixin(GroupSignal):
         devices = self.users.filter(default=self.organization)
         devices = devices.values_list('id', flat=True)
 
-        msg = ('Activity from {user}!'
-        '\nCheck last events.').format(user=self.user.name)
+        msg = ('Activity from {user}!').format(user=self.user.name)
 
         data = {'heading': {'en': 'Arcamens'},
         "contents": {"en": msg}}
@@ -398,6 +397,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
