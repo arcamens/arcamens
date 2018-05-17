@@ -476,6 +476,22 @@ headers = {
 req = requests.post(url, data=json.dumps(payload), headers=headers)
 req
 req.text
+##############################################################################
+from itertools import *
+import itertools
+
+lst0 = ['a', 'b', 'c', 'd', 'e']
+itertools.izip(['|'], lst0)
+dir(itertools)
+lst0.extend((1, 2))
+lst0
+##############################################################################
+lst = [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13]
+rst = []
+
+rst = [lst[ind * 3:(ind + 1) * 3] 
+for ind in range(0, len(lst)//3 + 1)]
+rst
 
 
 

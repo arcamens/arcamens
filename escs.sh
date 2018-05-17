@@ -8,7 +8,7 @@ git status
 git add *
 git commit -a
 git push -u origin staging
-##############################################################################
+#############################################################################
 # push arcamens alpha branch.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
@@ -769,15 +769,6 @@ alter table core_app_user add column max_users INT NULL DEFAULT 3;
 
 python manage.py restore_ownership port arca ioli
 ##############################################################################
-# Switch to one signal.
-
-cd ~/projects/arcamens-code
-git branch -a
-git checkout -b C476
-git push --set-upstream origin C476
-
-git push origin C476
-##############################################################################
 # access victor vps and find mysql passsword for opus.
 tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
@@ -804,5 +795,7 @@ mysql -u username -p database_name < file.sql
 python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arcamens-db.json
 
 python manage.py loaddata arcamens-db.json
+##############################################################################
+
 
 
