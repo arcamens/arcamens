@@ -714,7 +714,7 @@ pip install py-gfm
 
 mysql -u staging -p staging
 
-password ueLa6eer
+password eicae8EiOhbiuJ8J
 ##############################################################################
 # Fixing issue with migrations after renaming model bitbucket_app.
 
@@ -723,7 +723,7 @@ rm -fr app/migrations
 # drop tables to solve the problem with unkonwn field in migrations.
 ssh arcamens@staging.arcamens.com
 mysql -i -u staging -p staging
-ueLa6eer
+eicae8EiOhbiuJ8J
 
 DROP TABLE bitbucket_app_bitbuckethooker;    
 
@@ -777,4 +777,32 @@ git checkout -b C476
 git push --set-upstream origin C476
 
 git push origin C476
+##############################################################################
+# access victor vps and find mysql passsword for opus.
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens-code
+tee >(python manage.py shell --settings=arcamens.settings)
+
+from django.db import connection
+db_name = connection.settings_dict['NAME']
+db_name
+connection.settings_dict
+##############################################################################
+# Drop project tables and recreate it.
+
+DROP DATABASE staging;
+CREATE DATABASE staging;
+
+
+mysql -u username -p database_name < file.sql
+##############################################################################
+# dump db as json and restore it.
+
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arcamens-db.json
+
+python manage.py loaddata arcamens-db.json
+
 
