@@ -45,22 +45,14 @@ $(document).ready(function() {
 
 {{user.init_onesignal | safe}}
 
+
 <script>
-$(document).on('ws-bell', function alertSound(e) {
-    var audio = new Audio('/static/event-alert.mp3');
-    audio.play();
-});
-
-$(document).on('ws-sound', function alertSound(e) {
-    var audio = new Audio('/static/event-alert.mp3');
-    audio.play();
+OneSignal.on('notificationDisplay', function (event) {
+    console.warn('OneSignal notification displayed:', event);
+    // var audio = new Audio('/static/event-alert.mp3');
+    // audio.play();
     $('.eventsButton').addClass('new-events');
 });
-
-$(document).on('ws-alert-event', function(e) {
-    $('.eventsButton').addClass('new-events');
-});
-
 </script>
 
 </head>
@@ -94,6 +86,7 @@ $(document).on('ws-alert-event', function(e) {
 </body>
 
 </html>
+
 
 
 
