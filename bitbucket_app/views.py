@@ -68,13 +68,10 @@ class BitbucketHandle(View):
         note=note, url=url, user=bitbot)
 
         # All the board members get aware of the event.
-        event.users.add(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.workers.all(), 
+            *card.ancestor.ancestor.members.all())
 
-        # The workers should be notified of it as well.
-        event.users.add(*card.workers.all())
-        # event.save()
-
-        # event.ws_cmd(card.ancestor.ancestor, 'ws-sound')
+        event.save()
 
     def get_commits(self, changes):
         # It may be the case the commits were truncated.
@@ -121,5 +118,6 @@ class CreateBitbucketHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 

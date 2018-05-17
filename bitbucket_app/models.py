@@ -1,6 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
 from core_app.models import Event
-from wsbells.models import UserWS, QueueWS
 from django.db import models
 
 class BitbucketHook(models.Model):
@@ -14,7 +13,7 @@ class BitbucketHook(models.Model):
     help_text='Example: https://bitbucket.org/team/project/',
     blank=False, default='', max_length=626)
 
-class EBitbucketCommit(UserWS, Event):
+class EBitbucketCommit(Event):
     # Not sure if i should have abitbuckethooker 
     # foreignkey here. The user actor will
     # be the bitbucket addon.
@@ -29,6 +28,7 @@ class EBitbucketCommit(UserWS, Event):
     related_name='commit')
 
     html_template = 'bitbucket_app/e-bitbucket-commit.html'
+
 
 
 
