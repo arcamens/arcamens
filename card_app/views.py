@@ -396,9 +396,6 @@ class CreatePostFork(GuardianView):
         event.dispatch(*fork.ancestor.users.all())
         event.dispatch(*card.ancestor.ancestor.members.all())
 
-        # user.ws_sound(card.ancestor.ancestor)
-        # user.ws_sound(fork.ancestor)
-
         return redirect('timeline_app:list-posts', timeline_id=ancestor_id)
 
 class CancelCardCreation(GuardianView):
