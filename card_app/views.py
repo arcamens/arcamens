@@ -104,12 +104,11 @@ class ListCards(GuardianView):
 
         workers1 = User.objects.filter(pk=user.pk, tasks=OuterRef('pk'))
         cards = cards.annotate(in_workers=Exists(workers1))
-        cards = cards.annotate(c_notes=Count('notes', distinct=True))
-        cards = cards.annotate(c_workers=Count('workers', distinct=True))
-        cards = cards.annotate(c_forks=Count('forks', distinct=True))
+        cards = cards.annotate(has_workers=Count('workers'))
 
         cards = cards.values('parent', 'label', 'id', 
-        'in_workers', 'c_notes', 'c_workers', 'c_forks')
+        'owner__name', 'created', 'in_workers', 'has_workers')
+
         cards = cards.order_by('-created')
 
         return render(request, 'card_app/list-cards.html', 
@@ -1270,6 +1269,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

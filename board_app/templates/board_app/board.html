@@ -19,12 +19,13 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 </p> 
 
 <small> By  <a href="#" data-toggle="popover" data-trigger="hover" title="{{board.owner.email}}"  data-content="Score: value">
-{{board.owner}} </a> at {{board.created}} </small>
+{{board.owner.name}} </a> at {{board.created}} </small>
 
 </div> 
 
 
 </div>
+
 
 
 

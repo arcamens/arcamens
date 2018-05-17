@@ -21,7 +21,7 @@ data-shell="#main-view" data-show="{% url 'card_app:cut-card' card.id %}">
 </div>
 
 
-<p> <a href="{% url 'card_app:card-link' card.id %}"  class="e-get {% if card.in_workers %} text-danger  {% elif card.c_workers %} text-success  {% endif %}"
+<p> <a href="{% url 'card_app:card-link' card.id %}"  class="e-get {% if card.in_workers %} text-danger  {% elif card.has_workers %} text-success  {% endif %}"
 data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 {% if card.done %} (Done) {% endif %}
@@ -31,23 +31,16 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 {{card.label}} </a> 
 </p>
 
+<small>
 
-<span class="badge">
-<span class="glyphicon glyphicon-comment"></span> 
-{{card.c_notes}}</span>
-
-<span class="badge">
-<span class="glyphicon glyphicon-user"></span> 
-{{card.c_workers}}</span>
-
-<span class="badge">
-<span class="glyphicon glyphicon-random"></span> 
-{{card.c_forks}}</span>
+By <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value">
+{{card.owner__name}} </a> at {{card.created}} </small>
 
 </div>
 
 
 </div>
+
 
 
 
