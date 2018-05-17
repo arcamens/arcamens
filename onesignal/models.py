@@ -14,8 +14,16 @@ class GroupSignal(models.Model):
     def push(self, data, devices):
         url = 'https://onesignal.com/api/v1/notifications'
 
-        targets = [{"field": "tag", "key": "device_id", 
-        "relation": "=", 'value':'device-%s' % ind } for ind in devices]
+        # targets = [{"field": "tag", "key": "device_id", 
+        # "relation": "=", 'value':'device-%s' % ind } for ind in devices]
+        targets = []
+
+        for ind in range(0, len(devices) - 1):
+            targets.extend(({"field": "tag", "relation": "=", 
+                'value':'device-%s' % devices[ind] }, {'operator':'OR'}))
+
+        targets.append({"field": "tag", "relation": "=", 
+                'value':'device-%s' % devices[-1]})
 
         payload = {
         'app_id': settings.ONE_SIGNAL_APPID, 
@@ -42,6 +50,7 @@ class Device(models.Model):
         tmp     = get_template('onesignal/init_onesignal.html')
         html    = tmp.render(context)
         return html
+
 
 
 

@@ -454,5 +454,28 @@ headers = {
 req = requests.post(url, data=json.dumps(payload), headers=headers)
 req
 req.text
+##############################################################################
+import requests
+import json
+from django.conf import settings
+url = 'https://onesignal.com/api/v1/notifications'
+
+payload = {'app_id': 'e4387e31-b5c1-493a-8a28-f56bfed98c27', 
+'filters': [{'field': 'tag',  'relation': 'exists', 'key': 'device_id',
+'value': 'device-3'}],
+'contents': {'en': 'Activity from Bitbucket Service!'}}
+
+
+auth = "Basic %s" % settings.ONE_SIGNAL_API_KEY
+
+headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": auth
+}
+
+req = requests.post(url, data=json.dumps(payload), headers=headers)
+req
+req.text
+
 
 
