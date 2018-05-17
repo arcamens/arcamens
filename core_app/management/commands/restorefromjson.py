@@ -19,7 +19,7 @@ class Command(BaseCommand):
         parser.add_argument("user", type=str)
 
     def handle(self, *args, **kwargs):
-        user = core_app.User.objects.get(name__startswith=kwargs['user'])
+        user = core_app.models.User.objects.get(name__startswith=kwargs['user'])
 
         data = json.load(kwargs['json'])
         models = {'timeline_app.timeline', 'post_app.post',
@@ -28,7 +28,7 @@ class Command(BaseCommand):
         for row in data:
             if not row['model'] in models:
                 continue
-            hash[row['model']].append(row)
+            hash[row['model']].append(row['fields'])
 
         for timeline_data in hash['timeline_app.timeline']:
             timeline = Timeline.objects.create(name=timeline_data['name'], description=timeline_data['description'],
@@ -36,7 +36,7 @@ class Command(BaseCommand):
             timeline.users.add(user)
 
         for post_data in hash['post_app.post']:
-            Post.objects.create(ancestor=post_data['ancestor'], label=post_data['label'], done=post_data['done'],
+            Post.objects.create(ancestor_id=post_data['ancestor'], label=post_data['label'], done=post_data['done'],
                                 user=user)
 
         for board_data in hash['board_app.board']:
@@ -45,17 +45,17 @@ class Command(BaseCommand):
             board.members.add(user)
 
         for list_data in hash['list_app.list']:
-            List.objects.create(ancestor=list_data['ancestor'], name=list_data['name'], description=list_data['description'],
+            List.objects.create(ancestor_id=list_data['ancestor'], name=list_data['name'], description=list_data['description'],
                                 owner=user)
 
         for card_data in hash['card_app.card']:
-            Card.objects.create(ancestor=card_data['ancestor'], label=card_data['label'], data=card_data['data'], done=card_data['done'],
+            Card.objects.create(ancestor_id=card_data['ancestor'], label=card_data['label'], data=card_data['data'], done=card_data['done'],
                                 owner=user)
 
         for snippet_data in hash['snippet_app.snippet']:
-            Snippet.objects.create(post=snippet_data['post'], title=snippet_data['title'], data=snippet_data['data'],
+            Snippet.objects.create(post_id=snippet_data['post'], title=snippet_data['title'], data=snippet_data['data'],
                                    owner=user)
 
         for note_data in hash['note_app.note']:
-            Note.objects.create(card=note_data['card'], data=note_data['data'],
+            Note.objects.create(card_id=note_data['card'], data=note_data['data'],
                                 owner=user)
