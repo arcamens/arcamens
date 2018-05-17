@@ -16,7 +16,7 @@ class GroupSignal(models.Model):
         devices = list(devices)
         SIZE    = 99
 
-        groups  = [ind[ind * SIZE:(ind + 1) * SIZE]
+        groups  = [[ind * SIZE:(ind + 1) * SIZE]
         for ind in range(0, len(devices)//SIZE + 1)]
 
         auth    = "Basic %s" % settings.ONE_SIGNAL_API_KEY
