@@ -47,11 +47,13 @@ $(document).ready(function() {
 
 
 <script>
-OneSignal.on('notificationDisplay', function (event) {
-    console.warn('OneSignal notification displayed:', event);
-    // var audio = new Audio('/static/event-alert.mp3');
-    // audio.play();
-    $('.eventsButton').addClass('new-events');
+OneSignal.push(function() {
+    OneSignal.on('notificationDisplay', function (event) {
+        console.warn('OneSignal notification displayed:', event);
+        // var audio = new Audio('/static/event-alert.mp3');
+        // audio.play();
+        $('.eventsButton').addClass('new-events');
+    });
 });
 </script>
 
