@@ -328,8 +328,6 @@ class CreateFork(GuardianView):
         ancestor=card.ancestor, card0=card, card1=fork, user=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
 
-        # user.ws_sound(card.ancestor.ancestor)
-
         return redirect('card_app:view-data', card_id=fork.id)
 
 class PullPostContent(GuardianView):
