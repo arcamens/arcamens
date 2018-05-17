@@ -197,8 +197,6 @@ class CreateCard(GuardianView):
         ancestor=card.ancestor, card=card, user=user)
         event.dispatch(*ancestor.ancestor.members.all())
 
-        # user.ws_sound(card.ancestor.ancestor)
-
         return redirect('card_app:view-data', card_id=card.id)
 
 class SelectForkList(GuardianView):
@@ -1269,6 +1267,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
