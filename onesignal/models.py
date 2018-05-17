@@ -16,7 +16,8 @@ class GroupSignal(models.Model):
 
         # targets = [{"field": "tag", "key": "device_id", 
         # "relation": "=", 'value':'device-%s' % ind } for ind in devices]
-        targets = list(devices)
+        devices = list(devices)
+        targets = []
 
         for ind in range(0, len(devices) - 1):
             targets.extend(({"field": "tag", "relation": "=", 
