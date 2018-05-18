@@ -42,7 +42,7 @@ class BitbucketHandle(View):
         return HttpResponse(status=200)
 
     def create_refs(self, address, commit):
-        print('Data:', commit, file=sys.stderr)
+        print('Data:', address, file=sys.stderr)
 
         REGX  ='card_app/card-link/([0-9]+)'
         ids   = findall(REGX, commit['message'])

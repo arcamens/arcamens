@@ -136,12 +136,12 @@ ls -la
 # by default, python3 has executable named python in arch linux.
 virtualenv arcamens -p /usr/bin/python
 ##############################################################################
-# activate, virtualenv, arcamens.
+# activate virtualenv arcamens.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
 ##############################################################################
-# install, arcamens, dependencies, virtualenv.
+# install arcamens dependencies virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
@@ -417,7 +417,6 @@ cd ~/projects/django-paybills-code
 python setup.py install
 rm -fr build
 ##############################################################################
-
 # access victor server through ssh.
 
 tee -i >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
@@ -428,9 +427,6 @@ tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 # run as supervisord.
 supervisord -n -c ../conf/supervisord.conf
 
-# remove arcamens and paybills.
-rm -fr /home/arcamens-test/projects/arcamens-code
-rm -fr /home/arcamens-test/projects/django-paybills-code
 ##############################################################################
 # deploy arcamens on victor server.
 # use rsync.
@@ -445,10 +441,6 @@ rm -fr /home/arcamens-test/projects/arcamens-code'
 
 scp -r /home/tau/projects/arcamens-code/build-data opus@opus.test.splittask.net:/home/opus/projects/arcamens-code
 
-##############################################################################
-# Delete/rmeove arcamens virtualenv.
-cd ~/.virtualenvs/
-rm -fr arcamens
 ##############################################################################
 # install blowdb
 cd ~/projects/django-blowdb-code
@@ -672,7 +664,10 @@ python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arc
 
 python manage.py loaddata arcamens-db.json
 ##############################################################################
-
+# Activate virtualenv on victor server.
+cd ~/.virtualenv/
+source opus/bin/activate
+cd ~/projects/arcamens-code
 
 
 
