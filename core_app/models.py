@@ -122,7 +122,7 @@ class EShoutMixin(models.Model):
         abstract = True
 
     def send_onesignal(self, devices):
-        msg = ('User {user} has shout: {msg}!').format(
+        msg = ('{user} shouts: {msg}!').format(
         user=self.user.name, msg=self.msg)
 
         data = {'heading': {'en': 'Arcamens'},
