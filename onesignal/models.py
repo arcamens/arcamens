@@ -14,8 +14,9 @@ class GroupSignal(models.Model):
 
     def push(self, data, devices):
         devices = list(devices)
-        SIZE    = 99
+        assert len(devices) > 0, 'No devices to send!'
 
+        SIZE    = 99
         groups  = [devices[ind * SIZE:(ind + 1) * SIZE] 
             for ind in range(0, len(devices)//SIZE + 1)]
 
@@ -31,9 +32,6 @@ class GroupSignal(models.Model):
     def post(self, data, devices, headers):
         url = 'https://onesignal.com/api/v1/notifications'
         targets = []
-
-        # targets = [{"field": "tag", "key": "device_id", 
-        # "relation": "=", 'value':'device-%s' % ind } for ind in devices]
 
         for ind in range(0, len(devices) - 1):
             targets.extend(({"field": "tag", "relation": "=", 'key': 'device_id', 
@@ -61,6 +59,7 @@ class Device(models.Model):
         tmp     = get_template('onesignal/init_onesignal.html')
         html    = tmp.render(context)
         return html
+
 
 
 

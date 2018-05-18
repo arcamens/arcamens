@@ -525,3 +525,9 @@ is_ok = Q(ancestor__ancestor__organization=orgs)
 cards = Card.objects.filter(is_ok)
 cards.count()
 
+for ind in []:
+    pass
+else:
+    print('hi')
+
+

@@ -91,6 +91,16 @@ class EventMixin(GroupSignal):
 
         devices = self.users.filter(default=self.organization)
         devices = devices.values_list('id', flat=True)
+    
+        # Attempt to send message just if there is
+        # any user related to the event.
+        if devices.count() > 0:
+            self.send_onesignal(devices)
+
+    def send_onesignal(self, devices):
+        """ 
+        Could be overriden to customize messages.
+        """
 
         msg = ('Activity from {user}!').format(user=self.user.name)
 
@@ -106,6 +116,19 @@ class EventMixin(GroupSignal):
         self.users.remove(user)
         self.signers.add(user)
         self.save(hcache=False)
+
+class EShoutMixin(models.Model):
+    class Meta:
+        abstract = True
+
+    def send_onesignal(self, devices):
+        msg = ('User {user} has shout: {msg}!').format(
+        user=self.user.name, msg=self.msg)
+
+        data = {'heading': {'en': 'Arcamens'},
+        "contents": {"en": self.msg}}
+
+        self.push(data, devices)
 
 class OrganizationMixin(models.Model):
     class Meta:
@@ -294,7 +317,7 @@ class EInviteUser(Event):
     related_name='e_invite_user0', blank=True)
     html_template = 'core_app/e-invite-user.html'
 
-class EShout(Event):
+class EShout(EShoutMixin, Event):
     msg = models.CharField(null=True,
     blank=False, verbose_name=_("Msg"),  max_length=256,
     help_text="No pain no gain!")
@@ -397,6 +420,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
