@@ -51,8 +51,19 @@ class BitbucketHandle(View):
         # Filter cards whose organization has a bitbucket hook
         # whose address is the one in the push payload.
         # Note: Not sure if there is a better way.
-        cards = cards.filter(
-            ancestor__ancestor__bitbucket_hooks__full_name=full_name)
+        # cards = cards.filter(
+            # ancestor__ancestor__organization__bitbucket_hooks__full_name=full_name)
+
+        # First grab the hooks.
+        hooks    = BitbucketHook.objects.filter(full_name='arcamens/django-github')
+        organizations  = hooks.values_list('organization')
+    
+        # Check if the card organizations are in the hook organizations.
+        is_ok = Q(ancestor__ancestor__organization=organizations)
+
+        # Just create events for cards which have a hook 
+        # mapping to the repository.
+        cards = cards.filter(is_ok)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
         message=commit['message'], url=commit['links']['html']['href'],

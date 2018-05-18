@@ -14,7 +14,7 @@ tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 cd ~/.virtualenv/
 source opus/bin/activate
-cd ~/projects/arcamens
+cd ~/projects/arcamens-code
 tee >(python manage.py shell --settings=arcamens.settings)
 
 ##############################################################################
@@ -356,6 +356,18 @@ connection.settings_dict
 cursor = connection.cursor()
 SQL = 'drop table django_migrations;'
 cursor.execute(SQL)
+connection.vendor
+from django.db.utils import OperationalError
+with cursor:
+    cursor.execute(SQL)
+
+help(connection)
+help(connection.cursor)
+
+from django.db import connections
+dir(connections)
+help(connections)
+print(connections)
 
 ##############################################################################
 
@@ -494,7 +506,22 @@ rst = []
 rst = [lst[ind * 3:(ind + 1) * 3] 
 for ind in range(0, len(lst)//3 + 1)]
 rst
+##############################################################################
+# Do lookups of cards that have an organization that has a BitbucketHook.
+# bitbucket_app debugging.
 
+from card_app.models import Card
+from bitbucket_app.models import BitbucketHook
+from django.db.models import Q
 
+cards = Card.objects.filter(
+ancestor__ancestor__organization__bitbucket_hooks__full_name='arcamens/django-github')
 
+cards.count()
+
+hooks = BitbucketHook.objects.filter(full_name='arcamens/django-github')
+orgs = hooks.values_list('organization')
+is_ok = Q(ancestor__ancestor__organization=orgs)
+cards = Card.objects.filter(is_ok)
+cards.count()
 
