@@ -8,8 +8,7 @@
 {% block head %}
 
 <h4>
-<a style="font-size:110%" class="s-modal" data-show="{% url 'core_app:invite-organization-user' organization.id %}" href="#"> 
-<span class="glyphicon glyphicon-plus"></span> </a>
+<span class="glyphicon glyphicon-user"></span> 
 
 {{organization.name}}'s Members  
 <span class="badge">{{count}}/{{total}}</span> </h4>
@@ -89,6 +88,7 @@ $('#list-user-search-form').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

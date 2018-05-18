@@ -25,9 +25,16 @@ Resend</a>
 <br>
 <small> Sent on {{ind.created}} </small>
 </p>
+{% empty %}
+No invites...
 {% endfor %}
 
 </div>
+
+<br>
+<a style="font-size:110%" class="s-modal" data-show="{% url 'core_app:invite-organization-user' organization.id %}" href="#"> 
+<span class="glyphicon glyphicon-send"></span> Invite a peer?</a>
+
 </div>
 
 <div class="modal-footer">
@@ -39,6 +46,7 @@ class="btn btn-default s-modal"> Back </button>
 </button>
 
 </div>
+
 
 
 

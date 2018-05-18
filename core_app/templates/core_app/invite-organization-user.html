@@ -22,12 +22,13 @@
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-show="{% url 'core_app:list-users' user.default.id  %}"
+<button  type="button" data-show="{% url 'core_app:list-invites'  %}"
 class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#bind-user-form" data-show="{% url 'core_app:invite-organization-user' user.default.id  %}"
 class="btn btn-default m-post"> {% trans "Send" %} </button>
 </div>
+
 
 
 
