@@ -126,7 +126,7 @@ class EShoutMixin(models.Model):
         user=self.user.name, msg=self.msg)
 
         data = {'heading': {'en': 'Arcamens'},
-        "contents": {"en": self.msg}}
+        "contents": {"en": msg}}
 
         self.push(data, devices)
 
