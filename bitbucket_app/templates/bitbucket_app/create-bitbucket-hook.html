@@ -16,7 +16,7 @@ Insert your Bitbucket Project URL below.
 <form id="bitbuckethookForm" enctype="multipart/form-data">
 {% csrf_token %}
 
-{% bootstrap_field form.address  size='md' %}
+{% bootstrap_field form.full_name  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
@@ -36,6 +36,7 @@ It is necessary to add a Webhook for push events to your repository.
 class="btn btn-default m-post">  {% trans "Create" %} </button>
 {% endblock %}
 </div>
+
 
 
 
