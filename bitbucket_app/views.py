@@ -39,8 +39,6 @@ class BitbucketHandle(View):
         for ind in commits:
             self.create_refs(address, ind)
 
-        # actor = request.POST['actor']
-
         return HttpResponse(status=200)
 
     def create_refs(self, address, commit):
@@ -49,6 +47,12 @@ class BitbucketHandle(View):
         REGX  ='card_app/card-link/([0-9]+)'
         ids   = findall(REGX, commit['message'])
         cards = Card.objects.filter(id__in = ids)
+
+        # Filter cards whose organization has a bitbucket hook
+        # whose address is the one in the push payload.
+        # Note: Not sure if there is a better way.
+        cards = cards.filter(
+            ancestor__ancestor__bitbucket_hooks__address=address)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
         message=commit['message'], url=commit['links']['html']['href'],
@@ -118,6 +122,7 @@ class CreateBitbucketHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 

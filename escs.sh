@@ -432,23 +432,7 @@ supervisord -n -c ../conf/supervisord.conf
 rm -fr /home/arcamens-test/projects/arcamens-code
 rm -fr /home/arcamens-test/projects/django-paybills-code
 ##############################################################################
-# install paybills
-cd ~/projects/django-paybills-code
-python setup.py install
-##############################################################################
-# passphrase for victor server.
-bohju9Do
-
-##############################################################################
 # deploy arcamens on victor server.
-
-cp -R ~/projects/arcamens-code /tmp
-rm -fr /tmp/arcamens-code/.git
-find /tmp/arcamens-code -path "arcamens-code/**/migrations/*.py" -not -name "__init__.py" -delete
-find /tmp/arcamens-code -path "arcamens-code/**/migrations/*.pyc" -not -name "__init__.py" -delete
-find /tmp/arcamens-code -path "arcamens-code*/*.pyc" -not -name "__init__.py" -delete
-find /tmp/arcamens-code -name "db.sqlite3" -delete
-
 # use rsync.
 rsync -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
 
@@ -462,28 +446,7 @@ rm -fr /home/arcamens-test/projects/arcamens-code'
 scp -r /home/tau/projects/arcamens-code/build-data opus@opus.test.splittask.net:/home/opus/projects/arcamens-code
 
 ##############################################################################
-# install paybills on victor server.
-
-cp -R ~/projects/django-paybills-code /tmp
-rm -fr /tmp/django-paybills-code/.git
-
-scp -r /tmp/django-paybills-code arcamens-test@job-lab.net:/home/arcamens-test/projects
-
-ssh arcamens-test@job-lab.net '
-cd ~/.virtualenvs/
-source arcamens/bin/activate
-cd /home/arcamens-test/projects/django-paybills-code
-sudo python setup.py install'
-
-# create basic folders victor porton server.
-mkdir ~/.virtualenvs
-mkdir ~/projects
-##############################################################################
-
-pip install future
-apt-get install rabbitmq
-##############################################################################
-#delete #remove #virtualenv
+# Delete/rmeove arcamens virtualenv.
 cd ~/.virtualenvs/
 rm -fr arcamens
 ##############################################################################
@@ -572,15 +535,6 @@ rabbitmqctl start&
 
 # then we are done, it is enough to run the server.
 ##############################################################################
-# run arcamens on victor server.
-
-ssh root@staging.arcamens.com 'rabbitmq-server start;exit;'
-
-# activate virtualenv on victor server.
-cd ~/.virtualenvs/
-source arcamens/bin/activate
-cd ~/projects/arcamens-code
-
 # run arcamens project on victor server.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
@@ -590,23 +544,15 @@ ps aux | grep mana
 
 ##############################################################################
 # install django-slock
-
 cd ~/projects/django-slock-code
 python setup.py install
 rm -fr build
 ##############################################################################
 # install django-jsim
-
 cd ~/projects/django-jsim-code
 python setup.py install
 rm -fr build
 
-##############################################################################
-
-# install django-scrolls
-cd ~/projects/django-scrolls-code
-python setup.py install
-rm -fr build
 ##############################################################################
 # pair fork master branch to upstream master branch.
 git fetch -p 
@@ -614,37 +560,6 @@ git checkout master
 git reset --hard f7e9f0b  
 git push origin master --force 
 
-##############################################################################
-# create C316 branch.
-cd ~/projects/arcamens-code
-git branch -a
-git checkout -b C316
-git push --set-upstream origin C316
-
-##############################################################################
-# merge C316 into staging.
-git checkout staging
-git merge C316
-git push -u origin staging
-##############################################################################
-# delete C316 branch.
-cd ~/projects/arcamens-code
-git branch -d C316
-git push origin :C316
-git fetch -p 
-##############################################################################
-# fetch remote branch
-git pull
-git checkout C162
-##############################################################################
-# merge C162 into staging.
-git checkout staging
-git merge C162
-git push -u origin staging
-
-git branch -d C162
-git push origin :C162
-git fetch -p 
 ##############################################################################
 # install django-sqlike
 
@@ -658,34 +573,8 @@ rm -fr build
 tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
 sudo supervisorctl restart arcamens
 ##############################################################################
-# run migrations arcamens on victor vps as root.
-
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-
-cd ~/.virtualenv/
-source opus/bin/activate
-cd ~/projects/arcamens-code
-git pull 
-git status
-git log
-
-# Do migrations.
-python manage.py apps
-python manage.py migrate
-
-exit
-
-
 # View uwsgi logs in victor server.
 tail -f ../logs/uwsgi.log
-##############################################################################
-# install wsbells in virtualenv.
-cd ~/.virtualenvs/
-source opus/bin/activate
-
-cd ~/projects/django-wsbells-code
-python setup.py install
-rm -fr build
 ##############################################################################
 # install py-gfm github flavoured markdown.
 
@@ -769,19 +658,6 @@ alter table core_app_user add column max_users INT NULL DEFAULT 3;
 
 python manage.py restore_ownership port arca ioli
 ##############################################################################
-# access victor vps and find mysql passsword for opus.
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-
-cd ~/.virtualenv/
-source opus/bin/activate
-cd ~/projects/arcamens-code
-tee >(python manage.py shell --settings=arcamens.settings)
-
-from django.db import connection
-db_name = connection.settings_dict['NAME']
-db_name
-connection.settings_dict
-##############################################################################
 # Drop project tables and recreate it.
 
 DROP DATABASE staging;
@@ -796,6 +672,7 @@ python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arc
 
 python manage.py loaddata arcamens-db.json
 ##############################################################################
+
 
 
 

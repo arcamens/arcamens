@@ -1,5 +1,5 @@
 ##############################################################################
-# activate, virtualenv, opus.
+# Activate virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
@@ -9,9 +9,9 @@ tee >(python manage.py shell --settings=arcamens.settings)
 
 quit()
 ##############################################################################
-# connect to victor vps.
-
+# connect to victor vps and activate virtualenv.
 tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens
@@ -346,15 +346,17 @@ REGX  ='card_app/card-link/([0-9]+)'
 cards = findall(REGX, 'this is a test ee https://staging.arcamens.com/card_app/card-link/500358/ letssee good https://staging.arcamens.com/card_app/card-link/500358/')
 cards
 ##############################################################################
-# check issue with bitbucket_app migrations.
-from bitbucket_app.models import BitbucketHooker
-x = BitbucketHooker.objects.all()
-x
+# Get database db name, password and username.
+# Execute raw sql in the database.
 
 from django.db import connection
 db_name = connection.settings_dict['NAME']
 db_name
 connection.settings_dict
+cursor = connection.cursor()
+SQL = 'drop table django_migrations;'
+cursor.execute(SQL)
+
 ##############################################################################
 
 from card_app.models import Card
@@ -492,6 +494,7 @@ rst = []
 rst = [lst[ind * 3:(ind + 1) * 3] 
 for ind in range(0, len(lst)//3 + 1)]
 rst
+
 
 
 
