@@ -32,17 +32,17 @@ class Authenticator(GuardianView):
 class BitbucketHandle(View):
     def post(self, request):
         data    = json.loads(request.body)
-        address = data['repository']['links']['html']
+        full_name = data['repository']['full_name']
         changes = data['push']['changes']
         commits = self.get_commits(changes)
 
         for ind in commits:
-            self.create_refs(address, ind)
+            self.create_refs(full_name, ind)
 
         return HttpResponse(status=200)
 
-    def create_refs(self, address, commit):
-        print('Data:', address, file=sys.stderr)
+    def create_refs(self, full_name, commit):
+        print('Data:', full_name, file=sys.stderr)
 
         REGX  ='card_app/card-link/([0-9]+)'
         ids   = findall(REGX, commit['message'])
@@ -52,7 +52,7 @@ class BitbucketHandle(View):
         # whose address is the one in the push payload.
         # Note: Not sure if there is a better way.
         cards = cards.filter(
-            ancestor__ancestor__bitbucket_hooks__address=address)
+            ancestor__ancestor__bitbucket_hooks__full_name=full_name)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
         message=commit['message'], url=commit['links']['html']['href'],

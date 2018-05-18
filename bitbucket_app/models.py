@@ -9,8 +9,8 @@ class BitbucketHook(models.Model):
     organization = models.ForeignKey('core_app.Organization', null=True, blank=True,
     related_name='bitbucket_hooks')
 
-    address = models.CharField(null=True, 
-    help_text='Example: https://bitbucket.org/team/project/',
+    full_name = models.CharField(null=True, 
+    help_text='Example: team/repo_name',
     blank=False, default='', max_length=626)
 
 class EBitbucketCommit(Event):
@@ -28,6 +28,7 @@ class EBitbucketCommit(Event):
     related_name='commit')
 
     html_template = 'bitbucket_app/e-bitbucket-commit.html'
+
 
 
 
