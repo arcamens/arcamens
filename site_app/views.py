@@ -223,7 +223,7 @@ class PaypalManualPayment(AuthenticatedView):
         # Fields that are related to generating the
         # html form. 
         payload = {
-        'item_name': "Splittask Period",
+        'item_name': "Arcamens Period",
         'currency_code': settings.CURRENCY_CODE,
         'amount': cost,
         'quantity': 1,
@@ -390,6 +390,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

@@ -155,7 +155,7 @@ class InviteMixin(models.Model):
         self.organization.name, self.peer.name)
 
         send_mail(msg, '%s %s' % (self.organization.name, 
-        self.invite_url), 'noreply@splittask.net', [self.user.email], 
+        self.invite_url), 'noreply@arcamens.com', [self.user.email], 
         fail_silently=False)
 
     def __str__(self):
