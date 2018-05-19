@@ -25,22 +25,26 @@ class ListPosts(GuardianView):
         filter, _ = PostFilter.objects.get_or_create(
         user=self.me, timeline=timeline)
 
-        posts      = timeline.posts.all()
-        total      = posts.count()
+        posts     = timeline.posts.all()
+        total     = posts.count()
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        listpins  = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins  = self.me.cardpin_set.filter(organization=self.me.default)
+
+        timelinepins = self.me.timelinepin_set.filter(
+        organization=self.me.default)
 
         posts = filter.collect(posts)
         posts = posts.order_by('-created')
         count = posts.count()
         elems = JScroll(self.me.id, 'timeline_app/list-posts-scroll.html', posts)
 
-        return render(request, 'timeline_app/list-posts.html', 
-        {'timeline':timeline, 'count': count, 'total': total, 'timelinepins': timelinepins,
-        'elems':elems.as_window(), 'filter': filter, 'boardpins': boardpins,
-        'listpins': listpins, 'cardpins': cardpins})
+        env = {'timeline':timeline, 'count': count, 'total': total, 
+        'timelinepins': timelinepins, 'elems':elems.as_window(), 
+        'filter': filter, 'boardpins': boardpins, 'listpins': listpins, 
+        'cardpins': cardpins}
+
+        return render(request, 'timeline_app/list-posts.html', env)
 
 class CreateTimeline(GuardianView):
     """
@@ -60,18 +64,17 @@ class CreateTimeline(GuardianView):
                                 'organization_id': organization_id}, status=400)
 
         organization = Organization.objects.get(id=organization_id)
-        user         = User.objects.get(id=self.user_id)
         record       = form.save(commit=False)
-        record.owner = user
+        record.owner = self.me
         record.organization  = organization
         form.save()
-        record.users.add(user)
+        record.users.add(self.me)
         record.save()
 
-        event = ECreateTimeline.objects.create(organization=user.default,
-        timeline=record, user=user)
+        event = ECreateTimeline.objects.create(organization=self.me.default,
+        timeline=record, user=self.me)
 
-        event.dispatch(user)
+        event.dispatch(self.me)
 
         # user.ws_subscribe(record, target=user)
         # user.ws_sound()
@@ -97,9 +100,8 @@ class DeleteTimeline(GuardianView):
                 'timeline_app/delete-timeline.html', 
                     {'timeline': timeline, 'form': form}, status=400)
 
-        user     = User.objects.get(id=self.user_id)
-        event    = EDeleteTimeline.objects.create(organization=user.default,
-        timeline_name=timeline.name, user=user)
+        event    = EDeleteTimeline.objects.create(organization=self.me.default,
+        timeline_name=timeline.name, user=self.me)
 
         # user.ws_sound(timeline)
         # user.ws_unsubscribe(timeline, target=timeline)
@@ -360,6 +362,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
