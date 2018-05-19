@@ -25,24 +25,23 @@ class ListLists(GuardianView):
     """
 
     def get(self, request, board_id):
-        user = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
         total = board.lists.all()
 
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         filter, _ = ListFilter.objects.get_or_create(
-        user=user, organization=user.default, board=board)
+        user=self.me, organization=self.me.default, board=board)
 
         lists = total.filter((Q(name__icontains=filter.pattern) | \
         Q(description__icontains=filter.pattern))) if filter.status else \
         total
 
         return render(request, 'list_app/list-lists.html', 
-        {'lists': lists, 'user': user, 'board': board, 'organization': user.default,
+        {'lists': lists, 'user': self.me, 'board': board, 'organization': self.me.default,
         'total': total, 'filter': filter, 'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins})
 
@@ -51,10 +50,8 @@ class CreateList(GuardianView):
     """
 
     def get(self, request, board_id):
-        user  = User.objects.get(id=self.user_id)
         board = Board.objects.get(id=board_id)
 
-        # list  = models.List.objects.create(owner=user, ancestor=board)
         form = forms.ListForm()
         return render(request, 'list_app/create-list.html', 
         {'form':form, 'board': board})
@@ -69,17 +66,14 @@ class CreateList(GuardianView):
 
 
         list          = form.save(commit=False)
-        user          = User.objects.get(id=self.user_id)
         board         = Board.objects.get(id=board_id)
-        list.owner    = user
+        list.owner    = self.me
         list.ancestor = board
         list.save()
 
-        event = ECreateList.objects.create(organization=user.default,
-        ancestor=list.ancestor, child=list, user=user)
+        event = ECreateList.objects.create(organization=self.me.default,
+        ancestor=list.ancestor, child=list, user=self.me)
         event.dispatch(*list.ancestor.members.all())
-
-        # user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', board_id=board_id)
 
@@ -92,12 +86,9 @@ class ConfirmListDeletion(GuardianView):
 class DeleteList(GuardianView):
     def get(self, request, list_id):
         list = List.objects.get(id=list_id)
-        user = User.objects.get(id=self.user_id)
 
-        # user.ws_sound(list.ancestor)
-
-        event = EDeleteList.objects.create(organization=user.default,
-        ancestor=list.ancestor, child_name=list.name, user=user)
+        event = EDeleteList.objects.create(organization=self.me.default,
+        ancestor=list.ancestor, child_name=list.name, user=self.me)
         event.dispatch(*list.ancestor.members.all())
 
         list.delete()
@@ -107,10 +98,9 @@ class DeleteList(GuardianView):
 
 class PinList(GuardianView):
     def get(self, request, list_id):
-        user = User.objects.get(id=self.user_id)
         list = List.objects.get(id=list_id)
-        pin  = ListPin.objects.create(user=user, 
-        organization=user.default, list=list)
+        pin  = ListPin.objects.create(user=self.me, 
+        organization=self.me.default, list=list)
         return redirect('board_app:list-pins')
 
 class UpdateList(GuardianView):
@@ -128,13 +118,10 @@ class UpdateList(GuardianView):
                         {'form': form, 'list':record, }, status=400)
 
         record.save()
-        user = User.objects.get(id=self.user_id)
 
-        event = EUpdateList.objects.create(organization=user.default,
-        ancestor=record.ancestor, child=record, user=user)
+        event = EUpdateList.objects.create(organization=self.me.default,
+        ancestor=record.ancestor, child=record, user=self.me)
         event.dispatch(*record.ancestor.members.all())
-
-        # user.ws_sound(record.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=record.id)
@@ -303,5 +290,6 @@ class Unpin(GuardianView):
         pin = ListPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 

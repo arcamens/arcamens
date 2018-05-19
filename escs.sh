@@ -19,9 +19,6 @@ git status
 git add *
 git commit -a
 git push -u origin alpha
-
-
-
 ##############################################################################
 # push arcamens on master.
 cd ~/projects/arcamens-code
