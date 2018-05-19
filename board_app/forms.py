@@ -14,8 +14,8 @@ class BindUsersForm(forms.Form):
     email = forms.EmailField()
     admin = forms.BooleanField(required=False)
 
-class BoardSearchForm(forms.Form):
-    name = forms.CharField(required=False)
+class BoardSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False)
 
 class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
@@ -23,6 +23,7 @@ class UserSearchForm(SqLikeForm, forms.Form):
 class ConfirmBoardDeletionForm(ConfirmTimelineDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the board name to confirm!')
+
 
 
 

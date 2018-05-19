@@ -5,7 +5,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available {{user.name}}'s Boards </h5>
+Available {{user.name}}'s Boards <span class="badge">{{count}}/{{total}}</span></h5>
 </div>
 
 <div class="modal-body">
@@ -47,7 +47,7 @@ data-show="{% url 'board_app:bind-board-user' ind.id user.id %}" href="#">
 
 {% csrf_token %}
 
-{% bootstrap_field form.name  size='md' layout='inline' %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -72,4 +72,5 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
