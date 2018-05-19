@@ -22,22 +22,20 @@ class ListPosts(GuardianView):
 
     def get(self, request, timeline_id):
         timeline  = Timeline.objects.get(id=timeline_id)
-        user      = User.objects.get(id=self.user_id)
-
         filter, _ = PostFilter.objects.get_or_create(
-        user=user, timeline=timeline)
+        user=self.me, timeline=timeline)
 
         posts      = timeline.posts.all()
         total      = posts.count()
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         posts = filter.collect(posts)
         posts = posts.order_by('-created')
         count = posts.count()
-        elems = JScroll(user.id, 'timeline_app/list-posts-scroll.html', posts)
+        elems = JScroll(self.me.id, 'timeline_app/list-posts-scroll.html', posts)
 
         return render(request, 'timeline_app/list-posts.html', 
         {'timeline':timeline, 'count': count, 'total': total, 'timelinepins': timelinepins,
@@ -362,6 +360,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
