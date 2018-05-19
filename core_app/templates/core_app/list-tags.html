@@ -39,8 +39,6 @@ No tags.
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-show="{% url 'core_app:update-organization' organization.id  %}"
-class="btn btn-default s-modal"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#tagSearchForm" 
 data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default m-post"> {% trans "Search" %} </button>
@@ -49,4 +47,5 @@ data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default m-post"> {% t
      {% trans "Close" %}
 </button>
 </div>
+
 

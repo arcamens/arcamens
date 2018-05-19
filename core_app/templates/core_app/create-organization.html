@@ -35,9 +35,10 @@ New organization
 <button  type="button" data-form="#form-organization-data" 
 data-callback="window.location='{% url 'core_app:index' %}';" 
 data-shell-error="#smallModalContent" 
-data-show="{% url 'core_app:create-organization' user.id %}"
+data-show="{% url 'core_app:create-organization' %}"
 class="btn btn-default e-post">  {% trans "Create" %} </button>
 {% endblock %}
 
 </div>
+
 

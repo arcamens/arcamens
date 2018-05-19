@@ -6,7 +6,6 @@ from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
 from django.shortcuts import render, redirect
-from slock.views import AuthenticatedView
 from slock.forms import UpdatePasswordForm
 from core_app.forms import SignupForm
 from django.views.generic import View
@@ -20,6 +19,7 @@ from django.urls import reverse
 from django.conf import settings
 from traceback import print_exc
 from itertools import chain
+import slock.views
 from . import models
 from . import forms
 import core_app.export
@@ -28,12 +28,24 @@ import json
 
 # Create your views here.
 
+class AuthenticatedView(slock.views.AuthenticatedView):
+    """
+    A shorthand to save the logged user instance and avoid having
+    to instantiate it again all over the code.
+    """
+
+    def on_auth(self, request, *args, **kwargs):
+        # Save the user instance to avoid prolixity when checking
+        # for permissions. I should have done it before.
+        self.me = User.objects.get(id=self.user_id)
+
 class GuardianView(AuthenticatedView):
     def delegate(self, request, *args, **kwargs):
-        user = User.objects.get(id=self.user_id)
-
         # Allow just the owner of the account to perform operations.
-        if not user.default.owner.enabled and user != user.default.owner:
+        # I can perform actions if i'm the owner and it is disabled.
+        not_owner = self.me != self.me.default.owner
+
+        if not self.me.default.owner.enabled and not_owner:
             return HttpResponse("Disabled organization \
                 account!", status=403)
 
@@ -45,64 +57,48 @@ class Index(AuthenticatedView):
     """
 
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
-        organizations = user.organizations.exclude(id=user.default.id)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
     
-        if hasattr(user, 'register_process'):
+        if hasattr(self.me, 'register_process'):
             return render(request, 
-                'site_app/confirm-email.html', {'user': user})
+                'site_app/confirm-email.html', {'user': self.me})
 
-        if not user.default.owner.enabled:
-            if user.default.owner != user:
+        if not self.me.default.owner.enabled:
+            if self.me.default.owner != self.me:
                 return redirect('core_app:disabled-account')
 
         return render(request, 'core_app/index.html', 
-        {'user': user, 'default': user.default, 'organization': user.default,
-        'organizations': organizations,
+        {'user': self.me, 'default': self.me.default, 
+        'organization': self.me.default, 'organizations': organizations,
          'settings': settings})
 
 class DisabledAccount(AuthenticatedView):
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
-        other = user.owned_organizations.first()
+        other = self.me.owned_organizations.first()
 
         return render(request, 'core_app/disabled-account.html', 
-        {'user': user, 'other': other})
+        {'user': self.me, 'other': other})
 
 class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
-        user = User.objects.get(id=self.user_id)
-
-        # user.ws_unsubscribe(user.default)
-
-        user.default = Organization.objects.get(
-        id=organization_id)
-
-        # user.ws_subscribe(user.default)
-
-        user.save()
-        # When user updates organization, it tells all the other
-        # tabs to restart the UI.
-        # user.ws_restart(user.default)
-
+        self.me.default = Organization.objects.get(id=organization_id)
+        self.me.save()
         return redirect('core_app:index')
 
 class UpdateUserInformation(GuardianView):
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
-        form = forms.UserForm(instance=user)
+        form = forms.UserForm(instance=self.me)
 
         return render(request, 'core_app/update-user-information.html', 
-        {'user': user, 'form': form})
+        {'user': self.me, 'form': form})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
-        form = forms.UserForm(request.POST, request.FILES, instance=user)
+        form = forms.UserForm(request.POST, request.FILES, instance=self.me)
 
         if not form.is_valid():
             return render(request, 
                 'core_app/update-user-information.html', 
-                    {'user': user, 'form': form}, status=400)
+                    {'user': self.me, 'form': form}, status=400)
 
         form.save()
         return HttpResponse(status=200)
@@ -111,32 +107,29 @@ class CreateOrganization(AuthenticatedView):
     """
     """
 
-    def get(self, request, user_id):
-        user = User.objects.get(id=self.user_id)
+    def get(self, request):
         form = forms.OrganizationForm()
         return render(request, 'core_app/create-organization.html', 
-        {'form':form, 'user': user})
+        {'form':form, 'user': self.me})
 
-    def post(self, request, user_id):
-        user = User.objects.get(id=self.user_id)
+    def post(self, request):
         form = forms.OrganizationForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'core_ap/create-organization.html',
-                        {'form': form, 'user': user}, status=400)
+                        {'form': form, 'user': self.me}, status=400)
 
         organization = Organization.objects.create(
-        name=form.cleaned_data['name'], owner=user) 
+        name=form.cleaned_data['name'], owner=self.me) 
 
-        user.organizations.add(organization)
-        user.default = organization
-        organization.admins.add(user)
-        user.save()
+        self.me.organizations.add(organization)
+        self.me.default = organization
+        organization.admins.add(self.me)
+        self.me.save()
         return redirect('core_app:index')
 
 class UpdateOrganization(GuardianView):
     def get(self, request, organization_id):
-        user = User.objects.get(id=self.user_id)
 
         organization = Organization.objects.get(id=organization_id)
         return render(request, 
@@ -144,8 +137,6 @@ class UpdateOrganization(GuardianView):
         'form': forms.UpdateOrganizationForm(instance=organization)})
 
     def post(self, request, organization_id):
-        user = User.objects.get(id=self.user_id)
-
         record  = Organization.objects.get(id=organization_id)
         form    = forms.UpdateOrganizationForm(request.POST, instance=record)
 
@@ -156,7 +147,7 @@ class UpdateOrganization(GuardianView):
         form.save()
 
         event = EUpdateOrganization.objects.create(
-        organization=user.default, user=user)
+        organization=self.me.default, user=self.me)
         event.dispatch(*record.users.all())
 
         # user.ws_sound(record)
@@ -166,7 +157,6 @@ class UpdateOrganization(GuardianView):
 class DeleteOrganization(GuardianView):
     def get(self, request,  organization_id):
         organization = Organization.objects.get(id = organization_id)
-        user         = User.objects.get(id=self.user_id)
         form = forms.ConfirmOrganizationDeletionForm()
 
         return render(request, 
@@ -184,38 +174,25 @@ class DeleteOrganization(GuardianView):
                 'core_app/delete-organization.html', 
                     {'organization': organization, 'form': form}, status=400)
 
-        user     = User.objects.get(id=self.user_id)
-        # event    = EDeleteOrganization.objects.create(organization=user.default,
-        # organization_name=organization.name, user=user)
-# 
-        # user.ws_unsubscribe_organization(organization.id)
-        # user.ws_sound()
-
-        # should tell users to unsubscribe here.
-        # it may hide bugs.
-        # event.dispatch(*organization.users.all())
-        # organization.delete()
-
-        if user.owned_organizations.count() == 1:
+        if self.me.owned_organizations.count() == 1:
             return HttpResponse("You can't delete \
                 this organization..", status=403)
 
         # First remove the reference otherwise
         # the user gets deleted in cascade due to the
         # user.default field.
-        user.organizations.remove(organization)
-        user.default = user.organizations.first()
-        user.save()
+        self.me.organizations.remove(organization)
+        self.me.default = self.me.organizations.first()
+        self.me.save()
         organization.delete()
 
         return redirect('core_app:index')
 
 class ListUsers(GuardianView):
     def get(self, request, organization_id):
-        me           = User.objects.get(id=self.user_id)
         organization = Organization.objects.get(id=organization_id)
         filter, _    = UserFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         users = organization.users.all()
         total = users.count()
@@ -230,11 +207,10 @@ class ListUsers(GuardianView):
         'form': form, 'count': count, 'organization': organization})
 
     def post(self, request, organization_id):
-        me           = User.objects.get(id=self.user_id)
         organization = Organization.objects.get(id=organization_id)
 
         filter, _    = UserFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         users = organization.users.all()
         total = users.count()
@@ -258,35 +234,33 @@ class ListUsers(GuardianView):
 
 class ManageUserTags(GuardianView):
     def get(self, request, user_id):
-        me       = User.objects.get(id=self.user_id)
         user     = User.objects.get(id=user_id)
 
-        included = user.tags.filter(organization=me.default)
-        excluded = me.default.tags.all()
+        included = user.tags.filter(organization=self.me.default)
+        excluded = self.me.default.tags.all()
         excluded = excluded.exclude(users=user)
         total    = included.count() + excluded.count()
 
         return render(request, 'core_app/manage-user-tags.html', 
-        {'included': included, 'excluded': excluded, 'user': user, 'me': me,
+        {'included': included, 'excluded': excluded, 'user': user, 'me': self.me,
         'form':forms.TagSearchForm(), 'total': total, 'count': total})
 
     def post(self, request, user_id):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        me = User.objects.get(id=self.user_id)
         user = User.objects.get(id=user_id)
 
-        included = user.tags.filter(organization=me.default)
-        excluded = me.default.tags.all()
+        included = user.tags.filter(organization=self.me.default)
+        excluded = self.me.default.tags.all()
         excluded = excluded.exclude(users=user)
         total    = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'core_app/manage-user-tags.html', 
                 {'included': included, 'excluded': excluded, 'total': total,
-                    'organization': me.default, 'user': user, 'count': 0,
-                        'form':form, 'me': me}, status=400)
+                    'organization': self.me.default, 'user': user, 'count': 0,
+                        'form':form, 'me': self.me}, status=400)
 
         included = sqlike.run(included)
         excluded = sqlike.run(excluded)
@@ -294,7 +268,7 @@ class ManageUserTags(GuardianView):
 
         return render(request, 'core_app/manage-user-tags.html', 
         {'included': included, 'excluded': excluded, 'user': user,
-        'me': me, 'organization': me.default, 'total': total, 
+        'me': self.me, 'organization': self.me.default, 'total': total, 
         'count': count, 'form':form})
 
 class ListEvents(GuardianView):
@@ -302,66 +276,59 @@ class ListEvents(GuardianView):
     """
 
     def get(self, request):
-        user   = User.objects.get(id=self.user_id)
-        events = user.events.filter(organization=user.default)
+        events = self.me.events.filter(organization=self.me.default)
         count = events.count()
         events = events.values('html', 'id').order_by('-created')
 
-        elems = JScroll(user.id, 'core_app/list-events-scroll.html', events)
+        elems = JScroll(self.me.id, 'core_app/list-events-scroll.html', events)
 
         return render(request, 'core_app/list-events.html', 
-        {'elems': elems.as_div(), 'user': user, 
-         'organization': user.default, 'count': count})
+        {'elems': elems.as_div(), 'user': self.me, 
+         'organization': self.me.default, 'count': count})
 
 class ListTags(GuardianView):
     def get(self, request):
-        user      = User.objects.get(id=self.user_id)
-        tags = user.default.tags.all()
+        tags = self.me.default.tags.all()
         form = forms.TagSearchForm()
         total = tags.count()
         return render(request, 'core_app/list-tags.html', 
-        {'tags': tags, 'form': form, 'user': user, 'total': total,
-        'count': total, 'organization': user.default})
+        {'tags': tags, 'form': form, 'user': self.me, 'total': total,
+        'count': total, 'organization': self.me.default})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
-        tags = user.default.tags.all()
+        tags = self.me.default.tags.all()
 
         total = tags.count()
     
         if not form.is_valid():
             return render(request, 'core_app/list-tags.html', 
-                {'tags': tags, 'form': form, 'user': user, 'total': total,
-                    'count': 0, 'organization': user.default})
+                {'tags': tags, 'form': form, 'user': self.me, 'total': total,
+                    'count': 0, 'organization': self.me.default})
 
         tags  = sqlike.run(tags)
         count = tags.count()
 
         return render(request, 'core_app/list-tags.html', 
-        {'tags': tags, 'form': form, 'user': user, 
-        'organization': user.default, 'total': total, 'count': count})
+        {'tags': tags, 'form': form, 'user': self.me, 
+        'organization': self.me.default, 'total': total, 'count': count})
 
 class DeleteTag(GuardianView):
     def get(self, request, tag_id):
-        user  = User.objects.get(id=self.user_id)
         tag   = Tag.objects.get(id=tag_id)
 
         event = EDeleteTag.objects.create(
-        organization=user.default, user=user, tag_name=tag.name)
+        organization=self.me.default, user=self.me, tag_name=tag.name)
         tag.delete()
 
-        users = user.default.users.all()
+        users = self.me.default.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(user.default)
 
         return HttpResponse(status=200)
 
 class CreateTag(GuardianView):
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
         form = forms.TagForm()
 
         return render(request, 'core_app/create-tag.html', 
@@ -373,18 +340,16 @@ class CreateTag(GuardianView):
 
         if not form.is_valid():
             return render(request, 'core_app/create-tag.html',
-                        {'form': form, 'user': user}, status=400)
+                        {'form': form, 'user': self.me}, status=400)
         record       = form.save(commit=False)
-        record.organization = user.default
+        record.organization = self.me.default
         record.save()
 
         event = ECreateTag.objects.create(
-        organization=user.default, user=user, tag=record)
+        organization=self.me.default, user=self.me, tag=record)
 
-        users = user.default.users.all()
+        users = self.me.default.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(user.default)
 
         return redirect('core_app:list-tags')
 
@@ -395,14 +360,11 @@ class UnbindUserTag(GuardianView):
         user.tags.remove(tag)
         user.save()
 
-        me = User.objects.get(id=self.user_id)
         event = EUnbindUserTag.objects.create(
-        organization=me.default, user=me, peer=user, tag=tag)
+        organization=self.me.default, user=self.me, peer=user, tag=tag)
 
-        users = me.default.users.all()
+        users = self.me.default.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
@@ -413,74 +375,70 @@ class BindUserTag(GuardianView):
         user.tags.add(tag)
         user.save()
 
-        me    = User.objects.get(id=self.user_id)
         event = EBindUserTag.objects.create(
-        organization=me.default, user=me, peer=user, tag=tag)
-        users = me.default.users.all()
+        organization=self.me.default, user=self.me, peer=user, tag=tag)
+        users = self.me.default.users.all()
         event.dispatch(*users)
-
-        # me.ws_sound(me.default)
 
         return HttpResponse(status=200)
 
 class InviteOrganizationUser(GuardianView):
-    def get(self, request, organization_id):
-        user = User.objects.get(id=self.user_id)
-
+    def get(self, request):
         return render(request, 'core_app/invite-organization-user.html', 
-        {'form': forms.OrganizationInviteForm(), 'user': user})
+        {'form': forms.OrganizationInviteForm(), 'user': self.me})
 
-    def post(self, request, organization_id):
-        me = User.objects.get(id=self.user_id)
+    def post(self, request):
+        # I can send invite just if i'm admin of the organization.
+        me_admin = self.me.default.admins.filter(id=self.me.id).exists()
+        msg0     = "Only admins can do that!"
 
-        if not me.default.admins.filter(id=me.id).exists():
-            return HttpResponse("Only admins can do that!", status=403)
+        if not me_admin:
+            return HttpResponse(msg0, status=403)
 
-        if me.default.owner.is_max_users():
-            return HttpResponse("Max users limit was arrived!\
-                You need to upgrade your plan!", status=403)
+        msg1 = 'Max users limit was arrived!\
+        You need to upgrade your plan!'
+
+        if self.me.default.owner.is_max_users():
+            return HttpResponse(msg1, status=403)
 
         form = forms.OrganizationInviteForm(request.POST)
-
         if not form.is_valid():
             return render(request, 'core_app/invite-organization-user.html',
-                  {'form': form, 'organization': organization}, status=400)
+                  {'form': form, 'user': self.me}, status=400)
 
         email = form.cleaned_data['email']
-
         # Create the user anyway, but make it disabled
         # the user need to fill information first.
         user, _  = User.objects.get_or_create(email=email)
 
-        if user.organizations.filter(id=me.default.id).exists():
-            return HttpResponse("The user is already a member!", status=403)
+        # If the user is not a member then notify with an error.
+        is_member = user.organizations.filter(id=self.me.default.id).exists()
+        msg2      = "The user is already a member!"
+        if is_member:
+            return HttpResponse(msg2, status=403)
 
         # If there is already an invite just tell him it was sent.
-        is_member = user.invites.filter(
-            organization=me.default).exists()
+        is_sent = user.invites.filter(organization=self.me.default).exists()
+        msg3 = "The user was already invited!"
 
-        if is_member:
-            return HttpResponse("The user was already invited!", status=403)
+        if is_sent:
+            return HttpResponse(msg3, status=403)
 
         invite = Invite.objects.create(
-            organization=me.default, peer=me, user=user)
+            organization=self.me.default, peer=self.me, user=user)
 
         invite.send_email()
 
         event = EInviteUser.objects.create(
-        organization=me.default, user=me, peer=user)
-        event.dispatch(*me.default.users.all())
-
-        # me.ws_sound(me.default)
+        organization=self.me.default, user=self.me, peer=user)
+        event.dispatch(*self.me.default.users.all())
 
         return redirect('core_app:list-users', 
-        organization_id=me.default.id)
+        organization_id=self.me.default.id)
 
 class ResendInvite(GuardianView):
     def get(self, request, invite_id):
-        me = User.objects.get(id=self.user_id)
-
-        if not me.default.admins.filter(id=me.id).exists():
+        if not self.me.default.admins.filter(id=self.me.id).exists():
             return HttpResponse("Only admins can do that!", status=403)
 
         invite = Invite.objects.get(id=invite_id)
@@ -563,9 +521,8 @@ class SignupFromInvite(View):
 
 class ListClipboard(GuardianView):
     def get(self, request):
-        user         = User.objects.get(id=self.user_id)
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         cards = clipboard.cards.all()
         lists = clipboard.lists.all()
@@ -574,13 +531,13 @@ class ListClipboard(GuardianView):
         total = cards.count() + lists.count() + posts.count()
 
         return render(request, 'core_app/list-clipboard.html', 
-        {'user': user, 'cards': cards , 'posts': posts, 'lists': lists, 'total': total})
+        {'user': self.me, 'cards': cards , 'posts': posts, 
+        'lists': lists, 'total': total})
 
 class SeenEvent(GuardianView):
     def get(self, request, event_id):
-        user  = User.objects.get(id=self.user_id)
         event = Event.objects.get(id=event_id)
-        event.seen(user)
+        event.seen(self.me)
         return redirect('core_app:list-events')
 
 class ListLogs(GuardianView):
@@ -588,43 +545,40 @@ class ListLogs(GuardianView):
     """
 
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
         form = forms.EventFilterForm()
         return render(request, 'core_app/list-logs.html', 
-        {'user': user, 'form': form,
-         'organization': user.default})
+        {'user': self.me, 'form': form,
+         'organization': self.me.default})
 
     def post(self, request):
-        user  = User.objects.get(id=self.user_id)
         form  = forms.EventFilterForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'core_app/list-logs.html', 
-                {'user': user, 'form': form,
-                     'organization': user.default})
+                {'user': self.me, 'form': form,
+                     'organization': self.me.default})
 
         end    = form.cleaned_data['end']
         start  = form.cleaned_data['start']
 
-        events = user.seen_events.filter(created__lte=end,
-        created__gte=start, organization=user.default)
+        events = self.me.seen_events.filter(created__lte=end,
+        created__gte=start, organization=self.me.default)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
 
-        events = JScroll(user.id, 'core_app/list-logs-scroll.html', events)
+        events = JScroll(self.me.id, 'core_app/list-logs-scroll.html', events)
 
         return render(request, 'core_app/list-logs.html', 
-        {'user': user, 'form': form, 'events':events.as_div(), 
-        'count': count,'organization': user.default})
+        {'user': self.me, 'form': form, 'events':events.as_div(), 
+        'count': count,'organization': self.me.default})
 
 class AllSeen(GuardianView):
     def get(self, request):
-        user  = User.objects.get(id=self.user_id)
-        events = user.events.filter(organization=user.default)
+        events = self.me.events.filter(organization=self.me.default)
 
         for ind in events:
-            ind.seen(user)
+            ind.seen(self.me)
         return redirect('core_app:list-events')
 
 class Export(GuardianView):
@@ -662,9 +616,8 @@ class ConfirmClipboardDeletion(GuardianView):
 
 class DeleteAllClipboard(GuardianView):
     def get(self, request):
-        user         = User.objects.get(id=self.user_id)
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         cards = clipboard.cards.all()
         lists = clipboard.lists.all()
@@ -677,44 +630,40 @@ class DeleteAllClipboard(GuardianView):
 
 class Shout(GuardianView):
     def get(self, request):
-        me = User.objects.get(id=self.user_id)
         form = forms.ShoutForm()
 
-        return render(request, 'core_app/shout.html', {'form': form, 'me': me})
+        return render(request, 'core_app/shout.html', 
+        {'form': form, 'me': self.me})
 
     def post(self, request):
-        me   = User.objects.get(id=self.user_id)
         form = forms.ShoutForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'core_app/list-users.html', 
-                {'form': form, 'me': me}, status=400)
+                {'form': form, 'me': self.me}, status=400)
 
-        event = EShout.objects.create(organization=me.default, 
-        user=me, msg=form.cleaned_data['msg'])
+        event = EShout.objects.create(organization=self.me.default, 
+        user=self.me, msg=form.cleaned_data['msg'])
 
-        users = me.default.users.all()
+        users = self.me.default.users.all()
         event.dispatch(*users)
 
-        # me.ws_sound(me.default)
         return redirect('core_app:list-events')
 
 class UpdatePassword(GuardianView):
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
         form = UpdatePasswordForm()
 
         return render(request, 
             'core_app/update-password.html', 
-                {'user': user, 'form': form})
+                {'user': self.me, 'form': form})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
-        form = UpdatePasswordForm(request.POST, instance=user)
+        form = UpdatePasswordForm(request.POST, instance=self.me)
 
         if not form.is_valid():
             return render(request, 'core_app/update-password.html', 
-                    {'user': user, 'form': form}, status=400)
+                    {'user': self.me, 'form': form}, status=400)
     
         form.save()
 
@@ -722,12 +671,11 @@ class UpdatePassword(GuardianView):
 
 class RemoveOrganizationUser(GuardianView):
     def get(self, request, user_id):
-        me   = User.objects.get(id=self.user_id)
         user = User.objects.get(id=user_id)
 
         form = forms.RemoveUserForm()
-        timelines = user.owned_timelines.filter(organization=me.default)
-        boards = user.owned_boards.filter(organization=me.default)
+        timelines = user.owned_timelines.filter(organization=self.me.default)
+        boards = user.owned_boards.filter(organization=self.me.default)
 
         return render(request, 'core_app/remove-organization-user.html', 
         {'user': user, 'form': form, 'timelines': timelines, 'boards': boards})
@@ -735,17 +683,16 @@ class RemoveOrganizationUser(GuardianView):
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
         user = User.objects.get(id=user_id)
-        me   = User.objects.get(id=self.user_id)
 
         # If i'm the owner then i can't remove myself.
         # I should delete the organization.
 
-        if me.default.owner == user:
+        if self.me.default.owner == user:
             return HttpResponse("You can't remove the owner!", status=403)
 
-        is_admin = me.default.admins.filter(id=user.id).exists()
-        me_owner = me.default.owner == me
-        me_admin = me.default.admins.filter(id=me.id).exists()
+        is_admin = self.me.default.admins.filter(id=user.id).exists()
+        me_owner = self.me.default.owner == self.me
+        me_admin = self.me.default.admins.filter(id=self.me.id).exists()
 
         # If the user is an admin and i'm not the owner.
         if is_admin and not me_owner:
@@ -762,50 +709,49 @@ class RemoveOrganizationUser(GuardianView):
 
         # Remove user from all posts/cards he is assigned to.
         user.assignments.through.objects.filter(
-            post__ancestor__organization=me.default).delete()
+            post__ancestor__organization=self.me.default).delete()
 
         user.tasks.through.objects.filter(
-            card__ancestor__ancestor__organization=me.default).delete()
+            card__ancestor__ancestor__organization=self.me.default).delete()
 
         # Remove as an worker from all timelines.
         user.timelines.through.objects.filter(
-        timeline__organization=me.default, timeline__users=user).delete()
+        timeline__organization=self.me.default, timeline__users=user).delete()
 
         user.boards.through.objects.filter(
-        board__organization=me.default, board__members=user).delete()
+        board__organization=self.me.default, board__members=user).delete()
 
-        for ind in user.owned_timelines.filter(organization=me.default):
-            ind.set_ownership(me)
+        for ind in user.owned_timelines.filter(organization=self.me.default):
+            ind.set_ownership(self.me)
 
-        for ind in user.owned_boards.filter(organization=me.default):
-            ind.set_ownership(me)
+        for ind in user.owned_boards.filter(organization=self.me.default):
+            ind.set_ownership(self.me)
 
-        user.organizations.remove(me.default)
+        user.organizations.remove(self.me.default)
 
-        if user.default == me.default:
+        if user.default == self.me.default:
             user.default = user.organizations.first()
         user.save()
 
-        event = ERemoveOrganizationUser.objects.create(organization=me.default, user=me, 
+        event = ERemoveOrganizationUser.objects.create(organization=self.me.default, user=self.me, 
         peer=user, reason=form.cleaned_data['reason'])
 
-        event.dispatch(*me.default.users.all())
+        event.dispatch(*self.me.default.users.all())
 
-        msg = 'You no longer belong to %s!\n\n%s' % (me.default.name, 
+        msg = 'You no longer belong to %s!\n\n%s' % (self.me.default.name, 
         form.cleaned_data['reason'])
 
-        send_mail('%s notification!' % me.default.name, msg, 
+        send_mail('%s notification!' % self.me.default.name, msg, 
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
-        return redirect('core_app:list-users', organization_id=me.default.id)
+        return redirect('core_app:list-users', organization_id=self.me.default.id)
 
 class ListInvites(GuardianView):
     def get(self, request):
-        me = User.objects.get(id=self.user_id)
-        invites = me.default.invites.all()
+        invites = self.me.default.invites.all()
 
         return render(request, 'core_app/list-invites.html', 
-        {'organization': me.default, 'invites': invites})
+        {'organization': self.me.default, 'invites': invites})
 
 class CancelInvite(GuardianView):
     def get(self, request, invite_id):
@@ -988,6 +934,8 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
+
 
 
 

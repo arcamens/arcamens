@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^disabled-account/(?P<user_id>.+)/', views.DisabledAccount.as_view(), name='disabled-account'),
     url(r'^switch-organization/(?P<organization_id>.+)/', views.SwitchOrganization.as_view(), name='switch-organization'),
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
-    url(r'^create-organization/(?P<user_id>.+)/', views.CreateOrganization.as_view(), name='create-organization'),
+    url(r'^create-organization/', views.CreateOrganization.as_view(), name='create-organization'),
     url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
     url(r'^setup-node-filter/(?P<organization_id>.+)', views.SetupNodeFilter.as_view(), name='setup-node-filter'),
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^unbind-user-tag/(?P<user_id>.+)/(?P<tag_id>.+)/', views.UnbindUserTag.as_view(), name='unbind-user-tag'),
     url(r'^create-tag/', views.CreateTag.as_view(), name='create-tag'),
     url(r'^delete-tag/(?P<tag_id>.+)/', views.DeleteTag.as_view(), name='delete-tag'),
-    url(r'^invite-organization-user/(?P<organization_id>.+)/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
+    url(r'^invite-organization-user/', views.InviteOrganizationUser.as_view(), name='invite-organization-user'),
     url(r'^list-clipboard/', views.ListClipboard.as_view(), name='list-clipboard'),
     url(r'^delete-all-clipboard/', views.DeleteAllClipboard.as_view(), name='delete-all-clipboard'),
     url(r'^confirm-clipboard-deletion/', views.ConfirmClipboardDeletion.as_view(), name='confirm-clipboard-deletion'),
@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 
 ]
+
 
 
 
