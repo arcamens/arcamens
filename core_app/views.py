@@ -768,31 +768,28 @@ class CancelInvite(GuardianView):
 
 class ManageOrganizationAdmins(GuardianView):
     def get(self, request):
-        me = User.objects.get(id=self.user_id)
-
-        included = me.default.admins.all()
-        users    = me.default.users.all()
+        included = self.me.default.admins.all()
+        users    = self.me.default.users.all()
         excluded = users.exclude(id__in=included)
         total    = included.count() + excluded.count()
 
         return render(request, 'core_app/manage-organization-admins.html', 
         {'included': included, 'excluded': excluded,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm(), 
+        'me': self.me, 'organization': self.me.default,'form':forms.UserSearchForm(), 
         'count': total, 'total': total,})
 
     def post(self, request):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-        me   = User.objects.get(id=self.user_id)
 
-        included = me.default.admins.all()
-        users    = me.default.users.all()
+        included = self.me.default.admins.all()
+        users    = self.me.default.users.all()
         excluded = users.exclude(id__in=included)
         total    = included.count() + excluded.count()
         
         if not form.is_valid():
             return render(request, 'core_app/manage-organization-admins.html', 
-                {'me': me, 'count': 0, 'total': total, 'organization': me.default,
+                {'me': self.me, 'count': 0, 'total': total, 'organization': self.me.default,
                         'form':form}, status=400)
 
         included = sqlike.run(included)
@@ -801,77 +798,42 @@ class ManageOrganizationAdmins(GuardianView):
 
         return render(request, 'core_app/manage-organization-admins.html', 
         {'included': included, 'excluded': excluded, 
-        'me': me, 'organization': me.default,'form':form, 
+        'me': self.me, 'organization': self.me.default,'form':form, 
         'count': count, 'total': total,})
 
 class BindOrganizationAdmin(GuardianView):
     def get(self, request, organization_id, user_id):
-        user = User.objects.get(id=user_id)
-        me    = User.objects.get(id=self.user_id)
         organization = Organization.objects.get(id=organization_id)
+    
+        # Make sure the user belongs to the organization otherwise
+        # should return not existing record error.
+        user = organization.users.get(id=user_id)
 
-        if organization.owner != me:
+        if organization.owner != self.me:
             return HttpResponse("Just owner can do that!", status=403)
 
         organization.admins.add(user)
         organization.save()
 
-        # me    = User.objects.get(id=self.user_id)
-        # event = EBindOrganizationUser.objects.create(organization=me.default,
-        # organization=organization, user=me, peer=user)
-# 
-        # event.dispatch(*organization.users.all())
-# 
-        # me.ws_sound(organization)
-        # me.ws_subscribe(organization, target=user)
-
-        # it seems i cant warrant the order the events will be dispatched
-        # to the queue, if it is userid queue or organizationid queue
-        # then i have to just send again the sound event to the 
-        # user queue to warrant the event sound being dispatched.
-        # obs: if i'll abandon sound when user interacts it is not
-        # necessary.
-        # me.ws_sound(user)
-
         return HttpResponse(status=200)
 
 class UnbindOrganizationAdmin(GuardianView):
     def get(self, request, organization_id, user_id):
-        user = User.objects.get(id=user_id)
-        me = User.objects.get(id=self.user_id)
-
         organization = Organization.objects.get(id=organization_id)
+
+        # Grab the user from the organization users so it makes sure
+        # he belongs to the organization. It can avoid some misbehaviors.
+        user = organization.users.get(id=user_id)
 
         if organization.owner == user:
             return HttpResponse("You can't remove the owner!", status=403)
 
-        if organization.owner != me:
+        if organization.owner != self.me:
             return HttpResponse("No permission for that!", status=403)
 
 
         organization.admins.remove(user)
         organization.save()
-
-        # me    = User.objects.get(id=self.user_id)
-        # event = EUnbindOrganizationUser.objects.create(organization=me.default,
-        # organization=organization, user=me, peer=user)
-# 
-        # event.dispatch(*organization.users.all())
-# 
-        # me.ws_sound(organization)
-
-        # When user is removed from timline then it
-        # gets unsubscribed from the organization.
-        # The logged user is sending the event
-        # to the user queue that is going to receive
-        # the unsubscribe evvent.
-        # me.ws_unsubscribe(organization, target=user)
-
-        # As said before, order of events cant be determined
-        # when dispatched towards two queues. It might
-        # happen of sound event being dispatched before subscribe event.
-        # So, we warrant sound to happen.
-        # me.ws_sound(user)
 
         return HttpResponse(status=200)
 
@@ -880,22 +842,21 @@ class ListNodes(GuardianView):
     """
 
     def get(self, request):
-        user  = User.objects.get(id=self.user_id)
-        nodes = Node.objects.filter(Q(board__organization=user.default) 
-        | Q(timeline__organization=user.default)) 
+        nodes = Node.objects.filter(Q(board__organization=self.me.default) 
+        | Q(timeline__organization=self.me.default)) 
 
-        nodes = nodes.filter(Q(board__members=user) | Q(timeline__users=user))
+        nodes = nodes.filter(Q(board__members=self.me) | Q(timeline__users=self.me))
 
         nodes = nodes.order_by('-indexer')
         total = nodes.count()
 
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         filter, _ = NodeFilter.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         query = Q(board__name__icontains=filter.pattern) | \
         Q(board__description__icontains=filter.pattern) | \
@@ -906,8 +867,9 @@ class ListNodes(GuardianView):
         count = nodes.count()
 
         return render(request, 'core_app/list-nodes.html', 
-        {'nodes': nodes, 'boardpins': boardpins, 'listpins': listpins, 'user': user, 'total': total, 
-        'count': count, 'organization': user.default, 'filter': filter, 
+        {'nodes': nodes, 'boardpins': boardpins, 'listpins': listpins, 
+        'user': self.me, 'total': total, 'count': count, 
+        'organization': self.me.default, 'filter': filter, 
         'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class SetupNodeFilter(GuardianView):
