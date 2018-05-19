@@ -125,23 +125,9 @@ class UnbindTimelineUser(GuardianView):
         timeline.users.remove(user)
         timeline.save()
 
-        me    = User.objects.get(id=self.user_id)
-        event = EUnbindTimelineUser.objects.create(organization=me.default,
-        timeline=timeline, user=me, peer=user)
-
+        event = EUnbindTimelineUser.objects.create(organization=self.me.default,
+        timeline=timeline, user=self.me, peer=user)
         event.dispatch(*timeline.users.all())
-
-        # me.ws_sound(timeline)
-
-        # When user is removed from timline then it
-        # gets unsubscribed from the timeline.
-        # me.ws_unsubscribe(timeline, target=user)
-
-        # As said before, order of events cant be determined
-        # when dispatched towards two queues. It might
-        # happen of sound event being dispatched before subscribe event.
-        # So, we warrant soud to happen.
-        # me.ws_sound(user)
 
         return HttpResponse(status=200)
 
