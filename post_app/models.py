@@ -15,7 +15,10 @@ import operator
 
 # Create your models here.
 
-class PostMixin(object):
+class PostMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
@@ -86,7 +89,10 @@ class PostMixin(object):
     def __str__(self):
         return self.label
 
-class GlobalAssignmentsFilterMixin:
+class GlobalAssignmentsFilterMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def get_partial(self, posts):
         posts = posts.filter(Q(done=self.done))
         if self.options == '0':
@@ -95,7 +101,10 @@ class GlobalAssignmentsFilterMixin:
             return posts.filter(user=self.user)
         return posts
 
-class PostFilterMixin:
+class PostFilterMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def collect(self, posts):
         posts = posts.filter(done=False)
 
@@ -108,7 +117,10 @@ class PostFilterMixin:
 
         return posts
 
-class PostFileWrapperMixin(object):
+class PostFileWrapperMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def duplicate(self, post=None):
         wrapper       = PostFileWrapper.objects.get(id=self.id)
         wrapper.pk    = None
@@ -116,32 +128,7 @@ class PostFileWrapperMixin(object):
         wrapper.save()
         return wrapper
 
-class ECreatePostMixin(object):
-    def get_absolute_url(self):
-        return reverse('post_app:e-create-post', 
-        kwargs={'event_id': self.id})
-
-class EDeletePostMixin(object):
-    def get_absolute_url(self):
-        return reverse('post_app:e-delete-post', 
-        kwargs={'event_id': self.id})
-
-class EArchivePostMixin(object):
-    def get_absolute_url(self):
-        return reverse('post_app:e-archive-post', 
-        kwargs={'event_id': self.id})
-
-class EUpdatePostMixin(object):
-    def get_absolute_url(self):
-        return reverse('post_app:e-update-post', 
-        kwargs={'event_id': self.id})
-
-class ECutPostMixin(object):
-    def get_absolute_url(self):
-        return reverse('post_app:e-cut-post', 
-        kwargs={'event_id': self.id})
-
-class Post(PostMixin, models.Model):
+class Post(PostMixin):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
 
@@ -173,7 +160,7 @@ class Post(PostMixin, models.Model):
     data = models.TextField(blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
 
-class PostFilter(PostFilterMixin, models.Model):
+class PostFilter(PostFilterMixin):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: enginee x-11 + wheels + ,,,')
 
@@ -213,7 +200,7 @@ class GlobalPostFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization', )
 
-class GlobalAssignmentFilter(GlobalAssignmentsFilterMixin, models.Model):
+class GlobalAssignmentFilter(GlobalAssignmentsFilterMixin):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: tag:arcamens + tag:urgent')
 
@@ -251,7 +238,7 @@ class PostFileWrapper(PostFileWrapperMixin, models.Model):
     file = models.FileField(
     verbose_name='', help_text='')
 
-class ECreatePost(ECreatePostMixin, Event):
+class ECreatePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_create_post0', blank=True)
 
@@ -260,21 +247,21 @@ class ECreatePost(ECreatePostMixin, Event):
 
     html_template = 'post_app/e-create-post.html'
 
-class EArchivePost(EArchivePostMixin, Event):
+class EArchivePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_archive_post0', blank=True)
     post = models.ForeignKey('Post', blank=True,
     related_name='e_archive_post1')
     html_template = 'post_app/e-archive-post.html'
 
-class EUnarchivePost(EArchivePostMixin, Event):
+class EUnarchivePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_unarchive_post0', blank=True)
     post = models.ForeignKey('Post', blank=True,
     related_name='e_unarchive_post1')
     html_template = 'post_app/e-unarchive-post.html'
 
-class EDeletePost(EDeletePostMixin, Event):
+class EDeletePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_delete_post', blank=True)
 
@@ -283,7 +270,7 @@ class EDeletePost(EDeletePostMixin, Event):
 
     html_template = 'post_app/e-delete-post.html'
 
-class ECutPost(ECutPostMixin, Event):
+class ECutPost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_cut_post0', blank=True)
 
@@ -291,7 +278,7 @@ class ECutPost(ECutPostMixin, Event):
     related_name='e_cut_post1', blank=True)
     html_template = 'post_app/e-cut-post.html'
 
-class ECopyPost(ECutPostMixin, Event):
+class ECopyPost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_copy_post0', blank=True)
 
@@ -299,7 +286,7 @@ class ECopyPost(ECutPostMixin, Event):
     related_name='e_copy_post1', blank=True)
     html_template = 'post_app/e-copy-post.html'
 
-class EUpdatePost(EUpdatePostMixin, Event):
+class EUpdatePost(Event):
     timeline = models.ForeignKey('timeline_app.Timeline', 
     related_name='e_update_post0', blank=True)
     post = models.ForeignKey('Post', blank=True)
@@ -386,12 +373,15 @@ class ECreateCardFork(Event):
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
 
-class PostPinMixin(object):
+class PostPinMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def get_absolute_url(self):
         return reverse('post_app:post', 
             kwargs={'post_id': self.post.id})
 
-class PostPin(PostPinMixin, models.Model):
+class PostPin(PostPinMixin):
     user = models.ForeignKey('core_app.User', null=True, blank=True)
 
     organization = models.ForeignKey('core_app.Organization', 
@@ -401,6 +391,7 @@ class PostPin(PostPinMixin, models.Model):
 
     class Meta:
         unique_together = ('user', 'organization', 'post')
+
 
 
 

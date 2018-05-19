@@ -59,8 +59,6 @@ class CreateSnippet(GuardianView):
         organization=user.default, child=post, user=user, snippet=snippet)
         event.dispatch(*post.ancestor.users.all())
 
-        user.ws_sound(post.ancestor)
-
         return redirect('post_app:refresh-post', post_id=post.id)
 
 class AttachFile(GuardianView):
@@ -128,8 +126,6 @@ class UpdateSnippet(GuardianView):
         event.dispatch(*record.post.ancestor.users.all())
         event.save()
 
-        user.ws_sound(record.post.ancestor)
-
         return redirect('snippet_app:snippet', 
         snippet_id=record.id)
 
@@ -145,8 +141,6 @@ class DeleteSnippet(GuardianView):
         event.dispatch(*snippet.post.ancestor.users.all())
         snippet.delete()
 
-        user.ws_sound(snippet.post.ancestor)
-
         return redirect('post_app:refresh-post', 
         post_id=snippet.post.id)
 
@@ -156,6 +150,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 

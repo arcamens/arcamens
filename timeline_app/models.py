@@ -1,14 +1,22 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from core_app.models import  User, Event, Node
+from sqlike.parser import SqLike, SqNode
 from django.db import models
 from django.db.models import Q
-from onesignal.models import GroupSignal
 import datetime
 
-class TimelineMixin(GroupSignal):
+class TimelineMixin(models.Model):
     class Meta:
         abstract = True
+
+    @classmethod
+    def from_sqlike(cls):
+        default = lambda ind: Q(name__icontains=ind) |\
+         Q(description__icontains=ind)
+
+        sqlike = SqLike(SqNode(None, default))
+        return sqlike
 
     @classmethod
     def get_user_timelines(cls, user):
@@ -33,32 +41,18 @@ class TimelineMixin(GroupSignal):
         self.users.add(user)
         self.save()
 
-class EUpdateTimelineMixin(object):
-    pass
+class TimelinePinMixin(models.Model):
+    class Meta:
+        abstract = True
 
-class EDeleteTimelineMixin(object):
-    pass
-
-class EUnbindTimelineUserMixin(object):
-    pass
-
-class ECreateTimelineMixin(object):
-    pass
-
-class EBindTimelineUserMixin(object):
-    pass
-
-class TimelinePinMixin(object):
     def get_absolute_url(self):
         return reverse('timeline_app:list-posts', 
             kwargs={'timeline_id': self.timeline.id})
 
-class TimelinePin(TimelinePinMixin, models.Model):
+class TimelinePin(TimelinePinMixin):
     user = models.ForeignKey('core_app.User', null=True, blank=True)
-
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
-
     timeline = models.ForeignKey('timeline_app.Timeline', null=True, blank=True)
 
     class Meta:
@@ -87,30 +81,30 @@ class Timeline(TimelineMixin):
     node = models.OneToOneField('core_app.Node', 
     null=False, related_name='timeline')
 
-class EDeleteTimeline(Event, EDeleteTimelineMixin):
+class EDeleteTimeline(Event):
     timeline_name = models.CharField(null=True,
     blank=False, max_length=250)
 
     html_template = 'timeline_app/e-delete-timeline.html'
 
-class ECreateTimeline(Event, ECreateTimelineMixin):
+class ECreateTimeline(Event):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_create_timeline', blank=True)
     html_template = 'timeline_app/e-create-timeline.html'
 
-class EUpdateTimeline(Event, EUpdateTimelineMixin):
+class EUpdateTimeline(Event):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_update_timeline', blank=True)
     html_template = 'timeline_app/e-update-timeline.html'
 
-class EBindTimelineUser(Event, EBindTimelineUserMixin):
+class EBindTimelineUser(Event):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_bind_timeline_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
     html_template = 'timeline_app/e-bind-timeline-user.html'
 
-class EUnbindTimelineUser(Event, EUnbindTimelineUserMixin):
+class EUnbindTimelineUser(Event):
     timeline = models.ForeignKey('Timeline', 
     related_name='e_unbind_timeline_user', blank=True)
 
@@ -124,16 +118,6 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
-
-
-
-
-
-
-
-
-
-
 
 
 

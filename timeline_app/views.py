@@ -76,9 +76,6 @@ class CreateTimeline(GuardianView):
 
         event.dispatch(self.me)
 
-        # user.ws_subscribe(record, target=user)
-        # user.ws_sound()
-
         return redirect('core_app:list-nodes')
 
 class DeleteTimeline(GuardianView):
@@ -103,11 +100,6 @@ class DeleteTimeline(GuardianView):
         event    = EDeleteTimeline.objects.create(organization=self.me.default,
         timeline_name=timeline.name, user=self.me)
 
-        # user.ws_sound(timeline)
-        # user.ws_unsubscribe(timeline, target=timeline)
-
-        # should tell users to unsubscribe here.
-        # it may hide bugs.
         event.dispatch(*timeline.users.all())
         timeline.delete()
 
@@ -147,13 +139,9 @@ class UpdateTimeline(GuardianView):
                      {'timeline': record, 'form': form})
         form.save()
 
-        user  = User.objects.get(id=self.user_id)
         event = EUpdateTimeline.objects.create(
-        organization=user.default, timeline=record, user=user)
-
+        organization=self.me.default, timeline=record, user=self.me)
         event.dispatch(*record.users.all())
-
-        # user.ws_sound(record)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=record.id)
@@ -161,11 +149,10 @@ class UpdateTimeline(GuardianView):
 class PastePosts(GuardianView):
     def get(self, request, timeline_id):
         timeline = Timeline.objects.get(id=timeline_id)
-        user     = User.objects.get(id=self.user_id)
         users    = timeline.users.all()
 
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         posts = clipboard.posts.all()
 
@@ -175,33 +162,15 @@ class PastePosts(GuardianView):
 
         posts.update(ancestor=timeline)
         event = EPastePost(
-        organization=user.default, timeline=timeline, user=user)
+        organization=self.me.default, timeline=timeline, user=self.me)
         event.save(hcache=False)
         event.posts.add(*posts)
         event.dispatch(*users)
         event.save()
 
-        # user.ws_sound(timeline)
-
         clipboard.posts.clear()
         return redirect('timeline_app:list-posts', 
         timeline_id=timeline.id)
-
-class ListEvents(GuardianView):
-    """
-    """
-
-    def get(self, request):
-        user   = User.objects.get(id=self.user_id)
-        events = user.events.filter(organization=user.default).order_by('-created')
-
-        # Missing dynamic filter.
-        total = user.events.filter(organization=user.default).order_by('-created')
-
-        form = forms.FindEventForm()
-        return render(request, 'timeline_app/list-events.html',
-        {'user': user, 'events': events, 'form': form, 
-        'total': total, 'organization': user.default})
 
 class BindTimelineUser(GuardianView):
     def get(self, request, timeline_id, user_id):
@@ -211,98 +180,79 @@ class BindTimelineUser(GuardianView):
         timeline.users.add(user)
         timeline.save()
 
-        me = User.objects.get(id=self.user_id)
-
-        event    = EBindTimelineUser.objects.create(organization=me.default,
-        timeline=timeline, user=me, peer=user)
+        event    = EBindTimelineUser.objects.create(organization=self.me.default,
+        timeline=timeline, user=self.me, peer=user)
 
         event.dispatch(*timeline.users.all())
-
-        # me.ws_sound(timeline)
-        # me.ws_subscribe(timeline, target=user)
-
-        # it seems i cant warrant the order the events will be dispatched
-        # to the queue, if it is userid queue or timelineid queue
-        # then i have to just send again the sound event to the 
-        # user queue to warrant the event sound being dispatched.
-        # obs: if i'll abandon sound when user interacts it is not
-        # necessary.
-        # me.ws_sound(user)
 
         return HttpResponse(status=200)
 
 class ManageUserTimelines(GuardianView):
     def get(self, request, user_id):
-        me = User.objects.get(id=self.user_id)
-        user = User.objects.get(id=user_id)
+        user      = User.objects.get(id=user_id)
+        timelines = self.me.timelines.filter(organization=self.me.default)
+        total     = timelines.count()
+        excluded  = timelines.exclude(users=user)
+        included  = timelines.filter(users=user)
 
-        timelines = me.timelines.filter(organization=me.default)
-        excluded = timelines.exclude(users=user)
-        included = timelines.filter(users=user)
+        env = {'user': user, 'included': included, 
+        'excluded': excluded,  'count': total, 'total': total, 'me': self.me, 
+        'organization': self.me.default, 'form':forms.TimelineSearchForm()}
 
-        return render(request, 'timeline_app/manage-user-timelines.html', 
-        {'user': user, 'included': included, 'excluded': excluded,
-        'me': me, 'organization': me.default,'form':forms.BindTimelinesForm()})
+        return render(request, 'timeline_app/manage-user-timelines.html', env)
 
     def post(self, request, user_id):
-        user = User.objects.get(id=user_id)
-        form = forms.BindTimelinesForm(request.POST)
-
-        me = User.objects.get(id=self.user_id)
-        timelines = me.timelines.filter(organization=me.default)
+        user      = User.objects.get(id=user_id)
+        sqlike    = Timeline.from_sqlike()
+        form      = forms.TimelineSearchForm(request.POST, sqlike=sqlike)
+        timelines = self.me.timelines.filter(organization=self.me.default)
+        total     = timelines.count()
 
         if not form.is_valid():
             return render(request, 'timeline_app/manage-user-timelines.html', 
-                {'user': user, 'included': included, 'excluded': excluded,
-                    'me': me, 'organization': me.default, 
-                        'form':form}, status=400)
+                {'user': user, 'me': self.me, 'organization': self.me.default, 
+                    'count': 0,'form':form, 'total': total,}, status=400)
 
-        timelines = timelines.filter(Q(
-        name__contains=form.cleaned_data['name']) | Q(
-        description__contains=form.cleaned_data['name']))
+        excluded  = timelines.exclude(users=user)
+        included  = timelines.filter(users=user)
 
-        # timeline.users.add(user)
-        # timeline.save()
+        included = sqlike.run(included)
+        excluded = sqlike.run(excluded)
+        count    = included.count() + excluded.count()
+        env      = {'user': user, 'included': included, 'excluded': excluded, 
+        'total': total, 'me': self.me, 'organization': self.me.default, 
+        'form':form, 'count': count}
 
-        # return redirect('timeline_app:list-user-tags', 
-        # user_id=user.id)
-        excluded = timelines.exclude(users=user)
-        included = timelines.filter(users=user)
-
-        return render(request, 'timeline_app/manage-user-timelines.html', 
-        {'user': user, 'included': included, 'excluded': excluded,
-        'me': me, 'organization': me.default,'form':form})
+        return render(request, 'timeline_app/manage-user-timelines.html', env)
 
 class ManageTimelineUsers(GuardianView):
     def get(self, request, timeline_id):
-        me = User.objects.get(id=self.user_id)
         timeline = Timeline.objects.get(id=timeline_id)
 
         included = timeline.users.all()
-        users    = me.default.users.all()
+        users    = self.me.default.users.all()
         excluded = users.exclude(timelines=timeline)
         total    = included.count() + excluded.count()
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
-        'me': me, 'organization': me.default,'form':forms.UserSearchForm(), 
+        'me': self.me, 'organization': self.me.default,'form':forms.UserSearchForm(), 
         'count': total, 'total': total,})
 
     def post(self, request, timeline_id):
-        sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-        me   = User.objects.get(id=self.user_id)
+        sqlike   = User.from_sqlike()
+        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
         timeline = Timeline.objects.get(id=timeline_id)
         included = timeline.users.all()
-        users    = me.default.users.all()
+        users    = self.me.default.users.all()
         excluded = users.exclude(timelines=timeline)
 
         total = included.count() + excluded.count()
         
         if not form.is_valid():
             return render(request, 'timeline_app/manage-timeline-users.html', 
-                {'me': me, 'timeline': timeline, 'count': 0, 'total': total,
+                {'me': self.me, 'timeline': timeline, 'count': 0, 'total': total,
                         'form':form}, status=400)
 
         included = sqlike.run(included)
@@ -311,7 +261,7 @@ class ManageTimelineUsers(GuardianView):
 
         return render(request, 'timeline_app/manage-timeline-users.html', 
         {'included': included, 'excluded': excluded, 'timeline': timeline,
-        'me': me, 'organization': me.default,'form':form, 
+        'me': self.me, 'organization': self.me.default,'form':form, 
         'count': count, 'total': total,})
 
 class TimelineLink(GuardianView):
@@ -319,28 +269,26 @@ class TimelineLink(GuardianView):
     """
 
     def get(self, request, timeline_id):
-        record = Timeline.objects.get(id=timeline_id)
+        record       = Timeline.objects.get(id=timeline_id)
+        boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins     = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(
+            organization=self.me.default)
 
-        user = User.objects.get(id=self.user_id)
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
+        env = {'timeline': record, 'user': self.me, 'boardpins': boardpins, 
+        'default': self.me.default, 'listpins': listpins, 'cardpins': cardpins, 
+        'timelinepins': timelinepins, 'organization': self.me.default, 
+        'organizations': organizations, 'settings': settings}
 
-        organizations = user.organizations.exclude(id=user.default.id)
-
-        return render(request, 'timeline_app/timeline-link.html', 
-        {'timeline': record, 'user': user, 'boardpins': boardpins, 'default': user.default,
-        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
-        'organization': user.default, 'organizations': organizations, 
-        'settings': settings})
+        return render(request, 'timeline_app/timeline-link.html', env)
 
 class PinTimeline(GuardianView):
     def get(self, request, timeline_id):
-        user  = User.objects.get(id=self.user_id)
         timeline = Timeline.objects.get(id=timeline_id)
-        pin   = TimelinePin.objects.create(user=user, 
-        organization=user.default, timeline=timeline)
+        pin   = TimelinePin.objects.create(user=self.me, 
+        organization=self.me.default, timeline=timeline)
         return redirect('board_app:list-pins')
 
 class Unpin(GuardianView):
@@ -348,6 +296,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

@@ -27,9 +27,9 @@ class GroupSignal(models.Model):
         "Authorization": auth}
 
         for ind in groups:
-            self.post(data, ind, headers)
+            self.http_post(data, ind, headers)
 
-    def post(self, data, devices, headers):
+    def http_post(self, data, devices, headers):
         url = 'https://onesignal.com/api/v1/notifications'
         targets = []
 
@@ -59,6 +59,7 @@ class Device(models.Model):
         tmp     = get_template('onesignal/init_onesignal.html')
         html    = tmp.render(context)
         return html
+
 
 
 
