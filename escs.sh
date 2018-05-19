@@ -1,5 +1,5 @@
 ##############################################################################
-# push arcamens alpha branch.
+# push arcamens staging branch.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
@@ -30,21 +30,6 @@ git add *
 git commit -a
 git push -u origin master
 ##############################################################################
-# create dev branch.
-cd ~/projects/arcamens-code
-git branch -a
-git checkout -b development
-git push --set-upstream origin development
-##############################################################################
-# push, arcamens, beta.
-cd ~/projects/arcamens-code
-# clean up all .pyc files. 
-find . -name "*.pyc" -exec rm -f {} \;
-git status
-git add *
-git commit -a
-git push -u origin beta
-##############################################################################
 # merge staging into master.
 git checkout master
 git merge staging
@@ -66,11 +51,6 @@ git checkout master
 
 
 ##############################################################################
-# checkout all.
-
-git checkout *
-
-##############################################################################
 # merge alpha into staging.
 git checkout staging
 git merge alpha
@@ -82,15 +62,10 @@ git push origin :alpha
 git fetch -p 
 
 ##############################################################################
-
-# arcamens, pull.
 cd ~/projects/arcamens-code
 git pull
 ##############################################################################
-# setup, admin, site.
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python manage.py shell
-##############################################################################
-# make migrations.
+# erase database.
 cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
@@ -98,45 +73,26 @@ python manage.py blowdb
 # stress-db.
 ./stress-db teta 1
 ##############################################################################
-
-
-# create, arcamens, alpha, branch.
+# create alpha branch.
 git checkout -b alpha
 git push --set-upstream origin alpha
 
-# create, arcamens, beta, branch.
-git checkout -b beta
-git push --set-upstream origin beta
-
-git checkout -b gamma
-git push --set-upstream origin gamma
-
 ##############################################################################
-# switch, alpha, branch.
+# switch to alpha branch.
 git checkout alpha
-##############################################################################
-# switch, beta, branch.
-git checkout beta
-
 ##############################################################################
 # run arcamens project.
 cd ~/projects/arcamens-code
 stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 
 #####k#########################################################################
-# clone, arcamens, wiki.
-
-cd ~/projects
-git clone git@bitbucket.org:iogf/arcamens.git/wiki arcamens.wiki-code
-
-##############################################################################
-# create, setup, virtualenv, arcamens.
+# create arcamens virtualenv.
 cd ~/.virtualenvs/
 ls -la
 # by default, python3 has executable named python in arch linux.
 virtualenv arcamens -p /usr/bin/python
 ##############################################################################
-# activate virtualenv arcamens.
+# activate arcamens virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
@@ -147,11 +103,11 @@ source arcamens/bin/activate
 cd ~/projects/arcamens-code
 pip install -r requirements.txt 
 ##############################################################################
-# create, arcamens, project.
+# create arcamens project.
 cd ~/projects/
 django-admin startproject arcamens arcamens-code
 ##############################################################################
-# create, core_app, app.
+# create core_app app.
 cd ~/projects/arcamens-code
 python manage.py startapp core_app
 ##############################################################################
@@ -159,256 +115,28 @@ python manage.py startapp core_app
 cd ~/projects/arcamens-code
 python manage.py startapp onesignal
 ##############################################################################
-# create, help_app, app.
-cd ~/projects/arcamens-code
-python manage.py startapp help_app
-##############################################################################
-# create, register_app, app.
-cd ~/projects/arcamens-code
-python manage.py startapp register_app
-
-##############################################################################
-# create, timeline, app.
+# create timeline app.
 cd ~/projects/arcamens-code
 python manage.py startapp post_app
 ##############################################################################
-# create, chat_app, app.
-cd ~/projects/arcamens-code
-python manage.py startapp chat_app
-##############################################################################
-# create, comment_app, app.
+# create comment_app app.
 cd ~/projects/arcamens-code
 python manage.py startapp comment_app
 
-
 ##############################################################################
-# create, timeline_app, app.
+# create timeline_app app.
 cd ~/projects/arcamens-code
 python manage.py startapp timeline_app
 ##############################################################################
-# create, stream, app.
+# create stream app.
 cd ~/projects/arcamens-code
 python manage.py startapp stream_app
 ##############################################################################
-# rename, customer, to user.
-
-cd ~/projects/arcamens-code
-grep -rl 'board_app\.models\.User' --exclude-dir='.git' ./ | xargs sed -i 's/board_app\.models\.User/core_app.models.User/g'
-
-grep -rl 'OrganizationEvent' --exclude-dir='.git' ./ | xargs sed -i 's/OrganizationEvent/Event/g'
-
-grep -rl 'board_app.Labor' --exclude-dir='.git' ./ | xargs sed -i 's/board_app.Labor/core_app.Organization/g'
-
-grep -rl 'timeline_app.Opus' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app.Opus/core_app.Organization/g'
-
-grep -rl '\.opus' --exclude-dir='.git' ./ | xargs sed -i 's/\.opus//g'
-grep -rl '\.labor' --exclude-dir='.git' ./ | xargs sed -i 's/\.labor//g'
-
-grep -rl 'Labor' --exclude-dir='.git' ./ | xargs sed -i 's/Labor/Organization/g'
-grep -rl 'Opus' --exclude-dir='.git' ./ | xargs sed -i 's/Opus/Organization/g'
-
-cd ~/projects/labor2-code
-
-grep -rl 'timeline_app\.User' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\.User/core_app.User/g'
-
-grep -rl 'user-settings' --exclude-dir='.git' ./ | xargs sed -i 's/user-settings/list-user-tags/g'
-
-grep -rl 'timeline_app:list-timelines' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app:list-timelines/timeline_app:list-timelines/g'
-
-cd ~/projects/arcamens-code
-
-grep -rl 'core_app:profile' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:profile/board_app:profile/g'
-
-
-cd ~/projects/arcamens-code
-
-grep -rl 'default_organization' --exclude-dir='.git' ./ | xargs sed -i 's/default_organization/default/g'
-
-cd ~/projects/arcamens-code/board_app/
-
-grep -rl 'timeline_app/' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\//board_app\//g'
-
-grep -rl 'timeline_app' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app/timeline_app/g'
-
-cd ~/projects/arcamens-code/board_app/
-
-grep -rl 'timeline_app/' --exclude-dir='.git' ./ | xargs sed -i 's/timeline_app\//board_app\//g'
-
-cd ~/projects/arcamens-code/list_app
-
-grep -rl 'core_app\.models' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.models/board_app.models/g'
-
-grep -rl 'core_app\.arcamens' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.arcamens/timeline_app\.arcamens/g'
-
-cd ~/projects/arcamens-code/board_app
-
-grep -rl 'core_app\.models' --exclude-dir='.git' ./ | xargs sed -i 's/core_app\.models/board_app.models/g'
-
-cd ~/projects/labor2-code
-
-grep -rl 'Organization' --exclude-dir='.git' ./ | xargs sed -i 's/Organization/arcamens/g'
-
-cd ~/projects/arcamens-code/timeline_app
-
-grep -rl 'core_app:' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:/timeline_app:/g'
-
-cd ~/projects/arcamens-code/board_app
-
-grep -rl 'core_app:' --exclude-dir='.git' ./ | xargs sed -i 's/core_app:/board_app:/g'
-
-
-cd ~/projects/arcamens-code/board_app
-
-grep -rl '#main-view' --exclude-dir='.git' ./ | xargs sed -i 's/#main-view/#main-viewport/g'
-
-grep -rl '#main-view' --exclude-dir='.git' ./ | xargs sed -i 's/#main-view/#main-viewport/g'
-
-
-grep -rl 'Comment' --exclude-dir='.git' ./ | xargs sed -i 's/Comment/PostComment/g'
-
-grep -rl 'UserFilter' --exclude-dir='.git' ./ | xargs sed -i 's/UserFilter/arcamensUserFilter/g'
-
-grep -rl 'Event' --exclude-dir='.git' ./ | xargs sed -i 's/Event/arcamensEvent/g'
-
-grep -rl 'customer' --exclude-dir='.git' ./ | xargs sed -i 's/customer/user/g'
-
-cd ~/projects/arcamens-code/timeline_app
-
-grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
-
-cd ~/projects/arcamens-code/post_app
-grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
-
-cd ~/projects/arcamens-code/post_comment_app
-grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
-
-cd ~/projects/arcamens-code/site_app
-grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/timeline_app/g'
-
-cd ~/projects/arcamens-code/card_comment_app
-grep -rl 'core_app' --exclude-dir='.git' ./ | xargs sed -i 's/core_app/board_app/g'
-
-cd ~/projects/arcamens-code/post_app
-grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/PostFileWrapper/g'
-
-cd ~/projects/arcamens-code/card_app
-grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/CardFileWrapper/g'
-
-cd ~/projects/arcamens-code/board_app
-grep -rl 'FileWrapper' --exclude-dir='.git' ./ | xargs sed -i 's/FileWrapper/CardFileWrapper/g'
-
-
-##############################################################################
-# delete, last, commit.
+# delete last commit.
 
 cd ~/projects/arcamens-code
 git reset HEAD^ --hard
 git push -f
-##############################################################################
-# checkout, changed, files, between, two, branches.
-
-git diff --name-status alpha beta
-##############################################################################
-# merge, specific, file, from alpha.
-
-git checkout beta 
-git checkout alpha path-to-file
-git commit -a
-##############################################################################
-# unversion, file, git, db.sqlite3.
-
-git rm --cached db.sqlite3
-git rm --cached arcamens/settings.py
-##############################################################################
-# create, signup_app, app.
-cd ~/projects/arcamens-code
-python manage.py startapp site_app
-##############################################################################
-# delete, beta, branch.
-
-cd ~/projects/arcamens-code
-git branch -d beta
-git push origin :beta
-git fetch -p 
-
-##############################################################################
-
-# delete, gamma, branch.
-
-cd ~/projects/arcamens-code
-git branch -d gamma
-git push origin :gamma
-git fetch -p 
-
-##############################################################################
-# delete alpha branch.
-
-cd ~/projects/arcamens-code
-git branch -d alpha
-git push origin :alpha
-git fetch -p 
-
-##############################################################################
-# create releases.
-
-git checkout master
-git tag -a 1.0.1 -m 'Getting list-logs view to work with pagination.'
-git push origin : 1.0.1
-git checkout staging
-
-git checkout master
-git tag -a 1.0.3 -m 'Fixing bug with list_app.CreateView.'
-git push origin : 1.0.3
-git checkout staging
-
-git checkout master
-git tag -a 1.0.4 -m 'Fixing bug with clipboard clear button. It deletes all cards/posts/lists now.'
-git push origin : 1.0.4
-git checkout staging
-
-git checkout master
-git tag -a 1.0.5 -m 'New shout mechanism implemented.'
-git push origin : 1.0.5
-git checkout staging
-
-
-git checkout master
-git tag -a 1.0.11 -m 'Bug fixes, getting to work with jsim.'
-git push origin : 1.0.11
-git checkout staging
-
-git checkout master
-git tag -a 1.1.0 -m 'Bug fixes, implementing undoing clipboard operations.'
-git push origin : 1.1.0
-git checkout staging
-
-git checkout master
-git tag -a 1.1.2 -m 'Improvement of colors and design.'
-git push origin : 1.1.2
-git checkout staging
-
-git checkout master
-git tag -a 1.2.0 
-git push origin : 1.2.0
-git checkout staging
-
-##############################################################################
-cd ~/projects/arcamens-code
-
-# rename card_app to markdown_app.
-grep -rl  'card_app' . | xargs sed -i 's/card_app/markdown_app/g' 
-grep -rl  'Card' . | xargs sed -i 's/Card/Markdown/g' 
-grep -rl  'card' . | xargs sed -i 's/card/markdown/g' 
-
-##############################################################################
-#fix #gitignore #remove #cached #files #ignore #folder #migrations
-
-git rm -r --cached ./*/migrations/
-git rm --cached db.sqlite3
-git add .gitignore
-##############################################################################
-
-wget --post-data='somedata' http://189.84.248.176:8000/register_app/paypal-ipn/
 ##############################################################################
 # install paybills in virtualenv.
 cd ~/.virtualenvs/
@@ -420,26 +148,14 @@ rm -fr build
 # access victor server through ssh.
 
 tee -i >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-
-# accept signals.
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
-
-# run as supervisord.
+##############################################################################
+# run supervisord.
 supervisord -n -c ../conf/supervisord.conf
 
 ##############################################################################
 # deploy arcamens on victor server.
 # use rsync.
-rsync -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
-
-# uses scp.
-scp -r /tmp/arcamens-code arcamens-test@job-lab.net:/home/arcamens-test/projects
-
-# remove the old code.
-ssh arcamens-test@job-lab.net '
-rm -fr /home/arcamens-test/projects/arcamens-code'
-
-scp -r /home/tau/projects/arcamens-code/build-data opus@opus.test.splittask.net:/home/opus/projects/arcamens-code
+rsync -r folder arcamens-test@job-lab.net:/path/
 
 ##############################################################################
 # install blowdb
@@ -564,6 +280,8 @@ rm -fr build
 
 tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
 sudo supervisorctl restart arcamens
+sudo supervisorctl stop arcamens
+
 ##############################################################################
 # View uwsgi logs in victor server.
 tail -f ../logs/uwsgi.log
@@ -624,28 +342,6 @@ python manage.py migrate bitbucket_app
 
 mysqldump -u staging -p staging > ../mysql.sql
 ##############################################################################
-
-grep -rl '#smallModalContent' --exclude-dir='.git' ./ | xargs sed -i 's/#smallModalContent/#smallModalContent/g'
-
-##############################################################################
-DROP TABLE bitbucket_app_ebitbucketcommit;
-
-delete from django_migrations where app = 'core_app';
-delete from django_migrations where app = 'paybills';
-
-DROP TABLE paybills_paymentprocess;
-DROP TABLE paybills_paymentsuccess;
-DROP TABLE paybills_service                 ;
-DROP TABLE paybills_subscriptionpayment     ;
-DROP TABLE paybills_subscriptionprocess     ;
-DROP TABLE paybills_subscriptionsuccess     ;
-DROP TABLE paybills_unsubscriptionsuccess ;
-##############################################################################
-# create missing column in mysql, fix issues with migrations.
-
-alter table core_app_user add column max_users INT NULL DEFAULT 3;
-
-#####k#########################################################################
 # bind user to all boards/timelines joinall command.
 
 python manage.py restore_ownership port arca ioli
@@ -654,9 +350,6 @@ python manage.py restore_ownership port arca ioli
 
 DROP DATABASE staging;
 CREATE DATABASE staging;
-
-
-mysql -u username -p database_name < file.sql
 ##############################################################################
 # dump db as json and restore it.
 
