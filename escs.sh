@@ -8,6 +8,7 @@ git status
 git add *
 git commit -a
 git push -u origin staging
+
 #############################################################################
 # push arcamens alpha branch.
 cd ~/projects/arcamens-code
@@ -18,6 +19,8 @@ git status
 git add *
 git commit -a
 git push -u origin alpha
+
+
 
 ##############################################################################
 # push arcamens on master.
@@ -361,6 +364,7 @@ python manage.py loaddata arcamens-db.json
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens-code
+
 
 
 
