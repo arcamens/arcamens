@@ -157,9 +157,7 @@ class CreateCard(GuardianView):
 
     def get(self, request, ancestor_id, card_id=None):
         ancestor = list_app.models.List.objects.get(id=ancestor_id)
-        user     = core_app.models.User.objects.get(id=self.user_id)
-        card     = models.Card.objects.create(owner=user, 
-        ancestor=ancestor)
+        card     = models.Card.objects.create(owner=self.me, ancestor=ancestor)
         card.save()
 
         form = forms.CardForm(instance=card)
@@ -172,7 +170,6 @@ class CreateCard(GuardianView):
         ancestor = list_app.models.List.objects.get(id=ancestor_id)
         card     = models.Card.objects.get(id=card_id)
         form     = forms.CardForm(request.POST, instance=card)
-        user     = core_app.models.User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'card_app/create-card.html', 
@@ -181,18 +178,17 @@ class CreateCard(GuardianView):
 
         card.save()
 
-        event = models.ECreateCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, card=card, user=user)
+        event = models.ECreateCard.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card=card, user=self.me)
         event.dispatch(*ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=card.id)
 
 class SelectForkList(GuardianView):
     def get(self, request, card_id):
-        user   = User.objects.get(id=self.user_id)
         card   = models.Card.objects.get(id=card_id)
         form   = forms.ListSearchform()
-        boards = user.boards.filter(organization=user.default)
+        boards = self.me.boards.filter(organization=self.me.default)
         lists  = List.objects.filter(ancestor__in=boards)
 
         return render(request, 'card_app/select-fork-list.html', 
@@ -202,8 +198,7 @@ class SelectForkList(GuardianView):
         form = forms.ListSearchform(request.POST)
         card = models.Card.objects.get(id=card_id)
 
-        user  = User.objects.get(id=self.user_id)
-        lists = List.objects.filter(ancestor__in=user.boards.all())
+        lists = List.objects.filter(ancestor__in=self.me.boards.all())
 
         if not form.is_valid():
             return render(request, 'card_app/select-fork-list.html', 
@@ -222,10 +217,9 @@ class SelectForkList(GuardianView):
 
 class SelectForkTimeline(GuardianView):
     def get(self, request, card_id):
-        user = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
         form = forms.TimelineSearchform()
-        timelines = Timeline.get_user_timelines(user)
+        timelines = Timeline.get_user_timelines(self.me)
 
         return render(request, 'card_app/select-fork-timeline.html', 
         {'form':form, 'card': card, 'elems': timelines})
@@ -234,8 +228,7 @@ class SelectForkTimeline(GuardianView):
         form = forms.TimelineSearchform(request.POST)
         card = models.Card.objects.get(id=card_id)
 
-        user  = User.objects.get(id=self.user_id)
-        timelines = Timeline.get_user_timelines(user)
+        timelines = Timeline.get_user_timelines(self.me)
 
         if not form.is_valid():
             return render(request, 'card_app/select-fork-timeline.html', 
@@ -258,7 +251,6 @@ class PullCardContent(GuardianView):
 
     def get(self, request, card_id, fork_id=None):
         card       = models.Card.objects.get(id=card_id)
-        user       = User.objects.get(id=self.user_id)
         fork       = models.Card.objects.get(id=fork_id)
 
         fork.label = card.label
@@ -283,9 +275,8 @@ class CreateFork(GuardianView):
             return HttpResponse("The card's list is on \
                 clipboard! Can't fork now.", status=403)
 
-        user = User.objects.get(id=self.user_id)
         ancestor = List.objects.get(id=ancestor_id)
-        fork = models.Card.objects.create(owner=user, 
+        fork = models.Card.objects.create(owner=self.me, 
         ancestor=ancestor, parent=card)
 
         form = forms.CardForm(instance=fork)
@@ -303,7 +294,6 @@ class CreateFork(GuardianView):
         card = models.Card.objects.get(id=card_id)
         fork = models.Card.objects.get(id=fork_id)
         form = forms.CardForm(request.POST, instance=fork)
-        user = User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'card_app/create-fork.html', 
@@ -312,8 +302,8 @@ class CreateFork(GuardianView):
 
         fork.save()
 
-        event = models.ECreateFork.objects.create(organization=user.default,
-        ancestor=card.ancestor, card0=card, card1=fork, user=user)
+        event = models.ECreateFork.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card0=card, card1=fork, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
@@ -324,7 +314,6 @@ class PullPostContent(GuardianView):
 
     def get(self, request, card_id, fork_id=None):
         card       = models.Card.objects.get(id=card_id)
-        user       = User.objects.get(id=self.user_id)
         fork       = Post.objects.get(id=fork_id)
 
         fork.label = card.label
@@ -349,9 +338,8 @@ class CreatePostFork(GuardianView):
             return HttpResponse("The card list is on clipboard! \
                 Can't fork now.", status=403)
 
-        user = User.objects.get(id=self.user_id)
         ancestor = Timeline.objects.get(id=ancestor_id)
-        fork = Post.objects.create(user=user, 
+        fork = Post.objects.create(user=self.me, 
         ancestor=ancestor, parent=card)
 
         form = PostForm(instance=fork)
@@ -370,7 +358,6 @@ class CreatePostFork(GuardianView):
         fork = Post.objects.get(id=fork_id)
         form = PostForm(request.POST, instance=fork)
 
-        user = User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'card_app/create-post-fork.html', 
@@ -379,8 +366,8 @@ class CreatePostFork(GuardianView):
 
         fork.save()
 
-        event = models.ECreatePostFork.objects.create(organization=user.default,
-        list=card.ancestor, timeline=fork.ancestor, card=card, post=fork, user=user)
+        event = models.ECreatePostFork.objects.create(organization=self.me.default,
+        list=card.ancestor, timeline=fork.ancestor, card=card, post=fork, user=self.me)
         event.dispatch(*fork.ancestor.users.all())
         event.dispatch(*card.ancestor.ancestor.members.all())
 
@@ -405,13 +392,10 @@ class DeleteCard(GuardianView):
             return HttpResponse("The card's list is on clipboard!\
                 Can't delete now.", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-        event = models.EDeleteCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, label=card.label, user=user)
+        event = models.EDeleteCard.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, label=card.label, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
         card.delete()
-
-        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -428,7 +412,6 @@ class CutCard(GuardianView):
             return HttpResponse("The card's list is on clipboard!\
                 Can't cut now.", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
         list = card.ancestor
 
         # Missing event.
@@ -438,11 +421,11 @@ class CutCard(GuardianView):
         card.save()
 
         clipboard, _    = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
         clipboard.cards.add(card)
 
-        event = models.ECutCard.objects.create(organization=user.default,
-        ancestor=list, card=card, user=user)
+        event = models.ECutCard.objects.create(organization=self.me.default,
+        ancestor=list, card=card, user=self.me)
         event.dispatch(*list.ancestor.members.all())
 
         return redirect('card_app:list-cards', 
@@ -460,19 +443,15 @@ class CopyCard(GuardianView):
             return HttpResponse("The card's list is on clipboard!\
                 Can't copy now.", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
         copy = card.duplicate()
 
         clipboard, _    = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
         clipboard.cards.add(copy)
 
-        event = models.ECopyCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, card=card, user=user)
+        event = models.ECopyCard.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card=card, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
-
-        # Missing event.
-        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -583,34 +562,27 @@ class UpdateCard(GuardianView):
 
         record.save()
 
-        user  = core_app.models.User.objects.get(id=self.user_id)
         event = models.EUpdateCard.objects.create(
-        organization=user.default, ancestor=record.ancestor, 
-        card=record, user=user)
+        organization=self.me.default, ancestor=record.ancestor, 
+        card=record, user=self.me)
         event.dispatch(*record.ancestor.ancestor.members.all())
         event.save()
-
-        # user.ws_sound(record.ancestor.ancestor)
 
         return redirect('card_app:view-data', 
         card_id=record.id)
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
-        user   = core_app.models.User.objects.get(id=self.user_id)
-
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
-        organization__id=user.default.id, list__id=list_id)
+        organization__id=self.me.default.id, list__id=list_id)
 
         return render(request, 'card_app/setup-card-filter.html', 
         {'form': forms.CardFilterForm(instance=filter), 
         'list': filter.list})
 
     def post(self, request, list_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
-
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
-        organization__id=user.default.id, list__id=list_id)
+        organization__id=self.me.default.id, list__id=list_id)
         list   = list_app.models.List.objects.get(id=list_id)
 
         sqlike = models.Card.from_sqlike()
@@ -627,18 +599,15 @@ class SetupCardFilter(GuardianView):
 
 class PinCard(GuardianView):
     def get(self, request, card_id):
-        user = core_app.models.User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
-        pin  = CardPin.objects.create(user=user, 
-        organization=user.default, card=card)
+        pin  = CardPin.objects.create(user=self.me, 
+        organization=self.me.default, card=card)
 
         return redirect('board_app:list-pins')
 
 class UnrelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
-        user = User.objects.get(id=self.user_id)
-
         card0 = models.Card.objects.get(id=card0_id)
         card1 = models.Card.objects.get(id=card1_id)
 
@@ -654,22 +623,17 @@ class UnrelateCard(GuardianView):
         card0.save()
 
         event = models.EUnrelateCard.objects.create(
-        organization=user.default, ancestor0=card0.ancestor, 
+        organization=self.me.default, ancestor0=card0.ancestor, 
         ancestor1=card1.ancestor, card0=card0, 
-        card1=card1, user=user)
+        card1=card1, user=self.me)
 
         event.dispatch(*card0.ancestor.ancestor.members.all())
         event.dispatch(*card1.ancestor.ancestor.members.all())
-
-        # user.ws_sound(card0.ancestor.ancestor)
-        # user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
 class RelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
-        user = User.objects.get(id=self.user_id)
-
         card0 = models.Card.objects.get(id=card0_id)
         card1 = models.Card.objects.get(id=card1_id)
 
@@ -685,44 +649,39 @@ class RelateCard(GuardianView):
         card0.save()
 
         event = models.ERelateCard.objects.create(
-        organization=user.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, card0=card0, card1=card1, user=user)
+        organization=self.me.default, ancestor0=card0.ancestor, 
+        ancestor1=card1.ancestor, card0=card0, card1=card1, user=self.me)
 
         event.dispatch(*card0.ancestor.ancestor.members.all())
         event.dispatch(*card1.ancestor.ancestor.members.all())
-
-        # user.ws_sound(card0.ancestor.ancestor)
-        # user.ws_sound(card1.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
 class ManageCardRelations(GuardianView):
     def get(self, request, card_id):
-        me       = User.objects.get(id=self.user_id)
         card     = models.Card.objects.get(id=card_id)
         included = card.relations.filter(done=False)
-        cards    = models.Card.get_allowed_cards(me)
+        cards    = models.Card.get_allowed_cards(self.me)
         total    = cards.count()
         cards    = cards.filter(done=False)
         excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card, 
-        'total': total, 'count': total, 'me': me, 
+        'total': total, 'count': total, 'me': self.me, 
         'organization': me.default,'form':forms.CardSearchForm()})
 
     def post(self, request, card_id):
         sqlike = models.Card.from_sqlike()
 
         form   = forms.CardSearchForm(request.POST, sqlike=sqlike)
-        me     = User.objects.get(id=self.user_id)
         card   = models.Card.objects.get(id=card_id)
-        cards  = models.Card.get_allowed_cards(me)
+        cards  = models.Card.get_allowed_cards(self.me)
         total  = cards.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-relations.html', 
-                {'me': me, 'organization': me.default, 'card': card,
+                {'me': self.me, 'organization': self.me.default, 'card': card,
                      'total': total, 'count': 0, 'form':form}, status=400)
 
         included = card.relations.all()
@@ -737,36 +696,34 @@ class ManageCardRelations(GuardianView):
 
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card, 
-        'count': count, 'total': total, 'me': me, 'form':form})
+        'count': count, 'total': total, 'me': self.me, 'form':form})
 
 
 class ManageCardWorkers(GuardianView):
     def get(self, request, card_id):
-        me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
         included = card.workers.all()
-        excluded = me.default.users.exclude(tasks=card)
+        excluded = self.me.default.users.exclude(tasks=card)
         total = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-workers.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default, 'total': total, 
+        'me': self.me, 'organization': self.me.default, 'total': total, 
         'count': total, 'form':forms.UserSearchForm()})
 
     def post(self, request, card_id):
         sqlike   = User.from_sqlike()
         form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        me       = User.objects.get(id=self.user_id)
         card     = models.Card.objects.get(id=card_id)
         included = card.workers.all()
-        excluded = me.default.users.exclude(tasks=card)
+        excluded = self.me.default.users.exclude(tasks=card)
         total    = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-workers.html', 
-                {'me': me, 'card': card, 'form':form, 'total': total, 
+                {'me': self.me, 'card': card, 'form':form, 'total': total, 
                     'count': total,}, status=400)
 
         included = sqlike.run(included)
@@ -775,7 +732,7 @@ class ManageCardWorkers(GuardianView):
 
         return render(request, 'card_app/manage-card-workers.html', 
         {'included': included, 'excluded': excluded, 'card': card, 'total': total,
-        'count': count, 'me': me, 'form':form})
+        'count': count, 'me': self.me, 'form':form})
 
 class UnbindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
@@ -793,14 +750,11 @@ class UnbindCardWorker(GuardianView):
         card.workers.remove(user)
         card.save()
 
-        me = User.objects.get(id=self.user_id)
         event = models.EUnbindCardWorker.objects.create(
-        organization=me.default, ancestor=card.ancestor, 
-        card=card, user=me, peer=user)
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, user=self.me, peer=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
-
-        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -1250,6 +1204,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
