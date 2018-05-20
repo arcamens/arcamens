@@ -48,7 +48,6 @@ urlpatterns = [
     url(r'^bind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.BindCardTag.as_view(), name='bind-card-tag'),
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
     url(r'^request-card-attention/(?P<peer_id>.+)/(?P<card_id>.+)', views.RequestCardAttention.as_view(), name='request-card-attention'),
-    url(r'^card/(?P<card_id>.+)/', views.Card.as_view(), name='card'),
     url(r'^undo-clipboard/(?P<card_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
     url(r'^list-all-tasks/', views.ListAllTasks.as_view(), name='list-all-tasks'),
     url(r'^find/', views.Find.as_view(), name='find'),
@@ -56,5 +55,6 @@ urlpatterns = [
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 

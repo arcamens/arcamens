@@ -8,8 +8,8 @@
 <span class="glyphicon glyphicon-paperclip"></span> Pins:</a></li>
 
 {% for ind in boardpins %}
-<li> <a class="e-get pin-board" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-th"></span>  {{ind.board.name}}
+<li> <a class="e-get pin-board" data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-th"></span>  {{ind.board.name|truncatechars:20}}
 <span  onclick="$('#pins').load('{% url 'board_app:unpin' ind.id %}');event.stopPropagation();" class="close">
 &times; </span> </a>
 </li>
@@ -17,20 +17,17 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 {% endfor %}
 
 {% for ind in listpins %}
-<li > <a class="e-get pin-list" data-callback-error="$('#modalError').modal('toggle');" data-shell="#main-view"
+<li > <a class="e-get pin-list" data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-list-alt"> </span>
-{{ind.list.ancestor.name}} <span class="glyphicon glyphicon-arrow-right"></span> {{ind.list.name}}
+{{ind.list.ancestor.name|truncatechars:15}} <span class="glyphicon glyphicon-arrow-right"></span> {{ind.list.name|truncatechars:15}}
 <span class="close" onclick="$('#pins').load('{% url 'list_app:unpin' ind.id %}');event.stopPropagation();">&times;</span> </a>
 </li>
 
 {% endfor %}
 
 {% for ind in cardpins %}
-<li> <a class="e-get pin-card" 
-data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="#">
-<span class="glyphicon glyphicon-file"></span>
-{{ind.card.label|truncatechars:20}}
+<li> <a class="e-get pin-card"  data-shell="#main-view" data-show="{{ ind.get_absolute_url }}" href="#">
+<span class="glyphicon glyphicon-file"></span> {{ind.card.label|truncatechars:20}}
 
 <span class="close" onclick="$('#pins').load('{% url 'card_app:unpin' ind.id %}');event.stopPropagation();">&times;</span> </a>
 </li>
@@ -59,6 +56,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 // });
 // </script>
 -->
+
 
 
 

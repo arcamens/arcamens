@@ -24,15 +24,6 @@ from django.conf import settings
 from re import split
 
 # Create your views here.
-class Card(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
-
-        is_worker = card.workers.filter(id=self.user_id).count()
-        has_workers = card.workers.count()
-
-        return render(request, 'card_app/card.html', {'card': card,
-        'is_worker': is_worker, 'has_workers': has_workers})
 
 class CardLink(GuardianView):
     """
@@ -48,11 +39,10 @@ class CardLink(GuardianView):
         if not card.ancestor.ancestor:
             return HttpResponse("The card list is on clipboard!", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         forks = card.forks.all()
         workers = card.workers.all()
@@ -65,14 +55,14 @@ class CardLink(GuardianView):
         relations = relations.filter(Q(
         ancestor__ancestor__members__id=self.user_id) | Q(workers__id=self.user_id))
 
-        organizations = user.organizations.exclude(id=user.default.id)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'card_app/card-link.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
-        'attachments': attachments, 'user': user, 'workers': workers, 'path': path,
+        'attachments': attachments, 'user': self.me, 'workers': workers, 'path': path,
         'relations': relations, 'tags': tags, 'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
-        'user': user, 'default': user.default, 'organization': user.default,
+        'user': self.me, 'default': self.me.default, 'organization': self.me.default,
         'organizations': organizations, 'settings': settings})
 
 class ListCards(GuardianView):
@@ -86,14 +76,13 @@ class ListCards(GuardianView):
             return HttpResponse("This list is on clipboard!\
                 It can't be accessed now.", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         filter, _ = models.CardFilter.objects.get_or_create(
-        user=user, organization=user.default, list=list)
+        user=self.me, organization=self.me.default, list=list)
 
         cards = list.cards.all()
 
@@ -102,7 +91,7 @@ class ListCards(GuardianView):
         cards = filter.collect(cards)
         count = cards.count()
 
-        workers1 = User.objects.filter(pk=user.pk, tasks=OuterRef('pk'))
+        workers1 = User.objects.filter(pk=self.me.pk, tasks=OuterRef('pk'))
         cards = cards.annotate(in_workers=Exists(workers1))
         cards = cards.annotate(has_workers=Count('workers'))
 
@@ -114,7 +103,7 @@ class ListCards(GuardianView):
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
         'boardpins': boardpins, 'listpins':listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
-        'user': user, 'board': list.ancestor, 'count': count})
+        'user': self.me, 'board': list.ancestor, 'count': count})
 
 class ViewData(GuardianView):
     def get(self, request, card_id):
@@ -127,11 +116,10 @@ class ViewData(GuardianView):
         if not card.ancestor.ancestor:
             return HttpResponse("The card list is on clipboard!", status=403)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         forks = card.forks.all()
         workers = card.workers.all()
@@ -153,7 +141,7 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
-        'attachments': attachments, 'user': user, 'workers': workers,  'timelinepins': timelinepins,
+        'attachments': attachments, 'user': self.me, 'workers': workers,  'timelinepins': timelinepins,
         'relations': relations, 'listpins': listpins, 'boardpins': boardpins,
         'cardpins': cardpins, 'tags': tags})
 
@@ -1262,6 +1250,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
