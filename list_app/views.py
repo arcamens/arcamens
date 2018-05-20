@@ -256,6 +256,10 @@ class ListLink(GuardianView):
     def get(self, request, list_id):
         record = List.objects.get(id=list_id)
 
+        if not record.ancestor:
+            return HttpResponse("The list is on clipboard\
+                can't be accessed now!", status=403)
+
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
@@ -274,6 +278,7 @@ class Unpin(GuardianView):
         pin = ListPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
