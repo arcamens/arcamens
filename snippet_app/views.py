@@ -21,7 +21,6 @@ class Snippet(GuardianView):
             # return HttpResponse("This post is on clipboard! \
                # It can't be accessed.", status=400)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
         attachments = snippet.snippetfilewrapper_set.all()
 
         return render(request, 'snippet_app/snippet.html', 
@@ -41,8 +40,7 @@ class CreateSnippet(GuardianView):
 
     def get(self, request, post_id, snippet_id=None):
         post = post_app.models.Post.objects.get(id=post_id)
-        user = core_app.models.User.objects.get(id=self.user_id)
-        snippet = models.Snippet.objects.create(owner=user, post=post)
+        snippet = models.Snippet.objects.create(owner=self.me, post=post)
         post.save()
 
         form = forms.SnippetForm(instance=snippet)
@@ -54,7 +52,6 @@ class CreateSnippet(GuardianView):
 
         snippet = models.Snippet.objects.get(id=snippet_id)
         form = forms.SnippetForm(request.POST, instance=snippet)
-        user = core_app.models.User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'snippet_app/create-snippet.html', 
@@ -63,7 +60,7 @@ class CreateSnippet(GuardianView):
         snippet.save()
 
         event = models.ECreateSnippet.objects.create(
-        organization=user.default, child=post, user=user, snippet=snippet)
+        organization=self.me.default, child=post, user=self.me, snippet=snippet)
         event.dispatch(*post.ancestor.users.all())
 
         return redirect('post_app:refresh-post', post_id=post.id)
@@ -124,11 +121,9 @@ class UpdateSnippet(GuardianView):
 
         record.save()
 
-        user  = core_app.models.User.objects.get(id=self.user_id)
-
         event = models.EUpdateSnippet.objects.create(
-        organization=user.default, child=record.post, 
-        snippet=record, user=user)
+        organization=self.me.default, child=record.post, 
+        snippet=record, user=self.me)
 
         event.dispatch(*record.post.ancestor.users.all())
         event.save()
@@ -140,10 +135,8 @@ class DeleteSnippet(GuardianView):
     def get(self, request, snippet_id):
         snippet = models.Snippet.objects.get(id = snippet_id)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        event = models.EDeleteSnippet.objects.create(organization=user.default,
-        child=snippet.post, snippet=snippet.title, user=user)
+        event = models.EDeleteSnippet.objects.create(organization=self.me.default,
+        child=snippet.post, snippet=snippet.title, user=self.me)
 
         event.dispatch(*snippet.post.ancestor.users.all())
         snippet.delete()
