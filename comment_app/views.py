@@ -18,7 +18,6 @@ class ListComments(GuardianView):
 
 class CreateComment(GuardianView):
     def post(self, request, event_id):
-        user = timeline_app.models.User.objects.get(id=self.user_id)
         event = core_app.models.Event.objects.get(id=event_id)
         records = event.comment_set.order_by('-created')
         form = forms.CommentForm(request.POST, request.FILES)
@@ -29,19 +28,16 @@ class CreateComment(GuardianView):
 
         record      = form.save(commit = False)
         record.event = event
-        record.user = user
+        record.user = self.me
         record.save()
 
         target = models.ECreateComment.objects.create(
-        organization=user.default,comment=record, 
-        event=event, user=user)
+        organization=self.me.default,comment=record, 
+        event=event, user=self.me)
 
         scope = event.users.all() | event.signers.all()
         target.dispatch(*scope)
         target.save()
-
-        # for ind in target.users.all():
-            # user.ws_sound(ind)
 
         return redirect('comment_app:list-comments', 
         event_id=event.id)
@@ -54,6 +50,7 @@ class ECreateComment(GuardianView):
         event = models.ECreateComment.objects.get(id=event_id)
         return render(request, 'comment_app/e-create-comment.html', 
         {'event':event})
+
 
 
 
