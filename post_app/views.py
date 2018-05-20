@@ -343,13 +343,11 @@ class SetupPostFilter(GuardianView):
 
 class Find(GuardianView):
     def get(self, request):
-        me    = User.objects.get(id=self.user_id)
-
         filter, _ = GlobalPostFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
         form  = forms.GlobalPostFilterForm(instance=filter)
 
-        posts = models.Post.get_allowed_posts(me)
+        posts = models.Post.get_allowed_posts(self.me)
         total = posts.count()
 
         sqlike = models.Post.from_sqlike()
@@ -361,20 +359,19 @@ class Find(GuardianView):
         count = posts.count()
 
         posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'post_app/find-scroll.html', posts)
+        elems = JScroll(self.me.id, 'post_app/find-scroll.html', posts)
 
         return render(request, 'post_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
     def post(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalPostFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         sqlike = models.Post.from_sqlike()
         form  = forms.GlobalPostFilterForm(request.POST, sqlike=sqlike, instance=filter)
 
-        posts = models.Post.get_allowed_posts(me)
+        posts = models.Post.get_allowed_posts(self.me)
         total = posts.count()
 
         if not form.is_valid():
@@ -387,7 +384,7 @@ class Find(GuardianView):
         count =  posts.count()
 
         posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'post_app/find-scroll.html', posts)
+        elems = JScroll(self.me.id, 'post_app/find-scroll.html', posts)
 
         return render(request, 'post_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
@@ -400,21 +397,18 @@ class CutPost(GuardianView):
             return HttpResponse("Already on someone \
                 clipboard!", status=403)
 
-        user     = User.objects.get(id=self.user_id)
         timeline = post.ancestor
-
-        # user.ws_sound(post.ancestor)
 
         post.ancestor = None
         post.save()
 
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         clipboard.posts.add(post)
 
-        event = ECutPost.objects.create(organization=user.default,
-        timeline=timeline, post=post, user=user)
+        event = ECutPost.objects.create(organization=self.me.default,
+        timeline=timeline, post=post, user=self.me)
         users = timeline.users.all()
         event.dispatch(*users)
 
@@ -429,18 +423,15 @@ class CopyPost(GuardianView):
             return HttpResponse("Already on someone \
                 clipboard!", status=403)
 
-        user         = User.objects.get(id=self.user_id)
         copy         = post.duplicate()
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
         clipboard.posts.add(copy)
 
-        event = ECopyPost.objects.create(organization=user.default,
-        timeline=post.ancestor, post=post, user=user)
+        event = ECopyPost.objects.create(organization=self.me.default,
+        timeline=post.ancestor, post=post, user=self.me)
         users = post.ancestor.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=post.ancestor.id)
@@ -456,47 +447,41 @@ class Done(GuardianView):
         post.done = True
         post.save()
 
-        user = User.objects.get(id=self.user_id)
-
         # posts in the clipboard cant be archived.
-        event = EArchivePost.objects.create(organization=user.default,
-        timeline=post.ancestor, post=post, user=user)
+        event = EArchivePost.objects.create(organization=self.me.default,
+        timeline=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(post.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
 
 class ManagePostTags(GuardianView):
     def get(self, request, post_id):
-        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
 
         included = post.tags.all()
-        excluded = me.default.tags.exclude(posts=post)
+        excluded = self.me.default.tags.exclude(posts=post)
         total = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'organization': me.default,'form':forms.TagSearchForm(), 
+        'organization': self.me.default,'form':forms.TagSearchForm(), 
         'total': total, 'count': total})
 
     def post(self, request, post_id):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         included = post.tags.all()
-        excluded = me.default.tags.exclude(posts=post)
+        excluded = self.me.default.tags.exclude(posts=post)
         total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-tags.html', 
-                {'total': total, 'organization': me.default, 
+                {'total': total, 'organization': self.me.default, 
                     'post': post, 'form':form, 'count': 0}, status=400)
 
         included = sqlike.run(included)
@@ -505,8 +490,8 @@ class ManagePostTags(GuardianView):
 
         return render(request, 'post_app/manage-post-tags.html', 
         {'included': included, 'excluded': excluded, 'post': post, 
-        'total': total, 'count': count, 'me': me, 'form':form, 
-        'organization': me.default, })
+        'total': total, 'count': count, 'me': self.me, 'form':form, 
+        'organization': self.me.default, })
 
 class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
@@ -520,15 +505,11 @@ class UnbindPostTag(GuardianView):
         post.tags.remove(tag)
         post.save()
 
-        me = User.objects.get(id=self.user_id)
-
         event = EUnbindTagPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, tag=tag, user=me)
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=self.me)
         event.dispatch(*post.ancestor.users.all())
         event.save()
-
-        # me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -544,15 +525,11 @@ class BindPostTag(GuardianView):
         post.tags.add(tag)
         post.save()
 
-        me = User.objects.get(id=self.user_id)
-
         event = EBindTagPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, tag=tag, user=me)
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=self.me)
         event.dispatch(*post.ancestor.users.all())
         event.save()
-
-        # me.ws_sound(post.ancestor)
 
         return HttpResponse(status=200)
 
@@ -574,15 +551,11 @@ class Undo(GuardianView):
         post.done = False
         post.save()
 
-        user = User.objects.get(id=self.user_id)
-
-        event = EUnarchivePost.objects.create(organization=user.default,
-        timeline=post.ancestor, post=post, user=user)
+        event = EUnarchivePost.objects.create(organization=self.me.default,
+        timeline=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(post.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
@@ -598,7 +571,6 @@ class RequestPostAttention(GuardianView):
         {'peer': peer,  'post': post, 'form': form})
 
     def post(self, request, peer_id, post_id):
-        user = User.objects.get(id=self.user_id)
         peer = User.objects.get(id=peer_id)
         post = models.Post.objects.get(id=post_id)
         form = forms.PostAttentionForm(request.POST)
@@ -612,10 +584,10 @@ class RequestPostAttention(GuardianView):
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
         msg = '%s (%s) has requested your attention on\n%s\n\n%s' % (
-        user.name, user.email, url, form.cleaned_data['message'])
+        self.me.name, self.me.email, url, form.cleaned_data['message'])
 
-        send_mail('%s %s' % (user.default.name, 
-        user.name), msg, user.email, [peer.email], fail_silently=False)
+        send_mail('%s %s' % (self.me.default.name, 
+        self.me.name), msg, self.me.email, [peer.email], fail_silently=False)
 
         return redirect('post_app:post-worker-information', 
         peer_id=peer.id, post_id=post.id)
@@ -623,31 +595,29 @@ class RequestPostAttention(GuardianView):
 class AlertPostWorkers(GuardianView):
     def get(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
-        user = User.objects.get(id=self.user_id)
 
         form = forms.AlertPostWorkersForm()
         return render(request, 'post_app/alert-post-workers.html', 
-        {'post': post, 'form': form, 'user': user})
+        {'post': post, 'form': form, 'user': self.me})
 
     def post(self, request, post_id):
-        user = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         form = forms.AlertPostWorkersForm(request.POST)
 
         if not form.is_valid():
             return render(request,'post_app/alert-post-workers.html', 
-                    {'user': user, 'post': post, 'form': form})    
+                    {'user': self.me, 'post': post, 'form': form})    
 
         url  = reverse('post_app:post-link', 
         kwargs={'post_id': post.id})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
         msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
-        user.name, user.email, url, form.cleaned_data['message'])
+        self.me.name, self.me.email, url, form.cleaned_data['message'])
 
         for ind in post.workers.values_list('email'):
-            send_mail('%s %s' % (user.default.name, 
-                user.name), msg, user.email, 
+            send_mail('%s %s' % (self.me.default.name, 
+                self.me.name), msg, self.me.email, 
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
@@ -662,7 +632,6 @@ class ConfirmPostDeletion(GuardianView):
 class UndoClipboard(GuardianView):
     def get(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
-        user = User.objects.get(id=self.user_id)
         event0 = post.e_copy_post1.last()
         event1 = post.e_cut_post1.last()
 
@@ -677,21 +646,19 @@ class UndoClipboard(GuardianView):
         return redirect('core_app:list-clipboard')
 
     def undo_cut(self, event):
-        user = User.objects.get(id=self.user_id)
-
         event.post.ancestor = event.timeline
         event.post.save()
 
-        event1 = EPastePost(organization=user.default, 
-        timeline=event.timeline, user=user)
+        event1 = EPastePost(organization=self.me.default, 
+        timeline=event.timeline, user=self.me)
 
         event1.save(hcache=False)
         event1.posts.add(event.post)
-        event.dispatch(*event.timeline.users.all())
+        event1.dispatch(*event.timeline.users.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         clipboard.posts.remove(event.post)
 
@@ -701,7 +668,6 @@ class PullCardContent(GuardianView):
 
     def get(self, request, post_id, fork_id=None):
         post       = models.Post.objects.get(id=post_id)
-        user       = User.objects.get(id=self.user_id)
         fork       = Card.objects.get(id=fork_id)
 
         fork.label = post.label
@@ -723,9 +689,8 @@ class CreateCardFork(GuardianView):
             return HttpResponse("Post on clipboard! \
                 Can't fork now.", status=403)
 
-        user = User.objects.get(id=self.user_id)
         ancestor = List.objects.get(id=ancestor_id)
-        fork = Card.objects.create(owner=user, 
+        fork = Card.objects.create(owner=self.me, 
         ancestor=ancestor, parent_post=post)
 
         form = CardForm(instance=fork)
@@ -743,7 +708,6 @@ class CreateCardFork(GuardianView):
         post = models.Post.objects.get(id=post_id)
         fork = Card.objects.get(id=fork_id)
         form = CardForm(request.POST, instance=fork)
-        user = User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'post_app/create-fork.html', 
@@ -752,27 +716,21 @@ class CreateCardFork(GuardianView):
 
         fork.save()
 
-        event = models.ECreateCardFork.objects.create(organization=user.default,
-        ancestor=post.ancestor, post=post, card=fork, user=user)
+        event = models.ECreateCardFork.objects.create(organization=self.me.default,
+        ancestor=post.ancestor, post=post, card=fork, user=self.me)
 
         # The timeline users and the board users get the event.
         event.dispatch(*post.ancestor.users.all())
         event.dispatch(*fork.ancestor.ancestor.members.all())
 
-        # In this case, it would play sound twice if you're
-        # in both timeline and board.
-        # user.ws_sound(fork.ancestor.ancestor)
-        # user.ws_sound(post.ancestor)
-
         return redirect('card_app:view-data', card_id=fork.id)
 
 class SelectForkList(GuardianView):
     def get(self, request, post_id):
-        user = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         form = ListSearchform()
 
-        boards = user.boards.filter(organization=user.default)
+        boards = self.me.boards.filter(organization=self.me.default)
         lists  = List.objects.filter(ancestor__in=boards)
 
         return render(request, 'post_app/select-fork-list.html', 
@@ -782,8 +740,7 @@ class SelectForkList(GuardianView):
         form = forms.ListSearchform(request.POST)
         post = models.Post.objects.get(id=post_id)
 
-        user  = User.objects.get(id=self.user_id)
-        lists = List.objects.filter(ancestor__in=user.boards.all())
+        lists = List.objects.filter(ancestor__in=self.me.boards.all())
 
         if not form.is_valid():
             return render(request, 'post_app/select-fork-list.html', 
@@ -819,13 +776,12 @@ class PostEvents(GuardianView):
 
 class ListAllAssignments(GuardianView):
     def get(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalAssignmentFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         form  = forms.GlobalAssignmentFilterForm(instance=filter)
 
-        posts = models.Post.get_allowed_posts(me)
+        posts = models.Post.get_allowed_posts(self.me)
         posts = posts.filter(Q(workers__isnull=False))
         total = posts.count()
         posts = filter.get_partial(posts)
@@ -837,22 +793,21 @@ class ListAllAssignments(GuardianView):
 
         count = posts.count()
         posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'post_app/list-all-assignments-scroll.html', posts)
+        elems = JScroll(self.me.id, 'post_app/list-all-assignments-scroll.html', posts)
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'total': total, 'count': count, 
         'form': form, 'elems': elems.as_div()})
 
     def post(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalAssignmentFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         sqlike = models.Post.from_sqlike()
         form   = forms.GlobalAssignmentFilterForm(
             request.POST, sqlike=sqlike, instance=filter)
 
-        posts = models.Post.get_allowed_posts(me)
+        posts = models.Post.get_allowed_posts(self.me)
         posts = posts.filter(Q(workers__isnull=False))
         total = posts.count()
 
@@ -868,17 +823,16 @@ class ListAllAssignments(GuardianView):
 
         count = posts.count()
         posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'post_app/list-all-assignments-scroll.html', posts)
+        elems = JScroll(self.me.id, 'post_app/list-all-assignments-scroll.html', posts)
 
         return render(request, 'post_app/list-all-assignments.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
 
 class PinPost(GuardianView):
     def get(self, request, post_id):
-        user  = User.objects.get(id=self.user_id)
         post = Post.objects.get(id=post_id)
-        pin   = PostPin.objects.create(user=user, 
-        organization=user.default, post=post)
+        pin   = PostPin.objects.create(user=self.me, 
+        organization=self.me.default, post=post)
         return redirect('board_app:list-pins')
 
 class Unpin(GuardianView):
@@ -894,7 +848,6 @@ class RefreshPost(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.objects.get(id=post_id)
-        user = User.objects.get(id=self.user_id)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
@@ -906,7 +859,7 @@ class RefreshPost(GuardianView):
         # timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         return render(request, 'post_app/post-data.html', 
-        {'post':post, 'tags': post.tags.all(), 'user': user, })
+        {'post':post, 'tags': post.tags.all(), 'user': self.me, })
 
 
 
