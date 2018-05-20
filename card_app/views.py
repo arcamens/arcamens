@@ -669,7 +669,7 @@ class ManageCardRelations(GuardianView):
         return render(request, 'card_app/manage-card-relations.html', 
         {'included': included, 'excluded': excluded, 'card': card, 
         'total': total, 'count': total, 'me': self.me, 
-        'organization': me.default,'form':forms.CardSearchForm()})
+        'organization': self.me.default,'form':forms.CardSearchForm()})
 
     def post(self, request, card_id):
         sqlike = models.Card.from_sqlike()
@@ -1159,6 +1159,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
