@@ -36,17 +36,16 @@ class Post(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=403)
 
-        user = User.objects.get(id=self.user_id)
 
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         return render(request, 'post_app/post.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 
-        'timelinepins': timelinepins, 'user': user, })
+        'timelinepins': timelinepins, 'user': self.me, })
 
 class PostLink(GuardianView):
     """
@@ -59,18 +58,17 @@ class PostLink(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=403)
 
-        user = User.objects.get(id=self.user_id)
-        organizations = user.organizations.exclude(id=user.default.id)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
 
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'timelinepins': timelinepins, 'cardpins': cardpins, 'user': user, 
-        'default': user.default, 'organization': user.default, 
+        'timelinepins': timelinepins, 'cardpins': cardpins, 'user': self.me, 
+        'default': self.me.default, 'organization': self.me.default, 
         'organizations': organizations, 'settings': settings})
 
 class CreatePost(GuardianView):
@@ -79,8 +77,7 @@ class CreatePost(GuardianView):
 
     def get(self, request, ancestor_id, post_id=None):
         ancestor   = Timeline.objects.get(id=ancestor_id)
-        user       = User.objects.get(id=self.user_id)
-        post       = models.Post.objects.create(user=user, ancestor=ancestor)
+        post       = models.Post.objects.create(user=self.me, ancestor=ancestor)
         form       = forms.PostForm(instance=post)
         post.label = 'Draft.'
         post.save()
@@ -98,14 +95,11 @@ class CreatePost(GuardianView):
                                 'ancestor': ancestor}, status=400)
 
         post.save()
-        user  = User.objects.get(id=self.user_id)
-        event = ECreatePost.objects.create(organization=user.default,
-        timeline=ancestor, post=post, user=user)
+        event = ECreatePost.objects.create(organization=self.me.default,
+        timeline=ancestor, post=post, user=self.me)
 
         users = ancestor.users.all()
         event.dispatch(*users)
-
-        # user.ws_sound(post.ancestor)
 
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor_id)
@@ -130,17 +124,14 @@ class UpdatePost(GuardianView):
                    {'post': record, 'form': form}, status=400)
         record.save()
 
-        user  = User.objects.get(id=self.user_id)
-        event = EUpdatePost.objects.create(organization=user.default,
-        timeline=record.ancestor, post=record, user=user)
+        event = EUpdatePost.objects.create(organization=self.me.default,
+        timeline=record.ancestor, post=record, user=self.me)
 
         event.dispatch(*record.ancestor.users.all())
 
         # Notify workers of the event, in case the post
         # is on a timeline whose worker is not on.
         event.dispatch(*record.workers.all())
-
-        # user.ws_sound(record.ancestor)
 
         return redirect('post_app:refresh-post', 
         post_id=record.id)
@@ -201,37 +192,16 @@ class DeletePost(GuardianView):
             return HttpResponse("On clipboard, can't \
                 delete now!", status=403)
 
-        user  = User.objects.get(id=self.user_id)
-
-        event = EDeletePost.objects.create(organization=user.default,
-        timeline=post.ancestor, post_label=post.label, user=user)
+        event = EDeletePost.objects.create(organization=self.me.default,
+        timeline=post.ancestor, post_label=post.label, user=self.me)
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
         ancestor = post.ancestor
         post.delete()
 
-        # user.ws_sound(post.ancestor)
-
         return redirect('timeline_app:list-posts', 
         timeline_id=ancestor.id)
-
-# class ListAssignments(GuardianView):
-    # def get(self, request, user_id):
-        # user = User.objects.get(id=self.user_id)
-# 
-        # filter, _ = AssignmentFilter.objects.get_or_create(
-        # user=user, organization=user.default)
-# 
-        # posts      = user.assignments.all()
-        # total      = posts.count()
-# 
-        # posts = posts.order_by('id')
-        # count = posts.count()
-        # elems = JScroll(user.id, 'post_app/list-assignments-scroll.html', posts)
-# 
-        # return render(request, 'post_app/list-assignments.html', 
-        # {'elems': elems.as_window(), 'user':user, 'total': total, 'count': count})
 
 class PostWorkerInformation(GuardianView):
     def get(self, request, peer_id, post_id):
@@ -270,13 +240,12 @@ class UnassignPostUser(GuardianView):
                 unassign user.", status=403)
 
         user = User.objects.get(id=user_id)
-        me   = User.objects.get(id=self.user_id)
 
         # me.ws_sound(post.ancestor)
 
         event = EUnassignPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, user=me, peer=user)
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, user=self.me, peer=user)
 
         event.dispatch(*post.ancestor.users.all())
         
@@ -299,50 +268,45 @@ class AssignPostUser(GuardianView):
                 assign user.", status=403)
 
         user = User.objects.get(id=user_id)
-        me = User.objects.get(id=self.user_id)
 
         post.workers.add(user)
         post.save()
 
         event = EAssignPost.objects.create(
-        organization=me.default, ancestor=post.ancestor, 
-        post=post, user=me, peer=user)
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, user=self.me, peer=user)
 
         event.dispatch(*post.ancestor.users.all())
         event.dispatch(*post.workers.all())
         event.save()
 
-        # me.ws_sound(post.ancestor)
-
         return HttpResponse(status=200)
 
 class ManagePostWorkers(GuardianView):
     def get(self, request, post_id):
-        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
 
         included = post.workers.all()
-        excluded = me.default.users.exclude(assignments=post)
+        excluded = self.me.default.users.exclude(assignments=post)
         total    = included.count() + excluded.count()
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'count': total, 'total': total, 'me': me, 
+        'count': total, 'total': total, 'me': self.me, 
         'form':forms.UserSearchForm()})
 
     def post(self, request, post_id):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        me = User.objects.get(id=self.user_id)
         post = models.Post.objects.get(id=post_id)
         included = post.workers.all()
-        excluded = me.default.users.exclude(assignments=post)
+        excluded = self.me.default.users.exclude(assignments=post)
         total    = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'post_app/manage-post-workers.html',  
-                {'me': me, 'total': total, 'count': 0, 'post': post, 
+                {'me': self.me, 'total': total, 'count': 0, 'post': post, 
                     'form':form}, status=400)
 
         included = sqlike.run(included)
@@ -351,7 +315,7 @@ class ManagePostWorkers(GuardianView):
 
         return render(request, 'post_app/manage-post-workers.html', 
         {'included': included, 'excluded': excluded, 'post': post,
-        'me': me, 'form':form, 'total': total, 'count': count,})
+        'me': self.me, 'form':form, 'total': total, 'count': count,})
 
 class SetupPostFilter(GuardianView):
     def get(self, request, timeline_id):
@@ -936,14 +900,14 @@ class RefreshPost(GuardianView):
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=400)
 
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        # boardpins = user.boardpin_set.filter(organization=user.default)
+        # listpins = user.listpin_set.filter(organization=user.default)
+        # cardpins = user.cardpin_set.filter(organization=user.default)
+        # timelinepins = user.timelinepin_set.filter(organization=user.default)
 
         return render(request, 'post_app/post-data.html', 
-        {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'tags': post.tags.all(), 'user': user, })
+        {'post':post, 'tags': post.tags.all(), 'user': user, })
+
 
 
 
