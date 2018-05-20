@@ -129,9 +129,8 @@ class UpdateList(GuardianView):
 class PasteCards(GuardianView):
     def get(self, request, list_id):
         list         = List.objects.get(id=list_id)
-        user         = User.objects.get(id=self.user_id)
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         cards = clipboard.cards.all()
 
@@ -142,7 +141,7 @@ class PasteCards(GuardianView):
         cards.update(ancestor=list)
 
         event = EPasteCard(
-        organization=user.default, ancestor=list, user=user)
+        organization=self.me.default, ancestor=list, user=self.me)
         event.save(hcache=False)
 
         event.cards.add(*cards)
@@ -154,28 +153,24 @@ class PasteCards(GuardianView):
 
         clipboard.cards.clear()
 
-        # user.ws_sound(list.ancestor)
-
         return redirect('card_app:list-cards', 
         list_id=list.id)
 
 class CutList(GuardianView):
     def get(self, request, list_id):
         list  = List.objects.get(id=list_id)
-        user  = User.objects.get(id=self.user_id)
         board = list.ancestor
 
-        # user.ws_sound(list.ancestor)
 
         list.ancestor = None
         list.save()
 
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
         clipboard.lists.add(list)
 
-        event = ECutList.objects.create(organization=user.default,
-        ancestor=board, child=list, user=user)
+        event = ECutList.objects.create(organization=self.me.default,
+        ancestor=board, child=list, user=self.me)
         event.dispatch(*board.members.all())
 
         return redirect('list_app:list-lists', 
@@ -184,28 +179,23 @@ class CutList(GuardianView):
 class CopyList(GuardianView):
     def get(self, request, list_id):
         list = List.objects.get(id=list_id)
-        user = User.objects.get(id=self.user_id)
         copy = list.duplicate()
 
         clipboard, _    = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
         clipboard.lists.add(copy)
 
-        event = ECopyList.objects.create(organization=user.default,
-        ancestor=list.ancestor, child=list, user=user)
+        event = ECopyList.objects.create(organization=self.me.default,
+        ancestor=list.ancestor, child=list, user=self.me)
         event.dispatch(*list.ancestor.members.all())
-
-        # user.ws_sound(list.ancestor)
 
         return redirect('list_app:list-lists', 
         board_id=list.ancestor.id)
 
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
-        user = User.objects.get(id=self.user_id)
-
         filter = ListFilter.objects.get(
-        user__id=self.user_id, organization__id=user.default.id,
+        user__id=self.user_id, organization__id=self.me.default.id,
         board__id=board_id)
 
         return render(request, 'list_app/setup-list-filter.html', 
@@ -213,9 +203,8 @@ class SetupListFilter(GuardianView):
         'board': filter.board})
 
     def post(self, request, board_id):
-        user   = User.objects.get(id=self.user_id)
         record = ListFilter.objects.get(
-        organization__id=user.default.id, 
+        organization__id=self.me.default.id, 
         user__id=self.user_id, board__id=board_id)
 
         form   = forms.ListFilterForm(request.POST, instance=record)
@@ -230,7 +219,6 @@ class SetupListFilter(GuardianView):
 class UndoClipboard(GuardianView):
     def get(self, request, list_id):
         list = List.objects.get(id=list_id)
-        user = User.objects.get(id=self.user_id)
         event0 = list.e_copy_list1.last()
         event1 = list.e_cut_list1.last()
 
@@ -245,24 +233,21 @@ class UndoClipboard(GuardianView):
         return redirect('core_app:list-clipboard')
 
     def undo_cut(self, event):
-        user = User.objects.get(id=self.user_id)
-
         event.child.ancestor = event.ancestor
         event.child.save()
 
-        event1 = EPasteList(
-        organization=user.default, board=event.ancestor, user=user)
+        event1 = EPasteList(organization=self.me.default, 
+        board=event.ancestor, user=self.me)
+
         event1.save(hcache=False)
         event1.lists.add(event.child)
-        event.dispatch(*event.ancestor.members.all())
+        event1.dispatch(*event.ancestor.members.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         clipboard.lists.remove(event.child)
-
-        # user.ws_sound(event.ancestor)
 
 class ListLink(GuardianView):
     """
@@ -271,17 +256,16 @@ class ListLink(GuardianView):
     def get(self, request, list_id):
         record = List.objects.get(id=list_id)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-        boardpins = user.boardpin_set.filter(organization=user.default)
-        listpins = user.listpin_set.filter(organization=user.default)
-        cardpins = user.cardpin_set.filter(organization=user.default)
-        timelinepins = user.timelinepin_set.filter(organization=user.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
 
-        organizations = user.organizations.exclude(id=user.default.id)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'list_app/list-link.html', 
-        {'list': record, 'user': user, 'organization': user.default,
-        'default': user.default, 'organizations': organizations, 'boardpins': boardpins,
+        {'list': record, 'user': self.me, 'organization': self.me.default,
+        'default': self.me.default, 'organizations': organizations, 'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
 

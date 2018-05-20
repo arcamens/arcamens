@@ -61,7 +61,7 @@ class UserMixin(Device):
         return count >= self.max_users
 
     def __str__(self):
-        return '%s %s' % (self.name, self.email)
+        return self.name
 
 class EventMixin(GroupSignal):
     class Meta:
@@ -420,6 +420,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
