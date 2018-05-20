@@ -774,44 +774,39 @@ class BindCardWorker(GuardianView):
         card.workers.add(user)
         card.save()
 
-        me = User.objects.get(id=self.user_id)
         event = models.EBindCardWorker.objects.create(
-        organization=me.default, ancestor=card.ancestor, 
-        card=card, user=me, peer=user)
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, user=self.me, peer=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
-
-        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
 class ManageCardTags(GuardianView):
     def get(self, request, card_id):
-        me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
 
         included = card.tags.all()
-        excluded = me.default.tags.exclude(cards=card)
+        excluded = self.me.default.tags.exclude(cards=card)
         total = included.count() + excluded.count()
 
         return render(request, 'card_app/manage-card-tags.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'organization': me.default,'form':forms.TagSearchForm(),
+        'organization': self.me.default,'form':forms.TagSearchForm(),
         'total': total, 'count': total})
 
     def post(self, request, card_id):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        me = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
         included = card.tags.all()
-        excluded = me.default.tags.exclude(cards=card)
+        excluded = self.me.default.tags.exclude(cards=card)
         total = included.count() + excluded.count()
 
         if not form.is_valid():
             return render(request, 'card_app/manage-card-tags.html', 
-                {'organization': me.default, 'card': card, 'total': total,
+                {'organization': self.me.default, 'card': card, 'total': total,
                         'count': 0, 'form':form}, status=400)
 
         included = sqlike.run(included)
@@ -821,7 +816,7 @@ class ManageCardTags(GuardianView):
 
         return render(request, 'card_app/manage-card-tags.html', 
         {'included': included, 'excluded': excluded, 'card': card,
-        'me': me, 'organization': me.default,
+        'me': self.me, 'organization': self.me.default,
         'total': total, 'count': count, 'form':form})
 
 class UnbindCardTag(GuardianView):
@@ -840,21 +835,11 @@ class UnbindCardTag(GuardianView):
         card.tags.remove(tag)
         card.save()
 
-        # me = User.objects.get(id=self.user_id)
-
-        # event = models.EUnbindCardTag.objects.create(
-        # organization=me.default, ancestor=card.ancestor, 
-        # card=card, user=me, peer=user)
-        # event.dispatch(*card.ancestor.users.all())
-        # event.save()
-        me = User.objects.get(id=self.user_id)
         event = models.EUnbindTagCard.objects.create(
-        organization=me.default, ancestor=card.ancestor, 
-        card=card, tag=tag, user=me)
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
-
-        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -874,22 +859,11 @@ class BindCardTag(GuardianView):
         card.tags.add(tag)
         card.save()
 
-        # me = User.objects.get(id=self.user_id)
-
-        # event = models.EUnbindCardTag.objects.create(
-        # organization=me.default, ancestor=card.ancestor, 
-        # card=card, tag=me, peer=tag)
-        # event.tags.add(*card.ancestor.tags.all())
-        # event.save()
-        me = User.objects.get(id=self.user_id)
-
         event = models.EBindTagCard.objects.create(
-        organization=me.default, ancestor=card.ancestor, 
-        card=card, tag=tag, user=me)
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
-
-        # me.ws_sound(card.ancestor.ancestor)
 
         return HttpResponse(status=200)
 
@@ -908,17 +882,13 @@ class Done(GuardianView):
         card.done = True
         card.save()
 
-        user = core_app.models.User.objects.get(id=self.user_id)
 
         # cards in the clipboard cant be archived.
-        event    = models.EArchiveCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, card=card, user=user)
+        event    = models.EArchiveCard.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card=card, user=self.me)
 
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)
-
-        # Missing event.
-        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -937,16 +907,12 @@ class Undo(GuardianView):
         card.done = False
         card.save()
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-
         # cards in the clipboard cant be archived.
-        event    = models.EUnarchiveCard.objects.create(organization=user.default,
-        ancestor=card.ancestor, card=card, user=user)
+        event    = models.EUnarchiveCard.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card=card, user=self.me)
 
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)
-
-        # user.ws_sound(card.ancestor.ancestor)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -978,7 +944,6 @@ class RequestCardAttention(GuardianView):
         {'peer': peer,  'card': card, 'form': form})
 
     def post(self, request, peer_id, card_id):
-        user = User.objects.get(id=self.user_id)
         peer = User.objects.get(id=peer_id)
         card = models.Card.objects.get(id=card_id)
         form = forms.CardAttentionForm(request.POST)
@@ -992,10 +957,10 @@ class RequestCardAttention(GuardianView):
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
         msg = '%s (%s) has requested your attention on\n%s\n\n%s' % (
-        user.name, user.email, url, form.cleaned_data['message'])
+        self.me.name, self.me.email, url, form.cleaned_data['message'])
 
-        send_mail('%s %s' % (user.default.name, 
-        user.name), msg, user.email, [peer.email], fail_silently=False)
+        send_mail('%s %s' % (self.me.default.name, 
+        self.me.name), msg, self.me.email, [peer.email], fail_silently=False)
         return redirect('card_app:card-worker-information', 
         peer_id=peer.id, card_id=card.id)
 
@@ -1010,31 +975,29 @@ class CardTagInformation(GuardianView):
 class AlertCardWorkers(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        user = User.objects.get(id=self.user_id)
 
         form = forms.AlertCardWorkersForm()
         return render(request, 'card_app/alert-card-workers.html', 
-        {'card': card, 'form': form, 'user': user})
+        {'card': card, 'form': form, 'user': self.me})
 
     def post(self, request, card_id):
-        user = User.objects.get(id=self.user_id)
         card = models.Card.objects.get(id=card_id)
         form = forms.AlertCardWorkersForm(request.POST)
 
         if not form.is_valid():
             return render(request,'card_app/alert-card-workers.html', 
-                    {'user': user, 'card': card, 'form': form})    
+                    {'user': self.me, 'card': card, 'form': form})    
 
         url  = reverse('card_app:card-link', 
         kwargs={'card_id': card.id})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
         msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
-        user.name, user.email, url, form.cleaned_data['message'])
+        self.me.name, self.me.email, url, form.cleaned_data['message'])
 
         for ind in card.workers.values_list('email'):
-            send_mail('%s %s' % (user.default.name, 
-                user.name), msg, user.email, 
+            send_mail('%s %s' % (self.me.default.name, 
+                self.me.name), msg, self.me.email, 
                     [ind[0]], fail_silently=False)
 
         return HttpResponse(status=200)
@@ -1043,7 +1006,6 @@ class AlertCardWorkers(GuardianView):
 class UndoClipboard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.objects.get(id=card_id)
-        user = User.objects.get(id=self.user_id)
         event0 = card.e_copy_card1.last()
         event1 = card.e_cut_card1.last()
 
@@ -1058,32 +1020,29 @@ class UndoClipboard(GuardianView):
         return redirect('core_app:list-clipboard')
 
     def undo_cut(self, event):
-        user = User.objects.get(id=self.user_id)
-
         event.card.ancestor = event.ancestor
         event.card.save()
 
         event1 = EPasteCard(
-        organization=user.default, ancestor=event.ancestor, user=user)
+        organization=self.me.default, ancestor=event.ancestor, user=self.me)
         event1.save(hcache=False)
         event1.cards.add(event.card)
         event.dispatch(*event.ancestor.ancestor.members.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
-        user=user, organization=user.default)
+        user=self.me, organization=self.me.default)
 
         clipboard.cards.remove(event.card)
 
 class ListAllTasks(GuardianView):
     def get(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalTaskFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         form  = forms.GlobalTaskFilterForm(instance=filter)
 
-        cards = models.Card.get_allowed_cards(me)
+        cards = models.Card.get_allowed_cards(self.me)
         cards = cards.filter(Q(workers__isnull=False))
         total = cards.count()
         cards = filter.get_partial(cards)
@@ -1095,22 +1054,21 @@ class ListAllTasks(GuardianView):
 
         count = cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'card_app/list-all-tasks-scroll.html', cards)
+        elems = JScroll(self.me.id, 'card_app/list-all-tasks-scroll.html', cards)
 
         return render(request, 'card_app/list-all-tasks.html', 
         {'total': total, 'count': count, 
         'form': form, 'elems': elems.as_div()})
 
     def post(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalTaskFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         sqlike = models.Card.from_sqlike()
         form   = forms.GlobalTaskFilterForm(
             request.POST, sqlike=sqlike, instance=filter)
 
-        cards = models.Card.get_allowed_cards(me)
+        cards = models.Card.get_allowed_cards(self.me)
         cards = cards.filter(Q(workers__isnull=False))
         total = cards.count()
 
@@ -1126,20 +1084,18 @@ class ListAllTasks(GuardianView):
 
         count = cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'card_app/list-all-tasks-scroll.html', cards)
+        elems = JScroll(self.me.id, 'card_app/list-all-tasks-scroll.html', cards)
 
         return render(request, 'card_app/list-all-tasks.html', 
         {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
 
 class Find(GuardianView):
     def get(self, request):
-        me    = User.objects.get(id=self.user_id)
-
         filter, _ = GlobalCardFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
         form  = forms.GlobalCardFilterForm(instance=filter)
 
-        cards = models.Card.get_allowed_cards(me)
+        cards = models.Card.get_allowed_cards(self.me)
         total = cards.count()
 
         sqlike = models.Card.from_sqlike()
@@ -1150,20 +1106,19 @@ class Find(GuardianView):
         count = cards.count()
 
         cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'card_app/find-scroll.html', cards)
+        elems = JScroll(self.me.id, 'card_app/find-scroll.html', cards)
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
     def post(self, request):
-        me        = User.objects.get(id=self.user_id)
         filter, _ = GlobalCardFilter.objects.get_or_create(
-        user=me, organization=me.default)
+        user=self.me, organization=self.me.default)
 
         sqlike = models.Card.from_sqlike()
         form  = forms.GlobalCardFilterForm(request.POST, sqlike=sqlike, instance=filter)
 
-        cards = models.Card.get_allowed_cards(me)
+        cards = models.Card.get_allowed_cards(self.me)
         total = cards.count()
 
         if not form.is_valid():
@@ -1176,7 +1131,7 @@ class Find(GuardianView):
         count =  cards.count()
 
         cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(me.id, 'card_app/find-scroll.html', cards)
+        elems = JScroll(self.me.id, 'card_app/find-scroll.html', cards)
 
         return render(request, 'card_app/find.html', 
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
