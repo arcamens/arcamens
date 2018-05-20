@@ -24,6 +24,10 @@ class SnippetMixin(object):
         kwargs={'comment_id': self.id})
         return url
 
+    def get_link_url(self):
+        return reverse('snippet_app:snippet-link', 
+                    kwargs={'snippet_id': self.id})
+
     def __str__(self):
         return self.data
 
@@ -101,6 +105,7 @@ class EUpdateSnippet(Event):
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

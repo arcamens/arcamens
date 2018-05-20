@@ -28,6 +28,13 @@ class Snippet(GuardianView):
         {'snippet': snippet, 'post': snippet.post, 'attachments': attachments})
 
 
+class SnippetLink(GuardianView):
+    def get(self, request, snippet_id):
+        snippet = models.Snippet.objects.get(id=snippet_id)
+
+        return render(request, 'snippet_app/snippet-link.html', 
+        {'snippet': snippet, 'post': snippet.post})
+
 class CreateSnippet(GuardianView):
     """
     """
@@ -150,6 +157,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 

@@ -11,7 +11,9 @@ urlpatterns = [
     url(r'^attach-file/(?P<snippet_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
     url(r'^cancel-snippet-creation/(?P<snippet_id>.+)/', views.CancelSnippetCreation.as_view(), name='cancel-snippet-creation'),
+    url(r'^snippet-link/(?P<snippet_id>.+)/', views.SnippetLink.as_view(), name='snippet-link'),
 
 ]
+
 
 

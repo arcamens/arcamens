@@ -47,7 +47,7 @@ data-show="{% url 'post_app:post-events' post.id %}">
 </div>
 
 {% for ind in post.snippets.all %}
-<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="#"> 
+<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="{{ind.get_link_url}}"> 
 <span class="glyphicon glyphicon-book"></span>{{ind.title}} </a>
 {% empty %}
 No snippets...
@@ -193,6 +193,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 
