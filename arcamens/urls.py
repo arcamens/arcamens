@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^note_app/', include('note_app.urls', namespace='note_app')),
     url(r'^jsim/', include('jsim.urls', namespace='jsim')),
     url(r'^bitbucket_app/', include('bitbucket_app.urls', namespace='bitbucket_app')),
-    # url(r'^github_app/', include('github_app.urls', namespace='github_app')),
+    url(r'^github_app/', include('github_app.urls', namespace='github_app')),
 
     url(r'^list_app/', include('list_app.urls', namespace='list_app')),
 

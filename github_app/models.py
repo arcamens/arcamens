@@ -25,9 +25,10 @@ class EGithubCommit(Event):
     max_length=626)
 
     note = models.OneToOneField('note_app.Note', null=True, blank=True,
-    related_name='commit')
+    related_name='github_commits')
 
     html_template = 'github_app/e-github-commit.html'
+
 
 
 

@@ -4,10 +4,11 @@ from django import forms
 from . import models
 import card_app.models
 
-class BitbucketHookForm(forms.ModelForm):
+class GithubHookForm(forms.ModelForm):
     class Meta:
         model  = models.GithubHook
         fields = ('full_name', )
+
 
 
 

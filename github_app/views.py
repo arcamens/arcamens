@@ -20,7 +20,6 @@ COMMIT_FMT =  (
   '### Github Commit\n'
   '##### Author: {author}\n'
   '##### Commit: [{url}]({url})\n' 
-  '##### Avatar: [{avatar}]({avatar})\n' 
   '##### Message: {message}\n'
 )
 
@@ -33,8 +32,7 @@ class GithubHandle(View):
     def post(self, request):
         data    = json.loads(request.body)
         full_name = data['repository']['full_name']
-        changes = data['push']['changes']
-        commits = self.get_commits(changes)
+        commits = self.get_commits(data['commits'])
 
         for ind in commits:
             self.create_refs(full_name, ind)
@@ -65,9 +63,8 @@ class GithubHandle(View):
         # mapping to the repository.
         cards = cards.filter(is_ok)
 
-        data  = COMMIT_FMT.format(author=commit['author']['raw'], 
-        message=commit['message'], url=commit['links']['html']['href'],
-        avatar=commit['author']['user']['links']['html']['href'])
+        data  = COMMIT_FMT.format(author=commit['author']['name'],
+        message=commit['message'], url=commit['url'])
 
         for ind in cards:
             self.create_note(ind, data, 
@@ -133,6 +130,7 @@ class CreateGithubHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('github_app:list-github-hooks')
+
 
 
 

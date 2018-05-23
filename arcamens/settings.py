@@ -41,6 +41,9 @@ ARCAMENS_BOT_NAME = 'Arcamens Service'
 BITBUCKET_BOT_EMAIL = 'bitbot@arcamens.com'
 BITBUCKET_BOT_NAME = 'Bitbucket Service'
 
+GITHUB_BOT_EMAIL = 'hubbot@arcamens.com'
+GITHUB_BOT_NAME = 'Github Service'
+
 # When the user is not authenticated it is redirected by slock AuthenticatedView.
 AUTH_ERR = 'core_app/unauthorized.html'
 DEFAULT_ERR = 'core_app/default-error.html'
@@ -109,7 +112,7 @@ INSTALLED_APPS = [
     'onesignal',
     'captcha',
     'bitbucket_app',
-    # 'github_app',
+    'github_app',
 ]
 
 MIDDLEWARE = [
@@ -205,6 +208,8 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
 
 
 

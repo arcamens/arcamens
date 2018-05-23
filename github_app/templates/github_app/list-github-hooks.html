@@ -8,15 +8,15 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-<h4> <a href="#" class="s-modal" data-show="{% url 'bitbucket_app:create-bitbucket-hook' %}"> <span class="glyphicon glyphicon-plus"></span>  </a>
-Bitbucket/Hooks </h4>
+<h4> <a href="#" class="s-modal" data-show="{% url 'github_app:create-github-hook' %}"> <span class="glyphicon glyphicon-plus"></span>  </a>
+Github/Hooks </h4>
 </div>
 
 <div class="modal-body">
 
 <div class="pre-scrollable">
 {% for ind in hooks %}
-<p> <a href="#" data-show="{% url 'bitbucket_app:delete-bitbucket-hook' ind.id %}" class="s-modal text-danger"> 
+<p> <a href="#" data-show="{% url 'github_app:delete-github-hook' ind.id %}" class="s-modal text-danger"> 
 <span class="glyphicon glyphicon-remove"></span> </a> {{ind.full_name}} </p>
 {% endfor %}
 
@@ -32,6 +32,7 @@ type="button" class="btn btn-default s-modal"> {% trans "Back" %} </button>
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
