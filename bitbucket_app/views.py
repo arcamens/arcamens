@@ -59,7 +59,7 @@ class BitbucketHandle(View):
         organizations = hooks.values_list('organization')
     
         # Check if the card organizations are in the hook organizations.
-        is_ok = Q(ancestor__ancestor__organization=organizations)
+        is_ok = Q(ancestor__ancestor__organization__in=organizations)
 
         # Just create events for cards which have a hook 
         # mapping to the repository.
@@ -133,6 +133,7 @@ class CreateBitbucketHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 
