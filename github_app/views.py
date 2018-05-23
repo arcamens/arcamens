@@ -33,6 +33,7 @@ class GithubHandle(View):
         data    = json.loads(request.body)
         full_name = data['repository']['full_name']
         commits = self.get_commits(data['commits'])
+        print('Data:', data, file=sys.stderr)
 
         for ind in commits:
             self.create_refs(full_name, ind)
