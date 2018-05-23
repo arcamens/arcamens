@@ -489,6 +489,17 @@ From there you can rename or change its description.
 
 ### Board Deletion
 
+In order to delete a board just click on the wrench icon at the organization menu:
+
+![board-deletion-0](/static/site_app/help/board-deletion-0.png)
+
+Then click on Settings, you would get:
+
+![board-deletion-1](/static/site_app/help/board-deletion-1.png)
+
+After clicking Delete you'll be asked to type the name of the board in order
+to proceed with the deletion. 
+
 ### Bitbucket Integration
 
 ### Organization User Removal
@@ -496,6 +507,7 @@ From there you can rename or change its description.
 ### Organization Settings
 
 ### Logs
+
 
 
 
