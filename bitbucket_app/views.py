@@ -55,8 +55,8 @@ class BitbucketHandle(View):
             # ancestor__ancestor__organization__bitbucket_hooks__full_name=full_name)
 
         # First grab the hooks.
-        hooks    = BitbucketHook.objects.filter(full_name='arcamens/django-github')
-        organizations  = hooks.values_list('organization')
+        hooks = BitbucketHook.objects.filter(full_name=full_name)
+        organizations = hooks.values_list('organization')
     
         # Check if the card organizations are in the hook organizations.
         is_ok = Q(ancestor__ancestor__organization=organizations)
@@ -133,6 +133,7 @@ class CreateBitbucketHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 
