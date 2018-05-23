@@ -109,7 +109,7 @@ INSTALLED_APPS = [
     'onesignal',
     'captcha',
     'bitbucket_app',
-    'github_app',
+    # 'github_app',
 ]
 
 MIDDLEWARE = [
@@ -205,6 +205,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
