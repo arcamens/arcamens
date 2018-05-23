@@ -20,7 +20,6 @@ COMMIT_FMT =  (
   '### Bitbucket Commit\n'
   '##### Author: {author}\n'
   '##### Commit: [{url}]({url})\n' 
-  '##### Avatar: [{avatar}]({avatar})\n' 
   '##### Message: {message}\n'
 )
 
