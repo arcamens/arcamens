@@ -5,16 +5,13 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h5>
-<span class="glyphicon glyphicon-filter"></span>
-
-{{organization.name}}'s Filter</h5>
+<h4> <span class="glyphicon glyphicon-filter"></span> Collections's Filter</h4>
 </div>
 
 <div class="modal-body">
 {% csrf_token %}
 
-{% bootstrap_field form.pattern  size='md' %}
+{% bootstrap_field form.pattern size='md' %}
 
 {% bootstrap_field form.status  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -28,6 +25,7 @@ data-shell="#main-view" data-callback="$('#modal').modal('toggle');"
 data-shell-error="#smallModalContent" data-show="{% url 'core_app:setup-node-filter' organization.id  %}"
 class="btn btn-default e-post"> {% trans "Setup" %} </button>
 </div>
+
 
 
 

@@ -182,9 +182,10 @@ class DeleteOrganization(GuardianView):
         # the user gets deleted in cascade due to the
         # user.default field.
         self.me.organizations.remove(organization)
+        organization.delete()
+
         self.me.default = self.me.organizations.first()
         self.me.save()
-        organization.delete()
 
         return redirect('core_app:index')
 
@@ -896,6 +897,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

@@ -69,6 +69,10 @@ git pull
 cd ~/projects/arcamens-code
 python manage.py blowdb
 ./build-data
+
+python manage.py makemigrations
+python manage.py migrate
+
 ##############################################################################
 # stress-db.
 ./stress-db teta 1
@@ -101,7 +105,7 @@ cd ~/projects/arcamens-code
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
-pip install -r requirements.txt 
+pip install -r debug.requirements.txt 
 ##############################################################################
 # create arcamens project.
 cd ~/projects/
@@ -361,6 +365,7 @@ python manage.py loaddata arcamens-db.json
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens-code
+
 
 
 

@@ -6,11 +6,8 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h5>
-<span class="glyphicon glyphicon-search"></span>
-{{organization.name|truncatechars:20}}'s Admins 
-<span class="badge">{{count}}/{{total}}</span>
-</h5>
+<h4> <span class="glyphicon glyphicon-search"></span> {{organization.name|truncatechars:20}}'s Admins 
+<span class="badge">{{count}}/{{total}}</span> </h4>
 </div>
 
 <div class="modal-body">
@@ -81,6 +78,7 @@ $('#userSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

@@ -261,7 +261,7 @@ class User(UserMixin, BasicUser):
     # contacts  = models.ManyToManyField('self', 
     # related_name='users', null=True, blank=True, symmetrical=False)
     default = models.ForeignKey('Organization', 
-    null=True, blank=True)
+    null=True, blank=True, on_delete=models.SET_NULL)
 
     description = models.TextField(null=True,
     blank=False, verbose_name=_("Description"), 
@@ -269,7 +269,7 @@ class User(UserMixin, BasicUser):
     max_length=256)
 
     avatar = models.ImageField(null=True,
-    verbose_name='Your avatar.', help_text='', blank=False)
+    verbose_name='Your avatar.', help_text='', blank=True)
 
     enabled = models.BooleanField(blank=True, default=False)
 
@@ -356,7 +356,7 @@ class UserFilter(models.Model):
     blank=True, default='')
 
     pattern  = models.CharField(max_length=255, blank=True, default='',
-    help_text='Example: victor + #arcamens + #suggestion ...')
+    help_text='Example: oliveira@arcamens.com')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -401,9 +401,9 @@ class ERemoveOrganizationUser(Event):
 
 class NodeFilter(models.Model):
     pattern = models.CharField(max_length=255, blank=True, 
-    default='')
+    default='', help_text='/projectname/', )
 
-    user         = models.ForeignKey('core_app.User', null=True, blank=True)
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
 
@@ -420,6 +420,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

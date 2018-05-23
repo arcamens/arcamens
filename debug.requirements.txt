@@ -9,9 +9,9 @@ django-blowdb
 git+ssh://git@bitbucket.org/arcamens/django-paybills.git
 git+ssh://git@bitbucket.org/arcamens/django-slock.git
 git+ssh://git@bitbucket.org/arcamens/django-jsim.git
-mysqlclient
 pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
+
 
 
 

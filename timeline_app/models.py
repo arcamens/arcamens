@@ -65,12 +65,11 @@ class Timeline(TimelineMixin):
     related_name='timelines', null=True, blank=True)
 
     name = models.CharField(null=True, blank=False,
-    verbose_name=_("Name"), help_text='Example: /projects/labor/bugs, \
-    Management, Blackdawn Team, ...', max_length=250)
+    verbose_name=_("Name"), help_text='Example: Bugs', max_length=250)
 
     description = models.CharField(blank=True, default='', 
-    verbose_name=_("Description"), help_text='Example: Deals with \
-    labor bugs.', max_length=626)
+    verbose_name=_("Description"), help_text='Example: /projectname/', 
+    max_length=626)
 
     owner = models.ForeignKey('core_app.User', null=True, 
     blank=True, related_name='owned_timelines')
@@ -118,6 +117,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 
