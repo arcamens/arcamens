@@ -51,23 +51,23 @@ class BitbucketHandle(View):
         # Filter cards whose organization has a bitbucket hook
         # whose address is the one in the push payload.
         # Note: Not sure if there is a better way.
-        cards = cards.filter(
-            ancestor__ancestor__organization__bitbucket_hooks__full_name=full_name)
+        # cards = cards.filter(
+            # ancestor__ancestor__organization__bitbucket_hooks__full_name=full_name)
 
         # First grab the hooks.
-        # hooks = BitbucketHook.objects.filter(full_name=full_name)
-        # organizations = hooks.values_list('organization')
+        hooks = BitbucketHook.objects.filter(full_name=full_name)
+        organizations = hooks.values_list('organization')
     
         # Check if the card organizations are in the hook organizations.
-        # is_ok = Q(ancestor__ancestor__organization__in=organizations)
+        is_ok = Q(ancestor__ancestor__organization__in=organizations)
 
         # Just create events for cards which have a hook 
         # mapping to the repository.
-        # cards = cards.filter(is_ok)
+        cards = cards.filter(is_ok)
 
+        # Note: Not sure whether author will always be avaiable though.
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
-        message=commit['message'], url=commit['links']['html']['href'],
-        avatar=commit['author']['user']['links']['html']['href'])
+        message=commit['message'], url=commit['links']['html']['href'])
 
         for ind in cards:
             self.create_note(ind, data, 
