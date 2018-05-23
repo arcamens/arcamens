@@ -67,8 +67,7 @@ class GithubHandle(View):
         message=commit['message'], url=commit['url'])
 
         for ind in cards:
-            self.create_note(ind, data, 
-                commit['links']['html']['href'])
+            self.create_note(ind, data, commit['url'])
 
     def create_note(self, card, data, url):
         bitbot, _ = User.objects.get_or_create(
