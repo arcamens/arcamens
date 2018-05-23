@@ -7,7 +7,7 @@ from django.views.generic import View
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from bitbucket_app.models import BitbucketHook, EBitbucketCommit
+from github_app.models import GithubHook, EGithubCommit
 from core_app.models import User
 from card_app.models import Card
 from note_app.models import Note
@@ -17,7 +17,7 @@ import json
 import sys
 
 COMMIT_FMT =  (
-  '### Bitbucket Commit\n'
+  '### Github Commit\n'
   '##### Author: {author}\n'
   '##### Commit: [{url}]({url})\n' 
   '##### Avatar: [{avatar}]({avatar})\n' 
@@ -29,7 +29,7 @@ class Authenticator(GuardianView):
         pass
 
 @method_decorator(csrf_exempt, name='dispatch')
-class BitbucketHandle(View):
+class GithubHandle(View):
     def post(self, request):
         data    = json.loads(request.body)
         full_name = data['repository']['full_name']
@@ -48,22 +48,22 @@ class BitbucketHandle(View):
         ids   = findall(REGX, commit['message'])
         cards = Card.objects.filter(id__in = ids)
 
-        # Filter cards whose organization has a bitbucket hook
+        # Filter cards whose organization has a github hook
         # whose address is the one in the push payload.
         # Note: Not sure if there is a better way.
-        cards = cards.filter(
-            ancestor__ancestor__organization__bitbucket_hooks__full_name=full_name)
+        # cards = cards.filter(
+            # ancestor__ancestor__organization__github_hooks__full_name=full_name)
 
         # First grab the hooks.
-        # hooks = BitbucketHook.objects.filter(full_name=full_name)
-        # organizations = hooks.values_list('organization')
+        hooks = GithubHook.objects.filter(full_name=full_name)
+        organizations = hooks.values_list('organization')
     
         # Check if the card organizations are in the hook organizations.
-        # is_ok = Q(ancestor__ancestor__organization__in=organizations)
+        is_ok = Q(ancestor__ancestor__organization__in=organizations)
 
         # Just create events for cards which have a hook 
         # mapping to the repository.
-        # cards = cards.filter(is_ok)
+        cards = cards.filter(is_ok)
 
         data  = COMMIT_FMT.format(author=commit['author']['raw'], 
         message=commit['message'], url=commit['links']['html']['href'],
@@ -78,7 +78,7 @@ class BitbucketHandle(View):
         email=settings.BITBUCKET_BOT_EMAIL, name=settings.BITBUCKET_BOT_NAME)
 
         note  = Note.objects.create(card=card, data=data, owner=bitbot)
-        event = EBitbucketCommit.objects.create(
+        event = EGithubCommit.objects.create(
         organization=card.ancestor.ancestor.organization, 
         note=note, url=url, user=bitbot)
 
@@ -96,47 +96,43 @@ class BitbucketHandle(View):
                 return commits
         return []
 
-class ListBitbucketHooks(GuardianView):
+class ListGithubHooks(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
-        hooks = user.default.bitbucket_hooks.all()
+        hooks = user.default.github_hooks.all()
 
-        return render(request, 'bitbucket_app/list-bitbucket-hooks.html', 
+        return render(request, 'github_app/list-github-hooks.html', 
         {'user': user, 'hooks': hooks})
 
-class DeleteBitbucketHook(GuardianView):
+class DeleteGithubHook(GuardianView):
     def get(self, request, hook_id):
         user = User.objects.get(id=self.user_id)
-        hook = BitbucketHook.objects.get(id=hook_id)
+        hook = GithubHook.objects.get(id=hook_id)
         hook.delete()
 
-        return redirect('bitbucket_app:list-bitbucket-hooks')
+        return redirect('github_app:list-github-hooks')
 
-class CreateBitbucketHook(GuardianView):
+class CreateGithubHook(GuardianView):
     def get(self, request):
         user = User.objects.get(id=self.user_id)
-        form = forms.BitbucketHookForm()
+        form = forms.GithubHookForm()
 
-        return render(request, 'bitbucket_app/create-bitbucket-hook.html', 
+        return render(request, 'github_app/create-github-hook.html', 
         {'form':form, 'user': user})
 
     def post(self, request):
         user = User.objects.get(id=self.user_id)
-        form = forms.BitbucketHookForm(request.POST)
+        form = forms.GithubHookForm(request.POST)
 
         if not form.is_valid():
             return render(request, 
-                'bitbucket_app/create-bitbucket-hook.html', 
+                'github_app/create-github-hook.html', 
                     {'form':form, 'user': user})
 
         record = form.save(commit=False)
         record.organization = user.default
         record.save()
-        return redirect('bitbucket_app:list-bitbucket-hooks')
-
-
-
-
+        return redirect('github_app:list-github-hooks')
 
 
 
