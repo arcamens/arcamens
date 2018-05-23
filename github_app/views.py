@@ -32,10 +32,8 @@ class GithubHandle(View):
     def post(self, request):
         data    = json.loads(request.body)
         full_name = data['repository']['full_name']
-        commits = self.get_commits(data['commits'])
-        print('Data:', data, file=sys.stderr)
 
-        for ind in commits:
+        for ind in data['commits']:
             self.create_refs(full_name, ind)
 
         return HttpResponse(status=200)
@@ -84,14 +82,6 @@ class GithubHandle(View):
             *card.ancestor.ancestor.members.all())
 
         event.save()
-
-    def get_commits(self, changes):
-        # It may be the case the commits were truncated.
-        for ind in changes:
-            commits = ind.get('commits')
-            if commits:
-                return commits
-        return []
 
 class ListGithubHooks(GuardianView):
     def get(self, request):
