@@ -71,7 +71,7 @@ class GithubHandle(View):
 
     def create_note(self, card, data, url):
         bitbot, _ = User.objects.get_or_create(
-        email=settings.BITBUCKET_BOT_EMAIL, name=settings.BITBUCKET_BOT_NAME)
+        email=settings.GITHUB_BOT_EMAIL, name=settings.GITHUB_BOT_NAME)
 
         note  = Note.objects.create(card=card, data=data, owner=bitbot)
         event = EGithubCommit.objects.create(
