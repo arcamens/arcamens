@@ -229,7 +229,7 @@ The card board members and card workers.
 You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
 It is useful when your organization has many tags.
 
-### Card Task Search
+### Search for Card Tasks 
 
 ### Card Search
 
@@ -412,9 +412,81 @@ Fill the form and send the e-mail notification.
 
 You can as well send notification to all post workers by clicking on Alert Workers.
 
-### Post Task Search
+### Search for Post Tasks
+
+When a post is created and it is assigned to someone then it becomes a task.
+It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
+at the navbar:
+
+![search-for-post-tasks-0](/static/site_app/help/search-for-post-tasks-0.png)
+
+Then you would get:
+
+![search-for-post-tasks-1](/static/site_app/help/search-for-post-tasks-1.png)
+
+The option **Assigned to Me** would perform the search pattern through
+all tasks that someone has assigned to you even if it was assigned by yourself.
+
+If you option for  **Created by Me** then it would check the pattern against all posts
+that you created and it was at least one worker binded to.
+
+When **All Tasks** is checked then it matches against all posts that you were assigned to
+or are on all your timelines.
+
+The simplest example of pattern consists of merely strings:
+
+    bug with engine
+
+
+The above example would list all posts whose label or data fields contain the entire
+string.
+
+![search-for-post-tasks-2](/static/site_app/help/search-for-post-tasks-2.png)
+
+You could do:
+
+    bug with + engine
+
+
+In the above example it would list all posts that contains both two strings.
+
+![search-for-post-tasks-3](/static/site_app/help/search-for-post-tasks-3.png)
+
+**Note:** You are allowed to form longer patterns like:
+
+
+    bug + with + engine + driver
+
+
+It would list all posts that contains all the strings either in the label or markdown data fields.
+
+**Note:** Leave the Done attribute checked for searching only through the archived posts.
 
 ### Post Search
+
+The post search mechanism allows to search through all posts that you have access regardless
+if it has a worker or not. For such just click on the Post link at the navbar:
+
+![post-search-0](/static/site_app/help/post-search-0.png)
+
+Then you would get:
+
+![post-search-1](/static/site_app/help/post-search-1.png)
+
+**Examples:**
+
+Would find all posts where the three strings show up either in the label or markdown:
+
+    bug + engine + wheels
+
+
+Would find all posts where the strings 'bug' or 'engine wheels' show up.
+
+
+    bug + engine wheels
+
+
+Leave the **Done** field checked to search only through archived posts.
 
 ### Event Comments
 
@@ -472,9 +544,21 @@ search to be performed under a given attribute like email you could do:
 
 ### Advanced Post Search
 
-### Timeline Settings
+### Timeline Settings/Removal
 
-### Board Settings
+You can rename a timeline or delete it, you just access the desired timeline
+then click on Settings at the timeline menu:
+
+![timeline-settings-0](/static/site_app/help/timeline-settings-0.png)
+
+From there you can change the timeline attributes like name/description.
+You can as well click on Delete then you'll be asked for confirmation. 
+
+Type the timeline name then press Delete.
+
+![timeline-settings-1](/static/site_app/help/timeline-settings-1.png)
+
+### Board Settings/Removal
 
 You can rename boards by accessing its settings form. For such just access the board
 then click on the wrench icon:
@@ -485,20 +569,7 @@ Click on Settings then you get:
 
 ![board-settings-1](/static/site_app/help/board-settings-1.png)
 
-From there you can rename or change its description.
-
-### Board Deletion
-
-In order to delete a board just click on the wrench icon at the organization menu:
-
-![board-deletion-0](/static/site_app/help/board-deletion-0.png)
-
-Then click on Settings, you would get:
-
-![board-deletion-1](/static/site_app/help/board-deletion-1.png)
-
-After clicking Delete you'll be asked to type the name of the board in order
-to proceed with the deletion. 
+From there you can as well delete the board, you'll be asked for confirmation.
 
 ### Bitbucket Integration
 
@@ -518,6 +589,7 @@ Then click on Members, you would get:
 ### Organization Settings
 
 ### Logs
+
 
 
 

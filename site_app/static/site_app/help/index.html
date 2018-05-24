@@ -132,7 +132,7 @@ For tagging a given card just access the card by clicking on its label link.</p>
 The card board members and card workers.</p>
 <p>You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
 It is useful when your organization has many tags.</p>
-<h3>Card Task Search</h3>
+<h3>Search for Card Tasks</h3>
 <h3>Card Search</h3>
 <h3>Organization Creation</h3>
 <h3>Timelines</h3>
@@ -235,8 +235,49 @@ with a message.</p>
 <p><img alt="post-email-notification-2" src="/static/site_app/help/post-email-notification-2.png" /></p>
 <p>Fill the form and send the e-mail notification.</p>
 <p>You can as well send notification to all post workers by clicking on Alert Workers.</p>
-<h3>Post Task Search</h3>
+<h3>Search for Post Tasks</h3>
+<p>When a post is created and it is assigned to someone then it becomes a task.
+It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
+at the navbar:</p>
+<p><img alt="search-for-post-tasks-0" src="/static/site_app/help/search-for-post-tasks-0.png" /></p>
+<p>Then you would get:</p>
+<p><img alt="search-for-post-tasks-1" src="/static/site_app/help/search-for-post-tasks-1.png" /></p>
+<p>The option <strong>Assigned to Me</strong> would perform the search pattern through
+all tasks that someone has assigned to you even if it was assigned by yourself.</p>
+<p>If you option for  <strong>Created by Me</strong> then it would check the pattern against all posts
+that you created and it was at least one worker binded to.</p>
+<p>When <strong>All Tasks</strong> is checked then it matches against all posts that you were assigned to
+or are on all your timelines.</p>
+<p>The simplest example of pattern consists of merely strings:</p>
+<pre><code>bug with engine
+</code></pre>
+<p>The above example would list all posts whose label or data fields contain the entire
+string.</p>
+<p><img alt="search-for-post-tasks-2" src="/static/site_app/help/search-for-post-tasks-2.png" /></p>
+<p>You could do:</p>
+<pre><code>bug with + engine
+</code></pre>
+<p>In the above example it would list all posts that contains both two strings.</p>
+<p><img alt="search-for-post-tasks-3" src="/static/site_app/help/search-for-post-tasks-3.png" /></p>
+<p><strong>Note:</strong> You are allowed to form longer patterns like:</p>
+<pre><code>bug + with + engine + driver
+</code></pre>
+<p>It would list all posts that contains all the strings either in the label or markdown data fields.</p>
+<p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
 <h3>Post Search</h3>
+<p>The post search mechanism allows to search through all posts that you have access regardless
+if it has a worker or not. For such just click on the Post link at the navbar:</p>
+<p><img alt="post-search-0" src="/static/site_app/help/post-search-0.png" /></p>
+<p>Then you would get:</p>
+<p><img alt="post-search-1" src="/static/site_app/help/post-search-1.png" /></p>
+<p><strong>Examples:</strong></p>
+<p>Would find all posts where the three strings show up either in the label or markdown:</p>
+<pre><code>bug + engine + wheels
+</code></pre>
+<p>Would find all posts where the strings 'bug' or 'engine wheels' show up.</p>
+<pre><code>bug + engine wheels
+</code></pre>
+<p>Leave the <strong>Done</strong> field checked to search only through archived posts.</p>
 <h3>Event Comments</h3>
 <h3>Post Filter</h3>
 <h3>Collection Filter</h3>
@@ -267,22 +308,28 @@ search to be performed under a given attribute like email you could do:</p>
 </code></pre>
 <h3>Advanced Card Search</h3>
 <h3>Advanced Post Search</h3>
-<h3>Timeline Settings</h3>
-<h3>Board Settings</h3>
+<h3>Timeline Settings/Removal</h3>
+<p>You can rename a timeline or delete it, you just access the desired timeline
+then click on Settings at the timeline menu:</p>
+<p><img alt="timeline-settings-0" src="/static/site_app/help/timeline-settings-0.png" /></p>
+<p>From there you can change the timeline attributes like name/description.
+You can as well click on Delete then you'll be asked for confirmation. </p>
+<p>Type the timeline name then press Delete.</p>
+<p><img alt="timeline-settings-1" src="/static/site_app/help/timeline-settings-1.png" /></p>
+<h3>Board Settings/Removal</h3>
 <p>You can rename boards by accessing its settings form. For such just access the board
 then click on the wrench icon:</p>
 <p><img alt="board-settings-0" src="/static/site_app/help/board-settings-0.png" /></p>
 <p>Click on Settings then you get:</p>
 <p><img alt="board-settings-1" src="/static/site_app/help/board-settings-1.png" /></p>
-<p>From there you can rename or change its description.</p>
-<h3>Board Deletion</h3>
-<p>In order to delete a board just click on the wrench icon at the organization menu:</p>
-<p><img alt="board-deletion-0" src="/static/site_app/help/board-deletion-0.png" /></p>
-<p>Then click on Settings, you would get:</p>
-<p><img alt="board-deletion-1" src="/static/site_app/help/board-deletion-1.png" /></p>
-<p>After clicking Delete you'll be asked to type the name of the board in order
-to proceed with the deletion. </p>
+<p>From there you can as well delete the board, you'll be asked for confirmation.</p>
 <h3>Bitbucket Integration</h3>
 <h3>Organization User Removal</h3>
+<p>In order to remove an user from an organization it is necessary to be admin of the organization.
+The one who is removing the user will own all timeliens and boards of the removed user.</p>
+<p>Click on the wrench icon at the organization menu:</p>
+<p><img alt="organization-user-removal-0" src="/static/site_app/help/organization-user-removal-0.png" /></p>
+<p>Then click on Members, you would get:</p>
+<p><img alt="organization-user-removal-1" src="/static/site_app/help/organization-user-removal-1.png" /></p>
 <h3>Organization Settings</h3>
 <h3>Logs</h3>

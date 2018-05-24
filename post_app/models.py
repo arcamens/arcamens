@@ -74,7 +74,7 @@ class PostMixin(models.Model):
         snippet  = lambda ind: Q(snippets__title__icontains=ind) | Q(
         snippets__data__icontains=ind)
 
-        default = lambda ind: Q(label__icontains=ind)
+        default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind)
 
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), user),
@@ -391,6 +391,7 @@ class PostPin(PostPinMixin):
 
     class Meta:
         unique_together = ('user', 'organization', 'post')
+
 
 
 
