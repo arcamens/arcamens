@@ -310,13 +310,31 @@ with simple patterns as well.</p>
 <p>Listing posts that has a specific worker:</p>
 <pre><code>worker:last.src
 </code></pre>
-<p>Would list all posts that has a worker whose name/email matches the string 'last.src'.</p>
-<p>You could as well do:</p>
+<p>Would list all posts that have two workers whose name/email matches both strings.</p>
 <pre><code>worker:last.src + worker:porton
 </code></pre>
-<p>Would list all posts that have two workers whose name/email matches both strings.</p>
 <p><strong>See:</strong> <a href="#advanced-post-search">Advanced Post Search</a></p>
 <h3>Collection Filter</h3>
+<p>Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines.
+One could have a project that has many plugins and keep a board for each one of its plugins.</p>
+<p>It is necessary to stabilish a naming convention for your boards/timelines. </p>
+<p>For example:</p>
+<pre><code>Timeline: Arcamens/Notes
+
+Board: Arcamens
+
+Timeline: Arcamens/News
+
+Timeline: Arcamens/Bugs
+</code></pre>
+<p>All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines 
+then if you want to view just boards or timelines that are related to a given subject it gets simple.</p>
+<p>Just click Home at the navbar and click on the Filter link at the organization menu:</p>
+<p><img alt="collection-filter-0" src="/static/site_app/help/collection-filter-0.png" /></p>
+<p>You would get:</p>
+<p><img alt="collection-filter-1" src="/static/site_app/help/collection-filter-1.png" /></p>
+<p>In the previously stated context if you typed the string 'Arcamens' then you would view
+all the boards/timelines that contain such a string either in its name or description.</p>
 <h3>Card's Text Colors</h3>
 <h3>Card E-mail/Notifications</h3>
 <h3>Card Filter</h3>

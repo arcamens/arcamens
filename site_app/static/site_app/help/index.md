@@ -557,6 +557,36 @@ Would list all posts that have two workers whose name/email matches both strings
 
 ### Collection Filter
 
+Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines.
+One could have a project that has many plugins and keep a board for each one of its plugins.
+
+It is necessary to stabilish a naming convention for your boards/timelines. 
+
+For example:
+
+    Timeline: Arcamens/Notes
+
+    Board: Arcamens
+
+    Timeline: Arcamens/News
+
+    Timeline: Arcamens/Bugs
+
+
+All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines 
+then if you want to view just boards or timelines that are related to a given subject it gets simple.
+
+Just click Home at the navbar and click on the Filter link at the organization menu:
+
+![collection-filter-0](/static/site_app/help/collection-filter-0.png)
+
+You would get:
+
+![collection-filter-1](/static/site_app/help/collection-filter-1.png)
+
+In the previously stated context if you typed the string 'Arcamens' then you would view
+all the boards/timelines that contain such a string either in its name or description.
+
 ### Card's Text Colors
 
 ### Card E-mail/Notifications
