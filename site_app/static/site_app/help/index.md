@@ -593,6 +593,21 @@ all the boards/timelines that contain such a string either in its name or descri
 
 ### Card Filter
 
+You can specify a pattern for filtering cards inside lists as well thus allowing one to view just cards
+that have attributes matching requirements.
+
+Access the desired list then click on Filter at the list menu:
+
+![card-filter-0](/static/site_app/help/card-filter-0.png)
+
+You would get:
+
+![card-filter-1](/static/site_app/help/card-filter-1.png)
+
+You can filter by tag, worker, owner etc.
+
+**See:** [Advanced Card Search](#advanced-card-search)
+
 ### Card Forks
 
 ### Post Forks
