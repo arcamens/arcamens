@@ -504,6 +504,17 @@ to proceed with the deletion.
 
 ### Organization User Removal
 
+In order to remove an user from an organization it is necessary to be admin of the organization.
+The one who is removing the user will own all timeliens and boards of the removed user.
+
+Click on the wrench icon at the organization menu:
+
+![organization-user-removal-0](/static/site_app/help/organization-user-removal-0.png)
+
+Then click on Members, you would get:
+
+![organization-user-removal-1](/static/site_app/help/organization-user-removal-1.png)
+
 ### Organization Settings
 
 ### Logs
