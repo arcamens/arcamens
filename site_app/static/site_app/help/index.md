@@ -490,6 +490,31 @@ Leave the **Done** field checked to search only through archived posts.
 
 ### Event Comments
 
+All kind of user actions in Arcamens are liable of being commented. Whenever an user
+assigns a worker to a post it generates an event then the event/action can be commented out.
+
+When an user action is commented then another event is generated but it doesn't allow
+comments for action comments.
+
+Click on Events at the navbar:
+
+![event-comments-0](/static/site_app/help/event-comments-0.png)
+
+Then you would get:
+
+![event-comments-1](/static/site_app/help/event-comments-1.png)
+
+By clicking on the event Comments link:
+
+![event-comments-2](/static/site_app/help/event-comments-2.png)
+
+
+The users who are related to the event would get a new event like:
+
+![event-comments-3](/static/site_app/help/event-comments-3.png)
+
+They can reply by clicking on the event Comments link.
+
 ### Post Filter
 
 ### Collection Filter
