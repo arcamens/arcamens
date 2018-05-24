@@ -517,6 +517,44 @@ They can reply by clicking on the event Comments link.
 
 ### Post Filter
 
+It is possible to filter timeline posts as well, whenever you access the timeline
+then it will list just posts that match the filter pattern.
+
+For such just access the timeline then click on Filter at the timeline menu:
+
+![post-filter-0](/static/site_app/help/post-filter-0.png)
+
+You would get:
+
+![post-filter-1](/static/site_app/help/post-filter-1.png)
+
+It is mostly useful for filtering posts based on tag, owner or workers but it works
+with simple patterns as well.
+
+Would list all posts that have both tags.
+
+    tag:feature + tag:bug
+
+    
+Would list all posts whose owner's email or name matches the string 'last.src':
+
+
+    owner:last.src
+
+
+Listing posts that has a specific worker:
+
+
+    worker:last.src
+
+
+Would list all posts that have two workers whose name/email matches both strings.
+
+    worker:last.src + worker:porton
+
+
+**See:** [Advanced Post Search](#advanced-post-search)
+
 ### Collection Filter
 
 ### Card's Text Colors
@@ -568,6 +606,8 @@ search to be performed under a given attribute like email you could do:
 ### Advanced Card Search
 
 ### Advanced Post Search
+
+test
 
 ### Timeline Settings/Removal
 

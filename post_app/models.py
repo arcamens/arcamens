@@ -162,7 +162,7 @@ class Post(PostMixin):
 
 class PostFilter(PostFilterMixin):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: enginee x-11 + wheels + ,,,')
+    blank=True, help_text='Example: tag:bug + tag:python')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -391,6 +391,7 @@ class PostPin(PostPinMixin):
 
     class Meta:
         unique_together = ('user', 'organization', 'post')
+
 
 
 
