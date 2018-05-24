@@ -696,7 +696,15 @@ Then click on Members, you would get:
 
 ![organization-user-removal-1](/static/site_app/help/organization-user-removal-1.png)
 
-### Organization Settings
+### Organization Settings/Removal
+
+Click on wrench icon at the organization menu then Settings:
+
+![organization-settings-removal-0](/static/site_app/help/organization-settings-removal-0.png)
+
+You would get:
+
+![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
 
