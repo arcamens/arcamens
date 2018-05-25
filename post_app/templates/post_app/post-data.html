@@ -8,7 +8,7 @@
 <span class="glyphicon glyphicon-file"></span>
 
 Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="Score: value">
-<span class="glyphicon glyphicon-user"></span> {{post.user.name}} </a> 
+{{post.user.name}} </a> 
 on timeline
 
 <a class="e-get" href="{{post.ancestor.get_link_url}}"
@@ -187,6 +187,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

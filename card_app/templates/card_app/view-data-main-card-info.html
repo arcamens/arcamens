@@ -5,8 +5,7 @@
 
 <small>
 <span class="glyphicon glyphicon-file"></span> Card by 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value">
-<span class="glyphicon glyphicon-user"></span> {{card.owner.name}} </a> on list
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value"> {{card.owner.name}} </a> on list
 
 <a class="e-get" href="#"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
@@ -66,6 +65,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 
