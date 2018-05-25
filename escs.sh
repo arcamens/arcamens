@@ -264,6 +264,11 @@ rm -fr build
 cd ~/projects/django-jsim-code
 python setup.py install
 rm -fr build
+##############################################################################
+# install onesignal.
+cd ~/projects/django-onesignal-code
+python setup.py install
+rm -fr build
 
 ##############################################################################
 # pair fork master branch to upstream master branch.
@@ -365,6 +370,7 @@ python manage.py loaddata arcamens-db.json
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens-code
+
 
 
 
