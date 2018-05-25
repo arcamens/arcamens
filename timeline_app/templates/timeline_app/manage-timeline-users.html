@@ -23,10 +23,6 @@ Available {{timeline.name|truncatechars:20}}'s Members
 <br>
 
 <small> {{ind.email}} </small>   <br>
-<b style="font-size:60%"> All card/tasks: {{ind.tasks.count}}
-</b>
-
-<br>
 
 <a class="e-get" style="color:red; font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
@@ -44,8 +40,6 @@ data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" hre
 <br>
 
 <small> {{ind.email}} </small>  
-<br>
-<b style="font-size:60%">All card/tasks: {{ind.tasks.count}}</b>
 <br>
 
 <a class="e-get" style="color:green;font-size:70%"
@@ -77,4 +71,5 @@ class="btn btn-default m-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 

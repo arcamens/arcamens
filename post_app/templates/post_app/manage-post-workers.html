@@ -22,10 +22,6 @@ Available {{post.label|truncatechars:"60"}} post's workers
 <br>
 
 <small> {{ind.email}} </small>   <br>
-<b style="font-size:60%"> All post/tasks: {{ind.assignments.count}}
-</b>
-
-<br>
 
 <a class="e-get" style="color:red; font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
@@ -43,8 +39,6 @@ data-show="{% url 'post_app:unassign-post-user' post.id ind.id %}" href="#">
 <br>
 
 <small> {{ind.email}} </small>  
-<br>
-<b style="font-size:60%"> All post/tasks:: {{ind.assignments.count}}</b>
 <br>
 
 <a class="e-get" style="color:green;font-size:70%"
@@ -82,5 +76,6 @@ class="btn btn-default e-post"> {% trans "Filter" %} </button>
 </button>
 
 </div>
+
 
 
