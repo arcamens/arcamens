@@ -151,7 +151,7 @@ rm -fr build
 ##############################################################################
 # access victor server through ssh.
 
-tee -i >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+tee -i >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
 ##############################################################################
 # run supervisord.
 supervisord -n -c ../conf/supervisord.conf
@@ -195,7 +195,7 @@ rabbitmq-plugins enable rabbitmq_web_mqtt
 
 # setting up rabbitmq to work on server.
 
-tee -i >(stdbuf -o 0 ssh opus-test@staging.arcamens.com 'bash -i')
+tee -i >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
 
 # first enable the management tool.
 rabbitmq-plugins enable rabbitmq_management
@@ -287,7 +287,7 @@ rm -fr build
 ##############################################################################
 # Restart supervisor.
 
-tee >(stdbuf -o 0 ssh root@staging.arcamens.com 'bash -i')
+tee >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
 sudo supervisorctl restart arcamens
 sudo supervisorctl stop arcamens
 
@@ -329,7 +329,7 @@ password eicae8EiOhbiuJ8J
 rm -fr app/migrations
 
 # drop tables to solve the problem with unkonwn field in migrations.
-ssh arcamens@staging.arcamens.com
+ssh admin@staging.arcamens.com
 mysql -i -u staging -p staging
 eicae8EiOhbiuJ8J
 
@@ -370,6 +370,7 @@ python manage.py loaddata arcamens-db.json
 cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens-code
+
 
 
 

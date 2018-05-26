@@ -235,6 +235,22 @@ It is useful when your organization has many tags.
 
 ### Organization Creation
 
+Organizations can serve on multiple purposes depending on the kind of business and size. 
+You can map a team to an organization, a business branch to an organization or even handle all your
+business team in a single organization. 
+
+It all depends on how big your business is and on your necessities of designing your business workflow.
+
+For creating an organization just click on your current organization icon at the navbar:
+
+![organization-creation-0](/static/site_app/help/organization-creation-0.png)
+
+Then click on +Organization link, you would get:
+
+![organization-creation-1](/static/site_app/help/organization-creation-1.png)
+
+Type your new organizatio name then click Create.
+
 ### Timelines
 
 Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks.
@@ -707,6 +723,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
