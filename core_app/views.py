@@ -57,26 +57,42 @@ class Index(AuthenticatedView):
     """
 
     def get(self, request):
-        organizations = self.me.organizations.exclude(id=self.me.default.id)
-    
         if hasattr(self.me, 'register_process'):
             return render(request, 
                 'site_app/confirm-email.html', {'user': self.me})
+
+        organizations = self.me.organizations.all()
+        if not organizations.exists():
+            return redirect('core_app:no-organization')
+
+        if not self.me.default:
+            return redirect('core_app:no-default')
 
         if not self.me.default.owner.enabled:
             if self.me.default.owner != self.me:
                 return redirect('core_app:disabled-account')
 
+        organizations = organizations.exclude(id=self.me.default.id)
         return render(request, 'core_app/index.html', 
         {'user': self.me, 'default': self.me.default, 
         'organization': self.me.default, 'organizations': organizations,
          'settings': settings})
+
+    def set_default_organization(self):
+        self.me.default = self.me.organizanitions.first()
+        self.me.save()
 
 class DisabledAccount(AuthenticatedView):
     def get(self, request):
         other = self.me.owned_organizations.first()
 
         return render(request, 'core_app/disabled-account.html', 
+        {'user': self.me, 'other': other})
+
+class NoDefault(AuthenticatedView):
+    def get(self, request):
+        other = self.me.owned_organizations.first()
+        return render(request, 'core_app/no-default.html', 
         {'user': self.me, 'other': other})
 
 class SwitchOrganization(AuthenticatedView):
@@ -117,6 +133,31 @@ class CreateOrganization(AuthenticatedView):
 
         if not form.is_valid():
             return render(request, 'core_ap/create-organization.html',
+                        {'form': form, 'user': self.me}, status=400)
+
+        organization = Organization.objects.create(
+        name=form.cleaned_data['name'], owner=self.me) 
+
+        self.me.organizations.add(organization)
+        self.me.default = organization
+        organization.admins.add(self.me)
+        self.me.save()
+        return redirect('core_app:index')
+
+class NoOrganization(AuthenticatedView):
+    """
+    """
+
+    def get(self, request):
+        form = forms.OrganizationForm()
+        return render(request, 'core_app/no-organization.html', 
+        {'form':form, 'user': self.me})
+
+    def post(self, request):
+        form = forms.OrganizationForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'core_ap/no-organization.html',
                         {'form': form, 'user': self.me}, status=400)
 
         organization = Organization.objects.create(
@@ -174,18 +215,11 @@ class DeleteOrganization(GuardianView):
                 'core_app/delete-organization.html', 
                     {'organization': organization, 'form': form}, status=400)
 
-        if self.me.owned_organizations.count() == 1:
-            return HttpResponse("You can't delete \
-                this organization..", status=403)
+        # if self.me.owned_organizations.count() == 1:
+            # return HttpResponse("You can't delete \
+                # this organization..", status=403)
 
-        # First remove the reference otherwise
-        # the user gets deleted in cascade due to the
-        # user.default field.
-        self.me.organizations.remove(organization)
         organization.delete()
-
-        self.me.default = self.me.organizations.first()
-        self.me.save()
 
         return redirect('core_app:index')
 
@@ -467,11 +501,6 @@ class JoinOrganization(View):
 
         invite.user.organizations.add(organization)
         invite.user.default = organization
-
-        main = Organization.objects.create(name='Main', 
-        owner=invite.user)
-        invite.user.organizations.add(main)
-
         invite.user.save()
 
         # validates the invite.
@@ -485,8 +514,6 @@ class JoinOrganization(View):
         event = EJoinOrganization.objects.create(organization=organization, 
         peer=invite.user, user=invite.user)
         event.dispatch(*organization.users.all())
-
-        # invite.user.ws_sound(organization)
 
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
@@ -897,6 +924,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

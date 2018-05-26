@@ -16,21 +16,25 @@
 <body>
 
 <div class="container">
-  <div class="jumbotron">
-    <h1>Arcamens</h1> 
+<div class="jumbotron"> <h1>Arcamens</h1> 
 
-<h4 class="text-warning"> Your default organization <b> {{user.default.name}}</b>'s account was disabled. 
+<p class="text-warning">You have no organization! 
 <br>
-<small> Set other organization as default! </small>
-</h4> 
+<small class="text-info"> Create an organization to start working. </small>
+</p> 
 
-<a class="text-danger" href="#"> Leave organization? </a>
+<div class="row">
+<div class="col-md-5">
+<form action="{% url 'core_app:no-organization' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
 
-<br>
+{% bootstrap_field form.name  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+{% buttons submit='Create' layout='inline' %}{% endbuttons %}
 
-<div class="pull-right">
-<a href="{% url 'core_app:switch-organization' other.id %}" > Switch default organization? </a>
+</form>
 
+</div>
 </div>
 
 </div>
@@ -39,6 +43,5 @@
 
 </body>
 </html>
-
 
 

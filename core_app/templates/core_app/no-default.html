@@ -19,17 +19,13 @@
   <div class="jumbotron">
     <h1>Arcamens</h1> 
 
-<h4 class="text-warning"> Your default organization <b> {{user.default.name}}</b>'s account was disabled. 
+<h4 class="text-warning"> It seems your previous default organization was deleted!
 <br>
-<small> Set other organization as default! </small>
+<small> We'll set a new one. </small>
 </h4> 
 
-<a class="text-danger" href="#"> Leave organization? </a>
-
-<br>
-
 <div class="pull-right">
-<a href="{% url 'core_app:switch-organization' other.id %}" > Switch default organization? </a>
+<a href="{% url 'core_app:switch-organization' other.id %}" > Proceed? </a>
 
 </div>
 
@@ -39,6 +35,7 @@
 
 </body>
 </html>
+
 
 
 

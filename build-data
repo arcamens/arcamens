@@ -72,13 +72,14 @@ for ind in range(50):
         label=label * randint(0, 10), ancestor=list)
 
 
-user2  = User.objects.create(name='foobar',  email='aosu@sss.com', password='111', default=organization0)
+# user2  = User.objects.create(name='foobar',  email='aosu@sss.com', password='111', default=organization0)
 # queue0 = channel.queue_declare(queue=str(user2.id), durable=True)
-period0 = Period.objects.create(paid=False, total=0, user=user2)
-user2.enabled = True
-user2.organizations.add(organization0)
-user2.organizations.add(organization1)
-user2.save()
+# period0 = Period.objects.create(paid=False, total=0, user=user2)
+# user2.enabled = True
+# user2.organizations.add(organization0)
+# user2.organizations.add(organization1)
+# user2.save()
+
 
 
 

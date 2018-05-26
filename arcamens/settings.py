@@ -80,8 +80,14 @@ MQTT_PASS = "guest"
 MQTT_PORT = 1883
 
 NOCAPTCHA = True
-RECAPTCHA_PUBLIC_KEY = '6Lfz3lUUAAAAAJh0h0dNMWqgx-rGZR_aY9FJRecP'
-RECAPTCHA_PRIVATE_KEY = '6Lfz3lUUAAAAAEdgDWRrN2yLPVDR1pyNhW_6UPil'
+
+# For debugging on 0.0.0.0.
+RECAPTCHA_PUBLIC_KEY = '6Ldyj1sUAAAAAI1p76PwkLf4R8ffLwOGmv6nhJ9H'
+RECAPTCHA_PRIVATE_KEY = '6Ldyj1sUAAAAANLQ4AZ1ho4x2iu67bvH3AOxyI3_'
+
+# Production.
+# RECAPTCHA_PUBLIC_KEY = '6Lfz3lUUAAAAAJh0h0dNMWqgx-rGZR_aY9FJRecP'
+# RECAPTCHA_PRIVATE_KEY = '6Lfz3lUUAAAAAEdgDWRrN2yLPVDR1pyNhW_6UPil'
 
 # Application definition
 
@@ -208,6 +214,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

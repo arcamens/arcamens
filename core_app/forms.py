@@ -9,7 +9,7 @@ import site_app.forms
 import datetime
 
 class OrganizationForm(forms.Form):
-    name = forms.CharField()
+    name = forms.CharField(help_text='Example: Your business name.')
 
 class RemoveUserForm(forms.Form):
     reason = forms.CharField(required=False, help_text='You are fired!')
@@ -69,6 +69,7 @@ class NodeFilterForm(forms.ModelForm):
     class Meta:
         model  = models.NodeFilter
         exclude = ('user', 'organization')
+
 
 
 

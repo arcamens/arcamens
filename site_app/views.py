@@ -70,23 +70,11 @@ class SignUp(LoginView):
         charge on opus). 
         """
         form = forms.SignupForm(request.POST, request.FILES)
-
         if not form.is_valid():
             return render(request, 'site_app/signup.html', 
                 {'form': form}, status=400)
 
-        # Save the user record. The Service model
-        # has a field named enabled, it is False for default
-        # unless it is a free plan whose record is created by us.
-        record         = form.save(commit=False)
-        # record.enabled = True
-
-        record.save()
-        organization   = Organization.objects.create(name='Main', owner=record)
-        record.default = organization
-        record.organizations.add(organization)
-        record.save()
-
+        record = form.save()
         process = RegisterProcess.objects.create(user=record)
 
         return render(request, 
@@ -390,6 +378,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 
