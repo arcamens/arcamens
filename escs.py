@@ -529,5 +529,23 @@ for ind in []:
     pass
 else:
     print('hi')
+##############################################################################
+import html2text
+h = html2text.HTML2Text()
+h.ignore_links = True
+h.handle("<p>Hello, <a href='http://earth.google.com/'>world</a>!")
+help(h.handle)
+dir(h)
+##############################################################################
+from ehp import *
+
+html = Html()
+
+data = '''
+<body> <em> foo </em> </body>
+'''
+
+dom = html.feed(data)
+dom.text()
 
 

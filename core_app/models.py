@@ -12,6 +12,7 @@ from django.conf import settings
 from onesignal.models import Device, GroupSignal
 from os.path import join
 import random
+import html2text
 
 class UserMixin(Device):
     class Meta:
@@ -47,6 +48,7 @@ class UserMixin(Device):
         users   = self.__class__.objects.filter(organizations=orgs)
         n_users = users.count()
         return n_users
+
 
     def is_max_users(self):
         """
@@ -133,6 +135,50 @@ class EShoutMixin(models.Model):
 class OrganizationMixin(models.Model):
     class Meta:
         abstract = True
+
+    def revoke_access(self, admin, user):
+        self.cancel_assignments(user)
+        self.revoke_timelines(admin, user)
+        self.revoke_boards(admin, user)
+        user.organizations.remove(self)
+
+        # In case the user default organization is this one
+        # it sets the value to None.
+        user.default = None
+        user.save()
+
+    def cancel_assignments(self, user):
+        # Remove user from all posts/cards he is assigned to.
+        user.assignments.through.objects.filter(
+            post__ancestor__organization=self).delete()
+
+        user.tasks.through.objects.filter(
+            card__ancestor__ancestor__organization=self).delete()
+
+    def revoke_timelines(self, admin, user):
+        """
+        Remove user access to all timelines in this organization and
+        set admin as user and owner.
+        """
+
+        # Remove as an worker from all timelines.
+        user.timelines.through.objects.filter(
+        timeline__organization=self, timeline__users=user).delete()
+        timelines = user.owned_timelines.filter(organization=self)
+        for ind in timelines:
+            ind.set_ownership(admin)
+
+    def revoke_boards(self, admin, user):
+        """
+        Revoke user access to boards and assign admin to these boards.
+        """
+
+        user.boards.through.objects.filter(
+        board__organization=self, board__members=user).delete()
+
+        boards = user.owned_boards.filter(organization=self)
+        for ind in boards:
+            ind.set_ownership(admin)
 
     def __str__(self):
         return self.name
@@ -420,6 +466,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

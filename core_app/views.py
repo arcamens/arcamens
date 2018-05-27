@@ -735,34 +735,10 @@ class RemoveOrganizationUser(GuardianView):
                 'core_app/remove-organization-user.html', 
                     {'user': user, 'form': form})
 
-        # Remove user from all posts/cards he is assigned to.
-        user.assignments.through.objects.filter(
-            post__ancestor__organization=self.me.default).delete()
-
-        user.tasks.through.objects.filter(
-            card__ancestor__ancestor__organization=self.me.default).delete()
-
-        # Remove as an worker from all timelines.
-        user.timelines.through.objects.filter(
-        timeline__organization=self.me.default, timeline__users=user).delete()
-
-        user.boards.through.objects.filter(
-        board__organization=self.me.default, board__members=user).delete()
-
-        for ind in user.owned_timelines.filter(organization=self.me.default):
-            ind.set_ownership(self.me)
-
-        for ind in user.owned_boards.filter(organization=self.me.default):
-            ind.set_ownership(self.me)
-
-        user.organizations.remove(self.me.default)
-
-        if user.default == self.me.default:
-            user.default = user.organizations.first()
-        user.save()
-
-        event = ERemoveOrganizationUser.objects.create(organization=self.me.default, user=self.me, 
-        peer=user, reason=form.cleaned_data['reason'])
+        self.me.default.revoke_access(self.me, user)
+        event = ERemoveOrganizationUser.objects.create(
+        organization=self.me.default, user=self.me, peer=user, 
+        reason=form.cleaned_data['reason'])
 
         event.dispatch(*self.me.default.users.all())
 
@@ -772,6 +748,7 @@ class RemoveOrganizationUser(GuardianView):
         send_mail('%s notification!' % self.me.default.name, msg, 
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
+        # Should restart the user UI now (TO IMPLEMENT).
         return redirect('core_app:list-users', organization_id=self.me.default.id)
 
 class ListInvites(GuardianView):
@@ -924,6 +901,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

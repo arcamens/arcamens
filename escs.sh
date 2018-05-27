@@ -371,6 +371,8 @@ cd ~/.virtualenv/
 source opus/bin/activate
 cd ~/projects/arcamens-code
 
+##############################################################################
+pip install html2text
 
 
 
