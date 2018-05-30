@@ -3,9 +3,12 @@
 
 {% block content %}
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
-
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has created a
+
+{{event.user}} </a> has dettached file <span class="text-danger"> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{event.filename}}</span>  from 
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
@@ -14,48 +17,8 @@ data-show="{% url 'note_app:preview-note' event.note.id %}"
 href="#"> 
 <span class="glyphicon glyphicon-book"></span> Note </a> 
 
-on card
-
-<a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#main-view"
-data-show="{% url 'card_app:view-data' event.child.id %}" 
-href="{{event.child.get_link_url}}"> 
-<span class="glyphicon glyphicon-file"></span>
-{{event.child.label|truncatechars:40}} </a> 
-
 on {{event.created}}
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

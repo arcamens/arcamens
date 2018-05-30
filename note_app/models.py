@@ -98,9 +98,33 @@ class EUpdateNote(Event):
     def __str__(self):
         return self.user.name
 
+class EAttachNoteFile(Event):
+    """
+    """
+
+    filewrapper = models.ForeignKey('NoteFileWrapper', 
+    related_name='e_attach_note_file0', blank=True)
+
+    note = models.ForeignKey('Note', 
+    related_name='e_attach_note_file1', blank=True)
+
+    html_template = 'note_app/e-attach-note-file.html'
+
+class EDettachNoteFile(Event):
+    """
+    """
+    filename = models.CharField(null=True, blank=False, 
+    max_length=626)
+
+    note = models.ForeignKey('Note', 
+    related_name='e_dettach_note_file1', blank=True)
+
+    html_template = 'note_app/e-dettach-note-file.html'
+
 
 # Signals.
 @receiver(pre_delete, sender=NoteFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 

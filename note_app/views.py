@@ -97,6 +97,14 @@ class AttachFile(GuardianView):
         record = form.save(commit = False)
         record.note = note
         form.save()
+
+        event = models.EAttachNoteFile.objects.create(
+        organization=self.me.default, filewrapper=record, 
+        note=note, user=self.me)
+
+        event.dispatch(*note.card.ancestor.ancestor.members.all())
+        event.save()
+
         return self.get(request, note_id)
 
 class DetachFile(GuardianView):
@@ -105,10 +113,18 @@ class DetachFile(GuardianView):
 
     def get(self, request, filewrapper_id):
         filewrapper = models.NoteFileWrapper.objects.get(id=filewrapper_id)
-        filewrapper.delete()
         attachments = filewrapper.note.notefilewrapper_set.all()
 
         form = forms.NoteFileWrapperForm()
+
+        event = models.EDettachNoteFile.objects.create(
+        organization=self.me.default, filename=filewrapper.file.name, 
+        note=filewrapper.note, user=self.me)
+
+        event.dispatch(*filewrapper.note.card.ancestor.ancestor.members.all())
+        event.save()
+        filewrapper.delete()
+
         return render(request, 'note_app/attach-file.html', 
         {'note':filewrapper.note, 'form': form, 'attachments': attachments})
 
@@ -172,6 +188,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

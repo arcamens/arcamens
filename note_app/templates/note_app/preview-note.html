@@ -28,17 +28,20 @@ By {{note.owner.name}} at {{note.created}}
 
 </div>
 
-<div  style="font-size:80%">
-{% for ind in note.notefilewrapper_set.all %}
-<a href="#{{ ind.file.url }}" target="_blank">
-<span class="glyphicon glyphicon-file"></span>
-{{ind.file.name}} 
-</a>
-{% empty %}
-No attachments...
+<span  style="font-size:80%">
+<div id="note-attachments-{{note.id}}"> </div>
 
-{% endfor %}
-</div>
+<script> 
+$.get({ 
+url: "{% url 'note_app:attach-file' note.id %}",
+async: false},
+
+function(data) {
+    $('#note-attachments-{{note.id}}').html(data);
+});
+</script> 
+
+</span>
 
 </div>
 </div>
@@ -60,6 +63,7 @@ class="btn btn-default e-get"> {% trans "Update" %} </button>
 </button>
 
 </div>
+
 
 
 
