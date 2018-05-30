@@ -57,18 +57,8 @@ data-form="#eventCommentForm"
 data-show="{% url 'comment_app:create-comment' event.id %}"
 class="btn btn-default m-post">  {% trans "Send" %} </button>
 
-
-<script>
-$('#eventCommentForm').on('submit', (function(e){
-    e.preventDefault();
-        $('#sendeventComment').click();
-
-}));
-$('#id_data').focus();
-</script>
-
-
 </div>
+
 
 
 
