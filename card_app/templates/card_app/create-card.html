@@ -20,20 +20,17 @@
 
 <div class="modal-footer">
 {% block buttons %}
-<button  type="button" data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:cancel-card-creation' card.id %}"
-class="btn btn-default e-get"> 
-     {% trans "Cancel" %}
-</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
 <button  id="createCard" type="button" data-form="#form-card-data" 
-data-shell="#main-view"  data-show="{% url 'card_app:create-card' ancestor.id card.id %}"
+data-shell="#main-view"  data-show="{% url 'card_app:create-card' ancestor.id %}"
 class="btn btn-default m-post-close"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
 

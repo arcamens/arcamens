@@ -22,29 +22,22 @@
 <div class="modal-footer">
 {% block buttons %}
 
-<button  type="button"  
-data-callback="$('#bigModalContent').load('{% url 'note_app:list-notes' card.id %}')"
-data-show="{% url 'note_app:cancel-note-creation' note.id %}"
-class="btn btn-default e-get"> 
+<button  type="button" data-show="{% url 'note_app:list-notes' card.id %}"
+class="btn btn-default b-modal"> 
      {% trans "Back" %}
 </button>
 
 <button  type="button" data-form="#form-note-data" 
 data-shell="#bigModalContent"  
-data-shell-error="#bigModalContent" data-show="{% url 'note_app:create-note' card.id note.id %}"
+data-shell-error="#bigModalContent" data-show="{% url 'note_app:create-note' card.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
-
-<button  type="button" 
-data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'note_app:cancel-note-creation' note.id %}"
-class="btn btn-default e-get"> 
-     {% trans "Close" %}
-</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
 {% endblock %}
 </div>
+
 
 
 

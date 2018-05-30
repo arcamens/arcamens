@@ -30,7 +30,7 @@ class Note(GuardianView):
 class ListNotes(GuardianView):
     def get(self, request, card_id):
         card = card_app.models.Card.objects.get(id=card_id)
-        notes = card.notes.all()
+        notes = card.notes.all().order_by('-created')
 
         return render(request, 'note_app/list-notes.html', 
         {'records': notes, 'card': card})
@@ -39,37 +39,30 @@ class CreateNote(GuardianView):
     """
     """
 
-    def get(self, request, card_id, note_id=None):
+    def get(self, request, card_id):
         card = card_app.models.Card.objects.get(id=card_id)
         user = core_app.models.User.objects.get(id=self.user_id)
-        note = models.Note.objects.create(owner=user, 
-        card=card)
-        card.save()
-
-        form = forms.NoteForm(instance=note)
-        note.data = 'Draft.'
-        note.save()
+        form = forms.NoteForm()
         return render(request, 'note_app/create-note.html', 
-        {'form':form, 'card': card, 'note':note})
+        {'form':form, 'card': card})
 
-    def post(self, request, card_id, note_id):
+    def post(self, request, card_id):
         card = card_app.models.Card.objects.get(id=card_id)
-
-        note = models.Note.objects.get(id=note_id)
-        form = forms.NoteForm(request.POST, instance=note)
+        form = forms.NoteForm(request.POST)
         user = core_app.models.User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'note_app/create-note.html', 
-                {'form': form, 'card':card, 'note': note}, status=400)
+                {'form': form, 'card':card}, status=400)
 
+        note       = form.save(commit=False)
+        note.owner = user
+        note.card  = card
         note.save()
 
         event = models.ECreateNote.objects.create(
         organization=user.default, child=card, user=user, note=note)
         event.dispatch(*card.ancestor.ancestor.members.all())
-
-        # user.ws_sound(card.ancestor.ancestor)
 
         return render(request, 'note_app/preview-note.html',
         {'note': note, 'card': note.card})
@@ -188,6 +181,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

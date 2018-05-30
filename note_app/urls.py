@@ -2,7 +2,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^create-note/(?P<card_id>.+)/(?P<note_id>.+)/', views.CreateNote.as_view(), name='create-note'),
     url(r'^create-note/(?P<card_id>.+)/', views.CreateNote.as_view(), name='create-note'),
     url(r'^list-notes/(?P<card_id>.+)/', views.ListNotes.as_view(), name='list-notes'),
 
@@ -14,8 +13,9 @@ urlpatterns = [
 
     url(r'^attach-file/(?P<note_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
-    url(r'^cancel-note-creation/(?P<note_id>.+)/', views.CancelNoteCreation.as_view(), name='cancel-note-creation'),
+    # url(r'^cancel-note-creation/(?P<note_id>.+)/', views.CancelNoteCreation.as_view(), name='cancel-note-creation'),
 ]
+
 
 
 

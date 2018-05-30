@@ -11,7 +11,6 @@ urlpatterns = [
     url(r'^done/(?P<post_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<post_id>.+)/', views.Undo.as_view(), name='undo'),
 
-    url(r'^create-post/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreatePost.as_view(), name='create-post'),
     url(r'^create-post/(?P<ancestor_id>.+)/', views.CreatePost.as_view(), name='create-post'),
     url(r'^update-post/(?P<post_id>.+)/', views.UpdatePost.as_view(), name='update-post'),
     url(r'^attach-file/(?P<post_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
@@ -35,20 +34,21 @@ urlpatterns = [
     url(r'^manage-post-tags/(?P<post_id>.+)/', views.ManagePostTags.as_view(), name='manage-post-tags'),
     url(r'^bind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.BindPostTag.as_view(), name='bind-post-tag'),
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
-    url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
+    # url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
     url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
     url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
-    url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/(?P<fork_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
     url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
-    url(r'^pull-card-content/(?P<post_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
+    url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
     url(r'^list-all-assignments/', views.ListAllAssignments.as_view(), name='list-all-assignments'),
     url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
+
 
 
 

@@ -75,26 +75,27 @@ class CreatePost(GuardianView):
     """
     """
 
-    def get(self, request, ancestor_id, post_id=None):
+    def get(self, request, ancestor_id):
         ancestor   = Timeline.objects.get(id=ancestor_id)
-        post       = models.Post.objects.create(user=self.me, ancestor=ancestor)
-        form       = forms.PostForm(instance=post)
-        post.label = 'Draft.'
-        post.save()
-        return render(request, 'post_app/create-post.html', 
-        {'form':form, 'post': post, 'ancestor':ancestor})
+        form       = forms.PostForm()
 
-    def post(self, request, ancestor_id, post_id):
-        post     = models.Post.objects.get(id=post_id)
+        return render(request, 'post_app/create-post.html', 
+        {'form':form, 'ancestor':ancestor})
+
+    def post(self, request, ancestor_id):
         ancestor = Timeline.objects.get(id=ancestor_id)
 
-        form = forms.PostForm(request.POST, request.FILES, instance=post)
+        form = forms.PostForm(request.POST, request.FILES)
+
         if not form.is_valid():
             return render(request, 'post_app/create-post.html',
-                        {'form': form, 'post':post, 
-                                'ancestor': ancestor}, status=400)
+                        {'form': form, 'ancestor': ancestor}, status=400)
 
+        post          = form.save(commit=False)
+        post.user     = self.me
+        post.ancestor = ancestor
         post.save()
+
         event = ECreatePost.objects.create(organization=self.me.default,
         timeline=ancestor, post=post, user=self.me)
 
@@ -683,23 +684,19 @@ class PullCardContent(GuardianView):
     """
     """
 
-    def get(self, request, post_id, fork_id=None):
-        post       = models.Post.objects.get(id=post_id)
-        fork       = Card.objects.get(id=fork_id)
-
-        fork.label = post.label
-        fork.data  = post.data
-        # fork.save()
-        form       = CardForm(instance=fork)
+    def get(self, request, ancestor_id, post_id):
+        ancestor = List.objects.get(id=ancestor_id)
+        post     = models.Post.objects.get(id=post_id)
+        form     = CardForm(initial={'label': post.label, 'data': post.data})
 
         return render(request, 'post_app/create-fork.html', 
-        {'form':form, 'post': post, 'ancestor': fork.ancestor, 'card':fork})
+        {'form':form, 'post': post, 'ancestor': ancestor})
 
 class CreateCardFork(GuardianView):
     """
     """
 
-    def get(self, request, ancestor_id, post_id, fork_id=None):
+    def get(self, request, ancestor_id, post_id):
         post = models.Post.objects.get(id=post_id)
 
         if not post.ancestor:
@@ -707,31 +704,30 @@ class CreateCardFork(GuardianView):
                 Can't fork now.", status=403)
 
         ancestor = List.objects.get(id=ancestor_id)
-        fork = Card.objects.create(owner=self.me, 
-        ancestor=ancestor, parent_post=post)
-
-        form = CardForm(instance=fork)
-        fork.label = 'Draft.'
-
-        # path = post.path.all()
-        fork.parent_post = post
-        # fork.path.add(*path, post)
-        fork.save()
+        form = CardForm()
 
         return render(request, 'post_app/create-fork.html', 
-        {'form':form, 'post': post, 'ancestor': ancestor, 'card':fork})
+        {'form':form, 'post': post, 'ancestor': ancestor})
 
-    def post(self, request, ancestor_id, post_id, fork_id):
-        post = models.Post.objects.get(id=post_id)
-        fork = Card.objects.get(id=fork_id)
-        form = CardForm(request.POST, instance=fork)
+    def post(self, request, ancestor_id, post_id):
+        ancestor = List.objects.get(id=ancestor_id)
+        post     = models.Post.objects.get(id=post_id)
+        form     = CardForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'post_app/create-fork.html', 
-                {'form':form, 'ancestor': post.ancestor, 
-                    'post': post, 'card':fork}, status=400)
+                {'form':form, 'ancestor': ancestor, 'post': post}, status=400)
 
+        fork             = form.save(commit=False)
+        fork.owner       = self.me
+        fork.ancestor    = ancestor
+        fork.parent_post = post
         fork.save()
+
+        # # path = post.path.all()
+        # fork.parent_post = post
+        # # fork.path.add(*path, post)
+        # fork.save()
 
         event = models.ECreateCardFork.objects.create(organization=self.me.default,
         ancestor=post.ancestor, post=post, card=fork, user=self.me)
@@ -877,6 +873,7 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
 
 
 

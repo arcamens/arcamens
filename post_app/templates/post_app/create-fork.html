@@ -4,25 +4,22 @@
 
 {% block buttons %}
 <div class="pull-left">
-<a class="b-modal" href="#" data-show="{% url 'post_app:pull-card-content' post.id card.id %}"> 
+<a class="b-modal" href="#" data-show="{% url 'post_app:pull-card-content' ancestor.id post.id %}"> 
 <span class="glyphicon glyphicon-download"></span> 
 
 Keep old content? </a>
 </div>
 
-<button  type="button" data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:cancel-card-creation' card.id %}"
-class="btn btn-default e-get"> 
-     {% trans "Cancel" %}
-</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
 <button  type="button" data-form="#form-card-data" data-shell="#main-view" 
-data-show="{% url 'post_app:create-card-fork' ancestor.id post.id card.id %}"
+data-show="{% url 'post_app:create-card-fork' ancestor.id post.id %}"
 class="btn btn-default m-post-close"> 
 {% trans "Fork" %}
 </button>
 
 {% endblock %}
+
 
 
 

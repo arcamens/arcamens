@@ -22,15 +22,11 @@
 
 <div class="modal-footer">
 {% block buttons %}
-<button  type="button"  data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'post_app:cancel-post-creation' post.id %}"
-class="btn btn-default e-get"> 
-     {% trans "Cancel" %}
-</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
 <button id="createPost" type="button" data-form="#form-post-data" 
 data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-shell-error="#bigModalContent" data-show="{% url 'post_app:create-post' ancestor.id post.id %}"
+data-shell-error="#bigModalContent" data-show="{% url 'post_app:create-post' ancestor.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
@@ -38,5 +34,6 @@ class="btn btn-default e-post">
 {% endblock %}
 </div>
 </form>
+
 
 

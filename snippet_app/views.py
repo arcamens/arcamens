@@ -38,25 +38,24 @@ class CreateSnippet(GuardianView):
     """
     """
 
-    def get(self, request, post_id, snippet_id=None):
+    def get(self, request, post_id):
         post = post_app.models.Post.objects.get(id=post_id)
-        snippet = models.Snippet.objects.create(owner=self.me, post=post)
-        post.save()
+        form = forms.SnippetForm()
 
-        form = forms.SnippetForm(instance=snippet)
         return render(request, 'snippet_app/create-snippet.html', 
-        {'form':form, 'post': post, 'snippet':snippet})
+        {'form':form, 'post': post})
 
-    def post(self, request, post_id, snippet_id):
+    def post(self, request, post_id):
         post = post_app.models.Post.objects.get(id=post_id)
-
-        snippet = models.Snippet.objects.get(id=snippet_id)
-        form = forms.SnippetForm(request.POST, instance=snippet)
+        form = forms.SnippetForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'snippet_app/create-snippet.html', 
-                {'form': form, 'post':post, 'snippet': snippet}, status=400)
+                {'form': form, 'post':post,}, status=400)
 
+        snippet       = form.save(commit=False)
+        snippet.owner = self.me
+        snippet.post  = post
         snippet.save()
 
         event = models.ECreateSnippet.objects.create(
@@ -167,6 +166,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 

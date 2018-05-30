@@ -12,12 +12,11 @@ urlpatterns = [
     url(r'^select-fork-list/(?P<card_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
     # url(r'^select-fork-timeline/(?P<card_id>.+)/', views.SelectForkTimeline.as_view(), name='select-fork-timeline'),
 
-    url(r'^create-card/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateCard.as_view(), name='create-card'),
     url(r'^create-card/(?P<ancestor_id>.+)/', views.CreateCard.as_view(), name='create-card'),
-    url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
+
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
-    # url(r'^pull-post-content/(?P<card_id>.+)/(?P<fork_id>.+)/', views.PullPostContent.as_view(), name='pull-post-content'),
-    url(r'^pull-card-content/(?P<card_id>.+)/(?P<fork_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
+    # url(r'^pull-post-content/(?P<card_id>.+)/', views.PullPostContent.as_view(), name='pull-post-content'),
+    url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
 
     # url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
     # url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
@@ -25,7 +24,7 @@ urlpatterns = [
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
     url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
-    url(r'^cancel-card-creation/(?P<card_id>.+)/', views.CancelCardCreation.as_view(), name='cancel-card-creation'),
+    # url(r'^cancel-card-creation/(?P<card_id>.+)/', views.CancelCardCreation.as_view(), name='cancel-card-creation'),
     url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
     url(r'^confirm-card-deletion/(?P<card_id>.+)/', views.ConfirmCardDeletion.as_view(), name='confirm-card-deletion'),
 
@@ -54,6 +53,7 @@ urlpatterns = [
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 
 
