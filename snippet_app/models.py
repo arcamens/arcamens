@@ -101,10 +101,36 @@ class EUpdateSnippet(Event):
     def __str__(self):
         return self.user.name
 
+class EAttachSnippetFile(Event):
+    """
+    """
+
+    filewrapper = models.ForeignKey('SnippetFileWrapper', 
+    related_name='e_attach_snippet_file0', blank=True)
+
+    snippet = models.ForeignKey('Snippet', 
+    related_name='e_attach_snippet_file1', blank=True)
+
+    html_template = 'snippet_app/e-attach-snippet-file.html'
+
+class EDettachSnippetFile(Event):
+    """
+    """
+    filename = models.CharField(null=True, blank=False, 
+    max_length=626)
+
+    snippet = models.ForeignKey('Snippet', 
+    related_name='e_dettach_snippet_file1', blank=True)
+
+    html_template = 'snippet_app/e-dettach-snippet-file.html'
+
+
+
 # Signals.
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

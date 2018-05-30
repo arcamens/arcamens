@@ -88,6 +88,14 @@ class AttachFile(GuardianView):
         record = form.save(commit = False)
         record.snippet = snippet
         form.save()
+
+        event = models.EAttachSnippetFile.objects.create(
+        organization=self.me.default, filewrapper=record, 
+        snippet=snippet, user=self.me)
+
+        event.dispatch(*snippet.post.ancestor.users.all())
+        event.save()
+
         return self.get(request, snippet_id)
 
 class DetachFile(GuardianView):
@@ -96,10 +104,19 @@ class DetachFile(GuardianView):
 
     def get(self, request, filewrapper_id):
         filewrapper = models.SnippetFileWrapper.objects.get(id=filewrapper_id)
-        filewrapper.delete()
         attachments = filewrapper.snippet.snippetfilewrapper_set.all()
 
         form = forms.SnippetFileWrapperForm()
+
+        event = models.EDettachSnippetFile.objects.create(
+        organization=self.me.default, filename=filewrapper.file.name, 
+        snippet=filewrapper.snippet, user=self.me)
+
+        event.dispatch(*filewrapper.snippet.post.ancestor.users.all())
+        event.save()
+
+        filewrapper.delete()
+
         return render(request, 'snippet_app/attach-file.html', 
         {'snippet':filewrapper.snippet, 'form': form, 'attachments': attachments})
 
@@ -150,6 +167,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 

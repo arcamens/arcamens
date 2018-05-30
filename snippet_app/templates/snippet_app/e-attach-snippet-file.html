@@ -3,9 +3,12 @@
 
 {% block content %}
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
-
 <span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has created snippet 
+
+{{event.user}} </a> has attached file <a href="{{event.filewrapper.file.url}}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{event.filewrapper.file}} </a> to snippet
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
@@ -14,48 +17,7 @@ data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snipp
 <span class="glyphicon glyphicon-file"></span>
 {{event.snippet.title}} </a>
 
-on
-
-<a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
-data-shell="#main-view"
-data-show="{% url 'post_app:post' event.child.id %}" 
-href="{{ event.child.get_link_url }}"> 
-<span class="glyphicon glyphicon-file"></span>
-{{event.child.label|truncatechars:40}} </a> 
-
 on {{event.created}}
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
