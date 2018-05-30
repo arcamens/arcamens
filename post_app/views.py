@@ -782,6 +782,8 @@ class PostEvents(GuardianView):
         Q(epastepost__posts=post.id) | Q(ecreatesnippet__child__id=post.id) | \
         Q(eupdatesnippet__child__id=post.id) | Q(edeletesnippet__child__id=post.id) |\
         Q(eattachsnippetfile__snippet__post__id=post.id) | \
+        Q(eattachpostfile__post__id=post.id) | \
+        Q(edettachpostfile__post__id=post.id) | \
         Q(edettachsnippetfile__snippet__post__id=post.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
