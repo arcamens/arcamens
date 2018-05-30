@@ -8,19 +8,20 @@
 {{event.user}} </a> has dettached file <span class="text-danger"> 
 <span class="glyphicon glyphicon-file"></span>
 
-{{event.filename}}</span>  from post
+{{event.filename}}</span>  from card
 
 <a class="e-get"
 data-callback="$('#modal').modal('toggle');" 
 data-shell="#main-view"
-data-show="{% url 'post_app:view-data' event.post.id %}" 
-href="{{event.post.get_link_url}}"> 
+data-show="{% url 'card_app:view-data' event.card.id %}" 
+href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 
-{{event.post.label|truncatechars:40}} </a> 
+{{event.card.label|truncatechars:40}} </a> 
 
 on {{event.created}}
 
 {% endblock %}
+
 
 

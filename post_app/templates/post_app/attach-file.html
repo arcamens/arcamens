@@ -21,12 +21,15 @@ $('#PostFileWrapperForm-{{post.id}}').change(function(){
 {% bootstrap_field form.file  size='md' %} </form>
 
 {% for ind in attachments %}
-<a class="e-get" data-shell="#post-attachments-{{post.id}}"  href="#"
+<a class="e-get text-danger" data-shell="#post-attachments-{{post.id}}"  href="#"
 data-show="{% url 'post_app:detach-file' ind.id %}"> 
-<span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
+<span class="glyphicon glyphicon-remove"></span></a> 
+<a href="{{ind.file.url}}" target="_blank"> {{ind.file.name}} </a>
+
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 
