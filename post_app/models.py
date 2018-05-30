@@ -392,9 +392,28 @@ class PostPin(PostPinMixin):
     class Meta:
         unique_together = ('user', 'organization', 'post')
 
+class EAttachPostFile(Event):
+    """
+    """
 
+    filewrapper = models.ForeignKey('PostFileWrapper', 
+    related_name='e_attach_post_file0', blank=True)
 
+    post = models.ForeignKey('Post', 
+    related_name='e_attach_post_file1', blank=True)
 
+    html_template = 'post_app/e-attach-post-file.html'
+
+class EDettachPostFile(Event):
+    """
+    """
+    filename = models.CharField(null=True, blank=False, 
+    max_length=626)
+
+    post = models.ForeignKey('Post', 
+    related_name='e_dettach_post_file1', blank=True)
+
+    html_template = 'post_app/e-dettach-post-file.html'
 
 
 

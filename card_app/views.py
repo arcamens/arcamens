@@ -487,6 +487,14 @@ class AttachFile(GuardianView):
         record = form.save(commit = False)
         record.card = card
         form.save()
+
+        event = models.EAttachCardFile.objects.create(
+        organization=self.me.default, filewrapper=record, 
+        card=card, user=self.me)
+
+        event.dispatch(*card.ancestor.ancestor.members.all())
+        event.save()
+
         return self.get(request, card_id)
 
 class DetachFile(GuardianView):
@@ -504,10 +512,18 @@ class DetachFile(GuardianView):
             return HttpResponse("The card's list is on clipboard!\
                 Can't update now.", status=403)
 
-        filewrapper.delete()
         attachments = filewrapper.card.cardfilewrapper_set.all()
-
         form = forms.CardFileWrapperForm()
+
+        event = models.EDettachCardFile.objects.create(
+        organization=self.me.default, filename=filewrapper.file.name, 
+        card=filewrapper.card, user=self.me)
+
+        filewrapper.delete()
+
+        event.dispatch(*filewrapper.card.ancestor.ancestor.members.all())
+        event.save()
+
         return render(request, 'card_app/attach-file.html', 
         {'card':filewrapper.card, 'form': form, 'attachments': attachments})
 
@@ -1133,6 +1149,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

@@ -379,6 +379,29 @@ class EUpdateCard(Event):
 
     html_template = 'card_app/e-update-card.html'
 
+class EAttachCardFile(Event):
+    """
+    """
+
+    filewrapper = models.ForeignKey('CardFileWrapper', 
+    related_name='e_attach_card_file0', blank=True)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_attach_card_file1', blank=True)
+
+    html_template = 'card_app/e-attach-card-file.html'
+
+class EDettachCardFile(Event):
+    """
+    """
+    filename = models.CharField(null=True, blank=False, 
+    max_length=626)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_dettach_card_file1', blank=True)
+
+    html_template = 'card_app/e-dettach-card-file.html'
+
 class EDeleteCard(Event):
     """
     """
@@ -509,6 +532,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

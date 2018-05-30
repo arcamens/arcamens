@@ -164,6 +164,14 @@ class AttachFile(GuardianView):
         record = form.save(commit = False)
         record.post = post
         form.save()
+
+        event = models.EAttachPostFile.objects.create(
+        organization=self.me.default, filewrapper=record, 
+        post=post, user=self.me)
+
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
+
         return self.get(request, post_id)
 
 class DetachFile(GuardianView):
@@ -177,10 +185,19 @@ class DetachFile(GuardianView):
             return HttpResponse("Post was put on clipboard!\
                 can't dettach file now.", status=403)
 
-        filewrapper.delete()
         attachments = filewrapper.post.postfilewrapper_set.all()
 
         form = forms.PostFileWrapperForm()
+
+        event = models.EDettachPostFile.objects.create(
+        organization=self.me.default, filename=filewrapper.file.name, 
+        post=filewrapper.post, user=self.me)
+
+        filewrapper.delete()
+
+        event.dispatch(*filewrapper.post.ancestor.users.all())
+        event.save()
+
         return render(request, 'post_app/attach-file.html', 
         {'post':filewrapper.post, 'form': form, 'attachments': attachments})
 
@@ -860,6 +877,7 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
 
 
 
