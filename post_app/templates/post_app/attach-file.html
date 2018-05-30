@@ -25,8 +25,9 @@ $('#PostFileWrapperForm-{{post.id}}').change(function(){
 data-show="{% url 'post_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
 {% empty %}
-No file chosen.
+No attachments.
 {% endfor %}
+
 
 
 

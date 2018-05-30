@@ -20,7 +20,17 @@ Snippet by {{snippet.owner.name}} at {{snippet.created}}
 
 <div  style="font-size:80%">
 <div id="snippet-attachments-{{snippet.id}}"> </div>
-<script> $('#snippet-attachments-{{snippet.id}}').load("{% url 'snippet_app:attach-file' snippet.id %}"); </script>
+
+<script> 
+$.get({ 
+url: "{% url 'snippet_app:attach-file' snippet.id %}",
+async: false},
+
+function(data) {
+    $('#snippet-attachments-{{snippet.id}}').html(data);
+});
+
+</script>
 
 </div>
 
@@ -47,6 +57,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
     $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
+
 
 
 

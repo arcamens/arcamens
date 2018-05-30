@@ -47,7 +47,18 @@ data-show="{% url 'card_app:card-events' card.id %}">
 <span style="font-size:90%">
 <div id="card-attachments-{{card.id}}"> </div>
 
-<script> $('#card-attachments-{{card.id}}').load('{% url 'card_app:attach-file' card.id %}'); </script>
+<script> 
+/* It has to be async false otherwise it gets relayout when reloading the 
+the card details. */
+
+$.get({ 
+url: "{% url 'card_app:attach-file' card.id %}",
+async: false},
+
+function(data) {
+    $('#card-attachments-{{card.id}}').html(data);
+});
+</script>
 </span>
 
 </div>
@@ -60,6 +71,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

@@ -58,7 +58,15 @@ No snippets...
 <span style="font-size:80%">
 <div id="post-attachments-{{post.id}}"> </div>
 <script> 
-$('#post-attachments-{{post.id}}').load('{% url 'post_app:attach-file' post.id %}'); 
+
+$.get({ 
+url: "{% url 'post_app:attach-file' post.id %}",
+async: false},
+
+function(data) {
+    $('#post-attachments-{{post.id}}').html(data);
+});
+</script>
 
 </script>
 </span>
@@ -187,6 +195,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

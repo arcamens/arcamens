@@ -2,11 +2,11 @@
 {% load i18n %}
 
 <script>
-function send_file() {
+$('#NoteFileWrapperForm-{{note.id}}').change(function(){
    var formData = new FormData($('#NoteFileWrapperForm-{{note.id}}')[0]);
 
    $.ajax({
-   url: '{% url 'note_app:attach-file' note.id  %}', 
+   url: "{% url 'note_app:attach-file' note.id  %}", 
    type: 'POST',
    success: function(data) {
    $('#note-attachments-{{note.id}}').html(data);},
@@ -14,10 +14,6 @@ function send_file() {
    cache: false,
    contentType: false,
    processData: false});
-}
-
-$('#NoteFileWrapperForm-{{note.id}}').change(function(){
-    send_file();
 });
 
 </script>
@@ -35,6 +31,7 @@ data-show="{% url 'note_app:detach-file' ind.id %}">
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 

@@ -20,7 +20,17 @@ By {{note.owner.name}} at {{note.created}}
 
 <span  style="font-size:80%">
 <div id="note-attachments-{{note.id}}"> </div>
-<script> $('#note-attachments-{{note.id}}').load("{% url 'note_app:attach-file' note.id %}"); </script>
+
+<script> 
+$.get({ 
+url: "{% url 'note_app:attach-file' note.id %}",
+async: false},
+
+function(data) {
+    $('#note-attachments-{{note.id}}').html(data);
+});
+</script> 
+
 </span>
 
 <br>
@@ -42,6 +52,7 @@ class="text-danger e-get">
 
 </div>
 </div>
+
 
 
 
