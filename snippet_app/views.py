@@ -2,6 +2,7 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from board_app.views import GuardianView
 from django.http import HttpResponse
+from django.conf import settings
 import board_app.models
 import post_app.models
 import core_app.models
@@ -30,9 +31,12 @@ class Snippet(GuardianView):
 class SnippetLink(GuardianView):
     def get(self, request, snippet_id):
         snippet = models.Snippet.objects.get(id=snippet_id)
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'snippet_app/snippet-link.html', 
-        {'snippet': snippet, 'post': snippet.post})
+        {'snippet': snippet, 'post': snippet.post, 'user': self.me, 
+        'organizations': organizations, 'default': self.me.default, 
+        'organization': self.me.default, 'settings': settings})
 
 class CreateSnippet(GuardianView):
     """
@@ -166,6 +170,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 
