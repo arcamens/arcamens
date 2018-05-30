@@ -99,6 +99,8 @@ class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
         self.me.default = Organization.objects.get(id=organization_id)
         self.me.save()
+        self.me.reload_ui()
+        # return HttpResponse(status=200)
         return redirect('core_app:index')
 
 class UpdateUserInformation(GuardianView):
@@ -139,10 +141,13 @@ class CreateOrganization(AuthenticatedView):
         name=form.cleaned_data['name'], owner=self.me) 
 
         self.me.organizations.add(organization)
-        self.me.default = organization
         organization.admins.add(self.me)
-        self.me.save()
-        return redirect('core_app:index')
+
+        # self.me.default = organization
+        # self.me.save()
+        # Redirect the user so the ui will be reloaded over all tabs.
+        return redirect('core_app:switch-organization', 
+        organization_id=organization.id)
 
 class NoOrganization(AuthenticatedView):
     """
@@ -901,6 +906,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
