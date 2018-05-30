@@ -775,12 +775,15 @@ class PostEvents(GuardianView):
 
         query = Q(eunbindtagpost__post__id= post.id) | \
         Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
-        Q(eassignpost__post__id=post.id) | \
-        Q(ebindtagpost__post__id= post.id) | Q(eunassignpost__post__id= post.id)| \
+        Q(eassignpost__post__id=post.id) | Q(ebindtagpost__post__id= post.id) |\
+        Q(eunassignpost__post__id= post.id)| \
         Q(ecutpost__post__id = post.id) | Q(earchivepost__post__id=post.id) |\
         Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) | \
-        Q(epastepost__posts=post.id)
-    
+        Q(epastepost__posts=post.id) | Q(ecreatesnippet__child__id=post.id) | \
+        Q(eupdatesnippet__child__id=post.id) | Q(edeletesnippet__child__id=post.id) |\
+        Q(eattachsnippetfile__snippet__post__id=post.id) | \
+        Q(edettachsnippetfile__snippet__post__id=post.id)
+
         events = Event.objects.filter(query).order_by('-created').values('html')
 
         return render(request, 'post_app/post-events.html', 
@@ -873,6 +876,7 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
 
 
 
