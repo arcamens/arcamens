@@ -1128,7 +1128,11 @@ class CardEvents(GuardianView):
         Q(eupdatecard__card__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__card__id=card.id) |\
         Q(earchivecard__card__id=card.id) | Q(epastecard__cards=card.id) | \
-        Q(ecopycard__card=card.id)
+        Q(ecopycard__card=card.id) | Q(eattachcardfile__card=card.id) |\
+        Q(edettachcardfile__card=card.id) | Q(eupdatenote__child=card.id) |\
+        Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
+        Q(eattachnotefile__note__card=card.id) | Q(edettachnotefile__note__card=card.id)
+
 
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
@@ -1139,16 +1143,5 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
-
-
-
-
-
-
-
-
-
-
-
 
 
