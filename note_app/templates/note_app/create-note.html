@@ -15,15 +15,6 @@
 {% bootstrap_field form.data  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 
-
-<div id="div-note-attachments">
-</div>
-<script>
-
-$('#div-note-attachments').load("{% url 'note_app:attach-file' note.id %}");
-</script>
-
-
 </div>
 </form>
 
@@ -54,5 +45,6 @@ class="btn btn-default e-get">
 
 {% endblock %}
 </div>
+
 
 

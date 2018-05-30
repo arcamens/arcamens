@@ -45,14 +45,9 @@ data-show="{% url 'card_app:card-events' card.id %}">
 {{card.html | safe}}
 
 <span style="font-size:90%">
-{% for ind in attachments %}
-<a href="{{ ind.file.url }}" target="_blank">
-<span class="glyphicon glyphicon-file"></span>
-{{ind.file.name}} </a>
+<div id="card-attachments-{{card.id}}"> </div>
 
-{% empty %}
-No attachments...
-{% endfor %}
+<script> $('#card-attachments-{{card.id}}').load('{% url 'card_app:attach-file' card.id %}'); </script>
 </span>
 
 </div>
@@ -65,10 +60,6 @@ $(document).ready(function() {
 </script>
 
 </div>
-
-
-
-
 
 
 

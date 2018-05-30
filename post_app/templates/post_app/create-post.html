@@ -18,13 +18,6 @@
 
 {% bootstrap_form_errors form type='non_fields' %}
 
-<div id="div-attachments">
-</div>
-<script>
-$('#div-attachments').load('{% url 'post_app:attach-file' post.id %}');
-</script>
-
-
 </div>
 
 <div class="modal-footer">
@@ -45,4 +38,5 @@ class="btn btn-default e-post">
 {% endblock %}
 </div>
 </form>
+
 

@@ -22,7 +22,6 @@ urlpatterns = [
     # url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
     # url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
 
-    url(r'^attach-image/(?P<card_id>.+)/', views.AttachImage.as_view(), name='attach-image'),
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
     url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
@@ -55,6 +54,7 @@ urlpatterns = [
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 
 

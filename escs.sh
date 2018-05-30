@@ -319,6 +319,7 @@ pip install py-gfm
 # https://github.com/requests/requests-oauthlib (https://github.com/requests/requests-oauthlib/blob/a116d06dbb69ea5eb4fbe46530af27b12ad6d82c/docs/oauth2_workflow.rst#refreshing-tokens)
 ##############################################################################
 # access arcamens database.
+tee >(stdbuf -o 0 ssh admin@staging.arcamens.com 'bash -i')
 
 mysql -u staging -p staging
 
@@ -329,7 +330,7 @@ password eicae8EiOhbiuJ8J
 rm -fr app/migrations
 
 # drop tables to solve the problem with unkonwn field in migrations.
-ssh admin@staging.arcamens.com
+
 mysql -i -u staging -p staging
 eicae8EiOhbiuJ8J
 
@@ -373,6 +374,7 @@ cd ~/projects/arcamens-code
 
 ##############################################################################
 pip install html2text
+
 
 
 

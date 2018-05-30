@@ -39,29 +39,29 @@ data-show="{% url 'post_app:post-events' post.id %}">
 </div>
 
 <div class="panel-body" >
-<div class="pull-right" style="font-size:90%">
-{% for ind in post.postfilewrapper_set.all %}
-<a href="{{ ind.file.url }}" target="_blank">
-<span class="glyphicon glyphicon-file"></span>
-{{ind.file.name}} </a>
-{% empty %}
-No attachment.
-{% endfor %}
-</div>
-
 <div style="word-wrap: break-word;"> 
 
 <h5> {{post.label}} </h5>
 
 {{post.html|safe}}
+
 </div>
 
 {% for ind in post.snippets.all %}
 <a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="{{ind.get_link_url}}"> 
-<span class="glyphicon glyphicon-book"></span>{{ind.title}} </a>
+<span class="glyphicon glyphicon-book"></span> {{ind.title}} </a>
 {% empty %}
 No snippets...
 {% endfor %}
+
+<hr>
+<span style="font-size:80%">
+<div id="post-attachments-{{post.id}}"> </div>
+<script> 
+$('#post-attachments-{{post.id}}').load('{% url 'post_app:attach-file' post.id %}'); 
+
+</script>
+</span>
 
 <div class="row">
 
@@ -187,6 +187,10 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
+
+
+
 
 
 

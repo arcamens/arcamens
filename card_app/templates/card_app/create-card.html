@@ -14,16 +14,9 @@
 {% bootstrap_field form.data  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 
-<div id="div-attachments">
-</div>
-<script>
-$('#div-attachments').load('{% url 'card_app:attach-file' card.id %}');
-</script>
 
-
-</div>
 </form>
-
+</div>
 
 <div class="modal-footer">
 {% block buttons %}
@@ -41,6 +34,7 @@ class="btn btn-default m-post-close">
 
 {% endblock %}
 </div>
+
 
 
 

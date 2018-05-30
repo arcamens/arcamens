@@ -2,41 +2,35 @@
 {% load i18n %}
 
 <script>
-function send_file() {
-   var formData = new FormData($('#form-snippet-attachment-file-data')[0]);
-
+$('#SnippetFileWrapperForm-{{snippet.id}}').change(function(){
+   var formData = new FormData($('#SnippetFileWrapperForm-{{snippet.id}}')[0]);
    $.ajax({
    url: '{% url 'snippet_app:attach-file' snippet.id  %}', 
    type: 'POST',
    success: function(data) {
-   $('#div-snippet-attachments').html(data);},
+   $('#snippet-attachments-{{snippet.id}}').html(data);},
    data: formData,
    cache: false,
    contentType: false,
    processData: false});
-}
-
-$('#form-snippet-attachment-file-data').change(function(){
-    send_file();
 });
 
 </script>
 
-<form id="form-snippet-attachment-file-data" enctype="multipart/form-data">
+
+<form id="SnippetFileWrapperForm-{{snippet.id}}" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.file  size='md' %}
-
 </form>
 
 <div class="panel panel-default" >
 <div class="panel-body">
 {% for ind in attachments %}
-<a class="e-get" data-shell="#div-snippet-attachments" href="#"
+<a class="e-get" data-shell="#snippet-attachments-{{snippet.id}}" href="#"
 data-show="{% url 'snippet_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
-<br>
 {% empty %}
-No file chosen.
+No attachments.
 {% endfor %}
 </div>
 </div>

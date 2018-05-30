@@ -1,28 +1,20 @@
 <ul class="nav nav-pills ">
-<li>
-
-<!-- If the card has no ancestor then it is on clipboard -->
-<a data-shell="#main-view" 
+<li> <a data-shell="#main-view" 
 class="e-get"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
 
-<li>
-
-<a class="b-modal"data-show="{% url 'card_app:update-card' card.id %}"
+<li> <a class="b-modal"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
 
-<li>
-<a class="b-modal text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
+<li> <a class="b-modal text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
 href="#">
 <span class="badge">
 <span class="glyphicon glyphicon-comment"></span> {{card.notes.count}}
 </span> Notes</a></li>
 
 
-<li>
-
-<a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
+<li> <a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
 data-callback="$('#modal').modal('toggle');" href="#">
 <span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
@@ -77,11 +69,5 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
-
-
-
-
-
-
 
 

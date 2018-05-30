@@ -456,32 +456,6 @@ class CopyCard(GuardianView):
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
 
-class AttachImage(GuardianView):
-    """
-    """
-
-    def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
-        attachments = card.imagewrapper_set.all()
-        form = forms.ImageWrapperForm()
-        return render(request, 'card_app/attach-image.html', 
-        {'card':card, 'form': form, 'attachments': attachments})
-
-    def post(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
-        attachments = card.imagewrapper_set.all()
-        form = forms.ImageWrapperForm(request.POST, request.FILES)
-
-        if not form.is_valid():
-            return render(request, 'card_app/attach-image.html', 
-                {'card':card, 'form': form, 'attachments': attachments})
-
-        record = form.save(commit = False)
-        record.card = card
-        form.save()
-        return self.get(request, card_id)
-
-
 class AttachFile(GuardianView):
     """
     """
@@ -1159,6 +1133,7 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

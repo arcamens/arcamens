@@ -2,44 +2,37 @@
 {% load i18n %}
 
 <script>
-function send_file() {
-   var formData = new FormData($('#form-attachment-file-data')[0]);
+
+$('#CardFileWrapperForm-{{card.id}}').change(function(){
+   var formData = new FormData($('#CardFileWrapperForm-{{card.id}}')[0]);
 
    $.ajax({
    url: '{% url 'card_app:attach-file' card.id  %}', 
    type: 'POST',
    success: function(data) {
-   $('#div-attachments').html(data);},
+   $('#card-attachments-{{card.id}}').html(data);},
    data: formData,
    cache: false,
    contentType: false,
    processData: false});
-}
-
-$('#id_file').change(function(){
-    send_file();
 });
 
 </script>
 
-<form id="form-attachment-file-data" enctype="multipart/form-data">
+<form id="CardFileWrapperForm-{{card.id}}" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.file  size='md' %}
-
 </form>
 
-<div class="panel panel-default" >
-<div class="panel-body">
 {% for ind in attachments %}
-<a class="e-get" data-shell="#div-attachments" href="#"
+<a class="e-get" data-shell="#card-attachments-{{card.id}}" href="#"
 data-show="{% url 'card_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> {{ind.file.name}}
-<br>
 {% empty %}
-No file chosen.
+No attachments.
 {% endfor %}
-</div>
-</div>
+
+
 
 
 
