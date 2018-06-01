@@ -198,31 +198,23 @@ class UpdateOrganization(GuardianView):
         return redirect('core_app:index')
 
 class DeleteOrganization(GuardianView):
-    def get(self, request,  organization_id):
-        organization = Organization.objects.get(id = organization_id)
+    def get(self, request):
         form = forms.ConfirmOrganizationDeletionForm()
 
         return render(request, 
             'core_app/delete-organization.html', 
-                {'organization': organization, 'form': form})
+                {'organization': self.me.default, 'form': form})
 
-    def post(self, request, organization_id):
-        organization = Organization.objects.get(id = organization_id)
-
+    def post(self, request):
         form = forms.ConfirmOrganizationDeletionForm(request.POST, 
-        confirm_token=organization.name)
+        confirm_token=self.me.default.name)
 
         if not form.is_valid():
             return render(request, 
                 'core_app/delete-organization.html', 
-                    {'organization': organization, 'form': form}, status=400)
+                    {'organization': self.me.default, 'form': form}, status=400)
 
-        # if self.me.owned_organizations.count() == 1:
-            # return HttpResponse("You can't delete \
-                # this organization..", status=403)
-
-        organization.delete()
-
+        self.me.default.delete()
         return redirect('core_app:index')
 
 class ListUsers(GuardianView):

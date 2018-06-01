@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
     url(r'^update-organization/', views.UpdateOrganization.as_view(), name='update-organization'),
-    url(r'^delete-organization/(?P<organization_id>.+)/', views.DeleteOrganization.as_view(), name='delete-organization'),
+    url(r'^delete-organization/', views.DeleteOrganization.as_view(), name='delete-organization'),
     url(r'^list-users/(?P<organization_id>.+)', views.ListUsers.as_view(), name='list-users'),
     url(r'^manage-user-tags/(?P<user_id>.+)', views.ManageUserTags.as_view(), name='manage-user-tags'),
     url(r'^list-events/', views.ListEvents.as_view(), name='list-events'),
@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 
 ]
+
 
 
 
