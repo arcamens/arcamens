@@ -259,9 +259,17 @@ class ListUsers(GuardianView):
         'total': total, 'form': form, 'organization': self.me.default})
 
 class ManageUserTags(GuardianView):
-    def get(self, request, user_id):
-        user     = User.objects.get(id=user_id)
+    """
+    This view workings rely on the logged user default organization.
+    So it is already secured by default.
+    """
 
+    def get(self, request, user_id):
+        # Make sure the user belongs to the user default organization.
+        # Otherwise it may arise misbehaviors or security issues.
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+
+        # Filter the existing user tags by using my default orgnization.
         included = user.tags.filter(organization=self.me.default)
         excluded = self.me.default.tags.all()
         excluded = excluded.exclude(users=user)
@@ -275,7 +283,8 @@ class ManageUserTags(GuardianView):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        user = User.objects.get(id=user_id)
+        # Again make sure the user belongs to my default organization.
+        user = User.objects.get(id=user_id, organizations=self.me.default)
 
         included = user.tags.filter(organization=self.me.default)
         excluded = self.me.default.tags.all()
