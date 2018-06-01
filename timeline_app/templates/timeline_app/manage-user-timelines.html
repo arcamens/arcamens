@@ -60,7 +60,7 @@ data-show="{% url 'timeline_app:bind-timeline-user' ind.id user.id %}" href="#">
 
 <button  type="button" 
 data-shell="#smallModalContent" 
-data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users' me.default.id  %}"
+data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users'  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
@@ -73,5 +73,6 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 

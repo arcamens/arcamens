@@ -218,12 +218,11 @@ class DeleteOrganization(GuardianView):
         return redirect('core_app:index')
 
 class ListUsers(GuardianView):
-    def get(self, request, organization_id):
-        organization = Organization.objects.get(id=organization_id)
+    def get(self, request):
         filter, _    = UserFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
-        users = organization.users.all()
+        users = self.me.default.users.all()
         total = users.count()
 
         users = User.collect_users(users, filter.pattern)
@@ -232,25 +231,23 @@ class ListUsers(GuardianView):
         form  = forms.UserFilterForm(instance=filter)
 
         return render(request, 'core_app/list-users.html', 
-        {'users': users, 'owner': organization.owner, 'total': total, 
-        'form': form, 'count': count, 'organization': organization})
+        {'users': users, 'owner': self.me.default.owner, 'total': total, 
+        'form': form, 'count': count, 'organization': self.me.default})
 
-    def post(self, request, organization_id):
-        organization = Organization.objects.get(id=organization_id)
-
+    def post(self, request):
         filter, _    = UserFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
-        users = organization.users.all()
+        users = self.me.default.users.all()
         total = users.count()
         sqlike = User.from_sqlike()
         form  = forms.UserFilterForm(request.POST, sqlike=sqlike, instance=filter)
 
         if not form.is_valid():
             return render(request, 'core_app/list-users.html', 
-                {'count': 0, 'owner': organization.owner, 
+                {'count': 0, 'owner': self.me.default.owner, 
                     'total': total, 'form': form,
-                        'organization': organization}, status=400)
+                        'organization': self.me.default}, status=400)
   
         form.save()
 
@@ -258,8 +255,8 @@ class ListUsers(GuardianView):
         count = users.count()
 
         return render(request, 'core_app/list-users.html', 
-        {'users': users, 'owner': organization.owner, 'count': count,
-        'total': total, 'form': form, 'organization': organization})
+        {'users': users, 'owner': self.me.default.owner, 'count': count,
+        'total': total, 'form': form, 'organization': self.me.default})
 
 class ManageUserTags(GuardianView):
     def get(self, request, user_id):
@@ -462,8 +459,7 @@ class InviteOrganizationUser(GuardianView):
         organization=self.me.default, user=self.me, peer=user)
         event.dispatch(*self.me.default.users.all())
 
-        return redirect('core_app:list-users', 
-        organization_id=self.me.default.id)
+        return redirect('core_app:list-users')
 
 class ResendInvite(GuardianView):
     def get(self, request, invite_id):
@@ -473,8 +469,7 @@ class ResendInvite(GuardianView):
         invite = Invite.objects.get(id=invite_id)
         invite.send_email()
 
-        return redirect('core_app:list-users', 
-        organization_id=invite.organization.id)
+        return redirect('core_app:list-users')
 
         # return render(request, 
             # 'core_app/resend-invite.html', {'invite': invite})
