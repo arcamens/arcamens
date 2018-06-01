@@ -7,7 +7,7 @@ rm -fr ~/projects/arcamens-code/static/media
 git status
 git add *
 git commit -a
-git push -u origin staging
+git push
 
 #############################################################################
 # push arcamens alpha branch.
@@ -374,6 +374,7 @@ cd ~/projects/arcamens-code
 
 ##############################################################################
 pip install html2text
+
 
 
 

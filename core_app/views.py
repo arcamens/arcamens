@@ -175,26 +175,23 @@ class NoOrganization(AuthenticatedView):
         return redirect('core_app:index')
 
 class UpdateOrganization(GuardianView):
-    def get(self, request, organization_id):
-
-        organization = Organization.objects.get(id=organization_id)
+    def get(self, request):
         return render(request, 
-        'core_app/update-organization.html',{'organization': organization, 
-        'form': forms.UpdateOrganizationForm(instance=organization)})
+        'core_app/update-organization.html',{'organization': self.me.default, 
+        'form': forms.UpdateOrganizationForm(instance=self.me.default)})
 
-    def post(self, request, organization_id):
-        record  = Organization.objects.get(id=organization_id)
-        form    = forms.UpdateOrganizationForm(request.POST, instance=record)
+    def post(self, request):
+        form = forms.UpdateOrganizationForm(
+            request.POST, instance=self.me.default)
 
         if not form.is_valid():
             return render(request, 'core_app/update-organization.html',
-                {'organization': record, 'form': form}, status=400)
+                {'organization': self.me, 'form': form}, status=400)
 
         form.save()
-
         event = EUpdateOrganization.objects.create(
         organization=self.me.default, user=self.me)
-        event.dispatch(*record.users.all())
+        event.dispatch(*self.me.default.users.all())
 
         # user.ws_sound(record)
 
@@ -906,6 +903,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
