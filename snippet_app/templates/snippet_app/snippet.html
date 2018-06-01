@@ -5,7 +5,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-book"></span> 
-Snippet by {{snippet.owner.name}} at {{snippet.created}}
+Snippet by {{snippet.owner.name}} at <a href="{{snipet.get_link_url}}" target="_blank"> {{snippet.created}}</a>
 
 </div>
 
@@ -57,6 +57,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
     $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
+
 
 
 

@@ -30,17 +30,18 @@ class Post(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id,
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
                 It can't be accessed now.", status=403)
 
-
-        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins     = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
+        timelinepins = self.me.timelinepin_set.filter(
+        organization=self.me.default)
 
         return render(request, 'post_app/post.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
@@ -52,7 +53,8 @@ class PostLink(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id,
+            ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
@@ -878,6 +880,8 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
+
 
 
 

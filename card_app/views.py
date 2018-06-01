@@ -30,7 +30,14 @@ class CardLink(GuardianView):
     """
 
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.objects.get(id=card_id, 
+        ancestor__ancestor__organization=self.me.default)
+
+        # Supposing the user belongs to the requested organization in fact.
+        # Remain to be implemented checkings.
+        # if card.ancestor.ancestor.organization != self.me.default:
+            # return render(request, 'core_app/no-organization-resource.html', 
+                    # {'other': card.ancestor.ancestor.organization}, status=403)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -1143,5 +1150,6 @@ class Unpin(GuardianView):
         pin = CardPin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 

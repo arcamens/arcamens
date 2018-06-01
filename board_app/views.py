@@ -362,7 +362,8 @@ class BoardLink(GuardianView):
     """
 
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id, 
+        organization=self.me.default)
         # on_clipboard = not (board.ancestor and board.ancestor.ancestor)
 # 
         # if on_clipboard:
@@ -381,6 +382,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 

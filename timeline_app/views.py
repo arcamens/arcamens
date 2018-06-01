@@ -269,7 +269,9 @@ class TimelineLink(GuardianView):
     """
 
     def get(self, request, timeline_id):
-        record       = Timeline.objects.get(id=timeline_id)
+        record = Timeline.objects.get(id=timeline_id,
+        organization=self.me.default)
+
         boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
         listpins     = self.me.listpin_set.filter(organization=self.me.default)
         cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
@@ -296,6 +298,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

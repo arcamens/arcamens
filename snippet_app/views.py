@@ -30,7 +30,9 @@ class Snippet(GuardianView):
 
 class SnippetLink(GuardianView):
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id)
+        snippet = models.Snippet.objects.get(id=snippet_id,
+        post__ancestor__organization=self.me.default)
+
         organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'snippet_app/snippet-link.html', 
@@ -170,6 +172,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 
