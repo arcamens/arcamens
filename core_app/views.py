@@ -399,8 +399,11 @@ class CreateTag(GuardianView):
 
 class UnbindUserTag(GuardianView):
     def get(self, request, user_id, tag_id):
-        user = User.objects.get(id=user_id)
-        tag  = Tag.objects.get(id=tag_id)
+        # Make sure the user belongs to my default organization.
+        # This is necessary otherwise he can drop an user_id and tag_id
+        # and unbind all tags from all users(hacking).
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
         user.tags.remove(tag)
         user.save()
 
@@ -414,8 +417,10 @@ class UnbindUserTag(GuardianView):
 
 class BindUserTag(GuardianView):
     def get(self, request, user_id, tag_id):
-        user = User.objects.get(id=user_id)
-        tag  = Tag.objects.get(id=tag_id)
+        # Make sure the user/tag belongs are related to my default organization.
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+
         user.tags.add(tag)
         user.save()
 
