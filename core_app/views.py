@@ -350,9 +350,18 @@ class ListTags(GuardianView):
         'organization': self.me.default, 'total': total, 'count': count})
 
 class DeleteTag(GuardianView):
-    def get(self, request, tag_id):
-        tag   = Tag.objects.get(id=tag_id)
+    """
+    The view can be performed only by users who belong
+    to the tag organization. 
 
+    If an user attempts to call this view with a tag id that doesn't
+    belong to his default organization he will get an exception thrown
+    then an error message.
+    """
+
+    def get(self, request, tag_id):
+        # Make sure the tag belongs to my default orgnization.
+        tag   = Tag.objects.get(id=tag_id, organization=self.me.default)
         event = EDeleteTag.objects.create(
         organization=self.me.default, user=self.me, tag_name=tag.name)
         tag.delete()
@@ -899,6 +908,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
