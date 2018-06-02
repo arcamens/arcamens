@@ -27,7 +27,7 @@ data-callback="$('#modal').modal('toggle');" >
 
 <a class="e-get" 
 data-shell="#smallModalContent" href="#" 
-data-show="{% url 'core_app:setup-node-filter' organization.id %}"  
+data-show="{% url 'core_app:setup-node-filter' %}"  
 data-callback="$('#modal').modal('toggle');">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
@@ -45,6 +45,7 @@ Filter </strike>
 </div>
 
 </div>
+
 
 
 

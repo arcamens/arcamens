@@ -883,27 +883,23 @@ class ListNodes(GuardianView):
         'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class SetupNodeFilter(GuardianView):
-    def get(self, request, organization_id):
-        filter = NodeFilter.objects.get(user__id=self.user_id, 
-        organization__id=organization_id)
-
-        organization = Organization.objects.get(id=organization_id)
+    def get(self, request):
+        filter = NodeFilter.objects.get(user=self.me, 
+        organization=self.me.default)
 
         return render(request, 'core_app/setup-node-filter.html', 
         {'form': forms.NodeFilterForm(instance=filter), 
-        'organization': organization})
+        'organization': self.me.default})
 
-    def post(self, request, organization_id):
-        record = NodeFilter.objects.get(
-        organization__id=organization_id, user__id=self.user_id)
-
-        form         = forms.NodeFilterForm(request.POST, instance=record)
-        organization = Organization.objects.get(id=organization_id)
+    def post(self, request):
+        record = NodeFilter.objects.get(user=self.me, 
+        organization=self.me.default)
+        form = forms.NodeFilterForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'core_app/setup-node-filter.html',
                    {'node': record, 'form': form, 
-                        'organization': organization}, status=400)
+                        'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
 

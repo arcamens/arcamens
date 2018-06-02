@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^no-default/', views.NoDefault.as_view(), name='no-default'),
 
     url(r'^seen-event/(?P<event_id>.+)/', views.SeenEvent.as_view(), name='seen-event'),
-    url(r'^setup-node-filter/(?P<organization_id>.+)', views.SetupNodeFilter.as_view(), name='setup-node-filter'),
+    url(r'^setup-node-filter/', views.SetupNodeFilter.as_view(), name='setup-node-filter'),
     url(r'^join-organization/(?P<organization_id>.+)/(?P<token>.+)/', views.JoinOrganization.as_view(), name='join-organization'),
     url(r'^signup-from-invite/(?P<organization_id>.+)/(?P<token>.+)/', views.SignupFromInvite.as_view(), name='signup-from-invite'),
     url(r'^update-organization/', views.UpdateOrganization.as_view(), name='update-organization'),
