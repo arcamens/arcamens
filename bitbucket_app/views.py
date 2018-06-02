@@ -30,7 +30,9 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class BitbucketHandle(View):
     def post(self, request):
-        data      = json.loads(request.body.decode(request.encoding))
+        data = json.loads(request.body.decode(
+        request.encoding if request.encoding else settings.DEFAULT_CHARSET))
+
         full_name = data['repository']['full_name']
         changes   = data['push']['changes']
         commits   = self.get_commits(changes)
