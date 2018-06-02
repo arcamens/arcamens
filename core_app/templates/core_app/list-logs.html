@@ -6,14 +6,14 @@
 <h4>  
 <span class="glyphicon glyphicon-bell"></span>
 
-{{organization.name}}'s Logs <span class="badge">{{count}}</span></h4>
+{{organization.name}}'s Logs <span class="badge">{{count}}/{{total}}</span></h4>
 </div>
 
 <div class="modal-body">
 {{ events | safe}}
 
 <hr>
-<form id="listLogsForm" enctype="multipart/form-data">
+<form id="eventFilterForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.start  size='md' %}
 {% bootstrap_field form.end  size='md' %}
@@ -25,17 +25,16 @@
 </div>
 
 
-</div>
-
 <div class="modal-footer">
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Cancel" %}
 </button>
 
-<button  type="button" data-form="#listLogsForm" data-show="{% url 'core_app:list-logs'  %}"
+<button  type="button" data-form="#eventFilterForm" data-show="{% url 'core_app:list-logs'  %}"
 class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

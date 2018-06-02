@@ -1,7 +1,8 @@
 from core_app.models import Organization, User, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
-EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, EDisabledAccount
+EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
+EventFilter, EDisabledAccount
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
@@ -589,28 +590,45 @@ class ListLogs(GuardianView):
     """
 
     def get(self, request):
-        form = forms.EventFilterForm()
-        return render(request, 'core_app/list-logs.html', 
-        {'user': self.me, 'form': form,
-         'organization': self.me.default})
+        filter, _= EventFilter.objects.get_or_create(user=self.me, 
+        organization=self.me.default)
 
-    def post(self, request):
-        form  = forms.EventFilterForm(request.POST)
+        form   = forms.EventFilterForm(instance=filter)
 
-        if not form.is_valid():
-            return render(request, 'core_app/list-logs.html', 
-                {'user': self.me, 'form': form,
-                     'organization': self.me.default})
+        events = self.me.seen_events.filter(organization=self.me.default)
+        total = events.count()
 
-        end    = form.cleaned_data['end']
-        start  = form.cleaned_data['start']
-
-        events = self.me.seen_events.filter(created__lte=end,
-        created__gte=start, organization=self.me.default)
+        events = events.filter(created__lte=filter.end,
+        created__gte=filter.start)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
 
+        events = JScroll(self.me.id, 'core_app/list-logs-scroll.html', events)
+
+        return render(request, 'core_app/list-logs.html', 
+        {'user': self.me, 'form': form, 'events':events.as_div(), 'events': events.as_div(),
+        'count': count, 'total': total, 'organization': self.me.default})
+
+    def post(self, request):
+        filter = EventFilter.objects.get(user=self.me, 
+        organization=self.me.default)
+
+        form   = forms.EventFilterForm(request.POST, instance=filter)
+        events = self.me.seen_events.filter(organization=self.me.default)
+        total  = events.count()
+
+        if not form.is_valid():
+            return render(request, 'core_app/list-logs.html', 
+                {'user': self.me, 'form': form, 'count': 0, 'total': total,
+                     'organization': self.me.default})
+        form.save()
+
+        events = events.filter(created__lte=filter.end,
+        created__gte=filter.start)
+
+        count  = events.count()
+        events = events.values('html').order_by('-created')
         events = JScroll(self.me.id, 'core_app/list-logs-scroll.html', events)
 
         return render(request, 'core_app/list-logs.html', 
@@ -893,24 +911,6 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

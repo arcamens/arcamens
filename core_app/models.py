@@ -461,11 +461,28 @@ class NodeFilter(models.Model):
     class Meta:
         unique_together = ('user', 'organization',)
 
+class EventFilter(models.Model):
+    start = models.DateField(null=True, 
+    blank=False, help_text="Example: year-month-day")
+
+    end = models.DateField(null=True, 
+    blank=False, help_text="Example: year-month-day")
+
+    user = models.ForeignKey('core_app.User', null=True, blank=True)
+    organization = models.ForeignKey('core_app.Organization', 
+    blank=True, null=True)
+
+    # It warrants there will exist only one user and organization
+    # filter. If we decide to permit more filters..
+    class Meta:
+        unique_together = ('user', 'organization',)
+
 class EDisabledAccount(Event):
     reason = models.CharField(max_length=255, 
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
