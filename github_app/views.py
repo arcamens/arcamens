@@ -30,7 +30,7 @@ class Authenticator(GuardianView):
 @method_decorator(csrf_exempt, name='dispatch')
 class GithubHandle(View):
     def post(self, request):
-        data    = json.loads(request.body.encode(request.encoding))
+        data      = json.loads(request.body.decode(request.encoding))
         full_name = data['repository']['full_name']
 
         for ind in data['commits']:
@@ -120,6 +120,7 @@ class CreateGithubHook(GuardianView):
         record.organization = user.default
         record.save()
         return redirect('github_app:list-github-hooks')
+
 
 
 
