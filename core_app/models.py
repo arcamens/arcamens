@@ -137,7 +137,8 @@ class OrganizationMixin(models.Model):
         abstract = True
 
     def revoke_access(self, admin, user):
-        self.cancel_assignments(user)
+        # Should be pondered about it yet.
+        # self.cancel_assignments(user)
         self.revoke_timelines(admin, user)
         self.revoke_boards(admin, user)
         user.organizations.remove(self)
@@ -149,6 +150,8 @@ class OrganizationMixin(models.Model):
 
     def cancel_assignments(self, user):
         # Remove user from all posts/cards he is assigned to.
+        # This method is not working it cleans all post.workers
+        # and card.workers m2m field.
         user.assignments.through.objects.filter(
             post__ancestor__organization=self).delete()
 
@@ -161,24 +164,20 @@ class OrganizationMixin(models.Model):
         set admin as user and owner.
         """
 
-        # Remove as an worker from all timelines.
-        user.timelines.through.objects.filter(
-        timeline__organization=self, timeline__users=user).delete()
-        timelines = user.owned_timelines.filter(organization=self)
+        timelines = user.timelines.filter(organization=self)
+        timelines = timelines.only('users')
         for ind in timelines:
-            ind.set_ownership(admin)
+            ind.revoke_access(admin, user)
 
     def revoke_boards(self, admin, user):
         """
         Revoke user access to boards and assign admin to these boards.
         """
 
-        user.boards.through.objects.filter(
-        board__organization=self, board__members=user).delete()
-
-        boards = user.owned_boards.filter(organization=self)
+        boards = user.boards.filter(organization=self)
+        boards = boards.only('members', 'admins')
         for ind in boards:
-            ind.set_ownership(admin)
+            ind.revoke_access(admin, user)
 
     def __str__(self):
         return self.name
@@ -482,6 +481,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

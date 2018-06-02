@@ -44,12 +44,24 @@ class BoardMixin(models.Model):
     def __str__(self):
         return self.name
 
-    def set_ownership(self, user):
-        self.owner = user
-        self.members.add(user)
-        self.admins.add(user)
-        self.save()
-    
+    def revoke_access(self, admin, user):
+        """
+        Remove user access and allow admin access. Set ownership
+        to admin if the user is the owner of the board.
+        """
+
+        self.members.remove(user)
+        self.admins.remove(user)
+
+        if self.owner == user: 
+            self.set_ownership(admin)
+
+    def set_ownership(self, admin):
+        self.members.add(admin)
+        self.admins.add(admin)
+
+        self.owner = admin
+        self.save()            
 
 class EBindBoardUserMixin(object):
     pass
@@ -142,6 +154,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

@@ -744,6 +744,7 @@ class RemoveOrganizationUser(GuardianView):
                     {'user': user, 'form': form})
 
         self.me.default.revoke_access(self.me, user)
+
         event = ERemoveOrganizationUser.objects.create(
         organization=self.me.default, user=self.me, peer=user, 
         reason=form.cleaned_data['reason'])

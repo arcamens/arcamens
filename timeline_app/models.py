@@ -36,10 +36,19 @@ class TimelineMixin(models.Model):
     def __str__(self):
         return self.name
 
-    def set_ownership(self, user):
-        self.owner = user
-        self.users.add(user)
-        self.save()
+    def revoke_access(self, admin, user):
+        """
+        Remove user access and allow admin access.
+        """
+
+        self.users.remove(user)
+        if self.owner == user: 
+            self.set_ownership(admin)
+
+    def set_ownership(self, admin):
+        self.users.add(admin)
+        self.owner = admin
+        self.save()            
 
 class TimelinePinMixin(models.Model):
     class Meta:
@@ -117,6 +126,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 
