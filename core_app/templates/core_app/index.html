@@ -33,6 +33,12 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 
 });
+$(document).ready(function() {
+$('.navbar').on('focus', function() {
+    console.log('onfocus event');
+});
+
+});
 
 
 // $(document).ready(function(){
@@ -88,6 +94,7 @@ OneSignal.push(function() {
 </body>
 
 </html>
+
 
 
 

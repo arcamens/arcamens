@@ -20,6 +20,8 @@ import re
 
 class CreateBoard(GuardianView):
     """
+    Everyone in the organization is allowed to create boards,
+    every user has its own workspace.
     """
 
     def get(self, request):
@@ -54,7 +56,8 @@ class CreateBoard(GuardianView):
 
 class PinBoard(GuardianView):
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        # Make sure the board belongs to my default organization.
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         pin   = BoardPin.objects.create(user=self.me, 
         organization=self.me.default, board=board)
@@ -382,6 +385,8 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
+
 
 
 
