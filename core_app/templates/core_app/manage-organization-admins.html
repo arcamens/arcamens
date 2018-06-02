@@ -25,7 +25,7 @@
 
 <a class="e-get" style="color:red; font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
-data-show="{% url 'core_app:unbind-organization-admin' organization.id ind.id %}"  href="#"> 
+data-show="{% url 'core_app:unbind-organization-admin' ind.id %}"  href="#"> 
 <span class="glyphicon glyphicon-remove"></span> Remove</a>  
 
 </p>
@@ -43,7 +43,7 @@ data-show="{% url 'core_app:unbind-organization-admin' organization.id ind.id %}
 
 <a class="e-get" style="color:green;font-size:70%"
 data-callback="$('#user-choice-{{ind.id}}').remove();"
-data-show="{% url 'core_app:bind-organization-admin' organization.id ind.id %}" href="#"> 
+data-show="{% url 'core_app:bind-organization-admin' ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> Add </a> 
 
 </p>
@@ -78,6 +78,7 @@ $('#userSearchForm').on('submit', (function(e){
 
 }));
 </script>
+
 
 
 

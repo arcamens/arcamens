@@ -40,8 +40,8 @@ urlpatterns = [
     url(r'^cancel-invite/(?P<invite_id>.+)', views.CancelInvite.as_view(), name='cancel-invite'),
     url(r'^list-invites/', views.ListInvites.as_view(), name='list-invites'),
     url(r'^manage-organization-admins/', views.ManageOrganizationAdmins.as_view(), name='manage-organization-admins'),
-    url(r'^bind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.BindOrganizationAdmin.as_view(), name='bind-organization-admin'),
-    url(r'^unbind-organization-admin/(?P<organization_id>.+)/(?P<user_id>.+)/', views.UnbindOrganizationAdmin.as_view(), name='unbind-organization-admin'),
+    url(r'^bind-organization-admin/(?P<user_id>.+)/', views.BindOrganizationAdmin.as_view(), name='bind-organization-admin'),
+    url(r'^unbind-organization-admin/(?P<user_id>.+)/', views.UnbindOrganizationAdmin.as_view(), name='unbind-organization-admin'),
     url(r'^resend-invite/(?P<invite_id>.+)', views.ResendInvite.as_view(), name='resend-invite'),
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 

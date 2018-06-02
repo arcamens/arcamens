@@ -607,8 +607,9 @@ class ListLogs(GuardianView):
         events = JScroll(self.me.id, 'core_app/list-logs-scroll.html', events)
 
         return render(request, 'core_app/list-logs.html', 
-        {'user': self.me, 'form': form, 'events':events.as_div(), 'events': events.as_div(),
-        'count': count, 'total': total, 'organization': self.me.default})
+        {'user': self.me, 'form': form, 'events':events.as_div(), 
+        'events': events.as_div(), 'count': count, 'total': total, 
+        'organization': self.me.default})
 
     def post(self, request):
         filter = EventFilter.objects.get(user=self.me, 
@@ -817,39 +818,33 @@ class ManageOrganizationAdmins(GuardianView):
         'count': count, 'total': total,})
 
 class BindOrganizationAdmin(GuardianView):
-    def get(self, request, organization_id, user_id):
-        organization = Organization.objects.get(id=organization_id)
-    
+    def get(self, request, user_id):
         # Make sure the user belongs to the organization otherwise
         # should return not existing record error.
-        user = organization.users.get(id=user_id)
+        user = self.me.default.users.get(id=user_id)
 
-        if organization.owner != self.me:
+        if self.me.default.owner != self.me:
             return HttpResponse("Just owner can do that!", status=403)
 
-        organization.admins.add(user)
-        organization.save()
+        self.me.default.admins.add(user)
+        self.me.default.save()
 
         return HttpResponse(status=200)
 
 class UnbindOrganizationAdmin(GuardianView):
-    def get(self, request, organization_id, user_id):
-        organization = Organization.objects.get(id=organization_id)
-
+    def get(self, request, user_id):
         # Grab the user from the organization users so it makes sure
         # he belongs to the organization. It can avoid some misbehaviors.
-        user = organization.users.get(id=user_id)
+        user = self.me.default.users.get(id=user_id)
 
-        if organization.owner == user:
+        if self.me.default.owner == user:
             return HttpResponse("You can't remove the owner!", status=403)
 
-        if organization.owner != self.me:
+        if self.me.default.owner != self.me:
             return HttpResponse("No permission for that!", status=403)
 
-
-        organization.admins.remove(user)
-        organization.save()
-
+        self.me.default.admins.remove(user)
+        self.me.default.save()
         return HttpResponse(status=200)
 
 class ListNodes(GuardianView):
