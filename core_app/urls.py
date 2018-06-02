@@ -35,8 +35,6 @@ urlpatterns = [
     url(r'^confirm-clipboard-deletion/', views.ConfirmClipboardDeletion.as_view(), name='confirm-clipboard-deletion'),
     url(r'^update-password/', views.UpdatePassword.as_view(), name='update-password'),
 
-    url(r'^export/', views.Export.as_view(), name='export'),
-    url(r'^import/', views.Import.as_view(), name='import'),
     url(r'^disabled-account/$', views.DisabledAccount.as_view(), name='disabled-account'),
     url(r'^remove-organization-user/(?P<user_id>.+)', views.RemoveOrganizationUser.as_view(), name='remove-organization-user'),
     url(r'^cancel-invite/(?P<invite_id>.+)', views.CancelInvite.as_view(), name='cancel-invite'),
@@ -48,6 +46,7 @@ urlpatterns = [
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 
 ]
+
 
 
 

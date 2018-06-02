@@ -219,7 +219,7 @@ class DeleteOrganization(GuardianView):
 
 class ListUsers(GuardianView):
     def get(self, request):
-        filter, _    = UserFilter.objects.get_or_create(
+        filter, _ = UserFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
         users = self.me.default.users.all()
@@ -625,35 +625,6 @@ class AllSeen(GuardianView):
             ind.seen(self.me)
         return redirect('core_app:list-events')
 
-class Export(GuardianView):
-    def get(self, request):
-        if request.GET.get('kind') == 'timelines':
-            user = User.objects.get(id=self.user_id)
-            data = core_app.export.export_timelines(user)
-            response = HttpResponse(data, content_type='application/json')
-            response['Content-Disposition'] = 'attachment; filename=timelines.json'
-            return response
-        elif request.GET.get('kind') == 'boards':
-            user = User.objects.get(id=self.user_id)
-            data = core_app.export.export_boards(user)
-            response = HttpResponse(data, content_type='application/json')
-            response['Content-Disposition'] = 'attachment; filename=boards.json'
-            return response
-        else:
-            return render(request, 'core_app/export.html')
-
-class Import(GuardianView):
-    def post(self, request):
-        user = User.objects.get(id=self.user_id)
-        file = request.FILES['file'].read()
-        if request.POST.get('kind') == 'timelines':
-            core_app.export.import_timelines(user, file)
-            return HttpResponse('OK')
-        elif request.POST.get('kind') == 'boards':
-            core_app.export.import_boards(user, file)
-            return HttpResponse('OK')
-        return HttpResponse('Fail')
-
 class ConfirmClipboardDeletion(GuardianView):
     def get(self, request):
         return render(request, 'core_app/confirm-clipboard-deletion.html')
@@ -715,7 +686,9 @@ class UpdatePassword(GuardianView):
 
 class RemoveOrganizationUser(GuardianView):
     def get(self, request, user_id):
-        user = User.objects.get(id=user_id)
+        # We need to make sure the user who is being removed belongs
+        # to our default organization otherwise it may allow misbehaviors.
+        user = User.objects.get(id=user_id, organizations=self.me.default)
 
         form = forms.RemoveUserForm()
         timelines = user.owned_timelines.filter(organization=self.me.default)
@@ -726,7 +699,7 @@ class RemoveOrganizationUser(GuardianView):
 
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id, organizations=self.me.default)
 
         # If i'm the owner then i can't remove myself.
         # I should delete the organization.
@@ -765,7 +738,7 @@ class RemoveOrganizationUser(GuardianView):
         'noreply@arcamens.com', [user.email], fail_silently=False)
 
         # Should restart the user UI now (TO IMPLEMENT).
-        return redirect('core_app:list-users', organization_id=self.me.default.id)
+        return redirect('core_app:list-users')
 
 class ListInvites(GuardianView):
     def get(self, request):
@@ -776,7 +749,10 @@ class ListInvites(GuardianView):
 
 class CancelInvite(GuardianView):
     def get(self, request, invite_id):
-        invite = Invite.objects.get(id=invite_id)
+        # We need to make sure the invite belongs to our self.me.default
+        # organization otherwise a hacker can just cancel all invites
+        # by running a simple script.
+        invite = Invite.objects.get(id=invite_id, organization=self.me.default)
 
         # If there is no more invites sent to this user
         # and his default org is null then he is not an existing
@@ -917,6 +893,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
