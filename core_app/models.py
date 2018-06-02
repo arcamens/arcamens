@@ -461,10 +461,10 @@ class NodeFilter(models.Model):
         unique_together = ('user', 'organization',)
 
 class EventFilter(models.Model):
-    start = models.DateField(null=True, 
+    start = models.DateField(null=True, default=datetime.now,
     blank=False, help_text="Example: year-month-day")
 
-    end = models.DateField(null=True, 
+    end = models.DateField(null=True, default=datetime.now,
     blank=False, help_text="Example: year-month-day")
 
     user = models.ForeignKey('core_app.User', null=True, blank=True)
@@ -481,17 +481,6 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
-
-
-
-
-
-
-
-
-
-
-
 
 
 
