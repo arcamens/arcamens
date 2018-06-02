@@ -634,7 +634,7 @@ class ListLogs(GuardianView):
 
         return render(request, 'core_app/list-logs.html', 
         {'user': self.me, 'form': form, 'events':events.as_div(), 
-        'count': count,'organization': self.me.default})
+        'count': count,'organization': self.me.default, 'total': total})
 
 class AllSeen(GuardianView):
     def get(self, request):
@@ -903,6 +903,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

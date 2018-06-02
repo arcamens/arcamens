@@ -548,4 +548,14 @@ data = '''
 dom = html.feed(data)
 dom.text()
 
+##############################################################################
+# delete user eventfilter on victor server.
+from core_app.models import User
+import datetime
+
+me = User.objects.get(name__startswith='Iury')
+me.eventfilter_set.all().delete()
+
+##############################################################################
+
 
