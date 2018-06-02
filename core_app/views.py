@@ -379,7 +379,6 @@ class CreateTag(GuardianView):
         {'form':form})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
         form = forms.TagForm(request.POST)
 
         if not form.is_valid():
@@ -576,7 +575,12 @@ class ListClipboard(GuardianView):
 
 class SeenEvent(GuardianView):
     def get(self, request, event_id):
-        event = Event.objects.get(id=event_id)
+        # Make sure the event is related to the user default organization
+        # otherwise it entails in security risk. The user could run a script
+        # that allows him to view all existing events through list-logs view.
+        # It happens because after event.seen(self.me) then the event is put
+        # in user.signers which is listed in list-logs.
+        event = Event.objects.get(id=event_id, organization=self.me.default)
         event.seen(self.me)
         return redirect('core_app:list-events')
 
@@ -913,6 +917,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': organization}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
