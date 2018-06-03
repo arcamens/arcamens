@@ -64,9 +64,17 @@ class PinBoard(GuardianView):
         return redirect('board_app:list-pins')
 
 class ManageUserBoards(GuardianView):
-    def get(self, request, user_id):
-        user = User.objects.get(id=user_id)
+    """
+    One is supposed to view a given user boards only if he belongs
+    to the logged user default organization. It is gonna show a list of
+    boards that i'm attached to.
+    """
 
+    def get(self, request, user_id):
+        # Make sure the user belongs to my default organization. It is necessary
+        # because it would allow one to view which boards the user is in. It is a security
+        # flaw if we dont do this checking.
+        user     = User.objects.get(id=user_id, organizations=self.me.default)
         boards   = self.me.boards.filter(organization=self.me.default)
         total    = boards.count()
 
@@ -80,7 +88,9 @@ class ManageUserBoards(GuardianView):
         return render(request, 'board_app/manage-user-boards.html', env)
 
     def post(self, request, user_id):
-        user   = User.objects.get(id=user_id)
+        # Does the necessary checking to make sure the user 
+        # belongs to my default organization.
+        user   = User.objects.get(id=user_id, organizations=self.me.default)
         sqlike = Board.from_sqlike()
         form   = forms.BoardSearchForm(request.POST, sqlike=sqlike)
 
