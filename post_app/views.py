@@ -118,13 +118,26 @@ class CreatePost(GuardianView):
         timeline_id=ancestor_id)
 
 class UpdatePost(GuardianView):
+    """
+    The post can be updated by everyone who belongs to the 
+    timeline or is a worker of the post. 
+
+    It also makes sure the user who performs this view has set as 
+    default the organization whose post belongs to.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         return render(request, 'post_app/update-post.html',
         {'post': post, 'form': forms.PostForm(instance=post)})
 
     def post(self, request, post_id):
-        record  = models.Post.objects.get(id=post_id)
+        record = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not record.ancestor:
             return HttpResponse("Can't update! On \
@@ -152,17 +165,23 @@ class UpdatePost(GuardianView):
 
 class AttachFile(GuardianView):
     """
+    It follows the same permission scheme for update-post view.
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         attachments = post.postfilewrapper_set.all()
         form = forms.PostFileWrapperForm()
         return render(request, 'post_app/attach-file.html', 
         {'post':post, 'form': form, 'attachments': attachments})
 
     def post(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Post was put on clipboard!\
@@ -189,10 +208,13 @@ class AttachFile(GuardianView):
 
 class DetachFile(GuardianView):
     """
+    The same permission scheme for attach-file view.
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = PostFileWrapper.objects.get(id=filewrapper_id)
+        filewrapper = PostFileWrapper.objects.get(
+        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
+        id=filewrapper_id, post__ancestor__organization=self.me.default)
 
         if not filewrapper.post.ancestor:
             return HttpResponse("Post was put on clipboard!\
@@ -215,8 +237,14 @@ class DetachFile(GuardianView):
         {'post':filewrapper.post, 'form': form, 'attachments': attachments})
 
 class DeletePost(GuardianView):
+    """
+    The same permission scheme for update-post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id = post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("On clipboard, can't \
@@ -234,8 +262,14 @@ class DeletePost(GuardianView):
         timeline_id=ancestor.id)
 
 class PostWorkerInformation(GuardianView):
+    """
+    Same permission scheme as in Post view.
+    """
+
     def get(self, request, peer_id, post_id):
-        event = EAssignPost.objects.filter(post__id=post_id,
+        event = EAssignPost.objects.filter(
+        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
+        post_id=post_id, post__ancestor__organization=self.me.default,
         peer__id=peer_id).last()
 
         active_posts = event.peer.assignments.filter(done=False)
@@ -254,16 +288,28 @@ class PostWorkerInformation(GuardianView):
         'created': event.created, 'user':event.user})
 
 class PostTagInformation(GuardianView):
+    """
+    Same permission scheme as PostWorkerInformation.
+    """
+
     def get(self, request, tag_id, post_id):
-        event = EBindTagPost.objects.filter(post__id=post_id,
+        event = EBindTagPost.objects.filter(
+        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
+        post_id=post_id, post__ancestor__organization=self.me.default,
         tag__id=tag_id).last()
 
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
 
 class UnassignPostUser(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id, user_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("On clipboard! Can't \
@@ -290,8 +336,14 @@ class UnassignPostUser(GuardianView):
         return HttpResponse(status=200)
 
 class AssignPostUser(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id, user_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("On clipboard! Can't \
@@ -313,8 +365,14 @@ class AssignPostUser(GuardianView):
         return HttpResponse(status=200)
 
 class ManagePostWorkers(GuardianView):
+    """
+    Same as in post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         included = post.workers.all()
         excluded = self.me.default.users.exclude(assignments=post)
@@ -329,7 +387,10 @@ class ManagePostWorkers(GuardianView):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         included = post.workers.all()
         excluded = self.me.default.users.exclude(assignments=post)
         total    = included.count() + excluded.count()
@@ -348,10 +409,20 @@ class ManagePostWorkers(GuardianView):
         'me': self.me, 'form':form, 'total': total, 'count': count,})
 
 class SetupPostFilter(GuardianView):
+    """
+    Makes sure the user can have a filter only if he belongs
+    to the timeline in fact. 
+
+    Notice that when the user is removed from the timeline the 
+    filter remains in the db.
+    """
+
     def get(self, request, timeline_id):
         filter = PostFilter.objects.get(
         user__id=self.user_id, timeline__id=timeline_id)
-        timeline = Timeline.objects.get(id=timeline_id)
+
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
         return render(request, 'post_app/setup-post-filter.html', 
         {'form': forms.PostFilterForm(instance=filter), 
@@ -363,7 +434,8 @@ class SetupPostFilter(GuardianView):
         sqlike = models.Post.from_sqlike()
 
         form     = forms.PostFilterForm(request.POST, sqlike=sqlike, instance=record)
-        timeline = Timeline.objects.get(id=timeline_id)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
         if not form.is_valid():
             return render(request, 'post_app/setup-post-filter.html',
@@ -372,6 +444,11 @@ class SetupPostFilter(GuardianView):
         return redirect('timeline_app:list-posts', timeline_id=timeline.id)
 
 class Find(GuardianView):
+    """
+    This view is already secured for default due to the way of how
+    it is implemented.
+    """
+
     def get(self, request):
         filter, _ = GlobalPostFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
@@ -420,8 +497,14 @@ class Find(GuardianView):
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
 class CutPost(GuardianView):
+    """
+    Same as in update-post view permission scheme.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Already on someone \
@@ -446,8 +529,14 @@ class CutPost(GuardianView):
         timeline_id=timeline.id)
 
 class CopyPost(GuardianView):
+    """
+    Same as in CutPost view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Already on someone \
@@ -467,8 +556,14 @@ class CopyPost(GuardianView):
         timeline_id=post.ancestor.id)
 
 class Done(GuardianView):
+    """
+    Same as in copy-post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Can't archive post now, \
@@ -488,8 +583,14 @@ class Done(GuardianView):
         post_id=post.id)
 
 class ManagePostTags(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         included = post.tags.all()
         excluded = self.me.default.tags.exclude(posts=post)
@@ -504,7 +605,10 @@ class ManagePostTags(GuardianView):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         included = post.tags.all()
         excluded = self.me.default.tags.exclude(posts=post)
         total = included.count() + excluded.count()
@@ -524,8 +628,14 @@ class ManagePostTags(GuardianView):
         'organization': self.me.default, })
 
 class UnbindPostTag(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id, tag_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -544,8 +654,14 @@ class UnbindPostTag(GuardianView):
         return HttpResponse(status=200)
 
 class BindPostTag(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id, tag_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -564,6 +680,10 @@ class BindPostTag(GuardianView):
         return HttpResponse(status=200)
 
 class CancelPostCreation(GuardianView):
+    """
+    Deprecated.
+    """
+
     def get(self, request, post_id):
         post = models.Post.objects.get(id = post_id)
         post.delete()
@@ -571,8 +691,14 @@ class CancelPostCreation(GuardianView):
         return HttpResponse(status=200)
 
 class Undo(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -592,17 +718,26 @@ class Undo(GuardianView):
 
 
 class RequestPostAttention(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, peer_id, post_id):
-        peer = User.objects.get(id=peer_id)
-        post = models.Post.objects.get(id=post_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         form = forms.PostAttentionForm()
         return render(request, 'post_app/request-post-attention.html', 
         {'peer': peer,  'post': post, 'form': form})
 
     def post(self, request, peer_id, post_id):
-        peer = User.objects.get(id=peer_id)
-        post = models.Post.objects.get(id=post_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         form = forms.PostAttentionForm(request.POST)
 
         if not form.is_valid():
@@ -623,15 +758,24 @@ class RequestPostAttention(GuardianView):
         peer_id=peer.id, post_id=post.id)
 
 class AlertPostWorkers(GuardianView):
+    """
+    Same as in update-post view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         form = forms.AlertPostWorkersForm()
         return render(request, 'post_app/alert-post-workers.html', 
         {'post': post, 'form': form, 'user': self.me})
 
     def post(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         form = forms.AlertPostWorkersForm(request.POST)
 
         if not form.is_valid():
@@ -653,15 +797,35 @@ class AlertPostWorkers(GuardianView):
         return HttpResponse(status=200)
 
 class ConfirmPostDeletion(GuardianView):
+    """
+    The user is supposed to view this dialog only if he
+    belongs to the timeline post or is a worker of the post.
+    
+    It enforces his default organization contains the post's timeline
+    as well.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         return render(request, 'post_app/confirm-post-deletion.html', 
         {'post': post})
 
 
 class UndoClipboard(GuardianView):
+    """
+    This view checks if the post belongs to the user default
+    organization. As every user has a particular clipboard this view
+    doesn't need further checkings on permissions.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(id=post_id,
+        post_clipboard_users__organization=self.me.default,
+        post_clipboard_users__user=self.me)
+
         event0 = post.e_copy_post1.last()
         event1 = post.e_cut_post1.last()
 
@@ -694,11 +858,24 @@ class UndoClipboard(GuardianView):
 
 class PullCardContent(GuardianView):
     """
+    The user has to be related to the post either by
+    belonging to the timeline/being a worker. 
+
+    The user has to be in the list's board that the 
+    post is forked into as well.
     """
 
     def get(self, request, ancestor_id, post_id):
-        ancestor = List.objects.get(id=ancestor_id)
-        post     = models.Post.objects.get(id=post_id)
+        # Make sure i belong to the board and the board belongs
+        # to my default organization.
+        ancestor = List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, 
+        ancestor__members=self.me)
+
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         form     = CardForm(initial={'label': post.label, 'data': post.data})
 
         return render(request, 'post_app/create-fork.html', 
@@ -709,7 +886,9 @@ class CreateCardFork(GuardianView):
     """
 
     def get(self, request, ancestor_id, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -722,8 +901,14 @@ class CreateCardFork(GuardianView):
         {'form':form, 'post': post, 'ancestor': ancestor})
 
     def post(self, request, ancestor_id, post_id):
-        ancestor = List.objects.get(id=ancestor_id)
-        post     = models.Post.objects.get(id=post_id)
+        ancestor = List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, 
+        ancestor__members=self.me)
+
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         form     = CardForm(request.POST)
 
         if not form.is_valid():
@@ -751,8 +936,16 @@ class CreateCardFork(GuardianView):
         return redirect('card_app:view-data', card_id=fork.id)
 
 class SelectForkList(GuardianView):
+    """
+    The user is supposed to view the dialog just if matches
+    the same permission criterea in create-fork view view.
+    """
+
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         form = ListSearchform()
 
         boards = self.me.boards.filter(organization=self.me.default)
@@ -763,13 +956,17 @@ class SelectForkList(GuardianView):
 
     def post(self, request, post_id):
         form = forms.ListSearchform(request.POST)
-        post = models.Post.objects.get(id=post_id)
 
-        lists = List.objects.filter(ancestor__in=self.me.boards.all())
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not form.is_valid():
             return render(request, 'post_app/select-fork-list.html', 
                   {'form':form, 'elems': lists, 'post': post})
+
+        boards = self.me.boards.filter(organization=self.me.default)
+        lists  = List.objects.filter(ancestor__in=boards)
 
         lists = lists.annotate(text=Concat('ancestor__name', 'name'))
 
