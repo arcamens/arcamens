@@ -80,17 +80,22 @@ class PostLink(GuardianView):
 
 class CreatePost(GuardianView):
     """
+    The logged user can create a post on the timeline just if his default timeline
+    contains the timeline and he belongs to the timeline.
     """
 
     def get(self, request, ancestor_id):
-        ancestor   = Timeline.objects.get(id=ancestor_id)
-        form       = forms.PostForm()
+        ancestor   = self.me.timelines.get(id=ancestor_id, 
+        organization=self.me.default)
+
+        form = forms.PostForm()
 
         return render(request, 'post_app/create-post.html', 
         {'form':form, 'ancestor':ancestor})
 
     def post(self, request, ancestor_id):
-        ancestor = Timeline.objects.get(id=ancestor_id)
+        ancestor   = self.me.timelines.get(id=ancestor_id, 
+        organization=self.me.default)
 
         form = forms.PostForm(request.POST, request.FILES)
 
