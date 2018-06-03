@@ -182,6 +182,10 @@ class UpdateOrganization(GuardianView):
         'form': forms.UpdateOrganizationForm(instance=self.me.default)})
 
     def post(self, request):
+        if not self.me.default.owner == self.me:
+            return HttpResponse('Just owner can \
+               update the organization!', status=403)
+
         form = forms.UpdateOrganizationForm(
             request.POST, instance=self.me.default)
 
@@ -207,13 +211,16 @@ class DeleteOrganization(GuardianView):
                 {'organization': self.me.default, 'form': form})
 
     def post(self, request):
+        if not self.me.default.owner == self.me:
+            return HttpResponse('Just owner can \
+                    delete the organization!', status=403)
+
         form = forms.ConfirmOrganizationDeletionForm(request.POST, 
         confirm_token=self.me.default.name)
 
         if not form.is_valid():
-            return render(request, 
-                'core_app/delete-organization.html', 
-                    {'organization': self.me.default, 'form': form}, status=400)
+            return render(request, 'core_app/delete-organization.html', 
+                {'organization': self.me.default, 'form': form}, status=400)
 
         self.me.default.delete()
         return redirect('core_app:index')
@@ -637,6 +644,10 @@ class ListLogs(GuardianView):
         'count': count,'organization': self.me.default, 'total': total})
 
 class AllSeen(GuardianView):
+    """
+    Secured.
+    """
+
     def get(self, request):
         events = self.me.events.filter(organization=self.me.default)
 
@@ -704,6 +715,10 @@ class UpdatePassword(GuardianView):
         return redirect('core_app:update-user-information')
 
 class RemoveOrganizationUser(GuardianView):
+    """
+    Secured.
+    """
+
     def get(self, request, user_id):
         # We need to make sure the user who is being removed belongs
         # to our default organization otherwise it may allow misbehaviors.
@@ -903,6 +918,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
