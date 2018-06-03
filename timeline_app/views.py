@@ -18,10 +18,18 @@ import json
 
 class ListPosts(GuardianView):
     """
+    This view is performed to be executed just if the logged user
+    in fact belongs to the timeline. 
+
+    It also checks if the logged user organization contains the timeline.
     """
 
     def get(self, request, timeline_id):
-        timeline  = Timeline.objects.get(id=timeline_id)
+        # Make sure i belong to the timeline and my default
+        # organization contains the timeline.
+        timeline = self.me.timelines.get(
+            id=timeline_id, organization=self.me.default)
+
         filter, _ = PostFilter.objects.get_or_create(
         user=self.me, timeline=timeline)
 
@@ -298,6 +306,7 @@ class Unpin(GuardianView):
         pin = TimelinePin.objects.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
