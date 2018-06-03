@@ -143,13 +143,11 @@ class UnbindTimelineUser(GuardianView):
             return HttpResponse("You can't remove \
                 the timeline owner!", status=403)
 
-        timeline.users.remove(user)
-        timeline.save()
-
         event = EUnbindTimelineUser.objects.create(organization=self.me.default,
         timeline=timeline, user=self.me, peer=user)
         event.dispatch(*timeline.users.all())
 
+        timeline.users.remove(user)
         return HttpResponse(status=200)
 
 class UpdateTimeline(GuardianView):
@@ -383,6 +381,7 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

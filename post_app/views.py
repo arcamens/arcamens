@@ -27,10 +27,13 @@ import json
 
 class Post(GuardianView):
     """
+    This view is supposed to be performed only if the user
+    belongs to the timeline or if he is a worker of the post.
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id,
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
         ancestor__organization=self.me.default)
 
         if not post.ancestor:
@@ -880,6 +883,7 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
 
 
 
