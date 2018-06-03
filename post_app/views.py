@@ -980,7 +980,9 @@ class SelectForkList(GuardianView):
 
 class PostEvents(GuardianView):
     def get(self, request, post_id):
-        post  = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         query = Q(eunbindtagpost__post__id= post.id) | \
         Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
@@ -1002,6 +1004,10 @@ class PostEvents(GuardianView):
 
 
 class ListAllAssignments(GuardianView):
+    """
+    This view is secured by default.
+    """
+
     def get(self, request):
         filter, _ = GlobalAssignmentFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
@@ -1057,14 +1063,17 @@ class ListAllAssignments(GuardianView):
 
 class PinPost(GuardianView):
     def get(self, request, post_id):
-        post = Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
+
         pin   = PostPin.objects.create(user=self.me, 
         organization=self.me.default, post=post)
         return redirect('board_app:list-pins')
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
-        pin = PostPin.objects.get(id=pin_id)
+        pin = self.me.postpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
 
@@ -1074,7 +1083,9 @@ class RefreshPost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
