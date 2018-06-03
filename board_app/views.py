@@ -119,13 +119,16 @@ class ManageBoardMembers(GuardianView):
     """
     The logged user is supposed to view all existing members of the board
     altogether with the organization members.
+
+    This dialog should be shown just if the user in fact belongs to the board
+    and his default organization contains the board.
     """
 
     def get(self, request, board_id):
         # Make sure the board belong to the user organization.
         # Otherwise it would be possible to view members of other
         # board organizations.
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
 
         included = board.members.all()
         users = self.me.default.users.all()
@@ -141,8 +144,7 @@ class ManageBoardMembers(GuardianView):
     def post(self, request, board_id):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
         included = board.members.all()
 
         users = self.me.default.users.all()
@@ -163,8 +165,13 @@ class ManageBoardMembers(GuardianView):
         'me': self.me, 'total': total, 'count': count, 'form':form})
 
 class ManageBoardAdmins(GuardianView):
+    """
+    One is supposed view the dialog only if he belongs to the board
+    and his default organization contains the board.
+    """
+
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
 
         included = board.admins.all()
         excluded = board.members.exclude(id__in=included)
@@ -178,9 +185,8 @@ class ManageBoardAdmins(GuardianView):
 
     def post(self, request, board_id):
         sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        form   = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
 
         included = board.admins.all()
         excluded = board.members.exclude(id__in=included)
@@ -373,25 +379,25 @@ class UnbindBoardUser(GuardianView):
             return HttpResponse("Just the owner can do that!", status=403)
 
         # We make sure the user is no longer an admin at all.
-        board.members.remove(user)
-        board.admins.remove(user)
-        board.save()
-
         event = EUnbindBoardUser.objects.create(organization=self.me.default,
         board=board, user=self.me, peer=user)
         event.dispatch(*board.members.all())
+
+        board.members.remove(user)
+        board.admins.remove(user)
+        board.save()
 
         return HttpResponse(status=200)
 
 class BindBoardAdmin(GuardianView):
     def get(self, request, board_id, user_id):
-        board = Board.objects.get(id=board_id)
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         # Just the owner can add/remove admins.
         if board.owner != self.me:
             return HttpResponse("Just the owner can do that!", status=403)
 
-        user = User.objects.get(id=user_id)
         board.admins.add(user)
         board.save()
 
@@ -399,8 +405,8 @@ class BindBoardAdmin(GuardianView):
 
 class UnbindBoardAdmin(GuardianView):
     def get(self, request, board_id, user_id):
-        board = Board.objects.get(id=board_id)
-        user = User.objects.get(id=user_id)
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         # The owner admin status cant be removed.
         if board.owner == user:
@@ -420,16 +426,13 @@ class UnbindBoardAdmin(GuardianView):
 
 class BoardLink(GuardianView):
     """
+    Make sure the user belongs to the board and his default
+    organization contains the board.
     """
 
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id, 
+        board = self.me.boards.get(id=board_id, 
         organization=self.me.default)
-        # on_clipboard = not (board.ancestor and board.ancestor.ancestor)
-# 
-        # if on_clipboard:
-            # return HttpResponse("This board is on clipboard! \
-               # It can't be accessed.", status=403)
 
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
@@ -443,17 +446,6 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
-
-
-
-
-
-
-
-
-
-
-
 
 
 
