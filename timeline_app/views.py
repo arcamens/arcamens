@@ -127,9 +127,17 @@ class DeleteTimeline(GuardianView):
         return redirect('core_app:list-nodes')
 
 class UnbindTimelineUser(GuardianView):
+    """
+    Just users whose default organization matches the timeline organization
+    can perform this view. Everyone in timeline is supposed to add/remove members.
+    """
+
     def get(self, request, timeline_id, user_id):
-        user = User.objects.get(id=user_id)
-        timeline = Timeline.objects.get(id=timeline_id)
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+
+        # Make sure i belong to the timeline.
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
         if timeline.owner == user:
             return HttpResponse("You can't remove \
@@ -145,15 +153,26 @@ class UnbindTimelineUser(GuardianView):
         return HttpResponse(status=200)
 
 class UpdateTimeline(GuardianView):
+    """
+    Just the owner is supposed to perform this view.
+    But for viewing the dialog it is necessary to belong to the timeline.
+    """
+
     def get(self, request, timeline_id):
-        timeline = Timeline.objects.get(id=timeline_id)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
+
         return render(request, 'timeline_app/update-timeline.html',
         {'timeline': timeline, 'form': forms.TimelineForm(instance=timeline)})
 
     def post(self, request, timeline_id):
-        record  = Timeline.objects.get(id=timeline_id)
-        form    = forms.TimelineForm(request.POST, instance=record)
+        record = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
+        if record.owner != self.me:
+            return HttpResponse('Just owner can do that!', status=403)
+
+        form = forms.TimelineForm(request.POST, instance=record)
         if not form.is_valid():
             return render(request, 
                 'timeline_app/update-timeline.html',
