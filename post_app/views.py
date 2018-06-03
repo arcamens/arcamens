@@ -503,7 +503,7 @@ class CutPost(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__users=self.me, id=post_id, 
         ancestor__organization=self.me.default)
 
         if not post.ancestor:
