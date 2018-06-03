@@ -325,9 +325,14 @@ class Unpin(GuardianView):
         return redirect('board_app:list-pins')
 
 class BindBoardUser(GuardianView):
+    """
+    Secured.
+    """
+
     def get(self, request, board_id, user_id):
-        user     = User.objects.get(id=user_id)
-        board    = Board.objects.get(id=board_id)
+        # Make sure the user belongs to my default organization.
+        user     = User.objects.get(id=user_id, organizations=self.me.default)
+        board    = Board.objects.get(id=board_id, organization=self.me.default)
         me_admin = board.admins.filter(id=self.me.id).exists()
 
         if not me_admin:
@@ -343,9 +348,13 @@ class BindBoardUser(GuardianView):
         return HttpResponse(status=200)
 
 class UnbindBoardUser(GuardianView):
+    """
+    Secured.
+    """
+
     def get(self, request, board_id, user_id):
-        user = User.objects.get(id=user_id)
-        board = Board.objects.get(id=board_id)
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         if board.owner == user:
             return HttpResponse("You can't remove \
@@ -434,6 +443,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
 
 
 
