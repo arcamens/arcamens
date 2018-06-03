@@ -164,7 +164,7 @@ class ManageBoardMembers(GuardianView):
 
 class ManageBoardAdmins(GuardianView):
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         included = board.admins.all()
         excluded = board.members.exclude(id__in=included)
@@ -180,7 +180,7 @@ class ManageBoardAdmins(GuardianView):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        board = Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         included = board.admins.all()
         excluded = board.members.exclude(id__in=included)
