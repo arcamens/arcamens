@@ -198,20 +198,22 @@ class PastePosts(GuardianView):
         timeline = self.me.timelines.get(
         id=timeline_id, organization=self.me.default)
 
-        users        = timeline.users.all()
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
-
         posts = clipboard.posts.all()
+
         if not posts.exists():
             return HttpResponse("There is no post on \
                 the clipboard.", status=403)
 
         posts.update(ancestor=timeline)
-        event = EPastePost(
-        organization=self.me.default, timeline=timeline, user=self.me)
+        event = EPastePost(organization=self.me.default, 
+        timeline=timeline, user=self.me)
+
         event.save(hcache=False)
         event.posts.add(*posts)
+
+        users = timeline.users.all()
         event.dispatch(*users)
         event.save()
 
@@ -220,16 +222,22 @@ class PastePosts(GuardianView):
         timeline_id=timeline.id)
 
 class BindTimelineUser(GuardianView):
+    """
+    Everyone in the timeline can perform this view but its default organization
+    has to contain the timeline and the user has to be in the organization of the
+    timeline as well.
+    """
+
     def get(self, request, timeline_id, user_id):
-        user = User.objects.get(id=user_id)
-        timeline = Timeline.objects.get(id=timeline_id)
+        user     = User.objects.get(id=user_id, organizations=self.me.default)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
         timeline.users.add(user)
         timeline.save()
 
-        event    = EBindTimelineUser.objects.create(organization=self.me.default,
+        event = EBindTimelineUser.objects.create(organization=self.me.default,
         timeline=timeline, user=self.me, peer=user)
-
         event.dispatch(*timeline.users.all())
 
         return HttpResponse(status=200)
