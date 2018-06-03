@@ -243,8 +243,14 @@ class BindTimelineUser(GuardianView):
         return HttpResponse(status=200)
 
 class ManageUserTimelines(GuardianView):
+    """
+    Make sure the logged user can view the timelines that he belongs to.
+    It also makes sure the listed timelines belong to his default organization.
+    """
+
     def get(self, request, user_id):
-        user      = User.objects.get(id=user_id)
+        # Make sure the user belongs to my default organization.
+        user      = User.objects.get(id=user_id, organizations=self.me.default)
         timelines = self.me.timelines.filter(organization=self.me.default)
         total     = timelines.count()
         excluded  = timelines.exclude(users=user)
@@ -257,7 +263,8 @@ class ManageUserTimelines(GuardianView):
         return render(request, 'timeline_app/manage-user-timelines.html', env)
 
     def post(self, request, user_id):
-        user      = User.objects.get(id=user_id)
+        # Make sure the user belongs to my default organization.
+        user      = User.objects.get(id=user_id, organizations=self.me.default)
         sqlike    = Timeline.from_sqlike()
         form      = forms.TimelineSearchForm(request.POST, sqlike=sqlike)
         timelines = self.me.timelines.filter(organization=self.me.default)
