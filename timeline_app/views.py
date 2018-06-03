@@ -337,10 +337,12 @@ class ManageTimelineUsers(GuardianView):
 
 class TimelineLink(GuardianView):
     """
+    The user is supposed to belong to the timeline and his
+    default organization has to contain the timeline as well.
     """
 
     def get(self, request, timeline_id):
-        record = Timeline.objects.get(id=timeline_id,
+        record = self.me.timelines.get(id=timeline_id,
         organization=self.me.default)
 
         boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
