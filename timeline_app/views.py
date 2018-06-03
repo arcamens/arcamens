@@ -187,15 +187,22 @@ class UpdateTimeline(GuardianView):
         timeline_id=record.id)
 
 class PastePosts(GuardianView):
-    def get(self, request, timeline_id):
-        timeline = Timeline.objects.get(id=timeline_id)
-        users    = timeline.users.all()
+    """
+    Everyone who belongs to the timeline is allowed to perform
+    this view.
+    """
 
+    def get(self, request, timeline_id):
+        # Make sure i belong to the timeline and my default organization
+        # contains it.
+        timeline = self.me.timelines.get(
+        id=timeline_id, organization=self.me.default)
+
+        users        = timeline.users.all()
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
         posts = clipboard.posts.all()
-
         if not posts.exists():
             return HttpResponse("There is no post on \
                 the clipboard.", status=403)
