@@ -55,10 +55,13 @@ class CreateBoard(GuardianView):
 
 
 class PinBoard(GuardianView):
+    """
+    This view is allowed to be performed just by the user who belongs to the    
+    board. The board has to be in the user default organization too.
+    """
     def get(self, request, board_id):
         # Make sure the board belongs to my default organization.
-        board = Board.objects.get(id=board_id, organization=self.me.default)
-
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
         pin   = BoardPin.objects.create(user=self.me, 
         organization=self.me.default, board=board)
         return redirect('board_app:list-pins')
