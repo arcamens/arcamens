@@ -360,24 +360,29 @@ class TimelineLink(GuardianView):
         return render(request, 'timeline_app/timeline-link.html', env)
 
 class PinTimeline(GuardianView):
+    """
+    Just performed if the logged user default organization
+    contains the timeline and the user belongs to such a timeline.
+    """
+
     def get(self, request, timeline_id):
-        timeline = Timeline.objects.get(id=timeline_id)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
+
         pin   = TimelinePin.objects.create(user=self.me, 
         organization=self.me.default, timeline=timeline)
         return redirect('board_app:list-pins')
 
 class Unpin(GuardianView):
+    """
+    Just performed if the pin is mine and its organization is my default
+    organization.
+    """
+
     def get(self, request, pin_id):
-        pin = TimelinePin.objects.get(id=pin_id)
+        pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
-
-
-
-
-
-
-
 
 
 
