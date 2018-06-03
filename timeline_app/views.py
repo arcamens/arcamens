@@ -56,6 +56,7 @@ class ListPosts(GuardianView):
 
 class CreateTimeline(GuardianView):
     """
+    As every user has its own workspace everyone can create timelines.
     """
 
     def get(self, request, organization_id):
@@ -87,15 +88,27 @@ class CreateTimeline(GuardianView):
         return redirect('core_app:list-nodes')
 
 class DeleteTimeline(GuardianView):
+    """
+    Just the owner of the timeline is supposed to delete the timeline.
+    The timeline also has to be in the logged user default organization.
+    """
+
     def get(self, request,  timeline_id):
-        timeline = Timeline.objects.get(id = timeline_id)
+        # Make sure i belong to the organization.
+        timeline = self.me.timelines.get(id = timeline_id,
+        organization=self.me.default)
+
         form = forms.ConfirmTimelineDeletionForm()
 
         return render(request, 'timeline_app/delete-timeline.html', 
         {'timeline': timeline, 'form': form})
 
     def post(self, request, timeline_id):
-        timeline = Timeline.objects.get(id = timeline_id)
+        timeline = self.me.timelines.get(id = timeline_id,
+        organization=self.me.default)
+
+        if timeline.owner != self.me:
+            return HttpResponse('Just owner can do that!', status=403)
 
         form = forms.ConfirmTimelineDeletionForm(request.POST, 
         confirm_token=timeline.name)
