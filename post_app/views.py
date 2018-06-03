@@ -53,11 +53,13 @@ class Post(GuardianView):
 
 class PostLink(GuardianView):
     """
+    This view worksk alike like Post in terms of permissions.
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id,
-            ancestor__organization=self.me.default)
+        post = models.Post.objects.get(
+        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
+        ancestor__organization=self.me.default)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
