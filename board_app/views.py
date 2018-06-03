@@ -202,7 +202,9 @@ class ManageBoardAdmins(GuardianView):
 
 class PasteLists(GuardianView):
     def get(self, request, board_id):
-        board        = Board.objects.get(id=board_id)
+        # We need to make sure the board belongs to the organization.
+        board = Board.objects.get(id=board_id, organization=self.me.default)
+
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
