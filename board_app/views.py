@@ -203,7 +203,8 @@ class ManageBoardAdmins(GuardianView):
 class PasteLists(GuardianView):
     def get(self, request, board_id):
         # We need to make sure the board belongs to the organization.
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        # It as well makes sure i belong to the board.
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
 
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
@@ -228,14 +229,26 @@ class PasteLists(GuardianView):
         board_id=board.id)
 
 class UpdateBoard(GuardianView):
+    """
+    This view is supopsed to allow the user to view the dialog for
+    updating the board but just the admins can perform the action.
+    """
+
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        # Just make sure the board belong to the my default organization
+        # but allows the user to view the update dialog template.
+        board = Board.objects.get(id=board_id, organization=self.me.default)
         return render(request, 'board_app/update-board.html',
         {'board': board, 'form': forms.BoardForm(instance=board)})
 
     def post(self, request, board_id):
         record = Board.objects.get(id=board_id)
-        form   = forms.BoardForm(request.POST, instance=record)
+        # Make sure i'm admin of the board and it belongs to 
+        # my default organization.
+        record = self.me.managed_boards.get(
+            id=board_id, organization=self.me.default)
+
+        form = forms.BoardForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'board_app/update-board.html',
