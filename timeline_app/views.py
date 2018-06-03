@@ -288,8 +288,15 @@ class ManageUserTimelines(GuardianView):
         return render(request, 'timeline_app/manage-user-timelines.html', env)
 
 class ManageTimelineUsers(GuardianView):
+    """
+    The listed users are supposed to belong to the logged user default
+    organization. It also checks if the user belongs to the timeline
+    in order to list its users.
+    """
+
     def get(self, request, timeline_id):
-        timeline = Timeline.objects.get(id=timeline_id)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
 
         included = timeline.users.all()
         users    = self.me.default.users.all()
@@ -305,7 +312,9 @@ class ManageTimelineUsers(GuardianView):
         sqlike   = User.from_sqlike()
         form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        timeline = Timeline.objects.get(id=timeline_id)
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
+
         included = timeline.users.all()
         users    = self.me.default.users.all()
         excluded = users.exclude(timelines=timeline)
