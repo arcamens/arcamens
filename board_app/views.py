@@ -116,8 +116,16 @@ class ManageUserBoards(GuardianView):
         return render(request, 'board_app/manage-user-boards.html', env)
 
 class ManageBoardMembers(GuardianView):
+    """
+    The logged user is supposed to view all existing members of the board
+    altogether with the organization members.
+    """
+
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        # Make sure the board belong to the user organization.
+        # Otherwise it would be possible to view members of other
+        # board organizations.
+        board = Board.objects.get(id=board_id, organization=self.me.default)
 
         included = board.members.all()
         users = self.me.default.users.all()
@@ -134,7 +142,7 @@ class ManageBoardMembers(GuardianView):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        board = Board.objects.get(id=board_id)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
         included = board.members.all()
 
         users = self.me.default.users.all()
