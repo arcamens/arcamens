@@ -80,7 +80,7 @@ class PostLink(GuardianView):
 
 class CreatePost(GuardianView):
     """
-    The logged user can create a post on the timeline just if his default timeline
+    The logged user can create a post on the timeline just if his default organization
     contains the timeline and he belongs to the timeline.
     """
 
