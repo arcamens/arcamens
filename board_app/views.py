@@ -237,7 +237,7 @@ class UpdateBoard(GuardianView):
     def get(self, request, board_id):
         # Just make sure the board belong to the my default organization
         # but allows the user to view the update dialog template.
-        board = Board.objects.get(id=board_id, organization=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
         return render(request, 'board_app/update-board.html',
         {'board': board, 'form': forms.BoardForm(instance=board)})
 
@@ -264,15 +264,21 @@ class UpdateBoard(GuardianView):
         board_id=record.id)
 
 class DeleteBoard(GuardianView):
+    """
+    Allow the users/admins to view the dialog for confirming board deletion
+    but just the owner can finalize with the action.
+    """
+
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
         form = forms.ConfirmBoardDeletionForm()
 
         return render(request, 'board_app/delete-board.html', 
         {'board': board, 'form': form})
 
     def post(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = self.me.owned_boards.get(
+            id=board_id, organization=self.me.default)
 
         form = forms.ConfirmBoardDeletionForm(request.POST, 
         confirm_token=board.name)
@@ -292,6 +298,9 @@ class DeleteBoard(GuardianView):
         return redirect('core_app:list-nodes')
 
 class ListPins(GuardianView):
+    """
+    This view is already secured for default.
+    """
     def get(self, request):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
@@ -303,8 +312,15 @@ class ListPins(GuardianView):
         'cardpins': cardpins, 'timelinepins': timelinepins})
 
 class Unpin(GuardianView):
+    """
+    Make sure the pin is mine and it belongs to the my
+    default organization.
+    """
+
     def get(self, request, pin_id):
-        pin = BoardPin.objects.get(id=pin_id)
+        pin = self.me.boardpin_set.get(
+        id=pin_id, organization=self.me.default)
+
         pin.delete()
         return redirect('board_app:list-pins')
 
