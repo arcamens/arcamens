@@ -32,9 +32,7 @@ class Post(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
@@ -57,9 +55,7 @@ class PostLink(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
@@ -127,17 +123,13 @@ class UpdatePost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         return render(request, 'post_app/update-post.html',
         {'post': post, 'form': forms.PostForm(instance=post)})
 
     def post(self, request, post_id):
-        record = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        record = models.Post.locate(self.me, self.me.default, post_id)
 
         if not record.ancestor:
             return HttpResponse("Can't update! On \
@@ -169,9 +161,7 @@ class AttachFile(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         attachments = post.postfilewrapper_set.all()
         form = forms.PostFileWrapperForm()
@@ -179,9 +169,7 @@ class AttachFile(GuardianView):
         {'post':post, 'form': form, 'attachments': attachments})
 
     def post(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Post was put on clipboard!\
@@ -212,9 +200,10 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = PostFileWrapper.objects.get(
+        filewrapper = PostFileWrapper.objects.filter(
         Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
         id=filewrapper_id, post__ancestor__organization=self.me.default)
+        filewrapper = filewrapper.distinct().first()
 
         if not filewrapper.post.ancestor:
             return HttpResponse("Post was put on clipboard!\
@@ -242,9 +231,7 @@ class DeletePost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("On clipboard, can't \
@@ -307,17 +294,13 @@ class UnassignPostUser(GuardianView):
     """
 
     def get(self, request, post_id, user_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("On clipboard! Can't \
                 unassign user.", status=403)
 
         user = User.objects.get(id=user_id)
-
-        # me.ws_sound(post.ancestor)
 
         event = EUnassignPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
@@ -341,9 +324,7 @@ class AssignPostUser(GuardianView):
     """
 
     def get(self, request, post_id, user_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("On clipboard! Can't \
@@ -370,9 +351,7 @@ class ManagePostWorkers(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         included = post.workers.all()
         excluded = self.me.default.users.exclude(assignments=post)
@@ -387,9 +366,7 @@ class ManagePostWorkers(GuardianView):
         sqlike = User.from_sqlike()
         form = forms.UserSearchForm(request.POST, sqlike=sqlike)
 
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         included = post.workers.all()
         excluded = self.me.default.users.exclude(assignments=post)
@@ -418,11 +395,12 @@ class SetupPostFilter(GuardianView):
     """
 
     def get(self, request, timeline_id):
+        timeline = self.me.timelines.get(id=timeline_id, 
+        organization=self.me.default)
+
         filter = PostFilter.objects.get(
         user__id=self.user_id, timeline__id=timeline_id)
 
-        timeline = self.me.timelines.get(id=timeline_id, 
-        organization=self.me.default)
 
         return render(request, 'post_app/setup-post-filter.html', 
         {'form': forms.PostFilterForm(instance=filter), 
@@ -502,9 +480,7 @@ class CutPost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        ancestor__users=self.me, id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Already on someone \
@@ -534,9 +510,7 @@ class CopyPost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Already on someone \
@@ -561,9 +535,7 @@ class Done(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Can't archive post now, \
@@ -588,9 +560,7 @@ class ManagePostTags(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         included = post.tags.all()
         excluded = self.me.default.tags.exclude(posts=post)
@@ -605,9 +575,7 @@ class ManagePostTags(GuardianView):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         included = post.tags.all()
         excluded = self.me.default.tags.exclude(posts=post)
@@ -633,9 +601,7 @@ class UnbindPostTag(GuardianView):
     """
 
     def get(self, request, post_id, tag_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -659,9 +625,7 @@ class BindPostTag(GuardianView):
     """
 
     def get(self, request, post_id, tag_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -685,7 +649,7 @@ class CancelPostCreation(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(id = post_id)
+        post = models.Post.locate(self.me, self.me.default, post_id)
         post.delete()
 
         return HttpResponse(status=200)
@@ -696,9 +660,7 @@ class Undo(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -724,9 +686,7 @@ class RequestPostAttention(GuardianView):
 
     def get(self, request, peer_id, post_id):
         peer = User.objects.get(id=peer_id, organizations=self.me.default)
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         form = forms.PostAttentionForm()
         return render(request, 'post_app/request-post-attention.html', 
@@ -734,9 +694,7 @@ class RequestPostAttention(GuardianView):
 
     def post(self, request, peer_id, post_id):
         peer = User.objects.get(id=peer_id, organizations=self.me.default)
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         form = forms.PostAttentionForm(request.POST)
 
@@ -763,18 +721,14 @@ class AlertPostWorkers(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         form = forms.AlertPostWorkersForm()
         return render(request, 'post_app/alert-post-workers.html', 
         {'post': post, 'form': form, 'user': self.me})
 
     def post(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         form = forms.AlertPostWorkersForm(request.POST)
 
@@ -806,9 +760,7 @@ class ConfirmPostDeletion(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         return render(request, 'post_app/confirm-post-deletion.html', 
         {'post': post})
@@ -872,11 +824,8 @@ class PullCardContent(GuardianView):
         ancestor__organization=self.me.default, 
         ancestor__members=self.me)
 
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
-
-        form     = CardForm(initial={'label': post.label, 'data': post.data})
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        form = CardForm(initial={'label': post.label, 'data': post.data})
 
         return render(request, 'post_app/create-fork.html', 
         {'form':form, 'post': post, 'ancestor': ancestor})
@@ -886,9 +835,7 @@ class CreateCardFork(GuardianView):
     """
 
     def get(self, request, ancestor_id, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("Post on clipboard! \
@@ -905,11 +852,8 @@ class CreateCardFork(GuardianView):
         ancestor__organization=self.me.default, 
         ancestor__members=self.me)
 
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
-
-        form     = CardForm(request.POST)
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        form = CardForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'post_app/create-fork.html', 
@@ -942,9 +886,7 @@ class SelectForkList(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         form = ListSearchform()
 
@@ -957,9 +899,7 @@ class SelectForkList(GuardianView):
     def post(self, request, post_id):
         form = forms.ListSearchform(request.POST)
 
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not form.is_valid():
             return render(request, 'post_app/select-fork-list.html', 
@@ -980,9 +920,7 @@ class SelectForkList(GuardianView):
 
 class PostEvents(GuardianView):
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         query = Q(eunbindtagpost__post__id= post.id) | \
         Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
@@ -1063,9 +1001,7 @@ class ListAllAssignments(GuardianView):
 
 class PinPost(GuardianView):
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         pin   = PostPin.objects.create(user=self.me, 
         organization=self.me.default, post=post)
@@ -1083,9 +1019,7 @@ class RefreshPost(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = models.Post.objects.get(
-        Q(ancestor__users=self.me) | Q(workers=self.me), id=post_id, 
-        ancestor__organization=self.me.default)
+        post = models.Post.locate(self.me, self.me.default, post_id)
 
         if not post.ancestor:
             return HttpResponse("This post is on clipboard!\
@@ -1098,6 +1032,7 @@ class RefreshPost(GuardianView):
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
+
 
 
 

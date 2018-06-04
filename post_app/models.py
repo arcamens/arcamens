@@ -19,6 +19,18 @@ class PostMixin(models.Model):
     class Meta:
         abstract = True
 
+    @classmethod
+    def locate(cls, user, organization, post_id):
+        """
+        Supposed to retrieve a given post only if the post matches
+        the required constraints.
+        """
+
+        post = cls.objects.filter(
+        Q(ancestor__users=user) | Q(workers=user),
+        ancestor__organization=organization, id=post_id).distinct()
+        return post.first()
+
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
@@ -414,6 +426,8 @@ class EDettachPostFile(Event):
     related_name='e_dettach_post_file1', blank=True)
 
     html_template = 'post_app/e-dettach-post-file.html'
+
+
 
 
 
