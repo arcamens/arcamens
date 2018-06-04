@@ -380,6 +380,7 @@ cd ~/projects/django-listutils-code
 python setup.py install
 rm -fr build
 
+python manage.py normalize_events
 
 
 
