@@ -195,7 +195,7 @@ rabbitmq-plugins enable rabbitmq_web_mqtt
 
 # setting up rabbitmq to work on server.
 
-tee -i >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
+tee -i >(stdbuf -o 0 ssh admin@staging.arcamens.com 'bash -i')
 
 # first enable the management tool.
 rabbitmq-plugins enable rabbitmq_management
@@ -319,7 +319,7 @@ pip install py-gfm
 # https://github.com/requests/requests-oauthlib (https://github.com/requests/requests-oauthlib/blob/a116d06dbb69ea5eb4fbe46530af27b12ad6d82c/docs/oauth2_workflow.rst#refreshing-tokens)
 ##############################################################################
 # access arcamens database.
-tee >(stdbuf -o 0 ssh admin@staging.arcamens.com 'bash -i')
+tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 mysql -u staging -p staging
 
@@ -374,6 +374,13 @@ cd ~/projects/arcamens-code
 
 ##############################################################################
 pip install html2text
+##############################################################################
+# install django-listutils-code
+cd ~/projects/django-listutils-code
+python setup.py install
+rm -fr build
+
+
 
 
 

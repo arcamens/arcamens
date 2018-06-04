@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     'blowdb',
     'slock',
     'onesignal',
+    'listutils',
     'captcha',
     'bitbucket_app',
     'github_app',
@@ -214,6 +215,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
