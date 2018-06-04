@@ -25,7 +25,7 @@ class ListLists(GuardianView):
     """
 
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
         total = board.lists.all()
 
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
@@ -50,7 +50,7 @@ class CreateList(GuardianView):
     """
 
     def get(self, request, board_id):
-        board = Board.objects.get(id=board_id)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
 
         form = forms.ListForm()
         return render(request, 'list_app/create-list.html', 
@@ -58,7 +58,7 @@ class CreateList(GuardianView):
 
     def post(self, request, board_id):
         form = forms.ListForm(request.POST)
-        board = Board.objects.get(id=board_id)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
 
         if not form.is_valid():
             return render(request, 'list_app/create-list.html',
@@ -79,13 +79,16 @@ class CreateList(GuardianView):
 
 class ConfirmListDeletion(GuardianView):
     def get(self, request, list_id):
-        list = models.List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         return render(request, 'list_app/confirm-list-deletion.html', 
         {'list': list})
 
 class DeleteList(GuardianView):
     def get(self, request, list_id):
-        list = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
 
         event = EDeleteList.objects.create(organization=self.me.default,
         ancestor=list.ancestor, child_name=list.name, user=self.me)
@@ -98,14 +101,18 @@ class DeleteList(GuardianView):
 
 class PinList(GuardianView):
     def get(self, request, list_id):
-        list = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         pin  = ListPin.objects.create(user=self.me, 
         organization=self.me.default, list=list)
         return redirect('board_app:list-pins')
 
 class UpdateList(GuardianView):
     def get(self, request, list_id):
-        list = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         return render(request, 'list_app/update-list.html',
         {'list': list, 'form': forms.ListForm(instance=list)})
 
@@ -128,7 +135,9 @@ class UpdateList(GuardianView):
 
 class PasteCards(GuardianView):
     def get(self, request, list_id):
-        list         = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
@@ -158,7 +167,9 @@ class PasteCards(GuardianView):
 
 class CutList(GuardianView):
     def get(self, request, list_id):
-        list  = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         board = list.ancestor
 
 
@@ -178,7 +189,9 @@ class CutList(GuardianView):
 
 class CopyList(GuardianView):
     def get(self, request, list_id):
-        list = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         copy = list.duplicate()
 
         clipboard, _    = Clipboard.objects.get_or_create(
@@ -194,9 +207,10 @@ class CopyList(GuardianView):
 
 class SetupListFilter(GuardianView):
     def get(self, request, board_id):
+        # allow to have a filter only if i belong to the board.
         filter = ListFilter.objects.get(
         user__id=self.user_id, organization__id=self.me.default.id,
-        board__id=board_id)
+        board__id=board_id, board__members=self.me)
 
         return render(request, 'list_app/setup-list-filter.html', 
         {'form': forms.ListFilterForm(instance=filter), 
@@ -204,10 +218,10 @@ class SetupListFilter(GuardianView):
 
     def post(self, request, board_id):
         record = ListFilter.objects.get(
-        organization__id=self.me.default.id, 
-        user__id=self.user_id, board__id=board_id)
+        user__id=self.user_id, organization__id=self.me.default.id,
+        board__id=board_id, board__members=self.me)
 
-        form   = forms.ListFilterForm(request.POST, instance=record)
+        form = forms.ListFilterForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'list_app/setup-list-filter.html',
@@ -218,7 +232,10 @@ class SetupListFilter(GuardianView):
 
 class UndoClipboard(GuardianView):
     def get(self, request, list_id):
-        list = List.objects.get(id=list_id)
+        list = models.List.objects.get(id=list_id,
+        list_clipboard_users__organization=self.me.default,
+        list_clipboard_users__user=self.me)
+
         event0 = list.e_copy_list1.last()
         event1 = list.e_cut_list1.last()
 
@@ -254,7 +271,8 @@ class ListLink(GuardianView):
     """
 
     def get(self, request, list_id):
-        record = List.objects.get(id=list_id)
+        record = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
 
         if not record.ancestor:
             return HttpResponse("The list is on clipboard\
@@ -275,9 +293,10 @@ class ListLink(GuardianView):
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
-        pin = ListPin.objects.get(id=pin_id)
+        pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
