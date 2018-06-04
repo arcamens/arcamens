@@ -25,7 +25,8 @@ No workers...
 <h5> <span class="glyphicon glyphicon-tag"></span> Tags</h5>
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in tags %}
-<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}" class="s-modal" href="#"><b># </b> {{ind.name}} </a>
+<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}" class="s-modal" href="#">
+<span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
 {% empty %}
 No tags...
 
@@ -81,6 +82,7 @@ No parents.
 </div>
 </div>
 </div>
+
 
 
 

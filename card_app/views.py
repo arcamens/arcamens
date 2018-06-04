@@ -30,8 +30,7 @@ class CardLink(GuardianView):
     """
 
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id, 
-        ancestor__ancestor__organization=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         # Supposing the user belongs to the requested organization in fact.
         # Remain to be implemented checkings.
@@ -77,7 +76,8 @@ class ListCards(GuardianView):
     """
 
     def get(self, request, list_id):
-        list = list_app.models.List.objects.get(id=list_id)
+        list = list_app.models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
 
         if not list.ancestor:
             return HttpResponse("This list is on clipboard!\
@@ -114,7 +114,7 @@ class ListCards(GuardianView):
 
 class ViewData(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -154,7 +154,8 @@ class ViewData(GuardianView):
 
 class ConfirmCardDeletion(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
         return render(request, 'card_app/confirm-card-deletion.html', 
         {'card': card})
 
@@ -163,13 +164,17 @@ class CreateCard(GuardianView):
     """
 
     def get(self, request, ancestor_id):
-        ancestor = list_app.models.List.objects.get(id=ancestor_id)
+        ancestor = list_app.models.List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         form = forms.CardForm()
         return render(request, 'card_app/create-card.html', 
         {'form':form, 'ancestor':ancestor})
 
     def post(self, request, ancestor_id):
-        ancestor = list_app.models.List.objects.get(id=ancestor_id)
+        ancestor = list_app.models.List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         form     = forms.CardForm(request.POST)
 
         if not form.is_valid():
@@ -189,7 +194,7 @@ class CreateCard(GuardianView):
 
 class SelectForkList(GuardianView):
     def get(self, request, card_id):
-        card   = models.Card.objects.get(id=card_id)
+        card   = models.Card.locate(self.me, self.me.default, card_id)
         form   = forms.ListSearchform()
         boards = self.me.boards.filter(organization=self.me.default)
         lists  = List.objects.filter(ancestor__in=boards)
@@ -199,9 +204,10 @@ class SelectForkList(GuardianView):
 
     def post(self, request, card_id):
         form = forms.ListSearchform(request.POST)
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
-        lists = List.objects.filter(ancestor__in=self.me.boards.all())
+        boards = self.me.boards.filter(organization=self.me.default)
+        lists = List.objects.filter(ancestor__in=boards)
 
         if not form.is_valid():
             return render(request, 'card_app/select-fork-list.html', 
@@ -219,8 +225,13 @@ class SelectForkList(GuardianView):
         {'form':form, 'card': card, 'elems': lists})
 
 class SelectForkTimeline(GuardianView):
+    """
+    Deprecated.
+    """
+
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
         form = forms.TimelineSearchform()
         timelines = Timeline.get_user_timelines(self.me)
 
@@ -253,9 +264,13 @@ class PullCardContent(GuardianView):
     """
 
     def get(self, request, ancestor_id, card_id):
-        ancestor = List.objects.get(id=ancestor_id)
-        card       = models.Card.objects.get(id=card_id)
-        form       = forms.CardForm(initial={'label': card.label, 'data': card.data})
+        # Allow to pull just if the destination list is accessible
+        # by the user and belongs to his default organization.
+        ancestor = list_app.models.List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
+        card = models.Card.locate(self.me, self.me.default, card_id)
+        form = forms.CardForm(initial={'label': card.label, 'data': card.data})
 
         return render(request, 'card_app/create-fork.html', 
         {'form':form, 'card': card, 'ancestor': ancestor})
@@ -265,7 +280,7 @@ class CreateFork(GuardianView):
     """
 
     def get(self, request, ancestor_id, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("On clipboard! \
@@ -275,16 +290,20 @@ class CreateFork(GuardianView):
             return HttpResponse("The card's list is on \
                 clipboard! Can't fork now.", status=403)
 
-        ancestor = List.objects.get(id=ancestor_id)
+        ancestor = list_app.models.List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         form = forms.CardForm()
 
         return render(request, 'card_app/create-fork.html', 
         {'form':form, 'card': card, 'ancestor': ancestor})
 
     def post(self, request, ancestor_id, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card     = models.Card.locate(self.me, self.me.default, card_id)
+        ancestor = list_app.models.List.objects.get(id=ancestor_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         form = forms.CardForm(request.POST)
-        ancestor = List.objects.get(id=ancestor_id)
 
         if not form.is_valid():
             return render(request, 'card_app/create-fork.html', 
@@ -379,7 +398,7 @@ class CreateFork(GuardianView):
 
 class DeleteCard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id = card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("On clipboard ! \
@@ -399,7 +418,7 @@ class DeleteCard(GuardianView):
 
 class CutCard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("On clipboard ! \
@@ -430,7 +449,7 @@ class CutCard(GuardianView):
 
 class CopyCard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card     = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("On clipboard ! \
@@ -458,14 +477,14 @@ class AttachFile(GuardianView):
     """
 
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card     = models.Card.locate(self.me, self.me.default, card_id)
         attachments = card.cardfilewrapper_set.all()
         form = forms.CardFileWrapperForm()
         return render(request, 'card_app/attach-file.html', 
         {'card':card, 'form': form, 'attachments': attachments})
 
     def post(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("On clipboard ! \
@@ -499,7 +518,11 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = models.CardFileWrapper.objects.get(id=filewrapper_id)
+        filewrapper = models.CardFileWrapper.objects.filter(
+        Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
+        id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
+        filewrapper = filewrapper.distinct().first()
+
 
         if not filewrapper.card.ancestor:
             return HttpResponse("On clipboard ! \
@@ -526,12 +549,12 @@ class DetachFile(GuardianView):
 
 class UpdateCard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
         return render(request, 'card_app/update-card.html',
         {'card': card, 'form': forms.CardForm(instance=card),})
 
     def post(self, request, card_id):
-        record  = models.Card.objects.get(id=card_id)
+        record = models.Card.locate(self.me, self.me.default, card_id)
 
         if not record.ancestor:
             return HttpResponse("On clipboard ! \
@@ -560,17 +583,22 @@ class UpdateCard(GuardianView):
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
+        list = list_app.models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
         organization__id=self.me.default.id, list__id=list_id)
 
         return render(request, 'card_app/setup-card-filter.html', 
         {'form': forms.CardFilterForm(instance=filter), 
-        'list': filter.list})
+        'list': list})
 
     def post(self, request, list_id):
+        list = list_app.models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
         organization__id=self.me.default.id, list__id=list_id)
-        list   = list_app.models.List.objects.get(id=list_id)
 
         sqlike = models.Card.from_sqlike()
         form   = forms.CardFilterForm(request.POST, 
@@ -586,7 +614,7 @@ class SetupCardFilter(GuardianView):
 
 class PinCard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         pin  = CardPin.objects.create(user=self.me, 
         organization=self.me.default, card=card)
@@ -595,8 +623,8 @@ class PinCard(GuardianView):
 
 class UnrelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
-        card0 = models.Card.objects.get(id=card0_id)
-        card1 = models.Card.objects.get(id=card1_id)
+        card0 = models.Card.locate(self.me, self.me.default, card0_id)
+        card1 = models.Card.locate(self.me, self.me.default, card1_id)
 
         if not card0.ancestor or not card1.ancestor:
             return HttpResponse("On clipboard ! \
@@ -621,8 +649,8 @@ class UnrelateCard(GuardianView):
 
 class RelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
-        card0 = models.Card.objects.get(id=card0_id)
-        card1 = models.Card.objects.get(id=card1_id)
+        card0 = models.Card.locate(self.me, self.me.default, card0_id)
+        card1 = models.Card.locate(self.me, self.me.default, card1_id)
 
         if not card0.ancestor or not card1.ancestor:
             return HttpResponse("On clipboard ! \
@@ -646,7 +674,7 @@ class RelateCard(GuardianView):
 
 class ManageCardRelations(GuardianView):
     def get(self, request, card_id):
-        card     = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
         included = card.relations.filter(done=False)
         cards    = models.Card.get_allowed_cards(self.me)
         total    = cards.count()
@@ -662,7 +690,7 @@ class ManageCardRelations(GuardianView):
         sqlike = models.Card.from_sqlike()
 
         form   = forms.CardSearchForm(request.POST, sqlike=sqlike)
-        card   = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
         cards  = models.Card.get_allowed_cards(self.me)
         total  = cards.count()
 
@@ -688,7 +716,7 @@ class ManageCardRelations(GuardianView):
 
 class ManageCardWorkers(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         included = card.workers.all()
         excluded = self.me.default.users.exclude(tasks=card)
@@ -702,8 +730,7 @@ class ManageCardWorkers(GuardianView):
     def post(self, request, card_id):
         sqlike   = User.from_sqlike()
         form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
-
-        card     = models.Card.objects.get(id=card_id)
+        card     = models.Card.locate(self.me, self.me.default, card_id)
         included = card.workers.all()
         excluded = self.me.default.users.exclude(tasks=card)
         total    = included.count() + excluded.count()
@@ -723,8 +750,8 @@ class ManageCardWorkers(GuardianView):
 
 class UnbindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
-        user = User.objects.get(id=user_id)
-        card = models.Card.objects.get(id=card_id)
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -747,8 +774,8 @@ class UnbindCardWorker(GuardianView):
 
 class BindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
-        user = User.objects.get(id=user_id)
-        card = models.Card.objects.get(id=card_id)
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -771,7 +798,7 @@ class BindCardWorker(GuardianView):
 
 class ManageCardTags(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         included = card.tags.all()
         excluded = self.me.default.tags.exclude(cards=card)
@@ -786,7 +813,8 @@ class ManageCardTags(GuardianView):
         sqlike = Tag.from_sqlike()
         form = forms.TagSearchForm(request.POST, sqlike=sqlike)
 
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
         included = card.tags.all()
         excluded = self.me.default.tags.exclude(cards=card)
         total = included.count() + excluded.count()
@@ -808,8 +836,10 @@ class ManageCardTags(GuardianView):
 
 class UnbindCardTag(GuardianView):
     def get(self, request, card_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id)
-        card = models.Card.objects.get(id=card_id)
+        tag = core_app.models.Tag.objects.get(id=tag_id, 
+        organization=self.me.default)
+
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -832,8 +862,10 @@ class UnbindCardTag(GuardianView):
 
 class BindCardTag(GuardianView):
     def get(self, request, card_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id)
-        card = models.Card.objects.get(id=card_id)
+        tag = core_app.models.Tag.objects.get(id=tag_id, 
+        organization=self.me.default)
+
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -856,7 +888,7 @@ class BindCardTag(GuardianView):
 
 class Done(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -881,7 +913,7 @@ class Done(GuardianView):
 
 class Undo(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         if not card.ancestor:
             return HttpResponse("This card is on clipboard! \
@@ -905,8 +937,9 @@ class Undo(GuardianView):
 
 class CardWorkerInformation(GuardianView):
     def get(self, request, peer_id, card_id):
-        event = models.EBindCardWorker.objects.filter(card__id=card_id,
-        peer__id=peer_id).last()
+        event = models.EBindCardWorker.objects.filter(
+        Q(card__workers=self.me) | Q(card__ancestor__ancestor__members=self.me),
+        card__id=card_id, peer__id=peer_id).last()
 
         active_posts = event.peer.assignments.filter(done=False)
         done_posts = event.peer.assignments.filter(done=True)
@@ -923,16 +956,17 @@ class CardWorkerInformation(GuardianView):
 
 class RequestCardAttention(GuardianView):
     def get(self, request, peer_id, card_id):
-        peer = User.objects.get(id=peer_id)
-        card = models.Card.objects.get(id=card_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         form = forms.CardAttentionForm()
         return render(request, 'card_app/request-card-attention.html', 
         {'peer': peer,  'card': card, 'form': form})
 
     def post(self, request, peer_id, card_id):
-        peer = User.objects.get(id=peer_id)
-        card = models.Card.objects.get(id=card_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
         form = forms.CardAttentionForm(request.POST)
 
         if not form.is_valid():
@@ -953,22 +987,23 @@ class RequestCardAttention(GuardianView):
 
 class CardTagInformation(GuardianView):
     def get(self, request, tag_id, card_id):
-        event = models.EBindTagCard.objects.filter(card__id=card_id,
-        tag__id=tag_id).last()
+        event = models.EBindTagCard.objects.filter(
+        Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
+        card__id=card_id, tag__id=tag_id).last()
 
         return render(request, 'post_app/post-tag-information.html', 
         {'user': event.user, 'created': event.created, 'tag':event.tag})
 
 class AlertCardWorkers(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         form = forms.AlertCardWorkersForm()
         return render(request, 'card_app/alert-card-workers.html', 
         {'card': card, 'form': form, 'user': self.me})
 
     def post(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
         form = forms.AlertCardWorkersForm(request.POST)
 
         if not form.is_valid():
@@ -992,7 +1027,10 @@ class AlertCardWorkers(GuardianView):
 
 class UndoClipboard(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.objects.get(id=card_id,
+        card_clipboard_users__organization=self.me.default,
+        card_clipboard_users__user=self.me)
+
         event0 = card.e_copy_card1.last()
         event1 = card.e_cut_card1.last()
 
@@ -1125,7 +1163,7 @@ class Find(GuardianView):
 
 class CardEvents(GuardianView):
     def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id)
+        card = models.Card.locate(self.me, self.me.default, card_id)
 
         query = Q(erelatecard__card0__id=card.id) | Q(erelatecard__card1__id=card.id) \
         | Q(eunrelatecard__card0__id=card.id) | Q(eunrelatecard__card1__id=card.id) | \
@@ -1149,9 +1187,10 @@ class CardEvents(GuardianView):
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
-        pin = CardPin.objects.get(id=pin_id)
+        pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

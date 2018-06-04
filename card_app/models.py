@@ -16,6 +16,18 @@ from operator import and_, or_
 # Create your models here.
 
 class CardMixin(object):
+    @classmethod
+    def locate(cls, user, organization, card_id):
+        """
+        Supposed to retrieve a given card only if the card matches
+        the required constraints.
+        """
+
+        card = cls.objects.filter(
+        Q(ancestor__ancestor__members=user) | Q(workers=user),
+        ancestor__ancestor__organization=organization, id=card_id).distinct()
+        return card.first()
+
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
@@ -532,6 +544,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 
