@@ -287,7 +287,7 @@ rm -fr build
 ##############################################################################
 # Restart supervisor.
 
-tee >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
+tee >(stdbuf -o 0 ssh admin@staging.arcamens.com 'bash -i')
 sudo supervisorctl restart arcamens
 sudo supervisorctl stop arcamens
 

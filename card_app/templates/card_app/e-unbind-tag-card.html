@@ -8,7 +8,7 @@
 {{event.user.name}} </a> has untagged card
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.card.id %}" href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -18,7 +18,7 @@ as {{event.tag.name}} on list
 <span class="glyphicon glyphicon-list-alt"></span> 
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 {{event.ancestor.name}}

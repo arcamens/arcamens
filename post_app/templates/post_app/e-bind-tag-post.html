@@ -8,7 +8,7 @@
 {{event.user.name}} </a> has tagged post
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -17,7 +17,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 with {{event.tag.name}} on timeline 
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}"> 

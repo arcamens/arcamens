@@ -11,7 +11,7 @@
 {{event.filename}}</span>  from 
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'note_app:preview-note' event.note.id %}" 
 href="#"> 

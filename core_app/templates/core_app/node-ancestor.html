@@ -20,7 +20,7 @@
 <a class="e-get" 
 data-shell="#smallModalContent" href="#"
 data-show="{% url 'board_app:create-board' %}"  
-data-callback="$('#modal').modal('toggle');" >
+data-callback="$('#smallModal').modal('toggle');" >
 <span class="glyphicon glyphicon-plus"></span> 
 {% trans "Board" %}
 </a>
@@ -28,7 +28,7 @@ data-callback="$('#modal').modal('toggle');" >
 <a class="e-get" 
 data-shell="#smallModalContent" href="#" 
 data-show="{% url 'core_app:setup-node-filter' %}"  
-data-callback="$('#modal').modal('toggle');">
+data-callback="$('#smallModal').modal('toggle');">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter

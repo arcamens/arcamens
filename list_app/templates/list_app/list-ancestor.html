@@ -22,13 +22,13 @@
 </a>
 
 <a class="e-get" data-shell="#smallModalContent" href="#" data-show="{% url 'list_app:create-list' board.id %}"  
-data-callback="$('#modal').modal('toggle');">
+data-callback="$('#smallModal').modal('toggle');">
 <span class="glyphicon glyphicon-plus"></span> 
 {% trans "List" %}
 </a>
 
 <a class="e-get" data-shell="#smallModalContent" href="#" data-show="{% url 'list_app:setup-list-filter' board.id %}"  
-data-callback="$('#modal').modal('toggle');">
+data-callback="$('#smallModal').modal('toggle');">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter

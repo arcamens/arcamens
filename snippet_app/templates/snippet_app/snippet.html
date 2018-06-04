@@ -14,7 +14,9 @@ Snippet by {{snippet.owner.name}} at <a href="{{snipet.get_link_url}}" target="_
 
 <h4> {{snippet.title}} </h4>
 
+<div class="pre-scrollable">
 {{snippet.html | safe}}
+</div>
 
 </div>
 
@@ -57,6 +59,7 @@ $('#bigModal').one('hidden.bs.modal', function () {
     $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
+
 
 
 

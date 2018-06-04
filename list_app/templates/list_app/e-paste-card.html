@@ -9,7 +9,7 @@
 
 {% for ind in event.cards.all %}
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' ind.id %}" 
 href="{{ind.get_link_url}}"> 
@@ -21,7 +21,7 @@ href="{{ind.get_link_url}}">
 on list
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span>

@@ -69,7 +69,7 @@ data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default m-post"> {% trans "Filter" %} </button>
 
 <script>
-$('#modal').one('hidden.bs.modal', function () {
+$('#smallModal').one('hidden.bs.modal', function () {
     $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
 })
 </script>

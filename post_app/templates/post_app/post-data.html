@@ -81,7 +81,7 @@ function(data) {
 <a 
 data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
 data-shell="#smallModalContent" 
-data-callback="$('#modal').modal('show');" 
+data-callback="$('#smallModal').modal('show');" 
 class="e-get"
 href="#">
 <span class="glyphicon glyphicon-tag"></span>
@@ -104,7 +104,7 @@ Workers </h5>
 <a 
 data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
 data-shell="#smallModalContent" 
-data-callback="$('#modal').modal('show');" 
+data-callback="$('#smallModal').modal('show');" 
 class="e-get"
 href="#">
 <span class="glyphicon glyphicon-user"></span>
@@ -113,7 +113,7 @@ href="#">
 </a>
 
 {% if forloop.last %} 
-<br> <a class="e-get text-warning" data-shell="#smallModalContent" data-callback="$('#modal').modal('toggle');" 
+<br> <a class="e-get text-warning" data-shell="#smallModalContent" data-callback="$('#smallModal').modal('toggle');" 
 data-show="{% url 'post_app:alert-post-workers' post.id %}" href="#">
 <span class="glyphicon glyphicon-alert"></span>
 
@@ -153,7 +153,7 @@ data-callback="$('#bigModal').modal('show');"  class="e-get">
 <span class="glyphicon glyphicon-edit"></span> Update</a>
 
 <a href="#"
-data-callback="$('#modal').modal('show');" 
+data-callback="$('#smallModal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
@@ -182,7 +182,7 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 <span class="glyphicon glyphicon-scissors"></span> Cut </a>
 
 <a href="#"
-data-callback="$('#modal').modal('show');" 
+data-callback="$('#smallModal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 

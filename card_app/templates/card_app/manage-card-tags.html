@@ -51,7 +51,7 @@ data-show="{% url 'card_app:bind-card-tag' card.id ind.id %}" href="#">
 
 <div class="modal-footer">
 <script>
-$('#modal').one('hidden.bs.modal', function () {
+$('#smallModal').one('hidden.bs.modal', function () {
     $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
 })
 </script>

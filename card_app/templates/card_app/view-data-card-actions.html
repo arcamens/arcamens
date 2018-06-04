@@ -15,7 +15,7 @@ href="#">
 
 
 <li> <a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
-data-callback="$('#modal').modal('toggle');" href="#">
+data-callback="$('#smallModal').modal('toggle');" href="#">
 <span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
 {% if card.done %}
@@ -32,7 +32,7 @@ data-show="{% url 'card_app:done'  card.id %}" href="#">
 
 <li>
 <a class="s-modal" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
-data-callback="$('#modal').modal('toggle');"  href="#">
+data-callback="$('#smallModal').modal('toggle');"  href="#">
 <span class="glyphicon glyphicon-tag"></span> Tags</a></li> 
 
 <li>

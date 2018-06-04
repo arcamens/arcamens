@@ -10,7 +10,7 @@
 data-shell="#main-view"role="button"> <span class="glyphicon glyphicon-home"></span>  </button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get eventsButton" 
-data-show="{% url 'core_app:list-events' %}" data-callback="$('#modal').modal('toggle');$('.eventsButton').removeClass('new-events')" 
+data-show="{% url 'core_app:list-events' %}" data-callback="$('#smallModal').modal('toggle');$('.eventsButton').removeClass('new-events')" 
 data-shell="#smallModalContent" href="#"> <span class="glyphicon glyphicon-bell"></span>  </button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" data-show="{% url 'post_app:find' %}" 
@@ -35,7 +35,7 @@ data-show="{% url 'card_app:list-all-tasks' %}" data-callback="$('#bigModal').mo
 href="#" data-shell="#main-view"> <span class="glyphicon glyphicon-home"></span>  Home</a></li>
 
 <li class="hidden-xs"><a class="e-get eventsButton" data-show="{% url 'core_app:list-events' %}" 
-data-shell="#smallModalContent" data-callback="$('#modal').modal('show');$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
+data-shell="#smallModalContent" data-callback="$('#smallModal').modal('show');$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
 {% trans "Events" %}</a></li>
 
 <li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'post_app:list-all-assignments' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent">

@@ -84,7 +84,7 @@ id="filterCardRelations" data-show="{% url 'card_app:manage-card-relations' card
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 <script>
-$('#modal').one('hidden.bs.modal', function () {
+$('#smallModal').one('hidden.bs.modal', function () {
     $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
 })
 </script>

@@ -14,7 +14,7 @@ Fork {{card.label|truncatechars:40}} on timeline.. </h5>
 <div class="pre-scrollable">
 {% for ind in elems %}
 <p><a class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:create-post-fork' ind.id card.id %}"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');"  href="{{ind.get_link_url}}" > 
+data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');"  href="{{ind.get_link_url}}" > 
 <span class="glyphicon glyphicon-eye-open"></span>
 
 {{ind.name}}

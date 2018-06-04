@@ -13,7 +13,8 @@ git+ssh://git@bitbucket.org/arcamens/django-jsim.git
 mysqlclient
 pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
-git+git@bitbucket.org:arcamens/django-onesignal.git
+git+ssh@bitbucket.org:arcamens/django-onesignal.git
+
 
 
 

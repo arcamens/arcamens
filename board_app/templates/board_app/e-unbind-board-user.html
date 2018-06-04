@@ -14,7 +14,7 @@
 {{event.peer.name}} </span> </a> from board
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.get_link_url}}"> 
 <span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  

@@ -11,7 +11,7 @@
 {{event.filewrapper.file}} </a> to snippet
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snippet.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>

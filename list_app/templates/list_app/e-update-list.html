@@ -8,7 +8,7 @@
 {{event.user}} </a> has updated list
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.child.id %}"
 href="{{event.child.get_link_url}}"> 
@@ -16,7 +16,7 @@ href="{{event.child.get_link_url}}">
 {{event.child.name}} </a> on board
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-th"></span>

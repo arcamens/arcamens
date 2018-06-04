@@ -8,7 +8,7 @@
 {{event.user}} </a> has created a
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');$('#bigModal').modal('show');" 
+data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'note_app:preview-note' event.note.id %}" 
 href="#"> 
@@ -17,7 +17,7 @@ href="#">
 on card
 
 <a class="e-get"
-data-callback="$('#modal').modal('toggle');" 
+data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
 href="{{event.child.get_link_url}}"> 
