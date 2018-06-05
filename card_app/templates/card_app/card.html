@@ -33,13 +33,14 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 <small>
 
-By <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value">
-{{card.owner__name}} </a> at {{card.created}} </small>
+By <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner__email}}"  data-content="Score: value">
+{{card.owner__name}} </a> on <a href="{{card.get_link_url}}" target="_blank"> {{card.created}} </small> </a>
 
 </div>
 
 
 </div>
+
 
 
 

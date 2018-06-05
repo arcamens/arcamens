@@ -102,7 +102,7 @@ class ListCards(GuardianView):
         cards = cards.annotate(in_workers=Exists(workers1))
         cards = cards.annotate(has_workers=Count('workers'))
 
-        cards = cards.values('parent', 'label', 'id', 
+        cards = cards.values('parent', 'label', 'id', 'owner__email',
         'owner__name', 'created', 'in_workers', 'has_workers')
 
         cards = cards.order_by('-created')
@@ -1190,6 +1190,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

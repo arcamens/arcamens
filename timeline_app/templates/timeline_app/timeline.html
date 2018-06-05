@@ -12,12 +12,13 @@ data-shell="#pins"  data-show="{% url 'timeline_app:pin-timeline' timeline.id %}
 <small>
 
 By <a href="#" data-toggle="popover" data-trigger="hover" title="{{timeline.owner.email}}"  data-content="Score: value">
-{{timeline.owner.name}} </a> at {{timeline.created}}
+{{timeline.owner.name}} </a> on <a href="{{timeline.get_link_url}}" target="_blank"> {{timeline.created}}</a>
 </small>
 
 
 </div>
 </div>
+
 
 
 
