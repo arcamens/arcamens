@@ -11,7 +11,10 @@ from django.dispatch import receiver
 from markdown import markdown
 from board_app.models import Event
 
-class SnippetMixin(object):
+class SnippetMixin(models.Model):
+    class Meta:
+        abstract = True
+
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
@@ -27,6 +30,23 @@ class SnippetMixin(object):
     def get_link_url(self):
         return reverse('snippet_app:snippet-link', 
                     kwargs={'snippet_id': self.id})
+
+    @classmethod
+    def locate(cls, user, organization, snippet_id):
+        """
+        Return the requested snippet only if the user has access to the snippet
+        by belonging to the snippet's post timeline or being a worker of the post.
+
+        It also checks if the snippet is on someone's clipboard, if it is
+        then the snippet is not supposed to be viewable.
+        """
+
+        snippet = cls.objects.filter(
+        Q(post__ancestor__users=user) | Q(post__workers=user), 
+        post__ancestor__organization=organization, id=snippet_id,
+        post__post_clipboard_users__isnull=True).distinct()
+
+        return snippet.first()
 
     def __str__(self):
         return self.data
@@ -130,6 +150,7 @@ class EDettachSnippetFile(Event):
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

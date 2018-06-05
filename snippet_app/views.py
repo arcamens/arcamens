@@ -1,26 +1,18 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from board_app.views import GuardianView
 from django.http import HttpResponse
 from django.conf import settings
+from post_app.models import Post
 import board_app.models
-import post_app.models
 import core_app.models
 from . import models
 from . import forms
 
 class Snippet(GuardianView):
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id)
-
-        # First check if someone has cut this post.
-        # Posts on clipboard shouldnt be accessed due to generating
-        # too many inconsistencies.
-        # on_clipboard = not (post.ancestor and post.ancestor.ancestor)
-# 
-        # if on_clipboard:
-            # return HttpResponse("This post is on clipboard! \
-               # It can't be accessed.", status=400)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
 
         attachments = snippet.snippetfilewrapper_set.all()
 
@@ -30,8 +22,7 @@ class Snippet(GuardianView):
 
 class SnippetLink(GuardianView):
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id,
-        post__ancestor__organization=self.me.default)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
 
         organizations = self.me.organizations.exclude(id=self.me.default.id)
 
@@ -45,14 +36,15 @@ class CreateSnippet(GuardianView):
     """
 
     def get(self, request, post_id):
-        post = post_app.models.Post.objects.get(id=post_id)
+        # Make sure i have access to the post.
+        post = Post.locate(self.me, self.me.default, post_id)
         form = forms.SnippetForm()
 
         return render(request, 'snippet_app/create-snippet.html', 
         {'form':form, 'post': post})
 
     def post(self, request, post_id):
-        post = post_app.models.Post.objects.get(id=post_id)
+        post = Post.locate(self.me, self.me.default, post_id)
         form = forms.SnippetForm(request.POST)
 
         if not form.is_valid():
@@ -75,7 +67,8 @@ class AttachFile(GuardianView):
     """
 
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
+
         attachments = snippet.snippetfilewrapper_set.all()
         form = forms.SnippetFileWrapperForm()
 
@@ -83,7 +76,7 @@ class AttachFile(GuardianView):
         {'snippet':snippet, 'form': form, 'attachments': attachments})
 
     def post(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
         attachments = snippet.snippetfilewrapper_set.all()
         form = forms.SnippetFileWrapperForm(request.POST, request.FILES)
 
@@ -108,7 +101,13 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = models.SnippetFileWrapper.objects.get(id=filewrapper_id)
+        # Make sure i can access the post through the post timeline
+        # or being a worker of the post.
+        filewrapper = models.SnippetFileWrapper.objects.filter(
+        Q(snippet__post__ancestor__users=self.me) | Q(snippet__post__workers=self.me),
+        snippet__post__ancestor__organization=self.me.default, 
+        id=filewrapper_id).distinct().first()
+
         attachments = filewrapper.snippet.snippetfilewrapper_set.all()
 
         form = forms.SnippetFileWrapperForm()
@@ -127,13 +126,13 @@ class DetachFile(GuardianView):
 
 class UpdateSnippet(GuardianView):
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id=snippet_id)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
         return render(request, 'snippet_app/update-snippet.html',
         {'snippet': snippet, 'post': snippet.post, 
         'form': forms.SnippetForm(instance=snippet),})
 
     def post(self, request, snippet_id):
-        record  = models.Snippet.objects.get(id=snippet_id)
+        record = models.Snippet.locate(self.me, self.me.default, snippet_id)
         form    = forms.SnippetForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -155,7 +154,7 @@ class UpdateSnippet(GuardianView):
 
 class DeleteSnippet(GuardianView):
     def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id = snippet_id)
+        snippet = models.Snippet.locate(self.me, self.me.default, snippet_id)
 
         event = models.EDeleteSnippet.objects.create(organization=self.me.default,
         child=snippet.post, snippet=snippet.title, user=self.me)
@@ -172,6 +171,7 @@ class CancelSnippetCreation(GuardianView):
         snippet.delete()
 
         return HttpResponse(status=200)
+
 
 
 
