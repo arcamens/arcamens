@@ -16,7 +16,7 @@ data-show="{% url 'timeline_app:list-posts' post.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
 
-at <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
+on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
 
 {% if post.done %}
 (Done)
@@ -195,6 +195,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

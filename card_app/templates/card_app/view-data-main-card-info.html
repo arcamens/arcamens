@@ -17,7 +17,7 @@ data-shell="#main-view" >
 
 </a>
 
-at <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
+on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
 {% if card.done %}
 (Done)
 
@@ -71,6 +71,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 
