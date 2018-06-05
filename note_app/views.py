@@ -1,4 +1,5 @@
 from django.views.generic import View
+from django.conf import settings
 from django.shortcuts import render, redirect
 from board_app.views import GuardianView
 from django.http import HttpResponse
@@ -26,6 +27,18 @@ class Note(GuardianView):
 
         return render(request, 'note_app/note.html', 
         {'note': note, 'attachments': attachments})
+
+class NoteLink(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.objects.get(id=note_id,
+        card__ancestor__ancestor__organization=self.me.default)
+
+        organizations = self.me.organizations.exclude(id=self.me.default.id)
+
+        return render(request, 'note_app/note-link.html', 
+        {'note': note, 'card': note.card, 'user': self.me, 
+        'organizations': organizations, 'default': self.me.default, 
+        'organization': self.me.default, 'settings': settings})
 
 class ListNotes(GuardianView):
     def get(self, request, card_id):
@@ -181,6 +194,7 @@ class CancelNoteCreation(GuardianView):
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

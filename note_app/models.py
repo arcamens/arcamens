@@ -17,6 +17,10 @@ class NoteMixin(object):
         enable_attributes=False)
         super(NoteMixin, self).save(*args, **kwargs)
 
+    def get_link_url(self):
+        return reverse('note_app:note-link', 
+                    kwargs={'note_id': self.id})
+
     def __str__(self):
         """
         """
@@ -126,5 +130,6 @@ class EDettachNoteFile(Event):
 @receiver(pre_delete, sender=NoteFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 

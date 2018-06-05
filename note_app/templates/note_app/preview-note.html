@@ -10,41 +10,7 @@ Note on card {{card.label|truncatechars:30}}
 </div>
 
 <div class="modal-body pre-scrollable">
-
-<div class="panel panel-default">
-  <div class="panel-body">
-
-<p style="font-size:80%"> 
-<span class="glyphicon glyphicon-comment"></span> 
-
-By {{note.owner.name}} at {{note.created}} 
-
-
-</p>
-
-<div style="word-wrap: break-word;"> 
-
-{{note.html | safe}}
-
-</div>
-
-<span  style="font-size:80%">
-<div id="note-attachments-{{note.id}}"> </div>
-
-<script> 
-$.get({ 
-url: "{% url 'note_app:attach-file' note.id %}",
-async: false},
-
-function(data) {
-    $('#note-attachments-{{note.id}}').html(data);
-});
-</script> 
-
-</span>
-
-</div>
-</div>
+{% include 'note_app/note.html' %}
 </div>
 
 <div class="modal-footer" >
@@ -53,16 +19,12 @@ data-show="{% url 'note_app:list-notes' card.id %}"
 data-shell="#bigModalContent" 
 class="btn btn-default e-get"> {% trans "Notes" %} </button>
 
-<button  type="button" 
-data-show="{% url 'note_app:update-note' note.id %}"
-data-shell="#bigModalContent" 
-class="btn btn-default e-get"> {% trans "Update" %} </button>
-
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
+
 
 
 

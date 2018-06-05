@@ -11,7 +11,7 @@
 data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'note_app:preview-note' event.note.id %}" 
-href="#"> 
+href="{{event.note.get_link_url}}"> 
 <span class="glyphicon glyphicon-book"></span> Note </a> 
 
 on card
@@ -27,6 +27,7 @@ href="{{event.child.get_link_url}}">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 
