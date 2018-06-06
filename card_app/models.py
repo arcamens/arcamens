@@ -86,6 +86,11 @@ class CardMixin(object):
         tag   = lambda ind: Q(tags__name__icontains=ind)
         list  = lambda ind: Q(ancestor__name__icontains=ind)
         board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
+
+        note_owner  = lambda ind: Q(notes__owner__name__icontains=ind) |\
+        Q(notes__owner__email__icontains=ind)
+        note_file  = lambda ind: Q(notes__notefilewrapper__file__icontains=ind)
+
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
 
         sqlike = SqLike(SqNode(None, default),
@@ -95,9 +100,11 @@ class CardMixin(object):
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('d', 'data'), data),
-        SqNode(('n', 'note'), note),
+        SqNode(('n', 'note'), note, chain=True),
         SqNode(('t', 'tag'), tag, chain=True),
         SqNode(('i', 'list'), list),
+        SqNode(('no', 'note.owner'), note_owner, chain=True),
+        SqNode(('nf', 'note.file'), note_file, chain=True),
         SqNode(('b', 'board'), board),)
         return sqlike
 

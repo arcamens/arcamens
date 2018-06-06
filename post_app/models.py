@@ -86,7 +86,11 @@ class PostMixin(models.Model):
         comment  = lambda ind: Q(postcomment__data__icontains=ind)
         snippet  = lambda ind: Q(snippets__title__icontains=ind) | Q(
         snippets__data__icontains=ind)
+        snippet_owner  = lambda ind: Q(snippets__owner__name__icontains=ind) |\
+        Q(snippets__owner__email__icontains=ind)
 
+        snippet_title  = lambda ind: Q(snippets__title__icontains=ind)
+        snippet_file  = lambda ind: Q(snippets__snippetfilewrapper__file__icontains=ind)
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind)
 
         sqlike = SqLike(SqNode(None, default),
@@ -96,7 +100,10 @@ class PostMixin(models.Model):
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('t', 'tag'), tag, chain=True),
-        SqNode(('s', 'snippet'), snippet),
+        SqNode(('s', 'snippet'), snippet, chain=True),
+        SqNode(('so', 'snippet.owner'), snippet_owner, chain=True),
+        SqNode(('st', 'snippet.title'), snippet_title, chain=True),
+        SqNode(('sf', 'snippet.file'), snippet_file, chain=True),
         SqNode(('i', 'timeline'), timeline),)
         return sqlike
 
