@@ -76,6 +76,7 @@ class CardMixin(object):
 
         worker  = lambda ind: Q(workers__name__icontains=ind) | Q(    
         workers__email__icontains=ind)
+        file     = lambda ind: Q(cardfilewrapper__file__icontains=ind)
 
         created = lambda ind: Q(created__icontains=ind)
         label   = lambda ind: Q(label__icontains=ind)
@@ -90,6 +91,7 @@ class CardMixin(object):
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), owner),
         SqNode(('w', 'worker'), worker, chain=True), 
+        SqNode(('f', 'file'), file, chain=True),
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('d', 'data'), data),
@@ -544,6 +546,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

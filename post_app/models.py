@@ -81,6 +81,7 @@ class PostMixin(models.Model):
         created  = lambda ind: Q(created__icontains=ind)
         label    = lambda ind: Q(label__icontains=ind)
         tag      = lambda ind: Q(tags__name__icontains=ind)
+        file     = lambda ind: Q(postfilewrapper__file__icontains=ind)
         timeline = lambda ind: Q(ancestor__name__icontains=ind)
         comment  = lambda ind: Q(postcomment__data__icontains=ind)
         snippet  = lambda ind: Q(snippets__title__icontains=ind) | Q(
@@ -90,6 +91,7 @@ class PostMixin(models.Model):
 
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), user),
+        SqNode(('f', 'file'), file, chain=True),
         SqNode(('w', 'worker'), worker, chain=True), 
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
@@ -426,6 +428,7 @@ class EDettachPostFile(Event):
     related_name='e_dettach_post_file1', blank=True)
 
     html_template = 'post_app/e-dettach-post-file.html'
+
 
 
 
