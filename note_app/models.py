@@ -11,6 +11,23 @@ from markdown import markdown
 from board_app.models import Event
 
 class NoteMixin(object):
+    @classmethod
+    def locate(cls, user, organization, note_id):
+        """
+        Return the requested note only if the user has access to the note
+        by belonging to the note's card timeline or being a worker of the card.
+
+        It also checks if the note is on someone's clipboard, if it is
+        then the note is not supposed to be viewable.
+        """
+
+        note = cls.objects.filter(
+        Q(card__ancestor__ancestor__members=user) | Q(card__workers=user), 
+        card__ancestor__ancestor__organization=organization, id=note_id,
+        card__card_clipboard_users__isnull=True).distinct()
+
+        return note.first()
+
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
@@ -130,6 +147,7 @@ class EDettachNoteFile(Event):
 @receiver(pre_delete, sender=NoteFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

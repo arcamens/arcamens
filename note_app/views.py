@@ -1,28 +1,17 @@
 from django.views.generic import View
 from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from board_app.views import GuardianView
 from django.http import HttpResponse
-import board_app.models
-import card_app.models
-import core_app.models
+from card_app.models import Card
+from core_app.models import User
 from . import models
 from . import forms
 
 class Note(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id=note_id)
-
-        # First check if someone has cut this card.
-        # Cards on clipboard shouldnt be accessed due to generating
-        # too many inconsistencies.
-        # on_clipboard = not (card.ancestor and card.ancestor.ancestor)
-# 
-        # if on_clipboard:
-            # return HttpResponse("This card is on clipboard! \
-               # It can't be accessed.", status=400)
-
-        user = core_app.models.User.objects.get(id=self.user_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
         attachments = note.notefilewrapper_set.all()
 
         return render(request, 'note_app/note.html', 
@@ -30,9 +19,7 @@ class Note(GuardianView):
 
 class NoteLink(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id=note_id,
-        card__ancestor__ancestor__organization=self.me.default)
-
+        note = models.Note.locate(self.me, self.me.default, note_id)
         organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'note_app/note-link.html', 
@@ -42,7 +29,7 @@ class NoteLink(GuardianView):
 
 class ListNotes(GuardianView):
     def get(self, request, card_id):
-        card = card_app.models.Card.objects.get(id=card_id)
+        card = Card.locate(self.me, self.me.default, card_id)
         notes = card.notes.all().order_by('-created')
 
         return render(request, 'note_app/list-notes.html', 
@@ -53,28 +40,27 @@ class CreateNote(GuardianView):
     """
 
     def get(self, request, card_id):
-        card = card_app.models.Card.objects.get(id=card_id)
-        user = core_app.models.User.objects.get(id=self.user_id)
+        card = Card.locate(self.me, self.me.default, card_id)
         form = forms.NoteForm()
         return render(request, 'note_app/create-note.html', 
         {'form':form, 'card': card})
 
     def post(self, request, card_id):
-        card = card_app.models.Card.objects.get(id=card_id)
+        card = Card.locate(self.me, self.me.default, card_id)
         form = forms.NoteForm(request.POST)
-        user = core_app.models.User.objects.get(id=self.user_id)
+        user = User.objects.get(id=self.user_id)
 
         if not form.is_valid():
             return render(request, 'note_app/create-note.html', 
                 {'form': form, 'card':card}, status=400)
 
         note       = form.save(commit=False)
-        note.owner = user
+        note.owner = self.me
         note.card  = card
         note.save()
 
         event = models.ECreateNote.objects.create(
-        organization=user.default, child=card, user=user, note=note)
+        organization=self.me.default, child=card, user=self.me, note=note)
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         return render(request, 'note_app/preview-note.html',
@@ -85,7 +71,7 @@ class AttachFile(GuardianView):
     """
 
     def get(self, request, note_id):
-        note = models.Note.objects.get(id=note_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
         attachments = note.notefilewrapper_set.all()
         form = forms.NoteFileWrapperForm()
 
@@ -93,6 +79,7 @@ class AttachFile(GuardianView):
         {'note':note, 'form': form, 'attachments': attachments})
 
     def post(self, request, note_id):
+        note = models.Note.locate(self.me, self.me.default, note_id)
         note = models.Note.objects.get(id=note_id)
         attachments = note.notefilewrapper_set.all()
         form = forms.NoteFileWrapperForm(request.POST, request.FILES)
@@ -118,10 +105,13 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        filewrapper = models.NoteFileWrapper.objects.get(id=filewrapper_id)
-        attachments = filewrapper.note.notefilewrapper_set.all()
+        filewrapper = models.NoteFileWrapper.objects.filter(
+        Q(note__card__ancestor__ancestor__members=self.me) | Q(note__card__workers=self.me), 
+        note__card__ancestor__ancestor__organization=self.me.default, 
+        id=filewrapper_id).distinct().first()
 
-        form = forms.NoteFileWrapperForm()
+        attachments = filewrapper.note.notefilewrapper_set.all()
+        form        = forms.NoteFileWrapperForm()
 
         event = models.EDettachNoteFile.objects.create(
         organization=self.me.default, filename=filewrapper.file.name, 
@@ -136,19 +126,19 @@ class DetachFile(GuardianView):
 
 class PreviewNote(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id=note_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
         
         return render(request, 'note_app/preview-note.html',
         {'note': note, 'card': note.card})
 
 class UpdateNote(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id=note_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
         return render(request, 'note_app/update-note.html',
         {'note': note, 'form': forms.NoteForm(instance=note),})
 
     def post(self, request, note_id):
-        record  = models.Note.objects.get(id=note_id)
+        record = models.Note.locate(self.me, self.me.default, note_id)
         form    = forms.NoteForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -157,11 +147,9 @@ class UpdateNote(GuardianView):
 
         record.save()
 
-        user  = core_app.models.User.objects.get(id=self.user_id)
-
         event = models.EUpdateNote.objects.create(
-        organization=user.default, child=record.card, 
-        note=record, user=user)
+        organization=self.me.default, child=record.card, 
+        note=record, user=self.me)
 
         event.dispatch(*record.card.ancestor.ancestor.members.all())
         event.save()
@@ -173,12 +161,10 @@ class UpdateNote(GuardianView):
 
 class DeleteNote(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id = note_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
 
-        user = core_app.models.User.objects.get(id=self.user_id)
-
-        event = models.EDeleteNote.objects.create(organization=user.default,
-        child=note.card, note='Note', user=user)
+        event = models.EDeleteNote.objects.create(organization=self.me.default,
+        child=note.card, note='Note', user=self.me)
 
         event.dispatch(*note.card.ancestor.ancestor.members.all())
         note.delete()
@@ -190,10 +176,11 @@ class DeleteNote(GuardianView):
 
 class CancelNoteCreation(GuardianView):
     def get(self, request, note_id):
-        note = models.Note.objects.get(id = note_id)
+        note = models.Note.locate(self.me, self.me.default, note_id)
         note.delete()
 
         return HttpResponse(status=200)
+
 
 
 

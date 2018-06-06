@@ -56,7 +56,7 @@ organization0.save()
 organization1.save()
 
 user1.organizations.add(organization1)
-# user1.organizations.add(organization0)
+user1.organizations.add(organization0)
 
 board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
 board.members.add(user1)
@@ -79,6 +79,7 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
+
 
 
 
