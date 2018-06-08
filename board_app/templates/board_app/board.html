@@ -10,7 +10,7 @@ data-shell="#pins"  data-show="{% url 'board_app:pin-board' board.id %}">
 
 <p> <a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:list-lists' board.id %}" href="{{board.get_link_url}}">
 <em ><span class="glyphicon glyphicon-th"></span> Board </em>
-{% if board.open %} !{% endif %}{{board.name}} 
+{% if board.open %} (open) {% endif %}{{board.name}} 
 <br>
 {{board.description}} 
 

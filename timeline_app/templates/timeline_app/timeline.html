@@ -7,7 +7,7 @@ data-shell="#pins"  data-show="{% url 'timeline_app:pin-timeline' timeline.id %}
 
 <p> <a class="e-get" href="{{timeline.get_link_url}}" data-shell="#main-view" data-show="{% url 'timeline_app:list-posts' timeline.id %}" >
 <span class="glyphicon glyphicon glyphicon-eye-open clip"></span> Timeline 
-{% if timeline.open %} !{% endif %}{{timeline.name}} 
+{% if timeline.open %} (open) {% endif %}{{timeline.name}} 
 <br>{{timeline.description}}</a></p>
 
 <small>
