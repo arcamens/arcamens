@@ -93,6 +93,9 @@ class Board(BoardMixin):
     created  = models.DateTimeField(auto_now_add=True, 
     null=True)
 
+    open = models.BooleanField(blank=True, default=False,
+    help_text='Include all organization members.')
+
     members = models.ManyToManyField('core_app.User', 
     null=True, related_name='boards', blank=True, 
     symmetrical=False)
@@ -154,6 +157,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

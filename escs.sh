@@ -80,7 +80,6 @@ python manage.py migrate
 # create alpha branch.
 git checkout -b alpha
 git push --set-upstream origin alpha
-
 ##############################################################################
 # switch to alpha branch.
 git checkout alpha
@@ -381,6 +380,7 @@ python setup.py install
 rm -fr build
 
 python manage.py normalize_events
+
 
 
 

@@ -39,7 +39,10 @@ class CreateBoard(GuardianView):
         board       = form.save()
         board.owner = self.me
 
-        board.members.add(self.me)
+        # The board members.
+        members = self.me.default.users.all() if board.open else (self.me,)
+        board.members.add(*members)
+
         board.admins.add(self.me)
         board.organization = self.me.default
         board.save()
@@ -48,7 +51,7 @@ class CreateBoard(GuardianView):
         board=board, user=self.me)
 
         # Organization admins should be notified?
-        event.dispatch(self.me)
+        event.dispatch(*members)
         event.save()
 
         return redirect('core_app:list-nodes')
@@ -248,7 +251,7 @@ class UpdateBoard(GuardianView):
         # but allows the user to view the update dialog template.
         board = self.me.boards.get(id=board_id, organization=self.me.default)
         return render(request, 'board_app/update-board.html',
-        {'board': board, 'form': forms.BoardForm(instance=board)})
+        {'board': board, 'form': forms.UpdateBoardForm(instance=board)})
 
     def post(self, request, board_id):
         record = Board.objects.get(id=board_id)
@@ -257,8 +260,7 @@ class UpdateBoard(GuardianView):
         record = self.me.managed_boards.get(
             id=board_id, organization=self.me.default)
 
-        form = forms.BoardForm(request.POST, instance=record)
-
+        form = forms.UpdateBoardForm(request.POST, instance=record)
         if not form.is_valid():
             return render(request, 'board_app/update-board.html',
                         {'form': form, 'board':record, }, status=400)
@@ -449,6 +451,8 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
         'settings': settings})
+
+
 
 
 

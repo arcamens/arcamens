@@ -73,17 +73,19 @@ class CreateTimeline(GuardianView):
                                 'organization_id': organization_id}, status=400)
 
         organization = Organization.objects.get(id=organization_id)
-        record       = form.save(commit=False)
+        record       = form.save()
         record.owner = self.me
         record.organization  = organization
         form.save()
-        record.users.add(self.me)
+
+        users = self.me.default.users.all() if record.open else (self.me, )
+        record.users.add(*users)
         record.save()
 
         event = ECreateTimeline.objects.create(organization=self.me.default,
         timeline=record, user=self.me)
 
-        event.dispatch(self.me)
+        event.dispatch(*users)
 
         return redirect('core_app:list-nodes')
 
@@ -161,7 +163,7 @@ class UpdateTimeline(GuardianView):
         organization=self.me.default)
 
         return render(request, 'timeline_app/update-timeline.html',
-        {'timeline': timeline, 'form': forms.TimelineForm(instance=timeline)})
+        {'timeline': timeline, 'form': forms.UpdateTimelineForm(instance=timeline)})
 
     def post(self, request, timeline_id):
         record = self.me.timelines.get(id=timeline_id, 
@@ -170,7 +172,7 @@ class UpdateTimeline(GuardianView):
         if record.owner != self.me:
             return HttpResponse('Just owner can do that!', status=403)
 
-        form = forms.TimelineForm(request.POST, instance=record)
+        form = forms.UpdateTimelineForm(request.POST, instance=record)
         if not form.is_valid():
             return render(request, 
                 'timeline_app/update-timeline.html',
@@ -381,6 +383,8 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
+
 
 
 

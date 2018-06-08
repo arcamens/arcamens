@@ -136,6 +136,27 @@ class OrganizationMixin(models.Model):
     class Meta:
         abstract = True
 
+    def set_open_boards(self, user):
+        """
+        Add the user to all open boards.
+        """
+
+        boards = self.boards.filter(open=True)
+        boards = boards.only('members')
+        for ind in boards:
+            ind.members.add(user)
+
+    def set_open_timelines(self, user):
+        """
+        Add the user to all open timelines.
+        """
+
+        timelines = self.timelines.filter(open=True)
+        timelines = timelines.only('users')
+
+        for ind in timelines:
+            ind.users.add(user)
+
     def revoke_access(self, admin, user):
         # Should be pondered about it yet.
         # self.cancel_assignments(user)
@@ -481,6 +502,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

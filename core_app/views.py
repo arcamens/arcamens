@@ -522,20 +522,20 @@ class JoinOrganization(View):
         invite.user.default = organization
         invite.user.save()
 
-        # validates the invite.
-        invite.delete()
-
-        invites = Invite.objects.filter(
-        organization=organization, user=invite.user)
-        invites.delete()
 
         # The user should be Arcamens Service(thinking about it later).
         event = EJoinOrganization.objects.create(organization=organization, 
         peer=invite.user, user=invite.user)
         event.dispatch(*organization.users.all())
 
+        organization.set_open_boards(invite.user)
+        organization.set_open_timelines(invite.user)
+
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
+
+        # validates the invite.
+        invite.delete()
 
         # Maybe just redirect the user to a page telling he joined the org.
         return redirect('core_app:index')
@@ -918,6 +918,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

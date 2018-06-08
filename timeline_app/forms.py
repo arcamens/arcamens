@@ -8,6 +8,11 @@ class TimelineForm(forms.ModelForm):
         model  = models.Timeline
         exclude = ('owner', 'organization', 'users', 'node')
 
+class UpdateTimelineForm(forms.ModelForm):
+    class Meta:
+        model  = models.Timeline
+        exclude = ('owner', 'organization', 'users', 'node', 'open')
+
 class TimelineSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
 
@@ -27,10 +32,9 @@ class ConfirmTimelineDeletionForm(forms.Form):
     def clean(self):
         super(ConfirmTimelineDeletionForm, self).clean()
         name   = self.cleaned_data.get('name')
-
         if name != self.confirm_token:
-            raise forms.ValidationError(
-                "The name doesn't match!")
+            raise forms.ValidationError("The name doesn't match!")
+
 
 
 

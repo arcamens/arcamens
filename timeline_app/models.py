@@ -73,6 +73,9 @@ class Timeline(TimelineMixin):
     organization = models.ForeignKey('core_app.Organization', 
     related_name='timelines', null=True, blank=True)
 
+    open = models.BooleanField(blank=True, default=False,
+    help_text='Include all organization members.')
+
     name = models.CharField(null=True, blank=False,
     verbose_name=_("Name"), help_text='Example: Bugs', max_length=250)
 
@@ -126,6 +129,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 
