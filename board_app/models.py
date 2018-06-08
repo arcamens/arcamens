@@ -82,7 +82,7 @@ class Board(BoardMixin):
     related_name='boards', null=True, blank=True)
 
     name = models.CharField(null=True, blank=False,
-    verbose_name=_("Name"), help_text='Example: Bugs', max_length=250)
+    verbose_name=_("Name"), help_text='Example: Arcamens', max_length=250)
 
     description = models.CharField(blank=True, default='', 
     verbose_name=_("Description"), help_text='Example: /projectname/', max_length=626)
@@ -157,6 +157,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 
