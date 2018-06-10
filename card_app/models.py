@@ -32,7 +32,17 @@ class CardMixin(object):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
+
+        # Define the new card with the greatest priority.
+        if not self.pk:
+            self.set_priority()
+
         super(CardMixin, self).save(*args, **kwargs)
+
+    def set_priority(self):
+        # There may exist a better way.
+        card = self.ancestor.cards.order_by('-priority').first()
+        self.priority = (card.priority + 1) if card else 0
 
     def get_absolute_url(self):
         return reverse('card_app:view-data', 
@@ -174,6 +184,8 @@ class Card(CardMixin, models.Model):
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Label, Priority, Deadline, ...', 
     max_length=626)
+
+    priority = models.IntegerField(default=0)
 
     data = models.TextField(blank=True, verbose_name=_("Data"), 
     help_text='Markdown content.', default='')
@@ -553,6 +565,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

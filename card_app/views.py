@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models.functions import Concat
-from django.db.models import Q, Exists, OuterRef, Count
+from django.db.models import Q, F, Exists, OuterRef, Count
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from card_app.models import GlobalTaskFilter, GlobalCardFilter, CardPin
@@ -106,7 +106,8 @@ class ListCards(GuardianView):
         cards = cards.only('parent', 'label', 'id', 'owner__email',
         'owner__name', 'created')
 
-        cards = cards.order_by('-created')
+        # cards = cards.order_by('-created')
+        cards = cards.order_by('-priority')
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
@@ -1190,6 +1191,7 @@ class CardPriority(GuardianView):
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
         cards = card.ancestor.cards.filter(done=False)
+        cards = cards.order_by('-priority')
         total = cards.count()
 
         return render(request, 'card_app/card-priority.html', 
@@ -1209,6 +1211,8 @@ class CardPriority(GuardianView):
                      'total': total, 'count': 0, 'form':form}, status=400)
 
         cards = sqlike.run(cards)
+        cards = cards.order_by('-priority')
+
         count = cards.count()
 
         return render(request, 'card_app/card-priority.html', 
@@ -1217,14 +1221,33 @@ class CardPriority(GuardianView):
 
 class SetPriorityUp(GuardianView):
     def get(self, request, card0_id, card1_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-        return redirect('card_app:list-cards', list_id=card.ancestor.id)
+        card0  = models.Card.locate(self.me, self.me.default, card0_id)
+        card1  = models.Card.locate(self.me, self.me.default, card1_id)
+
+        cards = card0.ancestor.cards.filter(
+        priority__gt=card1.priority, done=False)
+
+        cards.update(priority=F('priority') + 2)
+
+        card0.priority = card1.priority + 1
+        card0.save()
+
+        return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
 class SetPriorityDown(GuardianView):
     def get(self, request, card0_id, card1_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-        return redirect('card_app:list-cards', list_id=card.ancestor.id)
+        card0  = models.Card.locate(self.me, self.me.default, card0_id)
+        card1  = models.Card.locate(self.me, self.me.default, card1_id)
 
+        cards = card0.ancestor.cards.filter(
+        priority__gte=card1.priority, done=False)
+
+        cards.update(priority=F('priority') + 1)
+
+        card0.priority = card1.priority
+        card0.save()
+
+        return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
 class Unpin(GuardianView):
     def get(self, request, pin_id):
