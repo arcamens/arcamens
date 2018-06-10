@@ -12,6 +12,10 @@ class CardSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: owner:oliveira + tag:bug')
 
+class CardPriorityForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False, 
+    help_text='Example: owner:oliveira + tag:bug')
+
 class TagSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: fake-bug')
@@ -69,6 +73,7 @@ class CardFileWrapperForm(forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 

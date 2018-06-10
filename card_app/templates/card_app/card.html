@@ -33,6 +33,11 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 <small>
 
+<div class="pull-right" >
+<a class=" b-modal text-default"  href="#" data-show="{% url 'card_app:card-priority' card.id %}">
+<span class="glyphicon glyphicon-signal"></span> </a>
+</div>
+
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="Score: value">
 {{card.owner.name}} </a> on <a href="{{card.get_link_url}}" target="_blank"> {{card.created}} </small> </a>
 
@@ -40,6 +45,8 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 
 </div>
+
+
 
 
 

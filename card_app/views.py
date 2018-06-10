@@ -1186,15 +1186,49 @@ class CardEvents(GuardianView):
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
 
+class CardPriority(GuardianView):
+    def get(self, request, card_id):
+        card  = models.Card.locate(self.me, self.me.default, card_id)
+        cards = card.ancestor.cards.all()
+        total = cards.count()
+
+        return render(request, 'card_app/card-priority.html', 
+        {'card': card, 'total': total, 'count': total, 'me': self.me,
+        'cards': cards, 'form': forms.CardPriorityForm()})
+
+    def post(self, request, card_id):
+        sqlike = models.Card.from_sqlike()
+        card   = models.Card.locate(self.me, self.me.default, card_id)
+        cards  = card.ancestor.cards.all()
+        total  = cards.count()
+        form   = forms.CardPriorityForm(request.POST, sqlike=sqlike)
+
+        if not form.is_valid():
+            return render(request, 'card_app/card-priority.html', 
+                {'me': self.me, 'organization': self.me.default, 'card': card,
+                     'total': total, 'count': 0, 'form':form}, status=400)
+
+        cards = sqlike.run(cards)
+        count = cards.count()
+
+        return render(request, 'card_app/card-priority.html', 
+        {'card': card, 'total': total, 'count': count, 'me': self.me,
+        'cards': cards, 'form': form})
+
+class SetPriorityUp(GuardianView):
+    def post(self, request, card0_id, card1_id):
+        card  = models.Card.locate(self.me, self.me.default, card_id)
+
+class SetPriorityDown(GuardianView):
+    def post(self, request, card0_id, card1_id):
+        card  = models.Card.locate(self.me, self.me.default, card_id)
+
+
 class Unpin(GuardianView):
     def get(self, request, pin_id):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
-
-
-
-
 
 
 

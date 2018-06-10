@@ -20,9 +20,19 @@ href="#"> <span class="glyphicon glyphicon-remove"></span>  {% trans "Delete" %}
 
 <li><a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:paste-cards' list.id %}" 
 href="#"> <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:paste-cards' list.id %}" 
+href="#"> <span class="glyphicon glyphicon-signal"></span>  {% trans "Order/Priority" %}</a></li>
+
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view"  data-show="{% url 'list_app:paste-cards' list.id %}" 
+href="#"> <span class="glyphicon glyphicon-time"></span>  {% trans "Order/Created" %}</a></li>
 
 </ul>
 </div>
+
 
 
 
