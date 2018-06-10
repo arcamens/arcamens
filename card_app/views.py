@@ -1216,12 +1216,14 @@ class CardPriority(GuardianView):
         'cards': cards, 'form': form})
 
 class SetPriorityUp(GuardianView):
-    def post(self, request, card0_id, card1_id):
+    def get(self, request, card0_id, card1_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
+        return redirect('card_app:list-cards', list_id=card.ancestor.id)
 
 class SetPriorityDown(GuardianView):
-    def post(self, request, card0_id, card1_id):
+    def get(self, request, card0_id, card1_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
+        return redirect('card_app:list-cards', list_id=card.ancestor.id)
 
 
 class Unpin(GuardianView):
