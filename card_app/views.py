@@ -1189,7 +1189,7 @@ class CardEvents(GuardianView):
 class CardPriority(GuardianView):
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
-        cards = card.ancestor.cards.all()
+        cards = card.ancestor.cards.filter(done=False)
         total = cards.count()
 
         return render(request, 'card_app/card-priority.html', 
@@ -1199,7 +1199,7 @@ class CardPriority(GuardianView):
     def post(self, request, card_id):
         sqlike = models.Card.from_sqlike()
         card   = models.Card.locate(self.me, self.me.default, card_id)
-        cards  = card.ancestor.cards.all()
+        cards  = card.ancestor.cards.filter(done=False)
         total  = cards.count()
         form   = forms.CardPriorityForm(request.POST, sqlike=sqlike)
 
