@@ -1,0 +1,52 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> has set card priority
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.card0.id %}" href="{{event.card0.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card0.label|truncatechars:40}}
+</a> 
+
+down to
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.card1.id %}" href="{{event.card1.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card1.label|truncatechars:40}} </a>
+
+
+on list
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor.name}} </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -531,6 +531,36 @@ class ECutCard(Event):
 
     html_template = 'card_app/e-cut-card.html'
 
+class ESetPriorityUp(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_set_priority_up0', blank=True)
+
+    card0 = models.ForeignKey('Card', 
+    related_name='e_set_priority_up1', blank=True)
+
+    card1 = models.ForeignKey('Card', 
+    related_name='e_set_priority_up2', blank=True)
+
+    html_template = 'card_app/e-set-priority-up.html'
+
+class ESetPriorityDown(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_set_priority_down0', blank=True)
+
+    card0 = models.ForeignKey('Card', 
+    related_name='e_set_priority_down1', blank=True)
+
+    card1 = models.ForeignKey('Card', 
+    related_name='e_set_priority_down2', blank=True)
+
+    html_template = 'card_app/e-set-priority-down.html'
+
 class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_archive_card0', blank=True)
@@ -565,6 +595,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

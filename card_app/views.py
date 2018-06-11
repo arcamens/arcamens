@@ -1232,6 +1232,10 @@ class SetPriorityUp(GuardianView):
         card0.priority = card1.priority + 1
         card0.save()
 
+        event = models.ESetPriorityUp.objects.create(organization=self.me.default,
+        ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
 class SetPriorityDown(GuardianView):
@@ -1247,6 +1251,10 @@ class SetPriorityDown(GuardianView):
         card0.priority = card1.priority
         card0.save()
 
+        event = models.ESetPriorityDown.objects.create(organization=self.me.default,
+        ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
 class Unpin(GuardianView):
@@ -1254,6 +1262,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
