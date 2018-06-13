@@ -147,7 +147,7 @@ class PasteCards(GuardianView):
             return HttpResponse("There is no card on \
                 the clipboard.", status=403)
 
-        cards.update(ancestor=list)
+        cards.update(ancestor=list, priority=0)
 
         event = EPasteCard(
         organization=self.me.default, ancestor=list, user=self.me)
@@ -296,6 +296,7 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

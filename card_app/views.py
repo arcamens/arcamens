@@ -1225,7 +1225,7 @@ class SetPriorityUp(GuardianView):
         card1  = models.Card.locate(self.me, self.me.default, card1_id)
 
         cards = card0.ancestor.cards.filter(
-        priority__gt=card1.priority, done=False)
+        priority__gt=card1.priority, id__gt=card1.id, done=False)
 
         cards.update(priority=F('priority') + 2)
 
@@ -1244,7 +1244,7 @@ class SetPriorityDown(GuardianView):
         card1  = models.Card.locate(self.me, self.me.default, card1_id)
 
         cards = card0.ancestor.cards.filter(
-        priority__gte=card1.priority, done=False)
+        priority__gte=card1.priority, id__gte=card1.id, done=False)
 
         cards.update(priority=F('priority') + 1)
 
@@ -1262,6 +1262,8 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
+
 
 
 
