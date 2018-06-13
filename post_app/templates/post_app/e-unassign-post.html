@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
 
 <span class="glyphicon glyphicon-user"></span> {{event.peer.name}} </a> unassigned from
 
@@ -14,7 +14,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>  by 
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> on {{event.created}}
 

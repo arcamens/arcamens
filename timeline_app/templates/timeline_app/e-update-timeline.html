@@ -10,7 +10,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.
 <span class="glyphicon glyphicon-eye-open"></span>
 {{event.timeline.name}} </a>  updated by 
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> on {{event.created}}
 

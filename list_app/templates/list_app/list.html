@@ -25,7 +25,7 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="{{list.get_link_url}}"
 
 </p>
 
-<small> <a href="#" data-toggle="popover" data-trigger="hover" title="{{list.owner.email}}"  data-content="Score: value">
+<small> <a href="#" data-toggle="popover" data-trigger="hover" title="{{list.owner.email}}"  data-content="{{list.owner.description}}">
 {{list.owner.name}} </a> on <a href="{{list.get_link_url}}" target="_blank"> {{list.created}} </small> </a>
 
 
@@ -33,6 +33,7 @@ data-show="{% url 'card_app:list-cards' list.id %}" href="{{list.get_link_url}}"
 
 
 </div>
+
 
 
 

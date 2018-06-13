@@ -329,9 +329,9 @@ class User(UserMixin, BasicUser):
     default = models.ForeignKey('Organization', 
     null=True, blank=True, on_delete=models.SET_NULL)
 
-    description = models.TextField(null=True,
-    blank=False, verbose_name=_("Description"), 
-    help_text='Position, Skills, Goals, ..', 
+    description = models.CharField(null=True,
+    blank=False, verbose_name=_("Bio"), 
+    help_text='Example: Software Enginer, Rainbow hunter.', 
     max_length=256)
 
     avatar = models.ImageField(null=True,
@@ -502,6 +502,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

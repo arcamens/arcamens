@@ -17,7 +17,7 @@ data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="#"> 
 <span class="glyphicon glyphicon-th"></span> {{event.ancestor.name}} </a>  by 
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="Score: value">
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
 <span class="glyphicon glyphicon-user"></span>
 {{event.user}} </a> on {{event.created}}
 
