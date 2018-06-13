@@ -951,7 +951,8 @@ class CardEvents(GuardianView):
         Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
         Q(eattachnotefile__note__card=card.id) | \
         Q(edettachnotefile__note__card=card.id)|\
-        Q(ecreatecardfork__card=card.id)
+        Q(ecreatecardfork__card=card.id)| Q(esetpriorityup__card0=card.id)|\
+        Q(esetprioritydown__card0=card.id)
 
 
         events = Event.objects.filter(query).order_by('-created').values('html')
