@@ -32,19 +32,6 @@ class CardLink(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        # Supposing the user belongs to the requested organization in fact.
-        # Remain to be implemented checkings.
-        # if card.ancestor.ancestor.organization != self.me.default:
-            # return render(request, 'core_app/no-organization-resource.html', 
-                    # {'other': card.ancestor.ancestor.organization}, status=403)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't be accessed.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on clipboard!", status=403)
-
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
@@ -78,10 +65,6 @@ class ListCards(GuardianView):
     def get(self, request, list_id):
         list = list_app.models.List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
-
-        if not list.ancestor:
-            return HttpResponse("This list is on clipboard!\
-                It can't be accessed now.", status=403)
 
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
@@ -117,13 +100,6 @@ class ListCards(GuardianView):
 class ViewData(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't be accessed.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on clipboard!", status=403)
 
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
@@ -283,15 +259,6 @@ class CreateFork(GuardianView):
 
     def get(self, request, ancestor_id, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("On clipboard! \
-                Can't fork now", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card's list is on \
-                clipboard! Can't fork now.", status=403)
-
         ancestor = list_app.models.List.objects.get(id=ancestor_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
@@ -326,90 +293,9 @@ class CreateFork(GuardianView):
 
         return redirect('card_app:view-data', card_id=fork.id)
 
-# class PullPostContent(GuardianView):
-    # """
-    # """
-# 
-    # def get(self, request, card_id):
-        # card       = models.Card.objects.get(id=card_id)
-        # fork       = Post.objects.get(id=fork_id)
-# 
-        # fork.label = card.label
-        # fork.data  = card.data
-        # form       = PostForm(instance=fork)
-# 
-        # return render(request, 'card_app/create-post-fork.html', 
-        # {'form':form, 'post': fork, 'ancestor': fork.ancestor, 'card': card})
-# 
-# class CreatePostFork(GuardianView):
-    # """
-    # """
-# 
-    # def get(self, request, ancestor_id, card_id, fork_id=None):
-        # card = models.Card.objects.get(id=card_id)
-# 
-        # if not card.ancestor:
-            # return HttpResponse("This card is on clipboard! \
-               # Can't fork now.", status=403)
-# 
-        # if not card.ancestor.ancestor:
-            # return HttpResponse("The card list is on clipboard! \
-                # Can't fork now.", status=403)
-# 
-        # ancestor = Timeline.objects.get(id=ancestor_id)
-        # fork = Post.objects.create(user=self.me, 
-        # ancestor=ancestor, parent=card)
-# 
-        # form = PostForm(instance=fork)
-        # fork.label = 'Draft.'
-# 
-        # # path = card.path.all()
-        # fork.parent = card
-        # # fork.path.add(*path, card)
-        # fork.save()
-# 
-        # return render(request, 'card_app/create-post-fork.html', 
-        # {'form':form, 'post': fork, 'ancestor': ancestor, 'card': card})
-# 
-    # def post(self, request, ancestor_id, card_id, fork_id):
-        # card = models.Card.objects.get(id=card_id)
-        # fork = Post.objects.get(id=fork_id)
-        # form = PostForm(request.POST, instance=fork)
-# 
-# 
-        # if not form.is_valid():
-            # return render(request, 'card_app/create-post-fork.html', 
-                # {'form':form, 'ancestor': card.ancestor, 
-                    # 'card': card, 'post': fork}, status=400)
-# 
-        # fork.save()
-# 
-        # event = models.ECreatePostFork.objects.create(organization=self.me.default,
-        # list=card.ancestor, timeline=fork.ancestor, card=card, post=fork, user=self.me)
-        # event.dispatch(*fork.ancestor.users.all())
-        # event.dispatch(*card.ancestor.ancestor.members.all())
-# 
-        # return redirect('timeline_app:list-posts', timeline_id=ancestor_id)
-
-# class CancelCardCreation(GuardianView):
-    # def get(self, request, card_id):
-        # card = models.Card.objects.get(id = card_id)
-        # card.delete()
-# 
-        # return HttpResponse(status=200)
-
 class DeleteCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't delete now", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't delete now.", status=403)
-
         event = models.EDeleteCard.objects.create(organization=self.me.default,
         ancestor=card.ancestor, label=card.label, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
@@ -421,15 +307,6 @@ class DeleteCard(GuardianView):
 class CutCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't cut now", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't cut now.", status=403)
-
         list = card.ancestor
 
         # Missing event.
@@ -451,19 +328,10 @@ class CutCard(GuardianView):
 
 class CopyCard(GuardianView):
     def get(self, request, card_id):
-        card     = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't copy now", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't copy now.", status=403)
-
+        card = models.Card.locate(self.me, self.me.default, card_id)
         copy = card.duplicate()
 
-        clipboard, _    = Clipboard.objects.get_or_create(
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
         clipboard.cards.add(copy)
 
@@ -486,18 +354,9 @@ class AttachFile(GuardianView):
         {'card':card, 'form': form, 'attachments': attachments})
 
     def post(self, request, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't update now", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't update now.", status=403)
-
+        card        = models.Card.locate(self.me, self.me.default, card_id)
         attachments = card.cardfilewrapper_set.all()
-        form = forms.CardFileWrapperForm(request.POST, request.FILES)
+        form        = forms.CardFileWrapperForm(request.POST, request.FILES)
 
         if not form.is_valid():
             return render(request, 'card_app/attach-file.html', 
@@ -525,15 +384,6 @@ class DetachFile(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
 
-
-        if not filewrapper.card.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't update now", status=403)
-
-        if not filewrapper.card.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't update now.", status=403)
-
         attachments = filewrapper.card.cardfilewrapper_set.all()
         form = forms.CardFileWrapperForm()
 
@@ -557,15 +407,6 @@ class UpdateCard(GuardianView):
 
     def post(self, request, card_id):
         record = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not record.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't update now", status=403)
-
-        if not record.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't update now.", status=403)
-
         form    = forms.CardForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -627,15 +468,6 @@ class UnrelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
         card0 = models.Card.locate(self.me, self.me.default, card0_id)
         card1 = models.Card.locate(self.me, self.me.default, card1_id)
-
-        if not card0.ancestor or not card1.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't unrelate now", status=403)
-
-        if not card0.ancestor.ancestor or not card1.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't unrelate now.", status=403)
-
         card0.relations.remove(card1)
         card0.save()
 
@@ -653,15 +485,6 @@ class RelateCard(GuardianView):
     def get(self, request, card0_id, card1_id):
         card0 = models.Card.locate(self.me, self.me.default, card0_id)
         card1 = models.Card.locate(self.me, self.me.default, card1_id)
-
-        if not card0.ancestor or not card1.ancestor:
-            return HttpResponse("On clipboard ! \
-                Can't relate now", status=403)
-
-        if not card0.ancestor.ancestor or not card1.ancestor.ancestor:
-            return HttpResponse("The card's list is on clipboard!\
-                Can't relate now.", status=403)
-
         card0.relations.add(card1)
         card0.save()
 
@@ -755,14 +578,6 @@ class UnbindCardWorker(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't unbind.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't unbind now.", status=403)
-
         card.workers.remove(user)
         card.save()
 
@@ -778,15 +593,6 @@ class BindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't bind.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't bind now.", status=403)
-
         card.workers.add(user)
         card.save()
 
@@ -842,15 +648,6 @@ class UnbindCardTag(GuardianView):
         organization=self.me.default)
 
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               Can't untag now.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't untag now.", status=403)
-
         card.tags.remove(tag)
         card.save()
 
@@ -869,14 +666,6 @@ class BindCardTag(GuardianView):
 
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               Can't tag now.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't tag now.", status=403)
-
         card.tags.add(tag)
         card.save()
 
@@ -891,15 +680,6 @@ class BindCardTag(GuardianView):
 class Done(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't archive now.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't archive now.", status=403)
-
         card.done = True
         card.save()
 
@@ -916,15 +696,6 @@ class Done(GuardianView):
 class Undo(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-
-        if not card.ancestor:
-            return HttpResponse("This card is on clipboard! \
-               It can't unarchive now.", status=403)
-
-        if not card.ancestor.ancestor:
-            return HttpResponse("The card list is on \
-                clipboard! Can't unarchive now.", status=403)
-
         card.done = False
         card.save()
 
