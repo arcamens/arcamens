@@ -35,14 +35,9 @@ class CardMixin(object):
 
         # Define the new card with the greatest priority.
         if not self.pk:
-            self.set_priority()
+            self.priority = self.ancestor.cards.count()
 
         super(CardMixin, self).save(*args, **kwargs)
-
-    def set_priority(self):
-        # There may exist a better way.
-        card = self.ancestor.cards.order_by('-priority').first()
-        self.priority = (card.priority + 1) if card else 0
 
     def get_absolute_url(self):
         return reverse('card_app:view-data', 
@@ -531,35 +526,35 @@ class ECutCard(Event):
 
     html_template = 'card_app/e-cut-card.html'
 
-class ESetPriorityUp(Event):
+class ESetCardPriorityUp(Event):
     """
     """
 
     ancestor = models.ForeignKey('list_app.List', 
-    related_name='e_set_priority_up0', blank=True)
+    related_name='e_set_card_priority_up0', blank=True)
 
     card0 = models.ForeignKey('Card', 
-    related_name='e_set_priority_up1', blank=True)
+    related_name='e_set_card_priority_up1', blank=True)
 
     card1 = models.ForeignKey('Card', 
-    related_name='e_set_priority_up2', blank=True)
+    related_name='e_set_card_priority_up2', blank=True)
 
-    html_template = 'card_app/e-set-priority-up.html'
+    html_template = 'card_app/e-set-card-priority-up.html'
 
-class ESetPriorityDown(Event):
+class ESetCardPriorityDown(Event):
     """
     """
 
     ancestor = models.ForeignKey('list_app.List', 
-    related_name='e_set_priority_down0', blank=True)
+    related_name='e_set_card_priority_down0', blank=True)
 
     card0 = models.ForeignKey('Card', 
-    related_name='e_set_priority_down1', blank=True)
+    related_name='e_set_card_priority_down1', blank=True)
 
     card1 = models.ForeignKey('Card', 
-    related_name='e_set_priority_down2', blank=True)
+    related_name='e_set_card_priority_down2', blank=True)
 
-    html_template = 'card_app/e-set-priority-down.html'
+    html_template = 'card_app/e-set-card-priority-down.html'
 
 class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
@@ -595,6 +590,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

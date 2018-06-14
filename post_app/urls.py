@@ -45,8 +45,12 @@ urlpatterns = [
     url(r'^list-all-assignments/', views.ListAllAssignments.as_view(), name='list-all-assignments'),
     url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
+    url(r'^set-post-priority-down/(?P<post0_id>.+)/(?P<post1_id>.+)/', views.SetPostPriorityDown.as_view(), name='set-post-priority-down'),
+    url(r'^set-post-priority-up/(?P<post0_id>.+)/(?P<post1_id>.+)/', views.SetPostPriorityUp.as_view(), name='set-post-priority-up'),
+    url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
+
 
 
 

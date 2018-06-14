@@ -1,0 +1,53 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> has set post priority
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post0.id %}" href="{{event.post0.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post0.label|truncatechars:40}}
+</a> 
+
+down to
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post1.id %}" href="{{event.post1.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post1.label|truncatechars:40}} </a>
+
+
+on list
+
+<a class="e-get"
+data-callback="$('#smallModal').modal('toggle');" 
+data-shell="#main-view"
+data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
+<span class="glyphicon glyphicon-list-alt"></span>
+{{event.ancestor.name}} </a> 
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,6 +12,7 @@ from post_app.forms import PostForm
 from timeline_app.models import Timeline
 from core_app.models import User
 from list_app.models import List, EPasteCard
+from django.db import transaction
 from jsim.jscroll import JScroll
 from functools import reduce
 import board_app.models
@@ -991,41 +992,51 @@ class CardPriority(GuardianView):
         {'card': card, 'total': total, 'count': count, 'me': self.me,
         'cards': cards, 'form': form})
 
-class SetPriorityUp(GuardianView):
+class SetCardPriorityUp(GuardianView):
+    @transaction.atomic
     def get(self, request, card0_id, card1_id):
         card0  = models.Card.locate(self.me, self.me.default, card0_id)
         card1  = models.Card.locate(self.me, self.me.default, card1_id)
+        dir    = -1 if card0.priority < card1.priority else 1
+        flag   = 0 if card0.priority <= card1.priority else 1
 
-        cards = card0.ancestor.cards.filter(
-        priority__gt=card1.priority, id__gt=card1.id, done=False)
+        q0     = Q(priority__lte=card1.priority, priority__gt=card0.priority)
+        q1     = Q(priority__gt=card1.priority, priority__lt=card0.priority)
+        query  =  q0 if card0.priority < card1.priority else q1
+        cards  = card0.ancestor.cards.filter(query)
 
-        cards.update(priority=F('priority') + 2)
-
-        card0.priority = card1.priority + 1
+        cards.update(priority=F('priority') + dir)
+        card0.priority = card1.priority + flag
         card0.save()
 
-        event = models.ESetPriorityUp.objects.create(organization=self.me.default,
+        event = models.ESetCardPriorityUp.objects.create(organization=self.me.default,
         ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
         event.dispatch(*card0.ancestor.ancestor.members.all())
+        print('Priority', [[ind.label, ind.priority] for ind in card0.ancestor.cards.all().order_by('-priority')])
 
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
-class SetPriorityDown(GuardianView):
+class SetCardPriorityDown(GuardianView):
+    @transaction.atomic
     def get(self, request, card0_id, card1_id):
         card0  = models.Card.locate(self.me, self.me.default, card0_id)
         card1  = models.Card.locate(self.me, self.me.default, card1_id)
+        dir    = -1 if card0.priority < card1.priority else 1
+        flag   = -1 if card0.priority < card1.priority else 0
 
-        cards = card0.ancestor.cards.filter(
-        priority__gte=card1.priority, id__gte=card1.id, done=False)
+        q0     = Q(priority__lt=card1.priority, priority__gt=card0.priority)
+        q1     = Q(priority__gte=card1.priority, priority__lt=card0.priority)
+        query  = q0 if card0.priority < card1.priority else q1
+        cards  = card0.ancestor.cards.filter(query)
 
-        cards.update(priority=F('priority') + 1)
-
-        card0.priority = card1.priority
+        cards.update(priority=F('priority') + dir)
+        card0.priority = card1.priority + flag
         card0.save()
 
-        event = models.ESetPriorityDown.objects.create(organization=self.me.default,
+        event = models.ESetCardPriorityDown.objects.create(organization=self.me.default,
         ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
         event.dispatch(*card0.ancestor.ancestor.members.all())
+        print('Priority', [[ind.label, ind.priority] for ind in card0.ancestor.cards.all().order_by('-priority')])
 
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
@@ -1034,6 +1045,8 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
+
 
 
 

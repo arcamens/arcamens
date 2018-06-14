@@ -34,6 +34,7 @@ data-shell="#main-view" >
 <a class="s-modal" href="#"
 data-show="{% url 'post_app:post-events' post.id %}"> 
 <span class="glyphicon glyphicon-bell"></span> E/C</a>
+
 </div>
 </div>
 </div>
@@ -190,11 +191,18 @@ class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-random"></span> Fork/Card </a>
 
+<div class="pull-right">
+<a class=" b-modal text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
+<span class="glyphicon glyphicon-signal"></span> </a>
+</div>
+
 </div>
 
 {% endblock %}
 </div>
 </div>
+
+
 
 
 

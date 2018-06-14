@@ -16,6 +16,7 @@ from timeline_app.models import Timeline, EPastePost
 from django.conf import settings
 from jsim.jscroll import JScroll
 from card_app.models import Card
+from django.db import transaction
 from card_app.forms import CardForm, ListSearchform
 from functools import reduce
 from re import split
@@ -858,7 +859,9 @@ class PostEvents(GuardianView):
         Q(eattachsnippetfile__snippet__post__id=post.id) | \
         Q(eattachpostfile__post__id=post.id) | \
         Q(edettachpostfile__post__id=post.id) | \
-        Q(edettachsnippetfile__snippet__post__id=post.id)
+        Q(edettachsnippetfile__snippet__post__id=post.id)|\
+        Q(esetpostpriorityup__post0__id=post.id)|\
+        Q(esetpostprioritydown__post0__id=post.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
 
@@ -953,4 +956,84 @@ class RefreshPost(GuardianView):
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
 
+
+class PostPriority(GuardianView):
+    def get(self, request, post_id):
+        post  = models.Post.locate(self.me, self.me.default, post_id)
+        posts = post.ancestor.posts.filter(done=False)
+        posts = posts.order_by('-priority')
+        total = posts.count()
+
+        return render(request, 'post_app/post-priority.html', 
+        {'post': post, 'total': total, 'count': total, 'me': self.me,
+        'posts': posts, 'form': forms.PostPriorityForm()})
+
+    def post(self, request, post_id):
+        sqlike = models.Post.from_sqlike()
+        post   = models.Post.locate(self.me, self.me.default, post_id)
+        posts  = post.ancestor.posts.filter(done=False)
+        total  = posts.count()
+        form   = forms.PostPriorityForm(request.POST, sqlike=sqlike)
+
+        if not form.is_valid():
+            return render(request, 'post_app/post-priority.html', 
+                {'me': self.me, 'organization': self.me.default, 'post': post,
+                     'total': total, 'count': 0, 'form':form}, status=400)
+
+        posts = sqlike.run(posts)
+        posts = posts.order_by('-priority')
+
+        count = posts.count()
+
+        return render(request, 'post_app/post-priority.html', 
+        {'post': post, 'total': total, 'count': count, 'me': self.me,
+        'posts': posts, 'form': form})
+
+class SetPostPriorityUp(GuardianView):
+    @transaction.atomic
+    def get(self, request, post0_id, post1_id):
+        post0  = models.Post.locate(self.me, self.me.default, post0_id)
+        post1  = models.Post.locate(self.me, self.me.default, post1_id)
+        dir    = -1 if post0.priority < post1.priority else 1
+        flag   = 0 if post0.priority <= post1.priority else 1
+
+        q0     = Q(priority__lte=post1.priority, priority__gt=post0.priority)
+        q1     = Q(priority__gt=post1.priority, priority__lt=post0.priority)
+        query  = q0 if post0.priority < post1.priority else q1
+        posts  = post0.ancestor.posts.filter(query)
+
+        posts.update(priority=F('priority') + dir)
+        post0.priority = post1.priority + flag
+        post0.save()
+
+        event = models.ESetPostPriorityUp.objects.create(organization=self.me.default,
+        ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
+        event.dispatch(*post0.ancestor.users.all())
+        print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
+
+        return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+
+class SetPostPriorityDown(GuardianView):
+    @transaction.atomic
+    def get(self, request, post0_id, post1_id):
+        post0  = models.Post.locate(self.me, self.me.default, post0_id)
+        post1  = models.Post.locate(self.me, self.me.default, post1_id)
+        dir    = -1 if post0.priority < post1.priority else 1
+        flag   = -1 if post0.priority < post1.priority else 0
+
+        q0     = Q(priority__lt=post1.priority, priority__gt=post0.priority)
+        q1     = Q(priority__gte=post1.priority, priority__lt=post0.priority)
+        query  =  q0 if post0.priority < post1.priority else q1
+        posts  = post0.ancestor.posts.filter(query)
+
+        posts.update(priority=F('priority') + dir)
+        post0.priority = post1.priority + flag
+        post0.save()
+
+        event = models.ESetPostPriorityDown.objects.create(organization=self.me.default,
+        ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
+        event.dispatch(*post0.ancestor.users.all())
+        print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
+
+        return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
 

@@ -6,14 +6,14 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
-<span class="glyphicon glyphicon-search"></span> {{card.label|truncatechars:15}}'s Priority
+<span class="glyphicon glyphicon-search"></span> {{post.label|truncatechars:15}}'s Priority
 <span class="badge">{{count}}/{{total}}</span> </h5>
 </div>
 
 <div class="modal-body">
 <div class="pre-scrollable">
 
-{% for ind in cards %}
+{% for ind in posts %}
 <p>
 
 
@@ -22,17 +22,17 @@
 
 <small>
 <a class="e-get text-danger"  data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:set-card-priority-up' card.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-up"></span>Up</a> 
+data-show="{% url 'post_app:set-post-priority-up' post.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-up"></span>Up</a> 
 
 <a class="e-get text-success" data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
-data-show="{% url 'card_app:set-card-priority-down' card.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-down"></span>Down</a> 
+data-show="{% url 'post_app:set-post-priority-down' post.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-down"></span>Down</a> 
 </small>
 
 </p>
 {% endfor %}
 
 </div> <br>
-<form id="cardPriorityForm" enctype="multipart/form-data">
+<form id="postPriorityForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.pattern  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -45,8 +45,8 @@ data-show="{% url 'card_app:set-card-priority-down' card.id ind.id %}" href="{{i
 <button type="button" class="btn btn-default" 
 data-dismiss="modal">Close</button>
 
-<button  type="button" data-form="#cardPriorityForm" 
-id="filterCardRelations" data-show="{% url 'card_app:card-priority' card.id  %}"
+<button  type="button" data-form="#postPriorityForm" 
+id="filterCardRelations" data-show="{% url 'post_app:post-priority' post.id  %}"
 class="btn btn-default m-post"> {% trans "Search" %} </button>
 
 </div>

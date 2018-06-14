@@ -52,10 +52,11 @@ urlpatterns = [
     url(r'^card-events/(?P<card_id>.+)/', views.CardEvents.as_view(), name='card-events'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
     url(r'^card-priority/(?P<card_id>.+)/', views.CardPriority.as_view(), name='card-priority'),
-    url(r'^set-priority-down/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetPriorityDown.as_view(), name='set-priority-down'),
-    url(r'^set-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetPriorityUp.as_view(), name='set-priority-up'),
+    url(r'^set-card-priority-down/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityDown.as_view(), name='set-card-priority-down'),
+    url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
 
 ]
+
 
 
 

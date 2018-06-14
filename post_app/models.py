@@ -35,6 +35,10 @@ class PostMixin(models.Model):
         self.html = markdown(self.data,
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
+
+        if not self.pk:
+            self.priority = self.ancestor.posts.count()
+
         super(PostMixin, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -152,6 +156,8 @@ class PostFileWrapperMixin(models.Model):
 class Post(PostMixin):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
+
+    priority = models.IntegerField(default=0)
 
     # parent = models.ForeignKey('card_app.Card', 
     # related_name='post_forks', null=True, blank=True)
@@ -436,7 +442,35 @@ class EDettachPostFile(Event):
 
     html_template = 'post_app/e-dettach-post-file.html'
 
+class ESetPostPriorityUp(Event):
+    """
+    """
 
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_set_post_priority_up0', blank=True)
+
+    post0 = models.ForeignKey('Post', 
+    related_name='e_set_post_priority_up1', blank=True)
+
+    post1 = models.ForeignKey('Post', 
+    related_name='e_set_post_priority_up2', blank=True)
+
+    html_template = 'post_app/e-set-priority-up.html'
+
+class ESetPostPriorityDown(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    related_name='e_set_post_priority_down0', blank=True)
+
+    post0 = models.ForeignKey('Post', 
+    related_name='e_set_post_priority_down1', blank=True)
+
+    post1 = models.ForeignKey('Post', 
+    related_name='e_set_post_priority_down2', blank=True)
+
+    html_template = 'post_app/e-set-priority-down.html'
 
 
 

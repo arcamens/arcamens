@@ -5,7 +5,7 @@ from . import models
 class PostForm(forms.ModelForm):
     class Meta:
         model  = models.Post
-        exclude = ('user', 'ancestor', 'html', 'parent')
+        exclude = ('user', 'ancestor', 'html', 'parent', 'priority')
 
 class PostFileWrapperForm(forms.ModelForm):
     class Meta:
@@ -53,16 +53,8 @@ class ListSearchform(forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
 
-
-
-
-
-
-
-
-
-
-
-
+class PostPriorityForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False, 
+    help_text='Example: owner:oliveira + tag:bug')
 
 

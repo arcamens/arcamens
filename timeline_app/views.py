@@ -43,7 +43,7 @@ class ListPosts(GuardianView):
         organization=self.me.default)
 
         posts = filter.collect(posts)
-        posts = posts.order_by('-created')
+        posts = posts.order_by('-priority')
         count = posts.count()
         elems = JScroll(self.me.id, 'timeline_app/list-posts-scroll.html', posts)
 
@@ -206,7 +206,10 @@ class PastePosts(GuardianView):
             return HttpResponse("There is no post on \
                 the clipboard.", status=403)
 
-        posts.update(ancestor=timeline)
+        post = self.ancestor.posts.order_by('-priority').first()
+        posts.update(ancestor=list, priority=F('priority') + post.priority)
+
+        posts.update(ancestor=timeline, priority=post.priority)
         event = EPastePost(organization=self.me.default, 
         timeline=timeline, user=self.me)
 
@@ -383,6 +386,10 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
+
+
+
 
 
 
