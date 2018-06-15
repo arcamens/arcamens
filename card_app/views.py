@@ -515,23 +515,6 @@ class PinCard(GuardianView):
 
         return redirect('board_app:list-pins')
 
-class UnrelateCard(GuardianView):
-    def get(self, request, card0_id, card1_id):
-        card0 = models.Card.locate(self.me, self.me.default, card0_id)
-        card1 = models.Card.locate(self.me, self.me.default, card1_id)
-        card0.relations.remove(card1)
-        card0.save()
-
-        event = models.EUnrelateCard.objects.create(
-        organization=self.me.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, card0=card0, 
-        card1=card1, user=self.me)
-
-        event.dispatch(*card0.ancestor.ancestor.members.all())
-        event.dispatch(*card1.ancestor.ancestor.members.all())
-
-        return HttpResponse(status=200)
-
 class ManageCardWorkers(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
