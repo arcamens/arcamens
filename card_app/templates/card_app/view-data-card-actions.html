@@ -44,12 +44,6 @@ data-callback="$('#smallModal').modal('toggle');"  href="#">
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
-
-<a class="b-modal"
-data-show="{% url 'card_app:manage-card-relations'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-link"></span> Relate</a></li>
-
-<li>
 <a data-shell="#main-view" class="e-get text-warning"
 data-show="{% url 'card_app:cut-card' card.id %}" href="#">
 <span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
@@ -69,5 +63,6 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 

@@ -39,9 +39,9 @@ urlpatterns = [
     url(r'^bind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.BindCardWorker.as_view(), name='bind-card-worker'),
     url(r'^unbind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.UnbindCardWorker.as_view(), name='unbind-card-worker'),
     url(r'^pin-card/(?P<card_id>.+)/', views.PinCard.as_view(), name='pin-card'),
-    url(r'^relate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.RelateCard.as_view(), name='relate-card'),
-    url(r'^unrelate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.UnrelateCard.as_view(), name='unrelate-card'),
-    url(r'^manage-card-relations/(?P<card_id>.+)/', views.ManageCardRelations.as_view(), name='manage-card-relations'),
+    # url(r'^relate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.RelateCard.as_view(), name='relate-card'),
+    # url(r'^unrelate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.UnrelateCard.as_view(), name='unrelate-card'),
+    # url(r'^manage-card-relations/(?P<card_id>.+)/', views.ManageCardRelations.as_view(), name='manage-card-relations'),
     url(r'^manage-card-tags/(?P<card_id>.+)/', views.ManageCardTags.as_view(), name='manage-card-tags'),
     url(r'^bind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.BindCardTag.as_view(), name='bind-card-tag'),
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
 
 ]
+
 
 
 

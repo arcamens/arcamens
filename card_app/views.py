@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models.functions import Concat
-from django.db.models import Q, F, Exists, OuterRef, Count
+from django.db.models import Q, F, Exists, OuterRef, Count, Value, CharField
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from card_app.models import GlobalTaskFilter, GlobalCardFilter, CardPin
@@ -23,6 +23,7 @@ import operator
 import core_app.models
 from django.conf import settings
 from re import split
+from re import findall
 
 # Create your views here.
 
@@ -164,12 +165,34 @@ class CreateCard(GuardianView):
         card.owner    = self.me
         card.ancestor = ancestor
         card.save()
+        REGX  ='card_app/card-link/([0-9]+)'
+        ids   = findall(REGX, card.data)
+
+        self.create_relations(card, ids)
 
         event = models.ECreateCard.objects.create(organization=self.me.default,
         ancestor=card.ancestor, card=card, user=self.me)
         event.dispatch(*ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=card.id)
+
+    def create_relations(self, card, ids):
+        cards = models.Card.objects.filter(id__in=ids)
+
+        for ind in cards:
+            self.relate(card, ind)
+    
+    def relate(self, card0, card1):
+        card0.relations.add(card1)
+        event = models.ERelateCard.objects.create(
+        organization=self.me.default, ancestor0=card0.ancestor, 
+        ancestor1=card1.ancestor, card0=card0, card1=card1, user=self.me)
+
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+        event.dispatch(*card1.ancestor.ancestor.members.all())
+
+    def unrelate(self, card0, card1):
+        pass
 
 class SelectForkList(GuardianView):
     def get(self, request, card_id):
@@ -400,7 +423,7 @@ class DetachFile(GuardianView):
         return render(request, 'card_app/attach-file.html', 
         {'card':filewrapper.card, 'form': form, 'attachments': attachments})
 
-class UpdateCard(GuardianView):
+class UpdateCard(CreateCard):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
         return render(request, 'card_app/update-card.html',
@@ -422,8 +445,35 @@ class UpdateCard(GuardianView):
         event.dispatch(*record.ancestor.ancestor.members.all())
         event.save()
 
+        REGX  ='card_app/card-link/([0-9]+)'
+        ids   = findall(REGX, record.data)
+
+        self.update_relations(record, ids)
+
         return redirect('card_app:view-data', 
         card_id=record.id)
+
+    def update_relations(self, card, ids):
+        cards = models.Card.objects.filter(id__in=ids)
+        cards = cards.exclude(id__in=card.relations.all())
+        for ind in cards:
+            self.relate(card, ind)
+
+        cards = card.relations.exclude(id__in=ids)
+        for ind in cards:
+            self.unrelate(card, ind)
+
+    def unrelate(self, card0, card1):
+        card0.relations.remove(card1)
+        card0.save()
+
+        event = models.EUnrelateCard.objects.create(
+        organization=self.me.default, ancestor0=card0.ancestor, 
+        ancestor1=card1.ancestor, card0=card0, 
+        card1=card1, user=self.me)
+
+        event.dispatch(*card0.ancestor.ancestor.members.all())
+        event.dispatch(*card1.ancestor.ancestor.members.all())
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
@@ -481,64 +531,6 @@ class UnrelateCard(GuardianView):
         event.dispatch(*card1.ancestor.ancestor.members.all())
 
         return HttpResponse(status=200)
-
-class RelateCard(GuardianView):
-    def get(self, request, card0_id, card1_id):
-        card0 = models.Card.locate(self.me, self.me.default, card0_id)
-        card1 = models.Card.locate(self.me, self.me.default, card1_id)
-        card0.relations.add(card1)
-        card0.save()
-
-        event = models.ERelateCard.objects.create(
-        organization=self.me.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, card0=card0, card1=card1, user=self.me)
-
-        event.dispatch(*card0.ancestor.ancestor.members.all())
-        event.dispatch(*card1.ancestor.ancestor.members.all())
-
-        return HttpResponse(status=200)
-
-class ManageCardRelations(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-        included = card.relations.filter(done=False)
-        cards    = models.Card.get_allowed_cards(self.me)
-        total    = cards.count()
-        cards    = cards.filter(done=False)
-        excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
-
-        return render(request, 'card_app/manage-card-relations.html', 
-        {'included': included, 'excluded': excluded, 'card': card, 
-        'total': total, 'count': total, 'me': self.me, 
-        'organization': self.me.default,'form':forms.CardSearchForm()})
-
-    def post(self, request, card_id):
-        sqlike = models.Card.from_sqlike()
-
-        form   = forms.CardSearchForm(request.POST, sqlike=sqlike)
-        card = models.Card.locate(self.me, self.me.default, card_id)
-        cards  = models.Card.get_allowed_cards(self.me)
-        total  = cards.count()
-
-        if not form.is_valid():
-            return render(request, 'card_app/manage-card-relations.html', 
-                {'me': self.me, 'organization': self.me.default, 'card': card,
-                     'total': total, 'count': 0, 'form':form}, status=400)
-
-        included = card.relations.all()
-        excluded = cards.exclude(Q(pk__in=included) | Q(pk=card.pk))
-
-        included = included.filter(Q(done=form.cleaned_data['done']))
-        included = sqlike.run(included)
-
-        excluded = excluded.filter(Q(done=form.cleaned_data['done']))
-        excluded = sqlike.run(excluded)
-        count    = excluded.count() + included.count()
-
-        return render(request, 'card_app/manage-card-relations.html', 
-        {'included': included, 'excluded': excluded, 'card': card, 
-        'count': count, 'total': total, 'me': self.me, 'form':form})
-
 
 class ManageCardWorkers(GuardianView):
     def get(self, request, card_id):
@@ -952,8 +944,8 @@ class CardEvents(GuardianView):
         Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
         Q(eattachnotefile__note__card=card.id) | \
         Q(edettachnotefile__note__card=card.id)|\
-        Q(ecreatecardfork__card=card.id)| Q(esetpriorityup__card0=card.id)|\
-        Q(esetprioritydown__card0=card.id)
+        Q(ecreatecardfork__card=card.id)| Q(esetcardpriorityup__card0=card.id)|\
+        Q(esetcardprioritydown__card0=card.id)
 
 
         events = Event.objects.filter(query).order_by('-created').values('html')
@@ -1045,6 +1037,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
