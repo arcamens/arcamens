@@ -165,14 +165,15 @@ class CreateCard(GuardianView):
         card.owner    = self.me
         card.ancestor = ancestor
         card.save()
-        REGX  ='card_app/card-link/([0-9]+)'
-        ids   = findall(REGX, card.data)
-
-        self.create_relations(card, ids)
 
         event = models.ECreateCard.objects.create(organization=self.me.default,
         ancestor=card.ancestor, card=card, user=self.me)
         event.dispatch(*ancestor.ancestor.members.all())
+
+        REGX  ='card_app/card-link/([0-9]+)'
+        ids   = findall(REGX, card.data)
+
+        self.create_relations(card, ids)
 
         return redirect('card_app:view-data', card_id=card.id)
 
