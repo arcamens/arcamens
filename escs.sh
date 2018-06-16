@@ -380,15 +380,9 @@ python setup.py install
 rm -fr build
 
 python manage.py normalize_events
+##############################################################################
 
-
-
-
-
-
-
-
-
+pandoc --toc -s index.md -o index.html
 
 
 

@@ -1,3 +1,7 @@
+---
+title: Arcamens Docs
+---
+
 ## Intro
 
 Arcamens was designed to allow a high level of communication and collaboration by teams.
@@ -151,16 +155,17 @@ You would get:
 ![card-workers-1](/static/site_app/help/card-workers-1.png)
 
 Type a string that matches either the user name or email then hit enter.
+So you will be able to add users to the card task.
 
-**See:** Advanced User Search
+**See:** [Advanced User Search](#advanced-user-search)
 
 ### Board Permissions
 
-A board will have a owner(the one who has created it), admins and members. The owner
+A board will have a owner (the one who has created it), admins and members. The owner
 is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board
 but members aren't allowed to remove peers.
 
-For adding new members to the board(assuming you're the owner or an admin), just access the board 
+For adding new members to the board (assuming you're the owner or an admin), just access the board 
 then click on the wrench icon:
 
 ![board-permissions-0](/static/site_app/help/board-permissions-0.png)
@@ -169,9 +174,9 @@ Then click on Members, you would get:
 
 ![board-permissions-1](/static/site_app/help/board-permissions-1.png)
 
-You can search users by using tag, email or name attributes.
+You can search users by using tag, email or name attributes, then add users.
 
-**See:** Advanced User Search
+**See:** [Advanced User Search](#advanced-user-search)
 
 After binding/unbinding a given user to a board he/she will get notified of it.
 
@@ -224,12 +229,80 @@ Then you'll be able to manage the card tags:
 ![card-tags-3](/static/site_app/help/card-tags-3.png)
 
 If you add/remove a tag to a card then everyone who is related to the card will get notified. 
-The card board members and card workers.
-
 You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
 It is useful when your organization has many tags.
 
 ### Search for Card Tasks 
+
+In arcamens there is a generic concept of task, a card becomes into a task when it is
+assigned to someone. When the task is accomplished then one can just archive it. 
+The card will remain available for later inspection.
+
+In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards
+at the navbar:
+
+**Note:** The mechanism will match the search pattern against all cards that can be accessed by you.
+
+![search-for-card-tasks-0](/static/site_app/help/search-for-card-tasks-0.png)
+
+From the dialog window you can search through all cards that have at least one user
+bound to. 
+
+![search-for-card-tasks-1](/static/site_app/help/search-for-card-tasks-1.png)
+
+**Assigned to me**
+
+When this option is marked then the filter pattern will be matched
+against all cards that were assigned to you.
+
+**Created by Me**
+
+When this option is checked then the filter pattern will match
+all cards that were assigned to someone and the owner is you.
+
+**All Tasks**
+
+Use this option for matching the filter pattern over all cards
+that contain at least one worker assigned to.
+
+**Done**
+
+This option allows to search for archived cards instead of active ones.
+
+Consider the filter pattern below and the three listed cards in the above picture.
+Assume you dont know who has created such a card then leave the All Tasks option checked.
+
+~~~
+any + create + tag
+~~~
+
+The above pattern would match the card label is:
+
+~~~
+Anybody can create/delete a tag 
+~~~
+
+If you wrote as pattern:
+
+~~~
+bug with + zone
+~~~
+
+It would match:
+
+~~~
+Bug with timezone. 
+~~~
+
+Notice that it also checks for card data attribute(the one which can contain markdown).
+The string patterns are delimited by the plus sign '+', the listed cards should contain
+each one of the pattern strings either in the label or data attribute.
+
+You can get more than one match depending on the pattern and the existing cards.
+Once you have filtered the cards then you can click on the card link and open it in the
+actual browser tab or just right click and open in a new tab.
+
+**See:** [Advanced Card Search](#advanced-card-search)
 
 ### Card Search
 
@@ -405,7 +478,7 @@ Then you would get:
 
 From there you can search users from your organization that match a given criterea.
 
-**See:** Advanced User Search
+**See:** [Advanced User Search](#advanced-user-search)
 
 
 ### Post E-mail/Notifications

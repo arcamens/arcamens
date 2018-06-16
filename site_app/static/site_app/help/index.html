@@ -1,331 +1,464 @@
-<h2>Intro</h2>
-<p>Arcamens was designed to allow a high level of communication and collaboration by teams.
-It implements so called Kanban Boards and Timelines.
-Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is
-pertinent to a project.</p>
-<p>The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates
-better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.</p>
-<p>The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective
-of the information that is relevant to the board team.</p>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Arcamens Docs</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">Arcamens Docs</h1>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#intro">Intro</a><ul>
+<li><a href="#board-creation">Board Creation</a></li>
+<li><a href="#list-creation">List Creation</a></li>
+<li><a href="#card-creation">Card Creation</a></li>
+<li><a href="#events">Events</a></li>
+<li><a href="#card-workers">Card Workers</a></li>
+<li><a href="#board-permissions">Board Permissions</a></li>
+<li><a href="#tag-creation">Tag Creation</a></li>
+<li><a href="#card-tags">Card Tags</a></li>
+<li><a href="#search-for-card-tasks">Search for Card Tasks</a></li>
+<li><a href="#card-search">Card Search</a></li>
+<li><a href="#organization-creation">Organization Creation</a></li>
+<li><a href="#timelines">Timelines</a></li>
+<li><a href="#timeline-creation">Timeline Creation</a></li>
+<li><a href="#posts">Posts</a></li>
+<li><a href="#post-creation">Post Creation</a></li>
+<li><a href="#post-workers">Post Workers</a></li>
+<li><a href="#post-tags">Post Tags</a></li>
+<li><a href="#organization-invites">Organization Invites</a></li>
+<li><a href="#organization-admins">Organization Admins</a></li>
+<li><a href="#timeline-members">Timeline Members</a></li>
+<li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
+<li><a href="#search-for-post-tasks">Search for Post Tasks</a></li>
+<li><a href="#post-search">Post Search</a></li>
+<li><a href="#event-comments">Event Comments</a></li>
+<li><a href="#post-filter">Post Filter</a></li>
+<li><a href="#collection-filter">Collection Filter</a></li>
+<li><a href="#cards-text-colors">Card’s Text Colors</a></li>
+<li><a href="#card-e-mailnotifications">Card E-mail/Notifications</a></li>
+<li><a href="#card-filter">Card Filter</a></li>
+<li><a href="#card-forks">Card Forks</a></li>
+<li><a href="#post-forks">Post Forks</a></li>
+<li><a href="#advanced-user-search">Advanced User Search</a></li>
+<li><a href="#advanced-card-search">Advanced Card Search</a></li>
+<li><a href="#advanced-post-search">Advanced Post Search</a></li>
+<li><a href="#timeline-settingsremoval">Timeline Settings/Removal</a></li>
+<li><a href="#board-settingsremoval">Board Settings/Removal</a></li>
+<li><a href="#bitbucket-integration">Bitbucket Integration</a></li>
+<li><a href="#organization-user-removal">Organization User Removal</a></li>
+<li><a href="#organization-settingsremoval">Organization Settings/Removal</a></li>
+<li><a href="#logs">Logs</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="intro">Intro</h2>
+<p>Arcamens was designed to allow a high level of communication and collaboration by teams. It implements so called Kanban Boards and Timelines. Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is pertinent to a project.</p>
+<p>The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.</p>
+<p>The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective of the information that is relevant to the board team.</p>
 <p>The following image displays an example set of boards:</p>
-<p><img alt="arcamens-boards-0" src="/static/site_app/help/arcamens-boards-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/arcamens-boards-0.png" alt="arcamens-boards-0" /><figcaption>arcamens-boards-0</figcaption>
+</figure>
 <p>After accessing the board, its lists are shown.</p>
-<p><img alt="arcamens-boards-1" src="/static/site_app/help/arcamens-boards-1.png" /></p>
-<p>Once a list is accessed by clicking on its link name it displays all the cards
-that it holds.</p>
-<p><img alt="arcamens-boards-2" src="/static/site_app/help/arcamens-boards-2.png" /></p>
-<p>Arcamens boards allow one to deal with a high amount of cards in a very advantageous manner
-because information is more visible. It allows one to pin certain lists that are often used
-thus allowing quick access of content.</p>
+<figure>
+<img src="/static/site_app/help/arcamens-boards-1.png" alt="arcamens-boards-1" /><figcaption>arcamens-boards-1</figcaption>
+</figure>
+<p>Once a list is accessed by clicking on its link name it displays all the cards that it holds.</p>
+<figure>
+<img src="/static/site_app/help/arcamens-boards-2.png" alt="arcamens-boards-2" /><figcaption>arcamens-boards-2</figcaption>
+</figure>
+<p>Arcamens boards allow one to deal with a high amount of cards in a very advantageous manner because information is more visible. It allows one to pin certain lists that are often used thus allowing quick access of content.</p>
 <p>Pinning an element is as easy as clicking on the clip icon as shown below:</p>
-<p><img alt="arcamens-boards-3" src="/static/site_app/help/arcamens-boards-3.png" /></p>
+<figure>
+<img src="/static/site_app/help/arcamens-boards-3.png" alt="arcamens-boards-3" /><figcaption>arcamens-boards-3</figcaption>
+</figure>
 <p><strong>Note:</strong> You can pin boards, lists, cards or timelines.</p>
-<p>Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than
-the usual drag&amp;drop approach.  You can cut several cards, these will stay on the clipboard
-when you're ready just paste them somewhere.</p>
-<h3>Board Creation</h3>
-<p>You can create as many boards as you desire. For creating a new board just click on Home at the navbar
-and then use the popup menu by clicking the wrench icon shown at this image:</p>
-<p><img alt="board-creation-0" src="/static/site_app/help/board-creation-0.png" /></p>
+<p>Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than the usual drag&amp;drop approach. You can cut several cards, these will stay on the clipboard when you’re ready just paste them somewhere.</p>
+<h3 id="board-creation">Board Creation</h3>
+<p>You can create as many boards as you desire. For creating a new board just click on Home at the navbar and then use the popup menu by clicking the wrench icon shown at this image:</p>
+<figure>
+<img src="/static/site_app/help/board-creation-0.png" alt="board-creation-0" /><figcaption>board-creation-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="board-creation-1" src="/static/site_app/help/board-creation-1.png" /></p>
-<p>One may find it necessary to have boards that are related to the same project, in such situations
-it is possible to set their descriptions with a slug to group them according to their project.</p>
-<p>Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins.
-You could come up with boards description like:</p>
+<figure>
+<img src="/static/site_app/help/board-creation-1.png" alt="board-creation-1" /><figcaption>board-creation-1</figcaption>
+</figure>
+<p>One may find it necessary to have boards that are related to the same project, in such situations it is possible to set their descriptions with a slug to group them according to their project.</p>
+<p>Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins. You could come up with boards description like:</p>
 <pre><code>Arcamens/Github
-Arcamens/Bitbucket
-</code></pre>
+Arcamens/Bitbucket</code></pre>
 <p>Then you can use your board filter with a pattern like:</p>
-<pre><code>Arcamens/
-</code></pre>
+<pre><code>Arcamens/</code></pre>
 <p>It would display just boards that meet that slug.</p>
 <p><strong>See:</strong> Link to board filters.</p>
-<h3>List Creation</h3>
-<p>Lists are placed inside boards, After accessing the board link name you can
-create new lists for the board.</p>
+<h3 id="list-creation">List Creation</h3>
+<p>Lists are placed inside boards, After accessing the board link name you can create new lists for the board.</p>
 <p>For such click on +List link button.</p>
-<p><img alt="list-creation-0" src="/static/site_app/help/list-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/list-creation-0.png" alt="list-creation-0" /><figcaption>list-creation-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="list-creation-1" src="/static/site_app/help/list-creation-1.png" /></p>
-<p>You can set slugs for lists as well, you could handle a project with many plugins
-using the approach of setting slugs for each one of your project plugins as follows:</p>
+<figure>
+<img src="/static/site_app/help/list-creation-1.png" alt="list-creation-1" /><figcaption>list-creation-1</figcaption>
+</figure>
+<p>You can set slugs for lists as well, you could handle a project with many plugins using the approach of setting slugs for each one of your project plugins as follows:</p>
 <pre><code>Bitbucket/Todo
 Github/Todo
 Bitbucket/Doing
 Github/Doing
 
-...
-</code></pre>
-<p>It allows designing your project workflow without creating multiple
-boards for its plugins.</p>
-<h3>Card Creation</h3>
+...</code></pre>
+<p>It allows designing your project workflow without creating multiple boards for its plugins.</p>
+<h3 id="card-creation">Card Creation</h3>
 <p>Card are the entities which contain actual information pieces.</p>
 <p>Cards are created inside lists, after accessing a list just click on +Card:</p>
-<p><img alt="card-creation-0" src="/static/site_app/help/card-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-creation-0.png" alt="card-creation-0" /><figcaption>card-creation-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="card-creation-1" src="/static/site_app/help/card-creation-1.png" /></p>
-<p>The card label field is used to give a short description of the task, the data field
-can contain markdown content and should be used when the content is too long.
-After filling the fields and creating your task, you would get the view of the card:</p>
-<p><img alt="card-creation-2" src="/static/site_app/help/card-creation-2.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-creation-1.png" alt="card-creation-1" /><figcaption>card-creation-1</figcaption>
+</figure>
+<p>The card label field is used to give a short description of the task, the data field can contain markdown content and should be used when the content is too long. After filling the fields and creating your task, you would get the view of the card:</p>
+<figure>
+<img src="/static/site_app/help/card-creation-2.png" alt="card-creation-2" /><figcaption>card-creation-2</figcaption>
+</figure>
 <p><strong>Note:</strong> Click on Up to get back to the card list.</p>
-<p>You can change all attributes for the card there, whenever an attribute is changed
-then an event is fired. All users who are related to the card will get notified.
-These users are those who belong to the card board or are assigned to the card.</p>
-<h3>Events</h3>
-<p>Whenever an user creates or updates content then an event is fired. The events
-are means of knowing what is going on with your teams.</p>
-<p><img alt="events-9" src="/static/site_app/help/events-0.png" /></p>
-<p>The kind of action that was performed can be commented out thus giving constructive criticism about your peers
-work.</p>
-<p>Events will carry links to the objects that are related to the user action. You can left click on the links
-and inspect the cards, lists, etc in the same browser tab or just middle click and open them in new browser
-tabs.</p>
-<p>When you finished checking an user action you can mark the event as seen then it will be no longer listed in the
-Events dialog but you can still access it through your logs.</p>
-<h3>Card Workers</h3>
+<p>You can change all attributes for the card there, whenever an attribute is changed then an event is fired. All users who are related to the card will get notified. These users are those who belong to the card board or are assigned to the card.</p>
+<h3 id="events">Events</h3>
+<p>Whenever an user creates or updates content then an event is fired. The events are means of knowing what is going on with your teams.</p>
+<figure>
+<img src="/static/site_app/help/events-0.png" alt="events-9" /><figcaption>events-9</figcaption>
+</figure>
+<p>The action that was performed can be commented on thus giving constructive criticism about your peers work.</p>
+<p>Events will carry links to the objects that are related to the user action. You can left click on the links and inspect the cards, lists, etc in the same browser tab or just middle click and open them in new browser tabs.</p>
+<p>When you finished checking an user action you can mark the event as seen then it will be no longer listed in the Events dialog but you can still access it through your logs.</p>
+<h3 id="card-workers">Card Workers</h3>
 <p>After a card is created it can be assigned to someone for its execution by clicking on Workers:</p>
-<p><img alt="card-workers-0" src="/static/site_app/help/card-workers-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-workers-0.png" alt="card-workers-0" /><figcaption>card-workers-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="card-workers-1" src="/static/site_app/help/card-workers-1.png" /></p>
-<p>Type a string that matches either the user name or email then hit enter.</p>
-<p><strong>See:</strong> Advanced User Search</p>
-<h3>Board Permissions</h3>
-<p>A board will have a owner(the one who has created it), admins and members. The owner
-is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board
-but members aren't allowed to remove peers.</p>
-<p>For adding new members to the board(assuming you're the owner or an admin), just access the board 
-then click on the wrench icon:</p>
-<p><img alt="board-permissions-0" src="/static/site_app/help/board-permissions-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-workers-1.png" alt="card-workers-1" /><figcaption>card-workers-1</figcaption>
+</figure>
+<p>Type a string that matches either the user name or email then hit enter. So you will be able to add users to the card task.</p>
+<p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
+<h3 id="board-permissions">Board Permissions</h3>
+<p>A board will have a owner (the one who has created it), admins and members. The owner is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board but members aren’t allowed to remove peers.</p>
+<p>For adding new members to the board (assuming you’re the owner or an admin), just access the board then click on the wrench icon:</p>
+<figure>
+<img src="/static/site_app/help/board-permissions-0.png" alt="board-permissions-0" /><figcaption>board-permissions-0</figcaption>
+</figure>
 <p>Then click on Members, you would get:</p>
-<p><img alt="board-permissions-1" src="/static/site_app/help/board-permissions-1.png" /></p>
-<p>You can search users by using tag, email or name attributes.</p>
-<p><strong>See:</strong> Advanced User Search</p>
+<figure>
+<img src="/static/site_app/help/board-permissions-1.png" alt="board-permissions-1" /><figcaption>board-permissions-1</figcaption>
+</figure>
+<p>You can search users by using tag, email or name attributes, then add users.</p>
+<p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
 <p>After binding/unbinding a given user to a board he/she will get notified of it.</p>
-<h3>Tag Creation</h3>
-<p>You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed
-to create new tags, when a tag is created an event is fired and everyone in the organization gets aware of it.</p>
+<h3 id="tag-creation">Tag Creation</h3>
+<p>You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed to create new tags, when a tag is created an event is fired and everyone in the organization gets aware of it.</p>
 <p>Click on the wrench icon on the organization menu:</p>
-<p><img alt="tag-creation-0" src="/static/site_app/help/tag-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/tag-creation-0.png" alt="tag-creation-0" /><figcaption>tag-creation-0</figcaption>
+</figure>
 <p>Then click on Tags:</p>
-<p><img alt="tag-creation-1" src="/static/site_app/help/tag-creation-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/tag-creation-1.png" alt="tag-creation-1" /><figcaption>tag-creation-1</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="tag-creation-2" src="/static/site_app/help/tag-creation-2.png" /></p>
-<p>Notice that if your organization has many tags then you can look up a given tag by its name or description.
-Just insert the pattern and hit enter then you'll get all tags that match the criterea.</p>
+<figure>
+<img src="/static/site_app/help/tag-creation-2.png" alt="tag-creation-2" /><figcaption>tag-creation-2</figcaption>
+</figure>
+<p>Notice that if your organization has many tags then you can look up a given tag by its name or description. Just insert the pattern and hit enter then you’ll get all tags that match the criterea.</p>
 <p>Clicking on the plus sign it gives you:</p>
-<p><img alt="tag-creation-3" src="/static/site_app/help/tag-creation-3.png" /></p>
+<figure>
+<img src="/static/site_app/help/tag-creation-3.png" alt="tag-creation-3" /><figcaption>tag-creation-3</figcaption>
+</figure>
 <p>Fill the tag name and description and then click on Create.</p>
-<p><img alt="tag-creation-4" src="/static/site_app/help/tag-creation-4.png" /></p>
-<h3>Card Tags</h3>
-<p>Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users.
-For tagging a given card just access the card by clicking on its label link.</p>
-<p><img alt="card-tags-0" src="/static/site_app/help/card-tags-0.png" /></p>
-<p>Then you'll view the card attributes.</p>
-<p><img alt="card-tags-1" src="/static/site_app/help/card-tags-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/tag-creation-4.png" alt="tag-creation-4" /><figcaption>tag-creation-4</figcaption>
+</figure>
+<h3 id="card-tags">Card Tags</h3>
+<p>Tags are a powerful mean of classifying content, arcamens allows you to tag cards, posts and users. For tagging a given card just access the card by clicking on its label link.</p>
+<figure>
+<img src="/static/site_app/help/card-tags-0.png" alt="card-tags-0" /><figcaption>card-tags-0</figcaption>
+</figure>
+<p>Then you’ll view the card attributes.</p>
+<figure>
+<img src="/static/site_app/help/card-tags-1.png" alt="card-tags-1" /><figcaption>card-tags-1</figcaption>
+</figure>
 <p>Click on Tags button at the card toolbar:</p>
-<p><img alt="card-tags-2" src="/static/site_app/help/card-tags-2.png" /></p>
-<p>Then you'll be able to manage the card tags:</p>
-<p><img alt="card-tags-3" src="/static/site_app/help/card-tags-3.png" /></p>
-<p>If you add/remove a tag to a card then everyone who is related to the card will get notified. 
-The card board members and card workers.</p>
-<p>You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
-It is useful when your organization has many tags.</p>
-<h3>Search for Card Tasks</h3>
-<h3>Card Search</h3>
-<h3>Organization Creation</h3>
-<p>Organizations can serve on multiple purposes depending on the kind of business and size. 
-You can map a team to an organization, a business branch to an organization or even handle all your
-business team in a single organization. </p>
+<figure>
+<img src="/static/site_app/help/card-tags-2.png" alt="card-tags-2" /><figcaption>card-tags-2</figcaption>
+</figure>
+<p>Then you’ll be able to manage the card tags:</p>
+<figure>
+<img src="/static/site_app/help/card-tags-3.png" alt="card-tags-3" /><figcaption>card-tags-3</figcaption>
+</figure>
+<p>If you add/remove a tag to a card then everyone who is related to the card will get notified. You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter. It is useful when your organization has many tags.</p>
+<h3 id="search-for-card-tasks">Search for Card Tasks</h3>
+<p>In arcamens there is a generic concept of task, a card becomes into a task when it is assigned to someone. When the task is accomplished then one can just archive it. The card will remain available for later inspection.</p>
+<p>In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards at the navbar:</p>
+<p><strong>Note:</strong> The mechanism will match the search pattern against all cards that can be accessed by you.</p>
+<figure>
+<img src="/static/site_app/help/search-for-card-tasks-0.png" alt="search-for-card-tasks-0" /><figcaption>search-for-card-tasks-0</figcaption>
+</figure>
+<p>From the dialog window you can search through all cards that have at least one user bound to.</p>
+<figure>
+<img src="/static/site_app/help/search-for-card-tasks-1.png" alt="search-for-card-tasks-1" /><figcaption>search-for-card-tasks-1</figcaption>
+</figure>
+<p><strong>Assigned to me</strong></p>
+<p>When this option is marked then the filter pattern will be matched against all cards that were assigned to you.</p>
+<p><strong>Created by Me</strong></p>
+<p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you.</p>
+<p><strong>All Tasks</strong></p>
+<p>Use this option for matching the filter pattern over all cards that contain at least one worker assigned to.</p>
+<p><strong>Done</strong></p>
+<p>This option allows to search for archived cards instead of active ones.</p>
+<p>Consider the filter pattern below and the three listed cards in the above picture. Assume you dont know who has created such a card then leave the All Tasks option checked.</p>
+<pre><code>any + create + tag</code></pre>
+<p>The above pattern would match the card label is:</p>
+<pre><code>Anybody can create/delete a tag </code></pre>
+<p>If you wrote as pattern:</p>
+<pre><code>bug with + zone</code></pre>
+<p>It would match:</p>
+<pre><code>Bug with timezone. </code></pre>
+<p>Notice that it also checks for card data attribute(the one which can contain markdown). The string patterns are delimited by the plus sign ‘+’, the listed cards should contain each one of the pattern strings either in the label or data attribute.</p>
+<p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
+<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
+<h3 id="card-search">Card Search</h3>
+<h3 id="organization-creation">Organization Creation</h3>
+<p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
 <p>It all depends on how big your business is and on your necessities of designing your business workflow.</p>
 <p>For creating an organization just click on your current organization icon at the navbar:</p>
-<p><img alt="organization-creation-0" src="/static/site_app/help/organization-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-creation-0.png" alt="organization-creation-0" /><figcaption>organization-creation-0</figcaption>
+</figure>
 <p>Then click on +Organization link, you would get:</p>
-<p><img alt="organization-creation-1" src="/static/site_app/help/organization-creation-1.png" /></p>
-<h3>Timelines</h3>
-<p>Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks.
-Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
-it allows one to setup a timeline to be used as a scrum board backlog.</p>
-<h3>Timeline Creation</h3>
-<p>For creating a timeline just click on Home at the navbar then on the wrench icon at the organization
-toolbar:</p>
-<p><img alt="timeline-creation-0" src="/static/site_app/help/timeline-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-creation-1.png" alt="organization-creation-1" /><figcaption>organization-creation-1</figcaption>
+</figure>
+<p>Type your new organizatio name then click Create.</p>
+<h3 id="timelines">Timelines</h3>
+<p>Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks. Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards it allows one to setup a timeline to be used as a scrum board backlog.</p>
+<h3 id="timeline-creation">Timeline Creation</h3>
+<p>For creating a timeline just click on Home at the navbar then on the wrench icon at the organization toolbar:</p>
+<figure>
+<img src="/static/site_app/help/timeline-creation-0.png" alt="timeline-creation-0" /><figcaption>timeline-creation-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="timeline-creation-1" src="/static/site_app/help/timeline-creation-1.png" /></p>
-<p>Notice that you can associate timelines to a given project by setting up a common slug.
-You could fill the above fields with:</p>
+<figure>
+<img src="/static/site_app/help/timeline-creation-1.png" alt="timeline-creation-1" /><figcaption>timeline-creation-1</figcaption>
+</figure>
+<p>Notice that you can associate timelines to a given project by setting up a common slug. You could fill the above fields with:</p>
 <p><strong>Name:</strong> Notes</p>
 <p><strong>Description:</strong> Arcamens/</p>
 <p>Or you could do:</p>
 <p><strong>Name:</strong> Arcamens/Notes</p>
 <p><strong>Description:</strong> Notes on arcamens project.</p>
-<p>There are many ways of grouping boards and timelines, feel free to pick up the
-best one for you. You don't need to pick a description for your boards/timelines at all.</p>
+<p>There are many ways of grouping boards and timelines, feel free to pick up the best one for you. You don’t need to pick a description for your boards/timelines at all.</p>
 <p><strong>See:</strong> Collection Filters</p>
 <p>After filling the fields you would get your timeline being listed altogether with your boards.</p>
-<h3>Posts</h3>
-<p>Timeline posts can be used for multiple purposes, they can convey information about events,
-tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet
-can contain a title and markdown content. </p>
-<p>Tasks that demand one to collect information regarding a given subject can be delegated by using posts. 
-The person attaches the missing information to the post as a snippet.</p>
-<p><img alt="post-0" src="/static/site_app/help/post-0.png" /></p>
-<p>Some tasks arent directly related to a specific project these tasks
-can be delegated to a team or user by using a post.</p>
-<p><img alt="post-1" src="/static/site_app/help/post-1.png" /></p>
-<h3>Post Creation</h3>
+<h3 id="posts">Posts</h3>
+<p>Timeline posts can be used for multiple purposes, they can convey information about events, tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet can contain a title and markdown content.</p>
+<p>Tasks that demand one to collect information regarding a given subject can be delegated by using posts. The person attaches the missing information to the post as a snippet.</p>
+<figure>
+<img src="/static/site_app/help/post-0.png" alt="post-0" /><figcaption>post-0</figcaption>
+</figure>
+<p>Some tasks arent directly related to a specific project these tasks can be delegated to a team or user by using a post.</p>
+<figure>
+<img src="/static/site_app/help/post-1.png" alt="post-1" /><figcaption>post-1</figcaption>
+</figure>
+<h3 id="post-creation">Post Creation</h3>
 <p>After a timeline is created just access it then click on +Post at the timeline toolbar:</p>
-<p><img alt="post-creation-0" src="/static/site_app/help/post-creation-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-creation-0.png" alt="post-creation-0" /><figcaption>post-creation-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="post-creation-1" src="/static/site_app/help/post-creation-1.png" /></p>
-<p>Posts can have a short title that holds a description of the post content and
-a markdown content.</p>
-<p>After pressing Create the post will be created and every timeline user will get notified
-of the post creation.</p>
-<h3>Post Workers</h3>
-<p>You can mention peers on a post, assign them to execute some task that's described over a timeline post.
-A post becomes a task when there is at least a worker that is assigned to it.</p>
+<figure>
+<img src="/static/site_app/help/post-creation-1.png" alt="post-creation-1" /><figcaption>post-creation-1</figcaption>
+</figure>
+<p>Posts can have a short title that holds a description of the post content and a markdown content.</p>
+<p>After pressing Create the post will be created and every timeline user will get notified of the post creation.</p>
+<h3 id="post-workers">Post Workers</h3>
+<p>You can mention peers on a post, assign them to execute some task that’s described over a timeline post. A post becomes a task when there is at least a worker that is assigned to it.</p>
 <p>Click on the Assign entry at the post toolbar in order to assign it to someone:</p>
-<p><img alt="post-workers-0" src="/static/site_app/help/post-workers-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-workers-0.png" alt="post-workers-0" /><figcaption>post-workers-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="post-workers-1" src="/static/site_app/help/post-workers-1.png" /></p>
-<p>Once you bind/unbind a worker to a post then the worker gets notified of it.
-The worker name will be listed on the post.</p>
-<h3>Post Tags</h3>
-<p>It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post
-is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users
-and post workers.</p>
+<figure>
+<img src="/static/site_app/help/post-workers-1.png" alt="post-workers-1" /><figcaption>post-workers-1</figcaption>
+</figure>
+<p>Once you bind/unbind a worker to a post then the worker gets notified of it. The worker name will be listed on the post.</p>
+<h3 id="post-tags">Post Tags</h3>
+<p>It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users and post workers.</p>
 <p>Click on Tags entry at the post toolbar:</p>
-<p><img alt="post-tags-0" src="/static/site_app/help/post-tags-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-tags-0.png" alt="post-tags-0" /><figcaption>post-tags-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="post-tags-1" src="/static/site_app/help/post-tags-1.png" /></p>
-<h3>Organization Invites</h3>
-<p>An organization can contain as many users as your account plan allows. Users are invited to an organization
-through e-mail. When the user is already an arcamens user then it is enough to click on the link that was sent
-then join the organization. In the case his e-mail isn't belonging to an arcamens account then he will have to fill
-a quick form in order to join the invite organization.</p>
-<p>In order to send an invite just click Home at the navbar then go to the organization menu and click on the
-wrench icon:</p>
-<p><img alt="organization-invites-0" src="/static/site_app/help/organization-invites-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-tags-1.png" alt="post-tags-1" /><figcaption>post-tags-1</figcaption>
+</figure>
+<h3 id="organization-invites">Organization Invites</h3>
+<p>An organization can contain as many users as your account plan allows. Users are invited to an organization through e-mail. When the user is already an arcamens user then it is enough to click on the link that was sent then join the organization. In the case his e-mail isn’t belonging to an arcamens account then he will have to fill a quick form in order to join the invite organization.</p>
+<p>In order to send an invite just click Home at the navbar then go to the organization menu and click on the wrench icon:</p>
+<figure>
+<img src="/static/site_app/help/organization-invites-0.png" alt="organization-invites-0" /><figcaption>organization-invites-0</figcaption>
+</figure>
 <p>Click on Members then you get;</p>
-<p><img alt="organization-invites-1" src="/static/site_app/help/organization-invites-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-invites-1.png" alt="organization-invites-1" /><figcaption>organization-invites-1</figcaption>
+</figure>
 <p>Which would list all your organization members.</p>
 <p>Click on the plus sign at the top:</p>
-<p><img alt="organization-invites-2" src="/static/site_app/help/organization-invites-2.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-invites-2.png" alt="organization-invites-2" /><figcaption>organization-invites-2</figcaption>
+</figure>
 <p>Then fill the field with the peer e-mail to whom you would like to join your organization.</p>
-<p><img alt="organization-invites-3" src="/static/site_app/help/organization-invites-3.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-invites-3.png" alt="organization-invites-3" /><figcaption>organization-invites-3</figcaption>
+</figure>
 <p>You can check all invites that were sent by clicking on:</p>
-<p><img alt="organization-invites-4" src="/static/site_app/help/organization-invites-4.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-invites-4.png" alt="organization-invites-4" /><figcaption>organization-invites-4</figcaption>
+</figure>
 <p>You would have listed all invites:</p>
-<p><img alt="organization-invites-5" src="/static/site_app/help/organization-invites-5.png" /></p>
-<p>You can cancel invites or just resend the invite link. Notice that your account invites
-can't override your account max users limit. The invites sum up with regular users and should
-be lesser or equal your account max users limit.</p>
-<h3>Organization Admins</h3>
-<h3>Timeline Members</h3>
-<p>Users of a timeline get notification from all events that happen with the timeline. Whenever an user
-is binded/unbinded to a timeline everyone who is in the timeline gets notified.</p>
+<figure>
+<img src="/static/site_app/help/organization-invites-5.png" alt="organization-invites-5" /><figcaption>organization-invites-5</figcaption>
+</figure>
+<p>You can cancel invites or just resend the invite link. Notice that your account invites can’t override your account max users limit. The invites sum up with regular users and should be lesser or equal your account max users limit.</p>
+<h3 id="organization-admins">Organization Admins</h3>
+<h3 id="timeline-members">Timeline Members</h3>
+<p>Users of a timeline get notification from all events that happen with the timeline. Whenever an user is binded/unbinded to a timeline everyone who is in the timeline gets notified.</p>
 <p>For binding/unbinding users to a timeline just access the timeline then:</p>
-<p><img alt="timeline-members-0" src="/static/site_app/help/timeline-members-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/timeline-members-0.png" alt="timeline-members-0" /><figcaption>timeline-members-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="timeline-members-1" src="/static/site_app/help/timeline-members-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/timeline-members-1.png" alt="timeline-members-1" /><figcaption>timeline-members-1</figcaption>
+</figure>
 <p>From there you can search users from your organization that match a given criterea.</p>
-<p><strong>See:</strong> Advanced User Search</p>
-<h3>Post E-mail/Notifications</h3>
-<p>When a post has workers who were assigned it may be interesting to call attention
-of these workers through e-mail. A link for the post would be sent through e-mail
-with a message.</p>
-<p><img alt="post-email-notification-0" src="/static/site_app/help/post-email-notification-0.png" /></p>
+<p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
+<h3 id="post-e-mailnotifications">Post E-mail/Notifications</h3>
+<p>When a post has workers who were assigned it may be interesting to call attention of these workers through e-mail. A link for the post would be sent through e-mail with a message.</p>
+<figure>
+<img src="/static/site_app/help/post-email-notification-0.png" alt="post-email-notification-0" /><figcaption>post-email-notification-0</figcaption>
+</figure>
 <p>You can click on the worker name and then:</p>
-<p><img alt="post-email-notification-1" src="/static/site_app/help/post-email-notification-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-email-notification-1.png" alt="post-email-notification-1" /><figcaption>post-email-notification-1</figcaption>
+</figure>
 <p>After clicking on Request attention through e-mail you would be prompted with:</p>
-<p><img alt="post-email-notification-2" src="/static/site_app/help/post-email-notification-2.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-email-notification-2.png" alt="post-email-notification-2" /><figcaption>post-email-notification-2</figcaption>
+</figure>
 <p>Fill the form and send the e-mail notification.</p>
 <p>You can as well send notification to all post workers by clicking on Alert Workers.</p>
-<h3>Search for Post Tasks</h3>
-<p>When a post is created and it is assigned to someone then it becomes a task.
-It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
-at the navbar:</p>
-<p><img alt="search-for-post-tasks-0" src="/static/site_app/help/search-for-post-tasks-0.png" /></p>
+<h3 id="search-for-post-tasks">Search for Post Tasks</h3>
+<p>When a post is created and it is assigned to someone then it becomes a task. It is possible to search for archived or active tasks by clicking at the Tasks/Posts link at the navbar:</p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-0.png" alt="search-for-post-tasks-0" /><figcaption>search-for-post-tasks-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="search-for-post-tasks-1" src="/static/site_app/help/search-for-post-tasks-1.png" /></p>
-<p>The option <strong>Assigned to Me</strong> would perform the search pattern through
-all tasks that someone has assigned to you even if it was assigned by yourself.</p>
-<p>If you option for  <strong>Created by Me</strong> then it would check the pattern against all posts
-that you created and it was at least one worker binded to.</p>
-<p>When <strong>All Tasks</strong> is checked then it matches against all posts that you were assigned to
-or are on all your timelines.</p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-1.png" alt="search-for-post-tasks-1" /><figcaption>search-for-post-tasks-1</figcaption>
+</figure>
+<p>The option <strong>Assigned to Me</strong> would perform the search pattern through all tasks that someone has assigned to you even if it was assigned by yourself.</p>
+<p>If you option for <strong>Created by Me</strong> then it would check the pattern against all posts that you created and it was at least one worker binded to.</p>
+<p>When <strong>All Tasks</strong> is checked then it matches against all posts that you were assigned to or are on all your timelines.</p>
 <p>The simplest example of pattern consists of merely strings:</p>
-<pre><code>bug with engine
-</code></pre>
-<p>The above example would list all posts whose label or data fields contain the entire
-string.</p>
-<p><img alt="search-for-post-tasks-2" src="/static/site_app/help/search-for-post-tasks-2.png" /></p>
+<pre><code>bug with engine</code></pre>
+<p>The above example would list all posts whose label or data fields contain the entire string.</p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-2.png" alt="search-for-post-tasks-2" /><figcaption>search-for-post-tasks-2</figcaption>
+</figure>
 <p>You could do:</p>
-<pre><code>bug with + engine
-</code></pre>
+<pre><code>bug with + engine</code></pre>
 <p>In the above example it would list all posts that contains both two strings.</p>
-<p><img alt="search-for-post-tasks-3" src="/static/site_app/help/search-for-post-tasks-3.png" /></p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-3.png" alt="search-for-post-tasks-3" /><figcaption>search-for-post-tasks-3</figcaption>
+</figure>
 <p><strong>Note:</strong> You are allowed to form longer patterns like:</p>
-<pre><code>bug + with + engine + driver
-</code></pre>
+<pre><code>bug + with + engine + driver</code></pre>
 <p>It would list all posts that contains all the strings either in the label or markdown data fields.</p>
 <p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
-<h3>Post Search</h3>
-<p>The post search mechanism allows to search through all posts that you have access regardless
-if it has a worker or not. For such just click on the Post link at the navbar:</p>
-<p><img alt="post-search-0" src="/static/site_app/help/post-search-0.png" /></p>
+<h3 id="post-search">Post Search</h3>
+<p>The post search mechanism allows to search through all posts that you have access regardless if it has a worker or not. For such just click on the Post link at the navbar:</p>
+<figure>
+<img src="/static/site_app/help/post-search-0.png" alt="post-search-0" /><figcaption>post-search-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="post-search-1" src="/static/site_app/help/post-search-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-search-1.png" alt="post-search-1" /><figcaption>post-search-1</figcaption>
+</figure>
 <p><strong>Examples:</strong></p>
 <p>Would find all posts where the three strings show up either in the label or markdown:</p>
-<pre><code>bug + engine + wheels
-</code></pre>
-<p>Would find all posts where the strings 'bug' or 'engine wheels' show up.</p>
-<pre><code>bug + engine wheels
-</code></pre>
+<pre><code>bug + engine + wheels</code></pre>
+<p>Would find all posts where the strings ‘bug’ or ‘engine wheels’ show up.</p>
+<pre><code>bug + engine wheels</code></pre>
 <p>Leave the <strong>Done</strong> field checked to search only through archived posts.</p>
-<h3>Event Comments</h3>
-<p>All kind of user actions in Arcamens are liable of being commented. Whenever an user
-assigns a worker to a post it generates an event then the event/action can be commented out.</p>
-<p>When an user action is commented then another event is generated but it doesn't allow
-comments for action comments.</p>
+<h3 id="event-comments">Event Comments</h3>
+<p>All kind of user actions in Arcamens are liable of being commented. Whenever an user assigns a worker to a post it generates an event then the event/action can be commented out.</p>
+<p>When an user action is commented then another event is generated but it doesn’t allow comments for action comments.</p>
 <p>Click on Events at the navbar:</p>
-<p><img alt="event-comments-0" src="/static/site_app/help/event-comments-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/event-comments-0.png" alt="event-comments-0" /><figcaption>event-comments-0</figcaption>
+</figure>
 <p>Then you would get:</p>
-<p><img alt="event-comments-1" src="/static/site_app/help/event-comments-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/event-comments-1.png" alt="event-comments-1" /><figcaption>event-comments-1</figcaption>
+</figure>
 <p>By clicking on the event Comments link:</p>
-<p><img alt="event-comments-2" src="/static/site_app/help/event-comments-2.png" /></p>
+<figure>
+<img src="/static/site_app/help/event-comments-2.png" alt="event-comments-2" /><figcaption>event-comments-2</figcaption>
+</figure>
 <p>The users who are related to the event would get a new event like:</p>
-<p><img alt="event-comments-3" src="/static/site_app/help/event-comments-3.png" /></p>
+<figure>
+<img src="/static/site_app/help/event-comments-3.png" alt="event-comments-3" /><figcaption>event-comments-3</figcaption>
+</figure>
 <p>They can reply by clicking on the event Comments link.</p>
-<h3>Post Filter</h3>
-<p>It is possible to filter timeline posts as well, whenever you access the timeline
-then it will list just posts that match the filter pattern.</p>
+<h3 id="post-filter">Post Filter</h3>
+<p>It is possible to filter timeline posts as well, whenever you access the timeline then it will list just posts that match the filter pattern.</p>
 <p>For such just access the timeline then click on Filter at the timeline menu:</p>
-<p><img alt="post-filter-0" src="/static/site_app/help/post-filter-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/post-filter-0.png" alt="post-filter-0" /><figcaption>post-filter-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="post-filter-1" src="/static/site_app/help/post-filter-1.png" /></p>
-<p>It is mostly useful for filtering posts based on tag, owner or workers but it works
-with simple patterns as well.</p>
+<figure>
+<img src="/static/site_app/help/post-filter-1.png" alt="post-filter-1" /><figcaption>post-filter-1</figcaption>
+</figure>
+<p>It is mostly useful for filtering posts based on tag, owner or workers but it works with simple patterns as well.</p>
 <p>Would list all posts that have both tags.</p>
-<pre><code>tag:feature + tag:bug
-</code></pre>
-<p>Would list all posts whose owner's email or name matches the string 'last.src':</p>
-<pre><code>owner:last.src
-</code></pre>
+<pre><code>tag:feature + tag:bug</code></pre>
+<p>Would list all posts whose owner’s email or name matches the string ‘last.src’:</p>
+<pre><code>owner:last.src</code></pre>
 <p>Listing posts that has a specific worker:</p>
-<pre><code>worker:last.src
-</code></pre>
+<pre><code>worker:last.src</code></pre>
 <p>Would list all posts that have two workers whose name/email matches both strings.</p>
-<pre><code>worker:last.src + worker:porton
-</code></pre>
+<pre><code>worker:last.src + worker:porton</code></pre>
 <p><strong>See:</strong> <a href="#advanced-post-search">Advanced Post Search</a></p>
-<h3>Collection Filter</h3>
-<p>Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines.
-One could have a project that has many plugins and keep a board for each one of its plugins.</p>
-<p>It is necessary to stabilish a naming convention for your boards/timelines. </p>
+<h3 id="collection-filter">Collection Filter</h3>
+<p>Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines. One could have a project that has many plugins and keep a board for each one of its plugins.</p>
+<p>It is necessary to stabilish a naming convention for your boards/timelines.</p>
 <p>For example:</p>
 <pre><code>Timeline: Arcamens/Notes
 
@@ -333,78 +466,91 @@ Board: Arcamens
 
 Timeline: Arcamens/News
 
-Timeline: Arcamens/Bugs
-</code></pre>
-<p>All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines 
-then if you want to view just boards or timelines that are related to a given subject it gets simple.</p>
+Timeline: Arcamens/Bugs</code></pre>
+<p>All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines then if you want to view just boards or timelines that are related to a given subject it gets simple.</p>
 <p>Just click Home at the navbar and click on the Filter link at the organization menu:</p>
-<p><img alt="collection-filter-0" src="/static/site_app/help/collection-filter-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/collection-filter-0.png" alt="collection-filter-0" /><figcaption>collection-filter-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="collection-filter-1" src="/static/site_app/help/collection-filter-1.png" /></p>
-<p>In the previously stated context if you typed the string 'Arcamens' then you would view
-all the boards/timelines that contain such a string either in its name or description.</p>
-<h3>Card's Text Colors</h3>
-<h3>Card E-mail/Notifications</h3>
-<h3>Card Filter</h3>
-<p>You can specify a pattern for filtering cards inside lists as well thus allowing one to view just cards
-that have attributes matching requirements.</p>
+<figure>
+<img src="/static/site_app/help/collection-filter-1.png" alt="collection-filter-1" /><figcaption>collection-filter-1</figcaption>
+</figure>
+<p>In the previously stated context if you typed the string ‘Arcamens’ then you would view all the boards/timelines that contain such a string either in its name or description.</p>
+<h3 id="cards-text-colors">Card’s Text Colors</h3>
+<h3 id="card-e-mailnotifications">Card E-mail/Notifications</h3>
+<h3 id="card-filter">Card Filter</h3>
+<p>You can specify a pattern for filtering cards inside lists as well thus allowing one to view just cards that have attributes matching requirements.</p>
 <p>Access the desired list then click on Filter at the list menu:</p>
-<p><img alt="card-filter-0" src="/static/site_app/help/card-filter-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-filter-0.png" alt="card-filter-0" /><figcaption>card-filter-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="card-filter-1" src="/static/site_app/help/card-filter-1.png" /></p>
+<figure>
+<img src="/static/site_app/help/card-filter-1.png" alt="card-filter-1" /><figcaption>card-filter-1</figcaption>
+</figure>
 <p>You can filter by tag, worker, owner etc.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
-<h3>Card Forks</h3>
-<h3>Post Forks</h3>
-<h3>Advanced User Search</h3>
+<h3 id="card-forks">Card Forks</h3>
+<h3 id="post-forks">Post Forks</h3>
+<h3 id="advanced-user-search">Advanced User Search</h3>
 <p>You can search users for attributes like name, e-mail or tags.</p>
-<pre><code>tag:developer
-</code></pre>
+<pre><code>tag:developer</code></pre>
 <p>Would list all organization users who were tagged with developer. You can combine tags as well.</p>
-<pre><code>tag:developer + tag:python
-</code></pre>
+<pre><code>tag:developer + tag:python </code></pre>
 <p>You can combine tags but mix them with other kind of attributes like name or email.</p>
-<pre><code>tag:dev + @arcamens.com
-</code></pre>
-<p>Would list all workers that were tagged as developer and the email matches @arcamens.com.</p>
-<p><img alt="advanced-user-search-0" src="/static/site_app/help/advanced-user-search-0.png" /></p>
+<pre><code>tag:dev + @arcamens.com</code></pre>
+<p>Would list all workers that were tagged as developer and the email matches <span class="citation" data-cites="arcamens.com">@arcamens.com</span>.</p>
+<figure>
+<img src="/static/site_app/help/advanced-user-search-0.png" alt="advanced-user-search-0" /><figcaption>advanced-user-search-0</figcaption>
+</figure>
 <p>Notice that if you did:</p>
-<pre><code>tag:dev + oliveira
-</code></pre>
-<p>It would list all users with the tag dev and have the string oliveira
-appearing either in the name or email attributes. When you want to limit the
-search to be performed under a given attribute like email you could do:</p>
-<pre><code>tag:dev + email:oliveira
-</code></pre>
-<h3>Advanced Card Search</h3>
-<h3>Advanced Post Search</h3>
+<pre><code>tag:dev + oliveira</code></pre>
+<p>It would list all users with the tag dev and have the string oliveira appearing either in the name or email attributes. When you want to limit the search to be performed under a given attribute like email you could do:</p>
+<pre><code>tag:dev + email:oliveira</code></pre>
+<h3 id="advanced-card-search">Advanced Card Search</h3>
+<h3 id="advanced-post-search">Advanced Post Search</h3>
 <p>test</p>
-<h3>Timeline Settings/Removal</h3>
-<p>You can rename a timeline or delete it, you just access the desired timeline
-then click on Settings at the timeline menu:</p>
-<p><img alt="timeline-settings-0" src="/static/site_app/help/timeline-settings-0.png" /></p>
-<p>From there you can change the timeline attributes like name/description.
-You can as well click on Delete then you'll be asked for confirmation. </p>
+<h3 id="timeline-settingsremoval">Timeline Settings/Removal</h3>
+<p>You can rename a timeline or delete it, you just access the desired timeline then click on Settings at the timeline menu:</p>
+<figure>
+<img src="/static/site_app/help/timeline-settings-0.png" alt="timeline-settings-0" /><figcaption>timeline-settings-0</figcaption>
+</figure>
+<p>From there you can change the timeline attributes like name/description. You can as well click on Delete then you’ll be asked for confirmation.</p>
 <p>Type the timeline name then press Delete.</p>
-<p><img alt="timeline-settings-1" src="/static/site_app/help/timeline-settings-1.png" /></p>
-<h3>Board Settings/Removal</h3>
-<p>You can rename boards by accessing its settings form. For such just access the board
-then click on the wrench icon:</p>
-<p><img alt="board-settings-0" src="/static/site_app/help/board-settings-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/timeline-settings-1.png" alt="timeline-settings-1" /><figcaption>timeline-settings-1</figcaption>
+</figure>
+<h3 id="board-settingsremoval">Board Settings/Removal</h3>
+<p>You can rename boards by accessing its settings form. For such just access the board then click on the wrench icon:</p>
+<figure>
+<img src="/static/site_app/help/board-settings-0.png" alt="board-settings-0" /><figcaption>board-settings-0</figcaption>
+</figure>
 <p>Click on Settings then you get:</p>
-<p><img alt="board-settings-1" src="/static/site_app/help/board-settings-1.png" /></p>
-<p>From there you can as well delete the board, you'll be asked for confirmation.</p>
-<h3>Bitbucket Integration</h3>
-<h3>Organization User Removal</h3>
-<p>In order to remove an user from an organization it is necessary to be admin of the organization.
-The one who is removing the user will own all timeliens and boards of the removed user.</p>
+<figure>
+<img src="/static/site_app/help/board-settings-1.png" alt="board-settings-1" /><figcaption>board-settings-1</figcaption>
+</figure>
+<p>From there you can as well delete the board, you’ll be asked for confirmation.</p>
+<h3 id="bitbucket-integration">Bitbucket Integration</h3>
+<h3 id="organization-user-removal">Organization User Removal</h3>
+<p>In order to remove an user from an organization it is necessary to be admin of the organization. The one who is removing the user will own all timeliens and boards of the removed user.</p>
 <p>Click on the wrench icon at the organization menu:</p>
-<p><img alt="organization-user-removal-0" src="/static/site_app/help/organization-user-removal-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-user-removal-0.png" alt="organization-user-removal-0" /><figcaption>organization-user-removal-0</figcaption>
+</figure>
 <p>Then click on Members, you would get:</p>
-<p><img alt="organization-user-removal-1" src="/static/site_app/help/organization-user-removal-1.png" /></p>
-<h3>Organization Settings/Removal</h3>
+<figure>
+<img src="/static/site_app/help/organization-user-removal-1.png" alt="organization-user-removal-1" /><figcaption>organization-user-removal-1</figcaption>
+</figure>
+<h3 id="organization-settingsremoval">Organization Settings/Removal</h3>
 <p>Click on wrench icon at the organization menu then Settings:</p>
-<p><img alt="organization-settings-removal-0" src="/static/site_app/help/organization-settings-removal-0.png" /></p>
+<figure>
+<img src="/static/site_app/help/organization-settings-removal-0.png" alt="organization-settings-removal-0" /><figcaption>organization-settings-removal-0</figcaption>
+</figure>
 <p>You would get:</p>
-<p><img alt="organization-settings-removal-1" src="/static/site_app/help/organization-settings-removal-1.png" /></p>
-<h3>Logs</h3>
+<figure>
+<img src="/static/site_app/help/organization-settings-removal-1.png" alt="organization-settings-removal-1" /><figcaption>organization-settings-removal-1</figcaption>
+</figure>
+<h3 id="logs">Logs</h3>
+</body>
+</html>
