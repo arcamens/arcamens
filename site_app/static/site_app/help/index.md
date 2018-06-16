@@ -130,7 +130,7 @@ are means of knowing what is going on with your teams.
 
 ![events-9](/static/site_app/help/events-0.png)
 
-The kind of action that was performed can be commented out thus giving constructive criticism about your peers
+The action that was performed can be commented on thus giving constructive criticism about your peers
 work.
 
 Events will carry links to the objects that are related to the user action. You can left click on the links
@@ -723,6 +723,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
