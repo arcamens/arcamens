@@ -823,7 +823,8 @@ class SelectForkList(GuardianView):
         {'form':form, 'post': post, 'elems': lists})
 
     def post(self, request, post_id):
-        form = forms.ListSearchform(request.POST)
+        sqlike = List.from_sqlike()
+        form = forms.ListSearchform(request.POST, sqlike=sqlike)
 
         post = models.Post.locate(self.me, self.me.default, post_id)
 
@@ -833,13 +834,7 @@ class SelectForkList(GuardianView):
 
         boards = self.me.boards.filter(organization=self.me.default)
         lists  = List.objects.filter(ancestor__in=boards)
-
-        lists = lists.annotate(text=Concat('ancestor__name', 'name'))
-
-        # Not sure if its the fastest way to do it.
-        chks = split(' *\++ *', form.cleaned_data['pattern'])
-        lists = lists.filter(reduce(operator.and_, 
-        (Q(text__contains=ind) for ind in chks))) 
+        lists  = sqlike.run(lists)
 
         return render(request, 'post_app/select-fork-list.html', 
         {'form':form, 'post': post, 'elems': lists})
@@ -1036,4 +1031,5 @@ class SetPostPriorityDown(GuardianView):
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
         return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+
 

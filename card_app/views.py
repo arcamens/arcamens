@@ -222,41 +222,6 @@ class SelectForkList(GuardianView):
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
 
-class SelectForkTimeline(GuardianView):
-    """
-    Deprecated.
-    """
-
-    def get(self, request, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        form = forms.TimelineSearchform()
-        timelines = Timeline.get_user_timelines(self.me)
-
-        return render(request, 'card_app/select-fork-timeline.html', 
-        {'form':form, 'card': card, 'elems': timelines})
-
-    def post(self, request, card_id):
-        form = forms.TimelineSearchform(request.POST)
-        card = models.Card.objects.get(id=card_id)
-
-        timelines = Timeline.get_user_timelines(self.me)
-
-        if not form.is_valid():
-            return render(request, 'card_app/select-fork-timeline.html', 
-                  {'form':form, 'elems': timelines, 'card': card})
-
-        timelines = timelines.annotate(text=Concat('name', 'description'))
-
-        # Not sure if its the fastest way to do it.
-        chks     = split(' *\++ *', form.cleaned_data['pattern'])
-
-        timelines = timelines.filter(reduce(operator.and_, 
-        (Q(text__contains=ind) for ind in chks))) 
-
-        return render(request, 'card_app/select-fork-timeline.html', 
-        {'form':form, 'card': card, 'elems': timelines})
-
 class PullCardContent(GuardianView):
     """
     """

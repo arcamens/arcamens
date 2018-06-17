@@ -12,10 +12,17 @@ class TimelineMixin(models.Model):
 
     @classmethod
     def from_sqlike(cls):
-        default = lambda ind: Q(name__icontains=ind) |\
-         Q(description__icontains=ind)
+        owner   = lambda ind: Q(owner__name__icontains=ind) | Q(
+        owner__email__icontains=ind)
+        name        = lambda ind: Q(name__icontains=ind)
+        description = lambda ind: Q(description__icontains=ind)
+        default     = lambda ind: Q(name__icontains=ind) \
+        | Q(description__icontains=ind)
 
-        sqlike = SqLike(SqNode(None, default))
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('o', 'owner'), owner),
+        SqNode(('n', 'name'), name),
+        SqNode(('d', 'description'), description),)
         return sqlike
 
     @classmethod
@@ -129,6 +136,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'timeline_app/e-paste-post.html'
+
 
 
 
