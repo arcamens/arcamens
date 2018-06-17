@@ -371,7 +371,7 @@ class Tag(TagMixin):
     blank=False, max_length=256)
 
     description = models.CharField(null=True,
-    blank=False, max_length=256)
+    blank=False, default='...', max_length=256)
 
     # When the organization is deleted all its tags
     # are deleted too.
@@ -502,6 +502,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 
