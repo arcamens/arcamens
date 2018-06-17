@@ -206,7 +206,9 @@ class SelectForkList(GuardianView):
         {'form':form, 'card': card, 'elems': lists})
 
     def post(self, request, card_id):
-        form = forms.ListSearchform(request.POST)
+        sqlike = List.from_sqlike()
+        form   = forms.ListSearchform(request.POST, sqlike=sqlike)
+
         card = models.Card.locate(self.me, self.me.default, card_id)
 
         boards = self.me.boards.filter(organization=self.me.default)
@@ -216,14 +218,7 @@ class SelectForkList(GuardianView):
             return render(request, 'card_app/select-fork-list.html', 
                   {'form':form, 'elems': lists, 'card': card})
 
-        lists = lists.annotate(text=Concat('ancestor__name', 'name'))
-
-        # Not sure if its the fastest way to do it.
-        chks  = split(' *\++ *', form.cleaned_data['pattern'])
-
-        lists = lists.filter(reduce(operator.and_, 
-        (Q(text__contains=ind) for ind in chks))) 
-
+        lists  = sqlike.run(lists)
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
 
@@ -1021,6 +1016,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

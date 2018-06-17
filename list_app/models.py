@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from sqlike.parser import SqLike, SqNode
 from django.core.urlresolvers import reverse
 from board_app.models import Event, User
 from django.db.models import Q
@@ -14,6 +15,23 @@ class ListMixin(object):
         for ind in self.cards.all():
             ind.duplicate(list)
         return list
+
+    @classmethod
+    def from_sqlike(cls):
+        owner   = lambda ind: Q(owner__name__icontains=ind) | Q(
+        owner__email__icontains=ind)
+        name        = lambda ind: Q(name__icontains=ind)
+        description = lambda ind: Q(description__icontains=ind)
+        board       = lambda ind: Q(ancestor__name__icontains=ind)
+        default     = lambda ind: Q(name__icontains=ind) \
+        | Q(description__icontains=ind) | Q(ancestor__name__icontains=ind)
+
+        sqlike = SqLike(SqNode(None, default),
+        SqNode(('o', 'owner'), owner),
+        SqNode(('n', 'name'), name),
+        SqNode(('d', 'description'), description),
+        SqNode(('b', 'board'), board),)
+        return sqlike
 
     def get_ancestor_url(self):
         return reverse('board_app:list-boards')
@@ -148,6 +166,7 @@ class EPasteCard(Event):
     symmetrical=False)
 
     html_template = 'list_app/e-paste-card.html'
+
 
 
 

@@ -676,9 +676,41 @@ You would get:
 In the previously stated context if you typed the string 'Arcamens' then you would view
 all the boards/timelines that contain such a string either in its name or description.
 
-### Card's Text Colors
+### Card Colors
+
+When a card is a task it displays as green:
+
+![card-colors-0](/static/site_app/help/card-colors-0.png)
+
+When a card is assigned to you then it displays as red:
+
+![card-colors-1](/static/site_app/help/card-colors-1.png)
+
+A card fork's background is lighter than the usual card as well:
+
+![card-colors-2](/static/site_app/help/card-colors-2.png)
 
 ### Card E-mail/Notifications
+
+When a card is created and it has workers bound then it is possible to send
+e-mail notifications to the card workers.
+
+For such just access the card then click on the card worker name:
+
+![card-email-notification-0](/static/site_app/help/card-email-notification-0.png)
+
+You'll get:
+
+![card-email-notification-1](/static/site_app/help/card-email-notification-1.png)
+
+After clicking on **Request Attention through e-mail** you would get:
+
+![card-email-notification-2](/static/site_app/help/card-email-notification-2.png)
+
+You can fill with some message to be sent to the user.
+
+When the card has many workers you can just click on the **Alert workers?** link
+then sending an alert to all card workers at once.
 
 ### Card Filter
 
@@ -741,7 +773,6 @@ search to be performed under a given attribute like email you could do:
 
 ### Advanced Post Search
 
-test
 
 ### Timeline Settings/Removal
 
@@ -750,16 +781,18 @@ then click on Settings at the timeline menu:
 
 ![timeline-settings-0](/static/site_app/help/timeline-settings-0.png)
 
-From there you can change the timeline attributes like name/description.
-You can as well click on Delete then you'll be asked for confirmation. 
-
-Type the timeline name then press Delete.
+You would get:
 
 ![timeline-settings-1](/static/site_app/help/timeline-settings-1.png)
 
+From there you can change the timeline attributes like name/description.
+
+You can as well click on Delete then you'll be asked for confirmation. 
+Type the timeline name then press Delete.
+
 ### Board Settings/Removal
 
-You can rename boards by accessing its settings form. For such just access the board
+You can rename a board by accessing its settings form. For such just access the board
 then click on the wrench icon:
 
 ![board-settings-0](/static/site_app/help/board-settings-0.png)
@@ -796,6 +829,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 

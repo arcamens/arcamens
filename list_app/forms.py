@@ -14,3 +14,4 @@ class ListFilterForm(forms.ModelForm):
         model  = models.ListFilter
         exclude = ('user', 'organization', 'board')
 
+

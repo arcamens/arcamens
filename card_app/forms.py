@@ -20,7 +20,7 @@ class TagSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: fake-bug')
 
-class ListSearchform(forms.Form):
+class ListSearchform(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
 
@@ -73,6 +73,7 @@ class CardFileWrapperForm(forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 
