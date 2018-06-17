@@ -73,7 +73,7 @@ Then you can use your board filter with a pattern like:
 
 It would display just boards that meet that slug.
 
-**See:** Link to board filters.
+**See:** [Collection Filter](#collection-filter)
 
 ### List Creation
 
