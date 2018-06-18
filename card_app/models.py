@@ -34,7 +34,7 @@ class CardMixin(object):
         enable_attributes=False)
 
         # Define the new card with the greatest priority.
-        if not self.pk:
+        if not self.pk and self.ancestor:
             self.priority = self.ancestor.cards.count()
 
         super(CardMixin, self).save(*args, **kwargs)
@@ -177,7 +177,7 @@ class Card(CardMixin, models.Model):
     null=True)
 
     label = models.CharField(null=True, blank=False, 
-    verbose_name=_("Label"), help_text='Label, Priority, Deadline, ...', 
+    verbose_name=_("Label"), help_text='Label, Deadline, ...', 
     max_length=626)
 
     priority = models.IntegerField(default=0)
@@ -590,6 +590,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

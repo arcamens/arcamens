@@ -36,7 +36,7 @@ class PostMixin(models.Model):
         extensions=[TableExtension(), GithubFlavoredMarkdownExtension()], safe_mode=True,  
         enable_attributes=False)
 
-        if not self.pk:
+        if not self.pk and self.ancestor:
             self.priority = self.ancestor.posts.count()
 
         super(PostMixin, self).save(*args, **kwargs)
@@ -471,6 +471,7 @@ class ESetPostPriorityDown(Event):
     related_name='e_set_post_priority_down2', blank=True)
 
     html_template = 'post_app/e-set-priority-down.html'
+
 
 
 
