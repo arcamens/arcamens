@@ -208,16 +208,14 @@ class SelectForkList(GuardianView):
     def post(self, request, card_id):
         sqlike = List.from_sqlike()
         form   = forms.ListSearchform(request.POST, sqlike=sqlike)
-
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        boards = self.me.boards.filter(organization=self.me.default)
-        lists = List.objects.filter(ancestor__in=boards)
+        card   = models.Card.locate(self.me, self.me.default, card_id)
 
         if not form.is_valid():
             return render(request, 'card_app/select-fork-list.html', 
-                  {'form':form, 'elems': lists, 'card': card})
+                  {'form':form, 'card': card})
 
+        boards = self.me.boards.filter(organization=self.me.default)
+        lists = List.objects.filter(ancestor__in=boards)
         lists  = sqlike.run(lists)
         return render(request, 'card_app/select-fork-list.html', 
         {'form':form, 'card': card, 'elems': lists})
@@ -981,6 +979,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

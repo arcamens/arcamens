@@ -830,7 +830,7 @@ class SelectForkList(GuardianView):
 
         if not form.is_valid():
             return render(request, 'post_app/select-fork-list.html', 
-                  {'form':form, 'elems': lists, 'post': post})
+                  {'form':form, 'post': post})
 
         boards = self.me.boards.filter(organization=self.me.default)
         lists  = List.objects.filter(ancestor__in=boards)
@@ -1031,6 +1031,7 @@ class SetPostPriorityDown(GuardianView):
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
         return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+
 
 
 
