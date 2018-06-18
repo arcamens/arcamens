@@ -4,7 +4,7 @@
 
 {% block buttons %}
 <div class="pull-left">
-<a  data-shell="bigModalContent"  class="e-get" href="#" data-show="{% url 'card_app:pull-card-content' ancestor.id card.id %}"> 
+<a  data-shell="#bigModalContent"  class="e-get" href="#" data-show="{% url 'card_app:pull-card-content' ancestor.id card.id %}"> 
 <span class="glyphicon glyphicon-download"></span> 
 
 Keep old content? </a>
@@ -19,6 +19,7 @@ class="btn btn-default e-post">
 </button>
 
 {% endblock %}
+
 
 
 
