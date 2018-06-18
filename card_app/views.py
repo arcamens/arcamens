@@ -732,7 +732,7 @@ class AlertCardWorkers(GuardianView):
                 self.me.name), msg, self.me.email, 
                     [ind[0]], fail_silently=False)
 
-        return HttpResponse(status=200)
+        return render(request, 'card_app/alert-card-workers-sent.html', {})
 
 
 class UndoClipboard(GuardianView):
@@ -981,6 +981,7 @@ class Unpin(GuardianView):
         pin = self.me.cardpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

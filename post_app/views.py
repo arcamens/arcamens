@@ -679,7 +679,7 @@ class AlertPostWorkers(GuardianView):
                 self.me.name), msg, self.me.email, 
                     [ind[0]], fail_silently=False)
 
-        return HttpResponse(status=200)
+        return render(request, 'post_app/alert-post-workers-sent.html', {})
 
 class ConfirmPostDeletion(GuardianView):
     """
@@ -1031,5 +1031,6 @@ class SetPostPriorityDown(GuardianView):
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
         return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+
 
 

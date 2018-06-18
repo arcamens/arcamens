@@ -182,7 +182,7 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
-<a class="s-modal" href="#"
+<a class="e-get" href="#" data-shell="#smallModalContent"
 data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-random"></span> Fork/Card </a>
 
@@ -196,23 +196,5 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
