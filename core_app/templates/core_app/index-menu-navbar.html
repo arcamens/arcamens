@@ -10,23 +10,23 @@
 data-shell="#main-view"role="button"> <span class="glyphicon glyphicon-home"></span>  </button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get eventsButton" 
-data-show="{% url 'core_app:list-events' %}" data-callback="$('#smallModal').modal('toggle');$('.eventsButton').removeClass('new-events')" 
+data-show="{% url 'core_app:list-events' %}" data-callback="$('.eventsButton').removeClass('new-events')" 
 data-shell="#smallModalContent" href="#"> <span class="glyphicon glyphicon-bell"></span>  </button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" data-show="{% url 'post_app:find' %}" 
-data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent"> 
+data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> P</button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'card_app:find' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent"> 
+data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> C</button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'post_app:list-all-assignments' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent"> 
+data-show="{% url 'post_app:list-all-assignments' %}" data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-tasks">  </span> T/P</button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'card_app:list-all-tasks' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent"> 
+data-show="{% url 'card_app:list-all-tasks' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-tasks">  </span> T/C</button>
 
 
@@ -35,20 +35,18 @@ data-show="{% url 'card_app:list-all-tasks' %}" data-callback="$('#bigModal').mo
 href="#" data-shell="#main-view"> <span class="glyphicon glyphicon-home"></span>  Home</a></li>
 
 <li class="hidden-xs"><a class="e-get eventsButton" data-show="{% url 'core_app:list-events' %}" 
-data-shell="#smallModalContent" data-callback="$('#smallModal').modal('show');$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
+data-shell="#smallModalContent" data-callback="$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
 {% trans "Events" %}</a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'post_app:list-all-assignments' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent">
+<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'post_app:list-all-assignments' %}"  data-shell="#bigModalContent">
 <span class="glyphicon glyphicon-tasks"></span> Tasks/Posts </a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'card_app:list-all-tasks' %}" data-callback="$('#bigModal').modal('toggle');" data-shell="#bigModalContent">
+<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'card_app:list-all-tasks' %}" data-shell="#bigModalContent">
 <span class="glyphicon glyphicon-tasks"></span> Tasks/Cards </a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:find' %}" 
-data-callback="$('#bigModal').modal('show');"> <span class="glyphicon glyphicon-search"></span> Posts</a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Posts</a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:find' %}" 
-data-callback="$('#bigModal').modal('show');"> <span class="glyphicon glyphicon-search"></span> Cards</a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Cards</a></li>
 
 
 </ul>
@@ -57,6 +55,7 @@ data-callback="$('#bigModal').modal('show');"> <span class="glyphicon glyphicon-
 
 {% include "core_app/navbar-context-dropdown.html" %}
 </div>
+
 
 
 

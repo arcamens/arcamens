@@ -22,14 +22,15 @@
 {% block buttons %}
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-<button  id="createCard" type="button" data-form="#form-card-data" 
+<button  type="button" data-form="#form-card-data" 
 data-shell="#main-view"  data-show="{% url 'card_app:create-card' ancestor.id %}"
-class="btn btn-default m-post-close"> 
+class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
 

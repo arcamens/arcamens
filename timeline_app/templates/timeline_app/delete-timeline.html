@@ -23,11 +23,12 @@
 data-dismiss="modal">Cancel</button>
 
 <button  id="createCard" type="button" data-form="#confirmTimelineDeletionForm"
-data-shell="#main-view" data-callback="$('#smallModal').modal('toggle');" 
-data-shell-error="#smallModalContent" data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
+data-shell="#main-view"  
+data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
 class="btn btn-danger e-post"> 
      {% trans "Delete" %}
 </button>
+
 
 
 

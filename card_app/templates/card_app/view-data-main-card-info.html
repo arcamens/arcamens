@@ -33,7 +33,7 @@ data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphic
 </small>
 
 <div class="pull-right">
-<a class="s-modal" href="#"
+<a class="e-get"  data-shell="#smallModalContent"  href="#"
 data-show="{% url 'card_app:card-events' card.id %}"> 
 <span class="glyphicon glyphicon-bell"></span> E/C</a>
 </div>
@@ -71,6 +71,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

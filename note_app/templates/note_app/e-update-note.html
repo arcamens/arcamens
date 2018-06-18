@@ -8,7 +8,6 @@
 {{event.user}} </a> has updated a 
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'note_app:preview-note' event.note.id %}" 
 href="{{event.note.get_link_url}}"> 
@@ -17,7 +16,6 @@ href="{{event.note.get_link_url}}">
 on
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
 href="{{event.child.get_link_url}}"> 
@@ -27,6 +25,7 @@ href="{{event.child.get_link_url}}">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

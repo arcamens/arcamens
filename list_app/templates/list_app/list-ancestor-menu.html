@@ -11,7 +11,6 @@
 <li><a class="e-get"  
 data-shell="#smallModalContent" 
 data-show="{% url 'board_app:update-board' board.id %}" 
-data-callback="$('#smallModal').modal('show');" 
 href="#"> 
 <span class="glyphicon glyphicon-cog"></span> 
 {% trans "Settings" %}</a></li>
@@ -21,7 +20,6 @@ href="#">
 
 <li><a class="e-get" 
 data-shell="#smallModalContent" 
-data-callback="$('#smallModal').modal('show');" 
 data-show="{% url 'board_app:manage-board-members' board.id %}" 
 href="#"> <span class="glyphicon glyphicon-user"></span> 
 {% trans "Members" %}</a></li>
@@ -29,7 +27,6 @@ href="#"> <span class="glyphicon glyphicon-user"></span>
 
 <li><a class="e-get" 
 data-shell="#smallModalContent" 
-data-callback="$('#smallModal').modal('show');" 
 data-show="{% url 'board_app:manage-board-admins' board.id %}" 
 href="#"> <span class="glyphicon glyphicon-user"></span> 
 {% trans "Admins" %}</a></li>
@@ -42,6 +39,7 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>
 
 </ul>
 </div>
+
 
 
 

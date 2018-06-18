@@ -16,17 +16,17 @@
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<a href="#" class="s-modal" data-show="{% url 'bitbucket_app:list-bitbucket-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
+<a href="#" class="e-get" data-show="{% url 'bitbucket_app:list-bitbucket-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
 Bitbucket/Webhooks</a>
 
-<a href="#" class="s-modal" data-show="{% url 'github_app:list-github-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
+<a href="#" class="e-get" data-show="{% url 'github_app:list-github-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
 Github/Webhooks</a>
 
 </div>
 
 <div class="modal-footer">
 
-<button  type="button" data-show="{% url 'core_app:delete-organization' %}" class="btn btn-danger s-modal">  
+<button  type="button" data-show="{% url 'core_app:delete-organization' %}" class="btn btn-danger e-get">  
 {% trans "Delete" %} </button>
 
 <button  type="button" data-form="#form-organization-data" data-callback="location.reload()"  data-shell-error="#smallModalContent" 
@@ -34,6 +34,7 @@ data-show="{% url 'core_app:update-organization' %}" class="btn btn-default e-po
 </button>
 
 </div>
+
 
 
 

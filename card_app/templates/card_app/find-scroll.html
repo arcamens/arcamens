@@ -2,7 +2,6 @@
 <p>
 <a class="e-get" data-shell="#main-view" 
 data-show="{{ind.get_absolute_url}}"
-data-callback="$('#bigModal').modal('toggle');" 
 href="{{ind.get_link_url}}" > 
 <span class="glyphicon glyphicon-file"></span>
 {% if ind.done %} (Done) {% endif %}
@@ -20,6 +19,7 @@ href="{{ind.get_link_url}}" >
 </p>
 
 {% endfor %}
+
 
 
 

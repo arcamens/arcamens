@@ -27,7 +27,7 @@ Posts </h4>
 <span class="glyphicon glyphicon-file"></span>
 {{ind.label|truncatechars:40}} 
 <br>
-<a class="s-modal" data-show="{% url 'post_app:undo-clipboard' ind.id %} "
+<a class="e-get" data-show="{% url 'post_app:undo-clipboard' ind.id %} "
 href="#"> <span class="glyphicon glyphicon-repeat"></span> Undo</a>
 
 </p>
@@ -51,7 +51,7 @@ Lists </h4>
 <span class="glyphicon glyphicon-list-alt"></span>
 {{ind.name|truncatechars:40}} 
 <br>
-<a class="s-modal" data-show="{% url 'list_app:undo-clipboard' ind.id %} "
+<a class="e-get" data-show="{% url 'list_app:undo-clipboard' ind.id %} "
 href="#"> <span class="glyphicon glyphicon-repeat"></span> Undo</a>
 
 
@@ -76,7 +76,7 @@ Cards </h4>
 
 {{ind.label|truncatechars:40}} 
 <br>
-<a class="s-modal" data-show="{% url 'card_app:undo-clipboard' ind.id %} "
+<a class="e-get" data-show="{% url 'card_app:undo-clipboard' ind.id %} "
 href="#"> <span class="glyphicon glyphicon-repeat"></span> Undo</a>
 
 
@@ -90,11 +90,12 @@ No cards.
 
 <div class="modal-footer">
 <button  type="button"  data-show="{% url 'core_app:confirm-clipboard-deletion' %}"
-class="btn btn-default s-modal"> {% trans "Delete all?" %} </button>
+class="btn btn-default e-get"> {% trans "Delete all?" %} </button>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 

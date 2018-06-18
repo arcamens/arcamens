@@ -18,9 +18,7 @@ Available {{card.label|truncatechars:40}}'s Tags
 <div class="pre-scrollable">
 
 {% for ind in included %}
-<p id="unbind-card-tag-{{ind.id}}" > <a class="e-get" style="color:red"
-data-callback="$('#unbind-card-tag-{{ind.id}}').remove();"
-data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#"> 
+<p class="rm"> <a class="r-get" style="color:red" data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>  
 <b> {{ind.name}} </b>
 {{ind.description}} 
@@ -28,9 +26,8 @@ data-show="{% url 'card_app:unbind-card-tag' card.id ind.id %}" href="#">
 {% endfor %}
 
 {% for ind in excluded %}
-<p id="bind-card-tag-{{ind.id}}">
-<a class="e-get"
-data-callback="$('#bind-card-tag-{{ind.id}}').remove();"
+<p class="rm">
+<a class="r-get" 
 data-show="{% url 'card_app:bind-card-tag' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a>  <b> {{ind.name}}</b>
  {{ind.description}} 
@@ -58,12 +55,16 @@ $('#smallModal').one('hidden.bs.modal', function () {
 
 <button  type="button" data-form="#tagSearchForm"  
 data-show="{% url 'card_app:manage-card-tags' card.id  %}"
-class="btn btn-default m-post"> {% trans "Search" %} </button>
+class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
+
+
+
+
 
 

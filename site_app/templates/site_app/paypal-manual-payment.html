@@ -29,16 +29,17 @@ Paypal <small> Manual Payment </small></h3>
 
 <div class="modal-footer">
 
-<button  type="button" data-show="{% url 'site_app:upgrade' %}"
-class="btn btn-default s-modal"> {% trans "Back" %} </button>
+<button  type="button" data-show="{% url 'site_app:upgrade' %}" 
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-show="{% url 'site_app:calculate-period-cost' %}" data-form="#paypalManualPaymentForm"
-class="btn btn-default m-post"> {% trans "Calc/Cost" %} </button>
+class="btn btn-default e-post"> {% trans "Calc/Cost" %} </button>
 
 <button  type="button" data-show="{% url 'site_app:paypal-manual-payment' %}" data-form="#paypalManualPaymentForm"
-class="btn btn-default m-post"> {% trans "Purchase" %} </button>
+class="btn btn-default e-post"> {% trans "Purchase" %} </button>
 
 </div>
+
 
 
 

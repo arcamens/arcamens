@@ -25,20 +25,21 @@
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#form-board-data"     
+<button  type="button" 
 data-show="{% url 'board_app:delete-board' board.id %}"
-class="btn btn-danger s-modal"> 
+class="btn btn-danger e-get"> 
 {% trans "Delete" %}
 </button>
 
 <button  type="button" data-form="#form-board-data" data-shell="#main-view" 
-data-callback="$('#smallModal').modal('toggle');"  data-shell-error="#smallModalContent" 
+data-shell-error="#smallModalContent" 
 data-show="{% url 'board_app:update-board' board.id %}"
 class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>
 
 </div>
+
 
 
 

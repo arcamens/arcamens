@@ -4,18 +4,18 @@ class="e-get"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
 
-<li> <a class="b-modal"data-show="{% url 'card_app:update-card' card.id %}"
+<li> <a  data-shell="#bigModalContent" class="e-get"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
 
-<li> <a class="b-modal text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
+<li> <a  data-shell="#bigModalContent" class="e-get text-info" data-show="{% url 'note_app:list-notes' card.id %}"  
 href="#">
 <span class="badge">
 <span class="glyphicon glyphicon-comment"></span> {{card.notes.count}}
 </span> Notes</a></li>
 
 
-<li> <a class="s-modal text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
-data-callback="$('#smallModal').modal('toggle');" href="#">
+<li> <a  data-shell="#smallModalContent"  class="e-get text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" 
+ href="#">
 <span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
 {% if card.done %}
@@ -31,16 +31,16 @@ data-show="{% url 'card_app:done'  card.id %}" href="#">
 {% endif %}
 
 <li>
-<a class="s-modal" data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
-data-callback="$('#smallModal').modal('toggle');"  href="#">
+<a class="e-get"  data-shell="#smallModalContent"  data-show="{% url 'card_app:manage-card-tags'  card.id %}" 
+  href="#">
 <span class="glyphicon glyphicon-tag"></span> Tags</a></li> 
 
 <li>
-<a class="s-modal text-danger" data-show="{% url 'card_app:confirm-card-deletion'  card.id %}"  href="#">
+<a  data-shell="#smallModalContent"  class="e-get text-danger" data-show="{% url 'card_app:confirm-card-deletion'  card.id %}"  href="#">
 <span class="glyphicon glyphicon-remove"></span> Delete</a></li>
 
 <li>
-<a class="s-modal" data-show="{% url 'card_app:select-fork-list'  card.id %}" 
+<a class="e-get"  data-shell="#smallModalContent"  data-show="{% url 'card_app:select-fork-list'  card.id %}" 
 href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 
 <li>
@@ -63,6 +63,10 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
+
+
+
 
 
 

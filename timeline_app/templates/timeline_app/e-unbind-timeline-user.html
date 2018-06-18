@@ -10,7 +10,6 @@
 {{event.peer.name}} </span> </a> unbinded from
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.timeline.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
@@ -21,6 +20,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

@@ -6,7 +6,7 @@
 Post <span style="color:red"> <span class="glyphicon glyphicon-file"></span>
 {{event.post_label}}</span> deleted on timeline
 
-<a class="e-get" data-shell="#main-view" data-callback="$('#smallModal').modal('toggle');" 
+<a class="e-get" data-shell="#main-view"  
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.timeline.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
 
@@ -17,6 +17,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

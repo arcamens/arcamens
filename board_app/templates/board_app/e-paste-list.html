@@ -9,7 +9,6 @@
 
 {% for ind in event.lists.all %}
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' ind.id %}" href="{{ind.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span>
@@ -22,7 +21,6 @@ data-show="{% url 'card_app:list-cards' ind.id %}" href="{{ind.get_link_url}}">
 on board
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.get_link_url}}"> 
 <span class="glyphicon glyphicon-th"></span>
@@ -31,6 +29,7 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.g
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

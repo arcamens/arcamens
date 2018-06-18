@@ -13,9 +13,8 @@ Available {{user.name}}'s Timelines <span class="badge">{{count}}/{{total}}</spa
 
 <div class="pre-scrollable">
 {% for ind in included %}
-<p id="bind-timeline-user-{{ind.id}}">
-<a class="e-get" style="color:red"
-data-callback="$('#bind-timeline-user-{{ind.id}}').remove();"
+<p class="rm">
+<a class="r-get" style="color:red"
 data-show="{% url 'timeline_app:unbind-timeline-user' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a> 
 
@@ -28,9 +27,8 @@ data-show="{% url 'timeline_app:unbind-timeline-user' ind.id user.id %}" href="#
 {% endfor %}
 
 {% for ind in excluded %}
-<p id="bind-timeline-user-{{ind.id}}">
-<a class="e-get"
-data-callback="$('#bind-timeline-user-{{ind.id}}').remove();console.log('oo')"
+<p class="rm">
+<a class="r-get"
 data-show="{% url 'timeline_app:bind-timeline-user' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a> 
 
@@ -59,13 +57,12 @@ data-show="{% url 'timeline_app:bind-timeline-user' ind.id user.id %}" href="#">
 {% block buttons %}
 
 <button  type="button" 
-data-shell="#smallModalContent" 
-data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users'  %}"
+data-shell="#smallModalContent" data-show="{% url 'core_app:list-users'  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
 <button  type="button" data-form="#bind-timeline-search-form" data-shell="#smallModalContent" 
-data-shell-error="#smallModalContent" data-show="{% url 'timeline_app:manage-user-timelines' user.id  %}"
+data-show="{% url 'timeline_app:manage-user-timelines' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -73,6 +70,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

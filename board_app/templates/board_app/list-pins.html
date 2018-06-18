@@ -35,7 +35,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 
 {% for ind in timelinepins %}
 <li>
-<a class="e-get pin-timeline" data-callback-error="$('#smallModalError').modal('toggle');" data-shell="#main-view"
+<a class="e-get pin-timeline"  data-shell="#main-view"
 data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.timeline.name}}
 <span  onclick="$('#pins').load('{% url 'timeline_app:unpin' ind.id %}');event.stopPropagation();" class="close">
 &times;
@@ -56,6 +56,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 // });
 // </script>
 -->
+
 
 
 

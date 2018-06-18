@@ -9,7 +9,6 @@
 
 {% for ind in event.posts.all %}
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' ind.id %}"
 href="{{ind.get_link_url}}"> 
@@ -21,8 +20,6 @@ href="{{ind.get_link_url}}">
 on timeline 
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
-
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.timeline.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.timeline.name}} </a>  by 
@@ -30,6 +27,7 @@ data-show="{% url 'timeline_app:list-posts' event.timeline.id %}" href="{{event.
  on {{event.created}}
 
 {% endblock %}
+
 
 
 

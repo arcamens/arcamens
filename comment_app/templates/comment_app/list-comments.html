@@ -50,14 +50,16 @@ On {{ind.created}}</em>
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<button type="button" class="btn btn-default s-modal">  Back </button>
+<button type="button" class="btn btn-default e-get">  Back </button>
 
 <button  id="sendeventComment" type="button" 
 data-form="#eventCommentForm" 
 data-show="{% url 'comment_app:create-comment' event.id %}"
-class="btn btn-default m-post">  {% trans "Send" %} </button>
+class="btn btn-default e-post">  {% trans "Send" %} </button>
 
 </div>
+
+
 
 
 

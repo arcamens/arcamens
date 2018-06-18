@@ -30,7 +30,7 @@
 
 <div class="modal-footer">
 <div class="pull-left">
-<a href="#" data-show="{% url 'core_app:update-password'  %}" class="s-modal"> 
+<a href="#" data-show="{% url 'core_app:update-password'  %}" class="e-get"> 
 Set a new password?
 
 </a>
@@ -38,12 +38,13 @@ Set a new password?
 <br>
 <button  type="button" data-form="#update-user-information-form" 
 data-callback="window.location.replace('{% url 'core_app:index' %}');" 
-data-shell-error="#smallModalContent" data-show="{% url 'core_app:update-user-information'  %}"
+data-show="{% url 'core_app:update-user-information'  %}"
 class="btn btn-default e-post"> 
      {% trans "Update" %}
 </button>
 
 </div>
+
 
 
 

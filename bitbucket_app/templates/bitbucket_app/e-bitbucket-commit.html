@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<a class="e-get" data-callback="$('#smallModal').modal('toggle');" 
+<a class="e-get"  
 data-shell="#main-view" data-show="{% url 'card_app:view-data' event.note.card.id %}" href="{{event.note.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.note.card.label|truncatechars:40}} </a> referenced from commit 
@@ -15,6 +15,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' event.note.card.i
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

@@ -9,13 +9,14 @@
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in workers %}
-<a data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="s-modal" href="#">
+<a data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="e-get" data-shell="#smallModalContent" 
+href="#">
 <span class="glyphicon glyphicon-user"></span> {{ind.name}} </a>
 
 {% if forloop.last %} 
 <br>
 <a data-show="{% url 'card_app:alert-card-workers' card.id %}" 
-class="s-modal text-warning"  href="#"> <span class="glyphicon glyphicon-alert"></span> Alert workers?</a>
+class="e-get text-warning" data-shell="#smallModalContent"  href="#"> <span class="glyphicon glyphicon-alert"></span> Alert workers?</a>
 {% endif %}
 {% empty %}
 No workers...
@@ -25,7 +26,7 @@ No workers...
 <h5> <span class="glyphicon glyphicon-tag"></span> Tags</h5>
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in tags %}
-<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}" class="s-modal" href="#">
+<a data-show="{% url 'card_app:card-tag-information' ind.id card.id %}" class="e-get" data-shell="#smallModalContent"  href="#">
 <span class="glyphicon glyphicon-tag"></span> {{ind.name}} </a>
 {% empty %}
 No tags...
@@ -82,6 +83,7 @@ No parents.
 </div>
 </div>
 </div>
+
 
 
 

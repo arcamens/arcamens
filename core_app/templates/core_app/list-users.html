@@ -30,20 +30,20 @@
 <small> {{ind.email}} </small>   <br>
 
 <span style="font-size:90%">
-<a data-show="{% url 'timeline_app:manage-user-timelines' ind.id %}" class="s-modal" href="#">
+<a data-show="{% url 'timeline_app:manage-user-timelines' ind.id %}" class="e-get" href="#">
 <span class="glyphicon glyphicon-eye-open"></span> Timelines  </a>
 
-<a data-show="{% url 'board_app:manage-user-boards' ind.id %}" class="s-modal" href="#">
+<a data-show="{% url 'board_app:manage-user-boards' ind.id %}" class="e-get" href="#">
 <span class="glyphicon glyphicon-th"></span>  Boards  </a>
 
-<a data-show="{% url 'core_app:manage-user-tags' ind.id %}" class="s-modal" href="#">
+<a data-show="{% url 'core_app:manage-user-tags' ind.id %}" class="e-get" href="#">
 <span class="glyphicon glyphicon-tag"></span>  Tags  </a>
 
 <br>
 </span>
 
 <span style="font-size:70%">
-<a href="#" data-show="{% url 'core_app:remove-organization-user' ind.id %} " class="s-modal text-danger">
+<a href="#" data-show="{% url 'core_app:remove-organization-user' ind.id %} " class="e-get text-danger">
 <span class="glyphicon glyphicon-remove"></span> Remove  </a>
 </span>
 
@@ -65,21 +65,23 @@
 {% bootstrap_form_errors form type='non_fields' %}
 
 </form>
-<a href="#" data-show="{% url 'core_app:list-invites' %}" class="s-modal"> 
+<a href="#" data-show="{% url 'core_app:list-invites' %}" class="e-get"> 
  <span class="glyphicon glyphicon-send"></span> Invites </a>
 
 </div>
 
 <div class="modal-footer">
 
-<button  type="button" data-form="#list-user-search-form" id="filterUsers"
-data-show="{% url 'core_app:list-users'  %}" class="btn btn-default m-post"> {% trans "Filter" %} </button>
+<button  type="button" data-form="#list-user-search-form" 
+data-show="{% url 'core_app:list-users'  %}" class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 
 </div>
+
+
 
 
 

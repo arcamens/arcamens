@@ -5,7 +5,6 @@
 Card
 <a class="e-get"
 data-shell="#main-view"
-data-callback="$('#smallModal').modal('toggle');" 
 data-show="{% url 'card_app:view-data' event.card.id %}"
 href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -13,7 +12,6 @@ href="{{event.card.get_link_url}}">
 
 <a class="e-get"
 data-shell="#main-view"
-data-callback="$('#smallModal').modal('toggle');" 
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span> {{event.ancestor.name}} </a>  by 
 
@@ -22,6 +20,7 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ance
 {{event.user}} </a> on {{event.created}}
 
 {% endblock %}
+
 
 
 

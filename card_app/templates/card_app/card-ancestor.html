@@ -16,11 +16,11 @@
 <span class="glyphicon glyphicon-arrow-up"></span> Up
 </a>
 
-<a class="b-modal"  href="#" data-show="{% url 'card_app:create-card' list.id %}">
+<a  data-shell="bigModalContent" class="e-get"  href="#" data-show="{% url 'card_app:create-card' list.id %}">
 <span class="glyphicon glyphicon-plus"></span>  {% trans "Card" %}
 </a>
 
-<a class="s-modal"  href="#" data-show="{% url 'card_app:setup-card-filter' list.id %}" >
+<a class="e-get"  data-shell="#smallModalContent"   href="#" data-show="{% url 'card_app:setup-card-filter' list.id %}" >
 
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
@@ -37,4 +37,6 @@ Filter </strike>
 </div>
 
 </div>
+
+
 

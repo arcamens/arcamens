@@ -8,7 +8,6 @@
 {{event.user}} </a> has set post priority
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post0.id %}" href="{{event.post0.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -18,7 +17,6 @@ data-show="{% url 'post_app:post' event.post0.id %}" href="{{event.post0.get_lin
 up to
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post1.id %}" href="{{event.post1.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -28,7 +26,6 @@ data-show="{% url 'post_app:post' event.post1.id %}" href="{{event.post1.get_lin
 on list
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span>
@@ -37,6 +34,7 @@ data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="{{event.
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

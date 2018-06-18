@@ -21,10 +21,10 @@
 <br>
 
 <small>
-<a class="e-get text-danger"  data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
+<a class="e-get text-danger"  data-shell="#main-view"  
 data-show="{% url 'card_app:set-card-priority-up' card.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-up"></span>Up</a> 
 
-<a class="e-get text-success" data-shell="#main-view" data-callback="$('#bigModal').modal('toggle');" 
+<a class="e-get text-success" data-shell="#main-view"  
 data-show="{% url 'card_app:set-card-priority-down' card.id ind.id %}" href="{{ind.get_link_url}}">  <span class="glyphicon glyphicon-arrow-down"></span>Down</a> 
 </small>
 
@@ -47,9 +47,11 @@ data-dismiss="modal">Close</button>
 
 <button  type="button" data-form="#cardPriorityForm" 
 id="filterCardRelations" data-show="{% url 'card_app:card-priority' card.id  %}"
-class="btn btn-default m-post"> {% trans "Search" %} </button>
+class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
+
 
 
 

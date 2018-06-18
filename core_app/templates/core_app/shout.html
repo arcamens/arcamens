@@ -26,14 +26,15 @@
 
 <div class="modal-footer">
 <button  type="button" data-show="{% url 'core_app:list-events'  %}"
-class="btn btn-default s-modal"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#shoutForm" id="shoutFormButton"
-data-show="{% url 'core_app:shout'  %}" class="btn btn-default m-post"> {% trans "Shout" %} </button>
+data-show="{% url 'core_app:shout'  %}" class="btn btn-default e-post"> {% trans "Shout" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
 
 

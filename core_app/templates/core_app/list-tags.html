@@ -16,8 +16,8 @@
 
 <div class="pre-scrollable">
 {% for ind in tags %}
-<p id="delete-tag-{{ind.id}}"> <a class="e-get" style="color:red"
-data-callback="$('#delete-tag-{{ind.id}}').remove();" data-show="{% url 'core_app:delete-tag' ind.id %}" href="#"> 
+<p class="rm"> <a class="r-get" style="color:red"
+data-show="{% url 'core_app:delete-tag' ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>
 
 <b> {{ind.name}} </b> {{ind.description}} </p>
@@ -43,12 +43,15 @@ href="#"> <span class="glyphicon glyphicon-tag"></span> New tag?</a>
 <div class="modal-footer">
 
 <button  type="button" data-form="#tagSearchForm" 
-data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default m-post"> {% trans "Search" %} </button>
+data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Close" %}
 </button>
 </div>
+
+
+
 
 
 

@@ -8,7 +8,6 @@
 {{event.user}} </a> has updated snippet 
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');$('#bigModal').modal('show');" 
 data-shell="#bigModalContent" 
 data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snippet.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -17,7 +16,6 @@ data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snipp
 on
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.child.id %}" 
 href="{{ event.child.get_link_url }}"> 
@@ -27,6 +25,7 @@ href="{{ event.child.get_link_url }}">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

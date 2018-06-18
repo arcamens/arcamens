@@ -8,7 +8,7 @@
 data-form="#form-card-data" 
 data-shell="#main-view" 
 data-show="{% url 'card_app:update-card' card.id %}"
-class="btn btn-default m-post-close"> 
+class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>
 
@@ -21,6 +21,7 @@ $('#form-card-data').on('submit', (function(e){
 </script>
 
 {% endblock %}
+
 
 
 

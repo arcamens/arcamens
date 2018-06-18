@@ -4,7 +4,7 @@
 
 {% block buttons %}
 <div class="pull-left">
-<a class="b-modal" href="#" data-show="{% url 'card_app:pull-card-content' ancestor.id card.id %}"> 
+<a  data-shell="bigModalContent"  class="e-get" href="#" data-show="{% url 'card_app:pull-card-content' ancestor.id card.id %}"> 
 <span class="glyphicon glyphicon-download"></span> 
 
 Keep old content? </a>
@@ -14,11 +14,13 @@ Keep old content? </a>
 
 <button  type="button" data-form="#form-card-data" data-shell="#main-view" id="createFork"
 data-show="{% url 'card_app:create-fork' ancestor.id card.id  %}"
-class="btn btn-default m-post-close"> 
+class="btn btn-default e-post"> 
 {% trans "Fork" %}
 </button>
 
 {% endblock %}
+
+
 
 
 

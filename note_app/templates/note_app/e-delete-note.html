@@ -14,7 +14,6 @@
 on
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
 href="{{event.child.get_link_url}}"> 
@@ -24,6 +23,7 @@ href="{{event.child.get_link_url}}">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

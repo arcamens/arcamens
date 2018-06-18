@@ -32,12 +32,13 @@ $('#bigModal').one('hidden.bs.modal', function () {
 
 <button  type="button" data-form="#form-snippet-data" 
 data-shell="#post-{{post.id}}"  data-show="{% url 'snippet_app:create-snippet' post.id %}"
-class="btn btn-default m-post-close"> 
+class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
 

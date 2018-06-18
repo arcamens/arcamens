@@ -27,19 +27,20 @@
 
 <div class="modal-footer">
 <button  type="button" data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
-class="btn btn-danger s-modal"> 
+class="btn btn-danger e-get"> 
 {% trans "Delete" %}
 </button>
 
 <button  type="button" data-form="#form-timeline-data" 
 data-shell="#main-view" data-show="{% url 'timeline_app:update-timeline' timeline.id %}"
-class="btn btn-default m-post-close"> 
+class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>
 
 </button>
 
 </div>
+
 
 
 

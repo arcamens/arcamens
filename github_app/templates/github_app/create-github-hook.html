@@ -29,13 +29,15 @@ It is necessary to add a Webhook for push events to your repository.
 </div>
 
 <div class="modal-footer">
-<button  type="button" class="btn btn-default s-modal"> {% trans "Back" %} </button>
+<button  type="button" class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 {% block buttons %}
 <button  type="button" data-form="#githubhookForm" data-show="{% url 'github_app:create-github-hook' %}"
-class="btn btn-default m-post">  {% trans "Create" %} </button>
+class="btn btn-default e-post">  {% trans "Create" %} </button>
 {% endblock %}
 </div>
+
+
 
 
 

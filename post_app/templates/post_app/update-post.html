@@ -10,13 +10,14 @@ $('#bigModal').one('hidden.bs.modal', function () {
 </script>
 
       <button  type="button" data-form="#form-post-data" id="updatePost"
-      data-shell="#post-{{post.id}}" data-callback="$('#bigModal').modal('toggle');" 
+      data-shell="#post-{{post.id}}"  
       data-shell-error="#bigModalContent" data-show="{% url 'post_app:update-post' post.id %}"
       class="btn btn-default e-post"> 
            {% trans "Update" %}
       </button>
 
 {% endblock %}
+
 
 
 

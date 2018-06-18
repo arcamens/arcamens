@@ -8,7 +8,6 @@
 has forked card
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.card.id %}" 
 href="{{event.card.get_link_url}}"> 
@@ -19,7 +18,6 @@ href="{{event.card.get_link_url}}">
 to post
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" 
 href="{{event.post.get_link_url}}"> 
@@ -30,6 +28,7 @@ href="{{event.post.get_link_url}}">
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

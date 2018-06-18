@@ -17,7 +17,7 @@ Available {{card.label|truncatechars:20}}'s Workers
 
 <div class="pre-scrollable">
 {% for ind in included %}
-<p class="text-center" id="user-choice-{{ind.id}}">
+<p class="text-center rm" >
 <img class="img-responsive center-block"  width="50" height="50"  src="{% avatar ind.avatar %}" />
 {{ind.name}}  
 <br>
@@ -26,8 +26,7 @@ Available {{card.label|truncatechars:20}}'s Workers
 
 <br>
 
-<a class="e-get" style="color:red; font-size:70%"
-data-callback="$('#user-choice-{{ind.id}}').remove();"
+<a class="r-get" style="color:red; font-size:70%"
 data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> Unbind</a>  
 
@@ -36,7 +35,7 @@ data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#">
 {% endfor %}
 
 {% for ind in excluded %}
-<p class="text-center" id="user-choice-{{ind.id}}">
+<p class="text-center rm">
 <img class="img-responsive center-block"  width="50" height="50"  src="{% avatar ind.avatar %}" />
 {{ind.name}}  
 <br>
@@ -44,8 +43,7 @@ data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#">
 <small> {{ind.email}} </small>  
 <br>
 
-<a class="e-get" style="color:green;font-size:70%"
-data-callback="$('#user-choice-{{ind.id}}').remove();"
+<a class="r-get" style="color:green;font-size:70%"
 data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> bind </a> 
 
@@ -55,7 +53,7 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 
 <br>
 
-<form id="bind-card-search-form" enctype="multipart/form-data">
+<form id="userSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.pattern  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -64,9 +62,9 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-form="#bind-card-search-form" id="filterCardWorkers"
+<button  type="button" data-form="#userSearchForm" 
 data-show="{% url 'card_app:manage-card-workers' card.id  %}"
-class="btn btn-default m-post"> {% trans "Filter" %} </button>
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 <script>
 $('#smallModal').one('hidden.bs.modal', function () {
@@ -79,6 +77,8 @@ $('#smallModal').one('hidden.bs.modal', function () {
 </button>
 
 </div>
+
+
 
 
 

@@ -13,7 +13,6 @@
 
 to card
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'card_app:view-data' event.card.id %}" href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span> {{event.card.label|truncatechars:40}} </a> 
@@ -21,6 +20,7 @@ data-show="{% url 'card_app:view-data' event.card.id %}" href="{{event.card.get_
 at {{event.created}}
 
 {% endblock %}
+
 
 
 

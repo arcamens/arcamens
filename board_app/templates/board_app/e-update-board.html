@@ -8,7 +8,6 @@
 {{event.user}} </a> has updated board
 
 <a class="e-get"
-data-callback="$('#smallModal').modal('toggle');" 
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.get_link_url}}"> 
 <span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  
@@ -16,6 +15,7 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.g
 on {{event.created}}
 
 {% endblock %}
+
 
 
 

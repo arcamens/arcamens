@@ -31,7 +31,7 @@ data-shell="#main-view" >
 {% endif %}
 
 <div class="pull-right">
-<a class="s-modal" href="#"
+<a class="e-get" href="#"
 data-show="{% url 'post_app:post-events' post.id %}"> 
 <span class="glyphicon glyphicon-bell"></span> E/C</a>
 
@@ -49,7 +49,7 @@ data-show="{% url 'post_app:post-events' post.id %}">
 </div>
 
 {% for ind in post.snippets.all %}
-<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="b-modal" href="{{ind.get_link_url}}"> 
+<a data-show="{% url 'snippet_app:snippet' ind.id %}" class="e-get"  data-shell="bigModalContent" href="{{ind.get_link_url}}"> 
 <span class="glyphicon glyphicon-book"></span> {{ind.title}} </a>
 {% empty %}
 No snippets...
@@ -82,7 +82,6 @@ function(data) {
 <a 
 data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
 data-shell="#smallModalContent" 
-data-callback="$('#smallModal').modal('show');" 
 class="e-get"
 href="#">
 <span class="glyphicon glyphicon-tag"></span>
@@ -105,7 +104,6 @@ Workers </h5>
 <a 
 data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
 data-shell="#smallModalContent" 
-data-callback="$('#smallModal').modal('show');" 
 class="e-get"
 href="#">
 <span class="glyphicon glyphicon-user"></span>
@@ -114,7 +112,7 @@ href="#">
 </a>
 
 {% if forloop.last %} 
-<br> <a class="e-get text-warning" data-shell="#smallModalContent" data-callback="$('#smallModal').modal('toggle');" 
+<br> <a class="e-get text-warning" data-shell="#smallModalContent"  
 data-show="{% url 'post_app:alert-post-workers' post.id %}" href="#">
 <span class="glyphicon glyphicon-alert"></span>
 
@@ -149,16 +147,14 @@ No forks.
 <div class="panel-footer">
 {% block footer %}
 
-<a data-show="{% url 'post_app:update-post' post.id %}" data-shell="#bigModalContent"  href="#"
-data-callback="$('#bigModal').modal('show');"  class="e-get"> 
+<a data-show="{% url 'post_app:update-post' post.id %}" data-shell="#bigModalContent"  href="#" class="e-get"> 
 <span class="glyphicon glyphicon-edit"></span> Update</a>
 
 <a href="#"
-data-callback="$('#smallModal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
-<a class="s-modal text-danger" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
+<a class="e-get data-shell="#smallModalContent" text-danger" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
 {% if post.done %}
@@ -171,7 +167,7 @@ class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </
 class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
 
-<a class="b-modal text-info" data-show="{% url 'snippet_app:create-snippet' post.id %}" 
+<a  data-shell="bigModalContent" class="e-get text-info" data-show="{% url 'snippet_app:create-snippet' post.id %}" 
 href="#"><span class="glyphicon glyphicon-plus"></span> Snippet</a>
 
 <a class="e-get"  href="#"
@@ -183,7 +179,6 @@ data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
 <span class="glyphicon glyphicon-scissors"></span> Cut </a>
 
 <a href="#"
-data-callback="$('#smallModal').modal('show');" 
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-tags' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
@@ -192,7 +187,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-random"></span> Fork/Card </a>
 
 <div class="pull-right">
-<a class=" b-modal text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
+<a  data-shell="bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
 <span class="glyphicon glyphicon-signal"></span> </a>
 </div>
 
@@ -201,6 +196,10 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
+
+
+
 
 
 

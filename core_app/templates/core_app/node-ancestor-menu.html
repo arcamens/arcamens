@@ -5,37 +5,40 @@
 <span class="glyphicon glyphicon-wrench"></span>  </a>
 
 <ul class="dropdown-menu" role="menu">
-<li> <a  class="s-modal" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
+<li> <a  class="e-get" data-shell="#smallModalContent" data-show="{% url 'timeline_app:create-timeline' organization.id %}"
 href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Timeline" %}</a> </li>
 <li class="divider"></li>
 
-<li><a class="s-modal" href="#" data-show="{% url 'core_app:manage-organization-admins' %}">
+<li><a class="e-get" data-shell="#smallModalContent" href="#" data-show="{% url 'core_app:manage-organization-admins' %}">
 <span class="glyphicon glyphicon-user"></span> Admins </a> </li>
 
 <li class="divider"></li>
 
-<li><a href="#" class="s-modal"  data-show="{% url 'core_app:list-users'  %}">
+<li><a href="#" class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:list-users'  %}">
 <span class="glyphicon glyphicon-user"></span> Members  </a> </li>
 
 <li class="divider"></li>
 
 <li><a href="#" class="e-get" data-shell="#smallModalContent" 
-data-show="{% url 'core_app:list-tags' %}" data-callback="$('#smallModal').modal('show');">
+data-show="{% url 'core_app:list-tags' %}" >
 <span class="glyphicon glyphicon-tag"></span> Tags
 </a></li>
 
 <li class="divider"></li>
-<li><a class="s-modal" data-show = "{% url 'core_app:list-clipboard' %}" href="#">
+<li><a class="data-shell=" data-shell="#smallModalContent" data-show = "{% url 'core_app:list-clipboard' %}" href="#">
 <span class="glyphicon glyphicon-magnet"></span> {% trans "Clipboard" %}</a></li>
 
 <li class="divider"></li>
 
-<li><a href="#" class="s-modal"  data-show="{% url 'core_app:update-organization' %}">
+<li><a href="#" class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:update-organization' %}">
 <span class="glyphicon glyphicon-cog"></span> Settings </a></li>
 
 
 </ul>
 </div>
+
+
+
 
 
 

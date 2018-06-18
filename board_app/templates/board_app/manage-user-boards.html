@@ -11,9 +11,8 @@ Available {{user.name}}'s Boards <span class="badge">{{count}}/{{total}}</span><
 <div class="modal-body">
 <div class="pre-scrollable">
 {% for ind in included %}
-<p id="unbind-board-user-{{ind.id}}">
-<a class="e-get" style="color:red"
-data-callback="$('#unbind-board-user-{{ind.id}}').remove();"
+<p class="rm">
+<a class="r-get" style="color:red"
 data-show="{% url 'board_app:unbind-board-user' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a> 
 
@@ -26,9 +25,8 @@ data-show="{% url 'board_app:unbind-board-user' ind.id user.id %}" href="#">
 {% endfor %}
 
 {% for ind in excluded %}
-<p id="bind-board-user-{{ind.id}}">
-<a class="e-get"
-data-callback="$('#bind-board-user-{{ind.id}}').remove();"
+<p class="rm">
+<a class="r-get"
 data-show="{% url 'board_app:bind-board-user' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a> 
 
@@ -59,12 +57,12 @@ data-show="{% url 'board_app:bind-board-user' ind.id user.id %}" href="#">
 
 <button  type="button" 
 data-shell="#smallModalContent" 
-data-shell-error="#smallModalContent" data-show="{% url 'core_app:list-users'  %}"
+data-show="{% url 'core_app:list-users'  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
 <button  type="button" data-form="#bind-board-search-form" data-shell="#smallModalContent" 
-data-shell-error="#smallModalContent" data-show="{% url 'board_app:manage-user-boards' user.id  %}"
+data-show="{% url 'board_app:manage-user-boards' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -72,6 +70,8 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
+
 
 
 

@@ -22,13 +22,13 @@
 <div class="modal-footer">
 {% block buttons %}
 <button  type="button" data-form="#form-timeline-data" 
-data-shell="#main-view" data-callback="$('#smallModal').modal('toggle');" 
-data-shell-error="#smallModalContent" data-show="{% url 'timeline_app:create-timeline' organization_id %}"
+data-shell="#main-view" data-show="{% url 'timeline_app:create-timeline' organization_id %}"
 class="btn btn-default e-post"> 
 {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
