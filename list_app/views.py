@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from core_app.views import GuardianView
 from django.http import HttpResponse
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, F
 import board_app.models
 import card_app.models
 import board_app.models
@@ -147,8 +147,9 @@ class PasteCards(GuardianView):
             return HttpResponse("There is no card on \
                 the clipboard.", status=403)
 
-        card = self.ancestor.cards.order_by('-priority').first()
-        cards.update(ancestor=list, priority=F('priority') + card.priority)
+        card = list.cards.order_by('-priority').first()
+        priority = card.priority if card else 0
+        cards.update(ancestor=list, priority=F('priority') + priority)
 
         event = EPasteCard(
         organization=self.me.default, ancestor=list, user=self.me)
@@ -293,6 +294,7 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

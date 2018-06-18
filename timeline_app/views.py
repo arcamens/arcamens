@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
 from jsim.jscroll import JScroll
-from django.db.models import Q
+from django.db.models import Q, F
 import post_app.models
 import operator
 from . import forms
@@ -206,8 +206,9 @@ class PastePosts(GuardianView):
             return HttpResponse("There is no post on \
                 the clipboard.", status=403)
 
-        post = self.ancestor.posts.order_by('-priority').first()
-        posts.update(ancestor=list, priority=F('priority') + post.priority)
+        post = timeline.posts.order_by('-priority').first()
+        priority = post.priority if post else 0
+        posts.update(ancestor=list, priority=F('priority') + priority)
 
         posts.update(ancestor=timeline, priority=post.priority)
         event = EPastePost(organization=self.me.default, 
@@ -386,6 +387,7 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
