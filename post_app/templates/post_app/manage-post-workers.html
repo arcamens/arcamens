@@ -59,7 +59,7 @@ data-show="{% url 'post_app:assign-post-user' post.id ind.id %}" href="#">
 
 <div class="modal-footer">
 <script>
-$('#smallModal').one('shown.bs.modal', function () {
+$('#smallModal').one('hidden.bs.modal', function () {
     $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
 })
 </script>
@@ -73,5 +73,6 @@ class="btn btn-default e-post"> {% trans "Filter" %} </button>
 </button>
 
 </div>
+
 
 
