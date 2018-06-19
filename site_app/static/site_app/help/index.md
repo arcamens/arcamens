@@ -732,7 +732,7 @@ You can filter by tag, worker, owner etc.
 ### Card Forks
 
 When a given task can't be executed at once then it is necessary
-to break it into multiple sub tasks. In Arcamens it is named card forking, 
+to break it into multiple subtasks. In Arcamens it is named card forking, 
 when you fork a card you create a link between both cards.
 
 Consider the card below:
