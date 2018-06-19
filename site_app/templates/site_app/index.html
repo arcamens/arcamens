@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load bootstrap3 %}
 {% load i18n %}
+{% load static %}
+
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -60,7 +62,7 @@ footer p {
 <li><a href="{% url 'site_app:signup' %}" >
 <span class="glyphicon glyphicon-user"></span> {% trans "Sign up" %}</a></li>
 
-<li><a href="/static/help/index.html" target="_blank">
+<li><a href="{% static 'site_app/help/index.html' %}" target="_blank">
 <span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
 
 </ul>
@@ -104,6 +106,7 @@ footer p {
 
 </body>
 </html>
+
 
 
 

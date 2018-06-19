@@ -731,6 +731,48 @@ You can filter by tag, worker, owner etc.
 
 ### Card Forks
 
+When a given task can't be executed at once then it is necessary
+to break it into multiple sub tasks. In Arcamens it is named card forking, 
+when you fork a card you create a link between both cards.
+
+Consider the card below:
+
+![card-forks-0](/static/site_app/help/card-forks-0.png)
+
+In order to fork such a card just click on : Fork/Card link then you would get:
+
+![card-forks-1](/static/site_app/help/card-forks-1.png)
+
+When there are many lists you can just filter the lists based on a pattern:
+
+![card-forks-2](/static/site_app/help/card-forks-2.png)
+
+**Note:** If you wanted to search for a list named "beta" that is in a board named "alpha"
+then you could do:
+
+~~~
+alpha + beta
+~~~
+
+It will match lists that you have access. Once you pick up the desired list you will get the fork creation dialog:
+
+![card-forks-3](/static/site_app/help/card-forks-3.png)
+
+If you click on **Keep old content** link it will fill the fields with the parent card
+attributes. It is useful sometimes when you just want to fork and edit the previous task.
+
+After forking you'll get:
+
+![card-forks-4](/static/site_app/help/card-forks-4.png)
+
+You can browse all forks and parents of a given card by following the
+links on the card.
+
+**Note:** You can open a given card in a new browser tab by just right clicking it then open in a new tab.
+
+**See:** [Advanced List Search](#advanced-list-search)
+
+
 ### Post Forks
 
 ### Advanced User Search
@@ -773,6 +815,7 @@ search to be performed under a given attribute like email you could do:
 
 ### Advanced Post Search
 
+### Advanced List Search
 
 ### Timeline Settings/Removal
 
@@ -829,6 +872,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 

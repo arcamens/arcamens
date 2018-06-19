@@ -83,18 +83,22 @@ class Index(AuthenticatedView):
         self.me.default = self.me.organizanitions.first()
         self.me.save()
 
+class SelectOrganization(AuthenticatedView):
+    def get(self, request):
+        organizations = self.me.organizations.all()
+
+        return render(request, 'core_app/select-organization.html', 
+        {'user': self.me, 'organizations': organizations})
+
 class DisabledAccount(AuthenticatedView):
     def get(self, request):
-        other = self.me.owned_organizations.first()
-
         return render(request, 'core_app/disabled-account.html', 
-        {'user': self.me, 'other': other})
+        {'user': self.me})
 
 class NoDefault(AuthenticatedView):
     def get(self, request):
-        other = self.me.organizations.first()
         return render(request, 'core_app/no-default.html', 
-        {'user': self.me, 'other': other})
+        {'user': self.me})
 
 class SwitchOrganization(AuthenticatedView):
     def get(self, request, organization_id):
@@ -918,6 +922,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

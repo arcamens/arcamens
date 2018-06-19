@@ -19,13 +19,13 @@
   <div class="jumbotron">
     <h1>Arcamens</h1> 
 
-<h4 class="text-warning"> It seems your previous default organization was deleted or you were removed!
+{% for ind in organizations %}
+<a href="{% url 'core_app:switch-organization' ind.id %}" > {{ind.name}} </a>
 <br>
-<small> We'll set a new one. </small>
-</h4> 
+{% endfor %}
 
 <div class="pull-right">
-<a href="{% url 'core_app:select-organization'  %}" > Proceed? </a>
+<a href="{% url 'core_app:no-organization' %}" > Create a new one? </a>
 
 </div>
 
@@ -35,6 +35,7 @@
 
 </body>
 </html>
+
 
 
 

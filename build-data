@@ -29,13 +29,14 @@ user0  = User.objects.create(name='Victor Porton',  email='porton@narod.ru', pas
 # queue0 = channel.queue_declare(queue=str(user0.id), durable=True)
 period0 = Period.objects.create(paid=False, total=0, user=user0)
 user0.enabled = True
-organization0.owner = user0
 user0.organizations.add(organization0)
 user0.save()
 
 organization1 = Organization.objects.create(name='Splittask' )
 user1 = User.objects.create(name='Iury de oliveira',  email='ioliveira@id.uff.br', password='111', default=organization1)
 organization1.owner = user1
+organization0.owner = user1
+
 user1.organizations.add(organization1)
 
 # user0.organizations.add(organization1)
@@ -79,6 +80,7 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
+
 
 
 

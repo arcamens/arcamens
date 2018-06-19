@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^switch-organization/(?P<organization_id>.+)/', views.SwitchOrganization.as_view(), name='switch-organization'),
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
     url(r'^create-organization/', views.CreateOrganization.as_view(), name='create-organization'),
+    url(r'^select-organization/', views.SelectOrganization.as_view(), name='select-organization'),
     url(r'^no-organization/', views.NoOrganization.as_view(), name='no-organization'),
     url(r'^no-default/', views.NoDefault.as_view(), name='no-default'),
 
@@ -46,6 +47,7 @@ urlpatterns = [
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
 
 ]
+
 
 
 
