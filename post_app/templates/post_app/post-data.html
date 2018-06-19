@@ -154,7 +154,7 @@ No forks.
 data-shell="#smallModalContent" data-show="{% url 'post_app:manage-post-workers' post.id %}"
 class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a>
 
-<a class="e-get data-shell="#smallModalContent" text-danger" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
+<a class="e-get text-danger" data-shell="#smallModalContent" href="#" data-show="{% url 'post_app:confirm-post-deletion' post.id %}">
 <span class="glyphicon glyphicon-remove"></span> Delete  </a>
 
 {% if post.done %}
@@ -196,6 +196,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 
