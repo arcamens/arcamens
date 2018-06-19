@@ -208,7 +208,7 @@ class PastePosts(GuardianView):
 
         post = timeline.posts.order_by('-priority').first()
         priority = post.priority if post else 0
-        posts.update(ancestor=list, priority=F('priority') + priority)
+        posts.update(ancestor=timeline, priority=F('priority') + priority)
 
         posts.update(ancestor=timeline, priority=post.priority)
         event = EPastePost(organization=self.me.default, 
@@ -387,6 +387,7 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
