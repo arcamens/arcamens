@@ -54,7 +54,7 @@ class CardMixin(object):
         card.save()
 
         for ind in self.cardfilewrapper_set.all():
-            ind.duplicate(list)
+            ind.duplicate(card)
         return card
 
     @classmethod
@@ -590,6 +590,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

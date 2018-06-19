@@ -92,7 +92,7 @@ class DisabledAccount(AuthenticatedView):
 
 class NoDefault(AuthenticatedView):
     def get(self, request):
-        other = self.me.owned_organizations.first()
+        other = self.me.organizations.first()
         return render(request, 'core_app/no-default.html', 
         {'user': self.me, 'other': other})
 
@@ -918,6 +918,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
