@@ -9,7 +9,7 @@
 
 <div class="modal-body">
 
-<form id="form-organization-data" enctype="multipart/form-data">
+<form id="organizationForm" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
@@ -29,11 +29,12 @@ Github/Webhooks</a>
 <button  type="button" data-show="{% url 'core_app:delete-organization' %}" class="btn btn-danger e-get">  
 {% trans "Delete" %} </button>
 
-<button  type="button" data-form="#form-organization-data" data-callback="location.reload()"  data-shell-error="#smallModalContent" 
+<button  type="button" data-form="#organizationForm" data-callback="location.reload()"  data-shell="" data-shell-error="#smallModalContent" 
 data-show="{% url 'core_app:update-organization' %}" class="btn btn-default e-post"> {% trans "Update" %}
 </button>
 
 </div>
+
 
 
 

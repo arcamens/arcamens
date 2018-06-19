@@ -22,11 +22,12 @@
 <button type="button" class="btn btn-default" 
 data-dismiss="modal">Cancel</button>
 
-<button  id="createCard" type="button" data-form="#confirmOrganizationDeletionForm" data-callback="location.reload()" 
-data-show="{% url 'core_app:delete-organization'  %}"
+<button type="button" data-form="#confirmOrganizationDeletionForm" data-callback="location.reload()" 
+data-show="{% url 'core_app:delete-organization'  %}" data-shell=""
 class="btn btn-danger e-post"> 
      {% trans "Delete" %}
 </button>
+
 
 
 

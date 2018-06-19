@@ -13,7 +13,7 @@
 </div>
 
 <div class="modal-body">
-<form id="update-user-information-form" enctype="multipart/form-data" >
+<form id="userForm" enctype="multipart/form-data" >
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.email  size='md' %}
@@ -36,7 +36,8 @@ Set a new password?
 </a>
 </div>
 <br>
-<button  type="button" data-form="#update-user-information-form" 
+<button  type="button" data-form="#userForm" 
+data-shell=""
 data-callback="window.location.replace('{% url 'core_app:index' %}');" 
 data-show="{% url 'core_app:update-user-information'  %}"
 class="btn btn-default e-post"> 
@@ -44,6 +45,7 @@ class="btn btn-default e-post">
 </button>
 
 </div>
+
 
 
 
