@@ -19,8 +19,11 @@
   <div class="jumbotron">
     <h1>Arcamens</h1> 
 
+
 {% for ind in organizations %}
-<a href="{% url 'core_app:switch-organization' ind.id %}" > {{ind.name}} </a>
+<a href="{% url 'core_app:switch-organization' ind.id %}" > 
+<span class="glyphicon glyphicon-flag"></span>
+{{ind.name}} </a>
 <br>
 {% endfor %}
 
