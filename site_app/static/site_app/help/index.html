@@ -520,7 +520,7 @@ Timeline: Arcamens/Bugs</code></pre>
 <p>You can filter by tag, worker, owner etc.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="card-forks">Card Forks</h3>
-<p>When a given task can’t be executed at once then it is necessary to break it into multiple sub tasks. In Arcamens it is named card forking, when you fork a card you create a link between both cards.</p>
+<p>When a given task can’t be executed at once then it is necessary to break it into multiple subtasks. In Arcamens it is named card forking, when you fork a card you create a link between both cards.</p>
 <p>Consider the card below:</p>
 <figure>
 <img src="/static/site_app/help/card-forks-0.png" alt="card-forks-0" /><figcaption>card-forks-0</figcaption>
@@ -535,7 +535,11 @@ Timeline: Arcamens/Bugs</code></pre>
 </figure>
 <p><strong>Note:</strong> If you wanted to search for a list named “beta” that is in a board named “alpha” then you could do:</p>
 <pre><code>alpha + beta</code></pre>
-<p>It will match lists that you have access. Once you pick up the desired list you will get the fork creation dialog:</p>
+<p>Notice that if you inserted just the list name it would output more results if you have other lists named like this. It is also important to notice that the above pattern would match all lists that either board name or list name contains each one of the strings “alpha” and “beta”.</p>
+<p>For more consistent results just use:</p>
+<pre><code>board:alpha + name:beta</code></pre>
+<p>It would make sure to list just a list from a board that contains the string “alpha” in its name and the list name contains the string “beta”.</p>
+<p>Once you pick up the desired list you will get the fork creation dialog:</p>
 <figure>
 <img src="/static/site_app/help/card-forks-3.png" alt="card-forks-3" /><figcaption>card-forks-3</figcaption>
 </figure>
@@ -548,6 +552,26 @@ Timeline: Arcamens/Bugs</code></pre>
 <p><strong>Note:</strong> You can open a given card in a new browser tab by just right clicking it then open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
 <h3 id="post-forks">Post Forks</h3>
+<p>Timeline posts can be forked into cards, it is mostly useful when a timeline is used as a kanban board backlog.</p>
+<p>Timelines are great for sharing information of all kind, one might use a timeline to get bug reports and fork the bug reports into card tasks over their corresponding project boards. It all depends on how you feel more comfortable to model your team workflow.</p>
+<p>For forking a post just access the post:</p>
+<figure>
+<img src="/static/site_app/help/post-forks-0.png" alt="post-forks-0" /><figcaption>post-forks-0</figcaption>
+</figure>
+<p>After that just click on: Fork/Card it would give you:</p>
+<figure>
+<img src="/static/site_app/help/post-forks-1.png" alt="post-forks-1" /><figcaption>post-forks-1</figcaption>
+</figure>
+<p>For basic understanding on how to filter lists:</p>
+<p><strong>See:</strong> <a href="#card-forks">Card Forks</a></p>
+<p>After picking up the desired list you would get:</p>
+<figure>
+<img src="/static/site_app/help/post-forks-2.png" alt="post-forks-2" /><figcaption>post-forks-2</figcaption>
+</figure>
+<p>After creating the card then everyone who is attached to the timeline and to the destin list’s board will get notified of the fork creation.</p>
+<p>Some features that should be implemented may be related to multiple project boards, the forking mechanism allows a fancy approach for keeping track of all tasks that are necessary in order to have a given feature implemented.</p>
+<p>For a more complete reference on list filters:</p>
+<p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
 <h3 id="advanced-user-search">Advanced User Search</h3>
 <p>You can search users for attributes like name, e-mail or tags.</p>
 <pre><code>tag:developer</code></pre>

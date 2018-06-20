@@ -754,7 +754,20 @@ then you could do:
 alpha + beta
 ~~~
 
-It will match lists that you have access. Once you pick up the desired list you will get the fork creation dialog:
+Notice that if you inserted just the list name it would output more results if you have other lists named like this. 
+It is also important to notice that the above pattern would match all lists that either board name
+or list name contains each one of the strings "alpha" and "beta". 
+
+For more consistent results just use:
+
+~~~
+board:alpha + name:beta
+~~~
+
+It would make sure to list just a list from a board that contains the string "alpha" in its name
+and the list name contains the string "beta".
+
+Once you pick up the desired list you will get the fork creation dialog:
 
 ![card-forks-3](/static/site_app/help/card-forks-3.png)
 
@@ -774,6 +787,41 @@ links on the card.
 
 
 ### Post Forks
+
+Timeline posts can be forked into cards, it is mostly useful when a timeline is used
+as a kanban board backlog. 
+
+Timelines are great for sharing information of all kind, one might use a timeline
+to get bug reports and fork the bug reports into card tasks over their
+corresponding project boards. It all depends on how you feel more comfortable
+to model your team workflow. 
+
+For forking a post just access the post:
+
+![post-forks-0](/static/site_app/help/post-forks-0.png)
+
+After that just click on: Fork/Card it would give you:
+
+![post-forks-1](/static/site_app/help/post-forks-1.png)
+
+For basic understanding on how to filter lists:
+
+**See:** [Card Forks](#card-forks)
+
+After picking up the desired list you would get:
+
+![post-forks-2](/static/site_app/help/post-forks-2.png)
+
+After creating the card then everyone who is attached to the timeline
+and to the destin list's board will get notified of the fork creation.
+
+Some features that should be implemented may be related to multiple project boards, 
+the forking mechanism allows a fancy approach for keeping track of all tasks
+that are necessary in order to have a given feature implemented.
+
+For a more complete reference on list filters:
+
+**See:** [Advanced List Search](#advanced-list-search)
 
 ### Advanced User Search
 
@@ -872,6 +920,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
