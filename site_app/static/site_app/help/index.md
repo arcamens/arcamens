@@ -127,6 +127,8 @@ You can change all attributes for the card there, whenever an attribute is chang
 then an event is fired. All users who are related to the card will get notified.
 These users are those who belong to the card board or are assigned to the card.
 
+### Card Edition
+
 ### Events
 
 Whenever an user creates or updates content then an event is fired. The events
@@ -392,6 +394,8 @@ a markdown content.
 
 After pressing Create the post will be created and every timeline user will get notified
 of the post creation.
+
+### Post Edition
 
 ### Post Workers
 
@@ -729,6 +733,8 @@ You can filter by tag, worker, owner etc.
 
 **See:** [Advanced Card Search](#advanced-card-search)
 
+### Card Relations
+
 ### Card Forks
 
 When a given task can't be executed at once then it is necessary
@@ -920,6 +926,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
