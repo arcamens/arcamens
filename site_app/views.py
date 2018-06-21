@@ -146,7 +146,7 @@ class CalculatePeriodCost(AuthenticatedView):
         if not form.is_valid():
             return render(request, 
                 'site_app/paypal-manual-payment.html', {'form':form, 
-                    'me': me, 'USER_COST':settings.USER_COST, 'CURRENCY_CODE': settings.CURRENCY_CODE}, status=400)
+                    'me': me, 'settings':settings}, status=400)
 
         now  = datetime.date.today()
         init = me.expiration if me.expiration and me.expiration > now else now
@@ -158,7 +158,7 @@ class CalculatePeriodCost(AuthenticatedView):
         cost = round(cost, 3)
 
         return render(request, 'site_app/paypal-manual-payment.html', 
-        {'form':form, 'me': me, 'cost': cost, 'USER_COST':settings.USER_COST, 'CURRENCY_CODE': settings.CURRENCY_CODE})
+        {'form':form, 'me': me, 'cost': cost, 'settings':settings, })
 
 class PaypalManualPayment(AuthenticatedView):
     """
@@ -176,7 +176,7 @@ class PaypalManualPayment(AuthenticatedView):
         'expiration': me.expiration})
 
         return render(request, 'site_app/paypal-manual-payment.html', 
-        {'form':form, 'me': me, 'USER_COST':settings.USER_COST, 'CURRENCY_CODE': settings.CURRENCY_CODE})
+        {'form':form, 'me': me, 'settings':settings})
 
     def post(self, request):
         me   = User.objects.get(id=self.user_id)
@@ -190,7 +190,7 @@ class PaypalManualPayment(AuthenticatedView):
         if not form.is_valid():
             return render(request, 
                 'site_app/paypal-manual-payment.html', {'form':form, 
-                    'me': me, 'USER_COST':settings.USER_COST, 'CURRENCY_CODE': settings.CURRENCY_CODE}, status=400)
+                    'me': me, 'settings':settings, }, status=400)
 
         record      = form.save(commit=False)
         record.paid = True
@@ -378,6 +378,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

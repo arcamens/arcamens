@@ -7,13 +7,15 @@
 
 </div>
 <div class="modal-body">
+<p class="text-info"> Your account can have at most {{ me.max_users }} users.
+</p>
 
-<h4> Current state </h4>
-<p>Expiration: {{ me.expiration }}<br>
-Max users: {{ me.max_users }}</p>
+<p class="text-warning">
+It will expire on {{ me.expiration }}.<br>
+</p>
 
-<h4> Purchases </h4>
-<div class="pre-scrollable">
+<h5 class="text-info"> Your purchases: </h5>
+<div class="pre-scrollable" style="font-size:90%">
 {% for ind in items %}
 <p> 
 Max Users: {{ind.period.max_users}} 
@@ -51,6 +53,7 @@ Date: {{ind.period.created}}
 </div>
 
 </div>
+
 
 
 

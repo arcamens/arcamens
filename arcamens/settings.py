@@ -61,7 +61,6 @@ PAYPAL_BUSINESS_NAME = ''
 # Max users per account for free plan.
 FREE_MAX_USERS = 3
 USER_COST      = 10
-CURRENCY_CODE  = 'USD'
 
 # Mail settings.
 
@@ -73,11 +72,6 @@ EMAIL_HOST_PASSWORD = 'arcamenssoftwares'
 
 # just a workaround.
 LOCAL_ADDR = 'http://0.0.0.0:8000'if DEBUG else 'https://www.arcamens.com'
-
-MQTT_HOST = "127.0.0.1"  
-MQTT_USER = "guest"  
-MQTT_PASS = "guest"  
-MQTT_PORT = 1883
 
 NOCAPTCHA = True
 
@@ -215,6 +209,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

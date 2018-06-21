@@ -19,10 +19,10 @@ Paypal <small> Manual Payment </small></h3>
 {% bootstrap_form_errors form type='non_fields' %}
 
 </form>
-<p> <b> Total Cost: {{cost}} {{CURRENCY_CODE}}</b> <br>
+<p> <b> Total Cost: {{cost}} {{settings.USER_COST}}</b> <br>
 <small class="text-info"> Cost based on current expiration and max users limit. 
 
-<span class="text-warning"> Cost per user {{USER_COST}} {{CURRENCY_CODE}} per 30 days. </span>
+<span class="text-warning"> Cost per user {{settings.USER_COST}} {{settings.USER_COST}} per 30 days. </span>
 </small></p>
 
 </div>
@@ -39,6 +39,7 @@ class="btn btn-default e-post"> {% trans "Calc/Cost" %} </button>
 class="btn btn-default e-post"> {% trans "Purchase" %} </button>
 
 </div>
+
 
 
 
