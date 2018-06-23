@@ -78,39 +78,73 @@ class CardMixin(object):
     def from_sqlike(cls):
         owner   = lambda ind: Q(owner__name__icontains=ind) | Q(
         owner__email__icontains=ind)
+        not_owner = lambda ind: ~owner(ind)
 
         worker  = lambda ind: Q(workers__name__icontains=ind) | Q(    
         workers__email__icontains=ind)
+        not_worker = lambda ind: ~worker(ind)
+
         file     = lambda ind: Q(cardfilewrapper__file__icontains=ind)
 
         created = lambda ind: Q(created__icontains=ind)
         label   = lambda ind: Q(label__icontains=ind)
+        not_label = lambda ind: ~label(ind)
+
         data    = lambda ind: Q(data__icontains=ind)
+        not_data    = lambda ind: ~data(ind)
 
         note  = lambda ind: Q(notes__data__icontains=ind)
+        not_note  = lambda ind: ~note(ind)
+
         tag   = lambda ind: Q(tags__name__icontains=ind)
+        not_tag   = lambda ind: ~tag(ind)
+
         list  = lambda ind: Q(ancestor__name__icontains=ind)
+        not_list = lambda ind: ~list(ind)
+
         board = lambda ind: Q(ancestor__ancestor__name__icontains=ind)
+        not_board = lambda ind: ~board(ind)
 
         note_owner  = lambda ind: Q(notes__owner__name__icontains=ind) |\
         Q(notes__owner__email__icontains=ind)
+
+        not_note_owner = lambda ind: ~note_owner(ind)
+
         note_file  = lambda ind: Q(notes__notefilewrapper__file__icontains=ind)
 
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
 
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), owner),
+        SqNode(('!o', '!owner'), not_owner),
+
         SqNode(('w', 'worker'), worker, chain=True), 
+        SqNode(('!w', '!worker'), not_worker, chain=True), 
+
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
+        SqNode(('!l', '!label'), not_label),
+
         SqNode(('d', 'data'), data),
+        SqNode(('!d', '!data'), not_data),
+
         SqNode(('n', 'note'), note, chain=True),
+        SqNode(('!n', '!note'), not_note),
+
         SqNode(('t', 'tag'), tag, chain=True),
+        SqNode(('!t', '!tag'), not_tag, chain=True),
+
         SqNode(('i', 'list'), list),
+        SqNode(('!i', '!list'), not_list),
+
         SqNode(('no', 'note.owner'), note_owner, chain=True),
+        SqNode(('!no', '!note.owner'), not_note_owner, chain=True),
+
         SqNode(('nf', 'note.file'), note_file, chain=True),
-        SqNode(('b', 'board'), board),)
+        SqNode(('b', 'board'), board),
+        SqNode(('!b', '!board'), not_board),)
+
         return sqlike
 
     def __str__(self):
@@ -590,6 +624,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

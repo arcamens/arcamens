@@ -78,37 +78,77 @@ class PostMixin(models.Model):
     def from_sqlike(cls):
         user = lambda ind: Q(user__name__icontains=ind) | Q(
         user__email__icontains=ind)
+        not_user = lambda ind: ~user(ind)
 
         worker = lambda ind: Q(workers__name__icontains=ind) | Q(    
         workers__email__icontains=ind)
+        not_worker = lambda ind: ~worker(ind)
 
         created  = lambda ind: Q(created__icontains=ind)
         label    = lambda ind: Q(label__icontains=ind)
+        not_label = lambda ind: ~label(ind)
+
+        data    = lambda ind: Q(data__icontains=ind)
+        not_data    = lambda ind: ~data(ind)
+
         tag      = lambda ind: Q(tags__name__icontains=ind)
+        not_tag   = lambda ind: ~tag(ind)
+
         file     = lambda ind: Q(postfilewrapper__file__icontains=ind)
         timeline = lambda ind: Q(ancestor__name__icontains=ind)
-        comment  = lambda ind: Q(postcomment__data__icontains=ind)
+        not_timeline = lambda ind: ~timeline(ind)
+
         snippet  = lambda ind: Q(snippets__title__icontains=ind) | Q(
         snippets__data__icontains=ind)
+        not_snippet = lambda ind: ~snippet(ind)
+
         snippet_owner  = lambda ind: Q(snippets__owner__name__icontains=ind) |\
         Q(snippets__owner__email__icontains=ind)
+        not_snippet_owner = lambda ind: ~snippet_owner(ind)
 
         snippet_title  = lambda ind: Q(snippets__title__icontains=ind)
+        not_snippet_title = lambda ind: ~snippet_title(ind)
+
+        snippet_data  = lambda ind: Q(snippets__data__icontains=ind)
+        not_snippet_data = lambda ind: ~snippet_data(ind)
+
         snippet_file  = lambda ind: Q(snippets__snippetfilewrapper__file__icontains=ind)
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind)
 
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), user),
+        SqNode(('!o', '!owner'), not_user),
+
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('w', 'worker'), worker, chain=True), 
+        SqNode(('!w', '!worker'), not_worker, chain=True), 
+
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
+        SqNode(('!l', '!label'), not_label),
+
+        SqNode(('d', 'data'), data),
+        SqNode(('!d', '!data'), not_data),
+
         SqNode(('t', 'tag'), tag, chain=True),
+        SqNode(('!t', '!tag'), not_tag, chain=True),
+
         SqNode(('s', 'snippet'), snippet, chain=True),
+        SqNode(('!s', '!snippet'), not_snippet, chain=True),
+
         SqNode(('so', 'snippet.owner'), snippet_owner, chain=True),
+        SqNode(('!so', '!snippet.owner'), not_snippet_owner, chain=True),
+
         SqNode(('st', 'snippet.title'), snippet_title, chain=True),
+        SqNode(('!st', '!snippet.title'), not_snippet_title, chain=True),
+
+        SqNode(('sd', 'snippet.data'), snippet_data, chain=True),
+        SqNode(('!sd', '!snippet.data'), not_snippet_data, chain=True),
+
         SqNode(('sf', 'snippet.file'), snippet_file, chain=True),
-        SqNode(('i', 'timeline'), timeline),)
+        SqNode(('i', 'timeline'), timeline),
+        SqNode(('!i', '!timeline'), not_timeline),)
+
         return sqlike
 
     def __str__(self):
@@ -471,6 +511,7 @@ class ESetPostPriorityDown(Event):
     related_name='e_set_post_priority_down2', blank=True)
 
     html_template = 'post_app/e-set-priority-down.html'
+
 
 
 
