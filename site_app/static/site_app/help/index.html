@@ -228,7 +228,7 @@ Github/Doing
 <img src="/static/site_app/help/search-for-card-tasks-1.png" alt="search-for-card-tasks-1" /><figcaption>search-for-card-tasks-1</figcaption>
 </figure>
 <p><strong>Assigned to me</strong></p>
-<p>When this option is marked then the filter pattern will be matched against all cards that were assigned to you.</p>
+<p>When this option is checked then the filter pattern will be matched against all cards that were assigned to you.</p>
 <p><strong>Created by Me</strong></p>
 <p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you.</p>
 <p><strong>All Tasks</strong></p>
@@ -243,7 +243,7 @@ Github/Doing
 <pre><code>bug with + zone</code></pre>
 <p>It would match:</p>
 <pre><code>Bug with timezone. </code></pre>
-<p>Notice that it also checks for card data attribute(the one which can contain markdown). The string patterns are delimited by the plus sign ‘+’, the listed cards should contain each one of the pattern strings either in the label or data attribute.</p>
+<p>Notice that it also checks for card data attribute (the one which can contain markdown). The string patterns are delimited by the plus sign ‘+’, the listed cards should contain each one of the pattern strings either in the label or data attribute.</p>
 <p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="card-search">Card Search</h3>
@@ -255,11 +255,11 @@ Github/Doing
 <figure>
 <img src="/static/site_app/help/card-search-1.png" alt="card-search-1" /><figcaption>card-search-1</figcaption>
 </figure>
-<p>In the above search/filter pattern it finds all cards that contain the strings ‘render’ and ‘template’ either in the label or data attribute. The data attribute of a card it is the one that carries markdown.</p>
+<p>with the above search/filter pattern it finds all cards that contain the strings ‘render’ and ‘template’ either in the label or data attribute. The data attribute of a card it is the one that carries markdown.</p>
 <p>If you defined as search pattern:</p>
 <pre><code>python django + render template + form</code></pre>
 <p>It would list all cards that contain the strings ‘python django’, ‘render template’ ad ‘form’ either in the label or data attribute.</p>
-<p>Notice that if you wanted the search pattern to be matched only against archived cards then it would be necessary to mark the field Done as checked.</p>
+<p>Notice that if you wanted the search pattern to be matched against archived cards instead, then it would be necessary to mark the field Done as checked.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="organization-creation">Organization Creation</h3>
 <p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
@@ -609,6 +609,56 @@ Timeline: Arcamens/Bugs</code></pre>
 <h3 id="advanced-card-search">Advanced Card Search</h3>
 <h3 id="advanced-post-search">Advanced Post Search</h3>
 <h3 id="advanced-list-search">Advanced List Search</h3>
+<p>When forking cards/posts it is necessary to search the desired board list that will contain the fork. Lists are searched pretty much like cards/posts except that it contains some different attributes.</p>
+<p>List attributes used in searches:</p>
+<p><strong>owner</strong></p>
+<p>The one who has created the list.</p>
+<p><strong>name</strong></p>
+<p>The name of the list.</p>
+<p><strong>board</strong></p>
+<p>The board that contains the list.</p>
+<p><strong>description</strong></p>
+<p>The list description.</p>
+<p>When no attribute is specified then the default attributes that are assumed consist of the board name and list name.</p>
+<p>For example:</p>
+<pre><code>arcamens + todo</code></pre>
+<p>The above pattern would match all lists that contains each one of the strings either in the board name or list name. So, if there were a list named Todo in a board named Arcamens then it would be listed.</p>
+<p>Suppose you wanted to list all lists whose owner is a guy named iury and it is named Todo:</p>
+<pre><code>owner:iury + name:todo</code></pre>
+<p><strong>Note:</strong> When the owner attribute is used then it matches against the owner name and e-mail.</p>
+<p>If you wanted to search all lists based on description then you could do:</p>
+<pre><code>description:contain bugs</code></pre>
+<p>It would list all lists that contains the string ‘contain bugs’ in its description. When searching by using the description attribute it is mostly useful if you have a project with many plugins and you’re handling all your plugins insde the project board.</p>
+<p>The naming scheme examplifies the situation:</p>
+<pre><code>Arcamens
+    Name:Todo
+    Description:core_app
+    .
+    .
+    .
+
+    Name:Todo
+    Description:bitbucket_app
+
+    Doing
+    Description:bitbucket_app
+
+    Done
+    Description:bitbucket_app
+
+    To check
+    Description:bitbucket_app
+
+
+    .
+    .
+    .</code></pre>
+<p>Imagine you wanted to fork a given card from core_app/Todo list into bitbucket_app/Todo list:</p>
+<pre><code>arcamens + description:bitbucket</code></pre>
+<p>That would be enough to list all lists from board arcamens whose description contains the slug string ‘bitbucket’.</p>
+<p>You could as well do:</p>
+<pre><code>board:arcamens + description:bitbucket</code></pre>
+<p>Which would give you more accurate results in case you have other boards where the string ‘arcamens’ shows in.</p>
 <h3 id="timeline-settingsremoval">Timeline Settings/Removal</h3>
 <p>You can rename a timeline or delete it, you just access the desired timeline then click on Settings at the timeline menu:</p>
 <figure>

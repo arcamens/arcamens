@@ -254,7 +254,7 @@ bound to.
 
 **Assigned to me**
 
-When this option is marked then the filter pattern will be matched
+When this option is checked then the filter pattern will be matched
 against all cards that were assigned to you.
 
 **Created by Me**
@@ -296,7 +296,7 @@ It would match:
 Bug with timezone. 
 ~~~
 
-Notice that it also checks for card data attribute(the one which can contain markdown).
+Notice that it also checks for card data attribute (the one which can contain markdown).
 The string patterns are delimited by the plus sign '+', the listed cards should contain
 each one of the pattern strings either in the label or data attribute.
 
@@ -317,7 +317,7 @@ You would get:
 
 ![card-search-1](/static/site_app/help/card-search-1.png)
 
-In the above search/filter pattern it finds all cards
+with the above search/filter pattern it finds all cards
 that contain the strings 'render' and 'template' either
 in the label or data attribute. The data attribute of a card
 it is the one that carries markdown.
@@ -331,7 +331,7 @@ python django + render template + form
 It would list all cards that contain the strings 'python django', 'render template'
 ad 'form' either in the label or data attribute.
 
-Notice that if you wanted the search pattern to be matched only against archived cards
+Notice that if you wanted the search pattern to be matched against archived cards instead,
 then it would be necessary to mark the field Done as checked.
 
 
@@ -899,6 +899,109 @@ search to be performed under a given attribute like email you could do:
 ### Advanced Post Search
 
 ### Advanced List Search
+
+When forking cards/posts it is necessary to search the desired
+board list that will contain the fork. Lists are searched pretty much
+like cards/posts except that it contains some different attributes.
+
+List attributes used in searches:
+
+**owner**
+
+The one who has created the list.
+
+**name**
+
+The name of the list.
+
+**board**
+
+The board that contains the list.
+
+**description**
+
+The list description.
+
+When no attribute is specified then the default attributes
+that are assumed consist of the board name and list name.
+
+For example:
+
+~~~
+arcamens + todo
+~~~
+
+The above pattern would match all lists that contains
+each one of the strings either in the board name or list name.
+So, if there were a list named Todo in a board named Arcamens
+then it would be listed.
+
+Suppose you wanted to list all lists whose owner is a guy named iury and
+it is named Todo:
+
+
+~~~
+owner:iury + name:todo
+~~~
+
+**Note:** When the owner attribute is used then it matches against the owner name and e-mail.
+
+If you wanted to search all lists based on description then you could do:
+
+~~~
+description:contain bugs
+~~~
+
+It would list all lists that contains the string 'contain bugs' in its description.
+When searching by using the description attribute it is mostly useful if you have
+a project with many plugins and you're handling all your plugins insde the project board.
+
+The naming scheme examplifies the situation:
+
+~~~
+Arcamens
+    Name:Todo
+    Description:core_app
+    .
+    .
+    .
+
+    Name:Todo
+    Description:bitbucket_app
+
+    Doing
+    Description:bitbucket_app
+
+    Done
+    Description:bitbucket_app
+
+    To check
+    Description:bitbucket_app
+
+
+    .
+    .
+    .
+~~~
+
+Imagine you wanted to fork a given card from core_app/Todo list
+into bitbucket_app/Todo list:
+
+~~~
+arcamens + description:bitbucket
+~~~
+
+That would be enough to list all lists from board arcamens whose description
+contains the slug string 'bitbucket'.
+
+You could as well do:
+
+~~~
+board:arcamens + description:bitbucket
+~~~
+
+Which would give you more accurate results in case you have other boards where the string
+'arcamens' shows in.
 
 ### Timeline Settings/Removal
 
