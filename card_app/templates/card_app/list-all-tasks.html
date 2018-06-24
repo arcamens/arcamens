@@ -16,8 +16,15 @@ Tasks/Cards <span class="badge">{{count}}/{{total}}</span></h4>
 <form id="task-search-form" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.pattern  size='md' %}
-{% bootstrap_field form.options  size='md' %}
-{% bootstrap_field form.done  size='md' %}
+
+<ul class="nav nav-pills nav-justified">
+  <li>{% bootstrap_field form.assigned_to_me  size='md' %}</li>
+  <li>{% bootstrap_field form.created_by_me  size='md' %}</li>
+  <li>{% bootstrap_field form.done  size='md' %}</li>
+</ul>
+
+
+
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
@@ -33,5 +40,6 @@ class="btn btn-default e-post"> {% trans "Filter" %} </button>
      {% trans "Close" %}
 </button>
 </div>
+
 
 

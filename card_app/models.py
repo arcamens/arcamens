@@ -155,10 +155,10 @@ class CardMixin(object):
 class GlobalTasksFilterMixin:
     def get_partial(self, cards):
         cards = cards.filter(Q(done=self.done))
-        if self.options == '0':
-            return cards.filter(workers=self.user)
-        elif self.options == '1':
-            return cards.filter(owner=self.user)
+        if self.assigned_to_me:
+            cards = cards.filter(workers=self.user)
+        if self.created_by_me:
+            cards = cards.filter(owner=self.user)
         return cards
 
 class CardFilterMixin:
@@ -271,18 +271,13 @@ class GlobalTaskFilter(GlobalTasksFilterMixin, models.Model):
     blank=True)
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
+    default=False, help_text='Archived cards?.')
 
-    CHOICES = (
-        ('0', 'Assigned to Me'),
-        ('1', 'Created by Me'),
-        ('2', 'All Tasks')
+    assigned_to_me = models.BooleanField(blank=True, 
+    default=True, help_text='Only your tasks.')
 
-
-    )
-
-    options = models.CharField(max_length=6, 
-    choices=CHOICES, default='0')
+    created_by_me = models.BooleanField(blank=True, 
+    default=False, help_text='Only tasks you created.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -624,6 +619,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

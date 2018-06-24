@@ -160,10 +160,11 @@ class GlobalAssignmentsFilterMixin(models.Model):
 
     def get_partial(self, posts):
         posts = posts.filter(Q(done=self.done))
-        if self.options == '0':
-            return posts.filter(workers=self.user)
-        elif self.options == '1':
-            return posts.filter(user=self.user)
+        if self.assigned_to_me:
+            posts = posts.filter(workers=self.user)
+
+        if self.created_by_me:
+            posts = posts.filter(owner=self.user)
         return posts
 
 class PostFilterMixin(models.Model):
@@ -277,22 +278,14 @@ class GlobalAssignmentFilter(GlobalAssignmentsFilterMixin):
     organization = models.ForeignKey('core_app.Organization', 
     null=True, blank=True)
 
-    status = models.BooleanField(blank=True, 
-    default=False, help_text='Filter On/Off.')
+    assigned_to_me = models.BooleanField(blank=True, 
+    default=True, help_text='Only your tasks.')
 
-    CHOICES = (
-        ('0', 'Assigned to Me'),
-        ('1', 'Created by Me'),
-        ('2', 'All Tasks')
-
-
-    )
-
-    options = models.CharField(max_length=6, 
-    choices=CHOICES, default='0')
+    created_by_me = models.BooleanField(blank=True, 
+    default=False, help_text='Only tasks you created.')
 
     done = models.BooleanField(blank=True, 
-    default=False, help_text='Done posts.')
+    default=False, help_text='Archived posts?')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -511,6 +504,7 @@ class ESetPostPriorityDown(Event):
     related_name='e_set_post_priority_down2', blank=True)
 
     html_template = 'post_app/e-set-priority-down.html'
+
 
 
 
