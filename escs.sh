@@ -381,9 +381,10 @@ rm -fr build
 
 python manage.py normalize_events
 ##############################################################################
+# compile docs.
 
+cd ~/projects/arcamens-code/site_app/static/site_app/help
 pandoc --toc -s index.md -o index.html
-
 
 
 

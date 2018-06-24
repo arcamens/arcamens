@@ -21,7 +21,7 @@
 </header>
 <nav id="TOC">
 <ul>
-<li><a href="#intro">Intro</a><ul>
+<li><a href="#intro">Intro</a></li>
 <li><a href="#board-creation">Board Creation</a></li>
 <li><a href="#list-creation">List Creation</a></li>
 <li><a href="#card-creation">Card Creation</a></li>
@@ -66,10 +66,9 @@
 <li><a href="#organization-user-removal">Organization User Removal</a></li>
 <li><a href="#organization-settingsremoval">Organization Settings/Removal</a></li>
 <li><a href="#logs">Logs</a></li>
-</ul></li>
 </ul>
 </nav>
-<h2 id="intro">Intro</h2>
+<h3 id="intro">Intro</h3>
 <p>Arcamens was designed to allow a high level of communication and collaboration by teams. It implements so called Kanban Boards and Timelines. Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is pertinent to a project.</p>
 <p>The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.</p>
 <p>The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective of the information that is relevant to the board team.</p>
@@ -248,6 +247,20 @@ Github/Doing
 <p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="card-search">Card Search</h3>
+<p>In order to perform global card search just click on: Cards at the navbar.</p>
+<figure>
+<img src="/static/site_app/help/card-search-0.png" alt="card-search-0" /><figcaption>card-search-0</figcaption>
+</figure>
+<p>You would get:</p>
+<figure>
+<img src="/static/site_app/help/card-search-1.png" alt="card-search-1" /><figcaption>card-search-1</figcaption>
+</figure>
+<p>In the above search/filter pattern it finds all cards that contain the strings ‘render’ and ‘template’ either in the label or data attribute. The data attribute of a card it is the one that carries markdown.</p>
+<p>If you defined as search pattern:</p>
+<pre><code>python django + render template + form</code></pre>
+<p>It would list all cards that contain the strings ‘python django’, ‘render template’ ad ‘form’ either in the label or data attribute.</p>
+<p>Notice that if you wanted the search pattern to be matched only against archived cards then it would be necessary to mark the field Done as checked.</p>
+<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="organization-creation">Organization Creation</h3>
 <p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
 <p>It all depends on how big your business is and on your necessities of designing your business workflow.</p>

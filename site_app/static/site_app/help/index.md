@@ -2,7 +2,7 @@
 title: Arcamens Docs
 ---
 
-## Intro
+### Intro
 
 Arcamens was designed to allow a high level of communication and collaboration by teams.
 It implements so called Kanban Boards and Timelines.
@@ -307,6 +307,34 @@ actual browser tab or just right click and open in a new tab.
 **See:** [Advanced Card Search](#advanced-card-search)
 
 ### Card Search
+
+In order to perform global card search just click on: Cards
+at the navbar.
+
+![card-search-0](/static/site_app/help/card-search-0.png)
+
+You would get:
+
+![card-search-1](/static/site_app/help/card-search-1.png)
+
+In the above search/filter pattern it finds all cards
+that contain the strings 'render' and 'template' either
+in the label or data attribute. The data attribute of a card
+it is the one that carries markdown.
+
+If you defined as search pattern:
+
+~~~
+python django + render template + form
+~~~
+
+It would list all cards that contain the strings 'python django', 'render template'
+ad 'form' either in the label or data attribute.
+
+Notice that if you wanted the search pattern to be matched only against archived cards
+then it would be necessary to mark the field Done as checked.
+
+**See:** [Advanced Card Search](#advanced-card-search)
 
 ### Organization Creation
 
@@ -926,6 +954,8 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
+
 
 
 

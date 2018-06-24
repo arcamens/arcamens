@@ -557,5 +557,27 @@ me = User.objects.get(name__startswith='Iury')
 me.eventfilter_set.all().delete()
 
 ##############################################################################
-
+from django import forms
+from card_app.forms import CardForm
+dir(CardForm)
+x = CardForm()
+x.declared_fields
+x.order_fields()
+dir(x.Meta)
+x.Meta.fields
+dir(x.visible_fields()[0])
+x.visible_fields()[0].css_classes()
+x.visible_fields()[0].field
+x.visible_fields()[0].
+dir(x.visible_fields()[0].field)
+x.visible_fields()[0].field.widget
+x.visible_fields()[0].field.widget.attrs
+x.visible_fields()[0].field.widget.attrs['pattern']="[0-9,.]"
+x.visible_fields()[0].as_widget()
+from django.forms.widgets import TextInput
+dir(TextInput)
+x = TextInput()
+x.render()
+x.attrs
+##############################################################################
 
