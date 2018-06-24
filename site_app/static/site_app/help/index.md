@@ -234,78 +234,6 @@ If you add/remove a tag to a card then everyone who is related to the card will 
 You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
 It is useful when your organization has many tags.
 
-### Search for Card Tasks 
-
-In arcamens there is a generic concept of task, a card becomes into a task when it is
-assigned to someone. When the task is accomplished then one can just archive it. 
-The card will remain available for later inspection.
-
-In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards
-at the navbar:
-
-**Note:** The mechanism will match the search pattern against all cards that can be accessed by you.
-
-![search-for-card-tasks-0](/static/site_app/help/search-for-card-tasks-0.png)
-
-From the dialog window you can search through all cards that have at least one user
-bound to. 
-
-![search-for-card-tasks-1](/static/site_app/help/search-for-card-tasks-1.png)
-
-**Assigned to me**
-
-When this option is checked then the filter pattern will be matched
-against all cards that were assigned to you.
-
-**Created by Me**
-
-When this option is checked then the filter pattern will match
-all cards that were assigned to someone and the owner is you.
-
-**All Tasks**
-
-Use this option for matching the filter pattern over all cards
-that contain at least one worker assigned to.
-
-**Done**
-
-This option allows to search for archived cards instead of active ones.
-
-Consider the filter pattern below and the three listed cards in the above picture.
-Assume you dont know who has created such a card then leave the All Tasks option checked.
-
-~~~
-any + create + tag
-~~~
-
-The above pattern would match the card label is:
-
-~~~
-Anybody can create/delete a tag 
-~~~
-
-If you wrote as pattern:
-
-~~~
-bug with + zone
-~~~
-
-It would match:
-
-~~~
-Bug with timezone. 
-~~~
-
-Notice that it also checks for card data attribute (the one which can contain markdown).
-The string patterns are delimited by the plus sign '+', the listed cards should contain
-each one of the pattern strings either in the label or data attribute.
-
-You can get more than one match depending on the pattern and the existing cards.
-Once you have filtered the cards then you can click on the card link and open it in the
-actual browser tab or just right click and open in a new tab.
-
-**See:** [Advanced Card Search](#advanced-card-search)
-
 ### Card Search
 
 In order to perform global card search just click on: Cards
@@ -334,6 +262,47 @@ ad 'form' either in the label or data attribute.
 Notice that if you wanted the search pattern to be matched against archived cards instead,
 then it would be necessary to mark the field Done as checked.
 
+
+**See:** [Advanced Card Search](#advanced-card-search)
+
+### Search for Card Tasks 
+
+In arcamens there is a generic concept of task, a card becomes a task when it is
+assigned to someone. When the task is accomplished then one can just archive it. 
+The card will remain available for later inspection.
+
+In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards
+at the navbar:
+
+**Note:** The mechanism will match the search pattern against all cards that can be accessed by you.
+
+![search-for-card-tasks-0](/static/site_app/help/search-for-card-tasks-0.png)
+
+From the dialog window you can search through all cards that have at least one user
+bound to. 
+
+![search-for-card-tasks-1](/static/site_app/help/search-for-card-tasks-1.png)
+
+**Assigned to me**
+
+When this option is checked then the filter pattern will be matched
+against all cards that were assigned to you.
+
+**Created by Me**
+
+When this option is checked then the filter pattern will match
+all cards that were assigned to someone and the owner is you.
+
+**Done**
+
+This option allows to search for archived cards instead of active ones.
+
+In the above example it finds all cards that are assigned to you
+and contain the strings 'bug' and 'timezone' either in the label or data attributes.
+
+You can get more than one match depending on the pattern and the existing cards.
+Once you have filtered the cards then you can click on the card link and open it in the
+actual browser tab or just right click and open in a new tab.
 
 **See:** [Advanced Card Search](#advanced-card-search)
 
@@ -534,56 +503,6 @@ Fill the form and send the e-mail notification.
 
 You can as well send notification to all post workers by clicking on Alert Workers.
 
-### Search for Post Tasks
-
-When a post is created and it is assigned to someone then it becomes a task.
-It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
-at the navbar:
-
-![search-for-post-tasks-0](/static/site_app/help/search-for-post-tasks-0.png)
-
-Then you would get:
-
-![search-for-post-tasks-1](/static/site_app/help/search-for-post-tasks-1.png)
-
-The option **Assigned to Me** would perform the search pattern through
-all tasks that someone has assigned to you even if it was assigned by yourself.
-
-If you option for  **Created by Me** then it would check the pattern against all posts
-that you created and it was at least one worker binded to.
-
-When **All Tasks** is checked then it matches against all posts that you were assigned to
-or are on all your timelines.
-
-The simplest example of pattern consists of merely strings:
-
-    bug with engine
-
-
-The above example would list all posts whose label or data fields contain the entire
-string.
-
-![search-for-post-tasks-2](/static/site_app/help/search-for-post-tasks-2.png)
-
-You could do:
-
-    bug with + engine
-
-
-In the above example it would list all posts that contains both two strings.
-
-![search-for-post-tasks-3](/static/site_app/help/search-for-post-tasks-3.png)
-
-**Note:** You are allowed to form longer patterns like:
-
-
-    bug + with + engine + driver
-
-
-It would list all posts that contains all the strings either in the label or markdown data fields.
-
-**Note:** Leave the Done attribute checked for searching only through the archived posts.
-
 ### Post Search
 
 The post search mechanism allows to search through all posts that you have access regardless
@@ -609,6 +528,37 @@ Would find all posts where the strings 'bug' or 'engine wheels' show up.
 
 
 Leave the **Done** field checked to search only through archived posts.
+
+### Search for Post Tasks
+
+When a post is created and it is assigned to someone then it becomes a task.
+It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
+at the navbar:
+
+![search-for-post-tasks-0](/static/site_app/help/search-for-post-tasks-0.png)
+
+Then you would get:
+
+![search-for-post-tasks-1](/static/site_app/help/search-for-post-tasks-1.png)
+
+The option **Assigned to me** would perform the search pattern through
+all tasks that someone has assigned to you even if it was assigned by yourself.
+
+If you option for  **Created by me** then it would check the pattern against all posts
+that you created and it was at least one worker binded to.
+
+In the above example it matches all cards that you are assigned to and contains
+the strings 'snippet', 'form', 'html'.
+
+Notice that the order of strings is not relevant; You could also try:
+
+~~~
+need a snippet + form + html
+~~~
+
+Which would work alike.
+
+**Note:** Leave the Done attribute checked for searching only through the archived posts.
 
 ### Event Comments
 
@@ -1058,6 +1008,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 

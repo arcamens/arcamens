@@ -31,8 +31,8 @@
 <li><a href="#board-permissions">Board Permissions</a></li>
 <li><a href="#tag-creation">Tag Creation</a></li>
 <li><a href="#card-tags">Card Tags</a></li>
-<li><a href="#search-for-card-tasks">Search for Card Tasks</a></li>
 <li><a href="#card-search">Card Search</a></li>
+<li><a href="#search-for-card-tasks">Search for Card Tasks</a></li>
 <li><a href="#organization-creation">Organization Creation</a></li>
 <li><a href="#timelines">Timelines</a></li>
 <li><a href="#timeline-creation">Timeline Creation</a></li>
@@ -45,8 +45,8 @@
 <li><a href="#organization-admins">Organization Admins</a></li>
 <li><a href="#timeline-members">Timeline Members</a></li>
 <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
-<li><a href="#search-for-post-tasks">Search for Post Tasks</a></li>
 <li><a href="#post-search">Post Search</a></li>
+<li><a href="#search-for-post-tasks">Search for Post Tasks</a></li>
 <li><a href="#event-comments">Event Comments</a></li>
 <li><a href="#post-filter">Post Filter</a></li>
 <li><a href="#collection-filter">Collection Filter</a></li>
@@ -216,36 +216,6 @@ Github/Doing
 <img src="/static/site_app/help/card-tags-3.png" alt="card-tags-3" /><figcaption>card-tags-3</figcaption>
 </figure>
 <p>If you add/remove a tag to a card then everyone who is related to the card will get notified. You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter. It is useful when your organization has many tags.</p>
-<h3 id="search-for-card-tasks">Search for Card Tasks</h3>
-<p>In arcamens there is a generic concept of task, a card becomes into a task when it is assigned to someone. When the task is accomplished then one can just archive it. The card will remain available for later inspection.</p>
-<p>In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards at the navbar:</p>
-<p><strong>Note:</strong> The mechanism will match the search pattern against all cards that can be accessed by you.</p>
-<figure>
-<img src="/static/site_app/help/search-for-card-tasks-0.png" alt="search-for-card-tasks-0" /><figcaption>search-for-card-tasks-0</figcaption>
-</figure>
-<p>From the dialog window you can search through all cards that have at least one user bound to.</p>
-<figure>
-<img src="/static/site_app/help/search-for-card-tasks-1.png" alt="search-for-card-tasks-1" /><figcaption>search-for-card-tasks-1</figcaption>
-</figure>
-<p><strong>Assigned to me</strong></p>
-<p>When this option is checked then the filter pattern will be matched against all cards that were assigned to you.</p>
-<p><strong>Created by Me</strong></p>
-<p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you.</p>
-<p><strong>All Tasks</strong></p>
-<p>Use this option for matching the filter pattern over all cards that contain at least one worker assigned to.</p>
-<p><strong>Done</strong></p>
-<p>This option allows to search for archived cards instead of active ones.</p>
-<p>Consider the filter pattern below and the three listed cards in the above picture. Assume you dont know who has created such a card then leave the All Tasks option checked.</p>
-<pre><code>any + create + tag</code></pre>
-<p>The above pattern would match the card label is:</p>
-<pre><code>Anybody can create/delete a tag </code></pre>
-<p>If you wrote as pattern:</p>
-<pre><code>bug with + zone</code></pre>
-<p>It would match:</p>
-<pre><code>Bug with timezone. </code></pre>
-<p>Notice that it also checks for card data attribute (the one which can contain markdown). The string patterns are delimited by the plus sign ‘+’, the listed cards should contain each one of the pattern strings either in the label or data attribute.</p>
-<p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
-<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="card-search">Card Search</h3>
 <p>In order to perform global card search just click on: Cards at the navbar.</p>
 <figure>
@@ -260,6 +230,26 @@ Github/Doing
 <pre><code>python django + render template + form</code></pre>
 <p>It would list all cards that contain the strings ‘python django’, ‘render template’ ad ‘form’ either in the label or data attribute.</p>
 <p>Notice that if you wanted the search pattern to be matched against archived cards instead, then it would be necessary to mark the field Done as checked.</p>
+<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
+<h3 id="search-for-card-tasks">Search for Card Tasks</h3>
+<p>In arcamens there is a generic concept of task, a card becomes a task when it is assigned to someone. When the task is accomplished then one can just archive it. The card will remain available for later inspection.</p>
+<p>In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards at the navbar:</p>
+<p><strong>Note:</strong> The mechanism will match the search pattern against all cards that can be accessed by you.</p>
+<figure>
+<img src="/static/site_app/help/search-for-card-tasks-0.png" alt="search-for-card-tasks-0" /><figcaption>search-for-card-tasks-0</figcaption>
+</figure>
+<p>From the dialog window you can search through all cards that have at least one user bound to.</p>
+<figure>
+<img src="/static/site_app/help/search-for-card-tasks-1.png" alt="search-for-card-tasks-1" /><figcaption>search-for-card-tasks-1</figcaption>
+</figure>
+<p><strong>Assigned to me</strong></p>
+<p>When this option is checked then the filter pattern will be matched against all cards that were assigned to you.</p>
+<p><strong>Created by Me</strong></p>
+<p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you.</p>
+<p><strong>Done</strong></p>
+<p>This option allows to search for archived cards instead of active ones.</p>
+<p>In the above example it finds all cards that are assigned to you and contain the strings ‘bug’ and ‘timezone’ either in the label or data attributes.</p>
+<p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="organization-creation">Organization Creation</h3>
 <p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
@@ -392,34 +382,6 @@ Github/Doing
 </figure>
 <p>Fill the form and send the e-mail notification.</p>
 <p>You can as well send notification to all post workers by clicking on Alert Workers.</p>
-<h3 id="search-for-post-tasks">Search for Post Tasks</h3>
-<p>When a post is created and it is assigned to someone then it becomes a task. It is possible to search for archived or active tasks by clicking at the Tasks/Posts link at the navbar:</p>
-<figure>
-<img src="/static/site_app/help/search-for-post-tasks-0.png" alt="search-for-post-tasks-0" /><figcaption>search-for-post-tasks-0</figcaption>
-</figure>
-<p>Then you would get:</p>
-<figure>
-<img src="/static/site_app/help/search-for-post-tasks-1.png" alt="search-for-post-tasks-1" /><figcaption>search-for-post-tasks-1</figcaption>
-</figure>
-<p>The option <strong>Assigned to Me</strong> would perform the search pattern through all tasks that someone has assigned to you even if it was assigned by yourself.</p>
-<p>If you option for <strong>Created by Me</strong> then it would check the pattern against all posts that you created and it was at least one worker binded to.</p>
-<p>When <strong>All Tasks</strong> is checked then it matches against all posts that you were assigned to or are on all your timelines.</p>
-<p>The simplest example of pattern consists of merely strings:</p>
-<pre><code>bug with engine</code></pre>
-<p>The above example would list all posts whose label or data fields contain the entire string.</p>
-<figure>
-<img src="/static/site_app/help/search-for-post-tasks-2.png" alt="search-for-post-tasks-2" /><figcaption>search-for-post-tasks-2</figcaption>
-</figure>
-<p>You could do:</p>
-<pre><code>bug with + engine</code></pre>
-<p>In the above example it would list all posts that contains both two strings.</p>
-<figure>
-<img src="/static/site_app/help/search-for-post-tasks-3.png" alt="search-for-post-tasks-3" /><figcaption>search-for-post-tasks-3</figcaption>
-</figure>
-<p><strong>Note:</strong> You are allowed to form longer patterns like:</p>
-<pre><code>bug + with + engine + driver</code></pre>
-<p>It would list all posts that contains all the strings either in the label or markdown data fields.</p>
-<p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
 <h3 id="post-search">Post Search</h3>
 <p>The post search mechanism allows to search through all posts that you have access regardless if it has a worker or not. For such just click on the Post link at the navbar:</p>
 <figure>
@@ -435,6 +397,22 @@ Github/Doing
 <p>Would find all posts where the strings ‘bug’ or ‘engine wheels’ show up.</p>
 <pre><code>bug + engine wheels</code></pre>
 <p>Leave the <strong>Done</strong> field checked to search only through archived posts.</p>
+<h3 id="search-for-post-tasks">Search for Post Tasks</h3>
+<p>When a post is created and it is assigned to someone then it becomes a task. It is possible to search for archived or active tasks by clicking at the Tasks/Posts link at the navbar:</p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-0.png" alt="search-for-post-tasks-0" /><figcaption>search-for-post-tasks-0</figcaption>
+</figure>
+<p>Then you would get:</p>
+<figure>
+<img src="/static/site_app/help/search-for-post-tasks-1.png" alt="search-for-post-tasks-1" /><figcaption>search-for-post-tasks-1</figcaption>
+</figure>
+<p>The option <strong>Assigned to me</strong> would perform the search pattern through all tasks that someone has assigned to you even if it was assigned by yourself.</p>
+<p>If you option for <strong>Created by me</strong> then it would check the pattern against all posts that you created and it was at least one worker binded to.</p>
+<p>In the above example it matches all cards that you are assigned to and contains the strings ‘snippet’, ‘form’, ‘html’.</p>
+<p>Notice that the order of strings is not relevant; You could also try:</p>
+<pre><code>need a snippet + form + html</code></pre>
+<p>Which would work alike.</p>
+<p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
 <h3 id="event-comments">Event Comments</h3>
 <p>All kind of user actions in Arcamens are liable of being commented. Whenever an user assigns a worker to a post it generates an event then the event/action can be commented out.</p>
 <p>When an user action is commented then another event is generated but it doesn’t allow comments for action comments.</p>
