@@ -580,4 +580,23 @@ x = TextInput()
 x.render()
 x.attrs
 ##############################################################################
+import boto3
+s3 = boto3.resource('s3')
+
+# Print out bucket names
+for bucket in s3.buckets.all():
+    print(bucket.name)
+##############################################################################
+from boto.s3.connection import S3Connection
+conn = S3Connection('AKIAICSFQ67ZCTVDLMEQ', 'yyGv7/1fNVignhsr6MQJcpNviXSHi+BUe1Zo66cY')
+
+rs = conn.get_all_buckets()
+rs
+
+# arcamens bucket.
+rs[0]
+dir(rs)
+url = s3.generate_url(expTime, 'GET', bucket=bucket, key=key)
+print (url)
+
 

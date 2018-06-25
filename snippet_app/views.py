@@ -165,21 +165,13 @@ class DeleteSnippet(GuardianView):
         return redirect('post_app:refresh-post', 
         post_id=snippet.post.id)
 
-class CancelSnippetCreation(GuardianView):
-    def get(self, request, snippet_id):
-        snippet = models.Snippet.objects.get(id = snippet_id)
-        snippet.delete()
 
-        return HttpResponse(status=200)
+class SnippetFileDownload(GuardianView):
+    def get(self, request, filewrapper_id):
+        filewrapper = models.SnippetFileWrapper.objects.filter(
+        Q(snippet__post__ancestor__users=self.me) | Q(snippet__post__workers=self.me),
+        snippet__post__ancestor__organization=self.me.default, 
+        id=filewrapper_id).distinct().first()
 
-
-
-
-
-
-
-
-
-
-
+        return redirect(filewrapper.file.url)
 

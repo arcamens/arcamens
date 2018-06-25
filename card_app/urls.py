@@ -16,15 +16,11 @@ urlpatterns = [
     url(r'^create-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreateFork.as_view(), name='create-fork'),
     url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
 
-    # url(r'^create-post-fork-/(?P<ancestor_id>.+)/(?P<card_id>.+)/(?P<fork_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
-    # url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<card_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
-
     url(r'^attach-file/(?P<card_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
     url(r'^card-file-download/(?P<filewrapper_id>.+)/', views.CardFileDownload.as_view(), name='card-file-download'),
 
     url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
-    # url(r'^cancel-card-creation/(?P<card_id>.+)/', views.CancelCardCreation.as_view(), name='cancel-card-creation'),
     url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
     url(r'^confirm-card-deletion/(?P<card_id>.+)/', views.ConfirmCardDeletion.as_view(), name='confirm-card-deletion'),
 
@@ -39,9 +35,6 @@ urlpatterns = [
     url(r'^bind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.BindCardWorker.as_view(), name='bind-card-worker'),
     url(r'^unbind-card-worker/(?P<card_id>.+)/(?P<user_id>.+)', views.UnbindCardWorker.as_view(), name='unbind-card-worker'),
     url(r'^pin-card/(?P<card_id>.+)/', views.PinCard.as_view(), name='pin-card'),
-    # url(r'^relate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.RelateCard.as_view(), name='relate-card'),
-    # url(r'^unrelate-card/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.UnrelateCard.as_view(), name='unrelate-card'),
-    # url(r'^manage-card-relations/(?P<card_id>.+)/', views.ManageCardRelations.as_view(), name='manage-card-relations'),
     url(r'^manage-card-tags/(?P<card_id>.+)/', views.ManageCardTags.as_view(), name='manage-card-tags'),
     url(r'^bind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.BindCardTag.as_view(), name='bind-card-tag'),
     url(r'^unbind-card-tag/(?P<card_id>.+)/(?P<tag_id>.+)', views.UnbindCardTag.as_view(), name='unbind-card-tag'),
