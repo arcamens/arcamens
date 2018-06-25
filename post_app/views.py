@@ -1032,6 +1032,14 @@ class SetPostPriorityDown(GuardianView):
 
         return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
 
+class PostFileDownload(GuardianView):
+    def get(self, request, filewrapper_id):
+        filewrapper = PostFileWrapper.objects.filter(
+        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
+        id=filewrapper_id, post__ancestor__organization=self.me.default)
+        filewrapper = filewrapper.distinct().first()
+
+        return redirect(filewrapper.file.url)
 
 
 

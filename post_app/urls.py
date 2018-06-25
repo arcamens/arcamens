@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^update-post/(?P<post_id>.+)/', views.UpdatePost.as_view(), name='update-post'),
     url(r'^attach-file/(?P<post_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
     url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
+    url(r'^post-file-download/(?P<filewrapper_id>.+)/', views.PostFileDownload.as_view(), name='post-file-download'),
+
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
@@ -50,6 +52,7 @@ urlpatterns = [
     url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
+
 
 
 
