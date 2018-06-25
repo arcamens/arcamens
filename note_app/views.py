@@ -174,19 +174,13 @@ class DeleteNote(GuardianView):
         return redirect('note_app:list-notes', 
         card_id=note.card.id)
 
-class CancelNoteCreation(GuardianView):
-    def get(self, request, note_id):
-        note = models.Note.locate(self.me, self.me.default, note_id)
-        note.delete()
+class NoteFileDownload(GuardianView):
+    def get(self, request, filewrapper_id):
+        filewrapper = models.NoteFileWrapper.objects.filter(
+        Q(note__card__ancestor__ancestor__members=self.me) | Q(note__card__workers=self.me), 
+        note__card__ancestor__ancestor__organization=self.me.default, 
+        id=filewrapper_id).distinct().first()
 
-        return HttpResponse(status=200)
-
-
-
-
-
-
-
-
+        return redirect(filewrapper.file.url)
 
 
