@@ -45,7 +45,8 @@ data-show="{% url 'card_app:card-events' card.id %}">
 {{card.html | safe}}
 
 <span style="font-size:90%">
-<div id="card-attachments-{{card.id}}"> </div>
+<!-- Add a min-height so it doesnt get relayout -->
+<div id="card-attachments-{{card.id}}" style="min-height:52px;"> </div>
 
 <script> 
 /* It has to be async false otherwise it gets relayout when reloading the 
@@ -53,7 +54,7 @@ the card details. */
 
 $.get({ 
 url: "{% url 'card_app:attach-file' card.id %}",
-async: false},
+async: true},
 
 function(data) {
     $('#card-attachments-{{card.id}}').html(data);
@@ -71,6 +72,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

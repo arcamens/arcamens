@@ -58,12 +58,13 @@ No snippets...
 
 <hr>
 <span style="font-size:80%">
-<div id="post-attachments-{{post.id}}"> </div>
+<!-- Add a min-height so it doesnt get relayout -->
+<div id="post-attachments-{{post.id}}" style="min-height:52px;"> </div>
 <script> 
 
 $.get({ 
 url: "{% url 'post_app:attach-file' post.id %}",
-async: false},
+async: true},
 
 function(data) {
     $('#post-attachments-{{post.id}}').html(data);
@@ -197,6 +198,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

@@ -19,12 +19,12 @@ By {{note.owner.name}} at <a href="{{note.get_link_url}}" target="_blank"> {{not
 </div>
 
 <span  style="font-size:80%">
-<div id="note-attachments-{{note.id}}"> </div>
+<div id="note-attachments-{{note.id}}" style="min-height:50px;"> </div>
 
 <script> 
 $.get({ 
 url: "{% url 'note_app:attach-file' note.id %}",
-async: false},
+async: true},
 
 function(data) {
     $('#note-attachments-{{note.id}}').html(data);
@@ -52,6 +52,8 @@ class="text-danger e-get">
 
 </div>
 </div>
+
+
 
 
 
