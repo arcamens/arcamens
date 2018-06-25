@@ -982,13 +982,11 @@ class Unpin(GuardianView):
 
 
 
-
-
-
-
-
-
-
-
-
+class CardFileDownload(GuardianView):
+    def get(self, request, filewrapper_id):
+        filewrapper = models.CardFileWrapper.objects.filter(
+        Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
+        id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
+        filewrapper = filewrapper.distinct().first()
+        return redirect(filewrapper.file.url)
 

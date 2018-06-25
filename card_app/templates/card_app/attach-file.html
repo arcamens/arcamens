@@ -28,11 +28,12 @@ $('#CardFileWrapperForm-{{card.id}}').change(function(){
 <a class="e-get text-danger" data-shell="#card-attachments-{{card.id}}" href="#"
 data-show="{% url 'card_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> 
-<a href="{{ind.file.url}}" target="_blank"> {{ind.file.name}} </a>
+<a href="{% url 'card_app:card-file-download' ind.id %}" target="_blank"> {{ind.file.name}} </a>
 
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 
