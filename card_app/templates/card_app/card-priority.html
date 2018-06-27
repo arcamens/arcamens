@@ -6,7 +6,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
-<span class="glyphicon glyphicon-search"></span> {{card.label|truncatechars:15}}'s Priority
+<span class="glyphicon glyphicon-search"></span> {{card.label|truncatechars:60}}'s Priority
 <span class="badge">{{count}}/{{total}}</span> </h5>
 </div>
 
@@ -50,6 +50,7 @@ id="filterCardRelations" data-show="{% url 'card_app:card-priority' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

@@ -234,6 +234,37 @@ If you add/remove a tag to a card then everyone who is related to the card will 
 You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
 It is useful when your organization has many tags.
 
+### Card Prioritization
+
+Arcamens implements card prioritization in a very smart and elegant
+manner. You can easily prioritize a card over other cards by
+specifying a consistent set of critereas.
+
+When a card priority changes then your board peers get
+notified. It is very handy when you want to make
+sure that a given task has more urgency than others.
+
+Just click on the signal icon:
+
+![card-prioritization-0](/static/site_app/help/card-prioritization-0.png)
+
+Then you would get a list of cards that are in the list:
+
+![card-prioritization-1](/static/site_app/help/card-prioritization-1.png)
+
+In that dialog you can use the same usual syntax for card search. Notice
+that if you have many cards in the list and you want to make sure that
+the card has priority superior to a given set of cards that contain a tag
+then you could do:
+
+~~~
+tag:sometag
+~~~
+
+It would list all cards with that tag thus you can easily
+change card priority over other cards.
+
+
 ### Card Search
 
 In order to perform global card search just click on: Cards
@@ -1008,6 +1039,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
