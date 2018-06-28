@@ -1008,8 +1008,10 @@ class SetCardParent(GuardianView):
         card0.parent_post = None
         card0.save()
 
+        # The ECreateFork.card0 corresponds to the context card1
+        # and vice versa.
         event = models.ECreateFork.objects.create(organization=self.me.default,
-        ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
+        ancestor=card0.ancestor, card0=card1, card1=card0, user=self.me)
         event.dispatch(*card0.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=card0.id)
