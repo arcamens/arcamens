@@ -178,7 +178,8 @@ class CreateCard(GuardianView):
         return redirect('card_app:view-data', card_id=card.id)
 
     def create_relations(self, card, ids):
-        cards = models.Card.objects.filter(id__in=ids)
+        cards = models.Card.get_allowed_cards(self.me)
+        cards = cards.filter(id__in=ids)
 
         for ind in cards:
             self.relate(card, ind)
@@ -413,8 +414,10 @@ class UpdateCard(CreateCard):
         card_id=record.id)
 
     def update_relations(self, card, ids):
-        cards = models.Card.objects.filter(id__in=ids)
+        cards = models.Card.get_allowed_cards(self.me)
+        cards = cards.filter(id__in=ids)
         cards = cards.exclude(id__in=card.relations.all())
+
         for ind in cards:
             self.relate(card, ind)
 
