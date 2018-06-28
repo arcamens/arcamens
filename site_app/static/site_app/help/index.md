@@ -534,9 +534,47 @@ Fill the form and send the e-mail notification.
 
 You can as well send notification to all post workers by clicking on Alert Workers.
 
+### Post Prioritization
+
+Arcamens timelines can play the role of backlogs where it can be used
+with scrum methodology, timelines can also be used for isolated task delegation.
+
+Prioritization of posts work alike the one for cards, when a given post
+is prioritized then an event is generated and everyone who is in the post's timeline
+gets notified.
+
+For doing prioritization of a given post just access the timeline
+then click on the signal icon at the post:
+
+![post-prioritization-0](/static/site_app/help/post-prioritization-0.png)
+
+Then would get a list of posts that are in that timeline:
+
+![post-prioritization-1](/static/site_app/help/post-prioritization-1.png)
+
+Imagine that you had a long product backlog with 200 posts that are correctly classified
+with tags. What if you wanted to just prioritize a given post that corresponds to a bug fix over all other posts
+that correspond to features? Well, you can just use the post filter pattern language
+to select all posts that contain the tag bug:
+
+~~~
+tag:bug
+~~~
+
+That is just a simple case you could have a lot of many other
+possibilities. 
+
+Using this approach for prioritization of posts/cards rather than the usual
+drag/drop thing it allow to improve work quality and productivity because
+correct ordering of priorities can be done more accurately.
+
+You can change the post priority up/down some other card to make it explicit
+to your timeline peers the correct order of tasks execution. You should
+also notice that prioritizing posts change the displaying order of the posts.
+
 ### Post Search
 
-The post search mechanism allows to search through all posts that you have access regardless
+The post search mechanism allow to search through all posts that you have access regardless
 if it has a worker or not. For such just click on the Post link at the navbar:
 
 ![post-search-0](/static/site_app/help/post-search-0.png)
@@ -1039,6 +1077,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
