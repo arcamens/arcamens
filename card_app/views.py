@@ -1019,6 +1019,7 @@ class SetPostFork(GuardianView):
     def get(self, request, card_id, post_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
         post  = Post.locate(self.me, self.me.default, post_id)
+        card.parent      = None
         card.parent_post = post
         card.path.clear()
         card.save()
