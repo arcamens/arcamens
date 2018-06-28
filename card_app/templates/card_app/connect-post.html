@@ -6,7 +6,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
-<span class="glyphicon glyphicon-search"></span> {{post.label|truncatechars:60}}'s Priority
+<span class="glyphicon glyphicon-search"></span> {{card.label|truncatechars:60}}'s Post Parents
 <span class="badge">{{count}}/{{total}}</span> </h5>
 </div>
 
@@ -22,7 +22,7 @@
 
 <small>
 <a class="e-get text-danger"  data-shell="#main-view"  
-data-show="{% url 'post_app:set-post-parent' post.id ind.id %}" href="{{ind.get_link_url}}">  
+data-show="{% url 'card_app:set-post-fork' card.id ind.id %}" href="{{ind.get_link_url}}">  
 <span class="glyphicon glyphicon-random"></span> Connect</a> 
 </small>
 
@@ -44,7 +44,7 @@ data-show="{% url 'post_app:set-post-parent' post.id ind.id %}" href="{{ind.get_
 data-dismiss="modal">Close</button>
 
 <button  type="button" data-form="#postPriorityForm" 
-id="filterpostRelations" data-show="{% url 'card_app:connect-post' post.id  %}"
+id="filterpostRelations" data-show="{% url 'card_app:connect-post' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
