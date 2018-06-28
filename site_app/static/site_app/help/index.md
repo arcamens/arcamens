@@ -238,11 +238,21 @@ It is useful when your organization has many tags.
 
 Arcamens implements card prioritization in a very smart and elegant
 manner. You can easily prioritize a card over other cards by
-specifying a consistent set of critereas.
+specifying a consistent set of critereas. 
 
 When a card priority changes then your board peers get
-notified. It is very handy when you want to make
+notified and the order of the cards get changed.  It is very handy when you want to make 
 sure that a given task has more urgency than others.
+
+The way of how order of cards is changed in arcamens it differs in concept
+from the often used drag&drop from trello-like platforms. 
+
+You are prompted with a list of cards that you want to increase/decrease priority from. 
+You can easily filter cards based on a criterea in that list it spares a lot of time
+when you want to prioritize a card over some other cards that are classified
+under a given set of tags. 
+
+The order of cards is defined by prioritization which is set as described below
 
 Just click on the signal icon:
 
@@ -1077,6 +1087,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
