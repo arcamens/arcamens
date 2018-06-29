@@ -13,20 +13,30 @@
 <div class="modal-body">
 <div class="pre-scrollable">
 
+{% if card.parent %}
+<p> <a href="{{card.get_link_url}}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span> {{card.parent.label}}</a> 
+<br>
+
+<small>
+<a class="e-get text-danger"  data-shell="#main-view"  
+data-show="{% url 'card_app:unset-card-parent' card.id %}" href="{{card.get_link_url}}">  
+<span class="glyphicon glyphicon-remove"></span> Disconnect</a> 
+</small> </p>
+
+{% endif %}
+
 {% for ind in cards %}
-<p>
-
-
-<a href="{{ind.get_link_url}}" target="_blank"> {{ind.label}}</a> 
+<p>  <a href="{{ind.get_link_url}}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span>
+{{ind.label}}</a> 
 <br>
 
 <small>
 <a class="e-get text-danger"  data-shell="#main-view"  
 data-show="{% url 'card_app:set-card-parent' card.id ind.id %}" href="{{ind.get_link_url}}">  
-<span class="glyphicon glyphicon-random"></span> Connect</a> 
-</small>
-
-</p>
+<span class="glyphicon glyphicon-ok"></span> Connect</a> 
+</small> </p>
 {% endfor %}
 
 </div> <br>
@@ -48,6 +58,7 @@ id="filterCardRelations" data-show="{% url 'card_app:connect-card' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

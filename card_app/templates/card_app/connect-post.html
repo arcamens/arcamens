@@ -12,18 +12,29 @@
 
 <div class="modal-body">
 <div class="pre-scrollable">
+{% if card.parent_post %}
+<p> <span class="glyphicon glyphicon-file"></span>
+
+<a href="{{card.get_link_url}}" target="_blank"> {{card.parent_post.label}}</a> 
+<br>
+
+<small>
+<a class="e-get text-danger"  data-shell="#main-view"  
+data-show="{% url 'card_app:unset-post-fork' card.id %}" href="{{card.get_link_url}}">  
+<span class="glyphicon glyphicon-remove"></span> Disconnect</a> 
+</small> </p>
+
+{% endif %}
 
 {% for ind in posts %}
-<p>
-
-
+<p> <span class="glyphicon glyphicon-file"></span>
 <a href="{{ind.get_link_url}}" target="_blank"> {{ind.label}}</a> 
 <br>
 
 <small>
 <a class="e-get text-danger"  data-shell="#main-view"  
 data-show="{% url 'card_app:set-post-fork' card.id ind.id %}" href="{{ind.get_link_url}}">  
-<span class="glyphicon glyphicon-random"></span> Connect</a> 
+<span class="glyphicon glyphicon-ok"></span> Connect</a> 
 </small>
 
 </p>
@@ -48,6 +59,7 @@ id="filterpostRelations" data-show="{% url 'card_app:connect-post' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

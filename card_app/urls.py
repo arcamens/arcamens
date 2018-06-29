@@ -52,7 +52,10 @@ urlpatterns = [
     url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
     url(r'^set-card-parent/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardParent.as_view(), name='set-card-parent'),
     url(r'^set-post-fork/(?P<card_id>.+)/(?P<post_id>.+)/', views.SetPostFork.as_view(), name='set-post-fork'),
+    url(r'^unset-card-parent/(?P<card_id>.+)/', views.UnsetCardParent.as_view(), name='unset-card-parent'),
+    url(r'^unset-post-fork/(?P<card_id>.+)/', views.UnsetPostFork.as_view(), name='unset-post-fork'),
 
 ]
+
 
 

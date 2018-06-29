@@ -1019,6 +1019,26 @@ class SetCardParent(GuardianView):
 
         return redirect('card_app:view-data', card_id=card0.id)
 
+class UnsetCardParent(GuardianView):
+    @transaction.atomic
+    def get(self, request, card_id):
+        card  = models.Card.locate(self.me, self.me.default, card_id)
+        card.parent = None
+        card.path.clear()
+        card.save()
+
+        return redirect('card_app:view-data', card_id=card.id)
+
+class UnsetPostFork(GuardianView):
+    @transaction.atomic
+    def get(self, request, card_id):
+        card  = models.Card.locate(self.me, self.me.default, card_id)
+        card.parent_post = None
+        card.path.clear()
+        card.save()
+
+        return redirect('card_app:view-data', card_id=card)
+
 class SetPostFork(GuardianView):
     @transaction.atomic
     def get(self, request, card_id, post_id):
