@@ -890,7 +890,10 @@ class CardEvents(GuardianView):
         Q(eattachnotefile__note__card=card.id) | \
         Q(edettachnotefile__note__card=card.id)|\
         Q(ecreatecardfork__card=card.id)| Q(esetcardpriorityup__card0=card.id)|\
-        Q(esetcardprioritydown__card0=card.id)
+        Q(esetcardprioritydown__card0=card.id) |\
+        Q(eremovecardfork__card0=card.id) |\
+        Q(eremovecardfork__card1=card.id)|\
+        Q(eremovepostfork__card=card.id)
 
 
         events = Event.objects.filter(query).order_by('-created').values('html')
@@ -900,7 +903,9 @@ class CardEvents(GuardianView):
 class ConnectCard(GuardianView):
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
-        cards = models.Card.get_allowed_cards(self.me)
+        cards = models.Card.get_allowed_cards(self.me).exclude(id=card_id)
+        cards = cards.exclude(id=card.parent.id) if card.parent else cards
+
         cards = cards.order_by('-priority')
         total = cards.count()
 
@@ -911,7 +916,9 @@ class ConnectCard(GuardianView):
     def post(self, request, card_id):
         sqlike = models.Card.from_sqlike()
         card   = models.Card.locate(self.me, self.me.default, card_id)
-        cards = models.Card.get_allowed_cards(self.me)
+        cards = models.Card.get_allowed_cards(self.me).exclude(id=card_id)
+        cards = cards.exclude(id=card.parent.id) if card.parent else cards
+
         total  = cards.count()
         form   = forms.ConnectCardForm(request.POST, sqlike=sqlike)
 
@@ -933,6 +940,8 @@ class ConnectPost(GuardianView):
     def get(self, request, card_id):
         card   = models.Card.locate(self.me, self.me.default, card_id)
         posts = Post.get_allowed_posts(self.me)
+        posts = posts.exclude(id=card.parent_post.id) if card.parent_post else posts
+
         posts = posts.order_by('-priority')
         total = posts.count()
 
@@ -944,6 +953,7 @@ class ConnectPost(GuardianView):
         sqlike = Post.from_sqlike()
         card   = models.Card.locate(self.me, self.me.default, card_id)
         posts = Post.get_allowed_posts(self.me)
+        posts = posts.exclude(id=card.parent_post.id) if card.parent_post else posts
 
         total  = posts.count()
         form   = forms.ConnectPostForm(request.POST, sqlike=sqlike)
@@ -1023,21 +1033,30 @@ class UnsetCardParent(GuardianView):
     @transaction.atomic
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
+
+        event = models.ERemoveCardFork.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, card0=card, card1=card.parent, user=self.me)
+
         card.parent = None
         card.path.clear()
         card.save()
 
+        event.dispatch(*card.ancestor.ancestor.members.all())
         return redirect('card_app:view-data', card_id=card.id)
 
 class UnsetPostFork(GuardianView):
     @transaction.atomic
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
+
+        event = models.ERemovePostFork.objects.create(organization=self.me.default,
+        ancestor=card.ancestor, post=card.parent_post, card=card, user=self.me)
+
         card.parent_post = None
         card.path.clear()
         card.save()
 
-        return redirect('card_app:view-data', card_id=card)
+        return redirect('card_app:view-data', card_id=card.id)
 
 class SetPostFork(GuardianView):
     @transaction.atomic
@@ -1117,5 +1136,6 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 

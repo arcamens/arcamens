@@ -406,6 +406,36 @@ class ECreateFork(Event):
 
     html_template = 'card_app/e-create-fork.html'
 
+class ERemoveCardFork(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_remove_card_fork0', blank=True)
+
+    card0 = models.ForeignKey('Card', 
+    related_name='e_remove_card_fork1', blank=True)
+
+    card1 = models.ForeignKey('Card', 
+    related_name='e_remove_card_fork2', blank=True)
+
+    html_template = 'card_app/e-remove-card-fork.html'
+
+class ERemovePostFork(Event):
+    """
+    """
+
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_remove_post_fork0', blank=True)
+
+    post = models.ForeignKey('post_app.Post', 
+    related_name='e_remove_post_fork1', blank=True)
+
+    card = models.ForeignKey('Card', 
+    related_name='e_remove_post_fork2', blank=True)
+
+    html_template = 'card_app/e-remove-post-fork.html'
+
 class ECreatePostFork(Event):
     """
     """
@@ -619,6 +649,7 @@ class ECopyCard(Event):
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     instance.file.delete(save=False)
+
 
 
 

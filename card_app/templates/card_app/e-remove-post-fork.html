@@ -1,0 +1,31 @@
+{% extends 'timeline_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+<span class="glyphicon glyphicon-user"></span>
+{{event.user}} </a> has removed fork
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'card_app:view-data' event.card.id %}" 
+href="{{event.card.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.card.label|truncatechars:40}} </a> 
+
+from 
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" 
+href="{{event.post.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label|truncatechars:40}}
+</a>
+
+on {{event.created}}
+
+{% endblock %}
+
+
+
