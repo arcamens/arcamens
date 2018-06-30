@@ -127,7 +127,7 @@ You can change all attributes for the card there, whenever an attribute is chang
 then an event is fired. All users who are related to the card will get notified.
 These users are those who belong to the card board or are assigned to the card.
 
-### Card Edition
+### Card Editing
 
 After a card is created it can have its Label/Data attributes changed. Such
 a change generates an event. Everyone who is attached to the card's board will
@@ -135,11 +135,11 @@ get notified as well as all workers of the card.
 
 In order to edit/update a card just access the card and click on: Update
 
-![card-edition-0](/static/site_app/help/card-edition-0.png)
+![card-editing-0](/static/site_app/help/card-editing-0.png)
 
 Then you would get:
 
-![card-edition-1](/static/site_app/help/card-edition-1.png)
+![card-editing-1](/static/site_app/help/card-editing-1.png)
 
 After pressing Update the event will be generated and the card updated.
 
@@ -448,7 +448,7 @@ a markdown content.
 After pressing Create the post will be created and every timeline user will get notified
 of the post creation.
 
-### Post Edition
+### Post Editing
 
 ### Post Workers
 
@@ -1106,7 +1106,7 @@ After an event is marked as seen it gets available through the logs window. In t
 window you can filter logs based on date.It is mostly useful to check what has been done
 in a period of time.
 
-For inspecting your logs just click on your name at the navbar:
+For inspecting your logs just click on your name at the navbar and click on Logs.
 
 ![logs-0](/static/site_app/help/logs-0.png)
 
@@ -1116,6 +1116,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
