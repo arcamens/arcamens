@@ -1102,19 +1102,20 @@ You would get:
 
 ### Logs
 
+After an event is marked as seen it gets available through the logs window. In the logs
+window you can filter logs based on date.It is mostly useful to check what has been done
+in a period of time.
 
+For inspecting your logs just click on your name at the navbar:
 
+![logs-0](/static/site_app/help/logs-0.png)
 
+Then you would get:
 
+![logs-1](/static/site_app/help/logs-1.png)
 
-
-
-
-
-
-
-
-
+From there you can specify the starting/ending date to filter your
+logs.
 
 
 
