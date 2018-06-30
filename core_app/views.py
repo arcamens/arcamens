@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from post_app.models import Post
 from django.db.models import Q
 from datetime import date
-from jsim.jscroll import JScroll
+from jscroll.wrappers import JScroll
 from django.urls import reverse
 from django.conf import settings
 from traceback import print_exc
@@ -922,6 +922,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

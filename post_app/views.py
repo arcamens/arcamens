@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from list_app.models import List
 from timeline_app.models import Timeline, EPastePost
 from django.conf import settings
-from jsim.jscroll import JScroll
+from jscroll.wrappers import JScroll
 from card_app.models import Card
 from django.db import transaction
 from card_app.forms import CardForm, ListSearchform
@@ -1040,6 +1040,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

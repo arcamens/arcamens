@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'^card_app/', include('card_app.urls', namespace='card_app')),
     url(r'^snippet_app/', include('snippet_app.urls', namespace='snippet_app')),
     url(r'^note_app/', include('note_app.urls', namespace='note_app')),
-    url(r'^jsim/', include('jsim.urls', namespace='jsim')),
+    url(r'^jscroll/', include('jscroll.urls', namespace='jscroll')),
+
     url(r'^bitbucket_app/', include('bitbucket_app.urls', namespace='bitbucket_app')),
     url(r'^github_app/', include('github_app.urls', namespace='github_app')),
 
@@ -44,6 +45,7 @@ urlpatterns = [
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 

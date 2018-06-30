@@ -13,7 +13,7 @@ from timeline_app.models import Timeline
 from core_app.models import User
 from list_app.models import List, EPasteCard
 from django.db import transaction
-from jsim.jscroll import JScroll
+from jscroll.wrappers import JScroll
 from functools import reduce
 import board_app.models
 import list_app.models
@@ -1136,6 +1136,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 

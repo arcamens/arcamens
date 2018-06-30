@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
-from jsim.jscroll import JScroll
+from jscroll.wrappers import JScroll
 from django.db.models import Q, F
 import post_app.models
 import operator
@@ -387,6 +387,7 @@ class Unpin(GuardianView):
         pin = self.me.timelinepin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

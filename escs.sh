@@ -262,6 +262,11 @@ cd ~/projects/django-jsim-code
 python setup.py install
 rm -fr build
 ##############################################################################
+# install django-jscroll-code
+cd ~/projects/django-jscroll-code
+python setup.py install
+rm -fr build
+##############################################################################
 # install onesignal.
 cd ~/projects/django-onesignal-code
 python setup.py install
@@ -384,5 +389,8 @@ python manage.py normalize_events
 cd ~/projects/arcamens-code/site_app/static/site_app/help
 pandoc --toc -s index.md -o index.html
 
+##############################################################################
+# site password.
 
-
+user arcamens
+password LQ3Q38hg7F94
