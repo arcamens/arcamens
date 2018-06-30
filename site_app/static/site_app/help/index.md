@@ -129,6 +129,20 @@ These users are those who belong to the card board or are assigned to the card.
 
 ### Card Edition
 
+After a card is created it can have its Label/Data attributes changed. Such
+a change generates an event. Everyone who is attached to the card's board will
+get notified as well as all workers of the card.
+
+In order to edit/update a card just access the card and click on: Update
+
+![card-edition-0](/static/site_app/help/card-edition-0.png)
+
+Then you would get:
+
+![card-edition-1](/static/site_app/help/card-edition-1.png)
+
+After pressing Update the event will be generated and the card updated.
+
 ### Events
 
 Whenever an user creates or updates content then an event is fired. The events
@@ -1087,6 +1101,7 @@ You would get:
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
 
 ### Logs
+
 
 
 
