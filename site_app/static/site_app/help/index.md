@@ -288,6 +288,8 @@ tag:sometag
 It would list all cards with that tag thus you can easily
 change card priority over other cards.
 
+**Note:** It is also important to notice that prioritization determines the order of
+card displaying. The cards with higher priority are displayed first.
 
 ### Card Search
 
