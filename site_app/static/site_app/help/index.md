@@ -266,7 +266,7 @@ You can easily filter cards based on a criterea in that list it spares a lot of 
 when you want to prioritize a card over some other cards that are classified
 under a given set of tags. 
 
-The order of cards is defined by prioritization which is set as described below
+The order of cards is determined by prioritization which is set as described below
 
 Just click on the signal icon:
 
@@ -287,9 +287,6 @@ tag:sometag
 
 It would list all cards with that tag thus you can easily
 change card priority over other cards.
-
-**Note:** It is also important to notice that prioritization determines the order of
-card displaying. The cards with higher priority are displayed first.
 
 ### Card Search
 
