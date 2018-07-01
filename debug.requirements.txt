@@ -13,16 +13,5 @@ git+ssh://git@bitbucket.org/arcamens/django-jsim.git
 pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
 git+ssh://git@bitbucket.org/arcamens/django-jscroll.git
-
-git+ssh@bitbucket.org:arcamens/django-onesignal.git
-
-
-
-
-
-
-
-
-
-
+git+ssh://git@bitbucket.org/arcamens/django-onesignal.git
 
