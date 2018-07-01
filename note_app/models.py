@@ -142,12 +142,13 @@ class EDettachNoteFile(Event):
 
     html_template = 'note_app/e-dettach-note-file.html'
 
-
-# Signals.
+# It is not necessary at all bacause notes arent
+# copied altogether with cards but it might be necessary
+# in the future..
 @receiver(pre_delete, sender=NoteFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
-    instance.file.delete(save=False)
-
-
-
+    is_unique = NoteFileWrapper.objects.filter(file=instance.file)
+    is_unique = is_unique.count() == 1
+    if is_unique: 
+        instance.file.delete(save=False)
 

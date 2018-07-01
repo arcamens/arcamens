@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from core_app.models import Event, User
 from sqlike.parser import SqLike, SqNode
 from board_app.models import Board
+from core_app.miscutils import disk_cleaner
 from django.db.models import Q
 from django.db import models
 from markdown import markdown
@@ -645,22 +646,11 @@ class ECopyCard(Event):
 
     html_template = 'card_app/e-copy-card.html'
 
-# Signals.
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
-    instance.file.delete(save=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
+    is_unique = CardFileWrapper.objects.filter(file=instance.file)
+    is_unique = is_unique.count() == 1
+    if is_unique: 
+        instance.file.delete(save=False)
 
 

@@ -1,3 +1,7 @@
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+
+
 def fmt_request(request):
     headers = ''
     for header, value in request.META.items():
@@ -19,3 +23,14 @@ def fmt_request(request):
         headers=headers,
         body=request.body,
     )
+
+# Signals.
+def disk_cleaner(model):
+    @receiver(pre_delete, sender=model)
+    def delete_filewrapper(sender, instance, **kwargs):
+        is_unique = model.objects.filter(file=instance.file)
+        is_unique = is_unique.count() == 1
+        print('being called')
+        if is_unique: 
+            instance.file.delete(save=False)
+

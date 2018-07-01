@@ -4,11 +4,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from markdown.extensions.tables import TableExtension
 from django.db.models.signals import pre_delete
-from django.dispatch import receiver
 from mdx_gfm import GithubFlavoredMarkdownExtension
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from sqlike.parser import SqLike, SqNode
 from markdown import markdown
 from timeline_app.models import Timeline
+from core_app.miscutils import disk_cleaner
 from core_app.models import Event
 from functools import reduce
 import operator
@@ -428,11 +430,6 @@ class ECreateCardFork(Event):
 
     html_template = 'post_app/e-create-card-fork.html'
 
-# Signals.
-@receiver(pre_delete, sender=PostFileWrapper)
-def delete_filewrapper(sender, instance, **kwargs):
-    instance.file.delete(save=False)
-
 class PostPinMixin(models.Model):
     class Meta:
         abstract = True
@@ -505,9 +502,12 @@ class ESetPostPriorityDown(Event):
 
     html_template = 'post_app/e-set-priority-down.html'
 
-
-
-
-
+# For some reason i cant abstract it and place it outside models.
+@receiver(pre_delete, sender=PostFileWrapper)
+def delete_filewrapper(sender, instance, **kwargs):
+    is_unique = PostFileWrapper.objects.filter(file=instance.file)
+    is_unique = is_unique.count() == 1
+    if is_unique: 
+        instance.file.delete(save=False)
 
 

@@ -144,15 +144,14 @@ class EDettachSnippetFile(Event):
 
     html_template = 'snippet_app/e-dettach-snippet-file.html'
 
-
-
-# Signals.
+# It is not necessary at all bacause snippets arent
+# copied altogether with posts but it might be necessary
+# in the future..
 @receiver(pre_delete, sender=SnippetFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
-    instance.file.delete(save=False)
-
-
-
-
+    is_unique = SnippetFileWrapper.objects.filter(file=instance.file)
+    is_unique = is_unique.count() == 1
+    if is_unique: 
+        instance.file.delete(save=False)
 
 
