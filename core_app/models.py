@@ -12,7 +12,6 @@ from django.conf import settings
 from onesignal.models import Device, GroupSignal
 from os.path import join
 import random
-import html2text
 
 class UserMixin(Device):
     class Meta:
@@ -502,6 +501,7 @@ class EDisabledAccount(Event):
     blank=True, default = '')
 
     html_template = 'core_app/e-disabled-account.html'
+
 
 
 

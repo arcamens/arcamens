@@ -394,5 +394,18 @@ pandoc --toc -s index.md -o index.html
 
 user arcamens
 password LQ3Q38hg7F94
+##############################################################################
+# first deploy on staging.
 
+# create the user.
+sudo adduser staging -u bash
+mkdir ~/projects/
+mkdir ~/.virtualenvs/
+
+# add deploy key.
+cp -i ~arcamens/.ssh/id_rsa.pub ~staging/.ssh/id_rsa.pub
+cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
+
+# open supervisord.conf and replace all arcamens -> staging
+# except arcamens-code
 
