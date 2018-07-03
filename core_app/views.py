@@ -592,7 +592,7 @@ class SeenEvent(GuardianView):
         # that allows him to view all existing events through list-logs view.
         # It happens because after event.seen(self.me) then the event is put
         # in user.signers which is listed in list-logs.
-        event = Event.objects.get(id=event_id, organization=self.me.default)
+        event = self.me.events.get(id=event_id, organization=self.me.default)
         event.seen(self.me)
         return redirect('core_app:list-events')
 
@@ -922,6 +922,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 
