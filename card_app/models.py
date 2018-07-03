@@ -113,6 +113,23 @@ class CardMixin(object):
 
         note_file  = lambda ind: Q(notes__notefilewrapper__file__icontains=ind)
 
+        fork   = lambda ind: Q(children__label__icontains=ind)|\
+        Q(children__data__icontains=ind)
+
+        fork_label = lambda ind: Q(children__label__icontains=ind)
+        not_fork_label = lambda ind: ~fork_label(ind)
+
+        fork_data  = lambda ind: Q(children__data__icontains=ind)
+        not_fork_data  = lambda ind: ~fork_data(ind)
+
+        fork_tag   = lambda ind: Q(children__tags__name__icontains=ind)
+        not_fork_tag   = lambda ind: ~fork_tag(ind)
+
+        fork_worker   = lambda ind: Q(children__workers__name__icontains=ind)|\
+        Q(children__workers__email__icontains=ind)
+
+        not_fork_worker   = lambda ind: ~fork_worker(ind)
+
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
 
         sqlike = SqLike(SqNode(None, default),
@@ -141,6 +158,18 @@ class CardMixin(object):
 
         SqNode(('no', 'note.owner'), note_owner, chain=True),
         SqNode(('!no', '!note.owner'), not_note_owner, chain=True),
+        SqNode(('k', 'fork'), fork),
+        SqNode(('kl', 'fork.label'), fork_label),
+        SqNode(('!kl', '!fork.label'), not_fork_label),
+
+        SqNode(('kd', 'fork.data'), fork_data),
+        SqNode(('!kd', '!fork.data'), not_fork_data),
+
+        SqNode(('kt', 'fork.tag'), fork_tag, chain=True),
+        SqNode(('!kt', '!fork.tag'), not_fork_tag, chain=True),
+
+        SqNode(('kw', 'fork.worker'), fork_worker, chain=True),
+        SqNode(('!kw', '!fork.worker'), not_fork_worker, chain=True),
 
         SqNode(('nf', 'note.file'), note_file, chain=True),
         SqNode(('b', 'board'), board),
@@ -652,5 +681,6 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
