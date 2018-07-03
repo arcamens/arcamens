@@ -130,6 +130,23 @@ class CardMixin(object):
 
         not_fork_worker   = lambda ind: ~fork_worker(ind)
 
+        parent   = lambda ind: Q(path__label__icontains=ind)|\
+        Q(path__data__icontains=ind)
+
+        parent_label = lambda ind: Q(path__label__icontains=ind)
+        not_parent_label = lambda ind: ~parent_label(ind)
+
+        parent_data  = lambda ind: Q(path__data__icontains=ind)
+        not_parent_data  = lambda ind: ~parent_data(ind)
+
+        parent_tag   = lambda ind: Q(path__tags__name__icontains=ind)
+        not_parent_tag   = lambda ind: ~parent_tag(ind)
+
+        parent_worker   = lambda ind: Q(path__workers__name__icontains=ind)|\
+        Q(path__workers__email__icontains=ind)
+
+        not_parent_worker   = lambda ind: ~parent_worker(ind)
+
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind) 
 
         sqlike = SqLike(SqNode(None, default),
@@ -170,6 +187,20 @@ class CardMixin(object):
 
         SqNode(('kw', 'fork.worker'), fork_worker, chain=True),
         SqNode(('!kw', '!fork.worker'), not_fork_worker, chain=True),
+
+        SqNode(('p', 'parent'), parent),
+
+        SqNode(('pl', 'parent.label'), parent_label),
+        SqNode(('!pl', '!parent.label'), not_parent_label),
+
+        SqNode(('pd', 'parent.data'), parent_data),
+        SqNode(('!pd', '!parent.data'), not_parent_data),
+
+        SqNode(('pt', 'parent.tag'), parent_tag, chain=True),
+        SqNode(('!pt', '!parent.tag'), not_parent_tag, chain=True),
+
+        SqNode(('pw', 'parent.worker'), parent_worker, chain=True),
+        SqNode(('!pw', '!parent.worker'), not_parent_worker, chain=True),
 
         SqNode(('nf', 'note.file'), note_file, chain=True),
         SqNode(('b', 'board'), board),
