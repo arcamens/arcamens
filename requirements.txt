@@ -16,3 +16,4 @@ git+ssh://git@bitbucket.org/arcamens/django-sqlike.git
 git+ssh://git@bitbucket.org/arcamens/django-onesignal.git
 git+ssh://git@bitbucket.org/arcamens/django-jscroll.git
 django-storages
+boto3
