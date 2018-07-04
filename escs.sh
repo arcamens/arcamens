@@ -408,4 +408,3 @@ cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
 
 # open supervisord.conf and replace all arcamens -> staging
 # except arcamens-code
-
