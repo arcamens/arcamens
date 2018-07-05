@@ -22,6 +22,7 @@ $('#CardFileWrapperForm-{{card.id}}').change(function(){
 <form id="CardFileWrapperForm-{{card.id}}" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.file  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
 </form>
 
 {% for ind in attachments %}
@@ -33,6 +34,7 @@ data-show="{% url 'card_app:detach-file' ind.id %}">
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 

@@ -21,6 +21,7 @@ $('#SnippetFileWrapperForm-{{snippet.id}}').change(function(){
 <form id="SnippetFileWrapperForm-{{snippet.id}}" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.file  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
 </form>
 
 <div class="panel panel-default" >
@@ -36,6 +37,7 @@ No attachments.
 {% endfor %}
 </div>
 </div>
+
 
 
 

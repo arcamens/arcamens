@@ -1,4 +1,5 @@
 from django import forms
+from core_app.forms import FileAttachment
 from sqlike.forms import SqLikeForm
 from . import models
 
@@ -77,14 +78,10 @@ class ImageWrapperForm(forms.ModelForm):
         model  = models.ImageWrapper
         exclude = ('card', )
 
-class CardFileWrapperForm(forms.ModelForm):
+class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
-
-
-
-
 
 
 

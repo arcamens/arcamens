@@ -1,5 +1,6 @@
 from django import forms
 from sqlike.forms import SqLikeForm
+from core_app.forms import FileAttachment
 from . import models
 
 class PostForm(forms.ModelForm):
@@ -7,7 +8,7 @@ class PostForm(forms.ModelForm):
         model  = models.Post
         exclude = ('user', 'ancestor', 'html', 'parent', 'priority')
 
-class PostFileWrapperForm(forms.ModelForm):
+class PostFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.PostFileWrapper
         exclude = ('post', )
@@ -56,6 +57,7 @@ class ListSearchform(SqLikeForm, forms.Form):
 class PostPriorityForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: owner:oliveira + tag:bug')
+
 
 
 

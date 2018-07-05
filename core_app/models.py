@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
 from onesignal.models import Device, GroupSignal
-# from storages.backends.s3boto3 import S3Boto3Storage
+from storages.backends.s3boto3 import S3Boto3Storage
 from os.path import join
 import random
 
@@ -503,13 +503,19 @@ class EDisabledAccount(Event):
 
     html_template = 'core_app/e-disabled-account.html'
 
-# class OurStorage(S3Boto3Storage):
-   # def url(self, name):
-       # return settings.MEDIA_URL + name
 
+class OurStorage(S3Boto3Storage):
+   def url(self, name):
+       name = settings.MEDIA_URL + name
+       q = super().url(name).query
+       if q != '':
+           name += '?' + q
+       return name
 
-
-
+   def generate_filename(self, filename):
+       v = 'storage ' + datetime.datetime.now().timestamp()+'/'+random.SystemRandom()
+       dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
+       return '%s/%s' % (dir, filename)
 
 
 

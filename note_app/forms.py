@@ -1,3 +1,4 @@
+from core_app.forms import FileAttachment
 from django import forms
 from . import models
 
@@ -7,10 +8,11 @@ class NoteForm(forms.ModelForm):
         model  = models.Note
         exclude = ('card', 'owner')
 
-class NoteFileWrapperForm(forms.ModelForm):
+class NoteFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.NoteFileWrapper
         exclude = ('note', )
+
 
 
 

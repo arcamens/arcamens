@@ -72,4 +72,21 @@ class EventFilterForm(forms.ModelForm):
             'end': forms.SelectDateWidget()
         }
 
+class FileAttachment:
+    """
+    We have to set different file size upload limits.
+    One for free plans one for paid plans eventually.
+    """
+    def __init__(self, *args, max_size=1024, **kwargs):
+        self.max_size = max_size
+        super(FileAttachment, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(FileAttachment, self).clean()
+        file = self.cleaned_data.get('file')
+        if file.size > self.max_size:
+            raise forms.ValidationError("File too big! \
+                Check your upload limits ")
+
+
 

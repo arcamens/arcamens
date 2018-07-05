@@ -18,7 +18,9 @@ $('#PostFileWrapperForm-{{post.id}}').change(function(){
 
 <form id="PostFileWrapperForm-{{post.id}}" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.file  size='md' %} </form>
+{% bootstrap_field form.file  size='md' %} 
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
 
 {% for ind in attachments %}
 <a class="e-get text-danger" data-shell="#post-attachments-{{post.id}}"  href="#"
@@ -29,6 +31,7 @@ data-show="{% url 'post_app:detach-file' ind.id %}">
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 
