@@ -507,15 +507,6 @@ class EDisabledAccount(Event):
 
 
 class OurStorage(S3Boto3Storage):
-   def url(self, name):
-       name = settings.MEDIA_URL + name
-
-       q = urllib.parse.urlparse(super().url(name)).query
-
-       if q != '':
-           name += '?' + q
-       return name
-
    def generate_filename(self, filename):
        v = 'storage ' + str(datetime.now().timestamp())+'/'+str(random.SystemRandom())
        dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
