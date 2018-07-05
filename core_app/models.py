@@ -13,6 +13,7 @@ from onesignal.models import Device, GroupSignal
 from storages.backends.s3boto3 import S3Boto3Storage
 from os.path import join
 import random
+import hmac
 
 class UserMixin(Device):
     class Meta:
