@@ -513,7 +513,7 @@ class OurStorage(S3Boto3Storage):
        return name
 
    def generate_filename(self, filename):
-       v = 'storage ' + datetime.now().timestamp()+'/'+random.SystemRandom()
+       v = 'storage ' + str(datetime.now().timestamp())+'/'+str(random.SystemRandom())
        dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
        return '%s/%s' % (dir, filename)
 
