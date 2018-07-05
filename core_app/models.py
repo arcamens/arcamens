@@ -510,7 +510,7 @@ class OurStorage(S3Boto3Storage):
    def url(self, name):
        name = settings.MEDIA_URL + name
 
-       q = urllib.parse(super().url(name)).query
+       q = urllib.parse.urlparse(super().url(name)).query
 
        if q != '':
            name += '?' + q
