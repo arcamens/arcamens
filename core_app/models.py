@@ -14,6 +14,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from os.path import join
 import random
 import hmac
+import urllib
 
 class UserMixin(Device):
     class Meta:
@@ -508,7 +509,9 @@ class EDisabledAccount(Event):
 class OurStorage(S3Boto3Storage):
    def url(self, name):
        name = settings.MEDIA_URL + name
-       q = super().url(name).query
+
+       q = urllib.parse(super().url(name)).query
+
        if q != '':
            name += '?' + q
        return name
