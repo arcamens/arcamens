@@ -598,5 +598,20 @@ rs[0]
 dir(rs)
 url = s3.generate_url(expTime, 'GET', bucket=bucket, key=key)
 print (url)
+##############################################################################
+import requests
+from urllib.parse import urlparse
 
+url = 'https://arcamens-staging.s3.amazonaws.com/mo1ahQuitaingu3A/5e1f650f02e3566a9cf537243cffdf22/p.md?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAICSFQ67ZCTVDLMEQ%2F20180706%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20180706T182510Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=54cec3b4f0795774506aed8860f7f301f35bc2ad5abdef1c97fb6c97669f4392'
+
+proxies = {
+  'http': 'http://staging.arcamens.com',
+  'https': 'https://staging.arcamens.com',
+}
+
+requests.get(url, proxies=proxies)
+
+scm = urlparse(url)
+scm.query
+scm.path
 

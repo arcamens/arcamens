@@ -11,10 +11,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from onesignal.models import Device, GroupSignal
 from storages.backends.s3boto3 import S3Boto3Storage
-from os.path import join
+from urllib.parse import urlparse
 import random
 import hmac
-import urllib
 
 class UserMixin(Device):
     class Meta:
@@ -512,7 +511,9 @@ class OurStorage(S3Boto3Storage):
        dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
        return '%s/%s' % (dir, filename)
 
-
-
+   def url(self, name):
+       scm = urlparse(super(OurStorage, self).url(name))
+       url = '%s%s%s' % (settings.AMAZON_FILE_PROXY, scm.path, scm.query)
+       return url
 
 

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from paybills.misc import get_addr
+
+AMAZON_FILE_PROXY = ''
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 ONE_SIGNAL_APPID = 'e4387e31-b5c1-493a-8a28-f56bfed98c27'
@@ -210,6 +212,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
