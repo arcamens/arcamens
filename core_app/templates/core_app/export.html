@@ -10,8 +10,8 @@
 <h1>Export/import</h1>
 
 <form method="get" action="{% url 'core_app:export' %}">
-    <h2>Export timelines</h2>
-    <input type="hidden" name="kind" value="timelines" />
+    <h2>Export groups</h2>
+    <input type="hidden" name="kind" value="groups" />
     <input type="submit" value="Export" />
 </form>
 
@@ -22,10 +22,10 @@
 </form>
 
 <form method="post" action="{% url 'core_app:import' %}" enctype="multipart/form-data"
-      onsubmit="if(!$('[name=file]', this).val()) {alert('Choose a file'); return false;}; return confirm('Really import timelines?')">
-    <h2>Import timelines</h2>
+      onsubmit="if(!$('[name=file]', this).val()) {alert('Choose a file'); return false;}; return confirm('Really import groups?')">
+    <h2>Import groups</h2>
     {% csrf_token %}
-    <input type="hidden" name="kind" value="timelines" />
+    <input type="hidden" name="kind" value="groups" />
     <input type="file" name="file" />
     <input type="submit" value="Import" />
 </form>

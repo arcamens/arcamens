@@ -1,10 +1,10 @@
 {% load i18n %}
 
-<ul class="nav nav-pills menu-timeline">
+<ul class="nav nav-pills menu-group">
 
 <li>
 <a  href="#"> <b><span class="glyphicon glyphicon-eye-open"></span>  
-{{timeline.name|slice:":20"}}'s Posts <span class="badge">{{count}}/{{total}}</span></b> </a>
+{{group.name|slice:":20"}}'s Posts <span class="badge">{{count}}/{{total}}</span></b> </a>
 </li>
 
 <li data-toggle="tooltip" title="Up">
@@ -14,21 +14,21 @@ data-shell="#main-view" data-show="" href="#">
 </a>
 </li>
 
-<li> <a class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:create-post' timeline.id %}" href="#">
+<li> <a class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:create-post' group.id %}" href="#">
 <span class="glyphicon glyphicon-plus"></span> {% trans "Post" %}</a></li>
 
-<li><a class="e-get"  data-shell="#smallModalContent" data-show="{% url 'timeline_app:update-timeline' timeline.id %}" 
+<li><a class="e-get"  data-shell="#smallModalContent" data-show="{% url 'group_app:update-group' group.id %}" 
 href="#"> <span class="glyphicon glyphicon-cog"></span> 
 Settings</a></li>
 
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#smallModalContent" data-show="{% url 'timeline_app:manage-timeline-users' timeline.id %}" href="#">
+<li><a class="e-get" data-shell="#smallModalContent" data-show="{% url 'group_app:manage-group-users' group.id %}" href="#">
 <span class="glyphicon glyphicon-user"></span>  {% trans "Members" %}</a></li>
 
 <li class="divider"></li>
 
-<li> <a class="e-get" data-shell="#smallModalContent" data-show="{% url 'post_app:setup-post-filter' timeline.id %}" href="#">
+<li> <a class="e-get" data-shell="#smallModalContent" data-show="{% url 'post_app:setup-post-filter' group.id %}" href="#">
 {% if filter.status %}
 <span class="glyphicon glyphicon-filter"></span> 
 Filter
@@ -41,7 +41,7 @@ Filter </strike>
 </a></li>
 
 <li><a class="e-get text-warning" data-shell="#main-view" 
-data-show="{% url 'timeline_app:paste-posts' timeline.id %}" href="#">
+data-show="{% url 'group_app:paste-posts' group.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
 </ul>

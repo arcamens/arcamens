@@ -8,7 +8,7 @@
 <h5>
 <span class="glyphicon glyphicon-filter"></span>
 
-{{timeline.name}}'s Filter</h5>
+{{group.name}}'s Filter</h5>
 </div>
 
 <div class="modal-body">
@@ -24,7 +24,7 @@
 <div class="modal-footer">
 <button  type="button" data-form="#setup-post-filter-form" 
 data-shell="#main-view"  
-data-shell-error="#smallModalContent" data-show="{% url 'post_app:setup-post-filter' timeline.id  %}"
+data-shell-error="#smallModalContent" data-show="{% url 'post_app:setup-post-filter' group.id  %}"
 class="btn btn-default e-post"> {% trans "Setup" %} </button>
 </div>
 

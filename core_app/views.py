@@ -533,7 +533,7 @@ class JoinOrganization(View):
         event.dispatch(*organization.users.all())
 
         organization.set_open_boards(invite.user)
-        organization.set_open_timelines(invite.user)
+        organization.set_open_groups(invite.user)
 
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
@@ -729,11 +729,11 @@ class RemoveOrganizationUser(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
 
         form = forms.RemoveUserForm()
-        timelines = user.owned_timelines.filter(organization=self.me.default)
+        groups = user.owned_groups.filter(organization=self.me.default)
         boards = user.owned_boards.filter(organization=self.me.default)
 
         return render(request, 'core_app/remove-organization-user.html', 
-        {'user': user, 'form': form, 'timelines': timelines, 'boards': boards})
+        {'user': user, 'form': form, 'groups': groups, 'boards': boards})
 
     def post(self, request, user_id):
         form = forms.RemoveUserForm(request.POST)
@@ -873,9 +873,9 @@ class ListNodes(GuardianView):
 
     def get(self, request):
         nodes = Node.objects.filter(Q(board__organization=self.me.default) 
-        | Q(timeline__organization=self.me.default)) 
+        | Q(group__organization=self.me.default)) 
 
-        nodes = nodes.filter(Q(board__members=self.me) | Q(timeline__users=self.me))
+        nodes = nodes.filter(Q(board__members=self.me) | Q(group__users=self.me))
 
         nodes = nodes.order_by('-indexer')
         total = nodes.count()
@@ -883,15 +883,15 @@ class ListNodes(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         filter, _ = NodeFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
         query = Q(board__name__icontains=filter.pattern) | \
         Q(board__description__icontains=filter.pattern) | \
-        Q(timeline__name__icontains=filter.pattern) | \
-        Q(timeline__description__icontains=filter.pattern)
+        Q(group__name__icontains=filter.pattern) | \
+        Q(group__description__icontains=filter.pattern)
 
         nodes = nodes.filter(query) if filter.status else nodes
         count = nodes.count()
@@ -900,7 +900,7 @@ class ListNodes(GuardianView):
         {'nodes': nodes, 'boardpins': boardpins, 'listpins': listpins, 
         'user': self.me, 'total': total, 'count': count, 
         'organization': self.me.default, 'filter': filter, 
-        'cardpins': cardpins, 'timelinepins': timelinepins})
+        'cardpins': cardpins, 'grouppins': grouppins})
 
 class SetupNodeFilter(GuardianView):
     def get(self, request):

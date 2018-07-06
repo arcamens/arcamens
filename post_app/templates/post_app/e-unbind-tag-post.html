@@ -1,4 +1,4 @@
-{% extends 'timeline_app/event.html' %}
+{% extends 'group_app/event.html' %}
 {% load i18n %}
 
 {% block content %}
@@ -16,11 +16,11 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 
 {{event.post.label}} </a>  
 
-on timeline 
+on group 
 
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'timeline_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
+data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.ancestor.name}} 
 
 </a>  

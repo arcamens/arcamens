@@ -1,0 +1,45 @@
+<div class="panel panel-default group" >
+
+<div class="panel-body text-center">
+<div class="pull-right"> <a class=" e-get text-default"  href="#" 
+data-shell="#pins"  data-show="{% url 'group_app:pin-group' group.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a> </div>
+
+<p> <a class="e-get" href="{{group.get_link_url}}" data-shell="#main-view" data-show="{% url 'group_app:list-posts' group.id %}" >
+<span class="glyphicon glyphicon glyphicon-eye-open clip"></span> Group {{group.name}} 
+<br>{{group.description}}</a></p>
+
+<small>
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{group.owner.email}}"  data-content="{{group.owner.description}}">
+{{group.owner.name}} </a> on <a href="{{group.get_link_url}}" target="_blank"> {{group.created}}</a>
+</small>
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

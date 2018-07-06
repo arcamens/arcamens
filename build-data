@@ -15,7 +15,7 @@ User.objects.create_superuser('admin', 'admin@example.com', 'itrocksalot')
 # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 # channel    = connection.channel()
 from core_app.models import User, Organization, Period
-from timeline_app.models import Timeline
+from group_app.models import Group
 
 from core_app.models import Organization
 from card_app.models import Card

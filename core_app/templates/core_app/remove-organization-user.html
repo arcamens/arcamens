@@ -11,13 +11,13 @@
 
 <div class="modal-body">
 <p class="text-danger"> You're about remove {{user.name}}! 
-<div class="text-info"> You will own the timelines/boards: </div> </p>
+<div class="text-info"> You will own the groups/boards: </div> </p>
 
 <div class="pre-scrollable">
-{% for ind in timelines %}
+{% for ind in groups %}
 <p> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.name}} </p>
 {% empty %}
-<p> No timelines...</p>
+<p> No groups...</p>
 {% endfor %}
 
 {% for ind in boards %}

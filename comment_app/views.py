@@ -1,7 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from timeline_app.views import GuardianView
-import timeline_app.models
+from group_app.views import GuardianView
+import group_app.models
 import core_app.models
 from . import models
 from . import forms

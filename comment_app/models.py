@@ -3,8 +3,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from timeline_app.models import Event
-import timeline_app.models
+from group_app.models import Event
+import group_app.models
 
 class Comment(models.Model):
     event = models.ForeignKey('core_app.Event', null=True, blank=False)

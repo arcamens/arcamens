@@ -1,12 +1,12 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<form id="form-timeline-data" enctype="multipart/form-data">
+<form id="form-group-data" enctype="multipart/form-data">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
 {% block title %}
-<h4 class="modal-title"> <span class="glyphicon glyphicon-eye-open"></span> Timeline</h4>
+<h4 class="modal-title"> <span class="glyphicon glyphicon-eye-open"></span> Group</h4>
 {% endblock %}
 
 </div>
@@ -21,8 +21,8 @@
 
 <div class="modal-footer">
 {% block buttons %}
-<button  type="button" data-form="#form-timeline-data" 
-data-shell="#main-view" data-show="{% url 'timeline_app:create-timeline' organization_id %}"
+<button  type="button" data-form="#form-group-data" 
+data-shell="#main-view" data-show="{% url 'group_app:create-group' organization_id %}"
 class="btn btn-default e-post"> 
 {% trans "Create" %}
 </button>

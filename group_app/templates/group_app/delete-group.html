@@ -4,15 +4,15 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<span class="glyphicon glyphicon-remove"></span> Delete timeline 
+<span class="glyphicon glyphicon-remove"></span> Delete group 
 
-{{timeline.name|truncatechars:60}}?
+{{group.name|truncatechars:60}}?
 </div>
 
 <div class="modal-body">
 <p class="text-danger"> The content will no longer be avaiable!</p>
 
-<form id="confirmTimelineDeletionForm" enctype="multipart/form-data">
+<form id="confirmGroupDeletionForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -22,9 +22,9 @@
 <button type="button" class="btn btn-default" 
 data-dismiss="modal">Cancel</button>
 
-<button  id="createCard" type="button" data-form="#confirmTimelineDeletionForm"
+<button  id="createCard" type="button" data-form="#confirmGroupDeletionForm"
 data-shell="#main-view"  
-data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
+data-show="{% url 'group_app:delete-group' group.id %}"
 class="btn btn-danger e-post"> 
      {% trans "Delete" %}
 </button>

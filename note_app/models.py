@@ -15,7 +15,7 @@ class NoteMixin(object):
     def locate(cls, user, organization, note_id):
         """
         Return the requested note only if the user has access to the note
-        by belonging to the note's card timeline or being a worker of the card.
+        by belonging to the note's card group or being a worker of the card.
 
         It also checks if the note is on someone's clipboard, if it is
         then the note is not supposed to be viewable.

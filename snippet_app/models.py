@@ -35,7 +35,7 @@ class SnippetMixin(models.Model):
     def locate(cls, user, organization, snippet_id):
         """
         Return the requested snippet only if the user has access to the snippet
-        by belonging to the snippet's post timeline or being a worker of the post.
+        by belonging to the snippet's post group or being a worker of the post.
 
         It also checks if the snippet is on someone's clipboard, if it is
         then the snippet is not supposed to be viewable.

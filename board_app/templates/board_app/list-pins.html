@@ -33,11 +33,11 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 </li>
 {% endfor %}
 
-{% for ind in timelinepins %}
+{% for ind in grouppins %}
 <li>
-<a class="e-get pin-timeline"  data-shell="#main-view"
-data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.timeline.name}}
-<span  onclick="$('#pins').load('{% url 'timeline_app:unpin' ind.id %}');event.stopPropagation();" class="close">
+<a class="e-get pin-group"  data-shell="#main-view"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-eye-open"></span>  {{ind.group.name}}
+<span  onclick="$('#pins').load('{% url 'group_app:unpin' ind.id %}');event.stopPropagation();" class="close">
 &times;
 </span> </a>
 </li>

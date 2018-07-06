@@ -147,21 +147,21 @@ class OrganizationMixin(models.Model):
         for ind in boards:
             ind.members.add(user)
 
-    def set_open_timelines(self, user):
+    def set_open_groups(self, user):
         """
-        Add the user to all open timelines.
+        Add the user to all open groups.
         """
 
-        timelines = self.timelines.filter(open=True)
-        timelines = timelines.only('users')
+        groups = self.groups.filter(open=True)
+        groups = groups.only('users')
 
-        for ind in timelines:
+        for ind in groups:
             ind.users.add(user)
 
     def revoke_access(self, admin, user):
         # Should be pondered about it yet.
         # self.cancel_assignments(user)
-        self.revoke_timelines(admin, user)
+        self.revoke_groups(admin, user)
         self.revoke_boards(admin, user)
         user.organizations.remove(self)
 
@@ -180,15 +180,15 @@ class OrganizationMixin(models.Model):
         user.tasks.through.objects.filter(
             card__ancestor__ancestor__organization=self).delete()
 
-    def revoke_timelines(self, admin, user):
+    def revoke_groups(self, admin, user):
         """
-        Remove user access to all timelines in this organization and
+        Remove user access to all groups in this organization and
         set admin as user and owner.
         """
 
-        timelines = user.timelines.filter(organization=self)
-        timelines = timelines.only('users')
-        for ind in timelines:
+        groups = user.groups.filter(organization=self)
+        groups = groups.only('users')
+        for ind in groups:
             ind.revoke_access(admin, user)
 
     def revoke_boards(self, admin, user):

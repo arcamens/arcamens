@@ -3,34 +3,34 @@ from sqlike.forms import SqLikeForm
 from django import forms
 from . import models
 
-class TimelineForm(forms.ModelForm):
+class GroupForm(forms.ModelForm):
     class Meta:
-        model  = models.Timeline
+        model  = models.Group
         exclude = ('owner', 'organization', 'users', 'node')
 
-class UpdateTimelineForm(forms.ModelForm):
+class UpdateGroupForm(forms.ModelForm):
     class Meta:
-        model  = models.Timeline
+        model  = models.Group
         exclude = ('owner', 'organization', 'users', 'node', 'open')
 
-class TimelineSearchForm(SqLikeForm, forms.Form):
+class GroupSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
 
 class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
 
-class ConfirmTimelineDeletionForm(forms.Form):
+class ConfirmGroupDeletionForm(forms.Form):
     name = forms.CharField(required=True,
-    help_text='Type the timeline name to confirm!')
+    help_text='Type the group name to confirm!')
 
     def __init__(self, *args, confirm_token='', **kwargs):
         self.confirm_token = confirm_token
 
-        super(ConfirmTimelineDeletionForm, 
+        super(ConfirmGroupDeletionForm, 
             self).__init__(*args, **kwargs)
 
     def clean(self):
-        super(ConfirmTimelineDeletionForm, self).clean()
+        super(ConfirmGroupDeletionForm, self).clean()
         name   = self.cleaned_data.get('name')
         if name != self.confirm_token:
             raise forms.ValidationError("The name doesn't match!")

@@ -71,7 +71,7 @@ from card_app.models import *
 from board_app.models import *
 from list_app.models import *
 from post_app.models import *
-from timeline_app.models import *
+from group_app.models import *
 from site_app.models import *
 from note_app.models import *
 from snippet_app.models import *
@@ -322,19 +322,19 @@ for ind in boards:
 from core_app.models import User, Organization
 from board_app.models import Board
 from list_app.models import List
-from timeline_app.models import Timeline
+from group_app.models import Group
 from post_app.models import Post
 
 lst = List.objects.get(name__startswith='Suggestion', 
 ancestor__organization__name='Arcamens', 
 ancestor__name__startswith='Arcamens')
 
-timeline = Timeline.objects.get(name__icontains='Arcamens/backlog',
+group = Group.objects.get(name__icontains='Arcamens/backlog',
 organization__name='Arcamens')
 
 for ind in lst.cards.all():
     Post.objects.create(label=ind.label, 
-        ancestor=timeline, data=ind.data,user=ind.owner)    
+        ancestor=group, data=ind.data,user=ind.owner)    
 
 from board_app.models import Board
 board = Board.objects.get(name='Arcamens', organization=organization)

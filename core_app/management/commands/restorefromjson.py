@@ -10,7 +10,7 @@ from list_app.models import List
 from note_app.models import Note
 from post_app.models import Post
 from snippet_app.models import Snippet
-from timeline_app.models import Timeline
+from group_app.models import Group
 
 
 class Command(BaseCommand):
@@ -22,7 +22,7 @@ class Command(BaseCommand):
         user = core_app.models.User.objects.get(name__startswith=kwargs['user'])
 
         data = json.load(kwargs['json'])
-        models = {'timeline_app.timeline', 'post_app.post',
+        models = {'group_app.group', 'post_app.post',
                   'board_app.board', 'list_app.list', 'card_app.card', 'snippet_app.snippet', 'note_app.note'}
         hash = {m: [] for m in models}
         for row in data:
@@ -30,10 +30,10 @@ class Command(BaseCommand):
                 continue
             hash[row['model']].append(row['fields'])
 
-        for timeline_data in hash['timeline_app.timeline']:
-            timeline = Timeline.objects.create(name=timeline_data['name'], description=timeline_data['description'],
+        for group_data in hash['group_app.group']:
+            group = Group.objects.create(name=group_data['name'], description=group_data['description'],
                                                owner=user, organization=user.default)
-            timeline.users.add(user)
+            group.users.add(user)
 
         for post_data in hash['post_app.post']:
             Post.objects.create(ancestor_id=post_data['ancestor'], label=post_data['label'], done=post_data['done'],

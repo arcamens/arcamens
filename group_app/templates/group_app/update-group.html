@@ -6,33 +6,33 @@
 
 <h5 class="modal-title">
 <span class="glyphicon glyphicon-cog"></span>
-{{timeline.name}}'s settings</h5>
+{{group.name}}'s settings</h5>
 
 </div>
 
 <div class="modal-body">
-<form id="form-timeline-data" enctype="multipart/form-data">
+<form id="form-group-data" enctype="multipart/form-data">
 
 {% csrf_token %}
 {% bootstrap_field form.name  size='sm' %}
 {% bootstrap_field form.description  size='sm' %}
 </form>
 
-{% if timeline.open %}  
-<p class="text-info"> This timeline is open.  </p>
+{% if group.open %}  
+<p class="text-info"> This group is open.  </p>
 {% endif %}
 
 </div>
 
 
 <div class="modal-footer">
-<button  type="button" data-show="{% url 'timeline_app:delete-timeline' timeline.id %}"
+<button  type="button" data-show="{% url 'group_app:delete-group' group.id %}"
 class="btn btn-danger e-get"> 
 {% trans "Delete" %}
 </button>
 
-<button  type="button" data-form="#form-timeline-data" 
-data-shell="#main-view" data-show="{% url 'timeline_app:update-timeline' timeline.id %}"
+<button  type="button" data-form="#form-group-data" 
+data-shell="#main-view" data-show="{% url 'group_app:update-group' group.id %}"
 class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>

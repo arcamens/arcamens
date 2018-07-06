@@ -8,7 +8,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available {{timeline.name|truncatechars:20}}'s Members 
+Available {{group.name|truncatechars:20}}'s Members 
 <span class="badge">{{count}}/{{total}}</span>
 </h5>
 </div>
@@ -25,7 +25,7 @@ Available {{timeline.name|truncatechars:20}}'s Members
 <small> {{ind.email}} </small>   <br>
 
 <a class="r-get" style="color:red; font-size:70%"
-data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" href="#"> 
+data-show="{% url 'group_app:unbind-group-user' group.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> Unbind</a>  
 
 </p>
@@ -42,7 +42,7 @@ data-show="{% url 'timeline_app:unbind-timeline-user' timeline.id ind.id %}" hre
 <br>
 
 <a class="r-get" style="color:green;font-size:70%"
-data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href="#"> 
+data-show="{% url 'group_app:bind-group-user' group.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> Bind </a> 
 
 </p>
@@ -61,7 +61,7 @@ data-show="{% url 'timeline_app:bind-timeline-user' timeline.id ind.id %}" href=
 <div class="modal-footer">
 
 <button type="button" data-form="#userSearchForm" 
-data-show="{% url 'timeline_app:manage-timeline-users' timeline.id  %}"
+data-show="{% url 'group_app:manage-group-users' group.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 

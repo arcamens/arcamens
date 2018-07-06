@@ -35,8 +35,8 @@
 <li><a href="#card-search">Card Search</a></li>
 <li><a href="#search-for-card-tasks">Search for Card Tasks</a></li>
 <li><a href="#organization-creation">Organization Creation</a></li>
-<li><a href="#timelines">Timelines</a></li>
-<li><a href="#timeline-creation">Timeline Creation</a></li>
+<li><a href="#groups">Groups</a></li>
+<li><a href="#group-creation">Group Creation</a></li>
 <li><a href="#posts">Posts</a></li>
 <li><a href="#post-creation">Post Creation</a></li>
 <li><a href="#post-editing">Post Editing</a></li>
@@ -44,7 +44,7 @@
 <li><a href="#post-tags">Post Tags</a></li>
 <li><a href="#organization-invites">Organization Invites</a></li>
 <li><a href="#organization-admins">Organization Admins</a></li>
-<li><a href="#timeline-members">Timeline Members</a></li>
+<li><a href="#group-members">Group Members</a></li>
 <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
 <li><a href="#post-prioritization">Post Prioritization</a></li>
 <li><a href="#post-search">Post Search</a></li>
@@ -62,7 +62,7 @@
 <li><a href="#advanced-card-search">Advanced Card Search</a></li>
 <li><a href="#advanced-post-search">Advanced Post Search</a></li>
 <li><a href="#advanced-list-search">Advanced List Search</a></li>
-<li><a href="#timeline-settingsremoval">Timeline Settings/Removal</a></li>
+<li><a href="#group-settingsremoval">Group Settings/Removal</a></li>
 <li><a href="#board-settingsremoval">Board Settings/Removal</a></li>
 <li><a href="#bitbucket-integration">Bitbucket Integration</a></li>
 <li><a href="#organization-user-removal">Organization User Removal</a></li>
@@ -71,7 +71,7 @@
 </ul>
 </nav>
 <h3 id="intro">Intro</h3>
-<p>Arcamens was designed to allow a high level of communication and collaboration by teams. It implements so called Kanban Boards and Timelines. Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is pertinent to a project.</p>
+<p>Arcamens was designed to allow a high level of communication and collaboration by teams. It implements so called Kanban Boards and Groups. Groups can be used to delegate isolated tasks, share information, events, questions and even store information that is pertinent to a project.</p>
 <p>The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.</p>
 <p>The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective of the information that is relevant to the board team.</p>
 <p>The following image displays an example set of boards:</p>
@@ -91,7 +91,7 @@
 <figure>
 <img src="/static/site_app/help/arcamens-boards-3.png" alt="arcamens-boards-3" /><figcaption>arcamens-boards-3</figcaption>
 </figure>
-<p><strong>Note:</strong> You can pin boards, lists, cards or timelines.</p>
+<p><strong>Note:</strong> You can pin boards, lists, cards or groups.</p>
 <p>Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than the usual drag&amp;drop approach. You can cut several cards, these will stay on the clipboard when you’re ready just paste them somewhere.</p>
 <h3 id="board-creation">Board Creation</h3>
 <p>You can create as many boards as you desire. For creating a new board just click on Home at the navbar and then use the popup menu by clicking the wrench icon shown at this image:</p>
@@ -293,28 +293,28 @@ Github/Doing
 <img src="/static/site_app/help/organization-creation-1.png" alt="organization-creation-1" /><figcaption>organization-creation-1</figcaption>
 </figure>
 <p>Type your new organizatio name then click Create.</p>
-<h3 id="timelines">Timelines</h3>
-<p>Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks. Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards it allows one to setup a timeline to be used as a scrum board backlog.</p>
-<h3 id="timeline-creation">Timeline Creation</h3>
-<p>For creating a timeline just click on Home at the navbar then on the wrench icon at the organization toolbar:</p>
+<h3 id="groups">Groups</h3>
+<p>Groups are great for sharing information, storing notes regarding a project and even delegating simple tasks. Groups can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards it allows one to setup a group to be used as a scrum board backlog.</p>
+<h3 id="group-creation">Group Creation</h3>
+<p>For creating a group just click on Home at the navbar then on the wrench icon at the organization toolbar:</p>
 <figure>
-<img src="/static/site_app/help/timeline-creation-0.png" alt="timeline-creation-0" /><figcaption>timeline-creation-0</figcaption>
+<img src="/static/site_app/help/group-creation-0.png" alt="group-creation-0" /><figcaption>group-creation-0</figcaption>
 </figure>
 <p>You would get:</p>
 <figure>
-<img src="/static/site_app/help/timeline-creation-1.png" alt="timeline-creation-1" /><figcaption>timeline-creation-1</figcaption>
+<img src="/static/site_app/help/group-creation-1.png" alt="group-creation-1" /><figcaption>group-creation-1</figcaption>
 </figure>
-<p>Notice that you can associate timelines to a given project by setting up a common slug. You could fill the above fields with:</p>
+<p>Notice that you can associate groups to a given project by setting up a common slug. You could fill the above fields with:</p>
 <p><strong>Name:</strong> Notes</p>
 <p><strong>Description:</strong> Arcamens/</p>
 <p>Or you could do:</p>
 <p><strong>Name:</strong> Arcamens/Notes</p>
 <p><strong>Description:</strong> Notes on arcamens project.</p>
-<p>There are many ways of grouping boards and timelines, feel free to pick up the best one for you. You don’t need to pick a description for your boards/timelines at all.</p>
+<p>There are many ways of grouping boards and groups, feel free to pick up the best one for you. You don’t need to pick a description for your boards/groups at all.</p>
 <p><strong>See:</strong> Collection Filters</p>
-<p>After filling the fields you would get your timeline being listed altogether with your boards.</p>
+<p>After filling the fields you would get your group being listed altogether with your boards.</p>
 <h3 id="posts">Posts</h3>
-<p>Timeline posts can be used for multiple purposes, they can convey information about events, tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet can contain a title and markdown content.</p>
+<p>Group posts can be used for multiple purposes, they can convey information about events, tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet can contain a title and markdown content.</p>
 <p>Tasks that demand one to collect information regarding a given subject can be delegated by using posts. The person attaches the missing information to the post as a snippet.</p>
 <figure>
 <img src="/static/site_app/help/post-0.png" alt="post-0" /><figcaption>post-0</figcaption>
@@ -324,7 +324,7 @@ Github/Doing
 <img src="/static/site_app/help/post-1.png" alt="post-1" /><figcaption>post-1</figcaption>
 </figure>
 <h3 id="post-creation">Post Creation</h3>
-<p>After a timeline is created just access it then click on +Post at the timeline toolbar:</p>
+<p>After a group is created just access it then click on +Post at the group toolbar:</p>
 <figure>
 <img src="/static/site_app/help/post-creation-0.png" alt="post-creation-0" /><figcaption>post-creation-0</figcaption>
 </figure>
@@ -333,10 +333,10 @@ Github/Doing
 <img src="/static/site_app/help/post-creation-1.png" alt="post-creation-1" /><figcaption>post-creation-1</figcaption>
 </figure>
 <p>Posts can have a short title that holds a description of the post content and a markdown content.</p>
-<p>After pressing Create the post will be created and every timeline user will get notified of the post creation.</p>
+<p>After pressing Create the post will be created and every group user will get notified of the post creation.</p>
 <h3 id="post-editing">Post Editing</h3>
 <h3 id="post-workers">Post Workers</h3>
-<p>You can mention peers on a post, assign them to execute some task that’s described over a timeline post. A post becomes a task when there is at least a worker that is assigned to it.</p>
+<p>You can mention peers on a post, assign them to execute some task that’s described over a group post. A post becomes a task when there is at least a worker that is assigned to it.</p>
 <p>Click on the Assign entry at the post toolbar in order to assign it to someone:</p>
 <figure>
 <img src="/static/site_app/help/post-workers-0.png" alt="post-workers-0" /><figcaption>post-workers-0</figcaption>
@@ -347,7 +347,7 @@ Github/Doing
 </figure>
 <p>Once you bind/unbind a worker to a post then the worker gets notified of it. The worker name will be listed on the post.</p>
 <h3 id="post-tags">Post Tags</h3>
-<p>It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users and post workers.</p>
+<p>It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post is as simple as tagging a card. After the post is tagged then an event is fired to all group users and post workers.</p>
 <p>Click on Tags entry at the post toolbar:</p>
 <figure>
 <img src="/static/site_app/help/post-tags-0.png" alt="post-tags-0" /><figcaption>post-tags-0</figcaption>
@@ -385,15 +385,15 @@ Github/Doing
 </figure>
 <p>You can cancel invites or just resend the invite link. Notice that your account invites can’t override your account max users limit. The invites sum up with regular users and should be lesser or equal your account max users limit.</p>
 <h3 id="organization-admins">Organization Admins</h3>
-<h3 id="timeline-members">Timeline Members</h3>
-<p>Users of a timeline get notification from all events that happen with the timeline. Whenever an user is binded/unbinded to a timeline everyone who is in the timeline gets notified.</p>
-<p>For binding/unbinding users to a timeline just access the timeline then:</p>
+<h3 id="group-members">Group Members</h3>
+<p>Users of a group get notification from all events that happen with the group. Whenever an user is binded/unbinded to a group everyone who is in the group gets notified.</p>
+<p>For binding/unbinding users to a group just access the group then:</p>
 <figure>
-<img src="/static/site_app/help/timeline-members-0.png" alt="timeline-members-0" /><figcaption>timeline-members-0</figcaption>
+<img src="/static/site_app/help/group-members-0.png" alt="group-members-0" /><figcaption>group-members-0</figcaption>
 </figure>
 <p>Then you would get:</p>
 <figure>
-<img src="/static/site_app/help/timeline-members-1.png" alt="timeline-members-1" /><figcaption>timeline-members-1</figcaption>
+<img src="/static/site_app/help/group-members-1.png" alt="group-members-1" /><figcaption>group-members-1</figcaption>
 </figure>
 <p>From there you can search users from your organization that match a given criterea.</p>
 <p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
@@ -413,13 +413,13 @@ Github/Doing
 <p>Fill the form and send the e-mail notification.</p>
 <p>You can as well send notification to all post workers by clicking on Alert Workers.</p>
 <h3 id="post-prioritization">Post Prioritization</h3>
-<p>Arcamens timelines can play the role of backlogs where it can be used with scrum methodology, timelines can also be used for isolated task delegation.</p>
-<p>Prioritization of posts work alike the one for cards, when a given post is prioritized then an event is generated and everyone who is in the post’s timeline gets notified.</p>
-<p>For doing prioritization of a given post just access the timeline then click on the signal icon at the post:</p>
+<p>Arcamens groups can play the role of backlogs where it can be used with scrum methodology, groups can also be used for isolated task delegation.</p>
+<p>Prioritization of posts work alike the one for cards, when a given post is prioritized then an event is generated and everyone who is in the post’s group gets notified.</p>
+<p>For doing prioritization of a given post just access the group then click on the signal icon at the post:</p>
 <figure>
 <img src="/static/site_app/help/post-prioritization-0.png" alt="post-prioritization-0" /><figcaption>post-prioritization-0</figcaption>
 </figure>
-<p>Then would get a list of posts that are in that timeline:</p>
+<p>Then would get a list of posts that are in that group:</p>
 <figure>
 <img src="/static/site_app/help/post-prioritization-1.png" alt="post-prioritization-1" /><figcaption>post-prioritization-1</figcaption>
 </figure>
@@ -427,7 +427,7 @@ Github/Doing
 <pre><code>tag:bug</code></pre>
 <p>That is just a simple case you could have a lot of many other possibilities.</p>
 <p>Using this approach for prioritization of posts/cards rather than the usual drag/drop thing it allow to improve work quality and productivity because correct ordering of priorities can be done more accurately.</p>
-<p>You can change the post priority up/down some other card to make it explicit to your timeline peers the correct order of tasks execution. You should also notice that prioritizing posts change the displaying order of the posts.</p>
+<p>You can change the post priority up/down some other card to make it explicit to your group peers the correct order of tasks execution. You should also notice that prioritizing posts change the displaying order of the posts.</p>
 <h3 id="post-search">Post Search</h3>
 <p>The post search mechanism allow to search through all posts that you have access regardless if it has a worker or not. For such just click on the Post link at the navbar:</p>
 <figure>
@@ -480,8 +480,8 @@ Github/Doing
 </figure>
 <p>They can reply by clicking on the event Comments link.</p>
 <h3 id="post-filter">Post Filter</h3>
-<p>It is possible to filter timeline posts as well, whenever you access the timeline then it will list just posts that match the filter pattern.</p>
-<p>For such just access the timeline then click on Filter at the timeline menu:</p>
+<p>It is possible to filter group posts as well, whenever you access the group then it will list just posts that match the filter pattern.</p>
+<p>For such just access the group then click on Filter at the group menu:</p>
 <figure>
 <img src="/static/site_app/help/post-filter-0.png" alt="post-filter-0" /><figcaption>post-filter-0</figcaption>
 </figure>
@@ -500,17 +500,17 @@ Github/Doing
 <pre><code>worker:last.src + worker:porton</code></pre>
 <p><strong>See:</strong> <a href="#advanced-post-search">Advanced Post Search</a></p>
 <h3 id="collection-filter">Collection Filter</h3>
-<p>Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines. One could have a project that has many plugins and keep a board for each one of its plugins.</p>
-<p>It is necessary to stabilish a naming convention for your boards/timelines.</p>
+<p>Groups and boards can be grouped by subject/project, it allows to form collections of boards/groups. One could have a project that has many plugins and keep a board for each one of its plugins.</p>
+<p>It is necessary to stabilish a naming convention for your boards/groups.</p>
 <p>For example:</p>
-<pre><code>Timeline: Arcamens/Notes
+<pre><code>Group: Arcamens/Notes
 
 Board: Arcamens
 
-Timeline: Arcamens/News
+Group: Arcamens/News
 
-Timeline: Arcamens/Bugs</code></pre>
-<p>All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines then if you want to view just boards or timelines that are related to a given subject it gets simple.</p>
+Group: Arcamens/Bugs</code></pre>
+<p>All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/groups then if you want to view just boards or groups that are related to a given subject it gets simple.</p>
 <p>Just click Home at the navbar and click on the Filter link at the organization menu:</p>
 <figure>
 <img src="/static/site_app/help/collection-filter-0.png" alt="collection-filter-0" /><figcaption>collection-filter-0</figcaption>
@@ -519,7 +519,7 @@ Timeline: Arcamens/Bugs</code></pre>
 <figure>
 <img src="/static/site_app/help/collection-filter-1.png" alt="collection-filter-1" /><figcaption>collection-filter-1</figcaption>
 </figure>
-<p>In the previously stated context if you typed the string ‘Arcamens’ then you would view all the boards/timelines that contain such a string either in its name or description.</p>
+<p>In the previously stated context if you typed the string ‘Arcamens’ then you would view all the boards/groups that contain such a string either in its name or description.</p>
 <h3 id="card-colors">Card Colors</h3>
 <p>When a card is a task it displays as green:</p>
 <figure>
@@ -595,8 +595,8 @@ Timeline: Arcamens/Bugs</code></pre>
 <p><strong>Note:</strong> You can open a given card in a new browser tab by just right clicking it then open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
 <h3 id="post-forks">Post Forks</h3>
-<p>Timeline posts can be forked into cards, it is mostly useful when a timeline is used as a kanban board backlog.</p>
-<p>Timelines are great for sharing information of all kind, one might use a timeline to get bug reports and fork the bug reports into card tasks over their corresponding project boards. It all depends on how you feel more comfortable to model your team workflow.</p>
+<p>Group posts can be forked into cards, it is mostly useful when a group is used as a kanban board backlog.</p>
+<p>Groups are great for sharing information of all kind, one might use a group to get bug reports and fork the bug reports into card tasks over their corresponding project boards. It all depends on how you feel more comfortable to model your team workflow.</p>
 <p>For forking a post just access the post:</p>
 <figure>
 <img src="/static/site_app/help/post-forks-0.png" alt="post-forks-0" /><figcaption>post-forks-0</figcaption>
@@ -611,7 +611,7 @@ Timeline: Arcamens/Bugs</code></pre>
 <figure>
 <img src="/static/site_app/help/post-forks-2.png" alt="post-forks-2" /><figcaption>post-forks-2</figcaption>
 </figure>
-<p>After creating the card then everyone who is attached to the timeline and to the destin list’s board will get notified of the fork creation.</p>
+<p>After creating the card then everyone who is attached to the group and to the destin list’s board will get notified of the fork creation.</p>
 <p>Some features that should be implemented may be related to multiple project boards, the forking mechanism allows a fancy approach for keeping track of all tasks that are necessary in order to have a given feature implemented.</p>
 <p>For a more complete reference on list filters:</p>
 <p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
@@ -683,17 +683,17 @@ Timeline: Arcamens/Bugs</code></pre>
 <p>You could as well do:</p>
 <pre><code>board:arcamens + description:bitbucket</code></pre>
 <p>Which would give you more accurate results in case you have other boards where the string ‘arcamens’ shows in.</p>
-<h3 id="timeline-settingsremoval">Timeline Settings/Removal</h3>
-<p>You can rename a timeline or delete it, you just access the desired timeline then click on Settings at the timeline menu:</p>
+<h3 id="group-settingsremoval">Group Settings/Removal</h3>
+<p>You can rename a group or delete it, you just access the desired group then click on Settings at the group menu:</p>
 <figure>
-<img src="/static/site_app/help/timeline-settings-0.png" alt="timeline-settings-0" /><figcaption>timeline-settings-0</figcaption>
+<img src="/static/site_app/help/group-settings-0.png" alt="group-settings-0" /><figcaption>group-settings-0</figcaption>
 </figure>
 <p>You would get:</p>
 <figure>
-<img src="/static/site_app/help/timeline-settings-1.png" alt="timeline-settings-1" /><figcaption>timeline-settings-1</figcaption>
+<img src="/static/site_app/help/group-settings-1.png" alt="group-settings-1" /><figcaption>group-settings-1</figcaption>
 </figure>
-<p>From there you can change the timeline attributes like name/description.</p>
-<p>You can as well click on Delete then you’ll be asked for confirmation. Type the timeline name then press Delete.</p>
+<p>From there you can change the group attributes like name/description.</p>
+<p>You can as well click on Delete then you’ll be asked for confirmation. Type the group name then press Delete.</p>
 <h3 id="board-settingsremoval">Board Settings/Removal</h3>
 <p>You can rename a board by accessing its settings form. For such just access the board then click on the wrench icon:</p>
 <figure>

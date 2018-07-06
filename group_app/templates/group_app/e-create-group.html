@@ -1,14 +1,14 @@
-{% extends 'timeline_app/event.html' %}
+{% extends 'group_app/event.html' %}
 {% load i18n %}
 
 {% block content %}
-Timeline
+Group
 <a class="e-get"
 data-shell="#main-view"
-data-show="{% url 'timeline_app:list-posts' event.timeline.id %}"
-href="{{event.timeline.get_link_url}}"> 
+data-show="{% url 'group_app:list-posts' event.group.id %}"
+href="{{event.group.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span>
-{{event.timeline.name}} </a> created on 
+{{event.group.name}} </a> created on 
 
 <span class="glyphicon glyphicon-flag"></span>
 

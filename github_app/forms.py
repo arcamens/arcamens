@@ -1,4 +1,4 @@
-from timeline_app.forms import ConfirmTimelineDeletionForm
+from group_app.forms import ConfirmGroupDeletionForm
 from sqlike.forms import SqLikeForm
 from django import forms
 from . import models

@@ -12,7 +12,7 @@ from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from list_app.models import List
-from timeline_app.models import Timeline, EPastePost
+from group_app.models import Group, EPastePost
 from django.conf import settings
 from jscroll.wrappers import JScroll
 from card_app.models import Card
@@ -29,7 +29,7 @@ import json
 class Post(GuardianView):
     """
     This view is supposed to be performed only if the user
-    belongs to the timeline or if he is a worker of the post.
+    belongs to the group or if he is a worker of the post.
     """
 
     def get(self, request, post_id):
@@ -37,13 +37,13 @@ class Post(GuardianView):
         boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
         listpins     = self.me.listpin_set.filter(organization=self.me.default)
         cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(
+        grouppins = self.me.grouppin_set.filter(
         organization=self.me.default)
 
         return render(request, 'post_app/post.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 
-        'timelinepins': timelinepins, 'user': self.me, })
+        'grouppins': grouppins, 'user': self.me, })
 
 class PostLink(GuardianView):
     """
@@ -57,22 +57,22 @@ class PostLink(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         return render(request, 'post_app/post-link.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'timelinepins': timelinepins, 'cardpins': cardpins, 'user': self.me, 
+        'grouppins': grouppins, 'cardpins': cardpins, 'user': self.me, 
         'default': self.me.default, 'organization': self.me.default, 
         'organizations': organizations, 'settings': settings})
 
 class CreatePost(GuardianView):
     """
-    The logged user can create a post on the timeline just if his default organization
-    contains the timeline and he belongs to the timeline.
+    The logged user can create a post on the group just if his default organization
+    contains the group and he belongs to the group.
     """
 
     def get(self, request, ancestor_id):
-        ancestor   = self.me.timelines.get(id=ancestor_id, 
+        ancestor   = self.me.groups.get(id=ancestor_id, 
         organization=self.me.default)
 
         form = forms.PostForm()
@@ -81,7 +81,7 @@ class CreatePost(GuardianView):
         {'form':form, 'ancestor':ancestor})
 
     def post(self, request, ancestor_id):
-        ancestor   = self.me.timelines.get(id=ancestor_id, 
+        ancestor   = self.me.groups.get(id=ancestor_id, 
         organization=self.me.default)
 
         form = forms.PostForm(request.POST, request.FILES)
@@ -96,18 +96,18 @@ class CreatePost(GuardianView):
         post.save()
 
         event = ECreatePost.objects.create(organization=self.me.default,
-        timeline=ancestor, post=post, user=self.me)
+        group=ancestor, post=post, user=self.me)
 
         users = ancestor.users.all()
         event.dispatch(*users)
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=ancestor_id)
+        return redirect('group_app:list-posts', 
+        group_id=ancestor_id)
 
 class UpdatePost(GuardianView):
     """
     The post can be updated by everyone who belongs to the 
-    timeline or is a worker of the post. 
+    group or is a worker of the post. 
 
     It also makes sure the user who performs this view has set as 
     default the organization whose post belongs to.
@@ -129,12 +129,12 @@ class UpdatePost(GuardianView):
         record.save()
 
         event = EUpdatePost.objects.create(organization=self.me.default,
-        timeline=record.ancestor, post=record, user=self.me)
+        group=record.ancestor, post=record, user=self.me)
 
         event.dispatch(*record.ancestor.users.all())
 
         # Notify workers of the event, in case the post
-        # is on a timeline whose worker is not on.
+        # is on a group whose worker is not on.
         event.dispatch(*record.workers.all())
 
         return redirect('post_app:refresh-post', 
@@ -209,15 +209,15 @@ class DeletePost(GuardianView):
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         event = EDeletePost.objects.create(organization=self.me.default,
-        timeline=post.ancestor, post_label=post.label, user=self.me)
+        group=post.ancestor, post_label=post.label, user=self.me)
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
         ancestor = post.ancestor
         post.delete()
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=ancestor.id)
+        return redirect('group_app:list-posts', 
+        group_id=ancestor.id)
 
 class PostWorkerInformation(GuardianView):
     """
@@ -274,7 +274,7 @@ class UnassignPostUser(GuardianView):
 
         event.dispatch(*post.ancestor.users.all())
         
-        # As posts can be assigned to users off the timeline.
+        # As posts can be assigned to users off the group.
         # We make sure them get the evvent.
         event.dispatch(*post.workers.all())
         event.save()
@@ -349,38 +349,38 @@ class ManagePostWorkers(GuardianView):
 class SetupPostFilter(GuardianView):
     """
     Makes sure the user can have a filter only if he belongs
-    to the timeline in fact. 
+    to the group in fact. 
 
-    Notice that when the user is removed from the timeline the 
+    Notice that when the user is removed from the group the 
     filter remains in the db.
     """
 
-    def get(self, request, timeline_id):
-        timeline = self.me.timelines.get(id=timeline_id, 
+    def get(self, request, group_id):
+        group = self.me.groups.get(id=group_id, 
         organization=self.me.default)
 
         filter = PostFilter.objects.get(
-        user__id=self.user_id, timeline__id=timeline_id)
+        user__id=self.user_id, group__id=group_id)
 
 
         return render(request, 'post_app/setup-post-filter.html', 
         {'form': forms.PostFilterForm(instance=filter), 
-        'timeline': timeline})
+        'group': group})
 
-    def post(self, request, timeline_id):
+    def post(self, request, group_id):
         record = PostFilter.objects.get(
-        timeline__id=timeline_id, user__id=self.user_id)
+        group__id=group_id, user__id=self.user_id)
         sqlike = models.Post.from_sqlike()
 
         form     = forms.PostFilterForm(request.POST, sqlike=sqlike, instance=record)
-        timeline = self.me.timelines.get(id=timeline_id, 
+        group = self.me.groups.get(id=group_id, 
         organization=self.me.default)
 
         if not form.is_valid():
             return render(request, 'post_app/setup-post-filter.html',
-                   {'timeline': record, 'form': form}, status=400)
+                   {'group': record, 'form': form}, status=400)
         form.save()
-        return redirect('timeline_app:list-posts', timeline_id=timeline.id)
+        return redirect('group_app:list-posts', group_id=group.id)
 
 class Find(GuardianView):
     """
@@ -442,7 +442,7 @@ class CutPost(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
-        timeline = post.ancestor
+        group = post.ancestor
 
         post.ancestor = None
         post.save()
@@ -453,12 +453,12 @@ class CutPost(GuardianView):
         clipboard.posts.add(post)
 
         event = ECutPost.objects.create(organization=self.me.default,
-        timeline=timeline, post=post, user=self.me)
-        users = timeline.users.all()
+        group=group, post=post, user=self.me)
+        users = group.users.all()
         event.dispatch(*users)
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=timeline.id)
+        return redirect('group_app:list-posts', 
+        group_id=group.id)
 
 class CopyPost(GuardianView):
     """
@@ -473,12 +473,12 @@ class CopyPost(GuardianView):
         clipboard.posts.add(copy)
 
         event = ECopyPost.objects.create(organization=self.me.default,
-        timeline=post.ancestor, post=post, user=self.me)
+        group=post.ancestor, post=post, user=self.me)
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        return redirect('timeline_app:list-posts', 
-        timeline_id=post.ancestor.id)
+        return redirect('group_app:list-posts', 
+        group_id=post.ancestor.id)
 
 class Done(GuardianView):
     """
@@ -492,7 +492,7 @@ class Done(GuardianView):
 
         # posts in the clipboard cant be archived.
         event = EArchivePost.objects.create(organization=self.me.default,
-        timeline=post.ancestor, post=post, user=self.me)
+        group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
         event.dispatch(*users)
@@ -601,7 +601,7 @@ class Undo(GuardianView):
         post.save()
 
         event = EUnarchivePost.objects.create(organization=self.me.default,
-        timeline=post.ancestor, post=post, user=self.me)
+        group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
         event.dispatch(*users)
@@ -684,9 +684,9 @@ class AlertPostWorkers(GuardianView):
 class ConfirmPostDeletion(GuardianView):
     """
     The user is supposed to view this dialog only if he
-    belongs to the timeline post or is a worker of the post.
+    belongs to the group post or is a worker of the post.
     
-    It enforces his default organization contains the post's timeline
+    It enforces his default organization contains the post's group
     as well.
     """
 
@@ -723,15 +723,15 @@ class UndoClipboard(GuardianView):
         return redirect('core_app:list-clipboard')
 
     def undo_cut(self, event):
-        event.post.ancestor = event.timeline
+        event.post.ancestor = event.group
         event.post.save()
 
         event1 = EPastePost(organization=self.me.default, 
-        timeline=event.timeline, user=self.me)
+        group=event.group, user=self.me)
 
         event1.save(hcache=False)
         event1.posts.add(event.post)
-        event1.dispatch(*event.timeline.users.all())
+        event1.dispatch(*event.group.users.all())
         event1.save()
         
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -742,7 +742,7 @@ class UndoClipboard(GuardianView):
 class PullCardContent(GuardianView):
     """
     The user has to be related to the post either by
-    belonging to the timeline/being a worker. 
+    belonging to the group/being a worker. 
 
     The user has to be in the list's board that the 
     post is forked into as well.
@@ -799,7 +799,7 @@ class CreateCardFork(GuardianView):
         event = models.ECreateCardFork.objects.create(organization=self.me.default,
         ancestor=post.ancestor, post=post, card=fork, user=self.me)
 
-        # The timeline users and the board users get the event.
+        # The group users and the board users get the event.
         event.dispatch(*post.ancestor.users.all())
         event.dispatch(*fork.ancestor.ancestor.members.all())
 
@@ -946,7 +946,7 @@ class RefreshPost(GuardianView):
         # boardpins = user.boardpin_set.filter(organization=user.default)
         # listpins = user.listpin_set.filter(organization=user.default)
         # cardpins = user.cardpin_set.filter(organization=user.default)
-        # timelinepins = user.timelinepin_set.filter(organization=user.default)
+        # grouppins = user.grouppin_set.filter(organization=user.default)
 
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
@@ -1006,7 +1006,7 @@ class SetPostPriorityUp(GuardianView):
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
-        return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+        return redirect('group_app:list-posts', group_id=post0.ancestor.id)
 
 class SetPostPriorityDown(GuardianView):
     @transaction.atomic
@@ -1030,7 +1030,7 @@ class SetPostPriorityDown(GuardianView):
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
-        return redirect('timeline_app:list-posts', timeline_id=post0.ancestor.id)
+        return redirect('group_app:list-posts', group_id=post0.ancestor.id)
 
 class PostFileDownload(GuardianView):
     def get(self, request, filewrapper_id):

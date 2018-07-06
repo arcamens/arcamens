@@ -9,7 +9,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from sqlike.parser import SqLike, SqNode
 from markdown import markdown
-from timeline_app.models import Timeline
+from group_app.models import Group
 from core_app.miscutils import disk_cleaner
 from core_app.models import Event
 from functools import reduce
@@ -55,10 +55,10 @@ class PostMixin(models.Model):
         return reverse('post_app:update-post', 
         kwargs={'post_id': self.id})
 
-    def duplicate(self, timeline=None):
+    def duplicate(self, group=None):
         post          = Post.objects.get(id=self.id)
         post.pk       = None
-        post.ancestor = timeline
+        post.ancestor = group
         post.save()
 
         for ind in self.postfilewrapper_set.all():
@@ -69,7 +69,7 @@ class PostMixin(models.Model):
     def get_allowed_posts(cls, user):
         """
         Return all posts that the user is a worker
-        or a member of the timeline
+        or a member of the group
         """
 
         posts = Post.objects.filter(Q(ancestor__organization=user.default) &
@@ -97,8 +97,8 @@ class PostMixin(models.Model):
         not_tag   = lambda ind: ~tag(ind)
 
         file     = lambda ind: Q(postfilewrapper__file__icontains=ind)
-        timeline = lambda ind: Q(ancestor__name__icontains=ind)
-        not_timeline = lambda ind: ~timeline(ind)
+        group = lambda ind: Q(ancestor__name__icontains=ind)
+        not_group = lambda ind: ~group(ind)
 
         snippet  = lambda ind: Q(snippets__title__icontains=ind) | Q(
         snippets__data__icontains=ind)
@@ -148,8 +148,8 @@ class PostMixin(models.Model):
         SqNode(('!sd', '!snippet.data'), not_snippet_data, chain=True),
 
         SqNode(('sf', 'snippet.file'), snippet_file, chain=True),
-        SqNode(('i', 'timeline'), timeline),
-        SqNode(('!i', '!timeline'), not_timeline),)
+        SqNode(('i', 'group'), group),
+        SqNode(('!i', '!group'), not_group),)
 
         return sqlike
 
@@ -206,7 +206,7 @@ class Post(PostMixin):
     # related_name='post_forks', null=True, blank=True)
 
     ancestor = models.ForeignKey(
-    'timeline_app.Timeline', related_name='posts', 
+    'group_app.Group', related_name='posts', 
     null=True, blank=True)
 
     created = models.DateTimeField(auto_now=True, 
@@ -243,17 +243,17 @@ class PostFilter(PostFilterMixin):
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done posts.')
 
-    timeline = models.ForeignKey(
-    'timeline_app.Timeline', blank=True, null=True)
+    group = models.ForeignKey(
+    'group_app.Group', blank=True, null=True)
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..
     class Meta:
-        unique_together = ('user', 'timeline', )
+        unique_together = ('user', 'group', )
 
 class GlobalPostFilter(models.Model):
     pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: worker:oliveira + timeline:backlog + tag:git')
+    blank=True, help_text='Example: worker:oliveira + group:backlog + tag:git')
 
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -301,7 +301,7 @@ class PostFileWrapper(PostFileWrapperMixin, models.Model):
     verbose_name='', help_text='')
 
 class ECreatePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_create_post0', blank=True)
 
     post = models.ForeignKey('Post', blank=True,
@@ -310,21 +310,21 @@ class ECreatePost(Event):
     html_template = 'post_app/e-create-post.html'
 
 class EArchivePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_archive_post0', blank=True)
     post = models.ForeignKey('Post', blank=True,
     related_name='e_archive_post1')
     html_template = 'post_app/e-archive-post.html'
 
 class EUnarchivePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_unarchive_post0', blank=True)
     post = models.ForeignKey('Post', blank=True,
     related_name='e_unarchive_post1')
     html_template = 'post_app/e-unarchive-post.html'
 
 class EDeletePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_delete_post', blank=True)
 
     post_label = models.CharField(null=True, 
@@ -333,7 +333,7 @@ class EDeletePost(Event):
     html_template = 'post_app/e-delete-post.html'
 
 class ECutPost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_cut_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -341,7 +341,7 @@ class ECutPost(Event):
     html_template = 'post_app/e-cut-post.html'
 
 class ECopyPost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_copy_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -349,7 +349,7 @@ class ECopyPost(Event):
     html_template = 'post_app/e-copy-post.html'
 
 class EUpdatePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_update_post0', blank=True)
     post = models.ForeignKey('Post', blank=True)
     html_template = 'post_app/e-update-post.html'
@@ -358,7 +358,7 @@ class EAssignPost(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_assign_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -373,7 +373,7 @@ class EUnassignPost(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_unassign_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -388,7 +388,7 @@ class EBindTagPost(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_bind_tag_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -404,7 +404,7 @@ class EUnbindTagPost(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_unbind_tag_post0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -419,7 +419,7 @@ class ECreateCardFork(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_create_card_fork0', blank=True)
 
     post = models.ForeignKey('Post', 
@@ -476,7 +476,7 @@ class ESetPostPriorityUp(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_set_post_priority_up0', blank=True)
 
     post0 = models.ForeignKey('Post', 
@@ -491,7 +491,7 @@ class ESetPostPriorityDown(Event):
     """
     """
 
-    ancestor = models.ForeignKey('timeline_app.Timeline', 
+    ancestor = models.ForeignKey('group_app.Group', 
     related_name='e_set_post_priority_down0', blank=True)
 
     post0 = models.ForeignKey('Post', 

@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import Q
 import datetime
 
-class TimelineMixin(models.Model):
+class GroupMixin(models.Model):
     class Meta:
         abstract = True
 
@@ -26,14 +26,14 @@ class TimelineMixin(models.Model):
         return sqlike
 
     @classmethod
-    def get_user_timelines(cls, user):
-        timelines = user.timelines.filter(
+    def get_user_groups(cls, user):
+        groups = user.groups.filter(
             organization=user.default)
-        return timelines
+        return groups
 
     def get_link_url(self):
-        return reverse('timeline_app:timeline-link', 
-                    kwargs={'timeline_id': self.id})
+        return reverse('group_app:group-link', 
+                    kwargs={'group_id': self.id})
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -57,28 +57,28 @@ class TimelineMixin(models.Model):
         self.owner = admin
         self.save()            
 
-class TimelinePinMixin(models.Model):
+class GroupPinMixin(models.Model):
     class Meta:
         abstract = True
 
     def get_absolute_url(self):
-        return reverse('timeline_app:list-posts', 
-            kwargs={'timeline_id': self.timeline.id})
+        return reverse('group_app:list-posts', 
+            kwargs={'group_id': self.group.id})
 
-class TimelinePin(TimelinePinMixin):
+class GroupPin(GroupPinMixin):
     user = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', 
     blank=True, null=True)
-    timeline = models.ForeignKey('timeline_app.Timeline', null=True, blank=True)
+    group = models.ForeignKey('group_app.Group', null=True, blank=True)
 
     class Meta:
-        unique_together = ('user', 'organization', 'timeline')
+        unique_together = ('user', 'organization', 'group')
 
-class Timeline(TimelineMixin):
+class Group(GroupMixin):
     users = models.ManyToManyField('core_app.User', null=True,  
-    related_name='timelines', blank=True, symmetrical=False)
+    related_name='groups', blank=True, symmetrical=False)
     organization = models.ForeignKey('core_app.Organization', 
-    related_name='timelines', null=True, blank=True)
+    related_name='groups', null=True, blank=True)
 
     open = models.BooleanField(blank=True, default=False,
     help_text='Include all organization members.')
@@ -91,51 +91,51 @@ class Timeline(TimelineMixin):
     max_length=626)
 
     owner = models.ForeignKey('core_app.User', null=True, 
-    blank=True, related_name='owned_timelines')
+    blank=True, related_name='owned_groups')
 
     created  = models.DateTimeField(auto_now_add=True, 
     null=True)
 
     node = models.OneToOneField('core_app.Node', 
-    null=False, related_name='timeline')
+    null=False, related_name='group')
 
-class EDeleteTimeline(Event):
-    timeline_name = models.CharField(null=True,
+class EDeleteGroup(Event):
+    group_name = models.CharField(null=True,
     blank=False, max_length=250)
 
-    html_template = 'timeline_app/e-delete-timeline.html'
+    html_template = 'group_app/e-delete-group.html'
 
-class ECreateTimeline(Event):
-    timeline = models.ForeignKey('Timeline', 
-    related_name='e_create_timeline', blank=True)
-    html_template = 'timeline_app/e-create-timeline.html'
+class ECreateGroup(Event):
+    group = models.ForeignKey('Group', 
+    related_name='e_create_group', blank=True)
+    html_template = 'group_app/e-create-group.html'
 
-class EUpdateTimeline(Event):
-    timeline = models.ForeignKey('Timeline', 
-    related_name='e_update_timeline', blank=True)
-    html_template = 'timeline_app/e-update-timeline.html'
+class EUpdateGroup(Event):
+    group = models.ForeignKey('Group', 
+    related_name='e_update_group', blank=True)
+    html_template = 'group_app/e-update-group.html'
 
-class EBindTimelineUser(Event):
-    timeline = models.ForeignKey('Timeline', 
-    related_name='e_bind_timeline_user', blank=True)
-
-    peer = models.ForeignKey('core_app.User', null=True, blank=True)
-    html_template = 'timeline_app/e-bind-timeline-user.html'
-
-class EUnbindTimelineUser(Event):
-    timeline = models.ForeignKey('Timeline', 
-    related_name='e_unbind_timeline_user', blank=True)
+class EBindGroupUser(Event):
+    group = models.ForeignKey('Group', 
+    related_name='e_bind_group_user', blank=True)
 
     peer = models.ForeignKey('core_app.User', null=True, blank=True)
-    html_template = 'timeline_app/e-unbind-timeline-user.html'
+    html_template = 'group_app/e-bind-group-user.html'
+
+class EUnbindGroupUser(Event):
+    group = models.ForeignKey('Group', 
+    related_name='e_unbind_group_user', blank=True)
+
+    peer = models.ForeignKey('core_app.User', null=True, blank=True)
+    html_template = 'group_app/e-unbind-group-user.html'
 
 class EPastePost(Event):
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_paste_post0', blank=True)
 
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
-    html_template = 'timeline_app/e-paste-post.html'
+    html_template = 'group_app/e-paste-post.html'
 
 
 

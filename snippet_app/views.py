@@ -101,7 +101,7 @@ class DetachFile(GuardianView):
     """
 
     def get(self, request, filewrapper_id):
-        # Make sure i can access the post through the post timeline
+        # Make sure i can access the post through the post group
         # or being a worker of the post.
         filewrapper = models.SnippetFileWrapper.objects.filter(
         Q(snippet__post__ancestor__users=self.me) | Q(snippet__post__workers=self.me),

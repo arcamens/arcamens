@@ -116,7 +116,7 @@ python manage.py startapp core_app
 cd ~/projects/arcamens-code
 python manage.py startapp onesignal
 ##############################################################################
-# create timeline app.
+# create group app.
 cd ~/projects/arcamens-code
 python manage.py startapp post_app
 ##############################################################################
@@ -125,9 +125,9 @@ cd ~/projects/arcamens-code
 python manage.py startapp comment_app
 
 ##############################################################################
-# create timeline_app app.
+# create group_app app.
 cd ~/projects/arcamens-code
-python manage.py startapp timeline_app
+python manage.py startapp group_app
 ##############################################################################
 # create stream app.
 cd ~/projects/arcamens-code
@@ -354,7 +354,7 @@ python manage.py migrate bitbucket_app
 
 mysqldump -u staging -p staging > ../mysql.sql
 ##############################################################################
-# bind user to all boards/timelines joinall command.
+# bind user to all boards/groups joinall command.
 
 python manage.py restore_ownership port arca ioli
 ##############################################################################
@@ -408,3 +408,6 @@ cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
 
 # open supervisord.conf and replace all arcamens -> staging
 # except arcamens-code
+
+grep -rl --exclude-dir='.git' 'Group' ./ | xargs sed -i 's/Group/Group/g'
+

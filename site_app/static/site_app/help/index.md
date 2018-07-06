@@ -5,8 +5,8 @@ title: Arcamens Docs
 ### Intro
 
 Arcamens was designed to allow a high level of communication and collaboration by teams.
-It implements so called Kanban Boards and Timelines.
-Timelines can be used to delegate isolated tasks, share information, events, questions and even store information that is
+It implements so called Kanban Boards and Groups.
+Groups can be used to delegate isolated tasks, share information, events, questions and even store information that is
 pertinent to a project.
 
 The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates
@@ -36,7 +36,7 @@ Pinning an element is as easy as clicking on the clip icon as shown below:
 
 ![arcamens-boards-3](/static/site_app/help/arcamens-boards-3.png)
 
-**Note:** You can pin boards, lists, cards or timelines.
+**Note:** You can pin boards, lists, cards or groups.
 
 Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than
 the usual drag&drop approach.  You can cut several cards, these will stay on the clipboard
@@ -378,24 +378,24 @@ Then click on +Organization link, you would get:
 
 Type your new organizatio name then click Create.
 
-### Timelines
+### Groups
 
-Timelines are great for sharing information, storing notes regarding a project and even delegating simple tasks.
-Timelines can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
-it allows one to setup a timeline to be used as a scrum board backlog.
+Groups are great for sharing information, storing notes regarding a project and even delegating simple tasks.
+Groups can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
+it allows one to setup a group to be used as a scrum board backlog.
 
-### Timeline Creation
+### Group Creation
 
-For creating a timeline just click on Home at the navbar then on the wrench icon at the organization
+For creating a group just click on Home at the navbar then on the wrench icon at the organization
 toolbar:
 
-![timeline-creation-0](/static/site_app/help/timeline-creation-0.png)
+![group-creation-0](/static/site_app/help/group-creation-0.png)
 
 You would get:
 
-![timeline-creation-1](/static/site_app/help/timeline-creation-1.png)
+![group-creation-1](/static/site_app/help/group-creation-1.png)
 
-Notice that you can associate timelines to a given project by setting up a common slug.
+Notice that you can associate groups to a given project by setting up a common slug.
 You could fill the above fields with:
 
 **Name:** Notes
@@ -408,16 +408,16 @@ Or you could do:
 
 **Description:** Notes on arcamens project.
 
-There are many ways of grouping boards and timelines, feel free to pick up the
-best one for you. You don't need to pick a description for your boards/timelines at all.
+There are many ways of grouping boards and groups, feel free to pick up the
+best one for you. You don't need to pick a description for your boards/groups at all.
 
 **See:** Collection Filters
 
-After filling the fields you would get your timeline being listed altogether with your boards.
+After filling the fields you would get your group being listed altogether with your boards.
 
 ### Posts
 
-Timeline posts can be used for multiple purposes, they can convey information about events,
+Group posts can be used for multiple purposes, they can convey information about events,
 tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet
 can contain a title and markdown content. 
 
@@ -433,7 +433,7 @@ can be delegated to a team or user by using a post.
 
 ### Post Creation
 
-After a timeline is created just access it then click on +Post at the timeline toolbar:
+After a group is created just access it then click on +Post at the group toolbar:
 
 ![post-creation-0](/static/site_app/help/post-creation-0.png)
 
@@ -444,14 +444,14 @@ You would get:
 Posts can have a short title that holds a description of the post content and
 a markdown content.
 
-After pressing Create the post will be created and every timeline user will get notified
+After pressing Create the post will be created and every group user will get notified
 of the post creation.
 
 ### Post Editing
 
 ### Post Workers
 
-You can mention peers on a post, assign them to execute some task that's described over a timeline post.
+You can mention peers on a post, assign them to execute some task that's described over a group post.
 A post becomes a task when there is at least a worker that is assigned to it.
 
 Click on the Assign entry at the post toolbar in order to assign it to someone:
@@ -468,7 +468,7 @@ The worker name will be listed on the post.
 ### Post Tags
 
 It is possible to tag posts for quickly finding information that is related to a given subject. Tagging a post
-is as simple as tagging a card. After the post is tagged then an event is fired to all timeline users
+is as simple as tagging a card. After the post is tagged then an event is fired to all group users
 and post workers.
 
 Click on Tags entry at the post toolbar:
@@ -519,18 +519,18 @@ be lesser or equal your account max users limit.
 
 ### Organization Admins
 
-### Timeline Members
+### Group Members
 
-Users of a timeline get notification from all events that happen with the timeline. Whenever an user
-is binded/unbinded to a timeline everyone who is in the timeline gets notified.
+Users of a group get notification from all events that happen with the group. Whenever an user
+is binded/unbinded to a group everyone who is in the group gets notified.
 
-For binding/unbinding users to a timeline just access the timeline then:
+For binding/unbinding users to a group just access the group then:
 
-![timeline-members-0](/static/site_app/help/timeline-members-0.png)
+![group-members-0](/static/site_app/help/group-members-0.png)
 
 Then you would get:
 
-![timeline-members-1](/static/site_app/help/timeline-members-1.png)
+![group-members-1](/static/site_app/help/group-members-1.png)
 
 From there you can search users from your organization that match a given criterea.
 
@@ -559,19 +559,19 @@ You can as well send notification to all post workers by clicking on Alert Worke
 
 ### Post Prioritization
 
-Arcamens timelines can play the role of backlogs where it can be used
-with scrum methodology, timelines can also be used for isolated task delegation.
+Arcamens groups can play the role of backlogs where it can be used
+with scrum methodology, groups can also be used for isolated task delegation.
 
 Prioritization of posts work alike the one for cards, when a given post
-is prioritized then an event is generated and everyone who is in the post's timeline
+is prioritized then an event is generated and everyone who is in the post's group
 gets notified.
 
-For doing prioritization of a given post just access the timeline
+For doing prioritization of a given post just access the group
 then click on the signal icon at the post:
 
 ![post-prioritization-0](/static/site_app/help/post-prioritization-0.png)
 
-Then would get a list of posts that are in that timeline:
+Then would get a list of posts that are in that group:
 
 ![post-prioritization-1](/static/site_app/help/post-prioritization-1.png)
 
@@ -592,7 +592,7 @@ drag/drop thing it allow to improve work quality and productivity because
 correct ordering of priorities can be done more accurately.
 
 You can change the post priority up/down some other card to make it explicit
-to your timeline peers the correct order of tasks execution. You should
+to your group peers the correct order of tasks execution. You should
 also notice that prioritizing posts change the displaying order of the posts.
 
 ### Post Search
@@ -681,10 +681,10 @@ They can reply by clicking on the event Comments link.
 
 ### Post Filter
 
-It is possible to filter timeline posts as well, whenever you access the timeline
+It is possible to filter group posts as well, whenever you access the group
 then it will list just posts that match the filter pattern.
 
-For such just access the timeline then click on Filter at the timeline menu:
+For such just access the group then click on Filter at the group menu:
 
 ![post-filter-0](/static/site_app/help/post-filter-0.png)
 
@@ -721,24 +721,24 @@ Would list all posts that have two workers whose name/email matches both strings
 
 ### Collection Filter
 
-Timelines and boards can be grouped by subject/project, it allows to form collections of boards/timelines.
+Groups and boards can be grouped by subject/project, it allows to form collections of boards/groups.
 One could have a project that has many plugins and keep a board for each one of its plugins.
 
-It is necessary to stabilish a naming convention for your boards/timelines. 
+It is necessary to stabilish a naming convention for your boards/groups. 
 
 For example:
 
-    Timeline: Arcamens/Notes
+    Group: Arcamens/Notes
 
     Board: Arcamens
 
-    Timeline: Arcamens/News
+    Group: Arcamens/News
 
-    Timeline: Arcamens/Bugs
+    Group: Arcamens/Bugs
 
 
-All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/timelines 
-then if you want to view just boards or timelines that are related to a given subject it gets simple.
+All these objects have a common pattern in its name. As arcamens allows to setup filter for boards/groups 
+then if you want to view just boards or groups that are related to a given subject it gets simple.
 
 Just click Home at the navbar and click on the Filter link at the organization menu:
 
@@ -749,7 +749,7 @@ You would get:
 ![collection-filter-1](/static/site_app/help/collection-filter-1.png)
 
 In the previously stated context if you typed the string 'Arcamens' then you would view
-all the boards/timelines that contain such a string either in its name or description.
+all the boards/groups that contain such a string either in its name or description.
 
 ### Card Colors
 
@@ -865,10 +865,10 @@ links on the card.
 
 ### Post Forks
 
-Timeline posts can be forked into cards, it is mostly useful when a timeline is used
+Group posts can be forked into cards, it is mostly useful when a group is used
 as a kanban board backlog. 
 
-Timelines are great for sharing information of all kind, one might use a timeline
+Groups are great for sharing information of all kind, one might use a group
 to get bug reports and fork the bug reports into card tasks over their
 corresponding project boards. It all depends on how you feel more comfortable
 to model your team workflow. 
@@ -889,7 +889,7 @@ After picking up the desired list you would get:
 
 ![post-forks-2](/static/site_app/help/post-forks-2.png)
 
-After creating the card then everyone who is attached to the timeline
+After creating the card then everyone who is attached to the group
 and to the destin list's board will get notified of the fork creation.
 
 Some features that should be implemented may be related to multiple project boards, 
@@ -1045,21 +1045,21 @@ board:arcamens + description:bitbucket
 Which would give you more accurate results in case you have other boards where the string
 'arcamens' shows in.
 
-### Timeline Settings/Removal
+### Group Settings/Removal
 
-You can rename a timeline or delete it, you just access the desired timeline
-then click on Settings at the timeline menu:
+You can rename a group or delete it, you just access the desired group
+then click on Settings at the group menu:
 
-![timeline-settings-0](/static/site_app/help/timeline-settings-0.png)
+![group-settings-0](/static/site_app/help/group-settings-0.png)
 
 You would get:
 
-![timeline-settings-1](/static/site_app/help/timeline-settings-1.png)
+![group-settings-1](/static/site_app/help/group-settings-1.png)
 
-From there you can change the timeline attributes like name/description.
+From there you can change the group attributes like name/description.
 
 You can as well click on Delete then you'll be asked for confirmation. 
-Type the timeline name then press Delete.
+Type the group name then press Delete.
 
 ### Board Settings/Removal
 

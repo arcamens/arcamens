@@ -316,11 +316,11 @@ class ListPins(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         return render(request, 'board_app/list-pins.html', 
         {'user': self.me, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'timelinepins': timelinepins})
+        'cardpins': cardpins, 'grouppins': grouppins})
 
 class Unpin(GuardianView):
     """
@@ -442,14 +442,14 @@ class BoardLink(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         organizations = self.me.organizations.exclude(id=self.me.default.id)
 
         return render(request, 'board_app/board-link.html', 
         {'board': board, 'user': self.me, 'organization': self.me.default,
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
-        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
+        'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
 
 

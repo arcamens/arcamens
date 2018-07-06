@@ -6,7 +6,7 @@
 {% block initializer %}
 <script>
 $(document).ready(function() {
-    $('#main-view').load("{% url 'timeline_app:list-posts' timeline.id %}");
+    $('#main-view').load("{% url 'group_app:list-posts' group.id %}");
 });
 
 $(function () {

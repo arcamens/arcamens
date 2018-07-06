@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from core_app.views import GuardianView
 from post_app.models import Post, ECreateCardFork
 from post_app.forms import PostForm
-from timeline_app.models import Timeline
+from group_app.models import Group
 from core_app.models import User
 from list_app.models import List, EPasteCard
 from django.db import transaction
@@ -37,7 +37,7 @@ class CardLink(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         forks = card.forks.all()
         workers = card.workers.all()
@@ -56,7 +56,7 @@ class CardLink(GuardianView):
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 
         'attachments': attachments, 'user': self.me, 'workers': workers, 'path': path,
         'relations': relations, 'tags': tags, 'boardpins': boardpins,
-        'listpins': listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
+        'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'user': self.me, 'default': self.me.default, 'organization': self.me.default,
         'organizations': organizations, 'settings': settings})
 
@@ -71,7 +71,7 @@ class ListCards(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         filter, _ = models.CardFilter.objects.get_or_create(
         user=self.me, organization=self.me.default, list=list)
@@ -96,7 +96,7 @@ class ListCards(GuardianView):
 
         return render(request, 'card_app/list-cards.html', 
         {'list': list, 'total': total, 'cards': cards, 'filter': filter,
-        'boardpins': boardpins, 'listpins':listpins, 'cardpins': cardpins, 'timelinepins': timelinepins,
+        'boardpins': boardpins, 'listpins':listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'user': self.me, 'board': list.ancestor, 'count': count})
 
 class ViewData(GuardianView):
@@ -106,7 +106,7 @@ class ViewData(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        timelinepins = self.me.timelinepin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         forks = card.forks.all()
         workers = card.workers.all()
@@ -128,7 +128,7 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
-        'attachments': attachments, 'user': self.me, 'workers': workers,  'timelinepins': timelinepins,
+        'attachments': attachments, 'user': self.me, 'workers': workers,  'grouppins': grouppins,
         'relations': relations, 'listpins': listpins, 'boardpins': boardpins,
         'cardpins': cardpins, 'tags': tags})
 

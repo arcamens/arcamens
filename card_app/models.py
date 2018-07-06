@@ -510,7 +510,7 @@ class ECreatePostFork(Event):
     post = models.ForeignKey('post_app.Post', 
     related_name='e_create_post_fork2', blank=True)
 
-    timeline = models.ForeignKey('timeline_app.Timeline', 
+    group = models.ForeignKey('group_app.Group', 
     related_name='e_create_post_fork3', blank=True)
 
     html_template = 'card_app/e-create-post-fork.html'

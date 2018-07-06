@@ -16,7 +16,7 @@ class PostFileWrapperForm(FileAttachment, forms.ModelForm):
 class PostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.PostFilter
-        exclude = ('user', 'timeline')
+        exclude = ('user', 'group')
 
 class GlobalAssignmentFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:

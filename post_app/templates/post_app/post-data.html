@@ -9,10 +9,10 @@
 
 Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="{{post.user.description}}">
 {{post.user.name}} </a> 
-on timeline
+on group
 
 <a class="e-get" href="{{post.ancestor.get_link_url}}"
-data-show="{% url 'timeline_app:list-posts' post.ancestor.id %}"
+data-show="{% url 'group_app:list-posts' post.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
 

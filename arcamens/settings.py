@@ -96,7 +96,7 @@ INSTALLED_APPS = [
     # It has to be in this order otherwise we get
     # dependencies order issues?
     'core_app',
-    'timeline_app',
+    'group_app',
     'post_app',
     'comment_app',
     'paybills',

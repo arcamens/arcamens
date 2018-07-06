@@ -1,4 +1,4 @@
-from timeline_app.forms import ConfirmTimelineDeletionForm
+from group_app.forms import ConfirmGroupDeletionForm
 from sqlike.forms import SqLikeForm
 from django import forms
 from . import models
@@ -26,7 +26,7 @@ class BoardSearchForm(SqLikeForm, forms.Form):
 class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False)
 
-class ConfirmBoardDeletionForm(ConfirmTimelineDeletionForm):
+class ConfirmBoardDeletionForm(ConfirmGroupDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the board name to confirm!')
 

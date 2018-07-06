@@ -19,7 +19,7 @@ consists of the optmization of social network's features.
 
 An employee, employer, regular person.
 
-## Timeline
+## Group
 
 Channels that glue together users.
 
@@ -32,11 +32,11 @@ Teams are set of people.
 A set of people who share a common interest. it can be
 a business, non profite organization etc.
 
-### timeline
+### group
 
-2. it should be possible to assign a given timeline post to a user.
-3. Timeline posts should follow facebook's style of posts.
-4. Timeline post should resemble a chat window to simplify talking about subjects.
+2. it should be possible to assign a given group post to a user.
+3. Group posts should follow facebook's style of posts.
+4. Group post should resemble a chat window to simplify talking about subjects.
 
 ### Organization Features
 
@@ -56,7 +56,7 @@ using organization_name.job-lab.net
 
 ### Team Features.
 
-1. Teams can be attached to timelines.
+1. Teams can be attached to groups.
 2. Teams can be attached to timelnie posts.
 3. Teams should have a short description.
 

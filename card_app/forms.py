@@ -33,7 +33,7 @@ class ListSearchform(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + todo ...')
 
-class TimelineSearchform(SqLikeForm, forms.Form):
+class GroupSearchform(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Ex: arcamens + backlog ...')
 

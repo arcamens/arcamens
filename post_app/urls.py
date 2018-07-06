@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^manage-post-workers/(?P<post_id>.+)/', views.ManagePostWorkers.as_view(), name='manage-post-workers'),
     url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
     url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
-    url(r'^setup-post-filter/(?P<timeline_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
+    url(r'^setup-post-filter/(?P<group_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
     url(r'^find/', views.Find.as_view(), name='find'),
 
     url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),

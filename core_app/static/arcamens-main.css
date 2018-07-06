@@ -42,7 +42,7 @@ color:#5E666F;
 color:#5366A0;
 
 }
-.pin-timeline {
+.pin-group {
 color:#295C2C;
 
 }
@@ -89,11 +89,11 @@ background-color:#F5EAEA;
 }
 
 
-.menu-timeline  {
+.menu-group  {
     background:#C7E1C8;
 }
 
-.timeline  {
+.group  {
     word-wrap: 
     break-word;
 

@@ -6,18 +6,18 @@ from board_app.models import Board
 from card_app.models import Card
 from list_app.models import List
 from post_app.models import Post
-from timeline_app.models import Timeline
+from group_app.models import Group
 
 
-def export_timelines(user):
+def export_groups(user):
     data = []
-    for timeline in Timeline.objects.filter(organization=user.default):
+    for group in Group.objects.filter(organization=user.default):
         posts = []
-        for post in Post.objects.filter(ancestor=timeline):
+        for post in Post.objects.filter(ancestor=group):
             # posts.append({'label': post.label, 'html': post.html, 'done': post.done})
             posts.append({'label': post.label, 'done': post.done})
-        timeline_desc = {'label': timeline.name, 'desc': timeline.description, 'posts': posts}
-        data.append(timeline_desc)
+        group_desc = {'label': group.name, 'desc': group.description, 'posts': posts}
+        data.append(group_desc)
     return json.dumps(data)
 
 
@@ -35,14 +35,14 @@ def export_boards(user):
     return json.dumps(data)
 
 
-def import_timelines(user, json_str):
+def import_groups(user, json_str):
     data = json.loads(json_str)
-    for timeline_desc in data:
-        timeline = Timeline.objects.create(name=timeline_desc['label'], description=timeline_desc['desc'],
+    for group_desc in data:
+        group = Group.objects.create(name=group_desc['label'], description=group_desc['desc'],
                                            owner=user, organization=user.default)
-        timeline.users.add(user)
-        for post_desc in timeline_desc['posts']:
-            Post.objects.create(ancestor=timeline, label=post_desc['label'], done=post_desc['done'],
+        group.users.add(user)
+        for post_desc in group_desc['posts']:
+            Post.objects.create(ancestor=group, label=post_desc['label'], done=post_desc['done'],
                                 user=user)
 
 

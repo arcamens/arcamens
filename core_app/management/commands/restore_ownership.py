@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from core_app.models import User, Organization
 from board_app.models import Board
-from timeline_app.models import Timeline
+from group_app.models import Group
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -20,10 +20,10 @@ class Command(BaseCommand):
         for ind in Board.objects.filter(organization=organization):
            ind.set_ownership(user)
         
-        for ind in Timeline.objects.filter(organization=organization):
+        for ind in Group.objects.filter(organization=organization):
            ind.set_ownership(user)
         
-        self.stdout.write('User binded to all boards/timelines!')
+        self.stdout.write('User binded to all boards/groups!')
     
     
 
