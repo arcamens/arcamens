@@ -513,7 +513,8 @@ class OurStorage(S3Boto3Storage):
 
    def url(self, name):
        scm = urlparse(super(OurStorage, self).url(name))
-       url = '%s%s?%s' % (settings.MEDIA_URL, scm.path, scm.query)
+       url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 

@@ -116,7 +116,7 @@ python manage.py startapp core_app
 cd ~/projects/arcamens-code
 python manage.py startapp onesignal
 ##############################################################################
-# create group app.
+# create timeline app.
 cd ~/projects/arcamens-code
 python manage.py startapp post_app
 ##############################################################################
@@ -125,9 +125,9 @@ cd ~/projects/arcamens-code
 python manage.py startapp comment_app
 
 ##############################################################################
-# create group_app app.
+# create timeline_app app.
 cd ~/projects/arcamens-code
-python manage.py startapp group_app
+python manage.py startapp timeline_app
 ##############################################################################
 # create stream app.
 cd ~/projects/arcamens-code
@@ -327,6 +327,13 @@ mysql -u staging -p staging
 
 password eicae8EiOhbiuJ8J
 ##############################################################################
+# access arcamens staging.
+tee >(stdbuf -o 0 ssh staging@staging.arcamens.com 'bash -i')
+
+mysql -u staging -p staging
+password eicae8EiOhbiuJ8J
+
+##############################################################################
 # Fixing issue with migrations after renaming model bitbucket_app.
 
 rm -fr app/migrations
@@ -354,7 +361,7 @@ python manage.py migrate bitbucket_app
 
 mysqldump -u staging -p staging > ../mysql.sql
 ##############################################################################
-# bind user to all boards/groups joinall command.
+# bind user to all boards/timelines joinall command.
 
 python manage.py restore_ownership port arca ioli
 ##############################################################################
@@ -368,12 +375,6 @@ CREATE DATABASE staging;
 python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arcamens-db.json
 
 python manage.py loaddata arcamens-db.json
-##############################################################################
-# Activate virtualenv on victor server.
-cd ~/.virtualenv/
-source opus/bin/activate
-cd ~/projects/arcamens-code
-
 ##############################################################################
 pip install html2text
 ##############################################################################
@@ -409,5 +410,6 @@ cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
 # open supervisord.conf and replace all arcamens -> staging
 # except arcamens-code
 
-grep -rl --exclude-dir='.git' 'Group' ./ | xargs sed -i 's/Group/Group/g'
+grep -rl --exclude-dir='.git' 'Timeline' ./ | xargs sed -i 's/Timeline/Group/g'
+grep -rl --exclude-dir='.git' 'timeline' ./ | xargs sed -i 's/timeline/group/g'
 
