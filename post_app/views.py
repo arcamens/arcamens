@@ -425,7 +425,6 @@ class Find(GuardianView):
         form.save()
 
         posts = filter.get_partial(posts)
-        sqlike.feed(filter.pattern)
         posts = sqlike.run(posts)
 
         count = posts.count()
@@ -983,6 +982,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

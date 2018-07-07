@@ -118,6 +118,7 @@ class CardMixin(models.Model):
 
         fork   = lambda ind: Q(children__label__icontains=ind)|\
         Q(children__data__icontains=ind)
+        not_fork = lambda ind: ~fork(ind)
 
         fork_label = lambda ind: Q(children__label__icontains=ind)
         not_fork_label = lambda ind: ~fork_label(ind)
@@ -179,6 +180,8 @@ class CardMixin(models.Model):
         SqNode(('no', 'note.owner'), note_owner, chain=True),
         SqNode(('!no', '!note.owner'), not_note_owner, chain=True),
         SqNode(('k', 'fork'), fork),
+        SqNode(('!k', '!fork'), not_fork),
+
         SqNode(('kl', 'fork.label'), fork_label),
         SqNode(('!kl', '!fork.label'), not_fork_label),
 
@@ -710,6 +713,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

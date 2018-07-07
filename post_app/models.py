@@ -117,6 +117,34 @@ class PostMixin(models.Model):
         snippet_file  = lambda ind: Q(snippets__snippetfilewrapper__file__icontains=ind)
         default = lambda ind: Q(label__icontains=ind) | Q(data__icontains=ind)
 
+        fork   = lambda ind: Q(card_forks__children__label__icontains=ind)|\
+        Q(card_forks__children__data__icontains=ind) |\
+        Q(card_forks__label__icontains=ind)|\
+        Q(card_forks__data__icontains=ind)
+        not_fork = lambda ind: ~fork(ind)
+
+        fork_label   = lambda ind: Q(card_forks__children__label__icontains=ind)|\
+        Q(card_forks__label__icontains=ind)
+
+        not_fork_label = lambda ind: ~fork_label(ind)
+
+        fork_data   = lambda ind: Q(card_forks__children__data__icontains=ind)|\
+        Q(card_forks__data__icontains=ind)
+
+        not_fork_data = lambda ind: ~fork_data(ind)
+
+        fork_tag   = lambda ind: Q(
+        card_forks__children__tags__name__icontains=ind)|\
+        Q(card_forks__tags__name__icontains=ind)
+
+        not_fork_tag   = lambda ind: ~fork_tag(ind)
+
+        fork_worker   = lambda ind: Q(
+        card_forks__children__workers__name__icontains=ind)|\
+        Q(card_forks__workers__name__icontains=ind)
+
+        not_fork_worker   = lambda ind: ~fork_worker(ind)
+
         sqlike = SqLike(SqNode(None, default),
         SqNode(('o', 'owner'), user),
         SqNode(('!o', '!owner'), not_user),
@@ -146,6 +174,20 @@ class PostMixin(models.Model):
 
         SqNode(('sd', 'snippet.data'), snippet_data, chain=True),
         SqNode(('!sd', '!snippet.data'), not_snippet_data, chain=True),
+        SqNode(('k', 'fork'), fork),
+        SqNode(('!k', '!fork'), not_fork),
+
+        SqNode(('kl', 'fork.label'), fork_label),
+        SqNode(('!kl', '!fork.label'), not_fork_label),
+
+        SqNode(('kd', 'fork.data'), fork_data),
+        SqNode(('!kd', '!fork.data'), not_fork_data),
+
+        SqNode(('kt', 'fork.tag'), fork_tag, chain=True),
+        SqNode(('!kt', '!fork.tag'), not_fork_tag, chain=True),
+
+        SqNode(('kw', 'fork.worker'), fork_worker, chain=True),
+        SqNode(('!kw', '!fork.worker'), not_fork_worker, chain=True),
 
         SqNode(('sf', 'snippet.file'), snippet_file, chain=True),
         SqNode(('i', 'group'), group),
@@ -497,6 +539,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

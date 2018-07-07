@@ -809,7 +809,7 @@ class Find(GuardianView):
         form.save()
 
         cards  = filter.get_partial(cards)
-        sqlike.feed(filter.pattern)
+        cards = sqlike.run(cards)
 
         count =  cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
@@ -1082,6 +1082,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 
