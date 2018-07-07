@@ -269,7 +269,7 @@ class GlobalPostFilter(GlobalPostFilterMixin):
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done posts.')
 
-    assigned = models.BooleanField(blank=True, 
+    assigned = models.BooleanField(blank=False, 
     default=True, help_text='Only tasks.')
 
     assigned_to_me = models.BooleanField(blank=True, 
