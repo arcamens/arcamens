@@ -18,15 +18,6 @@ class PostFilterForm(SqLikeForm, forms.ModelForm):
         model  = models.PostFilter
         exclude = ('user', 'group')
 
-class GlobalAssignmentFilterForm(SqLikeForm, forms.ModelForm):
-    class Meta:
-        model  = models.GlobalAssignmentFilter
-        exclude = ('user', 'organization')
-
-        widgets = {
-            'options': forms.RadioSelect,
-        }
-
 class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.GlobalPostFilter
@@ -57,6 +48,7 @@ class ListSearchform(SqLikeForm, forms.Form):
 class PostPriorityForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: owner:oliveira + tag:bug')
+
 
 
 

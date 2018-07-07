@@ -156,17 +156,19 @@ class PostMixin(models.Model):
     def __str__(self):
         return self.label
 
-class GlobalAssignmentsFilterMixin(models.Model):
+class GlobalPostFilterMixin(models.Model):
     class Meta:
         abstract = True
 
     def get_partial(self, posts):
         posts = posts.filter(Q(done=self.done))
+
+        if self.assigned:
+            posts = posts.filter(Q(workers__isnull=False))
         if self.assigned_to_me:
             posts = posts.filter(workers=self.user)
-
         if self.created_by_me:
-            posts = posts.filter(owner=self.user)
+            posts = posts.filter(user=self.user)
         return posts
 
 class PostFilterMixin(models.Model):
@@ -251,7 +253,7 @@ class PostFilter(PostFilterMixin):
     class Meta:
         unique_together = ('user', 'group', )
 
-class GlobalPostFilter(models.Model):
+class GlobalPostFilter(GlobalPostFilterMixin):
     pattern = models.CharField(max_length=255, default='',
     blank=True, help_text='Example: worker:oliveira + group:backlog + tag:git')
 
@@ -267,31 +269,17 @@ class GlobalPostFilter(models.Model):
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done posts.')
 
-    class Meta:
-        unique_together = ('user', 'organization', )
-
-class GlobalAssignmentFilter(GlobalAssignmentsFilterMixin):
-    pattern = models.CharField(max_length=255, default='',
-    blank=True, help_text='Example: tag:arcamens + tag:urgent')
-
-    user = models.ForeignKey('core_app.User', 
-    null=True, blank=True)
-
-    organization = models.ForeignKey('core_app.Organization', 
-    null=True, blank=True)
+    assigned = models.BooleanField(blank=True, 
+    default=True, help_text='All tasks.')
 
     assigned_to_me = models.BooleanField(blank=True, 
     default=True, help_text='Only your tasks.')
 
     created_by_me = models.BooleanField(blank=True, 
-    default=False, help_text='Only tasks you created.')
-
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Archived posts?')
+    default=False, help_text='Only posts you created.')
 
     class Meta:
         unique_together = ('user', 'organization', )
-
 
 class PostFileWrapper(PostFileWrapperMixin, models.Model):
     post = models.ForeignKey('Post', 
@@ -509,5 +497,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
+
 
 

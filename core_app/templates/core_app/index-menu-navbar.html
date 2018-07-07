@@ -15,19 +15,11 @@ data-shell="#smallModalContent" href="#"> <span class="glyphicon glyphicon-bell"
 
 <button type="button" class="navbar-toggle btn btn-info e-get" data-show="{% url 'post_app:find' %}" 
 data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-search">  </span> P</button>
+<span class="glyphicon glyphicon-search">  </span> T/P</button>
 
 <button type="button" class="navbar-toggle btn btn-info e-get" 
 data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-search">  </span> C</button>
-
-<button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'post_app:list-all-assignments' %}" data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-tasks">  </span> T/P</button>
-
-<button type="button" class="navbar-toggle btn btn-info e-get" 
-data-show="{% url 'card_app:list-all-tasks' %}"  data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-tasks">  </span> T/C</button>
+<span class="glyphicon glyphicon-search">  </span> T/C</button>
 
 
 <ul class="nav navbar-nav">
@@ -38,15 +30,9 @@ href="#" data-shell="#main-view"> <span class="glyphicon glyphicon-home"></span>
 data-shell="#smallModalContent" data-callback="$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
 {% trans "Events" %}</a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'post_app:list-all-assignments' %}"  data-shell="#bigModalContent">
-<span class="glyphicon glyphicon-tasks"></span> Tasks/Posts </a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Tasks/Posts</a></li>
 
-<li class="hidden-xs"><a href="#" class="e-get" data-show="{% url 'card_app:list-all-tasks' %}" data-shell="#bigModalContent">
-<span class="glyphicon glyphicon-tasks"></span> Tasks/Cards </a></li>
-
-<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Posts</a></li>
-
-<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Cards</a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Tasks/Cards</a></li>
 
 
 </ul>
@@ -55,6 +41,7 @@ data-shell="#smallModalContent" data-callback="$('.eventsButton').removeClass('n
 
 {% include "core_app/navbar-context-dropdown.html" %}
 </div>
+
 
 
 

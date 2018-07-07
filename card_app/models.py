@@ -16,7 +16,10 @@ from operator import and_, or_
 
 # Create your models here.
 
-class CardMixin(object):
+class CardMixin(models.Model):
+    class Meta:
+        abstract = True
+
     @classmethod
     def locate(cls, user, organization, card_id):
         """
@@ -213,16 +216,10 @@ class CardMixin(object):
         """
         return self.label
 
-class GlobalTasksFilterMixin:
-    def get_partial(self, cards):
-        cards = cards.filter(Q(done=self.done))
-        if self.assigned_to_me:
-            cards = cards.filter(workers=self.user)
-        if self.created_by_me:
-            cards = cards.filter(owner=self.user)
-        return cards
+class CardFilterMixin(models.Model):
+    class Meta:
+        abstract = True
 
-class CardFilterMixin:
     def collect(self, cards):
         cards = cards.filter(done=False)
 
@@ -235,6 +232,20 @@ class CardFilterMixin:
         cards = sqlike.run(cards)
         return cards
 
+class GlobalCardFilterMixin(models.Model):
+    class Meta:
+        abstract = True
+
+    def get_partial(self, cards):
+        cards = cards.filter(Q(done=self.done))
+        if self.assigned:
+            cards = cards.filter(Q(workers__isnull=False))
+        if self.assigned_to_me:
+            cards = cards.filter(workers=self.user)
+        if self.created_by_me:
+            cards = cards.filter(owner=self.user)
+        return cards
+
 class CardFileWrapperMixin(object):
     def duplicate(self, card=None):
         wrapper       = CardFileWrapper.objects.get(id=self.id)
@@ -243,12 +254,12 @@ class CardFileWrapperMixin(object):
         wrapper.save()
         return wrapper
 
-class CardPinMixin(object):
+class CardPinMixin(models.Model):
     def get_absolute_url(self):
         return reverse('card_app:view-data', 
             kwargs={'card_id': self.card.id})
 
-class CardPin(CardPinMixin, models.Model):
+class CardPin(CardPinMixin):
     user = models.ForeignKey('core_app.User', null=True, blank=True)
 
     organization = models.ForeignKey('core_app.Organization', 
@@ -259,7 +270,7 @@ class CardPin(CardPinMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', 'card')
 
-class Card(CardMixin, models.Model):
+class Card(CardMixin):
     """    
     """
     owner = models.ForeignKey('core_app.User', null=True, 
@@ -305,7 +316,7 @@ class Card(CardMixin, models.Model):
     null=True, related_name='children', blank=True, 
     symmetrical=False)
 
-class GlobalCardFilter(models.Model):
+class GlobalCardFilter(GlobalCardFilterMixin):
     pattern  = models.CharField(max_length=255, blank=True, 
     default='', help_text='tag:issue + owner:iury')
 
@@ -318,27 +329,14 @@ class GlobalCardFilter(models.Model):
     done = models.BooleanField(blank=True, 
     default=False, help_text='Done cards?.')
 
-    class Meta:
-        unique_together = ('user', 'organization', )
-
-class GlobalTaskFilter(GlobalTasksFilterMixin, models.Model):
-    pattern  = models.CharField(max_length=255, blank=True, 
-    default='', help_text='Example: bug + rocket + engine')
-
-    organization = models.ForeignKey('core_app.Organization', 
-    blank=True, null=True)
-
-    user = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
-
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Archived cards?.')
+    assigned = models.BooleanField(blank=True, 
+    default=True, help_text='All tasks.')
 
     assigned_to_me = models.BooleanField(blank=True, 
     default=True, help_text='Only your tasks.')
 
     created_by_me = models.BooleanField(blank=True, 
-    default=False, help_text='Only tasks you created.')
+    default=False, help_text='Only cards you created.')
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -712,6 +710,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

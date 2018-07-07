@@ -5,7 +5,7 @@ EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
 EventFilter, EDisabledAccount
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
-from card_app.models import Card, GlobalCardFilter, GlobalTaskFilter
+from card_app.models import Card, GlobalCardFilter
 from django.shortcuts import render, redirect
 from slock.forms import UpdatePasswordForm
 from core_app.forms import SignupForm
@@ -922,6 +922,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

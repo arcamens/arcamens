@@ -1,7 +1,7 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, \
-GlobalAssignmentFilter, EUnarchivePost
+EUnarchivePost
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
@@ -391,17 +391,16 @@ class Find(GuardianView):
     def get(self, request):
         filter, _ = GlobalPostFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
-        form  = forms.GlobalPostFilterForm(instance=filter)
-
-        posts = models.Post.get_allowed_posts(self.me)
-        total = posts.count()
+        form   = forms.GlobalPostFilterForm(instance=filter)
+        posts  = models.Post.get_allowed_posts(self.me)
+        total  = posts.count()
 
         sqlike = models.Post.from_sqlike()
+        posts  = filter.get_partial(posts)
+
         sqlike.feed(filter.pattern)
 
-        posts = posts.filter(Q(done=filter.done))
         posts = sqlike.run(posts)
-
         count = posts.count()
 
         posts = posts.only('done', 'label', 'id').order_by('id')
@@ -425,9 +424,11 @@ class Find(GuardianView):
                 {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
 
-        posts  = posts.filter(Q(done=filter.done))
-        posts  = sqlike.run(posts)
-        count =  posts.count()
+        posts = filter.get_partial(posts)
+        sqlike.feed(filter.pattern)
+        posts = sqlike.run(posts)
+
+        count = posts.count()
 
         posts = posts.only('done', 'label', 'id').order_by('id')
         elems = JScroll(self.me.id, 'post_app/find-scroll.html', posts)
@@ -864,64 +865,6 @@ class PostEvents(GuardianView):
         {'post': post, 'elems': events})
 
 
-class ListAllAssignments(GuardianView):
-    """
-    This view is secured by default.
-    """
-
-    def get(self, request):
-        filter, _ = GlobalAssignmentFilter.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        form  = forms.GlobalAssignmentFilterForm(instance=filter)
-
-        posts = models.Post.get_allowed_posts(self.me)
-        posts = posts.filter(Q(workers__isnull=False))
-        total = posts.count()
-        posts = filter.get_partial(posts)
-        
-        sqlike = models.Post.from_sqlike()
-        sqlike.feed(filter.pattern)
-
-        posts = sqlike.run(posts)
-
-        count = posts.count()
-        posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(self.me.id, 'post_app/list-all-assignments-scroll.html', posts)
-
-        return render(request, 'post_app/list-all-assignments.html', 
-        {'total': total, 'count': count, 
-        'form': form, 'elems': elems.as_div()})
-
-    def post(self, request):
-        filter, _ = GlobalAssignmentFilter.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        sqlike = models.Post.from_sqlike()
-        form   = forms.GlobalAssignmentFilterForm(
-            request.POST, sqlike=sqlike, instance=filter)
-
-        posts = models.Post.get_allowed_posts(self.me)
-        posts = posts.filter(Q(workers__isnull=False))
-        total = posts.count()
-
-        if not form.is_valid():
-            return render(request, 'post_app/list-all-assignments.html', 
-                {'form': form, 'total': total,
-                    'count': 0}, status=400)
-
-        form.save()
-
-        posts = filter.get_partial(posts)
-        posts = sqlike.run(posts)
-
-        count = posts.count()
-        posts = posts.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(self.me.id, 'post_app/list-all-assignments-scroll.html', posts)
-
-        return render(request, 'post_app/list-all-assignments.html', 
-        {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
-
 class PinPost(GuardianView):
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
@@ -1040,6 +983,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

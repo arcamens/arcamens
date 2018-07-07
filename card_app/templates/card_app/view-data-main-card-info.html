@@ -4,7 +4,7 @@
 <div class="panel-heading">
 
 <small>
-<span class="glyphicon glyphicon-file"></span> Card by 
+<span class="glyphicon glyphicon-file"></span> {% if card.done %} (Done) {% endif %} Card by 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="{{card.owner.description}}"> {{card.owner.name}} </a> on list
 
 <a class="e-get" href="#"
@@ -18,15 +18,11 @@ data-shell="#main-view" >
 </a>
 
 on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
-{% if card.done %}
-(Done)
-
-{% endif %}
 
 {% if card.parent_post %}
-forked from post
+forked from post 
 <a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#main-view"  target="_blank"
-data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> 
+data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
 {{card.parent_post.label|truncatechars:60}} </a>  
 {% endif %}
 
@@ -72,6 +68,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

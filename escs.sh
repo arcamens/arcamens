@@ -330,9 +330,8 @@ password eicae8EiOhbiuJ8J
 # access arcamens staging.
 tee >(stdbuf -o 0 ssh staging@staging.arcamens.com 'bash -i')
 
-mysql -u staging -p staging
-password eicae8EiOhbiuJ8J
-
+tee >(stdbuf -o 0 mysql -u staging -p staging)
+eicae8EiOhbiuJ8J
 ##############################################################################
 # Fixing issue with migrations after renaming model bitbucket_app.
 
@@ -412,4 +411,21 @@ cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
 
 grep -rl --exclude-dir='.git' 'Timeline' ./ | xargs sed -i 's/Timeline/Group/g'
 grep -rl --exclude-dir='.git' 'timeline' ./ | xargs sed -i 's/timeline/group/g'
+
+sed -i 's/Timeline/Group/g' arcamens-db.json
+
+sed -i 's/timeline/group/g' arcamens-db.json
+##############################################################################
+# Approach for renaming django app with existing db.
+
+# Make a backup of the db as json.
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arcamens-db.json
+
+sed -i 's/appname/newappname/g' arcamens-db.json
+sed -i 's/appname/newappname/g' arcamens-db.json
+
+# Switch to the commit that has the app renamed then restore the db.
+# The idea consists of renaming the occurrences of the app. it works in some
+# cases though.
+python manage.py loaddata arcamens-db.json
 

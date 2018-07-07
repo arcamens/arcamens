@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
 
-    # url(r'^list-assignments/(?P<user_id>.+)/', views.ListAssignments.as_view(), name='list-assignments'),
     url(r'^post-worker-information/(?P<peer_id>.+)/(?P<post_id>.+)/', views.PostWorkerInformation.as_view(), name='post-worker-information'),
     url(r'^post-tag-information/(?P<tag_id>.+)/(?P<post_id>.+)/', views.PostTagInformation.as_view(), name='post-tag-information'),
 
@@ -36,7 +35,6 @@ urlpatterns = [
     url(r'^manage-post-tags/(?P<post_id>.+)/', views.ManagePostTags.as_view(), name='manage-post-tags'),
     url(r'^bind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.BindPostTag.as_view(), name='bind-post-tag'),
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
-    # url(r'^cancel-post-creation/(?P<post_id>.+)/', views.CancelPostCreation.as_view(), name='cancel-post-creation'),
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
     url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
@@ -44,7 +42,6 @@ urlpatterns = [
     url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
     url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
-    url(r'^list-all-assignments/', views.ListAllAssignments.as_view(), name='list-all-assignments'),
     url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
     url(r'^set-post-priority-down/(?P<post0_id>.+)/(?P<post1_id>.+)/', views.SetPostPriorityDown.as_view(), name='set-post-priority-down'),
@@ -52,6 +49,7 @@ urlpatterns = [
     url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
+
 
 
 

@@ -17,6 +17,10 @@
 
 <a href="{{card.get_link_url}}" target="_blank"> {{card.parent_post.label}}</a> 
 <br>
+<small> On
+<span class="glyphicon glyphicon-eye-open"></span> 
+{{card.parent_post.ancestor.name}}</small>
+<br>
 
 <small>
 <a class="e-get text-danger"  data-shell="#main-view"  
@@ -29,6 +33,10 @@ data-show="{% url 'card_app:unset-post-fork' card.id %}" href="{{card.get_link_u
 {% for ind in posts %}
 <p> <span class="glyphicon glyphicon-file"></span>
 <a href="{{ind.get_link_url}}" target="_blank"> {{ind.label}}</a> 
+<br>
+<small> On
+<span class="glyphicon glyphicon-eye-open"></span> 
+{{ind.ancestor.name}}</small>
 <br>
 
 <small>
@@ -59,6 +67,7 @@ id="filterpostRelations" data-show="{% url 'card_app:connect-post' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

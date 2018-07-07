@@ -3,7 +3,7 @@ from django.db.models.functions import Concat
 from django.db.models import Q, F, Exists, OuterRef, Count, Value, CharField
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from card_app.models import GlobalTaskFilter, GlobalCardFilter, CardPin
+from card_app.models import GlobalCardFilter, CardPin
 from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView
@@ -771,73 +771,19 @@ class UndoClipboard(GuardianView):
 
         clipboard.cards.remove(event.card)
 
-class ListAllTasks(GuardianView):
-    def get(self, request):
-        filter, _ = GlobalTaskFilter.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        form  = forms.GlobalTaskFilterForm(instance=filter)
-
-        cards = models.Card.get_allowed_cards(self.me)
-        cards = cards.filter(Q(workers__isnull=False))
-        total = cards.count()
-        cards = filter.get_partial(cards)
-        
-        sqlike = models.Card.from_sqlike()
-        sqlike.feed(filter.pattern)
-
-        cards = sqlike.run(cards)
-
-        count = cards.count()
-        cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(self.me.id, 'card_app/list-all-tasks-scroll.html', cards)
-
-        return render(request, 'card_app/list-all-tasks.html', 
-        {'total': total, 'count': count, 
-        'form': form, 'elems': elems.as_div()})
-
-    def post(self, request):
-        filter, _ = GlobalTaskFilter.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        sqlike = models.Card.from_sqlike()
-        form   = forms.GlobalTaskFilterForm(
-            request.POST, sqlike=sqlike, instance=filter)
-
-        cards = models.Card.get_allowed_cards(self.me)
-        cards = cards.filter(Q(workers__isnull=False))
-        total = cards.count()
-
-        if not form.is_valid():
-            return render(request, 'card_app/list-all-tasks.html', 
-                {'form': form, 'total': total,
-                    'count': 0}, status=400)
-
-        form.save()
-
-        cards = filter.get_partial(cards)
-        cards = sqlike.run(cards)
-
-        count = cards.count()
-        cards = cards.only('done', 'label', 'id').order_by('id')
-        elems = JScroll(self.me.id, 'card_app/list-all-tasks-scroll.html', cards)
-
-        return render(request, 'card_app/list-all-tasks.html', 
-        {'form': form, 'elems': elems.as_div(), 'total': total, 'count': count})
-
 class Find(GuardianView):
     def get(self, request):
         filter, _ = GlobalCardFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
-        form  = forms.GlobalCardFilterForm(instance=filter)
+        form   = forms.GlobalCardFilterForm(instance=filter)
+        cards  = models.Card.get_allowed_cards(self.me)
+        total  = cards.count()
 
-        cards = models.Card.get_allowed_cards(self.me)
-        total = cards.count()
-
+        cards  = filter.get_partial(cards)
         sqlike = models.Card.from_sqlike()
+
         sqlike.feed(filter.pattern)
 
-        cards = cards.filter(Q(done=filter.done))
         cards = sqlike.run(cards)
         count = cards.count()
 
@@ -862,10 +808,10 @@ class Find(GuardianView):
                 {'form': form, 'total': total, 'count': 0}, status=400)
         form.save()
 
-        cards  = cards.filter(Q(done=filter.done))
-        cards  = sqlike.run(cards)
-        count =  cards.count()
+        cards  = filter.get_partial(cards)
+        sqlike.feed(filter.pattern)
 
+        count =  cards.count()
         cards = cards.only('done', 'label', 'id').order_by('id')
         elems = JScroll(self.me.id, 'card_app/find-scroll.html', cards)
 
@@ -1136,6 +1082,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 

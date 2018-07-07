@@ -7,7 +7,7 @@
 <div style="word-wrap: break-word;"> 
 <span class="glyphicon glyphicon-file"></span>
 
-Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="{{post.user.description}}">
+{% if post.done %} (Done) {% endif %} Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="{{post.user.description}}">
 {{post.user.name}} </a> 
 on group
 
@@ -17,18 +17,6 @@ data-shell="#main-view" >
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
 
 on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
-
-{% if post.done %}
-(Done)
-
-{% endif %}
-
-{% if post.parent %}
-from card <a class="e-get" href="{{post.parent.get_link_url}}"
-data-show="{% url 'card_app:view-data' post.parent.id %}"
-data-shell="#main-view" > 
-<span class="glyphicon glyphicon-file"></span> {{post.parent.label|truncatechars:60}} </a>
-{% endif %}
 
 <div class="pull-right">
 <a class="e-get" href="#"
@@ -69,7 +57,6 @@ async: true},
 function(data) {
     $('#post-attachments-{{post.id}}').html(data);
 });
-</script>
 
 </script>
 </span>
@@ -193,11 +180,11 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-signal"></span> </a>
 </div>
 
-</div>
 
 {% endblock %}
 </div>
 </div>
+
 
 
 

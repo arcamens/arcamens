@@ -18,6 +18,12 @@
 <span class="glyphicon glyphicon-file"></span> {{card.parent.label}}</a> 
 <br>
 
+<small> On
+<span class="glyphicon glyphicon-list-alt"></span> {{card.parent.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{card.parent.ancestor.name}}</small>
+<br>
+
 <small>
 <a class="e-get text-danger"  data-shell="#main-view"  
 data-show="{% url 'card_app:unset-card-parent' card.id %}" href="{{card.get_link_url}}">  
@@ -30,6 +36,12 @@ data-show="{% url 'card_app:unset-card-parent' card.id %}" href="{{card.get_link
 <p>  <a href="{{ind.get_link_url}}" target="_blank"> 
 <span class="glyphicon glyphicon-file"></span>
 {{ind.label}}</a> 
+<br>
+
+<small> On
+<span class="glyphicon glyphicon-list-alt"></span> {{ind.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{ind.ancestor.name}}</small>
 <br>
 
 <small>
@@ -58,6 +70,7 @@ id="filterCardRelations" data-show="{% url 'card_app:connect-card' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 
