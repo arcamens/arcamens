@@ -330,7 +330,7 @@ class GlobalCardFilter(GlobalCardFilterMixin):
     default=False, help_text='Done cards?.')
 
     assigned = models.BooleanField(blank=True, 
-    default=True, help_text='All tasks.')
+    default=True, help_text='Only tasks.')
 
     assigned_to_me = models.BooleanField(blank=True, 
     default=True, help_text='Only your tasks.')
@@ -710,6 +710,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 
