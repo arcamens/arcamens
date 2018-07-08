@@ -623,6 +623,9 @@ class EDeleteCard(Event):
     label = models.CharField(null=True, blank=False, 
     max_length=626)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_delete_card1', blank=True)
+
     html_template = 'card_app/e-delete-card.html'
 
 class CardFilter(CardFilterMixin, models.Model):
@@ -654,19 +657,6 @@ class CardFilter(CardFilterMixin, models.Model):
     class Meta:
         unique_together = ('user', 'organization', 'board', 'list')
 
-class ExternObject(models.Model):
-    """
-    Cards can be related to any kind of extern objects/events.
-    Like github commits or even comments. This model provides
-    an abstract approach for providing quick integration with
-    other platforms.
-    
-    """
-
-    card = models.ForeignKey('core_app.User', null=True, 
-    blank=True)
-
-
 class EBindTagCard(Event):
     """
     """
@@ -679,6 +669,9 @@ class EBindTagCard(Event):
 
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_bind_tag_card2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_bind_tag_card3', blank=True)
 
     html_template = 'card_app/e-bind-tag-card.html'
 
@@ -694,6 +687,9 @@ class EUnbindTagCard(Event):
 
     tag = models.ForeignKey('core_app.Tag', 
     related_name='e_unbind_tag_card2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_unbind_tag_card3', blank=True)
 
     html_template = 'card_app/e-unbind-tag-card.html'
 

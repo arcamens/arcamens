@@ -285,7 +285,9 @@ class DeleteCard(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
         event = models.EDeleteCard.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, label=card.label, user=self.me)
+        ancestor=card.ancestor, board=card.ancestor.ancestor, 
+        label=card.label, user=self.me)
+
         event.dispatch(*card.ancestor.ancestor.members.all())
         card.delete()
 
@@ -598,7 +600,7 @@ class UnbindCardTag(GuardianView):
 
         event = models.EUnbindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
-        card=card, tag=tag, user=self.me)
+        board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
@@ -616,7 +618,7 @@ class BindCardTag(GuardianView):
 
         event = models.EBindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
-        card=card, tag=tag, user=self.me)
+        board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
