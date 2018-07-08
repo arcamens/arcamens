@@ -7,7 +7,7 @@
 <h4>
 <span class="glyphicon glyphicon-paperclip"></span>
 
-Cards on Clipboard 
+Lists on Clipboard 
 <span class="badge">{{total}}</span>
 </h4>
 </div>
@@ -15,22 +15,22 @@ Cards on Clipboard
 
 <div class="modal-body">
 <div class="pre-scrollable">
-{% for ind in cards %}
+{% for ind in lists %}
 
 <p> 
-<span class="glyphicon glyphicon-file"></span>
+<span class="glyphicon glyphicon-list-alt"></span>
 
-{{ind.label|truncatechars:40}} 
+{{ind.name|truncatechars:40}} 
 <br>
 
 <small>
-<a class="e-get" data-show="{% url 'list_app:paste-card' list.id ind.id %} "
+<a class="e-get" data-show="{% url 'board_app:paste-list' board.id ind.id %} "
 href="#"> <span class="glyphicon glyphicon-paste"></span> Paste</a>
 </small>
 
 </p>
 {% empty %}
-No cards.
+No lists.
 {% endfor %}
 </div>
 
@@ -39,7 +39,7 @@ No cards.
 <div class="modal-footer">
 <script>
 $('#mediumModal').one('hidden.bs.modal', function () {
-    $('#main-view').load('{% url 'card_app:list-cards' list.id  %}');
+    $('#main-view').load('{% url 'list_app:list-lists' board.id  %}');
 })
 </script>
 

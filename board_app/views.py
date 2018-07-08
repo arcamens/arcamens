@@ -212,7 +212,48 @@ class ManageBoardAdmins(GuardianView):
         {'included': included, 'excluded': excluded, 'board': board,
         'me': self.me, 'total': total, 'count': count, 'form':form})
 
-class PasteLists(GuardianView):
+class SelectDestinBoard(GuardianView):
+    def get(self, request, board_id):
+        board = models.Board.objects.get(id=board_id, 
+        organization=self.me.default, members=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        lists = clipboard.lists.all()
+        total = lists.count() 
+
+        return render(request, 'board_app/select-destin-board.html', 
+        {'user': self.me, 'board': board, 'lists': lists,  'total': total})
+
+class PasteList(GuardianView):
+    def get(self, request, board_id, list_id):
+        board = models.Board.objects.get(id=board_id, 
+        organization=self.me.default, members=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        list = clipboard.lists.get(id=list_id)
+        list.ancestor = board
+        list.save()
+
+        event = EPasteList(organization=self.me.default, 
+        board=board, user=self.me)
+
+        event.save(hcache=False)
+        event.lists.add(list)
+    
+        # Workers of the list dont need to be notified of this event
+        # because them may not belong to the board at all.
+        event.dispatch(*board.members.all())
+        event.save()
+
+        clipboard.lists.remove(list)
+
+        return redirect('board_app:select-destin-board', board_id=board.id)
+
+class PasteAllLists(GuardianView):
     def get(self, request, board_id):
         # We need to make sure the board belongs to the organization.
         # It as well makes sure i belong to the board.
@@ -451,6 +492,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
 
 
 

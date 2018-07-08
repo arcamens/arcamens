@@ -32,13 +32,21 @@ href="#"> <span class="glyphicon glyphicon-user"></span>
 {% trans "Admins" %}</a></li>
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#main-view" 
-data-show="{% url 'board_app:paste-lists' board.id %}" 
+<li><a class="e-get" data-shell="#mediumModalContent" 
+data-show="{% url 'board_app:select-destin-board' board.id %}" 
 href="#"> <span class="glyphicon glyphicon-paste"></span> 
 {% trans "Paste" %}</a></li>
 
+<li class="divider"></li>
+
+<li><a class="e-get" data-shell="#main-view" 
+data-show="{% url 'board_app:paste-all-lists' board.id %}" 
+href="#"> <span class="glyphicon glyphicon-paste"></span> 
+{% trans "Paste All" %}</a></li>
+
 </ul>
 </div>
+
 
 
 

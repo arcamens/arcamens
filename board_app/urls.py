@@ -8,7 +8,10 @@ urlpatterns = [
     url(r'^pin-board/(?P<board_id>.+)/', views.PinBoard.as_view(), name='pin-board'),
 
     url(r'^update-board/(?P<board_id>.+)/', views.UpdateBoard.as_view(), name='update-board'),
-    url(r'^paste-lists/(?P<board_id>.+)/', views.PasteLists.as_view(), name='paste-lists'),
+    url(r'^paste-list/(?P<board_id>.+)/(?P<list_id>.+)/', views.PasteList.as_view(), name='paste-list'),
+    url(r'^paste-all-lists/(?P<board_id>.+)/', views.PasteAllLists.as_view(), name='paste-all-lists'),
+    url(r'^select-destin-board/(?P<board_id>.+)/', views.SelectDestinBoard.as_view(), name='select-destin-board'),
+
     url(r'^delete-board/(?P<board_id>.+)/', views.DeleteBoard.as_view(), name='delete-board'),
     url(r'^login/', RedirectView.as_view(pattern_name='site_app:login'), name='login'),
     url(r'^logout/', RedirectView.as_view(pattern_name='site_app:logout'), name='logout'),
@@ -25,6 +28,7 @@ urlpatterns = [
     url(r'^board-link/(?P<board_id>.+)/', views.BoardLink.as_view(), name='board-link'),
 
 ]
+
 
 
 
