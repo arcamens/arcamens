@@ -821,7 +821,8 @@ class CardEvents(GuardianView):
         Q(eremovecardfork__card0=card.id) |\
         Q(eremovecardfork__card1=card.id) |\
         Q(eremovepostfork__card=card.id)|\
-        Q(eunarchivecard__card__id=card.id)
+        Q(eunarchivecard__card__id=card.id)|\
+        Q(ebitbucketcommit__note__card__id=card.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
@@ -1076,6 +1077,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 
