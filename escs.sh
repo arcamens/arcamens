@@ -70,6 +70,9 @@ python manage.py blowdb
 ./build-data
 
 python manage.py makemigrations
+1
+None
+
 python manage.py migrate
 ##############################################################################
 # stress-db.

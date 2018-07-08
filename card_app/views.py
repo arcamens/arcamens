@@ -310,7 +310,7 @@ class CutCard(GuardianView):
         clipboard.cards.add(card)
 
         event = models.ECutCard.objects.create(organization=self.me.default,
-        ancestor=list, card=card, user=self.me)
+        ancestor=list, board=list.ancestor, card=card, user=self.me)
         event.dispatch(*list.ancestor.members.all())
 
         return redirect('card_app:list-cards', 

@@ -703,6 +703,9 @@ class ECutCard(Event):
     card = models.ForeignKey('Card', 
     related_name='e_cut_card1', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_cut_card2', blank=True)
+
     html_template = 'card_app/e-cut-card.html'
 
 class ESetCardPriorityUp(Event):
