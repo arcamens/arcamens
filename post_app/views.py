@@ -860,8 +860,8 @@ class PostEvents(GuardianView):
         Q(esetpostprioritydown__post0__id=post.id)|\
         Q(esetpostpriorityup__post1__id=post.id)|\
         Q(esetpostprioritydown__post1__id=post.id)|\
-        Q(eremovepostfork__post=post.id)
-
+        Q(eremovepostfork__post=post.id)|\
+        Q(eunarchivepost__post__id=post.id)
         events = Event.objects.filter(query).order_by('-created').values('html')
 
         return render(request, 'post_app/post-events.html', 

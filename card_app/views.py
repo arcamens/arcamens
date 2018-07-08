@@ -648,8 +648,9 @@ class Undo(GuardianView):
         card.save()
 
         # cards in the clipboard cant be archived.
-        event    = models.EUnarchiveCard.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card=card, user=self.me)
+        event    = models.EUnarchiveCard.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, card=card, user=self.me)
 
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)
@@ -852,8 +853,8 @@ class CardEvents(GuardianView):
         Q(esetcardprioritydown__card1=card.id) |\
         Q(eremovecardfork__card0=card.id) |\
         Q(eremovecardfork__card1=card.id) |\
-        Q(eremovepostfork__card=card.id)
-
+        Q(eremovepostfork__card=card.id)|\
+        Q(eunarchivecard__card__id=card.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
