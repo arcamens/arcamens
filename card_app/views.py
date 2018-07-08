@@ -632,8 +632,9 @@ class Done(GuardianView):
 
 
         # cards in the clipboard cant be archived.
-        event    = models.EArchiveCard.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card=card, user=self.me)
+        event    = models.EArchiveCard.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, card=card, user=self.me)
 
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)

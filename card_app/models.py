@@ -751,6 +751,9 @@ class EArchiveCard(Event):
     card = models.ForeignKey('Card', 
     related_name='e_archive_card1', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_archive_card2', blank=True)
+
     html_template = 'card_app/e-archive-card.html'
 
 class EUnarchiveCard(Event):
