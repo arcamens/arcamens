@@ -778,6 +778,9 @@ class ECopyCard(Event):
     card = models.ForeignKey('card', 
     related_name='e_copy_card1', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_copy_card2', blank=True)
+
     html_template = 'card_app/e-copy-card.html'
 
 @receiver(pre_delete, sender=CardFileWrapper)

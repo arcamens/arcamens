@@ -326,7 +326,9 @@ class CopyCard(GuardianView):
         clipboard.cards.add(copy)
 
         event = models.ECopyCard.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card=card, user=self.me)
+        ancestor=card.ancestor, board=card.ancestor.ancestor, 
+        card=card, user=self.me)
+
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         return redirect('card_app:list-cards', 
