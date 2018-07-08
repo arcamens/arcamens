@@ -113,7 +113,7 @@ class ViewData(GuardianView):
         attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
         # snippets = card.snippets.all()
-        relations = card.relations.all()
+        relations = card.related.all()
         path = card.path.all()
         # post_forks = card.post_forks.all()
         # This doesnt work because the board members should be
@@ -188,7 +188,8 @@ class CreateCard(GuardianView):
         card0.relations.add(card1)
         event = models.ERelateCard.objects.create(
         organization=self.me.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, card0=card0, card1=card1, user=self.me)
+        ancestor1=card1.ancestor, board0=card0.ancestor.ancestor, 
+        board1=card1.ancestor.ancestor, card0=card0, card1=card1, user=self.me)
 
         event.dispatch(*card0.ancestor.ancestor.members.all())
         event.dispatch(*card1.ancestor.ancestor.members.all())
@@ -431,7 +432,8 @@ class UpdateCard(CreateCard):
 
         event = models.EUnrelateCard.objects.create(
         organization=self.me.default, ancestor0=card0.ancestor, 
-        ancestor1=card1.ancestor, card0=card0, 
+        ancestor1=card1.ancestor, board0=card0.ancestor.ancestor, 
+        board1=card1.ancestor.ancestor, card0=card0, 
         card1=card1, user=self.me)
 
         event.dispatch(*card0.ancestor.ancestor.members.all())
@@ -1082,6 +1084,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 

@@ -299,8 +299,7 @@ class Card(CardMixin):
     symmetrical=False)
 
     relations = models.ManyToManyField('Card', 
-    null=True, related_name='related', blank=True, 
-    symmetrical=True)
+    null=True, related_name='related', blank=True)
 
     tags = models.ManyToManyField(
     'core_app.Tag', related_name='cards', 
@@ -387,6 +386,15 @@ class ERelateCard(Event):
     card1 = models.ForeignKey('Card', 
     related_name='e_relate_card3', blank=True)
 
+    # For listing board activity correctly.
+    board0 = models.ForeignKey('board_app.Board', 
+    default=None, related_name='e_relate_card4', 
+    blank=True)
+
+    board1 = models.ForeignKey('board_app.Board', 
+    default=None, related_name='e_relate_card5', 
+    blank=True)
+
     html_template = 'card_app/e-relate-card.html'
 
 class EUnrelateCard(Event):
@@ -404,6 +412,15 @@ class EUnrelateCard(Event):
 
     card1 = models.ForeignKey('Card', 
     related_name='e_unrelate_card3', blank=True)
+
+    # For listing board activity correctly.
+    board0 = models.ForeignKey('board_app.Board', 
+    default=None, related_name='e_unrelate_card4', 
+    blank=True)
+
+    board1 = models.ForeignKey('board_app.Board', 
+    default=None, related_name='e_unrelate_card5', 
+    blank=True)
 
     def get_absolute_url(self):
         return reverse('card_app:e-unrelate-card', 
@@ -713,6 +730,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 
