@@ -844,10 +844,13 @@ class CardEvents(GuardianView):
         Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
         Q(eattachnotefile__note__card=card.id) | \
         Q(edettachnotefile__note__card=card.id)|\
-        Q(ecreatepostfork__card=card.id)| Q(esetcardpriorityup__card0=card.id)|\
+        Q(ecreatepostfork__card=card.id) |\
+        Q(esetcardpriorityup__card0=card.id) |\
         Q(esetcardprioritydown__card0=card.id) |\
+        Q(esetcardpriorityup__card1=card.id) |\
+        Q(esetcardprioritydown__card1=card.id) |\
         Q(eremovecardfork__card0=card.id) |\
-        Q(eremovecardfork__card1=card.id)|\
+        Q(eremovecardfork__card1=card.id) |\
         Q(eremovepostfork__card=card.id)
 
 
@@ -1053,10 +1056,13 @@ class SetCardPriorityUp(GuardianView):
         card0.priority = card1.priority + flag
         card0.save()
 
-        event = models.ESetCardPriorityUp.objects.create(organization=self.me.default,
-        ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
+        event = models.ESetCardPriorityUp.objects.create(
+        organization=self.me.default, ancestor=card0.ancestor, 
+        board=card0.ancestor.ancestor, card0=card0, card1=card1, user=self.me)
+
         event.dispatch(*card0.ancestor.ancestor.members.all())
-        print('Priority', [[ind.label, ind.priority] for ind in card0.ancestor.cards.all().order_by('-priority')])
+        # print('Priority', [[ind.label, ind.priority] 
+        # for ind in card0.ancestor.cards.all().order_by('-priority')])
 
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
@@ -1077,8 +1083,10 @@ class SetCardPriorityDown(GuardianView):
         card0.priority = card1.priority + flag
         card0.save()
 
-        event = models.ESetCardPriorityDown.objects.create(organization=self.me.default,
-        ancestor=card0.ancestor, card0=card0, card1=card1, user=self.me)
+        event = models.ESetCardPriorityDown.objects.create(
+        organization=self.me.default, ancestor=card0.ancestor, 
+        board=card0.ancestor.ancestor, card0=card0, card1=card1, user=self.me)
+
         event.dispatch(*card0.ancestor.ancestor.members.all())
         print('Priority', [[ind.label, ind.priority] for ind in card0.ancestor.cards.all().order_by('-priority')])
 

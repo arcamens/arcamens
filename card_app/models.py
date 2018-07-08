@@ -721,6 +721,9 @@ class ESetCardPriorityUp(Event):
     card1 = models.ForeignKey('Card', 
     related_name='e_set_card_priority_up2', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_set_card_priority_up3', blank=True)
+
     html_template = 'card_app/e-set-card-priority-up.html'
 
 class ESetCardPriorityDown(Event):
@@ -735,6 +738,9 @@ class ESetCardPriorityDown(Event):
 
     card1 = models.ForeignKey('Card', 
     related_name='e_set_card_priority_down2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_set_card_priority_down3', blank=True)
 
     html_template = 'card_app/e-set-card-priority-down.html'
 

@@ -858,6 +858,8 @@ class PostEvents(GuardianView):
         Q(edettachsnippetfile__snippet__post__id=post.id)|\
         Q(esetpostpriorityup__post0__id=post.id)|\
         Q(esetpostprioritydown__post0__id=post.id)|\
+        Q(esetpostpriorityup__post1__id=post.id)|\
+        Q(esetpostprioritydown__post1__id=post.id)|\
         Q(eremovepostfork__post=post.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
@@ -984,6 +986,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 
