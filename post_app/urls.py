@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
     url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
     url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
-    url(r'^create-card-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreateCardFork.as_view(), name='create-card-fork'),
+    url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
     url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
     url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
     url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
+
 
 
 

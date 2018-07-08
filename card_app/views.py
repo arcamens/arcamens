@@ -7,7 +7,7 @@ from card_app.models import GlobalCardFilter, CardPin
 from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView
-from post_app.models import Post, ECreateCardFork
+from post_app.models import Post, ECreatePostFork
 from post_app.forms import PostForm
 from group_app.models import Group
 from core_app.models import User
@@ -167,7 +167,7 @@ class CreateCard(GuardianView):
         card.save()
 
         event = models.ECreateCard.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card=card, user=self.me)
+        ancestor=card.ancestor, board=card.ancestor.ancestor, card=card, user=self.me)
         event.dispatch(*ancestor.ancestor.members.all())
 
         REGX  ='card_app/card-link/([0-9]+)'
@@ -273,7 +273,10 @@ class CreateFork(GuardianView):
         fork.path.add(*path, card)
 
         event = models.ECreateFork.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card0=card, card1=fork, user=self.me)
+        ancestor0=card.ancestor, ancestor1=fork.ancestor, card0=card, 
+        card1=fork, user=self.me, board0=card.ancestor.ancestor, 
+        board1=fork.ancestor.ancestor)
+
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
@@ -523,7 +526,7 @@ class UnbindCardWorker(GuardianView):
 
         event = models.EUnbindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
-        card=card, user=self.me, peer=user)
+        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
@@ -538,7 +541,7 @@ class BindCardWorker(GuardianView):
 
         event = models.EBindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
-        card=card, user=self.me, peer=user)
+        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
 
@@ -837,7 +840,7 @@ class CardEvents(GuardianView):
         Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
         Q(eattachnotefile__note__card=card.id) | \
         Q(edettachnotefile__note__card=card.id)|\
-        Q(ecreatecardfork__card=card.id)| Q(esetcardpriorityup__card0=card.id)|\
+        Q(ecreatepostfork__card=card.id)| Q(esetcardpriorityup__card0=card.id)|\
         Q(esetcardprioritydown__card0=card.id) |\
         Q(eremovecardfork__card0=card.id) |\
         Q(eremovecardfork__card1=card.id)|\
@@ -972,7 +975,9 @@ class SetCardParent(GuardianView):
         # The ECreateFork.card0 corresponds to the context card1
         # and vice versa.
         event = models.ECreateFork.objects.create(organization=self.me.default,
-        ancestor=card0.ancestor, card0=card1, card1=card0, user=self.me)
+        ancestor0=card0.ancestor, ancestor1=card1.ancestor, card0=card1, 
+        card1=card0, board0=card0.ancestor.ancestor, 
+        user=self.me, board1=card1.ancestor.ancestor)
         event.dispatch(*card0.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=card0.id)
@@ -982,8 +987,11 @@ class UnsetCardParent(GuardianView):
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
 
-        event = models.ERemoveCardFork.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, card0=card, card1=card.parent, user=self.me)
+        event = models.ERemoveCardFork.objects.create(
+        organization=self.me.default, ancestor0=card.ancestor, 
+        ancestor1=card.parent.ancestor, board0=card.ancestor.ancestor, 
+        board1=card.parent.ancestor.ancestor, card0=card, 
+        card1=card.parent, user=self.me)
 
         card.parent = None
         card.path.clear()
@@ -997,8 +1005,10 @@ class UnsetPostFork(GuardianView):
     def get(self, request, card_id):
         card  = models.Card.locate(self.me, self.me.default, card_id)
 
-        event = models.ERemovePostFork.objects.create(organization=self.me.default,
-        ancestor=card.ancestor, post=card.parent_post, card=card, user=self.me)
+        event = models.ERemovePostFork.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        post=card.parent_post, card=card,  group=card.parent_post.ancestor, 
+        board=card.ancestor.ancestor, user=self.me)
 
         card.parent_post = None
         card.path.clear()
@@ -1016,8 +1026,9 @@ class SetPostFork(GuardianView):
         card.path.clear()
         card.save()
 
-        event = ECreateCardFork.objects.create(organization=self.me.default,
-        ancestor=post.ancestor, post=post, card=card, user=self.me)
+        event = ECreatePostFork.objects.create(organization=self.me.default,
+        group=post.ancestor, list=card.ancestor, board=card.ancestor.ancestor, 
+        post=post, card=card, user=self.me)
 
         return redirect('card_app:view-data', card_id=card.id)
 

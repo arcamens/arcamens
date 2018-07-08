@@ -12,13 +12,14 @@ Keep old content? </a>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-<button  type="button" data-form="#form-card-data" data-shell="#main-view" 
-data-show="{% url 'post_app:create-card-fork' ancestor.id post.id %}"
+<button  type="button" data-form="#cardForm" data-shell="#main-view" 
+data-show="{% url 'post_app:create-post-fork' ancestor.id post.id %}"
 class="btn btn-default e-post"> 
 {% trans "Fork" %}
 </button>
 
 {% endblock %}
+
 
 
 

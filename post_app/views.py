@@ -761,7 +761,7 @@ class PullCardContent(GuardianView):
         return render(request, 'post_app/create-fork.html', 
         {'form':form, 'post': post, 'ancestor': ancestor})
 
-class CreateCardFork(GuardianView):
+class CreatePostFork(GuardianView):
     """
     """
 
@@ -796,8 +796,9 @@ class CreateCardFork(GuardianView):
         # # fork.path.add(*path, post)
         # fork.save()
 
-        event = models.ECreateCardFork.objects.create(organization=self.me.default,
-        ancestor=post.ancestor, post=post, card=fork, user=self.me)
+        event = models.ECreatePostFork.objects.create(organization=self.me.default,
+        group=post.ancestor, list=fork.ancestor, post=post, card=fork, 
+        board=fork.ancestor.ancestor, user=self.me)
 
         # The group users and the board users get the event.
         event.dispatch(*post.ancestor.users.all())
@@ -856,7 +857,8 @@ class PostEvents(GuardianView):
         Q(edettachpostfile__post__id=post.id) | \
         Q(edettachsnippetfile__snippet__post__id=post.id)|\
         Q(esetpostpriorityup__post0__id=post.id)|\
-        Q(esetpostprioritydown__post0__id=post.id)
+        Q(esetpostprioritydown__post0__id=post.id)|\
+        Q(eremovepostfork__post=post.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
 
@@ -982,6 +984,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

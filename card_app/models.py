@@ -438,6 +438,10 @@ class ECreateCard(Event):
     card = models.ForeignKey('Card', 
     related_name='e_create_card1', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_create_card2', default=None, 
+    blank=True)
+
     html_template = 'card_app/e-create-card.html'
 
 class EBindCardWorker(Event):
@@ -452,6 +456,10 @@ class EBindCardWorker(Event):
 
     peer = models.ForeignKey('core_app.User', 
     related_name='e_bind_card_worker2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_bind_card_worker3', default=None, 
+    blank=True)
 
     html_template = 'card_app/e-bind-card-worker.html'
 
@@ -468,13 +476,17 @@ class EUnbindCardWorker(Event):
     peer = models.ForeignKey('core_app.User', 
     related_name='e_unbind_card_worker2', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_unbind_card_worker3', default=None, 
+    blank=True)
+
     html_template = 'card_app/e-unbind-card-worker.html'
 
 class ECreateFork(Event):
     """
     """
 
-    ancestor = models.ForeignKey('list_app.List', 
+    ancestor0 = models.ForeignKey('list_app.List', 
     related_name='e_create_fork0', blank=True)
 
     card0 = models.ForeignKey('Card', 
@@ -483,13 +495,25 @@ class ECreateFork(Event):
     card1 = models.ForeignKey('Card', 
     related_name='e_create_fork2', blank=True)
 
+    board0 = models.ForeignKey('board_app.Board', 
+    related_name='e_create_fork3', default=None, 
+    blank=True)
+
+    board1 = models.ForeignKey('board_app.Board', 
+    related_name='e_create_fork4', default=None, 
+    blank=True)
+
+    ancestor1 = models.ForeignKey('list_app.List', 
+    related_name='e_create_fork5', default=None, 
+    blank=True)
+
     html_template = 'card_app/e-create-fork.html'
 
 class ERemoveCardFork(Event):
     """
     """
 
-    ancestor = models.ForeignKey('list_app.List', 
+    ancestor0 = models.ForeignKey('list_app.List', 
     related_name='e_remove_card_fork0', blank=True)
 
     card0 = models.ForeignKey('Card', 
@@ -497,6 +521,18 @@ class ERemoveCardFork(Event):
 
     card1 = models.ForeignKey('Card', 
     related_name='e_remove_card_fork2', blank=True)
+
+    ancestor1 = models.ForeignKey('list_app.List', 
+    default=None, related_name='e_remove_card_fork3', 
+    blank=True)
+
+    board0 = models.ForeignKey('board_app.Board', 
+    related_name='e_remove_card_fork4', default=None, 
+    blank=True)
+
+    board1 = models.ForeignKey('board_app.Board', 
+    related_name='e_remove_card_fork5', default=None, 
+    blank=True)
 
     html_template = 'card_app/e-remove-card-fork.html'
 
@@ -513,25 +549,16 @@ class ERemovePostFork(Event):
     card = models.ForeignKey('Card', 
     related_name='e_remove_post_fork2', blank=True)
 
-    html_template = 'card_app/e-remove-post-fork.html'
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_remove_post_fork3', default=None, 
+    blank=True)
 
-class ECreatePostFork(Event):
-    """
-    """
-
-    list = models.ForeignKey('list_app.List', 
-    related_name='e_create_post_fork0', blank=True)
-
-    card = models.ForeignKey('Card', 
-    related_name='e_create_post_fork1', blank=True)
-
-    post = models.ForeignKey('post_app.Post', 
-    related_name='e_create_post_fork2', blank=True)
-
+    # The post timeline.
     group = models.ForeignKey('group_app.Group', 
-    related_name='e_create_post_fork3', blank=True)
+    related_name='e_remove_post_fork4', default=None, 
+    blank=True)
 
-    html_template = 'card_app/e-create-post-fork.html'
+    html_template = 'card_app/e-remove-post-fork.html'
 
 class EUpdateCard(Event):
     """
