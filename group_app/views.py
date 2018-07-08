@@ -186,7 +186,54 @@ class UpdateGroup(GuardianView):
         return redirect('group_app:list-posts', 
         group_id=record.id)
 
-class PastePosts(GuardianView):
+class SelectDestinGroup(GuardianView):
+    def get(self, request, group_id):
+        group = models.Group.objects.get(id=group_id, 
+        organization=self.me.default, users=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        posts = clipboard.posts.all()
+        total = posts.count() 
+
+        return render(request, 'group_app/select-destin-group.html', 
+        {'user': self.me, 'group': group, 'posts': posts,  'total': total})
+
+class PastePost(GuardianView):
+    def get(self, request, group_id, post_id):
+        group = models.Group.objects.get(id=group_id, 
+        organization=self.me.default, users=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        # Make sure the post is on the user clipboard.
+        post = clipboard.posts.get(id=post_id)
+        head = group.posts.order_by('-priority').first()
+
+        priority      = head.priority if head else 0
+        post.ancestor = group
+
+        # Maybe not necessary just +1.
+        post.priority = post.priority + priority
+        post.save()
+
+        event = EPastePost(organization=self.me.default, 
+        group=group, user=self.me)
+
+        event.save(hcache=False)
+        event.posts.add(post)
+    
+        # Workers of the post dont need to be notified of this event
+        # because them may not belong to the board at all.
+        event.dispatch(*group.users.all())
+        event.save()
+
+        clipboard.posts.remove(post)
+        return redirect('group_app:select-destin-group', group_id=group.id)
+
+class PasteAllPosts(GuardianView):
     """
     Everyone who belongs to the group is allowed to perform
     this view.
@@ -387,6 +434,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

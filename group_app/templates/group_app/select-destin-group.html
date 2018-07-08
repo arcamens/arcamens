@@ -1,0 +1,68 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4>
+<span class="glyphicon glyphicon-paperclip"></span>
+
+Cards on Clipboard 
+<span class="badge">{{total}}</span>
+</h4>
+</div>
+
+
+<div class="modal-body">
+<div class="pre-scrollable">
+{% for ind in posts %}
+
+<p> 
+<span class="glyphicon glyphicon-file"></span>
+
+{{ind.label|truncatechars:40}} 
+<br>
+
+<small>
+<a class="e-get" data-show="{% url 'group_app:paste-post' group.id ind.id %} "
+href="#"> <span class="glyphicon glyphicon-paste"></span> Paste</a>
+</small>
+
+</p>
+{% empty %}
+No posts.
+{% endfor %}
+</div>
+
+</div>
+
+<div class="modal-footer">
+<script>
+$('#mediumModal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'group_app:list-posts' group.id  %}');
+})
+</script>
+
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

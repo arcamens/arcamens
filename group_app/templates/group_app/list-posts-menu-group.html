@@ -40,11 +40,16 @@ Filter </strike>
 {% endif %}
 </a></li>
 
-<li><a class="e-get text-warning" data-shell="#main-view" 
-data-show="{% url 'group_app:paste-posts' group.id %}" href="#">
+<li><a class="e-get text-warning" data-shell="#mediumModalContent" 
+data-show="{% url 'group_app:select-destin-group' group.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 
+<li><a class="e-get text-warning" data-shell="#main-view" 
+data-show="{% url 'group_app:paste-all-posts' group.id %}" href="#">
+<span class="glyphicon glyphicon-paste"></span>  {% trans "Paste All" %}</a></li>
+
 </ul>
+
 
 
 
