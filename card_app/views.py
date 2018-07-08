@@ -354,8 +354,8 @@ class AttachFile(GuardianView):
         form.save()
 
         event = models.EAttachCardFile.objects.create(
-        organization=self.me.default, filewrapper=record, 
-        card=card, user=self.me)
+        organization=self.me.default, list=card.ancestor, filewrapper=record, 
+        board=card.ancestor.ancestor, card=card, user=self.me)
 
         event.dispatch(*card.ancestor.ancestor.members.all())
         event.save()
@@ -377,6 +377,7 @@ class DetachFile(GuardianView):
 
         event = models.EDettachCardFile.objects.create(
         organization=self.me.default, filename=filewrapper.file.name, 
+        list=filewrapper.card.ancestor, board=filewrapper.card.ancestor.ancestor, 
         card=filewrapper.card, user=self.me)
 
         filewrapper.delete()
@@ -405,7 +406,8 @@ class UpdateCard(CreateCard):
 
         event = models.EUpdateCard.objects.create(
         organization=self.me.default, ancestor=record.ancestor, 
-        card=record, user=self.me)
+        board=record.ancestor.ancestor, card=record, user=self.me)
+
         event.dispatch(*record.ancestor.ancestor.members.all())
         event.save()
 

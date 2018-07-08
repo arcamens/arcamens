@@ -570,6 +570,10 @@ class EUpdateCard(Event):
     card = models.ForeignKey('Card', 
     related_name='e_update_card1', blank=True)
 
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_update_card2', default=None, 
+    blank=True)
+
     html_template = 'card_app/e-update-card.html'
 
 class EAttachCardFile(Event):
@@ -582,6 +586,13 @@ class EAttachCardFile(Event):
     card = models.ForeignKey('Card', 
     related_name='e_attach_card_file1', blank=True)
 
+    list = models.ForeignKey('list_app.List', 
+    related_name='e_attach_card_file2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_attach_card_file3', 
+    blank=True)
+
     html_template = 'card_app/e-attach-card-file.html'
 
 class EDettachCardFile(Event):
@@ -592,6 +603,13 @@ class EDettachCardFile(Event):
 
     card = models.ForeignKey('Card', 
     related_name='e_dettach_card_file1', blank=True)
+
+    list = models.ForeignKey('list_app.List', 
+    related_name='e_dettach_card_file2', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_dettach_card_file3', 
+    blank=True)
 
     html_template = 'card_app/e-dettach-card-file.html'
 
