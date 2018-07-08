@@ -697,48 +697,6 @@ class ConfirmPostDeletion(GuardianView):
         {'post': post})
 
 
-class UndoClipboard(GuardianView):
-    """
-    This view checks if the post belongs to the user default
-    organization. As every user has a particular clipboard this view
-    doesn't need further checkings on permissions.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.objects.get(id=post_id,
-        post_clipboard_users__organization=self.me.default,
-        post_clipboard_users__user=self.me)
-
-        event0 = post.e_copy_post1.last()
-        event1 = post.e_cut_post1.last()
-
-        # Then it is a copy because there is no event
-        # mapped to it. A copy contains no e_copy_post1 nor
-        # e_cut_post1.
-        if not (event0 or event1):
-            post.delete()
-        else:
-            self.undo_cut(event1)
-
-        return redirect('core_app:list-clipboard')
-
-    def undo_cut(self, event):
-        event.post.ancestor = event.group
-        event.post.save()
-
-        event1 = EPastePost(organization=self.me.default, 
-        group=event.group, user=self.me)
-
-        event1.save(hcache=False)
-        event1.posts.add(event.post)
-        event1.dispatch(*event.group.users.all())
-        event1.save()
-        
-        clipboard, _ = Clipboard.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        clipboard.posts.remove(event.post)
-
 class PullCardContent(GuardianView):
     """
     The user has to be related to the post either by
@@ -986,6 +944,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

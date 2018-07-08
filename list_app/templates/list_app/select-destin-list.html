@@ -14,49 +14,6 @@ Clipboard
 
 
 <div class="modal-body">
-
-<h4> 
-<span class="glyphicon glyphicon-file"></span>
-
-Posts </h4>
-
-<div class="pre-scrollable">
-
-{% for ind in posts %}
-<p> 
-<span class="glyphicon glyphicon-file"></span>
-{{ind.label|truncatechars:40}} 
-
-</p>
-
-{% empty %}
-No posts.
-{% endfor %}
-
-</div>
-
-
-<h4> 
-<span class="glyphicon glyphicon-list-alt"></span>
-
-Lists </h4>
-
-<div class="pre-scrollable">
-
-{% for ind in lists %}
-<p> 
-<span class="glyphicon glyphicon-list-alt"></span>
-{{ind.name|truncatechars:40}} 
-
-
-</p>
-
-{% empty %}
-No lists.
-{% endfor %}
-
-</div>
-
 <h4> 
 <span class="glyphicon glyphicon-file"></span>
 
@@ -69,6 +26,9 @@ Cards </h4>
 <span class="glyphicon glyphicon-file"></span>
 
 {{ind.label|truncatechars:40}} 
+<br>
+<a class="e-get" data-show="{% url 'list_app:paste-card' list.id ind.id %} "
+href="#"> <span class="glyphicon glyphicon-scissors"></span> Paste</a>
 
 </p>
 {% empty %}
@@ -79,12 +39,18 @@ No cards.
 </div>
 
 <div class="modal-footer">
-<button  type="button"  data-show="{% url 'core_app:confirm-clipboard-deletion' %}"
-class="btn btn-default e-get"> {% trans "Delete all?" %} </button>
+<script>
+$('#mediumModal').one('hidden.bs.modal', function () {
+    $('#main-view').load('{% url 'card_app:list-cards' list.id  %}');
+})
+</script>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
+
+
 
 
 

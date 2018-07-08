@@ -37,7 +37,6 @@ urlpatterns = [
     url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
     url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
     url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
-    url(r'^undo-clipboard/(?P<post_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
     url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
     url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
     url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
@@ -49,6 +48,7 @@ urlpatterns = [
     url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
+
 
 
 

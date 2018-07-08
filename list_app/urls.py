@@ -8,7 +8,9 @@ urlpatterns = [
     url(r'^create-list/(?P<board_id>.+)/', views.CreateList.as_view(), name='create-list'),
     url(r'^delete-list/(?P<list_id>.+)/', views.DeleteList.as_view(), name='delete-list'),
     url(r'^pin-list/(?P<list_id>.+)/', views.PinList.as_view(), name='pin-list'),
-    url(r'^paste-cards/(?P<list_id>.+)/', views.PasteCards.as_view(), name='paste-cards'),
+    url(r'^select-destin-list/(?P<list_id>.+)/', views.SelectDestinList.as_view(), name='select-destin-list'),
+    url(r'^paste-card/(?P<list_id>.+)/(?P<card_id>.+)/', views.PasteCard.as_view(), name='paste-card'),
+    url(r'^paste-all-cards/(?P<list_id>.+)/', views.PasteAllCards.as_view(), name='paste-all-cards'),
     url(r'^cut-list/(?P<list_id>.+)/', views.CutList.as_view(), name='cut-list'),
     url(r'^copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
     url(r'^setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
@@ -18,6 +20,7 @@ urlpatterns = [
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 
 

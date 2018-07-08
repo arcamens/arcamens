@@ -749,41 +749,6 @@ class AlertCardWorkers(GuardianView):
         return render(request, 'card_app/alert-card-workers-sent.html', {})
 
 
-class UndoClipboard(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.objects.get(id=card_id,
-        card_clipboard_users__organization=self.me.default,
-        card_clipboard_users__user=self.me)
-
-        event0 = card.e_copy_card1.last()
-        event1 = card.e_cut_card1.last()
-
-        # Then it is a copy because there is no event
-        # mapped to it. A copy contains no e_copy_card1 nor
-        # e_cut_card1.
-        if not (event0 or event1):
-            card.delete()
-        else:
-            self.undo_cut(event1)
-
-        return redirect('core_app:list-clipboard')
-
-    def undo_cut(self, event):
-        event.card.ancestor = event.ancestor
-        event.card.save()
-
-        event1 = EPasteCard(
-        organization=self.me.default, ancestor=event.ancestor, user=self.me)
-        event1.save(hcache=False)
-        event1.cards.add(event.card)
-        event.dispatch(*event.ancestor.ancestor.members.all())
-        event1.save()
-        
-        clipboard, _ = Clipboard.objects.get_or_create(
-        user=self.me, organization=self.me.default)
-
-        clipboard.cards.remove(event.card)
-
 class Find(GuardianView):
     def get(self, request):
         filter, _ = GlobalCardFilter.objects.get_or_create(

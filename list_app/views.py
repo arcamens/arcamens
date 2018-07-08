@@ -9,8 +9,8 @@ from core_app.views import GuardianView
 from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Q, F
+from card_app.models import Card
 import board_app.models
-import card_app.models
 import board_app.models
 import list_app.models
 from . import models
@@ -133,7 +133,55 @@ class UpdateList(GuardianView):
         return redirect('card_app:list-cards', 
         list_id=record.id)
 
-class PasteCards(GuardianView):
+class SelectDestinList(GuardianView):
+    def get(self, request, list_id):
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        cards = clipboard.cards.all()
+        total = cards.count() 
+
+        return render(request, 'list_app/select-destin-list.html', 
+        {'user': self.me, 'list': list, 'cards': cards,  'total': total})
+
+class PasteCard(GuardianView):
+    def get(self, request, list_id, card_id):
+        list = models.List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
+        clipboard, _ = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        # Make sure the card is on the user clipboard.
+        card = clipboard.cards.get(id=card_id)
+        head = list.cards.order_by('-priority').first()
+
+        priority      = head.priority if head else 0
+        card.ancestor = list
+
+        # Maybe not necessary just +1.
+        card.priority = card.priority + priority
+        card.save()
+
+        event = EPasteCard(organization=self.me.default, 
+        ancestor=list, user=self.me)
+
+        event.save(hcache=False)
+        event.cards.add(card)
+    
+        # Workers of the card dont need to be notified of this event
+        # because them may not belong to the board at all.
+        event.dispatch(*list.ancestor.members.all())
+        event.save()
+
+        clipboard.cards.remove(card)
+
+        return redirect('list_app:select-destin-list', list_id=list.id)
+
+class PasteAllCards(GuardianView):
     def get(self, request, list_id):
         list = models.List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
@@ -294,6 +342,7 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
