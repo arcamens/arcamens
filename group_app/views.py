@@ -257,7 +257,7 @@ class PasteAllPosts(GuardianView):
         priority = post.priority if post else 0
         posts.update(ancestor=group, priority=F('priority') + priority)
 
-        posts.update(ancestor=group, priority=post.priority)
+        posts.update(ancestor=group, priority=priority)
         event = EPastePost(organization=self.me.default, 
         group=group, user=self.me)
 
