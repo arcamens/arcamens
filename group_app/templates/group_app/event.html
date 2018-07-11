@@ -5,11 +5,18 @@
 {% endblock %}
 
 <br>
+
+<small>
+{{event.created}}
+</small>
+
+<br>
 <a  href="#" data-show="{% url 'comment_app:list-comments' event.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-comment"></span> 
 Comment? </a>
 
 </div>
+
 
 
 

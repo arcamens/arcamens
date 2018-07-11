@@ -22,11 +22,10 @@ on group
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'group_app:list-posts' event.group.id %}" href="{{event.group.get_link_url}}"> 
-<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>  by 
-
- on {{event.created}}
+<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>   
 
 {% endblock %}
+
 
 
 
