@@ -47,7 +47,7 @@ class UserMixin(Device):
     def n_acc_users(self):
         orgs    = self.owned_organizations.all()
         users   = self.__class__.objects.filter(organizations=orgs)
-        n_users = users.count()
+        n_users = users.distinct().count()
         return n_users
 
 
@@ -515,6 +515,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
