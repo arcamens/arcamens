@@ -288,38 +288,7 @@ tag:sometag
 It would list all cards with that tag thus you can easily
 change card priority over other cards.
 
-### Card Search
-
-In order to perform global card search just click on: Cards
-at the navbar.
-
-![card-search-0](/static/site_app/help/card-search-0.png)
-
-You would get:
-
-![card-search-1](/static/site_app/help/card-search-1.png)
-
-with the above search/filter pattern it finds all cards
-that contain the strings 'render' and 'template' either
-in the label or data attribute. The data attribute of a card
-it is the one that carries markdown.
-
-If you defined as search pattern:
-
-~~~
-python django + render template + form
-~~~
-
-It would list all cards that contain the strings 'python django', 'render template'
-ad 'form' either in the label or data attribute.
-
-Notice that if you wanted the search pattern to be matched against archived cards instead,
-then it would be necessary to mark the field Done as checked.
-
-
-**See:** [Advanced Card Search](#advanced-card-search)
-
-### Search for Card Tasks 
+### Search for Cards/Tasks 
 
 In arcamens there is a generic concept of task, a card becomes a task when it is
 assigned to someone. When the task is accomplished then one can just archive it. 
@@ -595,33 +564,7 @@ You can change the post priority up/down some other card to make it explicit
 to your group peers the correct order of tasks execution. You should
 also notice that prioritizing posts change the displaying order of the posts.
 
-### Post Search
-
-The post search mechanism allow to search through all posts that you have access regardless
-if it has a worker or not. For such just click on the Post link at the navbar:
-
-![post-search-0](/static/site_app/help/post-search-0.png)
-
-Then you would get:
-
-![post-search-1](/static/site_app/help/post-search-1.png)
-
-**Examples:**
-
-Would find all posts where the three strings show up either in the label or markdown:
-
-    bug + engine + wheels
-
-
-Would find all posts where the strings 'bug' or 'engine wheels' show up.
-
-
-    bug + engine wheels
-
-
-Leave the **Done** field checked to search only through archived posts.
-
-### Search for Post Tasks
+### Search for Posts/Tasks
 
 When a post is created and it is assigned to someone then it becomes a task.
 It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
@@ -803,6 +746,8 @@ You would get:
 You can filter by tag, worker, owner etc.
 
 **See:** [Advanced Card Search](#advanced-card-search)
+
+### List Filter
 
 ### Card Relations
 
@@ -1115,6 +1060,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 

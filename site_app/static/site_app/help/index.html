@@ -32,8 +32,7 @@
 <li><a href="#tag-creation">Tag Creation</a></li>
 <li><a href="#card-tags">Card Tags</a></li>
 <li><a href="#card-prioritization">Card Prioritization</a></li>
-<li><a href="#card-search">Card Search</a></li>
-<li><a href="#search-for-card-tasks">Search for Card Tasks</a></li>
+<li><a href="#search-for-cardstasks">Search for Cards/Tasks</a></li>
 <li><a href="#organization-creation">Organization Creation</a></li>
 <li><a href="#groups">Groups</a></li>
 <li><a href="#group-creation">Group Creation</a></li>
@@ -47,14 +46,14 @@
 <li><a href="#group-members">Group Members</a></li>
 <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
 <li><a href="#post-prioritization">Post Prioritization</a></li>
-<li><a href="#post-search">Post Search</a></li>
-<li><a href="#search-for-post-tasks">Search for Post Tasks</a></li>
+<li><a href="#search-for-poststasks">Search for Posts/Tasks</a></li>
 <li><a href="#event-comments">Event Comments</a></li>
 <li><a href="#post-filter">Post Filter</a></li>
 <li><a href="#collection-filter">Collection Filter</a></li>
 <li><a href="#card-colors">Card Colors</a></li>
 <li><a href="#card-e-mailnotifications">Card E-mail/Notifications</a></li>
 <li><a href="#card-filter">Card Filter</a></li>
+<li><a href="#list-filter">List Filter</a></li>
 <li><a href="#card-relations">Card Relations</a></li>
 <li><a href="#card-forks">Card Forks</a></li>
 <li><a href="#post-forks">Post Forks</a></li>
@@ -233,7 +232,7 @@ Github/Doing
 <p>When a card priority changes then your board peers get notified and the order of the cards get changed. It is very handy when you want to make sure that a given task has more urgency than others.</p>
 <p>The way of how order of cards is changed in arcamens it differs in concept from the often used drag&amp;drop from trello-like platforms.</p>
 <p>You are prompted with a list of cards that you want to increase/decrease priority from. You can easily filter cards based on a criterea in that list it spares a lot of time when you want to prioritize a card over some other cards that are classified under a given set of tags.</p>
-<p>The order of cards is defined by prioritization which is set as described below</p>
+<p>The order of cards is determined by prioritization which is set as described below</p>
 <p>Just click on the signal icon:</p>
 <figure>
 <img src="/static/site_app/help/card-prioritization-0.png" alt="card-prioritization-0" /><figcaption>card-prioritization-0</figcaption>
@@ -245,23 +244,7 @@ Github/Doing
 <p>In that dialog you can use the same usual syntax for card search. Notice that if you have many cards in the list and you want to make sure that the card has priority superior to a given set of cards that contain a tag then you could do:</p>
 <pre><code>tag:sometag</code></pre>
 <p>It would list all cards with that tag thus you can easily change card priority over other cards.</p>
-<p><strong>Note:</strong> It is also important to notice that prioritization determines the order of card displaying. The cards with higher priority are displayed first.</p>
-<h3 id="card-search">Card Search</h3>
-<p>In order to perform global card search just click on: Cards at the navbar.</p>
-<figure>
-<img src="/static/site_app/help/card-search-0.png" alt="card-search-0" /><figcaption>card-search-0</figcaption>
-</figure>
-<p>You would get:</p>
-<figure>
-<img src="/static/site_app/help/card-search-1.png" alt="card-search-1" /><figcaption>card-search-1</figcaption>
-</figure>
-<p>with the above search/filter pattern it finds all cards that contain the strings ‘render’ and ‘template’ either in the label or data attribute. The data attribute of a card it is the one that carries markdown.</p>
-<p>If you defined as search pattern:</p>
-<pre><code>python django + render template + form</code></pre>
-<p>It would list all cards that contain the strings ‘python django’, ‘render template’ ad ‘form’ either in the label or data attribute.</p>
-<p>Notice that if you wanted the search pattern to be matched against archived cards instead, then it would be necessary to mark the field Done as checked.</p>
-<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
-<h3 id="search-for-card-tasks">Search for Card Tasks</h3>
+<h3 id="search-for-cardstasks">Search for Cards/Tasks</h3>
 <p>In arcamens there is a generic concept of task, a card becomes a task when it is assigned to someone. When the task is accomplished then one can just archive it. The card will remain available for later inspection.</p>
 <p>In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards at the navbar:</p>
 <p><strong>Note:</strong> The mechanism will match the search pattern against all cards that can be accessed by you.</p>
@@ -428,22 +411,7 @@ Github/Doing
 <p>That is just a simple case you could have a lot of many other possibilities.</p>
 <p>Using this approach for prioritization of posts/cards rather than the usual drag/drop thing it allow to improve work quality and productivity because correct ordering of priorities can be done more accurately.</p>
 <p>You can change the post priority up/down some other card to make it explicit to your group peers the correct order of tasks execution. You should also notice that prioritizing posts change the displaying order of the posts.</p>
-<h3 id="post-search">Post Search</h3>
-<p>The post search mechanism allow to search through all posts that you have access regardless if it has a worker or not. For such just click on the Post link at the navbar:</p>
-<figure>
-<img src="/static/site_app/help/post-search-0.png" alt="post-search-0" /><figcaption>post-search-0</figcaption>
-</figure>
-<p>Then you would get:</p>
-<figure>
-<img src="/static/site_app/help/post-search-1.png" alt="post-search-1" /><figcaption>post-search-1</figcaption>
-</figure>
-<p><strong>Examples:</strong></p>
-<p>Would find all posts where the three strings show up either in the label or markdown:</p>
-<pre><code>bug + engine + wheels</code></pre>
-<p>Would find all posts where the strings ‘bug’ or ‘engine wheels’ show up.</p>
-<pre><code>bug + engine wheels</code></pre>
-<p>Leave the <strong>Done</strong> field checked to search only through archived posts.</p>
-<h3 id="search-for-post-tasks">Search for Post Tasks</h3>
+<h3 id="search-for-poststasks">Search for Posts/Tasks</h3>
 <p>When a post is created and it is assigned to someone then it becomes a task. It is possible to search for archived or active tasks by clicking at the Tasks/Posts link at the navbar:</p>
 <figure>
 <img src="/static/site_app/help/search-for-post-tasks-0.png" alt="search-for-post-tasks-0" /><figcaption>search-for-post-tasks-0</figcaption>
@@ -561,6 +529,7 @@ Group: Arcamens/Bugs</code></pre>
 </figure>
 <p>You can filter by tag, worker, owner etc.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
+<h3 id="list-filter">List Filter</h3>
 <h3 id="card-relations">Card Relations</h3>
 <h3 id="card-forks">Card Forks</h3>
 <p>When a given task can’t be executed at once then it is necessary to break it into multiple subtasks. In Arcamens it is named card forking, when you fork a card you create a link between both cards.</p>
