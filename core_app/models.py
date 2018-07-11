@@ -45,12 +45,7 @@ class UserMixin(Device):
         return users
 
     def n_acc_users(self):
-        orgs  = self.owned_organizations.all()
-        users = self.__class__.objects.none()
-
-        for ind in orgs:
-            users = users | ind.users.all()
-
+        users = self.__class__.objects.filter(organizations__owner__id=self.id)
         n_users = users.distinct()
         n_users = users.count()
         return n_users
