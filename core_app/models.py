@@ -47,7 +47,8 @@ class UserMixin(Device):
     def n_acc_users(self):
         orgs    = self.owned_organizations.all()
         users   = self.__class__.objects.filter(organizations=orgs)
-        n_users = users.distinct().count()
+        n_users = users.distinct()
+        n_users = .count()
         return n_users
 
 
