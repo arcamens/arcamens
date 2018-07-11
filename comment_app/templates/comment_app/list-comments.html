@@ -23,11 +23,6 @@ Comments
 
 <p> <a href="#" title="{{ind.created}}"> {{ind.user.name}}: </a>
 {{ind.data}} 
-{% if ind.file %} 
-<br>
-<span style="color:red"> Attachment: </span>
-<a  href="{{ ind.file.url }}"  target="_blank"> {{ind.file.name}} </a>
-{% endif %}
 <br>
 <em class="text-info" style="font-size:70%; "> 
 On {{ind.created}}</em>
@@ -46,7 +41,6 @@ On {{ind.created}}</em>
 {% csrf_token %}
 
 {% bootstrap_field form.data layout='inline' size='sm' %}
-{% bootstrap_field form.file layout='inline' size='sm' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
@@ -58,6 +52,7 @@ data-show="{% url 'comment_app:create-comment' event.id %}"
 class="btn btn-default e-post">  {% trans "Send" %} </button>
 
 </div>
+
 
 
 

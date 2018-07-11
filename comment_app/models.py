@@ -11,11 +11,7 @@ class Comment(models.Model):
     user = models.ForeignKey('core_app.User', null=True, blank=True)
     data = models.CharField(null=True, blank=False, max_length=256)
 
-    file = models.FileField(null=True, blank=True, 
-    verbose_name='Document')
-
-    created = models.DateTimeField(
-    auto_now=True, null=True)
+    created = models.DateTimeField(auto_now=True, null=True)
 
     def get_absolute_url(self):
         return reverse('comment_app:comment', 
@@ -35,6 +31,7 @@ class ECreateComment(Event):
     related_name='e_create_comment1')
 
     html_template = 'comment_app/e-create-comment.html'
+
 
 
 

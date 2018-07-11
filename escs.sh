@@ -70,9 +70,6 @@ python manage.py blowdb
 ./build-data
 
 python manage.py makemigrations
-1
-None
-
 python manage.py migrate
 ##############################################################################
 # stress-db.
@@ -430,5 +427,6 @@ sed -i 's/appname/newappname/g' arcamens-db.json
 # The idea consists of renaming the occurrences of the app. it works in some
 # cases though.
 python manage.py loaddata arcamens-db.json
+
 
 
