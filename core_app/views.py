@@ -83,6 +83,17 @@ class Index(AuthenticatedView):
         self.me.default = self.me.organizanitions.first()
         self.me.save()
 
+class ResendEmailConfirmation(AuthenticatedView):
+    """
+    """
+
+    def get(self, request):
+        # Just generates another token link
+        # but the record remains with the same id.
+        self.me.register_process.save()
+        return render(request, 
+            'site_app/confirm-email.html', {'user': self.me})
+
 class SelectOrganization(AuthenticatedView):
     def get(self, request):
         organizations = self.me.organizations.all()
@@ -922,6 +933,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

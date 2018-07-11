@@ -161,7 +161,7 @@ class PasteCard(GuardianView):
 
         priority      = head.priority if head else 0
         card.ancestor = list
-
+        card.done     = False
         # Maybe not necessary just +1.
         card.priority = card.priority + priority
         card.save()
@@ -197,7 +197,9 @@ class PasteAllCards(GuardianView):
 
         card = list.cards.order_by('-priority').first()
         priority = card.priority if card else 0
-        cards.update(ancestor=list, priority=F('priority') + priority)
+
+        cards.update(ancestor=list, done=False, 
+        priority=F('priority') + priority)
 
         event = EPasteCard(
         organization=self.me.default, ancestor=list, user=self.me)
@@ -342,6 +344,7 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

@@ -301,7 +301,6 @@ class CutCard(GuardianView):
 
         # Missing event.
         # user.ws_sound(card.ancestor.ancestor)
-
         card.ancestor = None
         card.save()
 
@@ -1077,6 +1076,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 

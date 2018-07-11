@@ -45,17 +45,7 @@ urlpatterns = [
     url(r'^unbind-organization-admin/(?P<user_id>.+)/', views.UnbindOrganizationAdmin.as_view(), name='unbind-organization-admin'),
     url(r'^resend-invite/(?P<invite_id>.+)', views.ResendInvite.as_view(), name='resend-invite'),
     url(r'^list-nodes/', views.ListNodes.as_view(), name='list-nodes'),
+    url(r'^resend-email-confirmation/', views.ResendEmailConfirmation.as_view(), name='resend-email-confirmation'),
 
 ]
-
-
-
-
-
-
-
-
-
-
-
 

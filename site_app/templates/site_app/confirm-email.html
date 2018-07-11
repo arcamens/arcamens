@@ -21,6 +21,9 @@
 
 <p>An e-mail was sent to {{user.email}}. Click on the link for confirming your account. </p> 
 
+<a href="{% url 'core_app:resend-email-confirmation' %}"> Resend E-mail? </a>
+
+<a href="{% url 'site_app:logout' %}"> Logout? </a> 
 
 </div>
 </div>
@@ -28,6 +31,7 @@
 
 </body>
 </html>
+
 
 
 

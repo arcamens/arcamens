@@ -77,6 +77,10 @@ class SignUp(LoginView):
         record = form.save()
         process = RegisterProcess.objects.create(user=record)
 
+        # Authenticates the user afterwards so
+        # he can resend email confirmation etc.
+        request.session['user_id'] = record.id
+
         return render(request, 
             'site_app/confirm-email.html', {'user': record})
 
@@ -378,6 +382,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

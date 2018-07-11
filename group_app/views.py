@@ -214,6 +214,7 @@ class PastePost(GuardianView):
 
         priority      = head.priority if head else 0
         post.ancestor = group
+        post.done     = False
 
         # Maybe not necessary just +1.
         post.priority = post.priority + priority
@@ -255,9 +256,10 @@ class PasteAllPosts(GuardianView):
 
         post = group.posts.order_by('-priority').first()
         priority = post.priority if post else 0
-        posts.update(ancestor=group, priority=F('priority') + priority)
 
-        posts.update(ancestor=group, priority=priority)
+        posts.update(ancestor=group, done=False, 
+        priority=F('priority') + priority)
+
         event = EPastePost(organization=self.me.default, 
         group=group, user=self.me)
 
@@ -434,6 +436,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
