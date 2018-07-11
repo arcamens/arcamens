@@ -49,7 +49,7 @@ class UserMixin(Device):
         users = self.__class__.objects.none()
 
         for ind in orgs:
-            users = users | ind
+            users = users | ind.users.all()
 
         n_users = users.distinct()
         n_users = users.count()
