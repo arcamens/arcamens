@@ -46,7 +46,7 @@ class UserMixin(Device):
 
     def n_acc_users(self):
         orgs  = self.owned_organizations.all()
-        users = self.objects.none()
+        users = self.__class__.objects.none()
 
         for ind in orgs:
             users = users | ind
