@@ -288,7 +288,7 @@ tag:sometag
 It would list all cards with that tag thus you can easily
 change card priority over other cards.
 
-### Search for Cards/Tasks 
+### Search for Tasks/Cards
 
 In arcamens there is a generic concept of task, a card becomes a task when it is
 assigned to someone. When the task is accomplished then one can just archive it. 
@@ -299,29 +299,44 @@ at the navbar:
 
 **Note:** The mechanism will match the search pattern against all cards that can be accessed by you.
 
-![search-for-card-tasks-0](/static/site_app/help/search-for-card-tasks-0.png)
+![search-for-tasks-cards-0](/static/site_app/help/search-for-tasks-cards-0.png)
 
 From the dialog window you can search through all cards that have at least one user
 bound to. 
 
-![search-for-card-tasks-1](/static/site_app/help/search-for-card-tasks-1.png)
+![search-for-tasks-cards-1](/static/site_app/help/search-for-tasks-cards-1.png)
+
+**Assigned**
+
+When it is checked then it will match against cards that are tasks. It means
+cards that have at least one worker assigned to.
 
 **Assigned to me**
 
 When this option is checked then the filter pattern will be matched
 against all cards that were assigned to you.
 
-**Created by Me**
+**Created by me**
 
 When this option is checked then the filter pattern will match
-all cards that were assigned to someone and the owner is you.
+all cards that were assigned to someone and the owner is you. Combine this filter 
+with both **Assigned** or **Assigned to me** to find cards that are tasks and you have created.
 
 **Done**
 
-This option allows to search for archived cards instead of active ones.
+This option allows to search for archived cards instead of active ones. Combine this filter
+with the previous options to find cards that were archived.
 
-In the above example it finds all cards that are assigned to you
-and contain the strings 'bug' and 'timezone' either in the label or data attributes.
+The above options when combined will produce different results for the same pattern string.
+Consider you inserted the pattern:
+
+~~~
+bug + timezone
+~~~
+
+In the above pattern example it will find all cards that contain the strings 'bug' and 'timezone' 
+either in the label or data attributes.  When combined with the filter options it will narrow down the matched results
+according to the filter definitions so described above. 
 
 You can get more than one match depending on the pattern and the existing cards.
 Once you have filtered the cards then you can click on the card link and open it in the
@@ -1061,6 +1076,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 

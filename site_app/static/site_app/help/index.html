@@ -32,7 +32,7 @@
 <li><a href="#tag-creation">Tag Creation</a></li>
 <li><a href="#card-tags">Card Tags</a></li>
 <li><a href="#card-prioritization">Card Prioritization</a></li>
-<li><a href="#search-for-cardstasks">Search for Cards/Tasks</a></li>
+<li><a href="#search-for-taskscards">Search for Tasks/Cards</a></li>
 <li><a href="#organization-creation">Organization Creation</a></li>
 <li><a href="#groups">Groups</a></li>
 <li><a href="#group-creation">Group Creation</a></li>
@@ -56,6 +56,7 @@
 <li><a href="#list-filter">List Filter</a></li>
 <li><a href="#card-relations">Card Relations</a></li>
 <li><a href="#card-forks">Card Forks</a></li>
+<li><a href="#switch-card-parent">Switch Card Parent</a></li>
 <li><a href="#post-forks">Post Forks</a></li>
 <li><a href="#advanced-user-search">Advanced User Search</a></li>
 <li><a href="#advanced-card-search">Advanced Card Search</a></li>
@@ -244,24 +245,28 @@ Github/Doing
 <p>In that dialog you can use the same usual syntax for card search. Notice that if you have many cards in the list and you want to make sure that the card has priority superior to a given set of cards that contain a tag then you could do:</p>
 <pre><code>tag:sometag</code></pre>
 <p>It would list all cards with that tag thus you can easily change card priority over other cards.</p>
-<h3 id="search-for-cardstasks">Search for Cards/Tasks</h3>
+<h3 id="search-for-taskscards">Search for Tasks/Cards</h3>
 <p>In arcamens there is a generic concept of task, a card becomes a task when it is assigned to someone. When the task is accomplished then one can just archive it. The card will remain available for later inspection.</p>
 <p>In order to search for active or archived cards that contain bound workers to, just click on the Tasks/Cards at the navbar:</p>
 <p><strong>Note:</strong> The mechanism will match the search pattern against all cards that can be accessed by you.</p>
 <figure>
-<img src="/static/site_app/help/search-for-card-tasks-0.png" alt="search-for-card-tasks-0" /><figcaption>search-for-card-tasks-0</figcaption>
+<img src="/static/site_app/help/search-for-tasks-cards-0.png" alt="search-for-tasks-cards-0" /><figcaption>search-for-tasks-cards-0</figcaption>
 </figure>
 <p>From the dialog window you can search through all cards that have at least one user bound to.</p>
 <figure>
-<img src="/static/site_app/help/search-for-card-tasks-1.png" alt="search-for-card-tasks-1" /><figcaption>search-for-card-tasks-1</figcaption>
+<img src="/static/site_app/help/search-for-tasks-cards-1.png" alt="search-for-tasks-cards-1" /><figcaption>search-for-tasks-cards-1</figcaption>
 </figure>
+<p><strong>Assigned</strong></p>
+<p>When it is checked then it will match against cards that are tasks. It means cards that have at least one worker assigned to.</p>
 <p><strong>Assigned to me</strong></p>
 <p>When this option is checked then the filter pattern will be matched against all cards that were assigned to you.</p>
-<p><strong>Created by Me</strong></p>
-<p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you.</p>
+<p><strong>Created by me</strong></p>
+<p>When this option is checked then the filter pattern will match all cards that were assigned to someone and the owner is you. Combine this filter with both <strong>Assigned</strong> or <strong>Assigned to me</strong> to find cards that are tasks and you have created.</p>
 <p><strong>Done</strong></p>
-<p>This option allows to search for archived cards instead of active ones.</p>
-<p>In the above example it finds all cards that are assigned to you and contain the strings ‘bug’ and ‘timezone’ either in the label or data attributes.</p>
+<p>This option allows to search for archived cards instead of active ones. Combine this filter with the previous options to find cards that were archived.</p>
+<p>The above options when combined will produce different results for the same pattern string. Consider you inserted the pattern:</p>
+<pre><code>bug + timezone</code></pre>
+<p>In the above pattern example it will find all cards that contain the strings ‘bug’ and ‘timezone’ either in the label or data attributes. When combined with the filter options it will narrow down the matched results according to the filter definitions so described above.</p>
 <p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <h3 id="organization-creation">Organization Creation</h3>
@@ -563,6 +568,7 @@ Group: Arcamens/Bugs</code></pre>
 <p>You can browse all forks and parents of a given card by following the links on the card.</p>
 <p><strong>Note:</strong> You can open a given card in a new browser tab by just right clicking it then open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
+<h3 id="switch-card-parent">Switch Card Parent</h3>
 <h3 id="post-forks">Post Forks</h3>
 <p>Group posts can be forked into cards, it is mostly useful when a group is used as a kanban board backlog.</p>
 <p>Groups are great for sharing information of all kind, one might use a group to get bug reports and fork the bug reports into card tasks over their corresponding project boards. It all depends on how you feel more comfortable to model your team workflow.</p>
