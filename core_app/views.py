@@ -469,7 +469,23 @@ class InviteOrganizationUser(GuardianView):
         msg1 = 'Max users limit was arrived!\
         You need to upgrade your plan!'
 
-        if self.me.default.owner.is_max_users():
+        # Calculate the amount of users + invites
+        # the actual default organization owner has.
+        users = User.objects.filter(
+        organizations__owner__id=self.me.default.owner.id)
+
+        users   = users.distinct()
+        n_users = users.count()
+
+        invites = Invite.objects.filter(
+            organization__owner__id=self.me.default.owner.id)
+
+        # Not sure if necessary at all.
+        invites = invites.distinct()
+        n_invites = invites.count()
+        
+        max_users = n_users + n_invites
+        if self.me.default.owner.max_users <= max_users:
             return HttpResponse(msg1, status=403)
 
         form = forms.OrganizationInviteForm(request.POST)
@@ -933,6 +949,7 @@ class SetupNodeFilter(GuardianView):
                         'organization': self.me.default}, status=400)
         form.save()
         return redirect('core_app:list-nodes')
+
 
 
 

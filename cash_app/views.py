@@ -30,7 +30,7 @@ class Upgrade(AuthenticatedView):
 
 class ConfirmDowngradeFree(AuthenticatedView):
     def get(self, request):
-        users   = User.objects.filter(organizations__owner__id=self.id)
+        users   = User.objects.filter(organizations__owner__id=self.me.id)
         users   = users.distinct()
         n_users = users.count()
 
@@ -42,7 +42,9 @@ class ConfirmDowngradeFree(AuthenticatedView):
 
 class DowngradeFree(AuthenticatedView):
     def get(self, request):
-        n_users = self.me.n_acc_users()
+        users   = User.objects.filter(organizations__owner__id=self.me.id)
+        users   = users.distinct()
+        n_users = users.count()
 
         if n_users > settings.FREE_MAX_USERS:
             return render(request, 'cash_app/downgrade-free-max-users-error.html', 
@@ -188,4 +190,5 @@ class PayPalIPN(paybills.views.PayPalIPN):
         """
         """
         print('Manual payment happened!')
+
 
