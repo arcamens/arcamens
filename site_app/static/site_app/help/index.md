@@ -301,8 +301,8 @@ at the navbar:
 
 ![search-for-tasks-cards-0](/static/site_app/help/search-for-tasks-cards-0.png)
 
-From the dialog window you can search through all cards that have at least one user
-bound to. 
+From the dialog window you can search through all cards that you have access by combining
+the the following options altogether with a given string pattern.
 
 ![search-for-tasks-cards-1](/static/site_app/help/search-for-tasks-cards-1.png)
 
@@ -1087,6 +1087,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
