@@ -46,9 +46,8 @@ class UserMixin(Device):
 
     def n_acc_users(self):
         users = self.__class__.objects.filter(organizations__owner__id=self.id)
-        n_users = users.distinct()
-        n_users = users.count()
-        return n_users
+        users = users.distinct()
+        return users.count()
 
 
     def is_max_users(self):
