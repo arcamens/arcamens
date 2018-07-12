@@ -26,6 +26,8 @@ urlpatterns = [
      url(r'^board_app/', include('board_app.urls', namespace='board_app')), 
      url(r'^comment_app/', include('comment_app.urls', namespace='comment_app')), 
      url(r'^site_app/', include('site_app.urls', namespace='site_app')), 
+     url(r'^cash_app/', include('cash_app.urls', namespace='cash_app')), 
+
      url(r'^post_app/', include('post_app.urls', namespace='post_app')), 
      url(r'^group_app/', include('group_app.urls', namespace='group_app')),
      url(r'^paybills/', include('paybills.urls', namespace='paybills')), 
@@ -45,6 +47,7 @@ urlpatterns = [
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 

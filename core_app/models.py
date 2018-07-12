@@ -320,12 +320,6 @@ class User(UserMixin, BasicUser):
     'Tag', related_name='users', 
     null=True, blank=True, symmetrical=False)
 
-    # post_clipboard = models.ManyToManyField(
-    # 'post_app.Post', null=True, blank=True, 
-    # related_name='post_clipboard_users', symmetrical=False)
-
-    # contacts  = models.ManyToManyField('self', 
-    # related_name='users', null=True, blank=True, symmetrical=False)
     default = models.ForeignKey('Organization', 
     null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -514,6 +508,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 

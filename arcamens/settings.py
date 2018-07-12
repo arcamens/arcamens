@@ -56,7 +56,7 @@ PAYBILLS_USER = 'core_app.User'
 CURRENCY_CODE = 'USD'
 PAYPAL_URL = 'https://www.sandbox.paypal.com'
 PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
-PAYPAL_IPN_VIEW   = 'site_app:paypal-ipn'
+PAYPAL_IPN_VIEW   = 'cash_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
 # Max users per account for free plan.
@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'paybills',
     'board_app',
     'site_app', 
+    'cash_app',
     'list_app', 
     'card_app', 
     'jsim',
@@ -211,6 +212,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

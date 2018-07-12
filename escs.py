@@ -10,10 +10,10 @@ tee >(python manage.py shell --settings=arcamens.settings)
 quit()
 ##############################################################################
 # connect to victor vps and activate virtualenv.
-tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
+tee >(stdbuf -o 0 ssh staging@staging.arcamens.com 'bash -i')
 
-cd ~/.virtualenv/
-source opus/bin/activate
+cd ~/.virtualenvs/
+source arcamens/bin/activate
 cd ~/projects/arcamens-code
 tee >(python manage.py shell --settings=arcamens.settings)
 
@@ -614,4 +614,15 @@ requests.get(url, proxies=proxies)
 scm = urlparse(url)
 scm.query
 scm.path
+##############################################################################
+from core_app.models import User
+me = User.objects.get(name__startswith='Iury')
+me
+me.n_acc_users()
+me.id
+c = User.objects.filter(in__organization__owner=2).count()
+c = User.objects.filter(organizations__owner__id=2).distinct().count()
+c
+
+
 

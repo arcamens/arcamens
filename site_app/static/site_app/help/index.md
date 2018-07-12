@@ -433,6 +433,17 @@ of the post creation.
 
 ### Post Editing
 
+In order to edit the contents of a post just access its timeline then click on:
+
+![post-editing-0](/static/site_app/help/post-editing-0.png)
+
+Then you would get:
+
+![post-editing-1](/static/site_app/help/post-editing-1.png)
+
+After updating the post content everyone who belongs to the board or is
+an worker of the post will get notified of it.
+
 ### Post Workers
 
 You can mention peers on a post, assign them to execute some task that's described over a group post.

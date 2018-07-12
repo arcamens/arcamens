@@ -44,15 +44,16 @@ Date: {{ind.period.created}}
 <div class="modal-footer">
 
 <div class="text-center">
- <a class="e-get" data-show="{% url 'site_app:paypal-manual-payment' %}" href="#"> Paypal </a> 
-<a class="e-get" data-show="{% url 'site_app:custom-payment' %}" href="#"> Custom </a> 
+ <a class="e-get" data-show="{% url 'cash_app:paypal-manual-payment' %}" href="#"> Paypal </a> 
+<a class="e-get" data-show="{% url 'cash_app:custom-payment' %}" href="#"> Custom </a> 
 
 {% if me.paid %}
-<a class="e-get" data-show="{% url 'site_app:confirm-downgrade-free' %}" href="#"> Downgrade Free </a> 
+<a class="e-get" data-show="{% url 'cash_app:confirm-downgrade-free' %}" href="#"> Downgrade Free </a> 
 {% endif %}
 </div>
 
 </div>
+
 
 
 

@@ -19,26 +19,28 @@ Paypal <small> Manual Payment </small></h3>
 {% bootstrap_form_errors form type='non_fields' %}
 
 </form>
-<p> <b> Total Cost: {{cost}} {{settings.USER_COST}}</b> <br>
+<p> <b> Total Cost: {{cost}} {{settings.CURRENCY_CODE}}</b> <br>
 <small class="text-info"> Cost based on current expiration and max users limit. 
 
-<span class="text-warning"> Cost per user {{settings.USER_COST}} {{settings.USER_COST}} per 30 days. </span>
+<span class="text-warning"> Cost per user {{settings.USER_COST}} {{settings.CURRENCY_CODE}} per 30 days. </span>
 </small></p>
 
 </div>
 
 <div class="modal-footer">
 
-<button  type="button" data-show="{% url 'site_app:upgrade' %}" 
+<button  type="button" data-show="{% url 'cash_app:upgrade' %}" 
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
-<button  type="button" data-show="{% url 'site_app:calculate-period-cost' %}" data-form="#paypalManualPaymentForm"
+<button  type="button" data-show="{% url 'cash_app:calculate-period-cost' %}" data-form="#paypalManualPaymentForm"
 class="btn btn-default e-post"> {% trans "Calc/Cost" %} </button>
 
-<button  type="button" data-show="{% url 'site_app:paypal-manual-payment' %}" data-form="#paypalManualPaymentForm"
+<button  type="button" data-show="{% url 'cash_app:paypal-manual-payment' %}" data-form="#paypalManualPaymentForm"
 class="btn btn-default e-post"> {% trans "Purchase" %} </button>
 
 </div>
+
+
 
 
 
