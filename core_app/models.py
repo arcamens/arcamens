@@ -44,24 +44,6 @@ class UserMixin(Device):
         users = sqlike.run(users)
         return users
 
-    def n_acc_users(self):
-        users = self.__class__.objects.filter(organizations__owner__id=self.id)
-        users = users.distinct()
-        return users.count()
-
-
-    def is_max_users(self):
-        """
-        Tells if owner account has achieved its limit of users
-        in the account.
-        """
-
-        u_orgs       = self.owned_organizations.all()
-        n_users      = User.objects.filter(organizations__in=u_orgs).distinct().count()
-        n_invites    = Invite.objects.filter(organization__in=u_orgs).count()
-        count        = n_users + n_invites
-        return count >= self.max_users
-
     def __str__(self):
         return self.name
 
@@ -508,6 +490,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
