@@ -444,11 +444,13 @@ class CutPost(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         group = post.ancestor
 
-        post.ancestor = None
-        post.save()
 
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
+
+        post.ancestor = None
+        post.priority = clipboard.posts.count() + 1
+        post.save()
 
         clipboard.posts.add(post)
 
@@ -944,6 +946,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

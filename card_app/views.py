@@ -299,15 +299,18 @@ class CutCard(GuardianView):
         card = models.Card.locate(self.me, self.me.default, card_id)
         list = card.ancestor
 
-        # Missing event.
-        # user.ws_sound(card.ancestor.ancestor)
-        card.ancestor = None
-        card.save()
-
         clipboard, _    = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
-        clipboard.cards.add(card)
+    
+        # To avoid the possibility of another user/me
+        # having cut a card with the same priority from
+        # other list which entails in cards with equal priority
+        # when pasting over somewhere.
+        card.priority = clipboard.cards.count() + 1
+        card.ancestor  = None
+        card.save()
 
+        clipboard.cards.add(card)
         event = models.ECutCard.objects.create(organization=self.me.default,
         ancestor=list, board=list.ancestor, card=card, user=self.me)
         event.dispatch(*list.ancestor.members.all())
@@ -1030,8 +1033,8 @@ class SetCardPriorityUp(GuardianView):
         board=card0.ancestor.ancestor, card0=card0, card1=card1, user=self.me)
 
         event.dispatch(*card0.ancestor.ancestor.members.all())
-        # print('Priority', [[ind.label, ind.priority] 
-        # for ind in card0.ancestor.cards.all().order_by('-priority')])
+        print('Priority', [[ind.label, ind.priority] 
+        for ind in card0.ancestor.cards.all().order_by('-priority')])
 
         return redirect('card_app:list-cards', list_id=card0.ancestor.id)
 
@@ -1076,6 +1079,7 @@ class CardFileDownload(GuardianView):
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
         return redirect(filewrapper.file.url)
+
 
 
 
