@@ -46,7 +46,7 @@
 <li><a href="#group-members">Group Members</a></li>
 <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
 <li><a href="#post-prioritization">Post Prioritization</a></li>
-<li><a href="#search-for-poststasks">Search for Posts/Tasks</a></li>
+<li><a href="#search-for-tasksposts">Search for Tasks/Posts</a></li>
 <li><a href="#event-comments">Event Comments</a></li>
 <li><a href="#post-filter">Post Filter</a></li>
 <li><a href="#collection-filter">Collection Filter</a></li>
@@ -252,7 +252,7 @@ Github/Doing
 <figure>
 <img src="/static/site_app/help/search-for-tasks-cards-0.png" alt="search-for-tasks-cards-0" /><figcaption>search-for-tasks-cards-0</figcaption>
 </figure>
-<p>From the dialog window you can search through all cards that have at least one user bound to.</p>
+<p>From the dialog window you can search through all cards that you have access by combining the the following options altogether with a given string pattern.</p>
 <figure>
 <img src="/static/site_app/help/search-for-tasks-cards-1.png" alt="search-for-tasks-cards-1" /><figcaption>search-for-tasks-cards-1</figcaption>
 </figure>
@@ -425,22 +425,25 @@ Github/Doing
 <p>That is just a simple case you could have a lot of many other possibilities.</p>
 <p>Using this approach for prioritization of posts/cards rather than the usual drag/drop thing it allow to improve work quality and productivity because correct ordering of priorities can be done more accurately.</p>
 <p>You can change the post priority up/down some other card to make it explicit to your group peers the correct order of tasks execution. You should also notice that prioritizing posts change the displaying order of the posts.</p>
-<h3 id="search-for-poststasks">Search for Posts/Tasks</h3>
-<p>When a post is created and it is assigned to someone then it becomes a task. It is possible to search for archived or active tasks by clicking at the Tasks/Posts link at the navbar:</p>
+<h3 id="search-for-tasksposts">Search for Tasks/Posts</h3>
+<p>Posts are similar to cards in some ways, when a post is created then it becomes a task when it is assigned to someone.</p>
+<p>In order to search for posts that are assigned to someone or not just click on Tasks/Posts at the navbar.</p>
 <figure>
-<img src="/static/site_app/help/search-for-post-tasks-0.png" alt="search-for-post-tasks-0" /><figcaption>search-for-post-tasks-0</figcaption>
+<img src="/static/site_app/help/search-for-tasks-posts-0.png" alt="search-for-tasks-posts-0" /><figcaption>search-for-tasks-posts-0</figcaption>
 </figure>
 <p>Then you would get:</p>
 <figure>
-<img src="/static/site_app/help/search-for-post-tasks-1.png" alt="search-for-post-tasks-1" /><figcaption>search-for-post-tasks-1</figcaption>
+<img src="/static/site_app/help/search-for-tasks-posts-1.png" alt="search-for-tasks-posts-1" /><figcaption>search-for-tasks-posts-1</figcaption>
 </figure>
-<p>The option <strong>Assigned to me</strong> would perform the search pattern through all tasks that someone has assigned to you even if it was assigned by yourself.</p>
+<p>The option <strong>Assigned</strong> when checked would match against posts that have at least one worker assigned to. It means that it matches just against posts that are tasks.</p>
+<p>The option <strong>Assigned to me</strong> would perform the search pattern through all tasks that someone has assigned to you.</p>
 <p>If you option for <strong>Created by me</strong> then it would check the pattern against all posts that you created and it was at least one worker binded to.</p>
-<p>In the above example it matches all cards that you are assigned to and contains the strings ‘snippet’, ‘form’, ‘html’.</p>
+<p>Consider you wanted to search for posts that contain the strings ‘form’, ‘html’ and ‘need a snippet’ either in the label or data attribute. After inserting that pattern you could combine with the so described filter options above.</p>
 <p>Notice that the order of strings is not relevant; You could also try:</p>
 <pre><code>need a snippet + form + html</code></pre>
 <p>Which would work alike.</p>
 <p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
+<p><strong>See:</strong> <a href="#advanced-post-search">Advanced Post Search</a></p>
 <h3 id="event-comments">Event Comments</h3>
 <p>All kind of user actions in Arcamens are liable of being commented. Whenever an user assigns a worker to a post it generates an event then the event/action can be commented out.</p>
 <p>When an user action is commented then another event is generated but it doesn’t allow comments for action comments.</p>

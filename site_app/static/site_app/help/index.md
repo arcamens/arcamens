@@ -590,26 +590,33 @@ You can change the post priority up/down some other card to make it explicit
 to your group peers the correct order of tasks execution. You should
 also notice that prioritizing posts change the displaying order of the posts.
 
-### Search for Posts/Tasks
+### Search for Tasks/Posts
 
-When a post is created and it is assigned to someone then it becomes a task.
-It is possible to search for archived or active tasks by clicking at the Tasks/Posts link
-at the navbar:
+Posts are similar to cards in some ways, when a post is created
+then it becomes a task when it is assigned to someone.
 
-![search-for-post-tasks-0](/static/site_app/help/search-for-post-tasks-0.png)
+In order to search for posts that are assigned to someone or not just click
+on Tasks/Posts at the navbar.
+
+![search-for-tasks-posts-0](/static/site_app/help/search-for-tasks-posts-0.png)
 
 Then you would get:
 
-![search-for-post-tasks-1](/static/site_app/help/search-for-post-tasks-1.png)
+![search-for-tasks-posts-1](/static/site_app/help/search-for-tasks-posts-1.png)
+
+The option **Assigned** when  checked would match against posts
+that have at least one worker assigned to. It means that it matches just
+against posts that are tasks.
 
 The option **Assigned to me** would perform the search pattern through
-all tasks that someone has assigned to you even if it was assigned by yourself.
+all tasks that someone has assigned to you.
 
 If you option for  **Created by me** then it would check the pattern against all posts
 that you created and it was at least one worker binded to.
 
-In the above example it matches all cards that you are assigned to and contains
-the strings 'snippet', 'form', 'html'.
+Consider you wanted to search for posts that contain the strings 'form', 'html' and 'need a snippet'
+either in the label or data attribute. After inserting that pattern you could combine
+with the so described filter options above.
 
 Notice that the order of strings is not relevant; You could also try:
 
@@ -620,6 +627,8 @@ need a snippet + form + html
 Which would work alike.
 
 **Note:** Leave the Done attribute checked for searching only through the archived posts.
+
+**See:** [Advanced Post Search](#advanced-post-search)
 
 ### Event Comments
 
@@ -1087,6 +1096,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
