@@ -745,18 +745,48 @@ Can I ask, where is this documented? I cannot seem to find it. Thanks.</code></p
 <p>To be more specific.</p>
 <p><strong>Note File</strong></p>
 <p>It matches against all cards that have a note with an attachment file whose name contains a specific string.</p>
+<p>The above attribute works alike the one for card attachments but regards note attachments.</p>
+<pre><code>note.file:.pdf + note.file:ui.jpg</code></pre>
+<p>Would find all cards that have at least a note with attachment files whose names contain the strings ‘.pdf’ and ‘ui.jpg’.</p>
 <p><strong>Fork</strong></p>
 <p>Filter cards that have a fork whose label or data attribute contains a givein string.</p>
+<p>Imagine the situation that you want to find cards based on the label/data attribute of its forks, it is when you would use such a card attribute.</p>
+<pre><code>fork:django admin + fork:markdown</code></pre>
+<p>That would match all cards that contain a given fork whose label or data attribute contain the strings ‘django admin’ and ‘markdown’.</p>
 <p><strong>Fork Tag</strong></p>
 <p>Filter cards that have a fork that is tagged with a given tag.</p>
+<p>This would be useful to filter cards whose forks are tagged with a given set of tags.</p>
+<pre><code>fork.tag:bug</code></pre>
+<p>That would find all cards that have a fork that is tagged with bug tag.</p>
 <p><strong>Fork Worker</strong></p>
 <p>Filter cards that have a fork whose worker name or email contain a given string.</p>
+<p>This pattern:</p>
+<pre><code>fork.worker:rambo</code></pre>
+<p>Would find all cards that have a fork thats assigned to the worker Rambo.</p>
 <p><strong>Parent</strong></p>
 <p>Filter cards that have a parent card whose label or data attribute contains a given string.</p>
+<p>This card attribute is useful to list all forks of a given card, suppose you know a card that is as follow:</p>
+<pre><code>label: SQLite and Queryset.iterator() support
+data: I’m writing a non-web app that uses Django as the ORM and SQLite as the backend, 
+and I have a need to iterate over large tables efficiently.
+
+ Django’s documentation says Queryset.iterator() does not work on SQLite (1) (2) but I tried it anyways, and discovered that it works: 
+results are not read into memory in entirety, but streamed from the database in chunks. 
+I traced this to an apparent logic error in the SQLCompiler.execute_sql()
+method (3) and the interpretation of the can_use_chunked_reads flag. More on this below.</code></pre>
+<p>Suppose it had like more than three layers of forks then you wanted to list all of its forks:</p>
+<pre><code>parent:sqlite and queryset.iterator</code></pre>
+<p>That would be enough to list all of the desired forks.</p>
 <p><strong>Parent Tag</strong></p>
 <p>The same as fork tag but regarding its parent card.</p>
+<p>This one lists forks whose parents contain a given set of tags.</p>
+<pre><code>parent.tag:bug + parent.tag:django</code></pre>
+<p>That pattern would list all forks whose parent contains the tags bug and django.</p>
 <p><strong>Parent Worker</strong></p>
 <p>The same as fork worker but regarding its parent card.</p>
+<p>The below pattern:</p>
+<pre><code>parent.worker:iury</code></pre>
+<p>Would find all card forks whose parent is assigned to the worker name or email contains the string ‘iury’.</p>
 <h3 id="advanced-post-search">Advanced Post Search</h3>
 <h3 id="advanced-list-search">Advanced List Search</h3>
 <p>When forking cards/posts it is necessary to search the desired board list that will contain the fork. Lists are searched pretty much like cards/posts except that it contains some different attributes.</p>

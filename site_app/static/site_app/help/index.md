@@ -1276,32 +1276,107 @@ To be more specific.
 It matches against all cards that have a note with an attachment file
 whose name contains a specific string.
 
+The above attribute works alike the one for card attachments but regards
+note attachments.
+
+~~~
+note.file:.pdf + note.file:ui.jpg
+~~~
+
+Would find all cards that have at least a note with attachment files
+whose names contain the strings '.pdf' and 'ui.jpg'.
+
 **Fork**
 
 Filter cards that have a fork whose label or data attribute contains
 a givein string.
 
+Imagine the situation that you want to find cards based on the label/data attribute
+of its forks, it is when you would use such a card attribute.
+
+~~~
+fork:django admin + fork:markdown
+~~~
+
+That would match all cards that contain a given fork whose label or data attribute
+contain the strings 'django admin' and 'markdown'.
+
 **Fork Tag**
 
 Filter cards that have a fork that is tagged with a given tag.
+
+This would be useful to filter cards whose forks are tagged with a given set of tags.
+
+~~~
+fork.tag:bug
+~~~
+
+That would find all cards that have a fork that is tagged with bug tag.
 
 **Fork Worker**
 
 Filter cards that have a fork whose worker name or email contain
 a given string.
 
+This pattern:
+
+~~~
+fork.worker:rambo
+~~~
+
+Would find all cards that have a fork thats assigned to the worker Rambo.
+
 **Parent**
 
 Filter cards that have a parent card whose label or data attribute
 contains a given string.
 
+This card attribute is useful to list all forks of a given card, suppose you know
+a card that is as follow:
+
+~~~
+label: SQLite and Queryset.iterator() support
+data: I’m writing a non-web app that uses Django as the ORM and SQLite as the backend, 
+and I have a need to iterate over large tables efficiently.
+
+ Django’s documentation says Queryset.iterator() does not work on SQLite (1) (2) but I tried it anyways, and discovered that it works: 
+results are not read into memory in entirety, but streamed from the database in chunks. 
+I traced this to an apparent logic error in the SQLCompiler.execute_sql()
+method (3) and the interpretation of the can_use_chunked_reads flag. More on this below.
+~~~
+
+Suppose it had like more than three layers of forks then you wanted to list all of its forks:
+
+~~~
+parent:sqlite and queryset.iterator
+~~~
+
+That would be enough to list all of the desired forks.
+
 **Parent Tag**
 
 The same as fork tag but regarding its parent card.
 
+This one lists forks whose parents contain a given set of tags.
+
+~~~
+parent.tag:bug + parent.tag:django
+~~~
+
+That pattern would list all forks whose parent contains the tags bug and django.
+
 **Parent Worker**
 
 The same as fork worker but regarding its parent card.
+
+The below pattern:
+
+~~~
+parent.worker:iury
+~~~
+
+Would find all card forks whose parent is assigned to the worker name or email contains
+the string 'iury'.
 
 ### Advanced Post Search
 
