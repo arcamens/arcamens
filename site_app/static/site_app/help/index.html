@@ -619,7 +619,7 @@ Group: Arcamens/Bugs</code></pre>
 <pre><code>tag:dev + email:oliveira</code></pre>
 <h3 id="advanced-card-search">Advanced Card Search</h3>
 <p>Arcamens has a powerful pattern filtering language, it allows one to quickly write filter patterns to perform searches based on card attributes.</p>
-<p>The sign ‘+’ plus is used to mix up card attributes for filttering. The general format of a search pattern consists of:</p>
+<p>The sign ‘+’ plus is used to mix up card attributes for filtering. The general format of a search pattern consists of:</p>
 <pre><code>Attribute0:Value1 + Attribute1:Value2 + ...</code></pre>
 <p>The following attributes are accepted when searching for cards:</p>
 <p><strong>Owner</strong></p>
@@ -676,7 +676,7 @@ Other nix commands have a special flag for this exact use-case, for example $ ls
 <p>You would probably never face a situation where you would need to insert such a long pattern to find your cards, it is just left as a matter of examplification.</p>
 <p>Notice also that when you’re searching for cards based on the label/data attribute then it is not necessary to use the verbose format as above, it could be written like:</p>
 <pre><code>django-admin + django + management command + color + colorize output</code></pre>
-<p>Which would be equivalent to the previous pattern. You use the verbose format regarding label/data:</p>
+<p>Which would be give similar results to the previous filter pattern. You use the verbose format regarding label/data:</p>
 <pre><code>data:value</code></pre>
 <p>Only when you want to specifically mean that the card contains the pattern string in the data but not in the label or vice versa. It is not very often useful at all, better to use the less prolix format as shown above when matching against label or data attributes of cards.</p>
 <p><strong>Tag</strong></p>
@@ -718,7 +718,15 @@ Other nix commands have a special flag for this exact use-case, for example $ ls
 <p>For finding cards created in the month 05 then do:</p>
 <pre><code>created:-05-</code></pre>
 <p><strong>File</strong></p>
-<p>Filter cards whose one of its attachments contains some string.</p>
+<p>Filter cards whose one of its attachments contains some string. Imagine you wanted to find a card that has a given pdf file attached to.</p>
+<p>The file will contain the string ‘.pdf’ showing in its name thus you could do:</p>
+<pre><code>file:.pdf</code></pre>
+<p>Would be enough to find all cards that have attachments that are pdf.</p>
+<p>If you wanted to look up a card that has two attachments: engine tutorial.pdf, ui features.jpg</p>
+<p>Then you could do:</p>
+<pre><code>file:engine + file:features</code></pre>
+<p>That would be enough to find your card, if you wanted to be omre specific you could just do:</p>
+<pre><code>file:engine tutorial + file:ui features.jpg</code></pre>
 <p><strong>Note</strong></p>
 <p>Filter cards that have a note whose title or data attribute contains a given string.</p>
 <p><strong>Note Owner</strong></p>

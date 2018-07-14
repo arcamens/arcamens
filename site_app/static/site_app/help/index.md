@@ -922,7 +922,7 @@ search to be performed under a given attribute like email you could do:
 Arcamens has a powerful pattern filtering language, it allows one to quickly
 write filter patterns to perform searches based on card attributes.
 
-The sign '+' plus is used to mix up card attributes for filttering. The general format
+The sign '+' plus is used to mix up card attributes for filtering. The general format
 of a search pattern consists of:
 
 ~~~
@@ -1070,7 +1070,7 @@ necessary to use the verbose format as above, it could be written like:
 django-admin + django + management command + color + colorize output
 ~~~
 
-Which would be equivalent to the previous pattern. You use the verbose format regarding label/data:
+Which would be give similar results to the previous filter pattern. You use the verbose format regarding label/data:
 
 ~~~
 data:value
@@ -1201,7 +1201,31 @@ created:-05-
 
 **File**
 
-Filter cards whose one of its attachments contains some string.
+Filter cards whose one of its attachments contains some string. Imagine you wanted
+to find a card that has a given pdf file attached to.
+
+The file will contain the string '.pdf' showing in its name thus you could do:
+
+~~~
+file:.pdf
+~~~
+
+Would be enough to find all cards that have attachments that are pdf.
+
+If you wanted to look up a card that has two attachments: engine tutorial.pdf, ui features.jpg
+
+Then you could do:
+
+~~~
+file:engine + file:features
+~~~
+
+That would be enough to find your card, if you wanted to be omre specific
+you could just do:
+
+~~~
+file:engine tutorial + file:ui features.jpg
+~~~
 
 **Note**
 
