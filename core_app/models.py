@@ -315,6 +315,9 @@ class User(UserMixin, BasicUser):
 
     enabled = models.BooleanField(blank=True, default=False)
 
+    storage   = models.IntegerField(null=True, default=0)
+    # download_counter = models.IntegerField(null=True, default=0)
+
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)
     max_users  = models.IntegerField(null=True, default=3)
@@ -490,6 +493,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 

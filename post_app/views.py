@@ -157,7 +157,16 @@ class AttachFile(GuardianView):
     def post(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         attachments = post.postfilewrapper_set.all()
-        form = forms.PostFileWrapperForm(request.POST, request.FILES)
+
+        max_storage = settings.PAID_STORAGE_LIMIT if self.me.paid \
+        else settings.FREE_STORAGE_LIMIT
+
+        max_file = PAID_MAX_FILE_SIZE if self.me.paid \
+        else settings.FREE_MAX_FILE_SIZE 
+
+        form = forms.PostFileWrapperForm(request.POST, 
+        request.FILES, storage=self.me.storage,  max_storage=max_storage, 
+        max_file=max_file)
 
         if not form.is_valid():
             return render(request, 'post_app/attach-file.html', 
@@ -946,6 +955,7 @@ class PostFileDownload(GuardianView):
         filewrapper = filewrapper.distinct().first()
 
         return redirect(filewrapper.file.url)
+
 
 
 

@@ -77,16 +77,24 @@ class FileAttachment:
     We have to set different file size upload limits.
     One for free plans one for paid plans eventually.
     """
-    def __init__(self, *args, max_size=1024, **kwargs):
-        self.max_size = max_size
+    def __init__(self, *args, max_file=1, storage=0, 
+        max_storage=100, **kwargs):
+
+        self.max_file      = max_file * 1024 * 1024
+        self.storage       = storage * 1024 * 1024
+        self.max_storage   = max_storage * 1024 * 1024
         super(FileAttachment, self).__init__(*args, **kwargs)
 
     def clean(self):
         super(FileAttachment, self).clean()
         file = self.cleaned_data.get('file')
-        if file.size > self.max_size:
-            raise forms.ValidationError("File too big! \
-                Check your upload limits ")
 
+        if file.size > self.max_file:
+            raise forms.ValidationError("File too big!\
+                Check your upload limits ")
+        elif file.size + self.storage > self.max_storage:
+            raise forms.ValidationError("It overrides your \
+                max montly storage. Check your upload limits ")
+        
 
 
