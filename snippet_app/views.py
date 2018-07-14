@@ -1,7 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from board_app.views import GuardianView
+from core_app.views import GuardianView, FileDownload
 from django.http import HttpResponse
 from django.conf import settings
 from post_app.models import Post
@@ -168,13 +168,15 @@ class DeleteSnippet(GuardianView):
         post_id=snippet.post.id)
 
 
-class SnippetFileDownload(GuardianView):
+class SnippetFileDownload(FileDownload):
     def get(self, request, filewrapper_id):
         filewrapper = models.SnippetFileWrapper.objects.filter(
         Q(snippet__post__ancestor__users=self.me) | Q(snippet__post__workers=self.me),
         snippet__post__ancestor__organization=self.me.default, 
         id=filewrapper_id).distinct().first()
 
+        if not self.is_valid(filewrapper.file):
+            return HttpResponse('Download limit exceeded!', status=400)
         return redirect(filewrapper.file.url)
 
 

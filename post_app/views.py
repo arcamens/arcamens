@@ -6,7 +6,7 @@ from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
 from django.shortcuts import render, redirect
-from core_app.views import GuardianView
+from core_app.views import GuardianView, FileDownload
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.core.mail import send_mail
@@ -941,22 +941,14 @@ class SetPostPriorityDown(GuardianView):
 
         return redirect('group_app:list-posts', group_id=post0.ancestor.id)
 
-class PostFileDownload(GuardianView):
+class PostFileDownload(FileDownload):
     def get(self, request, filewrapper_id):
         filewrapper = PostFileWrapper.objects.filter(
         Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
         id=filewrapper_id, post__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
 
+        if not self.is_valid(filewrapper.file):
+            return HttpResponse('Download limit exceeded!', status=400)
         return redirect(filewrapper.file.url)
-
-
-
-
-
-
-
-
-
-
 

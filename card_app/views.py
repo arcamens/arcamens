@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from card_app.models import GlobalCardFilter, CardPin
 from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
-from core_app.views import GuardianView
+from core_app.views import GuardianView, FileDownload
 from post_app.models import Post, ECreatePostFork
 from post_app.forms import PostForm
 from group_app.models import Group
@@ -1074,20 +1074,16 @@ class Unpin(GuardianView):
 
 
 
-class CardFileDownload(GuardianView):
+class CardFileDownload(FileDownload):
     def get(self, request, filewrapper_id):
         filewrapper = models.CardFileWrapper.objects.filter(
         Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
+
+        if not self.is_valid(filewrapper.file):
+            return HttpResponse('Download limit exceeded!', status=400)
         return redirect(filewrapper.file.url)
-
-
-
-
-
-
-
 
 
 

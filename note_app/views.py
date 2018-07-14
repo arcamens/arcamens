@@ -2,7 +2,8 @@ from django.views.generic import View
 from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from board_app.views import GuardianView
+from core_app.views import GuardianView, FileDownload
+
 from django.http import HttpResponse
 from card_app.models import Card
 from core_app.models import User
@@ -176,14 +177,14 @@ class DeleteNote(GuardianView):
         return redirect('note_app:list-notes', 
         card_id=note.card.id)
 
-class NoteFileDownload(GuardianView):
+class NoteFileDownload(FileDownload):
     def get(self, request, filewrapper_id):
         filewrapper = models.NoteFileWrapper.objects.filter(
         Q(note__card__ancestor__ancestor__members=self.me) | Q(note__card__workers=self.me), 
         note__card__ancestor__ancestor__organization=self.me.default, 
         id=filewrapper_id).distinct().first()
 
+        if not self.is_valid(filewrapper.file):
+            return HttpResponse('Download limit exceeded!', status=400)
         return redirect(filewrapper.file.url)
-
-
 
