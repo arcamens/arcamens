@@ -788,6 +788,55 @@ method (3) and the interpretation of the can_use_chunked_reads flag. More on thi
 <pre><code>parent.worker:iury</code></pre>
 <p>Would find all card forks whose parent is assigned to the worker name or email contains the string ‘iury’.</p>
 <h3 id="advanced-post-search">Advanced Post Search</h3>
+<p>Group posts share some attributes with cards, these are:</p>
+<p><strong>Owner</strong></p>
+<p>The post creator.</p>
+<p><strong>Worker</strong></p>
+<p>Relative to the post workers.</p>
+<p><strong>Tag</strong></p>
+<p>Match against the post tags.</p>
+<p><strong>Created</strong></p>
+<p>Regarding the post creation date.</p>
+<p><strong>Label</strong></p>
+<p>The post title.</p>
+<p><strong>Data</strong></p>
+<p>The post data attribute, it is the one that carries markdown.</p>
+<p><strong>Fork</strong></p>
+<p>The card forks of the post in case it has sub tasks that are spreaded over boards.</p>
+<p>In order to get additional information about the above attributes.</p>
+<p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
+<p>In addition to cards the posts can have the following different attributes:</p>
+<p><strong>Snippet</strong></p>
+<p>It allows one to match against posts that contain a given string either in the title or in the data attribute.</p>
+<p>Imagine you want to find a post which contains a snippet whose title is:</p>
+<pre><code>A snippet how to use gle aka google searcher library for python.</code></pre>
+<p>And its data field contains:</p>
+<pre><code>from gle import Google
+
+# Count is the number of pages that you want to extract results.
+x = Google(count=2)
+pages = x.search(&#39;python vy editor&#39;)
+
+for indi in pages:
+    for indj in indi:
+        print(indj)</code></pre>
+<p>Then the below filter pattern would do the job to find such a post.</p>
+<pre><code>snippet:use gle + snippet:x.search</code></pre>
+<p><strong>Snippet Title</strong></p>
+<p>The above attribute matches strictly the snippet title.</p>
+<pre><code>snipet.title:some string in the title</code></pre>
+<p><strong>Snippet File</strong></p>
+<p>This one matches against posts that have snippets with attachments.</p>
+<pre><code>snippet.file:engine.pdf </code></pre>
+<p>That would find all posts that have a snippet with an attachment whose filename contains the string ‘engine.pdf’.</p>
+<p><strong>Snippet Owner</strong></p>
+<p>This one is regarding the snippet creator.</p>
+<pre><code>snippet.owner:Norris</code></pre>
+<p>Would find all posts that have at least one snippet that was created by a guy named Norris.</p>
+<p><strong>Group</strong></p>
+<p>It narrows down the results by including posts from a specific group.</p>
+<pre><code>group:arcamens/backlog</code></pre>
+<p>Would match against posts that are from a group named ‘arcamens/backlog’.</p>
 <h3 id="advanced-list-search">Advanced List Search</h3>
 <p>When forking cards/posts it is necessary to search the desired board list that will contain the fork. Lists are searched pretty much like cards/posts except that it contains some different attributes.</p>
 <p>List attributes used in searches:</p>

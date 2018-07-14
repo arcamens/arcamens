@@ -1380,6 +1380,114 @@ the string 'iury'.
 
 ### Advanced Post Search
 
+Group posts share some attributes with cards, these are:
+
+**Owner**
+
+The post creator.
+
+**Worker**
+
+Relative to the post workers.
+
+**Tag**
+
+Match against the post tags.
+
+**Created**
+
+Regarding the post creation date.
+
+**Label**
+
+The post title.
+
+**Data**
+
+The post data attribute, it is the one that carries markdown.
+
+**Fork**
+
+The card forks of the post in case it has sub tasks
+that are spreaded over boards.
+
+In order to get additional information about the above attributes.
+
+**See:** [Advanced Card Search](#advanced-card-search)
+
+In addition to cards the posts can have the following different attributes:
+
+**Snippet**
+
+It allows one to match against posts that contain a given string either in the title
+or in the data attribute.
+
+Imagine you want to find a post which contains a snippet whose title is:
+
+~~~
+A snippet how to use gle aka google searcher library for python.
+~~~
+
+And its data field contains:
+
+~~~
+from gle import Google
+
+# Count is the number of pages that you want to extract results.
+x = Google(count=2)
+pages = x.search('python vy editor')
+
+for indi in pages:
+    for indj in indi:
+        print(indj)
+~~~
+
+Then the below filter pattern would do the job to find such a post.
+
+~~~
+snippet:use gle + snippet:x.search
+~~~
+
+**Snippet Title**
+
+The above attribute matches strictly the snippet title.
+
+~~~
+snipet.title:some string in the title
+~~~
+
+**Snippet File**
+
+This one matches against posts that have snippets with attachments.
+
+~~~
+snippet.file:engine.pdf 
+~~~
+
+That would find all posts that have a snippet with an attachment whose filename contains
+the string 'engine.pdf'.
+
+**Snippet Owner**
+
+This one is regarding the snippet creator.
+
+~~~
+snippet.owner:Norris
+~~~
+
+Would find all posts that have at least one snippet that was created by a guy
+named Norris.
+
+**Group**
+
+It narrows down the results by including posts from a specific group.
+
+~~~
+group:arcamens/backlog
+~~~
+
+Would match against posts that are from a group named 'arcamens/backlog'.
+
 ### Advanced List Search
 
 When forking cards/posts it is necessary to search the desired
