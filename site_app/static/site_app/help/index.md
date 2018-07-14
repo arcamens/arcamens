@@ -919,6 +919,332 @@ search to be performed under a given attribute like email you could do:
 
 ### Advanced Card Search
 
+Arcamens has a powerful pattern filtering language, it allows one to quickly
+write filter patterns to perform searches based on card attributes.
+
+The sign '+' plus is used to mix up card attributes for filttering. The general format
+of a search pattern consists of:
+
+~~~
+Attribute0:Value1 + Attribute1:Value2 + ...
+~~~
+
+The following attributes are accepted when searching for cards:
+
+**Owner**
+
+The user who has created the card.
+
+Example:
+
+~~~
+owner:oliveira
+~~~
+
+Would match all cards whose owner name or email contains the string 'oliveira'.
+
+Thus consider a worker whose name and email are registered as follow:
+
+~~~
+Name: Iury de Oliveira Gomes Figueiredo
+E-mail: iogf@arcamens.com
+~~~
+
+The so defined pattern above would list all cards which were
+created by that worker as well.
+
+Notice that by using the above pattern it would list cards
+created by a worker whose name or e-mail consists of:
+
+~~~
+Name: John Rambo
+E-mail: oliveira@arcamens.com
+~~~
+
+In order to make your search more strict it is enough to add more information, like in:
+
+~~~
+owner:oliveira@arcamens.com
+~~~
+
+Would work like a charm.
+
+**Label**
+
+The card short description. Imagine that you have a card
+whose label/title is:
+
+~~~
+Update the password list used by CommonPasswordValidator to a more recent list
+~~~
+
+If you wanted to write a possible pattern filter to match against that card then you could
+do:
+
+~~~
+label: update
+~~~
+
+But also notice that despite of the above pattern being enough to list that card
+in the search it is not enough to make the results strict. It would list a lot of cards
+that contain the string 'update' in its short description.
+
+In order to improve your results you can just add more information like:
+
+~~~
+label: update the password
+~~~
+
+It could do the job in case you remembered better how the card label was written. However
+very often we just remember a few informations regarding the card, in these situations
+you could merely do:
+
+~~~
+label:update + label:pass + label:validator
+~~~
+
+It would surely find all cards that contain the string 'update' in its label
+and the string 'pass' as well as the string 'validator'. It would probably be enough
+to find the desired card
+
+More interestingly it could be possible to do:
+
+~~~
+label:update the password + label:commonpasswordvalidator to a more
+~~~
+
+The above one is left just as a matter of better elucidating the reader
+of the workings of the pattern filtering language mechanism.
+
+**Data**
+
+The card data it is the field that contains markdown.
+
+In order to demonstrate the data attribute usage in searches, consider
+the existance of a card that is written as follows:
+
+~~~
+Label: Add an option to django-admin to always colorize output
+
+Data: With Django management commands, it is currently possible disable colors with the --no-colors flag.
+What I'd like to have is basically the other side of the coin: a --force-colors flag that instructs 
+Django to output ANSI color sequences in cases it would disable colors by default (typically, 
+when the output is piped to another command, as documented).
+
+My real world use-case is the following one: I have a custom Django command to import data. 
+I run this command myself, and I'd like to send a colored log (HTML seems perfect for this) to the data curators. 
+I can use the ​https://github.com/theZiz/aha utility for this, but that doesn't work since Django disable colors when the output is piped.
+Other nix commands have a special flag for this exact use-case, for example $ ls --color=always
+
+~~~
+
+The above tag maps to a real issue taken from: https://code.djangoproject.com/query
+
+Imagine that you wanted to look that card up and you remembered just a few details regarding its description.
+The details are the string 'django' and that it is related to its management command feature and it is related to coloring output.
+
+Well, in that case you could quickly come up with:
+
+~~~
+data:django + data:management command + data:color
+~~~
+
+That probably be enough to bound your results in a reasonable amount of cards whose
+inspection would be feasible to do. In case you had many other cards with the same strings
+showing up in the data field then you could just try adding more information in order to narrow
+down your results.
+
+Note that if you knew details about the card label then you could also do:
+
+~~~
+label:django-admin + data:django + data:management command + data:color + label:colorize output
+~~~
+
+You would probably never face a situation where you would need to insert such a long pattern
+to find your cards, it is just left as a matter of examplification.
+
+Notice also that when you're searching for cards based on the label/data attribute then it is not
+necessary to use the verbose format as above, it could be written like:
+
+~~~
+django-admin + django + management command + color + colorize output
+~~~
+
+Which would be equivalent to the previous pattern. You use the verbose format regarding label/data:
+
+~~~
+data:value
+~~~
+
+Only when you want to specifically mean that the card contains the pattern string in the data
+but not in the label or vice versa. It is not very often useful at all, better to use the less
+prolix format as shown above when matching against label or data attributes of cards.
+
+**Tag**
+
+It allows to search for cards based on its tags. Imagine that you wanted
+to list all cards that contain a given set of tags, it is when you use the tag
+attribute.
+
+Consider you wanted to find all cards that contain the tags: python, feature and arcamens.
+You could just write:
+
+~~~
+tag:python + tag:feature + tag:arcamens
+~~~
+
+It is important to notice that as all other card attributes it can be mixed up.
+
+Thus it would as well be a valid filtering pattern:
+
+~~~
+label:django admin + tag:python + tag:feature + tag:arcamens + data:command management
+~~~
+
+**Worker**
+
+Find cards that are assigned to a specific worker. This is such
+a very handy card attribute, you'll find yourself looking up cards
+that are assigned to some of your peers very often.
+
+Imagine you wanted to look up all cards that are assigned to the worker John Rambo
+and are also tagged with the following tags: vy and untwisted
+
+You could just write:
+
+~~~
+tag:vy + worker:rambo + tag:untwisted
+~~~
+
+If you also wanted to find cards that are assigned to both Rambo and Porton workers
+then you could do:
+
+~~~
+worker:rambo + worker:porton
+~~~
+
+Notice also that you can use the worker email as a value for the worker attribute:
+
+~~~
+worker:rambo@arcamens.com + worker:porton@arcamens.com
+~~~
+
+**List**
+
+Filter cards that belong to a list whose name contains
+some string. It is a very common situation to inspect cards
+that are over specific lists from your boards. 
+
+Imagine you wanted to list all cards that are over the list Todo, then
+you could do:
+
+~~~
+list:Todo
+~~~
+
+More suprisingly you could do things like:
+
+
+~~~
+tag:bug + list:todo
+~~~
+
+Would find all cards that are on a list whose name matches the string 'todo' and are also tagged
+with the tag bug.
+
+If you wanted to list all cards that are over the lists whose name matches Done and are
+assigned to a worker named Rambo then you could do:
+
+~~~
+worker:rambo + list:done
+~~~
+
+**Board**
+
+Filter cards whose board name contains some string. Imagine you wanted
+to narrow down your results by including the cards board then you would use
+this attribute.
+
+The below example would match against cards that are from a board whose
+name or description contains the string 'arcamens'.
+
+~~~
+board:arcamens + tag:bug
+~~~
+
+It would find all cards that are tagged as related to bugs and are from boards
+where the string 'arcamens' shows up.
+
+**Created**
+
+Filter cards based on its creation date. List cards based on its
+creation date:
+
+~~~
+created:2018
+~~~
+
+Would find all cards that were created in 2018.
+
+~~~
+created:2018-05-23
+~~~
+
+The above example would find all cards that were created on 2018-05-23.
+The general format is: year-month-day
+
+For finding cards created in the month 05 then do:
+
+~~~
+created:-05-
+~~~
+
+**File**
+
+Filter cards whose one of its attachments contains some string.
+
+**Note**
+
+Filter cards that have a note whose title or data attribute
+contains a given string.
+
+**Note Owner**
+
+If finds all cards that have a note whose creator name or email
+contain a string.
+
+**Note File**
+
+It matches against all cards that have a note with an attachment file
+whose name contains a specific string.
+
+**Fork**
+
+Filter cards that have a fork whose label or data attribute contains
+a givein string.
+
+**Fork Tag**
+
+Filter cards that have a fork that is tagged with a given tag.
+
+**Fork Worker**
+
+Filter cards that have a fork whose worker name or email contain
+a given string.
+
+**Parent**
+
+Filter cards that have a parent card whose label or data attribute
+contains a given string.
+
+**Parent Tag**
+
+The same as fork tag but regarding its parent card.
+
+**Parent Worker**
+
+The same as fork worker but regarding its parent card.
+
 ### Advanced Post Search
 
 ### Advanced List Search
@@ -1096,6 +1422,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
