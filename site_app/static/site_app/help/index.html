@@ -823,7 +823,7 @@ method (3) and the interpretation of the can_use_chunked_reads flag. More on thi
 <p>Would find all posts that contain a card fork where the string ‘django command’ shows up either in its label or data field.</p>
 <p><strong>Fork Tag</strong></p>
 <p>Relative to the post fork tags.</p>
-<pre><code>tag:bug</code></pre>
+<pre><code>fork.tag:bug</code></pre>
 <p>Would list all posts that contain a given card fork that is tagged as a bug.</p>
 <p><strong>Fork Label</strong></p>
 <p>Relative to the post fork label.</p>
@@ -858,7 +858,7 @@ for indi in pages:
 <pre><code>snippet:use gle + snippet:x.search</code></pre>
 <p><strong>Snippet Title</strong></p>
 <p>The above attribute matches strictly the snippet title.</p>
-<pre><code>snipet.title:some string in the title</code></pre>
+<pre><code>snippet.title:some string in the title</code></pre>
 <p><strong>Snippet File</strong></p>
 <p>This one matches against posts that have snippets with attachments.</p>
 <pre><code>snippet.file:engine.pdf </code></pre>

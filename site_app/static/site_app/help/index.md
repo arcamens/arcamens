@@ -1471,7 +1471,7 @@ shows up either in its label or data field.
 Relative to the post fork tags.
 
 ~~~
-tag:bug
+fork.tag:bug
 ~~~
 
 Would list all posts that contain a given card fork that is tagged as a bug.
@@ -1551,7 +1551,7 @@ snippet:use gle + snippet:x.search
 The above attribute matches strictly the snippet title.
 
 ~~~
-snipet.title:some string in the title
+snippet.title:some string in the title
 ~~~
 
 **Snippet File**
