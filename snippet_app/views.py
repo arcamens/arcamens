@@ -175,8 +175,6 @@ class SnippetFileDownload(FileDownload):
         snippet__post__ancestor__organization=self.me.default, 
         id=filewrapper_id).distinct().first()
 
-        if not self.is_valid(filewrapper.file):
-            return HttpResponse('Download limit exceeded!', status=400)
-        return redirect(filewrapper.file.url)
+        return self.get_file_url(filewrapper.file)
 
 

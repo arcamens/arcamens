@@ -951,13 +951,13 @@ class SetupNodeFilter(GuardianView):
         return redirect('core_app:list-nodes')
 
 class FileDownload(GuardianView):
-    def is_valid(self, file):
+    def get_file_url(self, file):
         LIMIT = settings.PAID_DOWNLOAD_LIMIT\
         if self.me.paid else settings.FREE_DOWNLOAD_LIMIT
 
         if self.me.c_download > LIMIT:
-            return False
+            return HttpResponse('Download limit exceeded!', status=400)
         self.me.c_download = self.me.c_download + file.size
         self.me.save()
-        return True
+        return redirect(file.url)
 

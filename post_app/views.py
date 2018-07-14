@@ -948,7 +948,5 @@ class PostFileDownload(FileDownload):
         id=filewrapper_id, post__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
 
-        if not self.is_valid(filewrapper.file):
-            return HttpResponse('Download limit exceeded!', status=400)
-        return redirect(filewrapper.file.url)
+        return self.get_file_url(filewrapper.file)
 
