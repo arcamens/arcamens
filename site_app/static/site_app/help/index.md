@@ -1142,7 +1142,7 @@ you could do:
 list:Todo
 ~~~
 
-More suprisingly you could do things like:
+More interestingly you could do things like:
 
 
 ~~~
@@ -1230,12 +1230,46 @@ file:engine tutorial + file:ui features.jpg
 **Note**
 
 Filter cards that have a note whose title or data attribute
-contains a given string.
+contains a given string. This attribute is useful to find cards
+when you remember some characteristics of one of its notes.
+
+Imagine you had a card that had the following note attached to:
+
+~~~
+Hi Nicolas. I'm going to Accept this: it seems reasonable. 
+…in cases it would disable colors by default (typically, when the output is piped to another command, as documented).
+Can I ask, where is this documented? I cannot seem to find it. Thanks.
+~~~
+
+Then you could merely come up with the pattern:
+
+~~~
+note:color + Note:output + note:documented
+~~~
+
+Notice that you could also do:
+
+~~~
+note:going to accept + note:seems reasonable
+~~~
 
 **Note Owner**
 
 If finds all cards that have a note whose creator name or email
-contain a string.
+contain a string. Imagine you wanted to find all cards
+that have at least one note created by a given worker then you could do:
+
+~~~
+note.owner:rambo
+~~~
+
+Or you could do:
+
+~~~
+note.owner:rambo@arcamens.com
+~~~
+
+To be more specific.
 
 **Note File**
 
