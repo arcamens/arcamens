@@ -1386,30 +1386,128 @@ Group posts share some attributes with cards, these are:
 
 The post creator.
 
+List all posts which were created by a worker named Porton.
+
+~~~
+owner:porton
+~~~
+
 **Worker**
 
 Relative to the post workers.
+
+~~~
+worker:porton@arcamens.com
+~~~
+
+That finds all posts that have a worker whose email is porton@arcamens.com
+binded to.
 
 **Tag**
 
 Match against the post tags.
 
+~~~
+tag:snippet + tag:django
+~~~
+
+Find all posts that are tagged with snippet and django.
+
 **Created**
 
 Regarding the post creation date.
+
+~~~
+created:2017
+~~~
+
+Find all posts that were created in the year of 2017.
 
 **Label**
 
 The post title.
 
+~~~
+label:feature
+~~~
+
+Find all posts that contain the string 'feature' showing up in its label
+field.
+
 **Data**
 
 The post data attribute, it is the one that carries markdown.
+
+~~~
+data:wheels
+~~~
+
+Would find all posts that contain the string 'wheels' in its data attribute.
+
+**File**
+
+Match against posts that contain a given file name attached to.
+
+~~~
+file:tutorial
+~~~
+
+Would list all posts that contain an attachment whose name contains the string 'tutorial'.
 
 **Fork**
 
 The card forks of the post in case it has sub tasks
 that are spreaded over boards.
+
+~~~
+fork:django command
+~~~
+
+Would find all posts that contain a card fork where the string 'django command'
+shows up either in its label or data field.
+
+**Fork Tag**
+
+Relative to the post fork tags.
+
+~~~
+tag:bug
+~~~
+
+Would list all posts that contain a given card fork that is tagged as a bug.
+
+**Fork Label**
+
+Relative to the post fork label.
+
+~~~
+fork.label:list workers
+~~~
+
+Would find all posts which contains a given fork whose label field
+has the string 'list workers' showing up in.
+
+**Fork Data**
+
+Relative to the post fork data field.
+
+~~~
+fork.data:markdown content
+~~~
+
+Would find all posts that contain a card fork whose data attribute
+contains the string 'markdown content' showing up in.
+
+**Fork Worker**
+
+Match against posts that have a given set of workers binded to its forks.
+
+~~~
+fork.worker:iury
+~~~
+
+Would find all posts that contain a fork that is assigned to a worker
+whose either name or email attribute has the string 'iury' in.
 
 In order to get additional information about the above attributes.
 

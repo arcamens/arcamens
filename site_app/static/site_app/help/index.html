@@ -791,18 +791,52 @@ method (3) and the interpretation of the can_use_chunked_reads flag. More on thi
 <p>Group posts share some attributes with cards, these are:</p>
 <p><strong>Owner</strong></p>
 <p>The post creator.</p>
+<p>List all posts which were created by a worker named Porton.</p>
+<pre><code>owner:porton</code></pre>
 <p><strong>Worker</strong></p>
 <p>Relative to the post workers.</p>
+<pre><code>worker:porton@arcamens.com</code></pre>
+<p>That finds all posts that have a worker whose email is porton@arcamens.com binded to.</p>
 <p><strong>Tag</strong></p>
 <p>Match against the post tags.</p>
+<pre><code>tag:snippet + tag:django</code></pre>
+<p>Find all posts that are tagged with snippet and django.</p>
 <p><strong>Created</strong></p>
 <p>Regarding the post creation date.</p>
+<pre><code>created:2017</code></pre>
+<p>Find all posts that were created in the year of 2017.</p>
 <p><strong>Label</strong></p>
 <p>The post title.</p>
+<pre><code>label:feature</code></pre>
+<p>Find all posts that contain the string ‘feature’ showing up in its label field.</p>
 <p><strong>Data</strong></p>
 <p>The post data attribute, it is the one that carries markdown.</p>
+<pre><code>data:wheels</code></pre>
+<p>Would find all posts that contain the string ‘wheels’ in its data attribute.</p>
+<p><strong>File</strong></p>
+<p>Match against posts that contain a given file name attached to.</p>
+<pre><code>file:tutorial</code></pre>
+<p>Would list all posts that contain an attachment whose name contains the string ‘tutorial’.</p>
 <p><strong>Fork</strong></p>
 <p>The card forks of the post in case it has sub tasks that are spreaded over boards.</p>
+<pre><code>fork:django command</code></pre>
+<p>Would find all posts that contain a card fork where the string ‘django command’ shows up either in its label or data field.</p>
+<p><strong>Fork Tag</strong></p>
+<p>Relative to the post fork tags.</p>
+<pre><code>tag:bug</code></pre>
+<p>Would list all posts that contain a given card fork that is tagged as a bug.</p>
+<p><strong>Fork Label</strong></p>
+<p>Relative to the post fork label.</p>
+<pre><code>fork.label:list workers</code></pre>
+<p>Would find all posts which contains a given fork whose label field has the string ‘list workers’ showing up in.</p>
+<p><strong>Fork Data</strong></p>
+<p>Relative to the post fork data field.</p>
+<pre><code>fork.data:markdown content</code></pre>
+<p>Would find all posts that contain a card fork whose data attribute contains the string ‘markdown content’ showing up in.</p>
+<p><strong>Fork Worker</strong></p>
+<p>Match against posts that have a given set of workers binded to its forks.</p>
+<pre><code>fork.worker:iury</code></pre>
+<p>Would find all posts that contain a fork that is assigned to a worker whose either name or email attribute has the string ‘iury’ in.</p>
 <p>In order to get additional information about the above attributes.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <p>In addition to cards the posts can have the following different attributes:</p>
