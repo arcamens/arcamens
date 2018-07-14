@@ -83,15 +83,8 @@ class AttachFile(GuardianView):
         note = models.Note.objects.get(id=note_id)
         attachments = note.notefilewrapper_set.all()
 
-        max_storage = settings.PAID_STORAGE_LIMIT if self.me.paid \
-        else settings.FREE_STORAGE_LIMIT
-
-        max_file = PAID_MAX_FILE_SIZE if self.me.paid \
-        else settings.FREE_MAX_FILE_SIZE 
-
         form = forms.NoteFileWrapperForm(request.POST, 
-        request.FILES, storage=self.me.storage,  max_storage=max_storage, 
-        max_file=max_file)
+        request.FILES, user=self.me)
 
         if not form.is_valid():
             return render(request, 'note_app/attach-file.html', 

@@ -315,8 +315,8 @@ class User(UserMixin, BasicUser):
 
     enabled = models.BooleanField(blank=True, default=False)
 
-    storage   = models.IntegerField(null=True, default=0)
-    # download_counter = models.IntegerField(null=True, default=0)
+    c_storage   = models.IntegerField(null=True, default=0)
+    c_download = models.IntegerField(null=True, default=0)
 
     # default for expiration...
     # default=datetime.date.today() + datetime.timedelta(0)

@@ -350,15 +350,9 @@ class AttachFile(GuardianView):
     def post(self, request, card_id):
         card        = models.Card.locate(self.me, self.me.default, card_id)
         attachments = card.cardfilewrapper_set.all()
-        max_storage = settings.PAID_STORAGE_LIMIT if self.me.paid \
-        else settings.FREE_STORAGE_LIMIT
-
-        max_file = PAID_MAX_FILE_SIZE if self.me.paid \
-        else settings.FREE_MAX_FILE_SIZE 
 
         form = forms.CardFileWrapperForm(request.POST, 
-        request.FILES, storage=self.me.storage,  max_storage=max_storage, 
-        max_file=max_file)
+        request.FILES, user=self.me)
 
         if not form.is_valid():
             return render(request, 'card_app/attach-file.html', 

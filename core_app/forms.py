@@ -3,6 +3,7 @@ from group_app.forms import ConfirmGroupDeletionForm
 from slock.forms import SetPasswordForm
 from sqlike.forms import SqLikeForm
 from card_app.models import Card
+from django.conf import settings
 from django import forms
 from . import models
 import site_app.forms
@@ -77,24 +78,30 @@ class FileAttachment:
     We have to set different file size upload limits.
     One for free plans one for paid plans eventually.
     """
-    def __init__(self, *args, max_file=1, storage=0, 
-        max_storage=100, **kwargs):
-
-        self.max_file      = max_file * 1024 * 1024
-        self.storage       = storage * 1024 * 1024
-        self.max_storage   = max_storage * 1024 * 1024
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super(FileAttachment, self).__init__(*args, **kwargs)
 
     def clean(self):
         super(FileAttachment, self).clean()
-        file = self.cleaned_data.get('file')
+        file        = self.cleaned_data.get('file')
+        max_storage = settings.PAID_STORAGE_LIMIT\
+        if self.user.paid else settings.FREE_STORAGE_LIMIT
 
-        if file.size > self.max_file:
+        max_file = settings.PAID_MAX_FILE_SIZE\
+        if self.user.paid else settings.FREE_MAX_FILE_SIZE 
+
+        if file.size > max_file:
             raise forms.ValidationError("File too big!\
                 Check your upload limits ")
-        elif file.size + self.storage > self.max_storage:
+        elif file.size + self.user.c_storage > max_storage:
             raise forms.ValidationError("It overrides your \
                 max montly storage. Check your upload limits ")
         
+    def save(self, *args, **kwargs):
+        file = self.cleaned_data.get('file')
+        self.user.c_storage = self.user.c_storage + file.size
+        self.user.save()
+        return super(FileAttachment, self).save(*args, **kwargs)
 
 
