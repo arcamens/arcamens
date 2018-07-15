@@ -62,25 +62,14 @@ data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#">
 </div>
 
 <div class="modal-footer">
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" data-form="#userSearchForm" 
 data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
-<script>
-$('#smallModal').one('hidden.bs.modal', function () {
-    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
-})
-</script>
-
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Close" %}
-</button>
-
 </div>
-
-
-
-
-
 
 

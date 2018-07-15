@@ -1,23 +1,63 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<div class="panel-group">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<small>
+<span class="glyphicon glyphicon-file"></span> {% if card.done %} (Done) {% endif %} Card by 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="{{card.owner.description}}"> {{card.owner.name}} </a> on list
 
-{% include 'board_app/list-pins.html' %}
+<a class="e-get" href="#"
+data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
+data-shell="#main-view" > 
+<span class="glyphicon glyphicon-list-alt"> </span>
+{{card.ancestor.ancestor.name}}
+<span class="glyphicon glyphicon-arrow-right"></span>
+{{card.ancestor.name}}
+
+</a>
+
+on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
+
+{% if card.parent_post %}
+<script>
+    if($('#post-{{card.parent_post.id}}').length) {
+        $('#post-{{card.parent_post.id}}').load('{% url 'post_app:refresh-post' card.parent_post.id  %}');
+    }
+</script>
+
+forked from post 
+<a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#main-view"  target="_blank"
+data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
+{{card.parent_post.label|truncatechars:60}} </a>  
+{% endif %}
+
+</small>
+
+</div>
+
+<div class="modal-body">
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    if($('#card-{{card.id}}').length) {
+        $('#card-{{card.id}}').load('{% url 'card_app:refresh-card-label' card.id  %}');
+    }  
+
+})
+</script>
+
+<div class="panel-group">
 
 {% include 'card_app/view-data-main-card-info.html' %}
 
 {% include 'card_app/view-data-utils-info-panel.html' %}
 
 </div>
-
+<div style="font-size:85%">
 {% include 'card_app/view-data-card-actions.html' %}
+</div>
 
-
-
-
-
-
+</div>
 
 
 

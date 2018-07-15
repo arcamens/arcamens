@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     url(r'^list-cards/(?P<list_id>.+)/', views.ListCards.as_view(), name='list-cards'),
     url(r'^cut-card/(?P<card_id>.+)/', views.CutCard.as_view(), name='cut-card'),
+    url(r'^refresh-card-label/(?P<card_id>.+)/', views.RefreshCardLabel.as_view(), name='refresh-card-label'),
+
     url(r'^done/(?P<card_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<card_id>.+)/', views.Undo.as_view(), name='undo'),
     url(r'^card-worker-information/(?P<peer_id>.+)/(?P<card_id>.+)/', views.CardWorkerInformation.as_view(), name='card-worker-information'),
@@ -54,6 +56,7 @@ urlpatterns = [
     url(r'^unset-post-fork/(?P<card_id>.+)/', views.UnsetPostFork.as_view(), name='unset-post-fork'),
 
 ]
+
 
 
 

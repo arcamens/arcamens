@@ -15,10 +15,13 @@ Tagged by <span class="glyphicon glyphicon-user"></span>
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Close" %}
-</button>
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 </div>
+
+
 
 
 

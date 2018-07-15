@@ -1,40 +1,6 @@
 {% load static %}
 
 <div class="panel panel-default">
-<div class="panel-heading">
-
-<small>
-<span class="glyphicon glyphicon-file"></span> {% if card.done %} (Done) {% endif %} Card by 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="{{card.owner.description}}"> {{card.owner.name}} </a> on list
-
-<a class="e-get" href="#"
-data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
-data-shell="#main-view" > 
-<span class="glyphicon glyphicon-list-alt"> </span>
-{{card.ancestor.ancestor.name}}
-<span class="glyphicon glyphicon-arrow-right"></span>
-{{card.ancestor.name}}
-
-</a>
-
-on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
-
-{% if card.parent_post %}
-forked from post 
-<a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#main-view"  target="_blank"
-data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
-{{card.parent_post.label|truncatechars:60}} </a>  
-{% endif %}
-
-</small>
-
-<div class="pull-right">
-<a class="e-get"  data-shell="#smallModalContent"  href="#"
-data-show="{% url 'card_app:card-events' card.id %}"> 
-<span class="glyphicon glyphicon-bell"></span> E/C</a>
-</div>
-
-</div>
 
 <div class="panel-body">
 <h5> {{card.label}}.. </h5>
@@ -68,6 +34,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

@@ -119,7 +119,7 @@ No workers.
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in post.card_forks.all %}
-<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#bigModalContent" data-show="{{ind.get_absolute_url}}" >
 <span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}} </a> 
 <br>
 {% empty %}
@@ -184,6 +184,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

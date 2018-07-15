@@ -38,8 +38,8 @@ No tags...
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in relations %}
-<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view"  data-show="{% url 'card_app:view-data' ind.id %}" >
-<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}} </a> 
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#bigModalContent"  data-show="{% url 'card_app:view-data' ind.id %}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:70}} </a> 
 <br>
 {% empty %}
 No relations.
@@ -59,8 +59,8 @@ No relations.
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in forks %}
-<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
-<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#bigModalContent" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:70}}
 </a> 
 <br>
 {% empty %}
@@ -72,8 +72,8 @@ No forks.
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in path %}
-<a href="{{ind.get_link_url}}" class="e-get" data-shell="#main-view" data-show="{{ind.get_absolute_url}}" >
-<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#bigModalContent" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:70}}
 </a> 
 <br>
 {% empty %}
@@ -83,6 +83,7 @@ No parents.
 </div>
 </div>
 </div>
+
 
 
 

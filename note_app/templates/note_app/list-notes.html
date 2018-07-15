@@ -20,22 +20,18 @@ Notes on card {{card.label|truncatechars:30}}
 
 </div>
 <div class="modal-footer" >
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" 
 data-show="{% url 'note_app:create-note' card.id %}"
 data-shell="#bigModalContent" 
 class="btn btn-default e-get"> {% trans "Create" %} </button>
 
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Close" %}
-</button>
-
 </div>
 
-<script>
-$('#bigModal').one('hidden.bs.modal', function () {
-    $('#main-view').load('{% url 'card_app:view-data' card.id  %}');
-})
-</script>
+
 
 
 

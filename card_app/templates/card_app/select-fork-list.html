@@ -48,12 +48,16 @@ href="{{card.ancestor.get_link_url}}" >
 
 
 <div class="modal-footer">
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" data-form="#selectForkListForm" 
 data-show="{% url 'card_app:select-fork-list'  card.id %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 

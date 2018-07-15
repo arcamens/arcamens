@@ -26,6 +26,10 @@ from re import split
 from re import findall
 
 # Create your views here.
+class RefreshCardLabel(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.locate(self.me, self.me.default, card_id)
+        return render(request, 'card_app/card.html',  {'card': card},) 
 
 class CardLink(GuardianView):
     """
@@ -715,12 +719,14 @@ class RequestCardAttention(GuardianView):
 
 class CardTagInformation(GuardianView):
     def get(self, request, tag_id, card_id):
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
         event = models.EBindTagCard.objects.filter(
         Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
-        card__id=card_id, tag__id=tag_id).last()
+        card__id=card.id, tag__id=tag_id).last()
 
-        return render(request, 'post_app/post-tag-information.html', 
-        {'user': event.user, 'created': event.created, 'tag':event.tag})
+        return render(request, 'card_app/card-tag-information.html', 
+        {'user': event.user, 'card': card, 'created': event.created, 'tag':event.tag})
 
 class AlertCardWorkers(GuardianView):
     def get(self, request, card_id):
@@ -1082,6 +1088,8 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
+
 
 
 

@@ -1,8 +1,4 @@
 <ul class="nav nav-pills ">
-<li> <a data-shell="#main-view" 
-class="e-get"
-data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
-href="#"><span class="glyphicon glyphicon-arrow-up"></span> Up</a></li>
 
 <li> <a  data-shell="#bigModalContent" class="e-get"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
@@ -20,12 +16,12 @@ href="#">
 
 {% if card.done %}
 <li>
-<a data-shell="#main-view"class="e-get text-warning"
+<a data-shell="#bigModalContent"class="e-get text-warning"
 data-show="{% url 'card_app:undo'  card.id %}" href="#">
 <span class="glyphicon glyphicon-ok"></span> Undo</a></li>
 {% else %}
 <li>
-<a data-shell="#main-view"class="e-get text-warning"
+<a data-shell="#bigModalContent"class="e-get text-warning"
 data-show="{% url 'card_app:done'  card.id %}" href="#">
 <span class="glyphicon glyphicon-ok"></span> Done</a></li>
 {% endif %}
@@ -48,12 +44,14 @@ href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
 data-show="{% url 'card_app:cut-card' card.id %}" href="#">
 <span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
 
-<li>
-<a 
-data-shell="#main-view"
-class="e-get"
-data-show="{% url 'card_app:copy-card' card.id %}"
+<li> <a  data-shell="#main-view" class="e-get" data-show="{% url 'card_app:copy-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-scissors"></span> Copy</a></li>
+
+<li> 
+<a class="e-get"  data-shell="#smallModalContent"  href="#"
+data-show="{% url 'card_app:card-events' card.id %}"> 
+<span class="glyphicon glyphicon-bell"></span> E/C</a>
+</li>
 
 </ul>
 
@@ -63,6 +61,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 

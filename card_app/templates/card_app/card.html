@@ -22,7 +22,7 @@ data-shell="#main-view" data-show="{% url 'card_app:cut-card' card.id %}">
 
 
 <p> <a href="{% url 'card_app:card-link' card.id %}"  class="e-get {% if card.in_workers %} text-danger  {% elif card.has_workers %} text-success  {% endif %}"
-data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
+data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}" >
 
 {% if card.done %} (Done) {% endif %}
 <em> <span class="glyphicon glyphicon-file"></span> 
@@ -45,6 +45,7 @@ data-shell="#main-view" data-show="{% url 'card_app:view-data' card.id %}" >
 
 
 </div>
+
 
 
 
