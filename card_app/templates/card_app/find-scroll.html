@@ -1,8 +1,6 @@
 {% for ind in elems %}
 <p>
-<a class="e-get" data-shell="#bigModalContent" 
-data-show="{{ind.get_absolute_url}}"
-href="{{ind.get_link_url}}" > 
+<a href="{{ind.get_link_url}}" target="_blank"> 
 <span class="glyphicon glyphicon-file"></span>
 {% if ind.done %} (Done) {% endif %}
 
@@ -19,6 +17,7 @@ href="{{ind.get_link_url}}" >
 </p>
 
 {% endfor %}
+
 
 
 
