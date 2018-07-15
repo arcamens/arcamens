@@ -26,7 +26,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 {% endfor %}
 
 {% for ind in cardpins %}
-<li> <a class="e-get pin-card"  data-shell="#main-view" data-show="{{ ind.get_absolute_url }}" href="#">
+<li> <a class="e-get pin-card"  data-shell="#bigModalContent" data-show="{{ ind.get_absolute_url }}" href="#">
 <span class="glyphicon glyphicon-file"></span> {{ind.card.label|truncatechars:20}}
 
 <span class="close" onclick="$('#pins').load('{% url 'card_app:unpin' ind.id %}');event.stopPropagation();">&times;</span> </a>
@@ -56,6 +56,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 // });
 // </script>
 -->
+
 
 
 
