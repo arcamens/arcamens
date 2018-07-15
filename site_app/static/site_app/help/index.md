@@ -408,7 +408,7 @@ can contain a title and markdown content.
 Tasks that demand one to collect information regarding a given subject can be delegated by using posts. 
 The person attaches the missing information to the post as a snippet.
 
-![post-0](/static/site_app/help/post-0.png)
+![posts-0](/static/site_app/help/posts-0.png)
 
 Some tasks arent directly related to a specific project these tasks
 can be delegated to a team or user by using a post.
@@ -426,7 +426,7 @@ You would get:
 ![post-creation-1](/static/site_app/help/post-creation-1.png)
 
 Posts can have a short title that holds a description of the post content and
-a markdown content.
+a markdown content. Once the post is created then files can be attached.
 
 After pressing Create the post will be created and every group user will get notified
 of the post creation.
@@ -1761,6 +1761,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
