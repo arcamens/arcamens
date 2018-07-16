@@ -6,7 +6,10 @@
 {% block initializer %}
 <script>
 $(document).ready(function() {
-    $('#main-view').load("{% url 'post_app:post' post.id %}");
+    $('#main-view').load("{% url 'group_app:list-posts' post.ancestor.id %}");
+    $('#bigModalContent').load("{% url 'post_app:view-data' post.id %}");
+    $('#bigModal').modal('show');
+
 });
 
 $(function () {
@@ -14,5 +17,6 @@ $(function () {
 })
 </script>
 {% endblock %}
+
 
 

@@ -3,6 +3,10 @@
 {% load i18n %}
 
 {% block buttons %}
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'post_app:view-data' post.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" data-form="#form-post-data" 
 data-shell="#bigModalContent" data-show="{% url 'post_app:update-post' post.id %}"
 class="btn btn-default e-post"> 
@@ -10,6 +14,7 @@ class="btn btn-default e-post">
 </button>
 
 {% endblock %}
+
 
 
 

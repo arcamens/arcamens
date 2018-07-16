@@ -8,8 +8,10 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available {{card.label|truncatechars:20}}'s Workers 
+Available <a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a> Workers 
 <span class="badge">{{count}}/{{total}}</span>
+
 </h5>
 </div>
 
@@ -71,5 +73,6 @@ data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
