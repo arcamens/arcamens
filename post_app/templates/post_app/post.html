@@ -13,7 +13,7 @@ data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
 
 <span class="glyphicon glyphicon-file"></span> 
 {% if post.done %} (Done) {% endif %}
-{{post.label}}</a> </h5> {{post.html|safe}} </div>
+{{post.label}}</a> </h5> </div>
 
 <div class="pull-right">
 <a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
@@ -27,6 +27,7 @@ data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
 
 </div>
 </div>
+
 
 
 
