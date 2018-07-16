@@ -1,5 +1,4 @@
 {% load i18n %}
-
 {% for ind in elems %}
 <div id="post-{{ind.id}}">
         {% include 'post_app/post.html' with post=ind %}
@@ -12,6 +11,7 @@ $(document).ready(function() {
 
 });
 </script>
+
 
 
 
