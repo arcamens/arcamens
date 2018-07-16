@@ -21,7 +21,9 @@ on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 
 <div class="modal-body">
 <script>
+    if($('#post-{{post.id}}').length) {
         $('#post-{{post.id}}').load('{% url 'post_app:post' post.id  %}');
+    }  
 </script>
 
 <div class="panel-group">
