@@ -11,7 +11,7 @@
 {{event.filename}}</span>  from card
 
 <a class="e-get"
-data-shell="#main-view"
+data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' event.card.id %}" 
 href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -19,5 +19,6 @@ href="{{event.card.get_link_url}}">
 {{event.card.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
 
 

@@ -8,7 +8,7 @@
 {{event.user}} </a> has created card
 
 <a class="e-get"
-data-shell="#main-view"
+data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' event.card.id %}" 
 href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -24,4 +24,5 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ance
 {{event.ancestor.name}} </a> 
 
 {% endblock %}
+
 
