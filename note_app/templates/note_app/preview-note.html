@@ -6,7 +6,11 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-comment"></span> 
-Note on card {{card.label|truncatechars:30}}
+Note on card 
+
+<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
+
 </div>
 
 <div class="modal-body pre-scrollable">
@@ -24,6 +28,7 @@ class="btn btn-default e-get"> {% trans "Notes" %} </button>
 </button>
 
 </div>
+
 
 
 

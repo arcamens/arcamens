@@ -6,7 +6,7 @@
 {% block initializer %}
 <script>
 $(document).ready(function() {
-    $('#main-view').load("{% url 'card_app:view-data' card.id %}");
+    $('#main-view').load("{% url 'card_app:list-cards' card.ancestor.id %}");
     $('#bigModalContent').load("{% url 'note_app:preview-note' note.id %}");
     $('#bigModal').modal('show');
 
@@ -17,6 +17,7 @@ $(function () {
 })
 </script>
 {% endblock %}
+
 
 
 

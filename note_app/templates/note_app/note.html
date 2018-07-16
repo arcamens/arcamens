@@ -8,7 +8,9 @@
 <p style="font-size:80%"> 
 <span class="glyphicon glyphicon-comment"></span> 
 
-By {{note.owner.name}} at <a href="{{note.get_link_url}}" target="_blank"> {{note.created}} </a>
+By 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{note.owner.email}}"  data-content="{{note.owner.description}}"> {{note.owner.name}} </a>
+on <a href="{{note.get_link_url}}" target="_blank"> {{note.created}} </a>
 
 </p>
 
@@ -51,17 +53,7 @@ class="text-danger e-get">
 {% trans "Remove" %} </a>
 
 </div>
+
+
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
