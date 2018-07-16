@@ -3,17 +3,24 @@
 <div class="panel panel-default" >
 
 <div class="panel-body" >
-<div class="pull-right" >
+<div class="pull-right" > 
 <a class=" e-get text-default"  href="#" 
-data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
-<span class="glyphicon glyphicon-paperclip"></span> </a>
-</div>
+data-shell="#main-view" data-show="{% url 'post_app:copy-post' post.id %}">
+<span class="glyphicon glyphicon-copy"></span></a> 
 
-<div style="word-wrap: break-word;">  <h5> <a href="#" class="e-get" data-show="{% url 'post_app:view-data' post.id %}" data-shell="#bigModalContent"> 
+<a class=" e-get text-warning"  href="#" 
+data-shell="#main-view" data-show="{% url 'post_app:cut-post' post.id %}">
+<span class="glyphicon glyphicon-scissors"></span> </a> 
 
+<a class=" e-get text-default" href="#" data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a> </div>
+
+
+<p>
+<a href="#" class="e-get" data-show="{% url 'post_app:view-data' post.id %}" data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-file"></span> 
 {% if post.done %} (Done) {% endif %}
-{{post.label}}</a> </h5> </div>
+{{post.label}}</a> </p>
 
 <div class="pull-right">
 <a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
