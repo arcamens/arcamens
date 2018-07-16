@@ -11,12 +11,13 @@
 {{event.filename}}</span>  from post
 
 <a class="e-get"
-data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
+data-shell="#bigModalContent"
+data-show="{% url 'post_app:view-data' event.post.id %}" href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>
 
 {% endblock %}
+
 
 
 

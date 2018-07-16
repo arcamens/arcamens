@@ -8,8 +8,8 @@
 has forked post
 
 <a class="e-get"
-data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post.id %}" 
+data-shell="#bigModalContent"
+data-show="{% url 'post_app:view-data' event.post.id %}" 
 href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label|truncatechars:40}} </a> 
@@ -18,7 +18,7 @@ href="{{event.post.get_link_url}}">
 to card
 
 <a class="e-get"
-data-shell="#main-view"
+data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' event.card.id %}" 
 href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
@@ -26,6 +26,7 @@ href="{{event.card.get_link_url}}">
 </a>
 
 {% endblock %}
+
 
 
 

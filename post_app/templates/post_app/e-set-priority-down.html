@@ -8,8 +8,8 @@
 {{event.user}} </a> has set post priority
 
 <a class="e-get"
-data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post0.id %}" href="{{event.post0.get_link_url}}"> 
+data-shell="#bigModalContent"
+data-show="{% url 'post_app:view-data' event.post0.id %}" href="{{event.post0.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post0.label|truncatechars:40}}
 </a> 
@@ -17,13 +17,13 @@ data-show="{% url 'post_app:post' event.post0.id %}" href="{{event.post0.get_lin
 down to
 
 <a class="e-get"
-data-shell="#main-view"
-data-show="{% url 'post_app:post' event.post1.id %}" href="{{event.post1.get_link_url}}"> 
+data-shell="#bigModalContent"
+data-show="{% url 'post_app:view-data' event.post1.id %}" href="{{event.post1.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post1.label|truncatechars:40}} </a>
 
 
-on list
+on group
 
 <a class="e-get"
 data-shell="#main-view"
@@ -32,6 +32,7 @@ data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.anc
 {{event.ancestor.name}} </a> 
 
 {% endblock %}
+
 
 
 
