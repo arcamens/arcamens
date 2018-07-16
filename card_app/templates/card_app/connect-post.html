@@ -6,7 +6,8 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
-<span class="glyphicon glyphicon-search"></span>Possible parents of card: {{card.label|truncatechars:40}}
+<span class="glyphicon glyphicon-search"></span>Possible post parents of card: <a href="{{card.parent_post.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'post_app:view-data' card.parent_post.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.parent_post.label|truncatechars:60}} </a>
 <span class="badge">{{count}}/{{total}}</span> </h5>
 </div>
 
@@ -67,6 +68,7 @@ id="filterpostRelations" data-show="{% url 'card_app:connect-post' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 
