@@ -22,8 +22,8 @@
 {% block buttons %}
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-<button  type="button" data-form="#cardForm" 
-data-shell="#main-view"  data-show="{% url 'card_app:create-card' ancestor.id %}"
+<button  type="button" data-form="#cardForm" data-callback="$('#main-view').load('{% url 'card_app:list-cards' ancestor.id %}');"
+data-shell="#bigModalContent"  data-show="{% url 'card_app:create-card' ancestor.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>

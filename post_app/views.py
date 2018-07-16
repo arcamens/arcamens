@@ -97,8 +97,7 @@ class CreatePost(GuardianView):
         users = ancestor.users.all()
         event.dispatch(*users)
 
-        return redirect('group_app:list-posts', 
-        group_id=ancestor_id)
+        return redirect('post_app:view-data', post_id=post.id)
 
 class UpdatePost(GuardianView):
     """
@@ -943,6 +942,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

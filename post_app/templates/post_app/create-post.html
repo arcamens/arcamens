@@ -24,8 +24,8 @@
 {% block buttons %}
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-<button id="createPost" type="button" data-form="#form-post-data" 
-data-shell="#main-view" data-show="{% url 'post_app:create-post' ancestor.id %}"
+<button id="createPost" type="button" data-form="#form-post-data" data-callback="$('#main-view').load('{% url 'group_app:list-posts' ancestor.id %}');"
+data-shell="#bigModalContent" data-show="{% url 'post_app:create-post' ancestor.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
@@ -33,6 +33,7 @@ class="btn btn-default e-post">
 {% endblock %}
 </div>
 </form>
+
 
 
 
