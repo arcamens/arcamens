@@ -180,7 +180,7 @@ class CreateCard(GuardianView):
 
         self.create_relations(card, ids)
 
-        return redirect('card_app:view-data', card_id=card.id)
+        return redirect('card_app:list-cards', list_id=ancestor.id)
 
     def create_relations(self, card, ids):
         cards = models.Card.get_allowed_cards(self.me)
@@ -1089,6 +1089,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
