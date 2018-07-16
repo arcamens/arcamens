@@ -911,6 +911,7 @@ class ListNodes(GuardianView):
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
         grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        postpins = self.me.postpin_set.filter(organization=self.me.default)
 
         filter, _ = NodeFilter.objects.get_or_create(
         user=self.me, organization=self.me.default)
@@ -927,7 +928,7 @@ class ListNodes(GuardianView):
         {'nodes': nodes, 'boardpins': boardpins, 'listpins': listpins, 
         'user': self.me, 'total': total, 'count': count, 
         'organization': self.me.default, 'filter': filter, 
-        'cardpins': cardpins, 'grouppins': grouppins})
+        'cardpins': cardpins, 'grouppins': grouppins, 'postpins': postpins})
 
 class SetupNodeFilter(GuardianView):
     def get(self, request):
@@ -960,4 +961,5 @@ class FileDownload(GuardianView):
         self.me.c_download = self.me.c_download + file.size
         self.me.save()
         return redirect(file.url)
+
 

@@ -38,6 +38,7 @@ class ListPosts(GuardianView):
         boardpins = self.me.boardpin_set.filter(organization=self.me.default)
         listpins  = self.me.listpin_set.filter(organization=self.me.default)
         cardpins  = self.me.cardpin_set.filter(organization=self.me.default)
+        postpins = self.me.postpin_set.filter(organization=self.me.default)
 
         grouppins = self.me.grouppin_set.filter(
         organization=self.me.default)
@@ -48,7 +49,7 @@ class ListPosts(GuardianView):
         elems = JScroll(self.me.id, 'group_app/list-posts-scroll.html', posts)
 
         env = {'group':group, 'count': count, 'total': total, 
-        'grouppins': grouppins, 'elems':elems.as_window(), 
+        'grouppins': grouppins, 'elems':elems.as_window(), 'postpins': postpins,
         'filter': filter, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins}
 
@@ -436,6 +437,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

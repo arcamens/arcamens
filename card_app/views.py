@@ -76,6 +76,7 @@ class ListCards(GuardianView):
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
         grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        postpins = self.me.postpin_set.filter(organization=self.me.default)
 
         filter, _ = models.CardFilter.objects.get_or_create(
         user=self.me, organization=self.me.default, list=list)
@@ -99,7 +100,7 @@ class ListCards(GuardianView):
         cards = cards.order_by('-priority')
 
         return render(request, 'card_app/list-cards.html', 
-        {'list': list, 'total': total, 'cards': cards, 'filter': filter,
+        {'list': list, 'total': total, 'cards': cards, 'filter': filter, 'postpins': postpins,
         'boardpins': boardpins, 'listpins':listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'user': self.me, 'board': list.ancestor, 'count': count})
 
@@ -1088,6 +1089,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

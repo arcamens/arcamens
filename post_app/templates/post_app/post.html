@@ -13,19 +13,27 @@ data-shell="#main-view" > <span class="glyphicon glyphicon-eye-open"></span> {{p
 
 on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
 
-<div class="pull-right">
-<a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
-<span class="glyphicon glyphicon-signal"></span> </a>
+<div class="pull-right" >
+<a class=" e-get text-default"  href="#" 
+data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a>
 </div>
 
 </div>
 
 <div class="panel-body" >
+<div class="pull-right">
+<a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
+<span class="glyphicon glyphicon-signal"></span> </a>
+</div>
+
 <div style="word-wrap: break-word;">  <h5> <a href="#" class="e-get" data-show="{% url 'post_app:view-data' post.id %}" data-shell="#bigModalContent"> {{post.label}}</a> </h5> </div>
+
 </div>
 
 </div>
 </div>
+
 
 
 

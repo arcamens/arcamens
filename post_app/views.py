@@ -1,7 +1,7 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, \
-EUnarchivePost
+EUnarchivePost, PostPin
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
@@ -943,5 +943,6 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 

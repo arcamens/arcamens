@@ -472,7 +472,7 @@ class PostPinMixin(models.Model):
         abstract = True
 
     def get_absolute_url(self):
-        return reverse('post_app:post', 
+        return reverse('post_app:view-data', 
             kwargs={'post_id': self.post.id})
 
 class PostPin(PostPinMixin):
@@ -546,6 +546,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

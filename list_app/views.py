@@ -32,6 +32,7 @@ class ListLists(GuardianView):
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
         grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        postpins = self.me.postpin_set.filter(organization=self.me.default)
 
         filter, _ = ListFilter.objects.get_or_create(
         user=self.me, organization=self.me.default, board=board)
@@ -42,7 +43,7 @@ class ListLists(GuardianView):
 
         return render(request, 'list_app/list-lists.html', 
         {'lists': lists, 'user': self.me, 'board': board, 'organization': self.me.default,
-        'total': total, 'filter': filter, 'boardpins': boardpins,
+        'total': total, 'filter': filter, 'boardpins': boardpins, 'postpins': postpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins})
 
 class CreateList(GuardianView):
@@ -344,6 +345,7 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

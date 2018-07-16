@@ -43,6 +43,16 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 </li>
 {% endfor %}
 
+{% for ind in postpins %}
+<li>
+<a class="e-get pin-group"  data-shell="#bigModalContent"
+data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphicon-file"></span>  {{ind.post.label|truncatechars:20}}
+<span  onclick="$('#pins').load('{% url 'post_app:unpin' ind.id %}');event.stopPropagation();" class="close">
+&times;
+</span> </a>
+</li>
+{% endfor %}
+
 </ul>
 
 </div>
@@ -56,6 +66,7 @@ data-show="{{ ind.get_absolute_url }}" href="#"> <span class="glyphicon glyphico
 // });
 // </script>
 -->
+
 
 
 

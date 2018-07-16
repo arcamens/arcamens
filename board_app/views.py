@@ -358,10 +358,11 @@ class ListPins(GuardianView):
         listpins = self.me.listpin_set.filter(organization=self.me.default)
         cardpins = self.me.cardpin_set.filter(organization=self.me.default)
         grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        postpins = self.me.postpin_set.filter(organization=self.me.default)
 
         return render(request, 'board_app/list-pins.html', 
         {'user': self.me, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'grouppins': grouppins})
+        'cardpins': cardpins, 'postpins': postpins, 'grouppins': grouppins})
 
 class Unpin(GuardianView):
     """
@@ -492,6 +493,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
 
 
 
