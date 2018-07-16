@@ -14,13 +14,14 @@
 on
 
 <a class="e-get"
-data-shell="#main-view"
+data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' event.child.id %}" 
 href="{{event.child.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.child.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
 
 
 
