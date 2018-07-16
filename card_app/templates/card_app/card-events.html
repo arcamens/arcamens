@@ -4,9 +4,14 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>  
-<span class="glyphicon glyphicon-bell"></span>
 
-{{card.label|truncatechars:40}}'s Events <span class="badge">{{count}}</span></h5>
+<span class="glyphicon glyphicon-bell"></span>
+Events on card
+
+<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
+
+<span class="badge">{{count}}</span></h5>
 </div>
 
 <div class="modal-body">
@@ -40,6 +45,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 
