@@ -35,12 +35,15 @@ class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|trun
 </div>
 
 <div class="modal-footer">
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'post_app:view-data' post.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#selectForkListForm" data-show="{% url 'post_app:select-fork-list'  post.id %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+
 
 
 
