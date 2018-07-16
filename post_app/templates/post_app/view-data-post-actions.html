@@ -11,12 +11,9 @@ class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a> </li>
 <span class="glyphicon glyphicon-remove"></span> Delete  </a> </li>
 
 <li>
-{% if post.done %}
-<a href="#" data-shell="#bigModalContent" data-show="{% url 'post_app:undo' post.id %}"
+{% if post.done %} <a href="#" data-shell="#bigModalContent" data-show="{% url 'post_app:undo' post.id %}"
 class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
-
 {% else %}
-
 <a href="#" data-shell="#bigModalContent" data-show="{% url 'post_app:done' post.id %}"
 class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
@@ -45,5 +42,6 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 <li><a class="e-get" href="#" data-shell="#smallModalContent"  data-show="{% url 'post_app:post-events' post.id %}"> <span class="glyphicon glyphicon-bell"></span> E/C</a></li>
 
 </ul>
+
 
 
