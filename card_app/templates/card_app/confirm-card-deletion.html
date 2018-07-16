@@ -4,7 +4,8 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<span class="glyphicon glyphicon-remove"></span> Delete {{card.label|truncatechars:60}}?
+<span class="glyphicon glyphicon-remove"></span> Delete <a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a> ?
 </div>
 
 <div class="modal-body">
@@ -17,8 +18,9 @@
 
 
 <div class="modal-footer">
-<button type="button" class="btn btn-default" 
-data-dismiss="modal">Cancel</button>
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  id="createCard" type="button" 
 data-shell="#main-view" data-show="{% url 'card_app:delete-card' card.id %}"
@@ -28,6 +30,7 @@ class="btn btn-danger e-get">
 
 
 <script>
+
 
 
 
