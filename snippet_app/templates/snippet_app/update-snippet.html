@@ -7,6 +7,10 @@ Update card
 {% endblock %}
 
 {% block buttons %}
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'snippet_app:snippet' snippet.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" 
 data-form="#form-snippet-data" 
 data-shell="#bigModalContent" 
@@ -16,4 +20,5 @@ class="btn btn-default e-post">
 {% trans "Update" %}
 </button>
 {% endblock %}
+
 

@@ -1,8 +1,31 @@
-{% include 'board_app/list-pins.html' %}
 
 <div id="post-{{post.id}}">
+<div class="panel panel-default" >
+<div class="panel-heading">
+<span class="glyphicon glyphicon-file"></span>
 
-{% include 'post_app/post-data.html' %}
+{% if post.done %} (Done) {% endif %} Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="{{post.user.description}}">
+{{post.user.name}} </a> 
+on group
+
+<a class="e-get" href="{{post.ancestor.get_link_url}}" data-show="{% url 'group_app:list-posts' post.ancestor.id %}"
+data-shell="#main-view" > <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
+
+on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
+
+<div class="pull-right">
+<a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
+<span class="glyphicon glyphicon-signal"></span> </a>
 </div>
+
+</div>
+
+<div class="panel-body" >
+<div style="word-wrap: break-word;">  <h5> <a href="#" class="e-get" data-show="{% url 'post_app:view-data' post.id %}" data-shell="#bigModalContent"> {{post.label}}</a> </h5> </div>
+</div>
+
+</div>
+</div>
+
 
 

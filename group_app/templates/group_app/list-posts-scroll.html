@@ -2,7 +2,7 @@
 
 {% for ind in elems %}
 <div id="post-{{ind.id}}">
-        {% include 'post_app/post-data.html' with post=ind %}
+        {% include 'post_app/post.html' with post=ind %}
 </div>
 {% endfor %}
 
@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 });
 </script>
+
 
 
 

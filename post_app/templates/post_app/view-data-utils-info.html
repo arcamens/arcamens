@@ -1,0 +1,73 @@
+<div class="panel panel-default" >
+<div class="panel-body" >
+
+<div class="row">
+
+<div class="col-md-3">
+<h5> <span class="glyphicon glyphicon-tag"></span> Tags </h5>
+<div class="pre-scrollable" style="font-size:90%">
+
+{% for ind in post.tags.all %}
+<a 
+data-show="{% url 'post_app:post-tag-information' ind.id post.id %}"
+data-shell="#smallModalContent" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-tag"></span>
+
+{{ind.name}}
+</a>
+
+{% empty %}
+No tags.
+{% endfor %} </div> </div>
+
+<div class="col-md-3">
+<h5> 
+<span class="glyphicon glyphicon-user"></span>
+
+Workers </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in post.workers.all %}
+<a 
+data-show="{% url 'post_app:post-worker-information' ind.id post.id %}"
+data-shell="#smallModalContent" 
+class="e-get"
+href="#">
+<span class="glyphicon glyphicon-user"></span>
+
+{{ind.name}}
+</a>
+
+{% if forloop.last %} 
+<br> <a class="e-get text-warning" data-shell="#smallModalContent"  
+data-show="{% url 'post_app:alert-post-workers' post.id %}" href="#">
+<span class="glyphicon glyphicon-alert"></span>
+
+Alert workers?</a>
+
+{% endif %}
+
+{% empty %}
+No workers.
+{% endfor %}
+</div></div>
+
+<div class="col-md-6">
+<h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards </h5>
+
+<div class="pre-scrollable" style="font-size:90%">
+{% for ind in post.card_forks.all %}
+<a href="{{ind.get_link_url}}" class="e-get" data-shell="#bigModalContent" data-show="{{ind.get_absolute_url}}" >
+<span class="glyphicon glyphicon-file"></span> {% if ind.done %} (Done) {% endif %} {{ind.label|truncatechars:80}} </a> 
+<br>
+{% empty %}
+No forks.
+{% endfor %}</div></div>
+
+
+</div> 
+</div>
+</div>
+

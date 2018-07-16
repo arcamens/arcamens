@@ -28,16 +28,19 @@ $('#bigModal').one('hidden.bs.modal', function () {
 </script>
 
 {% block buttons %}
-<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'post_app:view-data' post.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#form-snippet-data" 
-data-shell="#post-{{post.id}}"  data-show="{% url 'snippet_app:create-snippet' post.id %}"
+data-shell="#bigModalContent"  data-show="{% url 'snippet_app:create-snippet' post.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
+
 
 
 

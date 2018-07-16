@@ -26,6 +26,11 @@ import operator
 
 import json
 
+class ViewData(GuardianView):
+    def get(self, request, post_id):
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        return render(request, 'post_app/view-data.html', {'post':post})
+
 class Post(GuardianView):
     """
     This view is supposed to be performed only if the user
@@ -34,16 +39,7 @@ class Post(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
-        boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins     = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
-        grouppins = self.me.grouppin_set.filter(
-        organization=self.me.default)
-
-        return render(request, 'post_app/post.html', 
-        {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
-        'cardpins': cardpins, 'tags': post.tags.all(), 
-        'grouppins': grouppins, 'user': self.me, })
+        return render(request, 'post_app/post.html', {'post':post})
 
 class PostLink(GuardianView):
     """
@@ -137,8 +133,7 @@ class UpdatePost(GuardianView):
         # is on a group whose worker is not on.
         event.dispatch(*record.workers.all())
 
-        return redirect('post_app:refresh-post', 
-        post_id=record.id)
+        return redirect('post_app:view-data', post_id=record.id)
 
 
 class AttachFile(GuardianView):
@@ -254,13 +249,14 @@ class PostTagInformation(GuardianView):
     """
 
     def get(self, request, tag_id, post_id):
+        post = models.Post.locate(self.me, self.me.default, post_id)
         event = EBindTagPost.objects.filter(
         Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
         post_id=post_id, post__ancestor__organization=self.me.default,
         tag__id=tag_id).last()
 
         return render(request, 'post_app/post-tag-information.html', 
-        {'user': event.user, 'created': event.created, 'tag':event.tag})
+        {'user': event.user, 'post':post, 'created': event.created, 'tag':event.tag})
 
 class UnassignPostUser(GuardianView):
     """
@@ -502,8 +498,7 @@ class Done(GuardianView):
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        return redirect('post_app:refresh-post', 
-        post_id=post.id)
+        return redirect('post_app:view-data', post_id=post.id)
 
 class ManagePostTags(GuardianView):
     """
@@ -611,8 +606,7 @@ class Undo(GuardianView):
         users = post.ancestor.users.all()
         event.dispatch(*users)
 
-        return redirect('post_app:refresh-post', 
-        post_id=post.id)
+        return redirect('post_app:view-data', post_id=post.id)
 
 
 class RequestPostAttention(GuardianView):
@@ -949,4 +943,5 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
