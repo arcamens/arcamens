@@ -3,19 +3,7 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<span class="glyphicon glyphicon-file"></span>
-
-{% if post.done %} (Done) {% endif %} Post by  <a href="#" data-toggle="popover" data-trigger="hover" title="{{post.user.email}}"  data-content="{{post.user.description}}">
-{{post.user.name}} </a> 
-on group
-
-<a class="e-get" href="{{post.ancestor.get_link_url}}" data-show="{% url 'group_app:list-posts' post.ancestor.id %}"
-data-shell="#main-view" > <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
-
-on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
-
-<a href="#" class="e-get" data-show="{% url 'post_app:find' %}"  data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-search">  </span> T/P</a>
+{% include 'post_app/view-data-user-info.html' %}
 
 </div>
 
@@ -31,7 +19,9 @@ on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.crea
 {% include 'post_app/view-data-utils-info.html' %}
 </div>
 
-{% include 'post_app/view-data-post-actions.html' %}
+<span style="font-size:90%;"> 
+{% include 'post_app/view-data-post-actions.html' %} 
+</span>
 
 <script>
 $(function () {
@@ -40,6 +30,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 

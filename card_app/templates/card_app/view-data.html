@@ -3,33 +3,7 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-<span class="glyphicon glyphicon-file"></span> {% if card.done %} (Done) {% endif %} Card by 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="{{card.owner.description}}"> {{card.owner.name}} </a> on list
-
-<a class="e-get" href="#"
-data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
-data-shell="#main-view" > 
-<span class="glyphicon glyphicon-list-alt"> </span>
-{{card.ancestor.ancestor.name}}
-<span class="glyphicon glyphicon-arrow-right"></span>
-{{card.ancestor.name}}
-
-</a>
-
-on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
-
-{% if card.parent_post %}
-forked from post 
-<a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#bigModalContent"  target="_blank"
-data-show="{% url 'post_app:view-data' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
-{{card.parent_post.label|truncatechars:60}} </a>  
-{% endif %}
-
-<a href="#" class="e-get" data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
-<span class="glyphicon glyphicon-search">  </span> T/C</a>
-
-</div>
+{% include 'card_app/view-data-user-info.html' %} </div>
 
 <div class="modal-body">
 <script>
@@ -42,13 +16,13 @@ $('#bigModal').one('hidden.bs.modal', function () {
 </script>
 
 <div class="panel-group">
-
 {% include 'card_app/view-data-main-card-info.html' %}
-
 {% include 'card_app/view-data-utils-info-panel.html' %}
-
 </div>
-{% include 'card_app/view-data-card-actions.html' %}
+
+<span style="font-size:90%;"> 
+{% include 'card_app/view-data-card-actions.html' %} 
+</span>
 
 <script>
 $(function () {
@@ -57,6 +31,8 @@ $(function () {
 </script>
 
 </div>
+
+
 
 
 

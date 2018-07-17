@@ -1,6 +1,6 @@
 <ul class="nav nav-pills ">
 <li> <a  data-shell="#bigModalContent" class="e-get"data-show="{% url 'card_app:update-card' card.id %}"
-href="#"><span class="glyphicon glyphicon-edit"></span> Update</a></li>
+href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
 
 <li> <a  data-shell="#bigModalContent" class="e-get text-info" data-show="{% url 'note_app:list-notes' card.id %}"   href="#">
 <span class="glyphicon glyphicon-comment"></span> Notes <span class="badge"> {{card.notes.count}} </span></a></li>
@@ -28,7 +28,7 @@ data-show="{% url 'card_app:done'  card.id %}" href="#">
 
 <li>
 <a class="e-get"  data-shell="#smallModalContent"  data-show="{% url 'card_app:select-fork-list'  card.id %}" 
-href="#"><span class="glyphicon glyphicon-random"></span> Fork/Card</a></li>
+href="#"><span class="glyphicon glyphicon-random"></span> Fork</a></li>
 
 <li>
 <a data-shell="#main-view" class="e-get text-warning"
@@ -36,7 +36,7 @@ data-show="{% url 'card_app:cut-card' card.id %}" href="#">
 <span class="glyphicon glyphicon-scissors"></span> Cut</a></li>
 
 <li> <a  data-shell="#main-view" class="e-get" data-show="{% url 'card_app:copy-card' card.id %}"
-href="#"><span class="glyphicon glyphicon-scissors"></span> Copy</a></li>
+href="#"><span class="glyphicon glyphicon-copy"></span> Copy</a></li>
 
 <li> 
 <a class="e-get"  data-shell="#smallModalContent"  href="#"
@@ -52,6 +52,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
