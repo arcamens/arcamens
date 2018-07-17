@@ -816,7 +816,6 @@ class PostEvents(GuardianView):
         Q(esetpostprioritydown__post0__id=post.id)|\
         Q(esetpostpriorityup__post1__id=post.id)|\
         Q(esetpostprioritydown__post1__id=post.id)|\
-        Q(eremovepostfork__post=post.id)|\
         Q(eunarchivepost__post__id=post.id)
         events = Event.objects.filter(query).order_by('-created').values('html')
 
@@ -837,22 +836,6 @@ class Unpin(GuardianView):
         pin = self.me.postpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
-
-class RefreshPost(GuardianView):
-    """
-    Used to update a post view after changing its data.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        # boardpins = user.boardpin_set.filter(organization=user.default)
-        # listpins = user.listpin_set.filter(organization=user.default)
-        # cardpins = user.cardpin_set.filter(organization=user.default)
-        # grouppins = user.grouppin_set.filter(organization=user.default)
-
-        return render(request, 'post_app/post-data.html', 
-        {'post':post, 'tags': post.tags.all(), 'user': self.me, })
-
 
 class PostPriority(GuardianView):
     def get(self, request, post_id):
@@ -942,6 +925,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

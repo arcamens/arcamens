@@ -509,57 +509,6 @@ class ECreateFork(Event):
 
     html_template = 'card_app/e-create-fork.html'
 
-class ERemoveCardFork(Event):
-    """
-    """
-
-    ancestor0 = models.ForeignKey('list_app.List', 
-    related_name='e_remove_card_fork0', blank=True)
-
-    card0 = models.ForeignKey('Card', 
-    related_name='e_remove_card_fork1', blank=True)
-
-    card1 = models.ForeignKey('Card', 
-    related_name='e_remove_card_fork2', blank=True)
-
-    ancestor1 = models.ForeignKey('list_app.List', 
-    default=None, related_name='e_remove_card_fork3', 
-    blank=True)
-
-    board0 = models.ForeignKey('board_app.Board', 
-    related_name='e_remove_card_fork4', default=None, 
-    blank=True)
-
-    board1 = models.ForeignKey('board_app.Board', 
-    related_name='e_remove_card_fork5', default=None, 
-    blank=True)
-
-    html_template = 'card_app/e-remove-card-fork.html'
-
-class ERemovePostFork(Event):
-    """
-    """
-
-    ancestor = models.ForeignKey('list_app.List', 
-    related_name='e_remove_post_fork0', blank=True)
-
-    post = models.ForeignKey('post_app.Post', 
-    related_name='e_remove_post_fork1', blank=True)
-
-    card = models.ForeignKey('Card', 
-    related_name='e_remove_post_fork2', blank=True)
-
-    board = models.ForeignKey('board_app.Board', 
-    related_name='e_remove_post_fork3', default=None, 
-    blank=True)
-
-    # The post timeline.
-    group = models.ForeignKey('group_app.Group', 
-    related_name='e_remove_post_fork4', default=None, 
-    blank=True)
-
-    html_template = 'card_app/e-remove-post-fork.html'
-
 class EUpdateCard(Event):
     """
     """
@@ -789,6 +738,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

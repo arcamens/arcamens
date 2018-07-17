@@ -829,87 +829,12 @@ class CardEvents(GuardianView):
         Q(esetcardprioritydown__card0=card.id) |\
         Q(esetcardpriorityup__card1=card.id) |\
         Q(esetcardprioritydown__card1=card.id) |\
-        Q(eremovecardfork__card0=card.id) |\
-        Q(eremovecardfork__card1=card.id) |\
-        Q(eremovepostfork__card=card.id)|\
         Q(eunarchivecard__card__id=card.id)|\
         Q(ebitbucketcommit__note__card__id=card.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
         return render(request, 'card_app/card-events.html', 
         {'card': card, 'elems': events})
-
-class ConnectCard(GuardianView):
-    def get(self, request, card_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-        cards = models.Card.get_allowed_cards(self.me).exclude(id=card_id)
-        cards = cards.exclude(id=card.parent.id) if card.parent else cards
-
-        cards = cards.order_by('-priority')
-        total = cards.count()
-
-        return render(request, 'card_app/connect-card.html', 
-        {'card': card, 'total': total, 'count': total, 'me': self.me,
-        'cards': cards, 'form': forms.ConnectCardForm()})
-
-    def post(self, request, card_id):
-        sqlike = models.Card.from_sqlike()
-        card   = models.Card.locate(self.me, self.me.default, card_id)
-        cards = models.Card.get_allowed_cards(self.me).exclude(id=card_id)
-        cards = cards.exclude(id=card.parent.id) if card.parent else cards
-
-        total  = cards.count()
-        form   = forms.ConnectCardForm(request.POST, sqlike=sqlike)
-
-        if not form.is_valid():
-            return render(request, 'card_app/connect-card.html', 
-                {'me': self.me, 'organization': self.me.default, 'card': card,
-                     'total': total, 'count': 0, 'form':form}, status=400)
-
-        cards = sqlike.run(cards)
-        cards = cards.order_by('-priority')
-
-        count = cards.count()
-
-        return render(request, 'card_app/connect-card.html', 
-        {'card': card, 'total': total, 'count': count, 'me': self.me,
-        'cards': cards, 'form': form})
-
-class ConnectPost(GuardianView):
-    def get(self, request, card_id):
-        card   = models.Card.locate(self.me, self.me.default, card_id)
-        posts = Post.get_allowed_posts(self.me)
-        posts = posts.exclude(id=card.parent_post.id) if card.parent_post else posts
-
-        posts = posts.order_by('-priority')
-        total = posts.count()
-
-        return render(request, 'card_app/connect-post.html', 
-        {'card': card, 'total': total, 'count': total, 'me': self.me,
-        'posts': posts, 'form': forms.ConnectPostForm()})
-
-    def post(self, request, card_id):
-        sqlike = Post.from_sqlike()
-        card   = models.Card.locate(self.me, self.me.default, card_id)
-        posts = Post.get_allowed_posts(self.me)
-        posts = posts.exclude(id=card.parent_post.id) if card.parent_post else posts
-
-        total  = posts.count()
-        form   = forms.ConnectPostForm(request.POST, sqlike=sqlike)
-
-        if not form.is_valid():
-            return render(request, 'card_app/connect-post.html', 
-                {'me': self.me, 'organization': self.me.default, 'card': card,
-                     'total': total, 'count': 0, 'form':form}, status=400)
-
-        posts = sqlike.run(posts)
-        posts = posts.order_by('-priority')
-
-        count = posts.count()
-
-        return render(request, 'card_app/connect-post.html', 
-        {'card': card, 'total': total, 'count': count, 'me': self.me,
-        'posts': posts, 'form': form})
 
 class CardPriority(GuardianView):
     def get(self, request, card_id):
@@ -944,81 +869,6 @@ class CardPriority(GuardianView):
         return render(request, 'card_app/card-priority.html', 
         {'card': card, 'total': total, 'count': count, 'me': self.me,
         'cards': cards, 'form': form})
-
-class SetCardParent(GuardianView):
-    @transaction.atomic
-    def get(self, request, card0_id, card1_id):
-        card0  = models.Card.locate(self.me, self.me.default, card0_id)
-        card1  = models.Card.locate(self.me, self.me.default, card1_id)
-        card0.parent = card1
-        card0.path.clear()
-        card0.path.add(*card1.path.all(), card1)
-
-        # Make sure it is a post fork, otherwise
-        # we get a broken concept. A card can have just
-        # one parent.
-        card0.parent_post = None
-        card0.save()
-
-        # The ECreateFork.card0 corresponds to the context card1
-        # and vice versa.
-        event = models.ECreateFork.objects.create(organization=self.me.default,
-        ancestor0=card0.ancestor, ancestor1=card1.ancestor, card0=card1, 
-        card1=card0, board0=card0.ancestor.ancestor, 
-        user=self.me, board1=card1.ancestor.ancestor)
-        event.dispatch(*card0.ancestor.ancestor.members.all())
-
-        return redirect('card_app:view-data', card_id=card0.id)
-
-class UnsetCardParent(GuardianView):
-    @transaction.atomic
-    def get(self, request, card_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-
-        event = models.ERemoveCardFork.objects.create(
-        organization=self.me.default, ancestor0=card.ancestor, 
-        ancestor1=card.parent.ancestor, board0=card.ancestor.ancestor, 
-        board1=card.parent.ancestor.ancestor, card0=card, 
-        card1=card.parent, user=self.me)
-
-        card.parent = None
-        card.path.clear()
-        card.save()
-
-        event.dispatch(*card.ancestor.ancestor.members.all())
-        return redirect('card_app:view-data', card_id=card.id)
-
-class UnsetPostFork(GuardianView):
-    @transaction.atomic
-    def get(self, request, card_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-
-        event = models.ERemovePostFork.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        post=card.parent_post, card=card,  group=card.parent_post.ancestor, 
-        board=card.ancestor.ancestor, user=self.me)
-
-        card.parent_post = None
-        card.path.clear()
-        card.save()
-
-        return redirect('card_app:view-data', card_id=card.id)
-
-class SetPostFork(GuardianView):
-    @transaction.atomic
-    def get(self, request, card_id, post_id):
-        card  = models.Card.locate(self.me, self.me.default, card_id)
-        post  = Post.locate(self.me, self.me.default, post_id)
-        card.parent      = None
-        card.parent_post = post
-        card.path.clear()
-        card.save()
-
-        event = ECreatePostFork.objects.create(organization=self.me.default,
-        group=post.ancestor, list=card.ancestor, board=card.ancestor.ancestor, 
-        post=post, card=card, user=self.me)
-
-        return redirect('card_app:view-data', card_id=card.id)
 
 class SetCardPriorityUp(GuardianView):
     @transaction.atomic
@@ -1089,6 +939,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

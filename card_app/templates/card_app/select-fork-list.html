@@ -30,16 +30,6 @@
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<p> 
-<span class="glyphicon glyphicon-question-sign"></span>
-Connect with existing
-
-<a class="e-get"  data-shell="#bigModalContent"  data-show="{% url 'card_app:connect-card' card.id %}"
-href="{{card.ancestor.get_link_url}}" > Card</a>/ <a class="e-get"  data-shell="#bigModalContent"  data-show="{% url 'card_app:connect-post' card.id %}"
-href="{{card.ancestor.get_link_url}}" > Post</a> ?
-
-</p>
-
 <a class="e-get"  data-shell="#bigModalContent"  data-show="{% url 'card_app:create-fork' card.ancestor.id card.id %}"
 href="{{card.ancestor.get_link_url}}" > 
 <span class="glyphicon glyphicon-arrow-down"></span>  On the same list</a>
@@ -57,6 +47,7 @@ data-show="{% url 'card_app:select-fork-list'  card.id %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

@@ -45,17 +45,11 @@ urlpatterns = [
     url(r'^card-events/(?P<card_id>.+)/', views.CardEvents.as_view(), name='card-events'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
     url(r'^card-priority/(?P<card_id>.+)/', views.CardPriority.as_view(), name='card-priority'),
-    url(r'^connect-card/(?P<card_id>.+)/', views.ConnectCard.as_view(), name='connect-card'),
-    url(r'^connect-post/(?P<card_id>.+)/', views.ConnectPost.as_view(), name='connect-post'),
 
     url(r'^set-card-priority-down/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityDown.as_view(), name='set-card-priority-down'),
     url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
-    url(r'^set-card-parent/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardParent.as_view(), name='set-card-parent'),
-    url(r'^set-post-fork/(?P<card_id>.+)/(?P<post_id>.+)/', views.SetPostFork.as_view(), name='set-post-fork'),
-    url(r'^unset-card-parent/(?P<card_id>.+)/', views.UnsetCardParent.as_view(), name='unset-card-parent'),
-    url(r'^unset-post-fork/(?P<card_id>.+)/', views.UnsetPostFork.as_view(), name='unset-post-fork'),
-
 ]
+
 
 
 
