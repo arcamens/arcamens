@@ -33,6 +33,7 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 
 });
+
 $(document).ready(function() {
 $('.navbar').on('focus', function() {
     console.log('onfocus event');
@@ -68,6 +69,7 @@ OneSignal.push(function() {
 <body>
 {% jsim %}
 
+
 <nav class="navbar navbar-inverse" style="background-color:#071152">
 <div class="container-fluid">
 
@@ -90,10 +92,23 @@ OneSignal.push(function() {
 
 <div id="main-view" class="container-fluid">
 </div>
+<script>
+$(document).ready(function(){
+    opts = {
+        'data-backdrop': 'static',
+        'data-keyboard': false
+    };
+
+    $('#bigModal').attr(opts);
+    $('#mediumModal').attr(opts);
+    $('#smallModal').attr(opts);
+});
+</script>
 
 </body>
 
 </html>
+
 
 
 
