@@ -5,7 +5,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-remove"></span> Delete board 
-
+<span class="glyphicon glyphicon-th"></span>
 {{board.name|truncatechars:60}}?
 </div>
 
@@ -27,6 +27,7 @@ data-shell="#main-view" data-show="{% url 'board_app:delete-board' board.id %}"
 class="btn btn-danger e-post"> 
      {% trans "Delete" %}
 </button>
+
 
 
 

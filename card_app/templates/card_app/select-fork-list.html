@@ -4,7 +4,7 @@
 
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
-<h5>  <span class="glyphicon glyphicon-random"></span> Fork card {{card.label|truncatechars:60}} on list.. </h5>
+<h5>  <span class="glyphicon glyphicon-random"></span> Fork card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} on list.. </h5>
 
 </div>
 
@@ -57,6 +57,7 @@ data-show="{% url 'card_app:select-fork-list'  card.id %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 
