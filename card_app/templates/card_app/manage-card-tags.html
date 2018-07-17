@@ -7,7 +7,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Tags on card {{card.label|truncatechars:60}} 
+Tags on card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} 
 <span class="badge">{{count}}/{{total}}</span>
 
 </h5>
@@ -55,6 +55,7 @@ data-show="{% url 'card_app:manage-card-tags' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

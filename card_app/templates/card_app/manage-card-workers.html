@@ -8,7 +8,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Workers on card {{card.label|truncatechars:60}} 
+Workers on card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} 
 <span class="badge">{{count}}/{{total}}</span>
 
 </h5>
@@ -72,6 +72,7 @@ data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

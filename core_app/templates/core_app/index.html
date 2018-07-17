@@ -68,6 +68,19 @@ OneSignal.push(function() {
 
 <body>
 {% jsim %}
+<script>
+    // It cant be inside document ready otherwise it fails
+    // when viewing cards, notes, posts etc because these
+    // are displayed over modals.
+    opts = {
+        'data-backdrop': 'static',
+        'data-keyboard': false
+    };
+
+    $('#bigModal').attr(opts);
+    $('#mediumModal').attr(opts);
+    $('#smallModal').attr(opts);
+</script>
 
 
 <nav class="navbar navbar-inverse" style="background-color:#071152">
@@ -92,18 +105,6 @@ OneSignal.push(function() {
 
 <div id="main-view" class="container-fluid">
 </div>
-<script>
-$(document).ready(function(){
-    opts = {
-        'data-backdrop': 'static',
-        'data-keyboard': false
-    };
-
-    $('#bigModal').attr(opts);
-    $('#mediumModal').attr(opts);
-    $('#smallModal').attr(opts);
-});
-</script>
 
 </body>
 
