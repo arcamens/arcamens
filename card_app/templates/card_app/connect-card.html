@@ -25,7 +25,7 @@
 <br>
 
 <small>
-<a class="e-get text-danger"  data-shell="#main-view"  
+<a class="e-get text-danger"  data-shell="#bigModalContent"  
 data-show="{% url 'card_app:unset-card-parent' card.id %}" href="{{card.get_link_url}}">  
 <span class="glyphicon glyphicon-remove"></span> Disconnect</a> 
 </small> </p>
@@ -45,7 +45,7 @@ data-show="{% url 'card_app:unset-card-parent' card.id %}" href="{{card.get_link
 <br>
 
 <small>
-<a class="e-get text-danger"  data-shell="#main-view"  
+<a class="e-get text-danger"  data-shell="#bigModalContent"  
 data-show="{% url 'card_app:set-card-parent' card.id ind.id %}" href="{{ind.get_link_url}}">  
 <span class="glyphicon glyphicon-ok"></span> Connect</a> 
 </small> </p>
@@ -71,6 +71,7 @@ id="filterCardRelations" data-show="{% url 'card_app:connect-card' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 
