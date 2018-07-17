@@ -324,13 +324,13 @@ tee >(stdbuf -o 0 ssh arcamens@staging.arcamens.com 'bash -i')
 
 mysql -u staging -p staging
 
-password eicae8EiOhbiuJ8J
+password Ighaw5aaquaeph5H
 ##############################################################################
 # access arcamens staging.
 tee >(stdbuf -o 0 ssh staging@staging.arcamens.com 'bash -i')
 
 tee >(stdbuf -o 0 mysql -u staging -p staging)
-eicae8EiOhbiuJ8J
+Ighaw5aaquaeph5H
 ##############################################################################
 # Fixing issue with migrations after renaming model bitbucket_app.
 
@@ -339,7 +339,7 @@ rm -fr app/migrations
 # drop tables to solve the problem with unkonwn field in migrations.
 
 mysql -i -u staging -p staging
-eicae8EiOhbiuJ8J
+Ighaw5aaquaeph5H
 
 DROP TABLE bitbucket_app_bitbuckethooker;    
 
@@ -427,6 +427,8 @@ sed -i 's/appname/newappname/g' arcamens-db.json
 # The idea consists of renaming the occurrences of the app. it works in some
 # cases though.
 python manage.py loaddata arcamens-db.json
+
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude card_app.ERemoveCardFork --exclude card_app.ERemovePostFork > arcamens-db.json
 
 
 

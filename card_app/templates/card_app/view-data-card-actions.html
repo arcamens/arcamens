@@ -2,9 +2,6 @@
 <li> <a  data-shell="#bigModalContent" class="e-get"data-show="{% url 'card_app:update-card' card.id %}"
 href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
 
-<li> <a  data-shell="#bigModalContent" class="e-get text-info" data-show="{% url 'note_app:list-notes' card.id %}"   href="#">
-<span class="glyphicon glyphicon-comment"></span> Notes <span class="badge"> {{card.notes.count}} </span></a></li>
-
 <li> <a  data-shell="#smallModalContent"  class="e-get text-default" data-show="{% url 'card_app:manage-card-workers' card.id %}" href="#">
 <span class="glyphicon glyphicon-user"></span> Workers</a></li>
 
@@ -44,6 +41,9 @@ data-show="{% url 'card_app:card-events' card.id %}">
 <span class="glyphicon glyphicon-bell"></span> E/C</a>
 </li>
 
+<li> <a  data-shell="#bigModalContent" class="e-get text-info" data-show="{% url 'note_app:list-notes' card.id %}"   href="#">
+<span class="glyphicon glyphicon-comment"></span> Notes <span class="badge"> {{card.notes.count}} </span></a></li>
+
 </ul>
 
 <script>
@@ -52,6 +52,7 @@ $('#view-data  img').each(function(){
     $(this).addClass('img-responsive');
 });
 </script>
+
 
 
 
