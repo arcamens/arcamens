@@ -5,27 +5,17 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-book"></span> 
-Snippet on post
+Snippet  by <a href="#" data-toggle="popover" data-trigger="hover" title="{{snippet.owner.email}}"  data-content="{{snippet.owner.description}}">
+{{snippet.owner.name}} </a> on post
 <a  href="#" data-shell="#bigModalContent"  data-show="{% url 'post_app:view-data' post.id %}"
 class="e-get"> <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
-
-by <a href="#" data-toggle="popover" data-trigger="hover" title="{{snippet.owner.email}}"  data-content="{{snippet.owner.description}}">
-{{snippet.owner.name}} </a>
-
-on <a href="{{snippet.get_link_url}}" target="_blank"> {{snippet.created}}</a>
 
 </div>
 
 <div class="modal-body">
-<div style="word-wrap: break-word;"> 
 
-<h4> {{snippet.title}} </h4>
-
-<div class="pre-scrollable">
+{{snippet.title}} 
 {{snippet.html | safe}}
-</div>
-
-</div>
 
 <div  style="font-size:80%">
 <div id="snippet-attachments-{{snippet.id}}" style="min-height:52px;"> </div>
@@ -42,6 +32,8 @@ function(data) {
 </script>
 
 </div>
+
+On <a href="{{snippet.get_link_url}}" target="_blank"> {{snippet.created}}</a>
 
 </div>
 
@@ -62,4 +54,5 @@ $(function () {
 </script>
 
 </div>
+
 
