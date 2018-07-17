@@ -7,8 +7,7 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
 <span class="glyphicon glyphicon-search"></span>
-Available <a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a> Tags 
+Tags on card {{card.label|truncatechars:60}} 
 <span class="badge">{{count}}/{{total}}</span>
 
 </h5>
@@ -56,6 +55,8 @@ data-show="{% url 'card_app:manage-card-tags' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
+
 
 
 

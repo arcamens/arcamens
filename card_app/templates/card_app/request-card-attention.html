@@ -6,9 +6,7 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Call {{peer.name}} attention on card 
-<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
+Call {{peer.name}} attention on card {{card.label|truncatechars:60}} 
 </h5>
 </div>
 
@@ -22,14 +20,15 @@ class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|trun
 
 
 <div class="modal-footer">
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Cancel" %}
-</button>
+<button  type="button" data-shell="#smallModalContent" 
+data-show="{% url 'card_app:card-worker-information' peer.id card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#requestCardAttentionForm" data-show="{% url 'card_app:request-card-attention' peer.id card.id  %}"
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
+
 
 
 

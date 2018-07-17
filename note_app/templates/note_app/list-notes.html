@@ -7,10 +7,7 @@
 
 <h5 class="modal-title">
 <span class="glyphicon glyphicon-comment"></span>
-Notes on card 
-
-<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
+Notes on card {{card.label|truncatechars:60}} 
 
 <span class="badge">{{records.count}}</span>
 </h5>
@@ -24,6 +21,10 @@ class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|trun
 
 </div>
 <div class="modal-footer" >
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
 <button  type="button" 
 data-show="{% url 'note_app:create-note' card.id %}"
 data-shell="#bigModalContent" 
@@ -36,6 +37,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 

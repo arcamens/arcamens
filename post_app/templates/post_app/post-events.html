@@ -7,10 +7,7 @@
 
 <span class="glyphicon glyphicon-bell"></span>
 
-Events on post
-
-<a href="{{post.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'post_app:view-data' post.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
+Events on post {{post.label|truncatechars:60}} 
 
 <span class="badge">{{count}}</span></h5>
 </div>
@@ -44,6 +41,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 

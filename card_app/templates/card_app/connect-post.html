@@ -6,8 +6,7 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>
-<span class="glyphicon glyphicon-search"></span>Possible post parents of card: <a href="{{card.parent_post.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'post_app:view-data' card.parent_post.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.parent_post.label|truncatechars:60}} </a>
+<span class="glyphicon glyphicon-search"></span>Possible post parents of card: {{card.parent_post.label|truncatechars:60}} 
 <span class="badge">{{count}}/{{total}}</span> </h5>
 </div>
 
@@ -60,14 +59,16 @@ data-show="{% url 'card_app:set-post-fork' card.id ind.id %}" href="{{ind.get_li
 
 <div class="modal-footer">
 
-<button type="button" class="btn btn-default" 
-data-dismiss="modal">Close</button>
+<button  type="button" data-shell="#smallModalContent" 
+data-show="{% url 'card_app:select-fork-list' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#postPriorityForm" 
 id="filterpostRelations" data-show="{% url 'card_app:connect-post' card.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
 </div>
+
 
 
 

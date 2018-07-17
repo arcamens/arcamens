@@ -6,9 +6,7 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Call {{peer.name}} attention on post 
-<a href="{{post.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'post_app:view-data' post.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
+Call {{peer.name}} attention on post {{post.label|truncatechars:60}} 
 
 </h5>
 </div>
@@ -23,9 +21,9 @@ class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|trun
 
 
 <div class="modal-footer">
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Cancel" %}
-</button>
+<button  type="button" data-shell="#smallModalContent" 
+data-show="{% url 'post_app:post-worker-information' peer.id post.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#requestpostAttentionForm" 
 data-shell="#smallModalContent" 
@@ -33,6 +31,7 @@ data-shell-error="#smallModalContent" data-show="{% url 'post_app:request-post-a
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
+
 
 
 

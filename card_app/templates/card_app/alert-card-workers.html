@@ -6,9 +6,7 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Alert workers on card 
-<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a></h5>
+Alert workers on card {{card.label|truncatechars:60}} </h5>
 </div>
 
 <div class="modal-body">
@@ -21,14 +19,15 @@ class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|trun
 
 
 <div class="modal-footer">
-<button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Cancel" %}
-</button>
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#alertCardWorkersForm" data-show="{% url 'card_app:alert-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
+
 
 
 

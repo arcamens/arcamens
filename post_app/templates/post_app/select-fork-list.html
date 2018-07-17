@@ -6,8 +6,7 @@
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
 <h5> 
 <span class="glyphicon glyphicon-random"></span>
-Fork <a href="{{post.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'post_app:view-data' post.id %}"
-class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a> on list..
+Fork post {{post.label|truncatechars:60}} on list..
 </h5>
 </div>
 
@@ -43,6 +42,7 @@ class="btn btn-default e-get"> {% trans "Back" %} </button>
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 
