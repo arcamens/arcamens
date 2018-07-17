@@ -44,8 +44,7 @@ data-shell="#bigModalContent"
 class="btn btn-default e-get"> {% trans "Update" %} </button>
 
 <button  type="button" data-show="{% url 'snippet_app:delete-snippet' snippet.id %}"
-data-shell="#post-{{post.id}}" 
-class="btn btn-default e-get"> {% trans "Remove" %} </button>
+data-shell="#bigModalContent" class="btn btn-default e-get"> {% trans "Remove" %} </button>
 
 <script>
 $(function () {
