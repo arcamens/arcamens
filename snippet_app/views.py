@@ -164,8 +164,7 @@ class DeleteSnippet(GuardianView):
         event.dispatch(*snippet.post.ancestor.users.all())
         snippet.delete()
 
-        return redirect('post_app:refresh-post', 
-        post_id=snippet.post.id)
+        return redirect('post_app:view-data', post_id=snippet.post.id)
 
 
 class SnippetFileDownload(FileDownload):
@@ -176,6 +175,7 @@ class SnippetFileDownload(FileDownload):
         id=filewrapper_id).distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

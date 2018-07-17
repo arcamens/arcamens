@@ -12,7 +12,7 @@ data-show="{% url 'snippet_app:snippet' snippet.id %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" 
-data-form="#form-snippet-data" 
+data-form="#snippetForm" 
 data-shell="#bigModalContent" 
 data-shell-error="#bigModalContent" 
 data-show="{% url 'snippet_app:update-snippet' snippet.id %}"
@@ -20,5 +20,6 @@ class="btn btn-default e-post">
 {% trans "Update" %}
 </button>
 {% endblock %}
+
 
 
