@@ -11,8 +11,6 @@ data-shell="#main-view" >
 
 </a>
 
-on <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
-
 {% if card.parent_post %}
 forked from post 
 <a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#bigModalContent"  target="_blank"
@@ -22,4 +20,5 @@ data-show="{% url 'post_app:view-data' card.parent_post.id %}" > <span class="gl
 
 <a href="#" class="e-get" data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> T/C</a>
+
 

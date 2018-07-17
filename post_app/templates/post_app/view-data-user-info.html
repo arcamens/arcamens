@@ -7,8 +7,7 @@ on group
 <a class="e-get" href="{{post.ancestor.get_link_url}}" data-show="{% url 'group_app:list-posts' post.ancestor.id %}"
 data-shell="#main-view" > <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
 
-on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
-
 <a href="#" class="e-get" data-show="{% url 'post_app:find' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> T/P</a>
+
 

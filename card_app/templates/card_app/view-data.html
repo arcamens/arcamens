@@ -14,15 +14,16 @@ $('#bigModal').one('hidden.bs.modal', function () {
 
 })
 </script>
+<span style="font-size:90%;"> 
+{% include 'card_app/view-data-card-actions.html' %} 
+</span>
 
 <div class="panel-group">
 {% include 'card_app/view-data-main-card-info.html' %}
 {% include 'card_app/view-data-utils-info-panel.html' %}
 </div>
 
-<span style="font-size:90%;"> 
-{% include 'card_app/view-data-card-actions.html' %} 
-</span>
+On <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
 
 <script>
 $(function () {
@@ -31,6 +32,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 
