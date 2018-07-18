@@ -39,9 +39,13 @@ class PostMixin(models.Model):
         enable_attributes=False)
 
         if not self.pk and self.ancestor:
-            self.priority = self.ancestor.posts.count()
+            self.set_priority()
 
         super(PostMixin, self).save(*args, **kwargs)
+
+    def set_priority(self):
+        post = self.ancestor.posts.order_by('-priority').first()
+        self.priority = (post.priority + 1) if post else 0
 
     def get_absolute_url(self):
         return reverse('post_app:view-data', 
@@ -546,6 +550,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

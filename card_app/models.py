@@ -39,10 +39,13 @@ class CardMixin(models.Model):
 
         # Define the new card with the greatest priority.
         if not self.pk and self.ancestor:
-            self.priority = self.ancestor.cards.count()
-
+            self.set_priority()
         super(CardMixin, self).save(*args, **kwargs)
 
+    def set_priority(self):
+        card = self.ancestor.cards.order_by('-priority').first()
+        self.priority = (card.priority + 1) if card else 0
+    
     def get_absolute_url(self):
         return reverse('card_app:view-data', 
                     kwargs={'card_id': self.id})
@@ -738,6 +741,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 
