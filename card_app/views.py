@@ -638,9 +638,14 @@ class BindCardTag(GuardianView):
 class Done(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
+
+        can_archive = all(card.forks.values_list('done', flat=True))
+        if not can_archive:
+            return HttpResponse("It has unarchived forks\
+                    cards. Can't archive it now", status=403)
+
         card.done = True
         card.save()
-
 
         # cards in the clipboard cant be archived.
         event    = models.EArchiveCard.objects.create(
@@ -939,6 +944,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

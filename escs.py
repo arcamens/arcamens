@@ -623,6 +623,10 @@ me.id
 c = User.objects.filter(in__organization__owner=2).count()
 c = User.objects.filter(organizations__owner__id=2).distinct().count()
 c
-
+##############################################################################
+from core_app.models import User
+users = User.objects.all()
+users = users.values_list('name', flat=True)
+users
 
 
