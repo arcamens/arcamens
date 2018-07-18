@@ -4,11 +4,22 @@
 
 
 {% block buttons %}
+<script>
+function updateCard(){
+    $('#card-{{card.id}}').load('{% url 'card_app:refresh-card-label' card.id  %}');
+    
+    // Update the parent post when there is one.
+    {% if card.parent_post %}
+    $('#post-{{card.parent_post.id}}').load('{% url 'post_app:refresh-post' card.parent_post.id  %}');
+    {% endif %}
+}
+</script>
+
 <button  type="button" data-shell="#bigModalContent" 
 data-show="{% url 'card_app:view-data' card.id %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
-<button  type="button" id="updateCard"
+<button  type="button" id="updateCard" data-callback="updateCard();"
 data-form="#cardForm" 
 data-shell="#bigModalContent" 
 data-show="{% url 'card_app:update-card' card.id %}"
@@ -25,6 +36,7 @@ $('#form-card-data').on('submit', (function(e){
 </script>
 
 {% endblock %}
+
 
 
 

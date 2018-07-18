@@ -6,14 +6,6 @@
 {% include 'card_app/view-data-user-info.html' %} </div>
 
 <div class="modal-body">
-<script>
-$('#bigModal').one('hidden.bs.modal', function () {
-    if($('#card-{{card.id}}').length) {
-        $('#card-{{card.id}}').load('{% url 'card_app:refresh-card-label' card.id  %}');
-    }  
-
-})
-</script>
 <span style="font-size:90%;"> 
 {% include 'card_app/view-data-card-actions.html' %} 
 </span>
@@ -32,6 +24,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 
