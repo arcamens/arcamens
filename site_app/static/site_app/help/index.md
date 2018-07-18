@@ -121,8 +121,6 @@ After filling the fields and creating your task, you would get the view of the c
 
 ![card-creation-2](/static/site_app/help/card-creation-2.png)
 
-**Note:** Click on Up to get back to the card list.
-
 You can change all attributes for the card there, whenever an attribute is changed
 then an event is fired. All users who are related to the card will get notified.
 These users are those who belong to the card board or are assigned to the card.
@@ -1761,6 +1759,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
