@@ -1,4 +1,10 @@
 <ul class="nav nav-pills ">
+<script>
+function groupUpdate(){
+    $('#main-view').load('{% url 'group_app:list-posts' post.ancestor.id %}');
+}
+</script>
+
 <li>
 <a data-show="{% url 'post_app:update-post' post.id %}" data-shell="#bigModalContent"  href="#" class="e-get"> 
 <span class="glyphicon glyphicon-edit"></span> Update</a> </li>
@@ -12,10 +18,10 @@ class="e-get"><span class="glyphicon glyphicon-user"> </span> Assign </a> </li>
 
 <li>
 {% if post.done %} <a href="#" data-shell="#bigModalContent" data-show="{% url 'post_app:undo' post.id %}"
-class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
+data-callback="groupUpdate();" class="text-warning  e-get"><span class="glyphicon glyphicon-ok"></span> Undo </a>
 {% else %}
 <a href="#" data-shell="#bigModalContent" data-show="{% url 'post_app:done' post.id %}"
-class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
+data-callback="groupUpdate();" class="text-warning e-get"><span class="glyphicon glyphicon-ok"></span> Done </a>
 {% endif %}
 </li>
 
@@ -42,6 +48,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 <li><a class="e-get" href="#" data-shell="#smallModalContent"  data-show="{% url 'post_app:post-events' post.id %}"> <span class="glyphicon glyphicon-bell"></span> E/C</a></li>
 
 </ul>
+
 
 
 

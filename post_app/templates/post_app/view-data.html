@@ -6,12 +6,6 @@
 {% include 'post_app/view-data-user-info.html' %} </div>
 
 <div class="modal-body">
-<script>
-    if($('#post-{{post.id}}').length) {
-        $('#post-{{post.id}}').load('{% url 'post_app:post' post.id  %}');
-    }  
-</script>
-
 <span style="font-size:90%;"> 
 {% include 'post_app/view-data-post-actions.html' %} 
 </span>
@@ -30,6 +24,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 
