@@ -1,7 +1,7 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<form id="snippetForm" enctype="multipart/form-data">
+<form id="form-snippet-data" enctype="multipart/form-data">
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -9,29 +9,35 @@
 </div>
 
 <div class="modal-body">
+
 {% csrf_token %}
+
 {% bootstrap_field form.data  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
+
 </div>
 </form>
 
 
 <div class="modal-footer">
-{% block buttons %}
-<button  type="button" data-shell="#bigModalContent" 
-data-show="{% url 'post_app:view-data' post.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
+})
 
-<button  type="button" data-form="#snippetForm" 
-data-shell="#bigModalContent"  data-show="{% url 'snippet_app:create-snippet' post.id %}"
+</script>
+
+{% block buttons %}
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+<button  type="button" data-form="#form-snippet-data" 
+data-shell="#post-{{post.id}}"  data-show="{% url 'snippet_app:create-snippet' post.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 
 {% endblock %}
 </div>
-
-
 
 
 

@@ -48,7 +48,7 @@ class PostMixin(models.Model):
         self.priority = (post.priority + 1) if post else 0
 
     def get_absolute_url(self):
-        return reverse('post_app:view-data', 
+        return reverse('post_app:post', 
         kwargs={'post_id': self.id})
 
     def get_link_url(self):
@@ -476,7 +476,7 @@ class PostPinMixin(models.Model):
         abstract = True
 
     def get_absolute_url(self):
-        return reverse('post_app:view-data', 
+        return reverse('post_app:post', 
             kwargs={'post_id': self.post.id})
 
 class PostPin(PostPinMixin):
@@ -550,8 +550,6 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
-
-
 
 
 

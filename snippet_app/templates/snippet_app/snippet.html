@@ -5,9 +5,8 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <span class="glyphicon glyphicon-book"></span> 
-Snippet  by <a href="#" data-toggle="popover" data-trigger="hover" title="{{snippet.owner.email}}"  data-content="{{snippet.owner.description}}">
-{{snippet.owner.name}} </a> on post
-<a  href="#" data-shell="#bigModalContent"  data-show="{% url 'post_app:view-data' post.id %}"
+Snippet by {{snippet.owner.name}}  on post
+<a  href="{{post.get_link_url}}" data-shell="#main-view"  data-show="{% url 'post_app:post' post.id %}"
 class="e-get"> <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
 
 </div>
@@ -15,6 +14,7 @@ class="e-get"> <span class="glyphicon glyphicon-file"></span> {{post.label|trunc
 <div class="modal-body">
 
 {{snippet.title}} 
+
 {{snippet.html | safe}}
 
 <div  style="font-size:80%">
@@ -32,9 +32,7 @@ function(data) {
 </script>
 
 </div>
-
 On <a href="{{snippet.get_link_url}}" target="_blank"> {{snippet.created}}</a>
-
 </div>
 
 <div class="modal-footer">
@@ -44,14 +42,35 @@ data-shell="#bigModalContent"
 class="btn btn-default e-get"> {% trans "Update" %} </button>
 
 <button  type="button" data-show="{% url 'snippet_app:delete-snippet' snippet.id %}"
-data-shell="#bigModalContent" class="btn btn-default e-get"> {% trans "Remove" %} </button>
+data-shell="#post-{{post.id}}" 
+class="btn btn-default e-get"> {% trans "Remove" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
 
 <script>
-$(function () {
-    $('[data-toggle="popover"]').popover()
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' snippet.post.id  %}');
 })
 </script>
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

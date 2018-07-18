@@ -6,9 +6,10 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Alert workers on post <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} 
+Alert workers on post 
+<span class="glyphicon glyphicon-file"></span>
 
-</h5>
+{{post.label|truncatechars:40}}</h5>
 </div>
 
 <div class="modal-body">
@@ -21,18 +22,15 @@ Alert workers on post <span class="glyphicon glyphicon-file"></span> {{post.labe
 
 
 <div class="modal-footer">
-<button  type="button" data-shell="#bigModalContent" 
-data-show="{% url 'post_app:view-data' post.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Cancel" %}
+</button>
 
 <button  type="button" data-form="#alertpostWorkersForm" 
 data-show="{% url 'post_app:alert-post-workers' post.id  %}"
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
-
-
-
 
 
 

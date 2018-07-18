@@ -6,9 +6,10 @@
 
 <h5> 
 <span class="glyphicon glyphicon-envelope"></span>
-Call {{peer.name}} attention on post <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} 
+Call {{peer.name}} attention on post 
+<span class="glyphicon glyphicon-file"></span>
 
-</h5>
+{{post.label|truncatechars:40}}</h5>
 </div>
 
 <div class="modal-body">
@@ -21,9 +22,9 @@ Call {{peer.name}} attention on post <span class="glyphicon glyphicon-file"></sp
 
 
 <div class="modal-footer">
-<button  type="button" data-shell="#smallModalContent" 
-data-show="{% url 'post_app:post-worker-information' peer.id post.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Cancel" %}
+</button>
 
 <button  type="button" data-form="#requestpostAttentionForm" 
 data-shell="#smallModalContent" 
@@ -31,9 +32,6 @@ data-shell-error="#smallModalContent" data-show="{% url 'post_app:request-post-a
 class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
 
 </div>
-
-
-
 
 
 

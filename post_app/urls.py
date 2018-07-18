@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^post/(?P<post_id>.+)/', views.Post.as_view(), name='post'),
-    url(r'^view-data/(?P<post_id>.+)/', views.ViewData.as_view(), name='view-data'),
+    url(r'^refresh-post/(?P<post_id>.+)/', views.RefreshPost.as_view(), name='refresh-post'),
 
     url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
     url(r'^alert-post-workers/(?P<post_id>.+)/', views.AlertPostWorkers.as_view(), name='alert-post-workers'),
@@ -48,8 +48,6 @@ urlpatterns = [
     url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
 
 ]
-
-
 
 
 

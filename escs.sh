@@ -430,6 +430,19 @@ python manage.py loaddata arcamens-db.json
 
 python manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude card_app.ERemoveCardFork --exclude card_app.ERemovePostFork > arcamens-db.json
 
-
+#############################################################################
+# push arcamens beta branch.
+cd ~/projects/arcamens-code
+# clean up all .pyc files. 
+find . -name "*.pyc" -exec rm -f {} \;
+rm -fr ~/projects/arcamens-code/static/media
+git status
+git add *
+git commit -a
+git push -u origin beta
+##############################################################################
+# create beta branch.
+git checkout -b beta
+git push --set-upstream origin beta
 
 

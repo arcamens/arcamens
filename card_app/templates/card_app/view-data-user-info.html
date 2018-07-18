@@ -13,12 +13,13 @@ data-shell="#main-view" >
 
 {% if card.parent_post %}
 forked from post 
-<a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#bigModalContent"  target="_blank"
-data-show="{% url 'post_app:view-data' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
+<a href="{% url 'post_app:post-link' card.parent_post.id %}" class="e-get" data-shell="#main-view"  target="_blank"
+data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphicon glyphicon-file"></span> {% if card.parent_post.done %} (Done) {% endif %}
 {{card.parent_post.label|truncatechars:60}} </a>  
 {% endif %}
 
 <a href="#" class="e-get" data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> T/C</a>
+
 
 
