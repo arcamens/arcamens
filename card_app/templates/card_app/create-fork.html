@@ -3,6 +3,13 @@
 {% load i18n %}
 
 {% block buttons %}
+<script>
+function listCards(){
+    $('#main-view').load('{% url 'card_app:list-cards' ancestor.id  %}');
+}
+
+</script>
+
 <div class="pull-left">
 <a  data-shell="#bigModalContent"  class="e-get" href="#" data-show="{% url 'card_app:pull-card-content' ancestor.id card.id %}"> 
 <span class="glyphicon glyphicon-download"></span> 
@@ -12,13 +19,14 @@ Keep old content? </a>
 
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-<button  type="button" data-form="#cardForm" data-shell="#bigModalContent" id="createFork"
+<button  type="button" data-form="#cardForm" data-shell="#bigModalContent" data-callback="listCards();"
 data-show="{% url 'card_app:create-fork' ancestor.id card.id  %}"
 class="btn btn-default e-post"> 
 {% trans "Fork" %}
 </button>
 
 {% endblock %}
+
 
 
 
