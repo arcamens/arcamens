@@ -53,10 +53,8 @@
 <li><a href="#card-colors">Card Colors</a></li>
 <li><a href="#card-e-mailnotifications">Card E-mail/Notifications</a></li>
 <li><a href="#card-filter">Card Filter</a></li>
-<li><a href="#list-filter">List Filter</a></li>
 <li><a href="#card-relations">Card Relations</a></li>
 <li><a href="#card-forks">Card Forks</a></li>
-<li><a href="#switch-card-parent">Switch Card Parent</a></li>
 <li><a href="#post-forks">Post Forks</a></li>
 <li><a href="#advanced-user-search">Advanced User Search</a></li>
 <li><a href="#advanced-card-search">Advanced Card Search</a></li>
@@ -536,8 +534,14 @@ Group: Arcamens/Bugs</code></pre>
 </figure>
 <p>You can filter by tag, worker, owner etc.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
-<h3 id="list-filter">List Filter</h3>
 <h3 id="card-relations">Card Relations</h3>
+<p>Cards can be referenced from other cards through their links:</p>
+<p>https://staging.arcamens.com/card_app/card-link/700/</p>
+<p>When you reference a card using its link from other card markdown then it creates relations between these cards. The relation is shown on the referenced card as follows:</p>
+<figure>
+<img src="/static/site_app/help/card-relations-0.png" alt="card-relations-0" /><figcaption>card-relations-0</figcaption>
+</figure>
+<p>When a card is referenced from other card then an event is fired to inform people who are related to both cards.</p>
 <h3 id="card-forks">Card Forks</h3>
 <p>When a given task can’t be executed at once then it is necessary to break it into multiple subtasks. In Arcamens it is named card forking, when you fork a card you create a link between both cards.</p>
 <p>Consider the card below:</p>
@@ -570,7 +574,6 @@ Group: Arcamens/Bugs</code></pre>
 <p>You can browse all forks and parents of a given card by following the links on the card.</p>
 <p><strong>Note:</strong> You can open a given card in a new browser tab by just right clicking it then open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-list-search">Advanced List Search</a></p>
-<h3 id="switch-card-parent">Switch Card Parent</h3>
 <h3 id="post-forks">Post Forks</h3>
 <p>Group posts can be forked into cards, it is mostly useful when a group is used as a kanban board backlog.</p>
 <p>Groups are great for sharing information of all kind, one might use a group to get bug reports and fork the bug reports into card tasks over their corresponding project boards. It all depends on how you feel more comfortable to model your team workflow.</p>

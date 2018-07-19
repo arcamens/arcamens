@@ -777,9 +777,19 @@ You can filter by tag, worker, owner etc.
 
 **See:** [Advanced Card Search](#advanced-card-search)
 
-### List Filter
-
 ### Card Relations
+
+Cards can be referenced from other cards through their links:
+
+https://staging.arcamens.com/card_app/card-link/700/
+
+When you reference a card using its link from other card markdown then it creates relations
+between these cards. The relation is shown on the referenced card as follows:
+
+![card-relations-0](/static/site_app/help/card-relations-0.png)
+
+When a card is referenced from other card then an event is fired to inform
+people who are related to both cards.
 
 ### Card Forks
 
@@ -836,8 +846,6 @@ links on the card.
 **Note:** You can open a given card in a new browser tab by just right clicking it then open in a new tab.
 
 **See:** [Advanced List Search](#advanced-list-search)
-
-### Switch Card Parent
 
 ### Post Forks
 
