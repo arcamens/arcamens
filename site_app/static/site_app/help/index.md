@@ -215,13 +215,12 @@ You would get:
 Notice that if your organization has many tags then you can look up a given tag by its name or description.
 Just insert the pattern and hit enter then you'll get all tags that match the criterea.
 
-Clicking on the plus sign it gives you:
+Clicking on the New tag? link it gives you:
 
 ![tag-creation-3](/static/site_app/help/tag-creation-3.png)
 
-Fill the tag name and description and then click on Create.
-
-![tag-creation-4](/static/site_app/help/tag-creation-4.png)
+Fill the tag name and description and then click on Create, it will throw
+an event to all members of the organization.
 
 ### Card Tags
 
@@ -234,13 +233,10 @@ Then you'll view the card attributes.
 
 ![card-tags-1](/static/site_app/help/card-tags-1.png)
 
-Click on Tags button at the card toolbar:
-
-![card-tags-2](/static/site_app/help/card-tags-2.png)
-
+Click on Tags button at the card toolbar.
 Then you'll be able to manage the card tags:
 
-![card-tags-3](/static/site_app/help/card-tags-3.png)
+![card-tags-2](/static/site_app/help/card-tags-2.png)
 
 If you add/remove a tag to a card then everyone who is related to the card will get notified. 
 You can look up the card tags by typing some pattern that shows on the tag name/description then hit enter.
@@ -410,8 +406,6 @@ The person attaches the missing information to the post as a snippet.
 
 Some tasks arent directly related to a specific project these tasks
 can be delegated to a team or user by using a post.
-
-![post-1](/static/site_app/help/post-1.png)
 
 ### Post Creation
 
@@ -1759,6 +1753,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
