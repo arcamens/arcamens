@@ -484,27 +484,30 @@ Click on Members then you get;
 
 Which would list all your organization members.
 
-Click on the plus sign at the top:
+Click on the Invtes link then you get:
 
 ![organization-invites-2](/static/site_app/help/organization-invites-2.png)
 
-Then fill the field with the peer e-mail to whom you would like to join your organization.
+Click on Invite a peer? to drop an invite through e-mail.
 
 ![organization-invites-3](/static/site_app/help/organization-invites-3.png)
 
-You can check all invites that were sent by clicking on:
-
-![organization-invites-4](/static/site_app/help/organization-invites-4.png)
-
-You would have listed all invites:
-
-![organization-invites-5](/static/site_app/help/organization-invites-5.png)
+Then fill the field with the peer e-mail to whom you would like to join your organization.
 
 You can cancel invites or just resend the invite link. Notice that your account invites
 can't override your account max users limit. The invites sum up with regular users and should
 be lesser or equal your account max users limit.
 
 ### Organization Admins
+
+Organization admins are allowed to send invites and remove peers. In order to manage
+your organization admins just click on the wrench icon at the organization card:
+
+![organization-admins-0](/static/site_app/help/organization-admins-0.png)
+
+Then you would get:
+
+![organization-admins-1](/static/site_app/help/organization-admins-1.png)
 
 ### Group Members
 
