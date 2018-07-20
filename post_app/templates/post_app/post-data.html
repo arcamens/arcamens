@@ -17,15 +17,15 @@ data-shell="#main-view" >
 <span class="glyphicon glyphicon-eye-open"></span> {{post.ancestor.name}} </a>
 
 on <a href="{% url 'post_app:post-link' post.id %}" target="_blank"> {{post.created}} </a>
-
 <div class="pull-right">
-<a class="e-get" href="#"
-data-shell="#smallModalContent" 
-data-show="{% url 'post_app:post-events' post.id %}"> 
-<span class="glyphicon glyphicon-bell"></span> E/C</a>
+<a class=" e-get text-default"  href="#" data-shell="#pins"  data-show="{% url 'post_app:pin-post' post.id %}">
+<span class="glyphicon glyphicon-paperclip"></span> </a>
+</div>
+
 
 </div>
-</div>
+
+
 </div>
 
 <div class="panel-body" >
@@ -115,7 +115,7 @@ No workers.
 </div></div>
 
 <div class="col-md-6">
-<h5> <span class="glyphicon glyphicon-random"></span> Forks/Cards </h5>
+<h5> <span class="glyphicon glyphicon-random"></span> Forks </h5>
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in post.card_forks.all %}
@@ -173,7 +173,12 @@ class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 
 <a class="e-get" href="#" data-shell="#smallModalContent"
 data-show="{% url 'post_app:select-fork-list' post.id %}">
-<span class="glyphicon glyphicon-random"></span> Fork/Card </a>
+<span class="glyphicon glyphicon-random"></span> Fork </a>
+
+<a class="e-get" href="#"
+data-shell="#smallModalContent" 
+data-show="{% url 'post_app:post-events' post.id %}"> 
+<span class="glyphicon glyphicon-bell"></span> E/C</a>
 
 <div class="pull-right">
 <a  data-shell="#bigModalContent" class="e-get text-default"  href="#" data-show="{% url 'post_app:post-priority' post.id %}">
@@ -184,6 +189,7 @@ data-show="{% url 'post_app:select-fork-list' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

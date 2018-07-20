@@ -1,7 +1,7 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
 PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
 PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, \
-EUnarchivePost
+EUnarchivePost, PostPin
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
 from django.db.models.functions import Concat
@@ -34,16 +34,16 @@ class Post(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
-        boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins     = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
-        grouppins = self.me.grouppin_set.filter(
-        organization=self.me.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins  = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins  = self.me.cardpin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        postpins  = self.me.postpin_set.filter(organization=self.me.default)
 
         return render(request, 'post_app/post.html', 
         {'post':post, 'boardpins': boardpins, 'listpins': listpins, 
         'cardpins': cardpins, 'tags': post.tags.all(), 
-        'grouppins': grouppins, 'user': self.me, })
+        'grouppins': grouppins, 'postpins': postpins, 'user': self.me, })
 
 class PostLink(GuardianView):
     """
@@ -948,5 +948,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
+
 
 

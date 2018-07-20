@@ -26,8 +26,7 @@ class Index(LoginView):
 
 class LoggedOut(View):
     def get(self, request):
-        return render(request, 
-        'site_app/logged-out.html', {})
+        return render(request, 'site_app/logged-out.html', {'settings': settings})
 
 class Help(View):
     def get(self, request):
@@ -161,5 +160,6 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
