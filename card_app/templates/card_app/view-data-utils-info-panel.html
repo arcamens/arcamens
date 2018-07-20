@@ -9,12 +9,10 @@
 
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in workers %}
-<a data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="e-get" data-shell="#smallModalContent" 
-href="#">
-<span class="glyphicon glyphicon-user"></span> {{ind.name}} </a>
+<a data-show="{% url 'card_app:card-worker-information' ind.id card.id %}" class="e-get" data-shell="#smallModalContent" href="#">
+<span class="glyphicon glyphicon-user"></span> {{ind.name}} </a> <br>
 
 {% if forloop.last %} 
-<br>
 <a data-show="{% url 'card_app:alert-card-workers' card.id %}" 
 class="e-get text-warning" data-shell="#smallModalContent"  href="#"> <span class="glyphicon glyphicon-alert"></span> Alert workers?</a>
 {% endif %}
@@ -83,6 +81,7 @@ No parents.
 </div>
 </div>
 </div>
+
 
 
 
