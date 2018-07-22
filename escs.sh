@@ -444,5 +444,7 @@ git push -u origin beta
 # create beta branch.
 git checkout -b beta
 git push --set-upstream origin beta
-
+##############################################################################
+# reset c_storage, c_download all counters.
+python manage.py reset_counters
 
