@@ -492,6 +492,12 @@ class Done(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
+
+        can_archive = all(post.card_forks.values_list('done', flat=True))
+        if not can_archive:
+            return HttpResponse("It has unarchived forks\
+                    cards. Can't archive it now", status=403)
+
         post.done = True
         post.save()
 
@@ -948,6 +954,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
