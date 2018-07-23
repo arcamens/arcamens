@@ -475,6 +475,10 @@ class CopyPost(GuardianView):
         copy         = post.duplicate()
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
+
+        copy.priority = clipboard.posts.count() + 1
+        copy.save()
+
         clipboard.posts.add(copy)
 
         event = ECopyPost.objects.create(organization=self.me.default,
@@ -954,6 +958,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

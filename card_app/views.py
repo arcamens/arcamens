@@ -330,6 +330,9 @@ class CopyCard(GuardianView):
 
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
+        copy.priority = clipboard.cards.count() + 1
+        copy.save()
+
         clipboard.cards.add(copy)
 
         event = models.ECopyCard.objects.create(organization=self.me.default,
@@ -944,6 +947,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
