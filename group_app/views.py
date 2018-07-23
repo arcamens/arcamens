@@ -399,11 +399,10 @@ class GroupLink(GuardianView):
         record = self.me.groups.get(id=group_id,
         organization=self.me.default)
 
-        boardpins    = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins     = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins     = self.me.cardpin_set.filter(organization=self.me.default)
-        grouppins = self.me.grouppin_set.filter(
-            organization=self.me.default)
+        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        listpins  = self.me.listpin_set.filter(organization=self.me.default)
+        cardpins  = self.me.cardpin_set.filter(organization=self.me.default)
+        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         organizations = self.me.organizations.exclude(id=self.me.default.id)
         env = {'group': record, 'user': self.me, 'boardpins': boardpins, 
@@ -420,9 +419,7 @@ class PinGroup(GuardianView):
     """
 
     def get(self, request, group_id):
-        group = self.me.groups.get(id=group_id, 
-        organization=self.me.default)
-
+        group = self.me.groups.get(id=group_id, organization=self.me.default)
         pin   = GroupPin.objects.create(user=self.me, 
         organization=self.me.default, group=group)
         return redirect('board_app:list-pins')
@@ -434,9 +431,10 @@ class Unpin(GuardianView):
     """
 
     def get(self, request, pin_id):
-        pin = self.me.grouppin_set.get(id=pin_id)
+        pin = self.me.grouppin_set.get(id=pin_id, organization=self.me.default)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
