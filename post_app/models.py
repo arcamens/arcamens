@@ -13,6 +13,7 @@ from group_app.models import Group
 from core_app.miscutils import disk_cleaner
 from core_app.models import Event
 from functools import reduce
+from slock.views import RenderExc
 import operator
 
 # Create your models here.
@@ -31,7 +32,20 @@ class PostMixin(models.Model):
         post = cls.objects.filter(
         Q(ancestor__users=user) | Q(workers=user),
         ancestor__organization=organization, id=post_id).distinct()
-        return post.first()
+        post = post.first()
+
+        if not post:
+            return cls.access_error(post_id)
+        return post
+
+    @classmethod
+    def access_error(cls, post_id):
+        post = cls.objects.get(id=post_id)
+        clipboard = post.post_clipboard_users.first()
+
+        if clipboard: 
+            raise RenderExc('post_app/post-on-clipboard.html', 
+                {'post': post, 'user': clipboard.user} , status=403)
 
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
@@ -550,6 +564,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 
