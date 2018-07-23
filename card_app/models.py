@@ -13,7 +13,7 @@ from django.db import models
 from markdown import markdown
 from functools import reduce
 from operator import and_, or_
-
+from slock.views import RenderExc
 # Create your models here.
 
 class CardMixin(models.Model):
@@ -30,7 +30,20 @@ class CardMixin(models.Model):
         card = cls.objects.filter(
         Q(ancestor__ancestor__members=user) | Q(workers=user),
         ancestor__ancestor__organization=organization, id=card_id).distinct()
-        return card.first()
+        card = card.first()
+
+        if not card:
+            return cls.access_error(card_id)
+        return card
+
+    @classmethod
+    def access_error(cls, card_id):
+        card = cls.objects.get(id=card_id)
+        clipboard = card.card_clipboard_users.first()
+
+        if clipboard: 
+            raise RenderExc('card_app/card-on-clipboard.html', 
+                {'card': card, 'user': clipboard.user} , status=403)
 
     def save(self, *args, **kwargs):
         self.html = markdown(self.data,
@@ -741,6 +754,8 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
+
 
 
 
