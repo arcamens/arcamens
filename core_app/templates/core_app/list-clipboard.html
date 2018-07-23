@@ -25,7 +25,7 @@ Posts </h4>
 {% for ind in posts %}
 <p> 
 <span class="glyphicon glyphicon-file"></span>
-{{ind.label|truncatechars:40}} 
+{{ind.label|truncatechars:100}} 
 
 </p>
 
@@ -46,7 +46,7 @@ Lists </h4>
 {% for ind in lists %}
 <p> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{ind.name|truncatechars:40}} 
+{{ind.name|truncatechars:100}} 
 
 
 </p>
@@ -68,7 +68,7 @@ Cards </h4>
 <p> 
 <span class="glyphicon glyphicon-file"></span>
 
-{{ind.label|truncatechars:40}} 
+{{ind.label|truncatechars:100}} 
 
 </p>
 {% empty %}
@@ -85,6 +85,7 @@ class="btn btn-default e-get"> {% trans "Delete all?" %} </button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
 </div>
+
 
 
 
