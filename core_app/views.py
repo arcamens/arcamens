@@ -815,6 +815,9 @@ class ListInvites(GuardianView):
 
 class CancelInvite(GuardianView):
     def get(self, request, invite_id):
+        if not self.me.default.admins.filter(id=self.me.id).exists():
+            return HttpResponse("Only admins can cancel invites!", status=403)
+
         # We need to make sure the invite belongs to our self.me.default
         # organization otherwise a hacker can just cancel all invites
         # by running a simple script.
@@ -961,5 +964,6 @@ class FileDownload(GuardianView):
         self.me.c_download = self.me.c_download + file.size
         self.me.save()
         return redirect(file.url)
+
 
 
