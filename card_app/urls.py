@@ -8,6 +8,8 @@ urlpatterns = [
 
     url(r'^done/(?P<card_id>.+)/', views.Done.as_view(), name='done'),
     url(r'^undo/(?P<card_id>.+)/', views.Undo.as_view(), name='undo'),
+    url(r'^archive-all/(?P<list_id>.+)/', views.ArchiveAll.as_view(), name='archive-all'),
+
     url(r'^card-worker-information/(?P<peer_id>.+)/(?P<card_id>.+)/', views.CardWorkerInformation.as_view(), name='card-worker-information'),
     url(r'^card-tag-information/(?P<tag_id>.+)/(?P<card_id>.+)/', views.CardTagInformation.as_view(), name='card-tag-information'),
     url(r'^card-link/(?P<card_id>.+)/', views.CardLink.as_view(), name='card-link'),
@@ -49,6 +51,7 @@ urlpatterns = [
     url(r'^set-card-priority-down/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityDown.as_view(), name='set-card-priority-down'),
     url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
 ]
+
 
 
 

@@ -713,7 +713,7 @@ class EArchiveCard(Event):
     ancestor = models.ForeignKey('list_app.List', 
     related_name='e_archive_card0', blank=True)
 
-    card = models.ForeignKey('Card', 
+    cards = models.ManyToManyField('Card', 
     related_name='e_archive_card1', blank=True)
 
     board = models.ForeignKey('board_app.Board', 
@@ -754,6 +754,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

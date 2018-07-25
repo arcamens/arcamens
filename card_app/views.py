@@ -8,6 +8,8 @@ from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView, FileDownload
 from post_app.models import Post, ECreatePostFork
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from post_app.forms import PostForm
 from group_app.models import Group
 from core_app.models import User
@@ -285,6 +287,35 @@ class CreateFork(GuardianView):
         event.dispatch(*card.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ArchiveAll(GuardianView):
+    def get(self, request, list_id):
+        list = List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
+        return render(request, 'card_app/archive-all.html', {'list': list})
+
+    def post(self, request, list_id):
+        list = List.objects.get(id=list_id, 
+        ancestor__organization=self.me.default, ancestor__members=self.me)
+
+        cards = list.cards.filter(done=False)
+        cards = cards.filter(Q(forks__done=True) | Q(forks__isnull=True))
+
+        event = models.EArchiveCard.objects.create(
+        organization=self.me.default, ancestor=list, 
+        board=list.ancestor, user=self.me)
+
+        event.save(hcache=False)
+        event.cards.add(*cards)
+
+        users = list.ancestor.members.all()
+        event.dispatch(*users)
+        event.save()
+
+        cards.update(done=True)
+        return redirect('card_app:list-cards', list_id=list.id)
 
 class DeleteCard(GuardianView):
     def get(self, request, card_id):
@@ -653,10 +684,14 @@ class Done(GuardianView):
         # cards in the clipboard cant be archived.
         event    = models.EArchiveCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, user=self.me)
+        board=card.ancestor.ancestor, user=self.me)
+
+        event.save(hcache=False)
+        event.cards.add(card)
 
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*users)
+        event.save()
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -947,6 +982,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
