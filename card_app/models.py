@@ -366,16 +366,6 @@ class CardClipboard(models.Model):
     card = models.OneToOneField('Card', null=True, 
     related_name='selected', blank=True)
 
-class ImageWrapper(models.Model):
-    """
-    """
-    
-    card = models.ForeignKey('Card', null=True, 
-    on_delete=models.CASCADE, blank=True)
-
-    file = models.ImageField(
-    verbose_name='', help_text='')
-
 class CardFileWrapper(CardFileWrapperMixin, models.Model):
     """
     """
@@ -754,6 +744,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         instance.file.delete(save=False)
+
 
 
 

@@ -64,15 +64,11 @@ class CardForm(forms.ModelForm):
         model  = models.Card
         fields = ('label', 'data')
 
-class ImageWrapperForm(forms.ModelForm):
-    class Meta:
-        model  = models.ImageWrapper
-        exclude = ('card', )
-
 class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 
