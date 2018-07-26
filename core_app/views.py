@@ -26,6 +26,7 @@ from . import forms
 import core_app.export
 import random
 import json
+import pytz
 
 # Create your views here.
 
@@ -72,6 +73,9 @@ class Index(AuthenticatedView):
         if not self.me.default.owner.enabled:
             if self.me.default.owner != self.me:
                 return redirect('core_app:disabled-account')
+
+        if not request.session.get('django_timezone'):
+            return redirect('core_app:set-timezone')
 
         organizations = organizations.exclude(id=self.me.default.id)
         return render(request, 'core_app/index.html', 
@@ -965,5 +969,14 @@ class FileDownload(GuardianView):
         self.me.save()
         return redirect(file.url)
 
+class SetTimezone(GuardianView):
+    def get(self, request):
+        return render(request, 'core_app/set-timezone.html', 
+            {'timezones': pytz.common_timezones})
+
+    def post(self, request):
+        print('ooooo', request.POST['timezone'])
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('core_app:index')
 
 

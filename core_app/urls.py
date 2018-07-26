@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^index/$', views.Index.as_view(), name='index'),
+    url(r'^set-timezone/$', views.SetTimezone.as_view(), name='set-timezone'),
     url(r'^disabled-account/(?P<user_id>.+)/', views.DisabledAccount.as_view(), name='disabled-account'),
     url(r'^switch-organization/(?P<organization_id>.+)/', views.SwitchOrganization.as_view(), name='switch-organization'),
     url(r'^update-user-information/', views.UpdateUserInformation.as_view(), name='update-user-information'),
@@ -48,4 +49,5 @@ urlpatterns = [
     url(r'^resend-email-confirmation/', views.ResendEmailConfirmation.as_view(), name='resend-email-confirmation'),
 
 ]
+
 

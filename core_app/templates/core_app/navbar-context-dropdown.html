@@ -50,12 +50,16 @@
 <span class="glyphicon glyphicon-info-sign"></span> Logs </a> </li>
 
 <li class="divider"></li>
+<li><a  href="{% url 'core_app:set-timezone' %}" target="_blank"><span class="glyphicon glyphicon-time"></span> {% trans "Timezone" %}</a></li>
+
+<li class="divider"></li>
 <li><a href="{% url 'site_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
 </ul>
 </li>
 
 
 </ul>
+
 
 
 
