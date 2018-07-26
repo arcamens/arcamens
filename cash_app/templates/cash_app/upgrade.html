@@ -11,7 +11,11 @@
 </p>
 
 <p class="text-warning">
-It will expire on {{ me.expiration }}.<br>
+{% if me.enabled %}
+It will expire on {{ me.expiration }}.
+{% else %}
+Your account was expirated!
+{% endif %}
 </p>
 
 <h5 class="text-info"> Your purchases: </h5>
@@ -53,6 +57,7 @@ Date: {{ind.period.created}}
 </div>
 
 </div>
+
 
 
 
