@@ -33,7 +33,7 @@ SECRET_KEY = '9!3k4j3p94v4jl!2ex^(ep$y7-^e4is9a!d-xw)pj$unf(o@m7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # The addon bots settings.
 ARCAMENS_BOT_EMAIL = 'arcabot@arcamens.com'
@@ -222,6 +222,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
