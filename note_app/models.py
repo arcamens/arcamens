@@ -153,7 +153,11 @@ def delete_filewrapper(sender, instance, **kwargs):
         clean_disk(instance)
 
 def clean_disk(record):
-    record.note.card.ancestor.ancestor.organization.owner.c_storage -= record.file.size
-    record.note.card.ancestor.ancestor.organization.owner.save()
+    field = 'card__ancestor__ancestor__organization__owner'
+    note  = Note.objects.select_related(field)
+    note  = note.get(id=record.note.id)
+    owner = note.card.ancestor.ancestor.organization.owner
+    owner.c_storage -= record.file.size
+    owner.save()
     record.file.delete(save=False)
 

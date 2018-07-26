@@ -10,6 +10,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from markdown import markdown
 from board_app.models import Event
+from post_app.models import Post
 
 class SnippetMixin(models.Model):
     class Meta:
@@ -155,8 +156,13 @@ def delete_filewrapper(sender, instance, **kwargs):
         clean_disk(instance)
 
 def clean_disk(record):
-    record.snippet.post.ancestor.organization.owner.c_storage -= record.file.size
-    record.snippet.post.ancestor.organization.owner.save()
+    field = 'post__ancestor__organization__owner'
+    snippet  = Snippet.objects.select_related(field)
+    snippet  = snippet.get(id=record.snippet.id)
+    owner = snippet.post.ancestor.organization.owner
+    owner.c_storage -= record.file.size
+    owner.save()
+
     record.file.delete(save=False)
 
 

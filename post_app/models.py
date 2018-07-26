@@ -566,8 +566,12 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
         clean_disk(instance)
 
 def clean_disk(record):
-    record.post.ancestor.organization.owner.c_storage -= record.file.size
-    record.post.ancestor.organization.owner.save()
+    field = 'ancestor__organization__owner'
+    post  = Post.objects.select_related(field)
+    post  = post.get(id=record.post.id)
+    owner = post.ancestor.organization.owner
+    owner.c_storage -= record.file.size
+    owner.save()
     record.file.delete(save=False)
 
 
