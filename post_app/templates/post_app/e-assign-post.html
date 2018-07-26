@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.peer.description}}">
 
 <span class="glyphicon glyphicon-user"></span> {{event.peer.name}}  </a>
 assigned to post
@@ -20,6 +20,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 {{event.user}} </a> 
 
 {% endblock %}
+
 
 
 
