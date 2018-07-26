@@ -68,10 +68,13 @@ class CardMixin(models.Model):
                     kwargs={'card_id': self.id})
 
     def duplicate(self, list=None):
-        card          = Card.objects.get(id=self.id)
-        card.pk       = None
-        card.ancestor = list
+        card             = Card.objects.get(id=self.id)
+        card.pk          = None
+        card.ancestor    = list
+        card.parent      = None
+        card.parent_post = None
         card.save()
+        card.path.clear()
 
         for ind in self.cardfilewrapper_set.all():
             ind.duplicate(card)
