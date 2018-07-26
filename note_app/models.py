@@ -150,5 +150,10 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = NoteFileWrapper.objects.filter(file=instance.file)
     is_unique = is_unique.count() == 1
     if is_unique: 
-        instance.file.delete(save=False)
+        clean_disk(instance)
+
+def clean_disk(record):
+    record.note.card.ancestor.ancestor.organization.owner.c_storage -= record.file.size
+    record.note.card.ancestor.ancestor.organization.owner.save()
+    record.file.delete(save=False)
 

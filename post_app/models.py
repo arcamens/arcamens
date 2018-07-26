@@ -559,17 +559,16 @@ class ESetPostPriorityDown(Event):
 
 # For some reason i cant abstract it and place it outside models.
 @receiver(pre_delete, sender=PostFileWrapper)
-def delete_filewrapper(sender, instance, **kwargs):
+def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = PostFileWrapper.objects.filter(file=instance.file)
     is_unique = is_unique.count() == 1
     if is_unique: 
-        instance.file.delete(save=False)
+        clean_disk(instance)
 
-
-
-
-
-
+def clean_disk(record):
+    record.post.ancestor.organization.owner.c_storage -= record.file.size
+    record.post.ancestor.organization.owner.save()
+    record.file.delete(save=False)
 
 
 
