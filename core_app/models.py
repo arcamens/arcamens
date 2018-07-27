@@ -461,11 +461,8 @@ class NodeFilter(models.Model):
         unique_together = ('user', 'organization',)
 
 class EventFilter(models.Model):
-    start = models.DateField(null=True, default=datetime.now,
-    blank=False, help_text="Example: year-month-day")
-
-    end = models.DateField(null=True, default=datetime.now,
-    blank=False, help_text="Example: year-month-day")
+    start = models.DateField(null=True, default=datetime.now, blank=False)
+    end   = models.DateField(null=True, default=datetime.now, blank=False)
 
     user = models.ForeignKey('core_app.User', null=True, blank=True)
     organization = models.ForeignKey('core_app.Organization', 
@@ -493,6 +490,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 

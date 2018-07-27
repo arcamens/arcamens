@@ -9,10 +9,21 @@
 {{organization.name}}'s Logs <span class="badge">{{count}}/{{total}}</span></h4>
 </div>
 
-<div class="modal-body">
+<div class="modal-body pre-scrollable">
 {{ events | safe}}
+</div>
 
-<hr>
+
+<div class="modal-footer">
+
+<div class="pull-left">
+<a href="#" data-toggle="collapse" data-target="#collapseEventFilterForm">
+<span class="glyphicon glyphicon-filter"></span>
+Set filter?</a>
+</div>
+
+<div id="collapseEventFilterForm" class="collapse">
+
 <form id="eventFilterForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.start  size='md' %}
@@ -21,11 +32,9 @@
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-
 </div>
 
 
-<div class="modal-footer">
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
      {% trans "Cancel" %}
 </button>
@@ -34,6 +43,7 @@
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 
