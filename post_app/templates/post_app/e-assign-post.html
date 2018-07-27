@@ -3,10 +3,10 @@
 
 {% block content %}
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.peer.description}}">
+User <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.peer.description}}">
 
 <span class="glyphicon glyphicon-user"></span> {{event.peer.name}}  </a>
-assigned to post
+was assigned to post
 
 <a class="e-get"
 data-shell="#main-view"
@@ -15,6 +15,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 {{event.post.label}} </a>  
 
 {% endblock %}
+
 
 
 
