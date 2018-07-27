@@ -91,6 +91,7 @@ class AttachFile(GuardianView):
             return render(request, 'note_app/attach-file.html', 
                 {'note':note, 'form': form, 'attachments': attachments})
         record = form.save(commit = False)
+        record.organization = self.me.default
         record.note = note
         form.save()
 
@@ -185,4 +186,5 @@ class NoteFileDownload(FileDownload):
         id=filewrapper_id).distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 

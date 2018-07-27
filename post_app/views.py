@@ -166,6 +166,7 @@ class AttachFile(GuardianView):
                 {'post':post, 'form': form, 'attachments': attachments})
 
         record = form.save(commit = False)
+        record.organization = self.me.default
         record.post = post
         form.save()
 
@@ -958,6 +959,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

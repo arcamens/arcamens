@@ -4,11 +4,11 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.core.urlresolvers import reverse
-from core_app.models import Event, User
+from core_app.models import Event, User, Organization
 from sqlike.parser import SqLike, SqNode
 from board_app.models import Board
 from core_app.miscutils import disk_cleaner
-from django.db.models import Q
+from django.db.models import Q, F
 from django.db import models
 from markdown import markdown
 from functools import reduce
@@ -372,6 +372,8 @@ class CardClipboard(models.Model):
 class CardFileWrapper(CardFileWrapperMixin, models.Model):
     """
     """
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
 
     card = models.ForeignKey('Card', null=True, 
     on_delete=models.CASCADE, blank=True)
@@ -745,16 +747,13 @@ class ECopyCard(Event):
 def delete_filewrapper(sender, instance, **kwargs):
     is_unique = CardFileWrapper.objects.filter(file=instance.file)
     is_unique = is_unique.count() == 1
-    if is_unique: 
-        clean_disk(instance)
+    if is_unique: clean_disk(instance)
 
 def clean_disk(record):
-    field = 'ancestor__ancestor__organization__owner'
-    card  = Card.objects.select_related(field)
-    card  = card.get(id=record.card.id)
-    owner = card.ancestor.ancestor.organization.owner
-    owner.c_storage -= record.file.size
-    owner.save()
+    org = Organization.objects.only('owner__c_storage')
+    org = org.get(id=record.organization_id)
+    org.owner.c_storage = F('c_storage') + record.file.size
+    org.owner.save()
     record.file.delete(save=False)
 
 

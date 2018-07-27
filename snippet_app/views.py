@@ -86,6 +86,7 @@ class AttachFile(GuardianView):
             return render(request, 'snippet_app/attach-file.html', 
                 {'snippet':snippet, 'form': form, 'attachments': attachments})
         record = form.save(commit = False)
+        record.organization = self.me.default
         record.snippet = snippet
         form.save()
 
@@ -176,5 +177,6 @@ class SnippetFileDownload(FileDownload):
         id=filewrapper_id).distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 

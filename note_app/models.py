@@ -9,6 +9,7 @@ from mdx_gfm import GithubFlavoredMarkdownExtension
 from markdown.extensions.tables import TableExtension
 from markdown import markdown
 from board_app.models import Event
+from card_app.models import clean_disk
 
 class NoteMixin(object):
     @classmethod
@@ -54,6 +55,8 @@ class NoteFileWrapperMixin(object):
 class NoteFileWrapper(NoteFileWrapperMixin, models.Model):
     """
     """
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
 
     note = models.ForeignKey('Note', null=True, 
     on_delete=models.CASCADE, blank=True)
@@ -152,12 +155,4 @@ def delete_filewrapper(sender, instance, **kwargs):
     if is_unique: 
         clean_disk(instance)
 
-def clean_disk(record):
-    field = 'card__ancestor__ancestor__organization__owner'
-    note  = Note.objects.select_related(field)
-    note  = note.get(id=record.note.id)
-    owner = note.card.ancestor.ancestor.organization.owner
-    owner.c_storage -= record.file.size
-    owner.save()
-    record.file.delete(save=False)
 

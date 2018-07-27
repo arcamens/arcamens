@@ -14,6 +14,7 @@ from core_app.miscutils import disk_cleaner
 from core_app.models import Event
 from functools import reduce
 from slock.views import RenderExc
+from card_app.models import clean_disk
 import operator
 
 # Create your models here.
@@ -342,6 +343,9 @@ class GlobalPostFilter(GlobalPostFilterMixin):
         unique_together = ('user', 'organization', )
 
 class PostFileWrapper(PostFileWrapperMixin, models.Model):
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
+
     post = models.ForeignKey('Post', 
     null=True, on_delete=models.CASCADE, blank=True)
 
@@ -564,15 +568,6 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
-
-def clean_disk(record):
-    field = 'ancestor__organization__owner'
-    post  = Post.objects.select_related(field)
-    post  = post.get(id=record.post.id)
-    owner = post.ancestor.organization.owner
-    owner.c_storage -= record.file.size
-    owner.save()
-    record.file.delete(save=False)
 
 
 

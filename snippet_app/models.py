@@ -11,6 +11,7 @@ from django.dispatch import receiver
 from markdown import markdown
 from board_app.models import Event
 from post_app.models import Post
+from card_app.models import clean_disk
 
 class SnippetMixin(models.Model):
     class Meta:
@@ -63,6 +64,8 @@ class SnippetFileWrapperMixin(object):
 class SnippetFileWrapper(SnippetFileWrapperMixin, models.Model):
     """
     """
+    organization = models.ForeignKey('core_app.Organization', 
+    null=True, blank=True)
 
     snippet = models.ForeignKey('Snippet', null=True, 
     on_delete=models.CASCADE, blank=True)
@@ -154,15 +157,4 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
-
-def clean_disk(record):
-    field = 'post__ancestor__organization__owner'
-    snippet  = Snippet.objects.select_related(field)
-    snippet  = snippet.get(id=record.snippet.id)
-    owner = snippet.post.ancestor.organization.owner
-    owner.c_storage -= record.file.size
-    owner.save()
-
-    record.file.delete(save=False)
-
 

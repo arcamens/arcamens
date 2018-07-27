@@ -398,6 +398,7 @@ class AttachFile(GuardianView):
                 {'card':card, 'form': form, 'attachments': attachments})
         record = form.save(commit = False)
         record.card = card
+        record.organization = self.me.default
         form.save()
 
         event = models.EAttachCardFile.objects.create(
@@ -982,6 +983,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
