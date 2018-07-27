@@ -862,7 +862,7 @@ class CardEvents(GuardianView):
         | Q(ecreatefork__card1=card.id) | Q(ecreatepostfork__card__id=card.id) | \
         Q(eupdatecard__card__id=card.id) | Q(ebindtagcard__card__id=card.id) | \
         Q(eunbindtagcard__card__id=card.id) | Q(ecutcard__card__id=card.id) |\
-        Q(earchivecard__card__id=card.id) | Q(epastecard__cards=card.id) | \
+        Q(earchivecard__cards__id=card.id) | Q(epastecard__cards=card.id) | \
         Q(ecopycard__card=card.id) | Q(eattachcardfile__card=card.id) |\
         Q(edettachcardfile__card=card.id) | Q(eupdatenote__child=card.id) |\
         Q(ecreatenote__child=card.id) | Q(edeletenote__child=card.id) |\
@@ -983,6 +983,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

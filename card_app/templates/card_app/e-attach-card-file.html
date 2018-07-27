@@ -2,13 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
 
-{{event.user}} </a> has attached file <a href="{{event.filewrapper.file.url}}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span>
-
-{{event.filewrapper.file}} </a> to card
+File <a href="{{event.filewrapper.file.url}}" target="_blank"> 
+<span class="glyphicon glyphicon-file"></span> {{event.filewrapper.file}} </a> was attached to card
 
 <a class="e-get"
 data-shell="#bigModalContent"
@@ -19,6 +15,8 @@ href="{{event.card.get_link_url}}">
 {{event.card.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
+
 
 
 

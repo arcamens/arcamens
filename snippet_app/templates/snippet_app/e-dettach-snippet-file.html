@@ -2,13 +2,8 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-
-{{event.user}} </a> has dettached file <span class="text-danger"> 
-<span class="glyphicon glyphicon-file"></span>
-
-{{event.filename}}</span>  from snippet
+File <span class="text-danger"> 
+<span class="glyphicon glyphicon-file"></span> {{event.filename}}</span> dettached from snippet
 
 <a class="e-get"
 data-shell="#bigModalContent" 
@@ -17,6 +12,7 @@ data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snipp
 {{event.snippet.title}} </a>
 
 {% endblock %}
+
 
 
 

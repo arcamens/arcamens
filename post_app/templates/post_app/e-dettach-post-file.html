@@ -2,13 +2,10 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-
-{{event.user}} </a> has dettached file <span class="text-danger"> 
+File <span class="text-danger"> 
 <span class="glyphicon glyphicon-file"></span>
 
-{{event.filename}}</span>  from post
+{{event.filename}}</span> dettached from post
 
 <a class="e-get"
 data-shell="#main-view"
@@ -17,6 +14,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 {{event.post.label}} </a>
 
 {% endblock %}
+
 
 
 

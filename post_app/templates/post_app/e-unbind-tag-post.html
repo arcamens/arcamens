@@ -2,12 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-{{event.user.name}} </a> has removed tag 
-
-{{event.tag.name}} from post
+Tag {{event.tag.name}} was removed from post
 
 <a class="e-get"
 data-shell="#main-view"
@@ -26,6 +21,7 @@ data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.anc
 </a>  
 
 {% endblock %}
+
 
 
 

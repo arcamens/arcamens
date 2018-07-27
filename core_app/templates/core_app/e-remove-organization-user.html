@@ -6,20 +6,17 @@
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.user.description}}">
 <span style="color:red"> <span class="glyphicon glyphicon-user"></span>
 
-{{event.peer.name}} </span> </a> removed from
+{{event.peer.name}} </span> </a> was removed from
 
-<span class="glyphicon glyphicon-flag"></span> {{event.organization.name}}  by 
+<span class="glyphicon glyphicon-flag"></span> {{event.organization.name}} 
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> 
-
-on {{event.created}}
 {% if event.reason %}
 <b> :{{event.reason}} </b>
 {% endif %}
 
 {% endblock %}
+
+
 
 
 

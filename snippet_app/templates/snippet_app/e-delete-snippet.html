@@ -2,17 +2,10 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has deleted snippet 
-
-<span style="color:red">
+Snippet <span style="color:red">
 <span class="glyphicon glyphicon-book"></span>
 {{event.snippet | truncatechars:30}}
-</span>
-
-on
+</span> was deleted on
 
 <a class="e-get"
 data-shell="#main-view"
@@ -22,5 +15,6 @@ href="{{event.child.get_link_url}}">
 {{event.child.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
 
 

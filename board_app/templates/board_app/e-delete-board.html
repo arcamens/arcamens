@@ -2,15 +2,12 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has deleted board
-
-<span style="color:red">
+Board <span style="color:red">
 <span class="glyphicon glyphicon-th"></span>
-{{event.board_name}} </span> 
+{{event.board_name}} </span> was deleted
 
 {% endblock %}
+
+
 
 

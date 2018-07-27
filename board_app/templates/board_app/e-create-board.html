@@ -2,16 +2,15 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has created board
 
-<a class="e-get"
+Board <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.get_link_url}}"> 
-<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a>  
+<span class="glyphicon glyphicon-th"></span> {{event.board.name}} </a> was created
 
 {% endblock %}
+
+
 
 
 

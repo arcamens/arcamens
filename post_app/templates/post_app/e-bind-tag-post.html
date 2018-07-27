@@ -2,27 +2,21 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span> {{user.name}} 
-{{event.user.name}} </a> has tagged post
-
-<a class="e-get"
+Post <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label}} </a>  
 
-with {{event.tag.name}} on group 
+was tagged with {{event.tag.name}} on group 
 
-<a class="e-get"
-
-data-shell="#main-view"
+<a class="e-get" data-shell="#main-view"
 data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.ancestor.name}} 
 </a>
 
 {% endblock %}
+
 
 
 

@@ -2,10 +2,8 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has shout:  <span style="color:green"> {{event.msg}}</span>
+Shout:  <span style="color:green"> {{event.msg}}</span>
 
 {% endblock %}
+
 

@@ -2,9 +2,13 @@
 
 {% load i18n %}
 {% for ind in elems %}
-<p>
+<div class="panel panel-default">
+<div class="panel-body">
 {{ind.html | safe}}
-</p>
+
+</div>
+</div>
+
 {% endfor %}
 
 <script>
@@ -12,4 +16,5 @@ $(function () {
     $('[data-toggle="popover"]').popover()
 })
 </script>
+
 

@@ -2,18 +2,11 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has updated snippet 
-
 <a class="e-get"
 data-shell="#bigModalContent" 
 data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snippet.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.snippet.title}} </a>
-
-on
+{{event.snippet.title}} </a> was updated on
 
 <a class="e-get"
 data-shell="#main-view"
@@ -23,6 +16,7 @@ href="{{ event.child.get_link_url }}">
 {{event.child.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
 
 
 

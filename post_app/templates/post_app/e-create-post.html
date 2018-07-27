@@ -2,24 +2,19 @@
 {% load i18n %}
 
 {% block content %}
-Post
-<a class="e-get"
+Post <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
-{{event.post.label}} </a> created on group
+{{event.post.label}} </a> was created on group
 
 <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'group_app:list-posts' event.group.id %}" href="{{event.group.get_link_url}}"> 
-<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>  by 
-
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> 
+<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>  
 
 {% endblock %}
+
 
 
 

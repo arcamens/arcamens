@@ -2,20 +2,13 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a>has tagged 
-
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-
-{{event.peer.name}} </a>
-
-with  {{event.tag.name}}  
+User <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.user.description}}">
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} </a>
+was tagged with  {{event.tag.name}}  
 
 {% endblock %}
+
+
 
 
 

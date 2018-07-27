@@ -2,14 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has deleted list
-
-<span style="color:red">
+List <span style="color:red">
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.child_name}} </span>  on board
+{{event.child_name}} </span> was deleted on board
 
 <a class="e-get"
 data-shell="#main-view"
@@ -18,4 +13,6 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ance
 {{event.ancestor.name}} </a>  by 
 
 {% endblock %}
+
+
 

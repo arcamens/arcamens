@@ -2,17 +2,13 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
 
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has updated list
-
-<a class="e-get"
+List <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.child.id %}"
 href="{{event.child.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.child.name}} </a> on board
+{{event.child.name}} </a> was updated on board
 
 <a class="e-get"
 data-shell="#main-view"
@@ -22,6 +18,8 @@ data-show="{% url 'list_app:list-lists' event.ancestor.id %}" href="{{event.ance
 
 
 {% endblock %}
+
+
 
 
 

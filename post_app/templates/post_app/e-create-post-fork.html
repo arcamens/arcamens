@@ -2,20 +2,14 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a>
-has forked post
-
-<a class="e-get"
+Post <a class="e-get"
 data-shell="#main-view"
 data-show="{% url 'post_app:post' event.post.id %}" 
 href="{{event.post.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span>
 {{event.post.label|truncatechars:40}} </a> 
 
-
-to card
+was forked to card
 
 <a class="e-get"
 data-shell="#bigModalContent"
@@ -26,6 +20,7 @@ href="{{event.card.get_link_url}}">
 </a>
 
 {% endblock %}
+
 
 
 

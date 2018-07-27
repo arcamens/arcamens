@@ -8,18 +8,14 @@ data-shell="#main-view"
 data-show="{% url 'group_app:list-posts' event.group.id %}"
 href="{{event.group.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span>
-{{event.group.name}} </a> created on 
+{{event.group.name}} </a> was created on 
 
 <span class="glyphicon glyphicon-flag"></span>
 
-{{event.organization.name}} by 
-
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> 
-
+{{event.organization.name}} 
 {% endblock %}
+
+
 
 
 

@@ -3,19 +3,13 @@
 
 {% block content %}
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has untagged 
+User <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+<span class="glyphicon glyphicon-user"></span> {{event.peer.name}} </a>
 
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-
-{{event.peer.name}} </a>
-
-with  {{event.tag.name}}  
+was untagged as {{event.tag.name}}  
 
 {% endblock %}
+
 
 
 

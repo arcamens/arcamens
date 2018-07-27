@@ -2,13 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
-
-{{event.user}} </a> has dettached file <span class="text-danger"> 
+File <span class="text-danger"> 
 <span class="glyphicon glyphicon-file"></span>
-
-{{event.filename}}</span>  from card
+{{event.filename}}</span> was dettached from card
 
 <a class="e-get"
 data-shell="#bigModalContent"
@@ -19,6 +15,8 @@ href="{{event.card.get_link_url}}">
 {{event.card.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
+
 
 
 

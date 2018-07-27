@@ -1,33 +1,17 @@
 {% load i18n %}
+<p>
 
-<div style="font-size:90%;">
 {% block content %}
 {% endblock %}
-
-<br>
+</p>
 
 <small>
-{{event.created}}
-</small>
-
-<br>
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+<span class="glyphicon glyphicon-user"></span> {{event.user}} </a> on {{event.created}}
 <a  href="#" data-show="{% url 'comment_app:list-comments' event.id %}"
 class="text-info e-get"><span class="glyphicon glyphicon-comment"></span> 
 Comment? </a>
 
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+</small>
 
 

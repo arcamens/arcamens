@@ -2,16 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has unbinded 
-
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.user.description}}">
-
-<span style="color:red">
-<span class="glyphicon glyphicon-user"></span>
-{{event.peer.name}} </span> </a> from board
+User <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.email}}"  data-content="{{event.user.description}}">
+<span style="color:red"> <span class="glyphicon glyphicon-user"></span>
+{{event.peer.name}} </span> </a> was unbinded from board
 
 <a class="e-get"
 data-shell="#main-view"
@@ -20,6 +13,8 @@ data-show="{% url 'list_app:list-lists' event.board.id %}" href="{{event.board.g
 
 
 {% endblock %}
+
+
 
 
 

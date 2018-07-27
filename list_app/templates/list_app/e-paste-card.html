@@ -2,12 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has pasted cards
-
-{% for ind in event.cards.all %}
+Cards {% for ind in event.cards.all %}
 <a class="e-get"
 data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' ind.id %}" 
@@ -17,7 +12,7 @@ href="{{ind.get_link_url}}">
 
 {% endfor %}
 
-on list
+were pasted on list
 
 <a class="e-get"
 data-shell="#main-view"
@@ -28,6 +23,8 @@ data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ance
 
 
 {% endblock %}
+
+
 
 
 
