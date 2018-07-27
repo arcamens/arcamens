@@ -146,7 +146,7 @@ After pressing Update the event will be generated and the card updated.
 Whenever an user creates or updates content then an event is fired. The events
 are means of knowing what is going on with your teams.
 
-![events-9](/static/site_app/help/events-0.png)
+![events-0](/static/site_app/help/events-0.png)
 
 The action that was performed can be commented on thus giving constructive criticism about your peers
 work.
@@ -1764,6 +1764,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
