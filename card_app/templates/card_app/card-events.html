@@ -3,11 +3,8 @@
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h5>  
-
-<span class="glyphicon glyphicon-bell"></span>
+<h5>   <span class="glyphicon glyphicon-bell"></span>
 Events on card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} 
-
 <span class="badge">{{count}}</span></h5>
 </div>
 
@@ -18,16 +15,14 @@ Events on card <span class="glyphicon glyphicon-file"></span> {{card.label|trunc
 <div class="panel-body">
 
 {{ind.html | safe}}
+</div>
+</div>
 
 {% endfor %}
-</div>
-
-</div>
 
 
 </div>
 
-</div>
 
 <div class="modal-footer">
 <button  type="button" data-shell="#bigModalContent" 
