@@ -9,22 +9,16 @@
 {{post.label|truncatechars:40}}'s Events <span class="badge">{{count}}</span></h5>
 </div>
 
-<div class="modal-body">
-<div class="container-fluid">
-<div class="pre-scrollable">
+<div class="modal-body pre-scrollable">
 {% for ind in elems %}
-
-<p> {{ind.html | safe}} </p>
-
+<div class="panel panel-default">
+<div class="panel-body">
+{{ind.html | safe}}
+</div> </div>
 {% endfor %}
-</div>
 
 </div>
 
-
-</div>
-
-</div>
 
 <div class="modal-footer">
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -38,6 +32,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 

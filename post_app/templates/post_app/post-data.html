@@ -175,9 +175,7 @@ class="e-get"><span class="glyphicon glyphicon-tag"></span> Tags </a>
 data-show="{% url 'post_app:select-fork-list' post.id %}">
 <span class="glyphicon glyphicon-random"></span> Fork </a>
 
-<a class="e-get" href="#"
-data-shell="#smallModalContent" 
-data-show="{% url 'post_app:post-events' post.id %}"> 
+<a class="e-get" href="#" data-shell="#mediumModalContent" data-show="{% url 'post_app:post-events' post.id %}"> 
 <span class="glyphicon glyphicon-bell"></span> E/C</a>
 
 <div class="pull-right">
@@ -189,6 +187,7 @@ data-show="{% url 'post_app:post-events' post.id %}">
 {% endblock %}
 </div>
 </div>
+
 
 
 

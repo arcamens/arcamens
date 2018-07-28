@@ -11,13 +11,13 @@ Events on card <span class="glyphicon glyphicon-file"></span> {{card.label|trunc
 <span class="badge">{{count}}</span></h5>
 </div>
 
-<div class="modal-body">
-<div class="container-fluid">
+<div class="modal-body pre-scrollable">
 
-<div class="pre-scrollable">
 {% for ind in elems %}
+<div class="panel panel-default">
+<div class="panel-body">
 
-<p> {{ind.html | safe}} </p>
+{{ind.html | safe}}
 
 {% endfor %}
 </div>
@@ -42,6 +42,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 
