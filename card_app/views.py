@@ -149,7 +149,7 @@ class ConfirmCardDeletion(GuardianView):
 class SetDeadline(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-        form = forms.DeadlineForm()
+        form = forms.DeadlineForm(instance=card)
 
         return render(request, 'card_app/set-deadline.html', {'card': card, 'form': form})
 
