@@ -1,6 +1,7 @@
 Django==1.11
 py-gfm
 django-bootstrap3
+django-datetime-widget
 pillow
 markdown
 django-recaptcha
@@ -17,3 +18,4 @@ git+ssh://git@bitbucket.org/arcamens/django-onesignal.git
 git+ssh://git@bitbucket.org/arcamens/django-jscroll.git
 django-storages
 boto3
+
