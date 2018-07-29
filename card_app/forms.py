@@ -1,4 +1,5 @@
 from django import forms
+from datetimewidget.widgets import DateTimeWidget
 from core_app.forms import FileAttachment
 from sqlike.forms import SqLikeForm
 from . import models
@@ -12,7 +13,8 @@ class DeadlineForm(forms.ModelForm):
         model   = models.Card
         fields  = ('deadline', )
         widgets = {
-            'deadline': forms.SelectDateWidget(),
+            'deadline': DateTimeWidget(usel10n = True, 
+                 bootstrap_version=3)
         }
 
 class CardSearchForm(SqLikeForm, forms.Form):

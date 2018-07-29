@@ -155,12 +155,12 @@ class SetDeadline(GuardianView):
 
     def post(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-        form = forms.DeadlineForm(request.POST)
+        form = forms.DeadlineForm(request.POST, instance=card)
 
         if not form.is_valid():
             return render(request, 'card_app/set-deadline.html', 
                 {'form': form, 'card': card}, status=400)
-
+        form.save()
         return redirect('card_app:view-data', card_id=card.id)
 
 class CreateCard(GuardianView):

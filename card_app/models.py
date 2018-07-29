@@ -302,7 +302,7 @@ class Card(CardMixin):
     null=True, related_name='cards', blank=True)
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
-    deadline = models.DateTimeField(null=True)
+    deadline = models.DateTimeField(null=True, blank=True)
 
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Label, Deadline, ...', 

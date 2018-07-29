@@ -17,6 +17,10 @@
 
 On <a href="{% url 'card_app:card-link' card.id %}" target="_blank"> {{card.created}} </a>  
 
+<div class="pull-right">
+<b class="text-danger"> Deadline: {{card.deadline}} </b>
+</div>
+
 <script>
 $(function () {
     $('[data-toggle="popover"]').popover()
@@ -24,6 +28,7 @@ $(function () {
 </script>
 
 </div>
+
 
 
 

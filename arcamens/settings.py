@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'board_app',
     'site_app', 
     'cash_app',
+    'datetimewidget',
     'list_app', 
     'card_app', 
     'jsim',
@@ -223,6 +224,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

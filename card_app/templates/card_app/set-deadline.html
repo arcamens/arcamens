@@ -8,10 +8,10 @@
 </div>
 
 <div class="modal-body">
+{{form.media}}
 <form id="deadlineForm" enctype="multipart/form-data">
 {% csrf_token %}
-{% bootstrap_field form.deadline  size='md'  %}
-{% bootstrap_form_errors form type='non_fields' %}
+{{ form.as_table }}
 </form>
 
 </div>
