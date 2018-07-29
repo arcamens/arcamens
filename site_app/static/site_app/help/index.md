@@ -1725,6 +1725,66 @@ From there you can as well delete the board, you'll be asked for confirmation.
 
 ### Bitbucket Integration
 
+Arcamens integrates with bitbucket, it is possible to reference cards from commit messages through links.
+When a card link shows on a commit message then an event is fired and a note is created on the card.
+
+The event is sent to everyone who is related to the card it means that if you belong to the card board
+or you're an worker of the card then you'll receive the commit event.
+
+In order to register a bitbucket web hook just access the organization card then click on Settings:
+
+![bitbucket-integration-0](/static/site_app/help/bitbucket-integration-0.png)
+
+Then you'll see:
+
+![bitbucket-integration-1](/static/site_app/help/bitbucket-integration-1.png)
+
+Clicking on Bitbucket/Webhooks would lead you to:
+
+![bitbucket-integration-2](/static/site_app/help/bitbucket-integration-2.png)
+
+Click on the plus icon then:
+
+![bitbucket-integration-3](/static/site_app/help/bitbucket-integration-3.png)
+
+The Full name field has to be filled with your team/repository. Imagine your bitbucket nickname is iogf
+and you want to register a repository named 'arcamens' then you would insert the string:
+
+~~~
+iogf/arcamens
+~~~
+
+If the repository were under a given team, if it were named splittask then you would insert:
+
+~~~
+splittask/arcamens
+~~~
+
+Once registering the hook you have to create a push event at the bitbucket side. The bitbucket
+web hook has to call the url below:
+
+https://www.arcamens.com/bitbucket_app/bitbucket-handle/
+
+Whenever a push commit event happens then that url is called by bitbucket. When there is a commit
+message with card links inside then the cards get referenced from the commits through events and a note
+is created on each one of the cards.
+
+As Arcamens has a powerful search mechanism it is possible to find cards that were referenced
+by bitbucket commits easily. For such you would use the pattern below:
+
+~~~
+note:bitbucket
+~~~
+
+That would be enough to list all cards that were referenced from a bitbucket commit. If you want
+to be more specific you could even search for cards that were referenced by commits and its commit author:
+
+~~~~
+note:bitbucket + note:author_name
+~~~~
+
+That would be enough to list the desired cards.
+
 ### Organization User Removal
 
 In order to remove an user from an organization it is necessary to be admin of the organization.
@@ -1764,6 +1824,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 

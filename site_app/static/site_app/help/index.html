@@ -937,6 +937,36 @@ for indi in pages:
 </figure>
 <p>From there you can as well delete the board, you’ll be asked for confirmation.</p>
 <h3 id="bitbucket-integration">Bitbucket Integration</h3>
+<p>Arcamens integrates with bitbucket, it is possible to reference cards from commit messages through links. When a card link shows on a commit message then an event is fired and a note is created on the card.</p>
+<p>The event is sent to everyone who is related to the card it means that if you belong to the card board or you’re an worker of the card then you’ll receive the commit event.</p>
+<p>In order to register a bitbucket web hook just access the organization card then click on Settings:</p>
+<figure>
+<img src="/static/site_app/help/bitbucket-integration-0.png" alt="bitbucket-integration-0" /><figcaption>bitbucket-integration-0</figcaption>
+</figure>
+<p>Then you’ll see:</p>
+<figure>
+<img src="/static/site_app/help/bitbucket-integration-1.png" alt="bitbucket-integration-1" /><figcaption>bitbucket-integration-1</figcaption>
+</figure>
+<p>Clicking on Bitbucket/Webhooks would lead you to:</p>
+<figure>
+<img src="/static/site_app/help/bitbucket-integration-2.png" alt="bitbucket-integration-2" /><figcaption>bitbucket-integration-2</figcaption>
+</figure>
+<p>Click on the plus icon then:</p>
+<figure>
+<img src="/static/site_app/help/bitbucket-integration-3.png" alt="bitbucket-integration-3" /><figcaption>bitbucket-integration-3</figcaption>
+</figure>
+<p>The Full name field has to be filled with your team/repository. Imagine your bitbucket nickname is iogf and you want to register a repository named ‘arcamens’ then you would insert the string:</p>
+<pre><code>iogf/arcamens</code></pre>
+<p>If the repository were under a given team, if it were named splittask then you would insert:</p>
+<pre><code>splittask/arcamens</code></pre>
+<p>Once registering the hook you have to create a push event at the bitbucket side. The bitbucket web hook has to call the url below:</p>
+<p>https://www.arcamens.com/bitbucket_app/bitbucket-handle/</p>
+<p>Whenever a push commit event happens then that url is called by bitbucket. When there is a commit message with card links inside then the cards get referenced from the commits through events and a note is created on each one of the cards.</p>
+<p>As Arcamens has a powerful search mechanism it is possible to find cards that were referenced by bitbucket commits easily. For such you would use the pattern below:</p>
+<pre><code>note:bitbucket</code></pre>
+<p>That would be enough to list all cards that were referenced from a bitbucket commit. If you want to be more specific you could even search for cards that were referenced by commits and its commit author:</p>
+<pre><code>note:bitbucket + note:author_name</code></pre>
+<p>That would be enough to list the desired cards.</p>
 <h3 id="organization-user-removal">Organization User Removal</h3>
 <p>In order to remove an user from an organization it is necessary to be admin of the organization. The one who is removing the user will own all timeliens and boards of the removed user.</p>
 <p>Click on the wrench icon at the organization menu:</p>
