@@ -1,0 +1,42 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<span class="glyphicon glyphicon-hourglass"></span> Deadline for card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} ?
+</div>
+
+<div class="modal-body">
+<form id="deadlineForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.deadline  size='md'  %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+</div>
+
+
+<div class="modal-footer">
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> {% trans "Back" %} </button>
+
+<button type="button" 
+data-shell="#bigModalContent" data-show="{% url 'card_app:set-deadline' card.id %}" data-form="#deadlineForm"
+class="btn btn-warning e-post"> 
+     {% trans "Set" %}
+</button>
+
+
+<script>
+
+
+
+
+
+
+
+
+
+

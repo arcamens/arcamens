@@ -301,8 +301,8 @@ class Card(CardMixin):
     ancestor = models.ForeignKey('list_app.List', 
     null=True, related_name='cards', blank=True)
 
-    created  = models.DateTimeField(auto_now_add=True, 
-    null=True)
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+    deadline = models.DateTimeField(null=True)
 
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Label, Deadline, ...', 
@@ -755,5 +755,6 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 

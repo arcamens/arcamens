@@ -3,6 +3,7 @@
 <div class="panel panel-default">
 
 <div class="panel-body">
+<div class="pull-right"> <a href="#" class="text-warning e-get" data-show="{% url 'card_app:set-deadline' card.id %}" data-shell="#smallModalContent"> Set deadline? </a> </div>
 <h5> {{card.label}}.. </h5>
 {{card.html | safe}}
 
@@ -34,6 +35,7 @@ $(document).ready(function() {
 </script>
 
 </div>
+
 
 
 

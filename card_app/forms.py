@@ -7,6 +7,14 @@ class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='Example: tag:arcamens + tag:bug-hunter')
 
+class DeadlineForm(forms.ModelForm):
+    class Meta:
+        model   = models.Card
+        fields  = ('deadline', )
+        widgets = {
+            'deadline': forms.SelectDateWidget(),
+        }
+
 class CardSearchForm(SqLikeForm, forms.Form):
     done = forms.BooleanField(required=False)
 
@@ -68,6 +76,7 @@ class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 

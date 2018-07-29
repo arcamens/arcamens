@@ -1728,7 +1728,7 @@ From there you can as well delete the board, you'll be asked for confirmation.
 Arcamens integrates with bitbucket, it is possible to reference cards from commit messages through links.
 When a card link shows on a commit message then an event is fired and a note is created on the card.
 
-The event is sent to everyone who is related to the card it means that if you belong to the card board
+The event is sent to everyone who is related to the card, it means that if you belong to the card board
 or you're an worker of the card then you'll receive the commit event.
 
 In order to register a bitbucket web hook just access the organization card then click on Settings:

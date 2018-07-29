@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^delete-card/(?P<card_id>.+)/', views.DeleteCard.as_view(), name='delete-card'),
     url(r'^view-data/(?P<card_id>.+)/', views.ViewData.as_view(), name='view-data'),
     url(r'^confirm-card-deletion/(?P<card_id>.+)/', views.ConfirmCardDeletion.as_view(), name='confirm-card-deletion'),
+    url(r'^set-deadline/(?P<card_id>.+)/', views.SetDeadline.as_view(), name='set-deadline'),
 
     url(r'^update-card/(?P<card_id>.+)/', views.UpdateCard.as_view(), name='update-card'),
     url(r'^alert-card-workers/(?P<card_id>.+)/', views.AlertCardWorkers.as_view(), name='alert-card-workers'),
@@ -51,6 +52,7 @@ urlpatterns = [
     url(r'^set-card-priority-down/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityDown.as_view(), name='set-card-priority-down'),
     url(r'^set-card-priority-up/(?P<card0_id>.+)/(?P<card1_id>.+)/', views.SetCardPriorityUp.as_view(), name='set-card-priority-up'),
 ]
+
 
 
 

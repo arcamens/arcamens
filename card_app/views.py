@@ -146,6 +146,23 @@ class ConfirmCardDeletion(GuardianView):
         return render(request, 'card_app/confirm-card-deletion.html', 
         {'card': card})
 
+class SetDeadline(GuardianView):
+    def get(self, request, card_id):
+        card = models.Card.locate(self.me, self.me.default, card_id)
+        form = forms.DeadlineForm()
+
+        return render(request, 'card_app/set-deadline.html', {'card': card, 'form': form})
+
+    def post(self, request, card_id):
+        card = models.Card.locate(self.me, self.me.default, card_id)
+        form = forms.DeadlineForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'card_app/set-deadline.html', 
+                {'form': form, 'card': card}, status=400)
+
+        return redirect('card_app:view-data', card_id=card.id)
+
 class CreateCard(GuardianView):
     """
     """
@@ -983,6 +1000,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
