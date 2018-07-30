@@ -161,6 +161,11 @@ class SetDeadline(GuardianView):
             return render(request, 'card_app/set-deadline.html', 
                 {'form': form, 'card': card}, status=400)
         form.save()
+
+        event = models.ESetCardDeadline.objects.create(
+        organization=self.me.default, card=card, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, user=self.me)
+
         return redirect('card_app:view-data', card_id=card.id)
 
 class CreateCard(GuardianView):
@@ -291,6 +296,7 @@ class CreateFork(GuardianView):
         fork.owner    = self.me
         fork.ancestor = ancestor
         fork.parent   = card
+        fork.deadline = card.deadline
         fork.save()
 
         path = card.path.all()
@@ -891,6 +897,7 @@ class CardEvents(GuardianView):
         Q(esetcardpriorityup__card1=card.id) |\
         Q(esetcardprioritydown__card1=card.id) |\
         Q(eunarchivecard__card__id=card.id)|\
+        Q(esetcarddeadline__card__id=card.id)|\
         Q(ebitbucketcommit__note__card__id=card.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
@@ -1000,6 +1007,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

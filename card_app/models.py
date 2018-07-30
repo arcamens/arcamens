@@ -743,6 +743,18 @@ class ECopyCard(Event):
 
     html_template = 'card_app/e-copy-card.html'
 
+class ESetCardDeadline(Event):
+    ancestor = models.ForeignKey('list_app.List', 
+    related_name='e_set_card_deadline0', blank=True)
+
+    card = models.ForeignKey('card', 
+    related_name='e_set_card_deadline1', blank=True)
+
+    board = models.ForeignKey('board_app.Board', 
+    related_name='e_set_card_deadline2', blank=True)
+
+    html_template = 'card_app/e-set-card-deadline.html'
+
 @receiver(pre_delete, sender=CardFileWrapper)
 def delete_filewrapper(sender, instance, **kwargs):
     is_unique = CardFileWrapper.objects.filter(file=instance.file)
@@ -755,6 +767,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 

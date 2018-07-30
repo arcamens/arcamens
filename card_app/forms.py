@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from datetimewidget.widgets import DateTimeWidget
 from core_app.forms import FileAttachment
 from sqlike.forms import SqLikeForm
@@ -16,6 +17,25 @@ class DeadlineForm(forms.ModelForm):
             'deadline': DateTimeWidget(usel10n = True, 
                  bootstrap_version=3)
         }
+
+    def clean(self):
+        super(DeadlineForm, self).clean()
+        deadline = self.cleaned_data.get('deadline')
+        cards    = self.instance.children.filter(Q(
+            deadline=None) | Q(deadline__gt=deadline))
+
+        ERR0 = ("Can't set card deadline!\n"
+        "Set or adjust card forks deadline first.").format()
+
+        if cards.exists(): 
+            raise forms.ValidationError(ERR0)
+
+        cards = self.instance.path.filter(Q(deadline__lt=deadline))
+        ERR1  = ("Can't set card deadline!\n"
+        "It doesn't meet card parents deadline").format()
+
+        if cards.exists(): 
+            raise forms.ValidationError(ERR1)
 
 class CardSearchForm(SqLikeForm, forms.Form):
     done = forms.BooleanField(required=False)
@@ -78,10 +98,5 @@ class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
-
-
-
-
-
 
 
