@@ -20,6 +20,7 @@ class SignupForm(SetPasswordForm):
 
     class Meta:
         model   = core_app.models.User
-        exclude = ('organizations', 'default', 
-        'expiration', 'max_users', 'paid')
+        exclude = ('organizations', 'default', 'enabled', 'tags',
+        'c_storage', 'c_download','expiration', 'max_users', 'paid')
+
 

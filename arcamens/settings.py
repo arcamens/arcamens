@@ -77,8 +77,8 @@ LOCAL_ADDR = 'http://127.0.0.1:8000'if DEBUG else 'https://www.arcamens.com'
 NOCAPTCHA = True
 
 # For debugging on 0.0.0.0.
-RECAPTCHA_PUBLIC_KEY = '6Ldyj1sUAAAAAI1p76PwkLf4R8ffLwOGmv6nhJ9H'
-RECAPTCHA_PRIVATE_KEY = '6Ldyj1sUAAAAANLQ4AZ1ho4x2iu67bvH3AOxyI3_'
+RECAPTCHA_PUBLIC_KEY = '6Ld9n2MUAAAAAEL8sbLLZi628y4pfb3_mNf0svGH'
+RECAPTCHA_PRIVATE_KEY = '6Ld9n2MUAAAAAM-PdmRF1J9RmmaBmDG1mmi00zrq'
 
 FREE_STORAGE_LIMIT = 1 * 1024 * 1024
 PAID_STORAGE_LIMIT = 2 * 1024 * 1024
@@ -224,6 +224,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
