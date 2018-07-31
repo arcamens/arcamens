@@ -26,15 +26,17 @@ class DeadlineForm(forms.ModelForm):
 
         elem = cards.first()
 
-        ERR0 = ("Can't set card deadline!\n"
-            "Doesn't meet fork deadline: {label}")
-        if elem: raise forms.ValidationError(ERR0.format(label=elem.label))
+        ERR0 = ("Can't set card deadline!"
+        "Doesn't meet card fork: {label}" "Deadline: {deadline}")
+        if elem: raise forms.ValidationError(
+        ERR0.format(label=elem.label, deadline=elem.deadline))
 
         cards = self.instance.path.filter(Q(deadline__lt=deadline))
         elem  = cards.first()
-        ERR1  = ("Can't set card deadline!\n"
-            "It doesn't meet card parent deadline: {label}")
-        if elem: raise forms.ValidationError(ERR1.format(label=elem.label))
+        ERR1  = ("Can't set card deadline!"
+        "It doesn't meet card parent: {label}" "Deadline: {deadline}")
+        if elem: raise forms.ValidationError(
+        ERR1.format(label=elem.label, deadline=elem.deadline))
 
 class CardSearchForm(SqLikeForm, forms.Form):
     done = forms.BooleanField(required=False)
@@ -97,5 +99,6 @@ class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
