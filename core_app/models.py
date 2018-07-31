@@ -347,7 +347,7 @@ class Event(EventMixin):
 
 class Tag(TagMixin):
     name = models.CharField(null=True,
-    blank=False, max_length=256)
+    blank=False, max_length=70)
 
     description = models.CharField(null=True,
     blank=False, default='...', max_length=256)
@@ -493,6 +493,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
