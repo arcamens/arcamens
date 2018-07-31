@@ -165,6 +165,7 @@ class SetDeadline(GuardianView):
         event = models.ESetCardDeadline.objects.create(
         organization=self.me.default, card=card, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, user=self.me)
+        event.dispatch(*card.ancestor.ancestor.members.all(), *card.workers.all())
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -307,7 +308,8 @@ class CreateFork(GuardianView):
         card1=fork, user=self.me, board0=card.ancestor.ancestor, 
         board1=fork.ancestor.ancestor)
 
-        event.dispatch(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -334,7 +336,8 @@ class ArchiveAll(GuardianView):
         event.cards.add(*cards)
 
         users = list.ancestor.members.all()
-        event.dispatch(*users)
+        workers = User.objects.filter(tasks__ancestor=list)
+        event.dispatch(*users, *workers)
         event.save()
 
         cards.update(done=True)
@@ -347,7 +350,8 @@ class DeleteCard(GuardianView):
         ancestor=card.ancestor, board=card.ancestor.ancestor, 
         label=card.label, user=self.me)
 
-        event.dispatch(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
         card.delete()
 
         return redirect('card_app:list-cards', 
@@ -372,7 +376,7 @@ class CutCard(GuardianView):
         clipboard.cards.add(card)
         event = models.ECutCard.objects.create(organization=self.me.default,
         ancestor=list, board=list.ancestor, card=card, user=self.me)
-        event.dispatch(*list.ancestor.members.all())
+        event.dispatch(*list.ancestor.members.all(), *card.workers.all())
 
         return redirect('card_app:list-cards', 
         list_id=list.id)
@@ -393,7 +397,8 @@ class CopyCard(GuardianView):
         ancestor=card.ancestor, board=card.ancestor.ancestor, 
         card=card, user=self.me)
 
-        event.dispatch(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
 
         return redirect('card_app:list-cards', 
         list_id=card.ancestor.id)
@@ -428,7 +433,7 @@ class AttachFile(GuardianView):
         organization=self.me.default, list=card.ancestor, filewrapper=record, 
         board=card.ancestor.ancestor, card=card, user=self.me)
 
-        event.dispatch(*card.ancestor.ancestor.members.all())
+        event.dispatch(*card.workers.all(), *card.ancestor.ancestor.members.all())
         event.save()
 
         return self.get(request, card_id)
@@ -453,7 +458,8 @@ class DetachFile(GuardianView):
 
         filewrapper.delete()
 
-        event.dispatch(*filewrapper.card.ancestor.ancestor.members.all())
+        event.dispatch(*filewrapper.card.workers.all(), 
+        *filewrapper.card.ancestor.ancestor.members.all())
         event.save()
 
         return render(request, 'card_app/attach-file.html', 
@@ -479,7 +485,8 @@ class UpdateCard(CreateCard):
         organization=self.me.default, ancestor=record.ancestor, 
         board=record.ancestor.ancestor, card=record, user=self.me)
 
-        event.dispatch(*record.ancestor.ancestor.members.all())
+        event.dispatch(*record.workers.all(), 
+        *record.ancestor.ancestor.members.all())
         event.save()
 
         REGX  ='card_app/card-link/([0-9]+)'
@@ -512,8 +519,9 @@ class UpdateCard(CreateCard):
         board1=card1.ancestor.ancestor, card0=card0, 
         card1=card1, user=self.me)
 
-        event.dispatch(*card0.ancestor.ancestor.members.all())
-        event.dispatch(*card1.ancestor.ancestor.members.all())
+        event.dispatch(*card0.ancestor.ancestor.members.all(),
+        *card1.ancestor.ancestor.members.all(), *card0.workers.all(),
+        *card1.workers.all())
 
 class SetupCardFilter(GuardianView):
     def get(self, request, list_id):
@@ -600,7 +608,9 @@ class UnbindCardWorker(GuardianView):
         event = models.EUnbindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
-        event.dispatch(*card.ancestor.ancestor.members.all())
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -615,7 +625,9 @@ class BindCardWorker(GuardianView):
         event = models.EBindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
-        event.dispatch(*card.ancestor.ancestor.members.all())
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -670,7 +682,9 @@ class UnbindCardTag(GuardianView):
         event = models.EUnbindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
-        event.dispatch(*card.ancestor.ancestor.members.all())
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -688,7 +702,9 @@ class BindCardTag(GuardianView):
         event = models.EBindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
-        event.dispatch(*card.ancestor.ancestor.members.all())
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -714,7 +730,7 @@ class Done(GuardianView):
         event.cards.add(card)
 
         users = card.ancestor.ancestor.members.all()
-        event.dispatch(*users)
+        event.dispatch(*card.workers.all(), *users)
         event.save()
 
         return redirect('card_app:view-data', card_id=card.id)
@@ -731,7 +747,7 @@ class Undo(GuardianView):
         board=card.ancestor.ancestor, card=card, user=self.me)
 
         users = card.ancestor.ancestor.members.all()
-        event.dispatch(*users)
+        event.dispatch(*card.workers.all(), *users)
 
         return redirect('card_app:view-data', card_id=card.id)
 
@@ -1007,20 +1023,5 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
