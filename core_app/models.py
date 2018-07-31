@@ -357,6 +357,9 @@ class Tag(TagMixin):
     organization = models.ForeignKey('core_app.Organization',
     related_name='tags', null=True, blank=True)
 
+    class Meta:
+        unique_together = ('name', 'organization')
+
 class EInviteUser(Event):
     peer = models.ForeignKey('User', null=True, 
     related_name='e_invite_user0', blank=True)
@@ -490,6 +493,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 

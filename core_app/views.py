@@ -406,12 +406,19 @@ class CreateTag(GuardianView):
         {'form':form})
 
     def post(self, request):
-        form = forms.TagForm(request.POST)
+        form      = forms.TagForm(request.POST)
+        is_valid  = form.is_valid() 
+        name      = form.cleaned_data.get('name')
+        is_unique = self.me.default.tags.filter(name=name).exists()
 
-        if not form.is_valid():
+        if is_unique: form.add_error('name', 
+            'There already exist a tag with this name')
+
+        if not is_valid or is_unique:
             return render(request, 'core_app/create-tag.html',
                         {'form': form, 'user': self.me}, status=400)
-        record       = form.save(commit=False)
+
+        record = form.save(commit=False)
         record.organization = self.me.default
         record.save()
 
@@ -978,6 +985,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 

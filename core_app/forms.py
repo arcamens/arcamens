@@ -53,7 +53,6 @@ class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False,
     help_text='tag:developer + tag:python')
 
-
 class SignupForm(SetPasswordForm):
     class Meta:
         model   = models.User
@@ -108,6 +107,5 @@ class FileAttachment:
         self.user.default.owner.c_storage = c_storage
         self.user.default.owner.save()
         return super(FileAttachment, self).save(*args, **kwargs)
-
 
 
