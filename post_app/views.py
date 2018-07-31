@@ -131,11 +131,7 @@ class UpdatePost(GuardianView):
         event = EUpdatePost.objects.create(organization=self.me.default,
         group=record.ancestor, post=record, user=self.me)
 
-        event.dispatch(*record.ancestor.users.all())
-
-        # Notify workers of the event, in case the post
-        # is on a group whose worker is not on.
-        event.dispatch(*record.workers.all())
+        event.dispatch(*record.ancestor.users.all(), *record.workers.all())
 
         return redirect('post_app:refresh-post', 
         post_id=record.id)
@@ -174,7 +170,7 @@ class AttachFile(GuardianView):
         organization=self.me.default, filewrapper=record, 
         post=post, user=self.me)
 
-        event.dispatch(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
         return self.get(request, post_id)
@@ -199,7 +195,8 @@ class DetachFile(GuardianView):
 
         filewrapper.delete()
 
-        event.dispatch(*filewrapper.post.ancestor.users.all())
+        event.dispatch(*filewrapper.post.ancestor.users.all(),
+        *filewrapper.post.workers.all())
         event.save()
 
         return render(request, 'post_app/attach-file.html', 
@@ -215,7 +212,7 @@ class DeletePost(GuardianView):
         event = EDeletePost.objects.create(organization=self.me.default,
         group=post.ancestor, post_label=post.label, user=self.me)
         users = post.ancestor.users.all()
-        event.dispatch(*users)
+        event.dispatch(*users, *post.workers.all())
 
         ancestor = post.ancestor
         post.delete()
@@ -276,11 +273,7 @@ class UnassignPostUser(GuardianView):
         organization=self.me.default, ancestor=post.ancestor, 
         post=post, user=self.me, peer=user)
 
-        event.dispatch(*post.ancestor.users.all())
-        
-        # As posts can be assigned to users off the group.
-        # We make sure them get the evvent.
-        event.dispatch(*post.workers.all())
+        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
         post.workers.remove(user)
@@ -304,8 +297,7 @@ class AssignPostUser(GuardianView):
         organization=self.me.default, ancestor=post.ancestor, 
         post=post, user=self.me, peer=user)
 
-        event.dispatch(*post.ancestor.users.all())
-        event.dispatch(*post.workers.all())
+        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -461,7 +453,7 @@ class CutPost(GuardianView):
         event = ECutPost.objects.create(organization=self.me.default,
         group=group, post=post, user=self.me)
         users = group.users.all()
-        event.dispatch(*users)
+        event.dispatch(*users, *post.workers.all())
 
         return redirect('group_app:list-posts', 
         group_id=group.id)
@@ -485,7 +477,7 @@ class CopyPost(GuardianView):
         event = ECopyPost.objects.create(organization=self.me.default,
         group=post.ancestor, post=post, user=self.me)
         users = post.ancestor.users.all()
-        event.dispatch(*users)
+        event.dispatch(*users, *post.workers.all())
 
         return redirect('group_app:list-posts', 
         group_id=post.ancestor.id)
@@ -511,7 +503,7 @@ class Done(GuardianView):
         group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
-        event.dispatch(*users)
+        event.dispatch(*users, *post.workers.all())
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
@@ -571,7 +563,7 @@ class UnbindPostTag(GuardianView):
         event = EUnbindTagPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=self.me)
-        event.dispatch(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
         return HttpResponse(status=200)
@@ -590,19 +582,8 @@ class BindPostTag(GuardianView):
         event = EBindTagPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
         post=post, tag=tag, user=self.me)
-        event.dispatch(*post.ancestor.users.all())
+        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
-
-        return HttpResponse(status=200)
-
-class CancelPostCreation(GuardianView):
-    """
-    Deprecated.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        post.delete()
 
         return HttpResponse(status=200)
 
@@ -620,7 +601,7 @@ class Undo(GuardianView):
         group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
-        event.dispatch(*users)
+        event.dispatch(*users, *post.workers.all())
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
@@ -775,8 +756,8 @@ class CreatePostFork(GuardianView):
         board=fork.ancestor.ancestor, user=self.me)
 
         # The group users and the board users get the event.
-        event.dispatch(*post.ancestor.users.all())
-        event.dispatch(*fork.ancestor.ancestor.members.all())
+        event.dispatch(*post.ancestor.users.all(), 
+        *fork.ancestor.ancestor.members.all(), *post.workers.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -922,6 +903,9 @@ class SetPostPriorityUp(GuardianView):
 
         event = models.ESetPostPriorityUp.objects.create(organization=self.me.default,
         ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
+
+        # As workers may not be in the board at all, there is no
+        # need to notify them separately.
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
@@ -946,6 +930,10 @@ class SetPostPriorityDown(GuardianView):
 
         event = models.ESetPostPriorityDown.objects.create(organization=self.me.default,
         ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
+
+        # As workers may not be in the board at all, there is no
+        # need to notify them separately.
+
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
@@ -959,6 +947,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
