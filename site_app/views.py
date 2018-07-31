@@ -90,6 +90,9 @@ class EnableAccount(View):
         process.user.enabled = True
         process.user.save()
         process.delete()
+    
+        # Create the free period record.
+        period = Period.objects.create(paid=False, total=0, user=self.me)
 
         request.session['user_id'] = user_id
         return redirect('core_app:index')
@@ -160,6 +163,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

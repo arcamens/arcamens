@@ -563,7 +563,9 @@ class JoinOrganization(View):
         invite.user.organizations.add(organization)
         invite.user.default = organization
         invite.user.save()
-
+    
+        # Create the free period record for the user.
+        period = Period.objects.create(paid=False, total=0, user=invite.user)
 
         # The user should be Arcamens Service(thinking about it later).
         event = EJoinOrganization.objects.create(organization=organization, 
@@ -985,6 +987,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
