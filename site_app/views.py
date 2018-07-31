@@ -60,7 +60,7 @@ class SignUp(LoginView):
     def get(self, request):
         form = forms.SignupForm()
         return render(request, 'site_app/signup.html', 
-        {'form': form,})
+        {'form': form, 'settings': settings})
 
     def post(self, request):
         """
@@ -72,7 +72,7 @@ class SignUp(LoginView):
         form = forms.SignupForm(request.POST, request.FILES)
         if not form.is_valid():
             return render(request, 'site_app/signup.html', 
-                {'form': form}, status=400)
+                {'form': form, 'settings': settings}, status=400)
 
         record = form.save()
         process = RegisterProcess.objects.create(user=record)
@@ -160,6 +160,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

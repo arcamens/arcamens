@@ -32,7 +32,13 @@
 <body>
 <div class="container" >
   <div class="jumbotron">
+<div class="pull-right">
+<h4> <a href="{{settings.LOCAL_ADDR}}"> 
+<span class="glyphicon glyphicon-arrow-left"></span> Back </a></h4>
+</div>
+
     <h1 >Arcamens <small> (Sign up) </small></h1> 
+
 
 
 <form id="form-user-data" method="post" action="{% url 'site_app:signup' %}" enctype="multipart/form-data">
@@ -57,6 +63,7 @@
 </div>
 
 </body>
+
 
 
 
