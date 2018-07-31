@@ -27,14 +27,14 @@ class DeadlineForm(forms.ModelForm):
         elem = cards.first()
 
         ERR0 = ("Can't set card deadline!"
-        "Doesn't meet card fork: {label}" "Deadline: {deadline}")
+        "Doesn't meet card fork: {label} " "Deadline: {deadline}")
         if elem: raise forms.ValidationError(
         ERR0.format(label=elem.label, deadline=elem.deadline))
 
         cards = self.instance.path.filter(Q(deadline__lt=deadline))
         elem  = cards.first()
         ERR1  = ("Can't set card deadline!"
-        "It doesn't meet card parent: {label}" "Deadline: {deadline}")
+        "It doesn't meet card parent: {label} " "Deadline: {deadline}")
         if elem: raise forms.ValidationError(
         ERR1.format(label=elem.label, deadline=elem.deadline))
 
