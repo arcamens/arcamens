@@ -26,6 +26,8 @@
 <p> No boards...</p>
 {% endfor %}
 
+<p class="text-info"> The user clipboard posts, lists and cards will be
+transfered to your clipboaard. </p>
 </div>
 
 <form id="actionReasonForm" enctype="multipart/form-data">
@@ -42,6 +44,7 @@ data-dismiss="modal">Cancel</button>
 data-show="{% url 'core_app:remove-organization-user' user.id %}" class="btn btn-danger e-post"> 
      {% trans "Remove" %}
 </button>
+
 
 
 

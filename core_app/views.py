@@ -803,6 +803,19 @@ class RemoveOrganizationUser(GuardianView):
                     {'user': user, 'form': form})
 
         self.me.default.revoke_access(self.me, user)
+        clipboard0, _    = Clipboard.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        clipboard1, _    = Clipboard.objects.get_or_create(
+        user=user, organization=self.me.default)
+
+        clipboard0.posts.add(*clipboard1.posts.all())
+        clipboard0.cards.add(*clipboard1.cards.all())
+        clipboard0.lists.add(*clipboard1.lists.all())
+
+        clipboard1.posts.clear()
+        clipboard1.cards.clear()
+        clipboard1.lists.clear()
 
         event = ERemoveOrganizationUser.objects.create(
         organization=self.me.default, user=self.me, peer=user, 
@@ -987,6 +1000,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
