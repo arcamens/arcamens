@@ -304,6 +304,8 @@ class Card(CardMixin):
     created  = models.DateTimeField(auto_now_add=True, null=True)
     deadline = models.DateTimeField(null=True, blank=True)
 
+    expired = models.BooleanField(blank=True, default=False)
+
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Label, Deadline, ...', 
     max_length=626)
@@ -765,6 +767,10 @@ class EArrivedCardDeadline(Event):
     board = models.ForeignKey('board_app.Board', 
     related_name='e_arrived_card_deadline0', blank=True)
 
+    # It might sound useless and bad, but saving the deadline
+    # that was expired on the event it may be useful in the future.
+    deadline = models.DateTimeField(null=True, blank=True)
+
     html_template = 'card_app/e-arrived-card-deadline.html'
 
 @receiver(pre_delete, sender=CardFileWrapper)
@@ -779,6 +785,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 

@@ -160,7 +160,10 @@ class SetDeadline(GuardianView):
         if not form.is_valid():
             return render(request, 'card_app/set-deadline.html', 
                 {'form': form, 'card': card}, status=400)
-        form.save()
+
+        record = form.save(commit=False)
+        record.expired = False
+        record.save()
 
         event = models.ESetCardDeadline.objects.create(
         organization=self.me.default, card=card, ancestor=card.ancestor, 
@@ -1023,5 +1026,6 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
