@@ -32,7 +32,7 @@ class Command(BaseCommand):
         emails = card.workers.values_list('email', flat=True)
     
         send_mail('Task deadline has arrived', '%s %s' % (card.label, url),
-                'noreply@arcamens.com', emails, fail_silently=False)
+                'noreply@arcamens.com', emails, fail_silently=True)
 
         event = EArrivedCardDeadline.objects.create(deadline=card.deadline,
         organization=card.ancestor.ancestor.organization, card=card, 
