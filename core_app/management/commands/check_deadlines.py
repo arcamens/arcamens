@@ -13,7 +13,7 @@ email=settings.ARCAMENS_BOT_EMAIL, name=settings.ARCAMENS_BOT_NAME)
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         now   = timezone.now()
-        query = Q(deadline__lte=now)  & Q(expired=False)
+        query = Q(deadline__lte=now)  & Q(expired=False) & Q(done=False)
         cards = Card.objects.filter(query)
         cards = cards.only('id', 'label', 'workers')
     
