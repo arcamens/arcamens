@@ -23,7 +23,6 @@ from itertools import chain
 import slock.views
 from . import models
 from . import forms
-import core_app.export
 import random
 import json
 import pytz
@@ -1000,6 +999,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
