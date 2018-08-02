@@ -27,7 +27,7 @@ class PasswordTicket(models.Model):
     related_name='password_tickets', blank=True)
 
     # expiration = models.DateTimeField(blank=True, null=True)
-    created = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
 class RegisterProcess(RegisterProcessMixin, models.Model):
     # email = models.EmailField(max_length=70, 
@@ -41,6 +41,7 @@ class RegisterProcess(RegisterProcessMixin, models.Model):
 
     signup_url = models.CharField(null=True,
     blank=False, max_length=256)
+
 
 
 

@@ -89,7 +89,7 @@ class Snippet(SnippetMixin, models.Model):
     help_text='Markdown content.', default='')
 
     created = models.DateTimeField(
-    auto_now=True, null=True)
+    auto_now_add=True, null=True)
 
     html = models.TextField(null=True, blank=True)
 
@@ -157,4 +157,5 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 

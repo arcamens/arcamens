@@ -272,7 +272,7 @@ class Post(PostMixin):
     'group_app.Group', related_name='posts', 
     null=True, blank=True)
 
-    created = models.DateTimeField(auto_now=True, 
+    created = models.DateTimeField(auto_now_add=True, 
     null=True)
 
     tags = models.ManyToManyField(
@@ -568,6 +568,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 

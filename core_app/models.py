@@ -237,7 +237,7 @@ class Organization(OrganizationMixin):
     owner = models.ForeignKey('User', null=True, 
     related_name='owned_organizations', blank=True)
 
-    created = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     admins = models.ManyToManyField('User', symmetrical=False,
     related_name='managed_organizations')
@@ -290,7 +290,7 @@ class Invite(InviteMixin):
     organization = models.ForeignKey('Organization', 
     null=False, related_name='invites')
 
-    created = models.DateTimeField(auto_now=True, null=False)
+    created = models.DateTimeField(auto_now_add=True, null=False)
 
 class User(UserMixin, BasicUser):
     organizations = models.ManyToManyField(
@@ -329,7 +329,7 @@ class Event(EventMixin):
     related_name='events', null=True)
 
     # created = models.DateTimeField(auto_now=True, null=True)
-    created = models.DateTimeField(auto_now=True, null=False)
+    created = models.DateTimeField(auto_now_add=True, null=False)
     user    = models.ForeignKey('core_app.User', null=True)
 
     signers = models.ManyToManyField('core_app.User', 
@@ -481,6 +481,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
