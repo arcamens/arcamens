@@ -21,20 +21,36 @@ class DeadlineForm(forms.ModelForm):
     def clean(self):
         super(DeadlineForm, self).clean()
         deadline = self.cleaned_data.get('deadline')
-        cards    = self.instance.children.filter(Q(
+
+        # Check if one of the parents has a deadline set
+        # in that case it cant have a none deadline.
+        cards = self.instance.path.filter(deadline__isnull=False)
+        elem  = cards.first()
+        ERR2  = ("Can't remove deadline!"
+        "Doesn't meet parent: {label} " "Deadline: {deadline}")
+
+        if elem and not deadline: raise forms.ValidationError(
+        ERR2.format(label=elem.label, deadline=elem.deadline))
+        elif not deadline: return
+
+        # Check if one of the children has a none deadline
+        # in that case he has to go and set the deadline.
+        cards = self.instance.children.filter(Q(
             deadline=None) | Q(deadline__gt=deadline))
 
         elem = cards.first()
-
-        ERR0 = ("Can't set card deadline!"
-        "Doesn't meet card fork: {label} " "Deadline: {deadline}")
+        ERR0 = ("Can't set deadline!"
+        "Doesn't meet fork: {label} " "Deadline: {deadline}")
         if elem: raise forms.ValidationError(
         ERR0.format(label=elem.label, deadline=elem.deadline))
 
+        # Check if one of the parent deadlines doesnt meet
+        # the desired deadline. The parent deadline has to be
+        # equal or greater to the set deadline.
         cards = self.instance.path.filter(Q(deadline__lt=deadline))
         elem  = cards.first()
-        ERR1  = ("Can't set card deadline!"
-        "It doesn't meet card parent: {label} " "Deadline: {deadline}")
+        ERR1  = ("Can't set deadline!"
+        "It doesn't meet parent: {label} " "Deadline: {deadline}")
         if elem: raise forms.ValidationError(
         ERR1.format(label=elem.label, deadline=elem.deadline))
 
@@ -99,6 +115,7 @@ class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
+
 
 
 

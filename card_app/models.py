@@ -304,7 +304,7 @@ class Card(CardMixin):
     created  = models.DateTimeField(auto_now_add=True, null=True)
     deadline = models.DateTimeField(null=True, blank=True)
 
-    expired = models.BooleanField(blank=True, default=False, db_index=True)
+    expired = models.BooleanField(blank=True, default=False)
 
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Label, Deadline, ...', 
