@@ -29,7 +29,7 @@ class Command(BaseCommand):
     def run_timeout(self, card):
         url    = '%s%s' % (settings.LOCAL_ADDR, 
         reverse('card_app:card-link', kwargs={'card_id': card.id}))
-        emails = card.workers.values_list('email')
+        emails = card.workers.values_list('email', flat=True)
     
         send_mail('Task deadline has arrived', '%s %s' % (card.label, url),
                 'noreply@arcamens.com', emails, fail_silently=False)
@@ -40,4 +40,5 @@ class Command(BaseCommand):
     
         event.dispatch(*card.workers.all(), *card.ancestor.ancestor.members.all())
     
+
 
