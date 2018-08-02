@@ -11,11 +11,12 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 was tagged with {{event.tag.name}} on group 
 
 <a class="e-get" data-shell="#main-view"
-data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}"> 
+data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-eye-open"></span> {{event.ancestor.name}} 
 </a>
 
 {% endblock %}
+
 
 
 

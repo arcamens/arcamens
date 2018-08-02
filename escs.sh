@@ -447,4 +447,10 @@ git push --set-upstream origin beta
 ##############################################################################
 # reset c_storage, c_download all counters.
 python manage.py reset_counters
+##############################################################################
+# run check deadlines command
+python manage.py check_deadlines
+
+pip install --upgrade git+ssh://git@bitbucket.org/arcamens/django-jsim.git
+
 
