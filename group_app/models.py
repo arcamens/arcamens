@@ -19,7 +19,7 @@ class GroupMixin(models.Model):
         default     = lambda ind: Q(name__icontains=ind) \
         | Q(description__icontains=ind)
 
-        sqlike = SqLike(SqNode(None, default),
+        sqlike = SqLike(cls, SqNode(None, default),
         SqNode(('o', 'owner'), owner),
         SqNode(('n', 'name'), name),
         SqNode(('d', 'description'), description),)
@@ -136,6 +136,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'group_app/e-paste-post.html'
+
 
 
 

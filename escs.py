@@ -628,5 +628,14 @@ from core_app.models import User
 users = User.objects.all()
 users = users.values_list('name', flat=True)
 users
+##############################################################################
 
+from django.db.models import Q, F
+e = Q(deadline__gt='2008')
+dir(e)
+e.resolve_expression()
+
+from card_app.models import Card
+qs = Card.objects.none()
+qs
 

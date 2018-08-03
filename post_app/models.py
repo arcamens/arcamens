@@ -105,7 +105,9 @@ class PostMixin(models.Model):
         workers__email__icontains=ind)
         not_worker = lambda ind: ~worker(ind)
 
-        created  = lambda ind: Q(created__icontains=ind)
+        created_gt = lambda ind: Q(created__gt=ind)
+        created_lt = lambda ind: Q(created__lt=ind)
+
         label    = lambda ind: Q(label__icontains=ind)
         not_label = lambda ind: ~label(ind)
 
@@ -164,15 +166,16 @@ class PostMixin(models.Model):
 
         not_fork_worker   = lambda ind: ~fork_worker(ind)
 
-        sqlike = SqLike(SqNode(None, default),
+        sqlike = SqLike(cls, SqNode(None, default),
         SqNode(('o', 'owner'), user),
         SqNode(('!o', '!owner'), not_user),
 
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('w', 'worker'), worker, chain=True), 
         SqNode(('!w', '!worker'), not_worker, chain=True), 
+        SqNode(('c>', '>created>'), created_gt),
+        SqNode(('c<', 'created<'), created_lt),
 
-        SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('!l', '!label'), not_label),
 
@@ -568,6 +571,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 

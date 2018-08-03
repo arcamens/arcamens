@@ -20,7 +20,7 @@ class BoardMixin(models.Model):
         default = lambda ind: Q(name__icontains=ind) |\
          Q(description__icontains=ind)
 
-        sqlike = SqLike(SqNode(None, default))
+        sqlike = SqLike(cls, SqNode(None, default))
         return sqlike
 
     @classmethod
@@ -157,6 +157,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

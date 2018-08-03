@@ -30,7 +30,7 @@ class UserMixin(Device):
         desc  = lambda ind: Q(description__icontains=ind)
         tag   = lambda ind: Q(tags__name__icontains=ind)
         default = lambda ind: Q(email__icontains=ind) | Q(name__icontains=ind)
-        sqlike = SqLike(SqNode(None, default),
+        sqlike = SqLike(cls, SqNode(None, default),
         SqNode(('m', 'email'), email),
         SqNode(('n', 'name'), name), 
         SqNode(('t', 'tag'), tag, chain=True), 
@@ -219,7 +219,7 @@ class TagMixin(models.Model):
         default  = lambda ind: Q(name__icontains=ind) | Q(
         description__icontains=ind)
 
-        sqlike = SqLike(SqNode(None, default))
+        sqlike = SqLike(cls, SqNode(None, default))
         return sqlike
 
 class Node(models.Model):
@@ -481,6 +481,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 

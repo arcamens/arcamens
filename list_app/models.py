@@ -27,7 +27,7 @@ class ListMixin(object):
 
         default = lambda ind: Q(name__icontains=ind) | Q(ancestor__name__icontains=ind)
 
-        sqlike = SqLike(SqNode(None, default),
+        sqlike = SqLike(cls, SqNode(None, default),
         SqNode(('o', 'owner'), owner),
         SqNode(('n', 'name'), name),
         SqNode(('d', 'description'), description),
@@ -167,6 +167,7 @@ class EPasteCard(Event):
     symmetrical=False)
 
     html_template = 'list_app/e-paste-card.html'
+
 
 
 
