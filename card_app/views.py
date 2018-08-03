@@ -301,6 +301,7 @@ class CreateFork(GuardianView):
         fork.ancestor = ancestor
         fork.parent   = card
         fork.deadline = card.deadline
+        fork.expired  = card.expired
         fork.save()
 
         path = card.path.all()
@@ -1026,6 +1027,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
