@@ -113,6 +113,9 @@ class CardMixin(models.Model):
         label   = lambda ind: Q(label__icontains=ind)
         not_label = lambda ind: ~label(ind)
 
+        deadline_gt = lambda ind: Q(deadline__gt=ind)
+        deadline_lt = lambda ind: Q(deadline__lt=ind)
+
         data    = lambda ind: Q(data__icontains=ind)
         not_data    = lambda ind: ~data(ind)
 
@@ -183,6 +186,8 @@ class CardMixin(models.Model):
         SqNode(('c', 'created'), created),
         SqNode(('l', 'label'), label),
         SqNode(('!l', '!label'), not_label),
+        SqNode(('dl>', '>deadline'), deadline_gt),
+        SqNode(('dl<', '<deadline'), deadline_lt),
 
         SqNode(('d', 'data'), data),
         SqNode(('!d', '!data'), not_data),
@@ -785,6 +790,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 
