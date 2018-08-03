@@ -1183,10 +1183,6 @@ where the string 'arcamens' shows up.
 Filter cards based on its creation date. List cards based on its
 creation date:
 
-~~~
-created:2018
-~~~
-
 Would find all cards that were created in 2018.
 
 ~~~
@@ -1196,11 +1192,27 @@ created:2018-05-23
 The above example would find all cards that were created on 2018-05-23.
 The general format is: year-month-day
 
-For finding cards created in the month 05 then do:
+For finding cards created in a given period you could do:
 
 ~~~
-created:-05-
+created>:2018-05-08 + created<:2018-05-01 
 ~~~
+
+Or you could merely do:
+
+~~~
+created>:2018-05-08
+~~~
+
+**Deadline**
+
+Cards can have deadlines, for finding cards that are in a given deadline:
+
+~~~
+deadline>:2018-05-08 + deadline<:2018-05-01 
+
+~~~
+
 
 **File**
 
@@ -1420,8 +1432,17 @@ Find all posts that are tagged with snippet and django.
 
 Regarding the post creation date.
 
+Would find posts created in the defined date range:
+
 ~~~
-created:2017
+created>:2018-05-08 + created<:2018-05-01 
+~~~
+
+Or you could just do:
+
+~~~
+created:2018-05-08
+
 ~~~
 
 Find all posts that were created in the year of 2017.
@@ -1824,6 +1845,7 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
 
 
 
