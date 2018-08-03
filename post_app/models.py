@@ -107,6 +107,7 @@ class PostMixin(models.Model):
 
         created_gt = lambda ind: Q(created__gt=ind)
         created_lt = lambda ind: Q(created__lt=ind)
+        created = lambda ind: Q(created__date=ind)
 
         label    = lambda ind: Q(label__icontains=ind)
         not_label = lambda ind: ~label(ind)
@@ -173,8 +174,9 @@ class PostMixin(models.Model):
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('w', 'worker'), worker, chain=True), 
         SqNode(('!w', '!worker'), not_worker, chain=True), 
-        SqNode(('c>', '>created>'), created_gt),
+        SqNode(('c>', 'created>'), created_gt),
         SqNode(('c<', 'created<'), created_lt),
+        SqNode(('c', 'created'), created),
 
         SqNode(('l', 'label'), label),
         SqNode(('!l', '!label'), not_label),
