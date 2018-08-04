@@ -226,25 +226,23 @@ class PostWorkerInformation(GuardianView):
     """
 
     def get(self, request, peer_id, post_id):
-        event = EAssignPost.objects.filter(
-        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
-        post_id=post_id, post__ancestor__organization=self.me.default,
-        peer__id=peer_id).last()
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
 
-        active_posts = event.peer.assignments.filter(done=False)
-        done_posts = event.peer.assignments.filter(done=True)
+        taskship = models.PostTaskShip.objects.get(worker=peer, post=post)
 
-        active_cards = event.peer.tasks.filter(done=False)
-        done_cards = event.peer.tasks.filter(done=True)
+        active_posts = peer.assignments.filter(done=False)
+        done_posts = peer.assignments.filter(done=True)
 
-        active_tasks = active_posts.count() + active_cards.count()
-        done_tasks = done_posts.count() + done_cards.count()
+        active_posts = peer.tasks.filter(done=False)
+        done_posts = peer.tasks.filter(done=True)
 
-        return render(request, 
-        'post_app/post-worker-information.html',  
-        {'peer': event.peer, 'active_tasks': active_tasks, 
-         'post': event.post,  'done_tasks': done_tasks,
-        'created': event.created, 'user':event.user})
+        active_tasks = active_posts.count() + active_posts.count()
+        done_tasks = done_posts.count() + done_posts.count()
+
+        return render(request, 'post_app/post-worker-information.html', 
+        {'peer': peer, 'created': taskship.created, 'active_tasks': active_tasks,
+        'done_tasks': done_tasks, 'assigner':taskship.assigner, 'post': post})
 
 class PostTagInformation(GuardianView):
     """

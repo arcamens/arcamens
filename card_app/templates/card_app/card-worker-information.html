@@ -11,7 +11,7 @@
 <div class="modal-body">
 <p>
 Binded by <span class="glyphicon glyphicon-user"></span>
-{{user.name}} <small> ({{assigner.email}})</small>
+{{assigner.name}} <small> ({{assigner.email}})</small>
 
 on {{created}}
 </p>
@@ -40,6 +40,7 @@ data-show="{% url 'card_app:view-data' card.id %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 </div>
+
 
 
 
