@@ -269,6 +269,8 @@ class UnassignPostUser(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         user = User.objects.get(id=user_id)
 
+        user.post_workership.get(post=post).delete()
+
         event = EUnassignPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
         post=post, user=self.me, peer=user)
@@ -276,7 +278,6 @@ class UnassignPostUser(GuardianView):
         event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
-        post.workers.remove(user)
         post.save()
 
         return HttpResponse(status=200)
@@ -290,12 +291,10 @@ class AssignPostUser(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         user = User.objects.get(id=user_id)
 
-        post.workers.add(user)
-        post.save()
+        models.PostTaskShip.objects.create(worker=user, assigner=self.me, post=post)
 
-        event = EAssignPost.objects.create(
-        organization=self.me.default, ancestor=post.ancestor, 
-        post=post, user=self.me, peer=user)
+        event = EAssignPost.objects.create(organization=self.me.default, 
+        ancestor=post.ancestor, post=post, user=self.me, peer=user)
 
         event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
@@ -947,6 +946,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

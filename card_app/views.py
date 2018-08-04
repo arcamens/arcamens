@@ -606,8 +606,7 @@ class UnbindCardWorker(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        card.workers.remove(user)
-        card.save()
+        user.card_workership.get(card=card).delete()
 
         event = models.EUnbindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -623,8 +622,8 @@ class BindCardWorker(GuardianView):
     def get(self, request, card_id, user_id):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
-        card.workers.add(user)
-        card.save()
+
+        models.CardTaskShip.objects.create(worker=user, assigner=self.me, card=card)
 
         event = models.EBindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -757,22 +756,23 @@ class Undo(GuardianView):
 
 class CardWorkerInformation(GuardianView):
     def get(self, request, peer_id, card_id):
-        event = models.EBindCardWorker.objects.filter(
-        Q(card__workers=self.me) | Q(card__ancestor__ancestor__members=self.me),
-        card__id=card_id, peer__id=peer_id).last()
+        card = models.Card.locate(self.me, self.me.default, card_id)
+        peer = User.objects.get(id=peer_id, organizations=self.me.default)
 
-        active_posts = event.peer.assignments.filter(done=False)
-        done_posts = event.peer.assignments.filter(done=True)
+        taskship = models.CardTaskShip.objects.get(worker=peer, card=card)
 
-        active_cards = event.peer.tasks.filter(done=False)
-        done_cards = event.peer.tasks.filter(done=True)
+        active_posts = peer.assignments.filter(done=False)
+        done_posts = peer.assignments.filter(done=True)
+
+        active_cards = peer.tasks.filter(done=False)
+        done_cards = peer.tasks.filter(done=True)
 
         active_tasks = active_posts.count() + active_cards.count()
         done_tasks = done_posts.count() + done_cards.count()
 
         return render(request, 'card_app/card-worker-information.html', 
-        {'peer': event.peer, 'created': event.created, 'active_tasks': active_tasks,
-        'done_tasks': done_tasks, 'user':event.user, 'card': event.card})
+        {'peer': peer, 'created': taskship.created, 'active_tasks': active_tasks,
+        'done_tasks': done_tasks, 'assigner':taskship.assigner, 'card': card})
 
 class RequestCardAttention(GuardianView):
     def get(self, request, peer_id, card_id):
@@ -1027,6 +1027,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

@@ -303,6 +303,18 @@ class CardPin(CardPinMixin):
     class Meta:
         unique_together = ('user', 'organization', 'card')
 
+class CardTaskShip(models.Model):
+    """    
+    """
+    card = models.ForeignKey('Card', null=True, blank=True)
+    worker = models.ForeignKey('core_app.User', null=True, 
+    related_name='card_workership', blank=True)
+
+    assigner = models.ForeignKey('core_app.User', null=True, 
+    related_name='card_assingership', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
 class Card(CardMixin):
     """    
     """
@@ -327,8 +339,8 @@ class Card(CardMixin):
     help_text='Markdown content.', default='')
 
     workers = models.ManyToManyField('core_app.User', 
-    null=True, related_name='tasks', blank=True, 
-    symmetrical=False)
+    null=True, related_name='tasks', blank=True, through=CardTaskShip, 
+    through_fields=('card', 'worker',), symmetrical=False)
 
     relations = models.ManyToManyField('Card', 
     null=True, related_name='related', blank=True)
@@ -796,6 +808,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 

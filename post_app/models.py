@@ -264,6 +264,18 @@ class PostFileWrapperMixin(models.Model):
         wrapper.save()
         return wrapper
 
+class PostTaskShip(models.Model):
+    """    
+    """
+    post = models.ForeignKey('Post', null=True, blank=True)
+    worker = models.ForeignKey('core_app.User', null=True, 
+    related_name='post_workership', blank=True)
+
+    assigner = models.ForeignKey('core_app.User', null=True, 
+    related_name='post_assingership', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
 class Post(PostMixin):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -285,8 +297,8 @@ class Post(PostMixin):
     null=True, blank=True, symmetrical=False)
 
     workers = models.ManyToManyField('core_app.User', 
-    related_name='assignments', blank=True, 
-    symmetrical=False)
+    related_name='assignments', blank=True, through=PostTaskShip,
+    through_fields=('post', 'worker'), symmetrical=False)
 
     label = models.CharField(null=True, blank=False, 
     verbose_name=_("Label"), help_text='Short description,', 
@@ -573,6 +585,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 
