@@ -679,8 +679,7 @@ class UnbindCardTag(GuardianView):
         organization=self.me.default)
 
         card = models.Card.locate(self.me, self.me.default, card_id)
-        card.tags.remove(tag)
-        card.save()
+        card.cardtagship_set.get(tag=tag).delete()
 
         event = models.EUnbindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -698,9 +697,8 @@ class BindCardTag(GuardianView):
         organization=self.me.default)
 
         card = models.Card.locate(self.me, self.me.default, card_id)
+        models.CardTagShip.objects.create(tag=tag, card=card, tagger=self.me)
 
-        card.tags.add(tag)
-        card.save()
 
         event = models.EBindTagCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -807,14 +805,13 @@ class RequestCardAttention(GuardianView):
 
 class CardTagInformation(GuardianView):
     def get(self, request, tag_id, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        event = models.EBindTagCard.objects.filter(
-        Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
-        card__id=card.id, tag__id=tag_id).last()
+        card    = models.Card.locate(self.me, self.me.default, card_id)
+        tag     = Tag.objects.get(id=tag_id, organization=self.me.default)
+        tagship = models.CardTagShip.objects.get(card=card, tag=tag)
 
         return render(request, 'card_app/card-tag-information.html', 
-        {'user': event.user, 'card': card, 'created': event.created, 'tag':event.tag})
+        {'tagger': tagship.tagger, 'card': card, 
+        'created': tagship.created, 'tag':tag})
 
 class AlertCardWorkers(GuardianView):
     def get(self, request, card_id):

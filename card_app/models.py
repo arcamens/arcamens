@@ -303,6 +303,17 @@ class CardPin(CardPinMixin):
     class Meta:
         unique_together = ('user', 'organization', 'card')
 
+class CardTagShip(models.Model):
+    """    
+    """
+    card = models.ForeignKey('Card', null=True, blank=True)
+    tag = models.ForeignKey('core_app.Tag', null=True, blank=True)
+
+    tagger = models.ForeignKey('core_app.User', null=True, 
+    related_name='card_taggership', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
 class CardTaskShip(models.Model):
     """    
     """
@@ -345,9 +356,10 @@ class Card(CardMixin):
     relations = models.ManyToManyField('Card', 
     null=True, related_name='related', blank=True)
 
-    tags = models.ManyToManyField(
-    'core_app.Tag', related_name='cards', 
-    null=True, blank=True, symmetrical=False)
+    tags = models.ManyToManyField('core_app.Tag', related_name='cards', 
+    null=True, blank=True, symmetrical=False, through=CardTagShip,
+    through_fields=('card', 'tag'))
+
     done = models.BooleanField(blank=True, default=False)
 
     html = models.TextField(null=True, blank=True)

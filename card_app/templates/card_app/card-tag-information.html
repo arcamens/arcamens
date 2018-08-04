@@ -9,7 +9,7 @@
 
 <div class="modal-body">
 Tagged by <span class="glyphicon glyphicon-user"></span>
-{{user.name}} <small> ({{user.email}})</small>
+{{tagger.name}} <small> ({{tagger.email}})</small>
 
  at {{created}}
 </div>
@@ -20,6 +20,7 @@ data-show="{% url 'card_app:view-data' card.id %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 </div>
+
 
 
 

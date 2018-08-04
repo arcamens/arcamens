@@ -276,6 +276,17 @@ class PostTaskShip(models.Model):
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
+class PostTagShip(models.Model):
+    """    
+    """
+    post = models.ForeignKey('Post', null=True, blank=True)
+    tag = models.ForeignKey('core_app.Tag', null=True, blank=True)
+
+    tagger = models.ForeignKey('core_app.User', null=True, 
+    related_name='post_taggership', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
 class Post(PostMixin):
     user = models.ForeignKey('core_app.User', 
     null=True, blank=True)
@@ -292,9 +303,9 @@ class Post(PostMixin):
     created = models.DateTimeField(auto_now_add=True, 
     null=True)
 
-    tags = models.ManyToManyField(
-    'core_app.Tag', related_name='posts', 
-    null=True, blank=True, symmetrical=False)
+    tags = models.ManyToManyField('core_app.Tag', related_name='posts', 
+    through=PostTagShip, through_fields=('post', 'tag'), null=True, 
+    blank=True, symmetrical=False)
 
     workers = models.ManyToManyField('core_app.User', 
     related_name='assignments', blank=True, through=PostTaskShip,

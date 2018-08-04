@@ -250,13 +250,12 @@ class PostTagInformation(GuardianView):
     """
 
     def get(self, request, tag_id, post_id):
-        event = EBindTagPost.objects.filter(
-        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
-        post_id=post_id, post__ancestor__organization=self.me.default,
-        tag__id=tag_id).last()
+        post    = models.Post.locate(self.me, self.me.default, post_id)
+        tag     = Tag.objects.get(id=tag_id, organization=self.me.default)
+        tagship = models.PostTagShip.objects.get(post=post, tag=tag)
 
         return render(request, 'post_app/post-tag-information.html', 
-        {'user': event.user, 'created': event.created, 'tag':event.tag})
+        {'tagger': tagship.tagger, 'created': tagship.created, 'tag':tag})
 
 class UnassignPostUser(GuardianView):
     """
@@ -554,8 +553,8 @@ class UnbindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         tag = Tag.objects.get(id=tag_id)
-        post.tags.remove(tag)
-        post.save()
+
+        post.posttagship_set.get(tag=tag).delete()
 
         event = EUnbindTagPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
@@ -573,8 +572,8 @@ class BindPostTag(GuardianView):
     def get(self, request, post_id, tag_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         tag = Tag.objects.get(id=tag_id)
-        post.tags.add(tag)
-        post.save()
+
+        models.PostTagShip.objects.create(tag=tag, post=post, tagger=self.me)
 
         event = EBindTagPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
