@@ -229,7 +229,7 @@ class PostWorkerInformation(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         peer = User.objects.get(id=peer_id, organizations=self.me.default)
 
-        taskship = models.PostTaskShip.objects.get(worker=peer, post=post)
+        taskship = models.PostTaskship.objects.get(worker=peer, post=post)
 
         active_posts = peer.assignments.filter(done=False)
         done_posts = peer.assignments.filter(done=True)
@@ -252,7 +252,7 @@ class PostTagInformation(GuardianView):
     def get(self, request, tag_id, post_id):
         post    = models.Post.locate(self.me, self.me.default, post_id)
         tag     = Tag.objects.get(id=tag_id, organization=self.me.default)
-        tagship = models.PostTagShip.objects.get(post=post, tag=tag)
+        tagship = models.PostTagship.objects.get(post=post, tag=tag)
 
         return render(request, 'post_app/post-tag-information.html', 
         {'tagger': tagship.tagger, 'created': tagship.created, 'tag':tag})
@@ -288,7 +288,7 @@ class AssignPostUser(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         user = User.objects.get(id=user_id)
 
-        models.PostTaskShip.objects.create(worker=user, assigner=self.me, post=post)
+        models.PostTaskship.objects.create(worker=user, assigner=self.me, post=post)
 
         event = EAssignPost.objects.create(organization=self.me.default, 
         ancestor=post.ancestor, post=post, user=self.me, peer=user)
@@ -573,7 +573,7 @@ class BindPostTag(GuardianView):
         post = models.Post.locate(self.me, self.me.default, post_id)
         tag = Tag.objects.get(id=tag_id)
 
-        models.PostTagShip.objects.create(tag=tag, post=post, tagger=self.me)
+        models.PostTagship.objects.create(tag=tag, post=post, tagger=self.me)
 
         event = EBindTagPost.objects.create(
         organization=self.me.default, ancestor=post.ancestor, 
@@ -943,6 +943,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

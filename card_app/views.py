@@ -623,7 +623,7 @@ class BindCardWorker(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        models.CardTaskShip.objects.create(worker=user, assigner=self.me, card=card)
+        models.CardTaskship.objects.create(worker=user, assigner=self.me, card=card)
 
         event = models.EBindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -697,7 +697,7 @@ class BindCardTag(GuardianView):
         organization=self.me.default)
 
         card = models.Card.locate(self.me, self.me.default, card_id)
-        models.CardTagShip.objects.create(tag=tag, card=card, tagger=self.me)
+        models.CardTagship.objects.create(tag=tag, card=card, tagger=self.me)
 
 
         event = models.EBindTagCard.objects.create(
@@ -757,7 +757,7 @@ class CardWorkerInformation(GuardianView):
         card = models.Card.locate(self.me, self.me.default, card_id)
         peer = User.objects.get(id=peer_id, organizations=self.me.default)
 
-        taskship = models.CardTaskShip.objects.get(worker=peer, card=card)
+        taskship = models.CardTaskship.objects.get(worker=peer, card=card)
 
         active_posts = peer.assignments.filter(done=False)
         done_posts = peer.assignments.filter(done=True)
@@ -807,7 +807,7 @@ class CardTagInformation(GuardianView):
     def get(self, request, tag_id, card_id):
         card    = models.Card.locate(self.me, self.me.default, card_id)
         tag     = Tag.objects.get(id=tag_id, organization=self.me.default)
-        tagship = models.CardTagShip.objects.get(card=card, tag=tag)
+        tagship = models.CardTagship.objects.get(card=card, tag=tag)
 
         return render(request, 'card_app/card-tag-information.html', 
         {'tagger': tagship.tagger, 'card': card, 
@@ -1024,6 +1024,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 

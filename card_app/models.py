@@ -303,7 +303,7 @@ class CardPin(CardPinMixin):
     class Meta:
         unique_together = ('user', 'organization', 'card')
 
-class CardTagShip(models.Model):
+class CardTagship(models.Model):
     """    
     """
     card = models.ForeignKey('Card', null=True, blank=True)
@@ -314,7 +314,7 @@ class CardTagShip(models.Model):
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
-class CardTaskShip(models.Model):
+class CardTaskship(models.Model):
     """    
     """
     card = models.ForeignKey('Card', null=True, blank=True)
@@ -350,14 +350,14 @@ class Card(CardMixin):
     help_text='Markdown content.', default='')
 
     workers = models.ManyToManyField('core_app.User', 
-    null=True, related_name='tasks', blank=True, through=CardTaskShip, 
+    null=True, related_name='tasks', blank=True, through=CardTaskship, 
     through_fields=('card', 'worker',), symmetrical=False)
 
     relations = models.ManyToManyField('Card', 
     null=True, related_name='related', blank=True)
 
     tags = models.ManyToManyField('core_app.Tag', related_name='cards', 
-    null=True, blank=True, symmetrical=False, through=CardTagShip,
+    null=True, blank=True, symmetrical=False, through=CardTagship,
     through_fields=('card', 'tag'))
 
     done = models.BooleanField(blank=True, default=False)
@@ -820,6 +820,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 

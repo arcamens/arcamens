@@ -292,7 +292,7 @@ class Invite(InviteMixin):
 
     created = models.DateTimeField(auto_now_add=True, null=False)
 
-class UserTagShip(models.Model):
+class UserTagship(models.Model):
     """    
     """
     user = models.ForeignKey('core_app.User', null=True, 
@@ -309,7 +309,7 @@ class User(UserMixin, BasicUser):
     organizations = models.ManyToManyField(
     'Organization', related_name='users', symmetrical=False)
 
-    tags = models.ManyToManyField('Tag', through=UserTagShip,
+    tags = models.ManyToManyField('Tag', through=UserTagship,
     through_fields=('user', 'tag'), related_name='users', symmetrical=False)
 
     default = models.ForeignKey('Organization',
@@ -494,6 +494,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
