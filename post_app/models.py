@@ -105,6 +105,11 @@ class PostMixin(models.Model):
         workers__email__icontains=ind)
         not_worker = lambda ind: ~worker(ind)
 
+        assigner  = lambda ind: Q(posttaskship__assigner__name__icontains=ind) | Q(    
+        posttaskship__assigner__email__icontains=ind)
+
+        not_assigner = lambda ind: ~assigner(ind)
+
         created_gt = lambda ind: Q(created__gt=ind)
         created_lt = lambda ind: Q(created__lt=ind)
         created = lambda ind: Q(created__date=ind)
@@ -174,6 +179,10 @@ class PostMixin(models.Model):
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('w', 'worker'), worker, chain=True), 
         SqNode(('!w', '!worker'), not_worker, chain=True), 
+
+        SqNode(('a', 'assigner'), assigner, chain=True), 
+        SqNode(('!a', '!assigner'), not_assigner, chain=True), 
+
         SqNode(('c>', 'created>'), created_gt),
         SqNode(('c<', 'created<'), created_lt),
         SqNode(('c', 'created'), created),
@@ -596,6 +605,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 

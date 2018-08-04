@@ -107,6 +107,11 @@ class CardMixin(models.Model):
         workers__email__icontains=ind)
         not_worker = lambda ind: ~worker(ind)
 
+        assigner  = lambda ind: Q(cardtaskship__assigner__name__icontains=ind) | Q(    
+        cardtaskship__assigner__email__icontains=ind)
+
+        not_assigner = lambda ind: ~assigner(ind)
+
         file     = lambda ind: Q(cardfilewrapper__file__icontains=ind)
 
         created_gt = lambda ind: Q(created__gt=ind)
@@ -184,6 +189,9 @@ class CardMixin(models.Model):
 
         SqNode(('w', 'worker'), worker, chain=True), 
         SqNode(('!w', '!worker'), not_worker, chain=True), 
+
+        SqNode(('a', 'assigner'), assigner, chain=True), 
+        SqNode(('!a', '!assigner'), not_assigner, chain=True), 
 
         SqNode(('f', 'file'), file, chain=True),
         SqNode(('c>', 'created>'), created_gt),
