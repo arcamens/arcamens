@@ -1,4 +1,4 @@
-from core_app.models import Organization, User, \
+from core_app.models import Organization, User, UserTagShip, \
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
 EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
@@ -436,8 +436,8 @@ class UnbindUserTag(GuardianView):
         # and unbind all tags from all users(hacking).
         user = User.objects.get(id=user_id, organizations=self.me.default)
         tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
-        user.tags.remove(tag)
-        user.save()
+
+        user.user_tagship.get(tag=tag).delete()
 
         event = EUnbindUserTag.objects.create(
         organization=self.me.default, user=self.me, peer=user, tag=tag)
@@ -453,8 +453,7 @@ class BindUserTag(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
 
-        user.tags.add(tag)
-        user.save()
+        UserTagShip.objects.create(user=user, tag=tag, tagger=self.me)
 
         event = EBindUserTag.objects.create(
         organization=self.me.default, user=self.me, peer=user, tag=tag)
@@ -999,6 +998,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
