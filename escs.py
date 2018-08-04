@@ -12,11 +12,6 @@ quit()
 # connect to victor vps and activate virtualenv.
 tee >(stdbuf -o 0 ssh staging@staging.arcamens.com 'bash -i')
 
-cd ~/.virtualenvs/
-source arcamens/bin/activate
-cd ~/projects/arcamens-code
-tee >(python manage.py shell --settings=arcamens.settings)
-
 ##############################################################################
 
 from django import forms
@@ -638,4 +633,24 @@ e.resolve_expression()
 from card_app.models import Card
 qs = Card.objects.none()
 qs
+##############################################################################
+# esc to clear all tags from cards, posts, users.
+from card_app.models import Card
+cards = Card.objects.all()
+
+for ind in cards:
+    ind.tags.clear()
+
+
+from post_app.models import Post
+posts = Post.objects.all()
+
+for ind in posts:
+    ind.tags.clear()
+
+from core_app.models import User
+users = User.objects.all()
+
+for ind in users:
+    ind.tags.clear()
 
