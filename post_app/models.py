@@ -240,6 +240,8 @@ class GlobalPostFilterMixin(models.Model):
 
         if self.assigned:
             posts = posts.filter(Q(workers__isnull=False))
+        if self.assigned_by_me:
+            posts = posts.filter(Q(posttaskship__assigner=self.user))
         if self.assigned_to_me:
             posts = posts.filter(workers=self.user)
         if self.created_by_me:
@@ -364,17 +366,13 @@ class GlobalPostFilter(GlobalPostFilterMixin):
     status = models.BooleanField(blank=True, 
     default=False, help_text='Filter On/Off.')
 
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done posts.')
+    done = models.BooleanField(blank=True, default=False)
 
-    assigned = models.BooleanField(blank=False, 
-    default=True, help_text='Only tasks.')
+    assigned = models.BooleanField(blank=False, default=True)
+    assigned_by_me = models.BooleanField(blank=False, default=True)
 
-    assigned_to_me = models.BooleanField(blank=True, 
-    default=True, help_text='Only your tasks.')
-
-    created_by_me = models.BooleanField(blank=True, 
-    default=False, help_text='Only posts you created.')
+    assigned_to_me = models.BooleanField(blank=True, default=True)
+    created_by_me = models.BooleanField(blank=True, default=False)
 
     class Meta:
         unique_together = ('user', 'organization', )
@@ -605,6 +603,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 

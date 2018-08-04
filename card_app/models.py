@@ -281,6 +281,8 @@ class GlobalCardFilterMixin(models.Model):
         cards = cards.filter(Q(done=self.done))
         if self.assigned:
             cards = cards.filter(Q(workers__isnull=False))
+        if self.assigned_by_me:
+            cards = cards.filter(Q(cardtaskship__assigner=self.user))
         if self.assigned_to_me:
             cards = cards.filter(workers=self.user)
         if self.created_by_me:
@@ -392,17 +394,14 @@ class GlobalCardFilter(GlobalCardFilterMixin):
     user = models.ForeignKey('core_app.User', null=True, 
     blank=True)
 
-    done = models.BooleanField(blank=True, 
-    default=False, help_text='Done cards?.')
+    done = models.BooleanField(blank=True, default=False)
 
-    assigned = models.BooleanField(blank=False, 
-    default=True, help_text='Only tasks.')
+    assigned = models.BooleanField(blank=False, default=True)
+    assigned_by_me = models.BooleanField(blank=False, default=True)
 
-    assigned_to_me = models.BooleanField(blank=True, 
-    default=True, help_text='Only your tasks.')
+    assigned_to_me = models.BooleanField(blank=True, default=True)
 
-    created_by_me = models.BooleanField(blank=True, 
-    default=False, help_text='Only cards you created.')
+    created_by_me = models.BooleanField(blank=True, default=False)
 
     class Meta:
         unique_together = ('user', 'organization', )
