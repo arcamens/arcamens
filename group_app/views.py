@@ -1,4 +1,4 @@
-from group_app.models import Group, ECreateGroup, EDeleteGroup, \
+from group_app.models import Group, ECreateGroup, EDeleteGroup, Groupship,\
 EUnbindGroupUser, EUpdateGroup, EPastePost, EBindGroupUser, GroupPin
 from post_app.models import Post, PostFilter, GlobalPostFilter
 from core_app.models import Organization, User, Clipboard
@@ -80,9 +80,11 @@ class CreateGroup(GuardianView):
         form.save()
 
         users = self.me.default.users.all() if record.open else (self.me, )
-        record.users.add(*users)
-        record.save()
 
+        groupships = (Groupship(user=ind, group=record, 
+        binder=self.me) for ind in users)
+
+        Groupship.objects.bulk_create(groupships)
         event = ECreateGroup.objects.create(organization=self.me.default,
         group=record, user=self.me)
 
@@ -139,18 +141,18 @@ class UnbindGroupUser(GuardianView):
         user = User.objects.get(id=user_id, organizations=self.me.default)
 
         # Make sure i belong to the group.
-        group = self.me.groups.get(id=group_id, 
-        organization=self.me.default)
+        group = self.me.groups.get(id=group_id, organization=self.me.default)
 
         if group.owner == user:
             return HttpResponse("You can't remove \
                 the group owner!", status=403)
 
+        user.user_groupship.get(group=group).delete()
+
         event = EUnbindGroupUser.objects.create(organization=self.me.default,
         group=group, user=self.me, peer=user)
         event.dispatch(*group.users.all())
 
-        group.users.remove(user)
         return HttpResponse(status=200)
 
 class UpdateGroup(GuardianView):
@@ -284,11 +286,9 @@ class BindGroupUser(GuardianView):
 
     def get(self, request, group_id, user_id):
         user     = User.objects.get(id=user_id, organizations=self.me.default)
-        group = self.me.groups.get(id=group_id, 
-        organization=self.me.default)
+        group = self.me.groups.get(id=group_id, organization=self.me.default)
 
-        group.users.add(user)
-        group.save()
+        Groupship.objects.create(user=user, binder=self.me, group=group)
 
         event = EBindGroupUser.objects.create(organization=self.me.default,
         group=group, user=self.me, peer=user)
@@ -434,6 +434,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id, organization=self.me.default)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

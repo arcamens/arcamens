@@ -287,6 +287,9 @@ class PostTaskship(models.Model):
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
+    class Meta:
+        unique_together = ('post', 'worker', )
+
 class PostTagship(models.Model):
     """    
     """
@@ -297,6 +300,9 @@ class PostTagship(models.Model):
     related_name='post_taggership', blank=True)
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        unique_together = ('post', 'tag', )
 
 class Post(PostMixin):
     user = models.ForeignKey('core_app.User', 
@@ -603,6 +609,7 @@ def on_filewrapper_deletion(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 

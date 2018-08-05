@@ -654,3 +654,7 @@ users = User.objects.all()
 for ind in users:
     ind.tags.clear()
 
+from core_app.models import Event
+events = Event.objects.all()
+events.delete()
+

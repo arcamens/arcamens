@@ -74,9 +74,27 @@ class GroupPin(GroupPinMixin):
     class Meta:
         unique_together = ('user', 'organization', 'group')
 
+class Groupship(models.Model):
+    """    
+    """
+    group = models.ForeignKey('Group', null=True, blank=True)
+
+    user = models.ForeignKey('core_app.User', null=True, 
+    related_name='user_groupship', blank=True)
+
+    binder = models.ForeignKey('core_app.User', null=True, 
+    related_name='binder_groupship', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        unique_together = ('group', 'user', )
+
 class Group(GroupMixin):
     users = models.ManyToManyField('core_app.User', null=True,  
-    related_name='groups', blank=True, symmetrical=False)
+    through=Groupship, related_name='groups', blank=True, 
+    through_fields=('group', 'user'), symmetrical=False)
+
     organization = models.ForeignKey('core_app.Organization', 
     related_name='groups', null=True, blank=True)
 
@@ -136,6 +154,7 @@ class EPastePost(Event):
     posts = models.ManyToManyField('post_app.Post', null=True,  
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'group_app/e-paste-post.html'
+
 
 
 

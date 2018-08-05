@@ -428,7 +428,8 @@ sed -i 's/appname/newappname/g' arcamens-db.json
 # cases though.
 python manage.py loaddata arcamens-db.json
 
-python manage.py dumpdata --exclude auth.permission --exclude contenttypes > arcamens-db.json
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude core_app.Tag --exclude core_app.Event --exclude core_app.UserTagship --exclude card_app.CardTagship --exclude card_app.CardTaskship --exclude post_app.PostTaskship --exclude post_app.PostTagship --exclude card_app.GlobalCardFilter --exclude post_app.GlobalPostFilter > arcamens-db.json
+
 
 #############################################################################
 # push arcamens beta branch.

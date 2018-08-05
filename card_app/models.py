@@ -324,6 +324,9 @@ class CardTagship(models.Model):
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
+    class Meta:
+        unique_together = ('card', 'tag', )
+
 class CardTaskship(models.Model):
     """    
     """
@@ -335,6 +338,9 @@ class CardTaskship(models.Model):
     related_name='card_assingership', blank=True)
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        unique_together = ('card', 'worker', )
 
 class Card(CardMixin):
     """    
@@ -827,6 +833,7 @@ def clean_disk(record):
     org.owner.c_storage = F('c_storage') + record.file.size
     org.owner.save()
     record.file.delete(save=False)
+
 
 
 
