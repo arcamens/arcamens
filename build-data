@@ -15,11 +15,11 @@ User.objects.create_superuser('admin', 'admin@example.com', 'itrocksalot')
 # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 # channel    = connection.channel()
 from core_app.models import User, Organization, Period
-from group_app.models import Group
+from group_app.models import Group, Groupship
 
 from core_app.models import Organization
 from card_app.models import Card
-from board_app.models import Board
+from board_app.models import Board, Boardship
 from list_app.models import List
 
 organization0 = Organization.objects.create(name='Arcamens' )
@@ -60,8 +60,11 @@ user1.organizations.add(organization1)
 user1.organizations.add(organization0)
 
 board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
-board.members.add(user1)
+Boardship.objects.create(board=board, member=user1, binder=user1)
 board.admins.add(user1)
+
+group = Group.objects.create(organization=organization1, owner=user1, name='beta')
+Groupship.objects.create(group=group, user=user1, binder=user1)
 
 list = List.objects.create(owner=user1, name='Alpha', ancestor=board)
 from random import randint
@@ -80,6 +83,7 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
+
 
 
 

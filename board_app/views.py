@@ -1,5 +1,5 @@
 from core_app.views import GuardianView
-from board_app.models import ECreateBoard, Board, BoardPin, \
+from board_app.models import ECreateBoard, Board, BoardPin, Boardship,\
 EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser, Board
 from django.shortcuts import render, redirect
 from core_app.models import Clipboard, User, Organization
@@ -41,7 +41,11 @@ class CreateBoard(GuardianView):
 
         # The board members.
         members = self.me.default.users.all() if board.open else (self.me,)
-        board.members.add(*members)
+
+        boardships = (Boardship(member=ind, board=board, 
+        binder=self.me) for ind in members)
+
+        Boardship.objects.bulk_create(boardships)
 
         board.admins.add(self.me)
         board.organization = self.me.default
@@ -391,8 +395,7 @@ class BindBoardUser(GuardianView):
         if not me_admin:
             return HttpResponse("Just admins can add users!", status=403)
 
-        board.members.add(user)
-        board.save()
+        Boardship.objects.create(member=user, binder=self.me, board=board)
 
         event = EBindBoardUser.objects.create(organization=self.me.default,
         board=board, user=self.me, peer=user)
@@ -430,7 +433,7 @@ class UnbindBoardUser(GuardianView):
         board=board, user=self.me, peer=user)
         event.dispatch(*board.members.all())
 
-        board.members.remove(user)
+        user.member_boardship.get(board=board).delete()
         board.admins.remove(user)
         board.save()
 
@@ -493,6 +496,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
 
 
 

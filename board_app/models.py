@@ -75,6 +75,22 @@ class EUpdateBoardMixin(object):
 class ECreateBoardMixin(object):
     pass
 
+class Boardship(models.Model):
+    """    
+    """
+    board = models.ForeignKey('Board', null=True, blank=True)
+
+    member = models.ForeignKey('core_app.User', null=True, 
+    related_name='member_boardship', blank=True)
+
+    binder = models.ForeignKey('core_app.User', null=True, 
+    related_name='binder_boardship', blank=True)
+
+    created  = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        unique_together = ('board', 'member', )
+
 class Board(BoardMixin):
     """    
     """
@@ -96,9 +112,9 @@ class Board(BoardMixin):
     open = models.BooleanField(blank=True, default=False,
     help_text='Include all organization members.')
 
-    members = models.ManyToManyField('core_app.User', 
-    null=True, related_name='boards', blank=True, 
-    symmetrical=False)
+    members = models.ManyToManyField('core_app.User', through=Boardship,
+    null=True, related_name='boards', blank=True, symmetrical=False,
+    through_fields=('board', 'member'))
 
     admins = models.ManyToManyField('core_app.User', 
     null=True, related_name='managed_boards', blank=True, 
@@ -157,6 +173,7 @@ class EPasteList(Event, ECreateBoardMixin):
     symmetrical=False)
 
     html_template = 'board_app/e-paste-list.html'
+
 
 
 

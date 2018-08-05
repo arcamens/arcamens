@@ -142,13 +142,10 @@ class UnbindGroupUser(GuardianView):
 
         # Make sure i belong to the group.
         group = self.me.groups.get(id=group_id, organization=self.me.default)
-
         if group.owner == user:
-            return HttpResponse("You can't remove \
-                the group owner!", status=403)
+            return HttpResponse("You can't remove the group owner!", status=403)
 
         user.user_groupship.get(group=group).delete()
-
         event = EUnbindGroupUser.objects.create(organization=self.me.default,
         group=group, user=self.me, peer=user)
         event.dispatch(*group.users.all())
