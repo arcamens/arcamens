@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from core_app.models import User, Organization
-from board_app.models import Board
-from group_app.models import Group
+from board_app.models import Board, Boardship
+from group_app.models import Group, Groupship
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -17,15 +17,21 @@ class Command(BaseCommand):
         user = User.objects.get(email__istartswith=kwargs['user-email'])
         user.organizations.add(organization)
 
-        for ind in Board.objects.filter(organization=organization):
-           ind.set_ownership(user)
-        
-        for ind in Group.objects.filter(organization=organization):
-           ind.set_ownership(user)
-        
+        boards     = Board.objects.filter(organization=organization)
+        boardships = (Boardship(member=user, board=ind, 
+        binder=self.me) for ind in boards)
+
+        Boardship.objects.bulk_create(boardships)
+
+        groups     = Group.objects.filter(organization=organization)
+        groupships = (Groupship(user=user, group=ind, 
+        binder=user) for ind in groups)
+        Groupship.objects.bulk_create(groupships)
+
         self.stdout.write('User binded to all boards/groups!')
     
     
+
 
 
 
