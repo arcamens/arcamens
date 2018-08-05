@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         boards     = Board.objects.filter(organization=organization)
         boardships = (Boardship(member=user, board=ind, 
-        binder=self.me) for ind in boards)
+        binder=user) for ind in boards)
 
         Boardship.objects.bulk_create(boardships)
 
