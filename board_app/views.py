@@ -394,7 +394,10 @@ class BindBoardUser(GuardianView):
     Secured.
     """
 
-    def get(self, request, board_id, user_id):
+    def redirect(self, request, board_id, user_id):
+        return ManageBoardMembers.as_view()(request, board_id)
+
+    def post(self, request, board_id, user_id):
         # Make sure the user belongs to my default organization.
         user  = User.objects.get(id=user_id, organizations=self.me.default)
         board = Board.objects.get(id=board_id, organization=self.me.default)
@@ -411,14 +414,20 @@ class BindBoardUser(GuardianView):
         board=board, user=self.me, peer=user)
         event.dispatch(*board.members.all())
 
-        return HttpResponse(status=200)
+        return self.redirect(request, board_id, user_id)
+
+class BindUserBoard(BindBoardUser):
+    def redirect(self, request, board_id, user_id):
+        return ManageUserBoards.as_view()(request, user_id)
 
 class UnbindBoardUser(GuardianView):
     """
     Secured.
     """
+    def redirect(self, request, board_id, user_id):
+        return ManageBoardMembers.as_view()(request, board_id)
 
-    def get(self, request, board_id, user_id):
+    def post(self, request, board_id, user_id):
         user  = User.objects.get(id=user_id, organizations=self.me.default)
         board = Board.objects.get(id=board_id, organization=self.me.default)
 
@@ -447,11 +456,14 @@ class UnbindBoardUser(GuardianView):
         event.dispatch(*board.members.all())
 
         user.member_boardship.get(board=board).delete()
+        return self.redirect(request, board_id, user_id)
 
-        return HttpResponse(status=200)
+class UnbindUserBoard(UnbindBoardUser):
+    def redirect(self, request, board_id, user_id):
+        return ManageUserBoards.as_view()(request, user_id)
 
 class BindBoardAdmin(GuardianView):
-    def get(self, request, board_id, user_id):
+    def post(self, request, board_id, user_id):
         user  = User.objects.get(id=user_id, organizations=self.me.default)
         board = Board.objects.get(id=board_id, organization=self.me.default)
 
@@ -462,11 +474,10 @@ class BindBoardAdmin(GuardianView):
         boardship = user.member_boardship.get(board=board)
         boardship.admin = True
         boardship.save()
-
-        return HttpResponse(status=200)
+        return ManageBoardAdmins.as_view()(request, board_id)
 
 class UnbindBoardAdmin(GuardianView):
-    def get(self, request, board_id, user_id):
+    def post(self, request, board_id, user_id):
         user  = User.objects.get(id=user_id, organizations=self.me.default)
         board = Board.objects.get(id=board_id, organization=self.me.default)
 
@@ -482,8 +493,7 @@ class UnbindBoardAdmin(GuardianView):
         boardship = user.member_boardship.get(board=board)
         boardship.admin = False
         boardship.save()
-
-        return HttpResponse(status=200)
+        return ManageBoardAdmins.as_view()(request, board_id)
 
 class BoardLink(GuardianView):
     """
@@ -507,6 +517,8 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
+
 
 
 

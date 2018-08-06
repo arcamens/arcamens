@@ -22,12 +22,16 @@ urlpatterns = [
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
     url(r'^bind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.BindBoardUser.as_view(), name='bind-board-user'),
     url(r'^unbind-board-user/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardUser.as_view(), name='unbind-board-user'),
+    url(r'^bind-user-board/(?P<board_id>.+)/(?P<user_id>.+)/', views.BindUserBoard.as_view(), name='bind-user-board'),
+    url(r'^unbind-user-board/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindUserBoard.as_view(), name='unbind-user-board'),
+
     url(r'^bind-board-admin/(?P<board_id>.+)/(?P<user_id>.+)/', views.BindBoardAdmin.as_view(), name='bind-board-admin'),
     url(r'^unbind-board-admin/(?P<board_id>.+)/(?P<user_id>.+)/', views.UnbindBoardAdmin.as_view(), name='unbind-board-admin'),
 
     url(r'^board-link/(?P<board_id>.+)/', views.BoardLink.as_view(), name='board-link'),
 
 ]
+
 
 
 

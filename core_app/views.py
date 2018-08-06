@@ -1029,7 +1029,6 @@ class SetTimezone(GuardianView):
             {'timezones': pytz.common_timezones})
 
     def post(self, request):
-        print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
 
