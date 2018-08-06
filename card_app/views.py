@@ -601,25 +601,8 @@ class ManageCardWorkers(GuardianView):
         {'included': included, 'excluded': excluded, 'card': card, 'total': total,
         'count': count, 'me': self.me, 'form':form})
 
-class UnbindCardWorker(GuardianView):
-    def get(self, request, card_id, user_id):
-        user = User.objects.get(id=user_id, organizations=self.me.default)
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        user.card_workership.get(card=card).delete()
-
-        event = models.EUnbindCardWorker.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
-
-        event.dispatch(*card.workers.all(), 
-        *card.ancestor.ancestor.members.all())
-        event.save()
-
-        return HttpResponse(status=200)
-
 class BindCardWorker(GuardianView):
-    def get(self, request, card_id, user_id):
+    def post(self, request, card_id, user_id):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
 
@@ -632,8 +615,31 @@ class BindCardWorker(GuardianView):
         event.dispatch(*card.workers.all(), 
         *card.ancestor.ancestor.members.all())
         event.save()
+        return ManageCardWorkers.as_view()(request, card_id)
 
-        return HttpResponse(status=200)
+# class BindWorkerCard(BindCardWorker):
+    # def redirect(self, request, card_id, user_id):
+        # return ManageCardWorkers.as_view()(request, card_id)
+
+class UnbindCardWorker(BindCardWorker):
+    def post(self, request, card_id, user_id):
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.locate(self.me, self.me.default, card_id)
+
+        user.card_workership.get(card=card).delete()
+
+        event = models.EUnbindCardWorker.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
+        event.save()
+        return ManageCardWorkers.as_view()(request, card_id)
+
+# class UnbindWorkerCard(UnbindCardWorker):
+    # def redirect(self, request, card_id, user_id):
+        # return ManageCardWorkers.as_view()(request, card_id)
 
 class ManageCardTags(GuardianView):
     def get(self, request, card_id):
@@ -674,7 +680,7 @@ class ManageCardTags(GuardianView):
         'total': total, 'count': count, 'form':form})
 
 class UnbindCardTag(GuardianView):
-    def get(self, request, card_id, tag_id):
+    def post(self, request, card_id, tag_id):
         tag = core_app.models.Tag.objects.get(id=tag_id, 
         organization=self.me.default)
 
@@ -688,11 +694,10 @@ class UnbindCardTag(GuardianView):
         event.dispatch(*card.workers.all(), 
         *card.ancestor.ancestor.members.all())
         event.save()
-
-        return HttpResponse(status=200)
+        return ManageCardTags.as_view()(request, card_id)
 
 class BindCardTag(GuardianView):
-    def get(self, request, card_id, tag_id):
+    def post(self, request, card_id, tag_id):
         tag = core_app.models.Tag.objects.get(id=tag_id, 
         organization=self.me.default)
 
@@ -707,8 +712,7 @@ class BindCardTag(GuardianView):
         event.dispatch(*card.workers.all(), 
         *card.ancestor.ancestor.members.all())
         event.save()
-
-        return HttpResponse(status=200)
+        return ManageCardTags.as_view()(request, card_id)
 
 class Done(GuardianView):
     def get(self, request, card_id):
@@ -1024,6 +1028,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
