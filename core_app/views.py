@@ -810,6 +810,13 @@ class RemoveOrganizationUser(GuardianView):
         boards = user.owned_boards.filter(organization=organization)
         boards.update(owner=self.me)
 
+        groupships = Groupship.objects.filter(
+        group__owner=user, group__organization=organization)
+        groupships.update(member=self.me, admin=True)
+
+        groups = user.owned_groups.filter(organization=organization)
+        groups.update(owner=self.me)
+
         # self.me.default.revoke_access(self.me, user)
         clipboard0, _    = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
