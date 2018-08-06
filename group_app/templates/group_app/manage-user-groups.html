@@ -13,9 +13,9 @@ Available {{user.name}}'s Groups <span class="badge">{{count}}/{{total}}</span> 
 
 <div class="pre-scrollable">
 {% for ind in included %}
-<p class="rm">
-<a class="r-get" style="color:red"
-data-show="{% url 'group_app:unbind-group-user' ind.id user.id %}" href="#"> 
+<p>
+<a class="e-post" style="color:red" data-form="#groupSearchForm"
+data-show="{% url 'group_app:unbind-user-group' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a> 
 
 <b> {{ind.name}} </b>
@@ -27,9 +27,9 @@ data-show="{% url 'group_app:unbind-group-user' ind.id user.id %}" href="#">
 {% endfor %}
 
 {% for ind in excluded %}
-<p class="rm">
-<a class="r-get"
-data-show="{% url 'group_app:bind-group-user' ind.id user.id %}" href="#"> 
+<p>
+<a class="e-post" data-form="#groupSearchForm"
+data-show="{% url 'group_app:bind-user-group' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a> 
 
 <b> {{ind.name}} </b>
@@ -43,12 +43,9 @@ data-show="{% url 'group_app:bind-group-user' ind.id user.id %}" href="#">
 </div>
 
 <br> 
-<form id="bind-group-search-form" enctype="multipart/form-data">
-
+<form id="groupSearchForm" enctype="multipart/form-data">
 {% csrf_token %}
-
 {% bootstrap_field form.pattern  size='md' layout='inline' %}
-
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 </div>
@@ -61,7 +58,7 @@ data-shell="#smallModalContent" data-show="{% url 'core_app:list-users'  %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 {% endblock %}
 
-<button  type="button" data-form="#bind-group-search-form" data-shell="#smallModalContent" 
+<button  type="button" data-form="#groupSearchForm" data-shell="#smallModalContent" 
 data-show="{% url 'group_app:manage-user-groups' user.id  %}"
 class="btn btn-default e-post"> {% trans "Search" %} </button>
 
@@ -70,7 +67,6 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
-
 
 
 

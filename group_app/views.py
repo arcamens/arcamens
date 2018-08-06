@@ -131,13 +131,38 @@ class DeleteGroup(GuardianView):
 
         return redirect('core_app:list-nodes')
 
-class UnbindGroupUser(GuardianView):
+class BindGroupUser(GuardianView):
+    """
+    Everyone in the group can perform this view but its default organization
+    has to contain the group and the user has to be in the organization of the
+    group as well.
+    """
+
+    def redirect(self, request, group_id, user_id):
+        return ManageGroupUsers.as_view()(request, group_id)
+
+    def post(self, request, group_id, user_id):
+        user     = User.objects.get(id=user_id, organizations=self.me.default)
+        group = self.me.groups.get(id=group_id, organization=self.me.default)
+
+        Groupship.objects.create(user=user, binder=self.me, group=group)
+
+        event = EBindGroupUser.objects.create(organization=self.me.default,
+        group=group, user=self.me, peer=user)
+        event.dispatch(*group.users.all())
+        return self.redirect(request, group_id, user_id)
+
+class BindUserGroup(BindGroupUser):
+    def redirect(self, request, group_id, user_id):
+        return ManageUserGroups.as_view()(request, user_id)
+
+class UnbindGroupUser(BindGroupUser):
     """
     Just users whose default organization matches the group organization
     can perform this view. Everyone in group is supposed to add/remove members.
     """
 
-    def get(self, request, group_id, user_id):
+    def post(self, request, group_id, user_id):
         user = User.objects.get(id=user_id, organizations=self.me.default)
 
         # Make sure i belong to the group.
@@ -149,8 +174,11 @@ class UnbindGroupUser(GuardianView):
         event = EUnbindGroupUser.objects.create(organization=self.me.default,
         group=group, user=self.me, peer=user)
         event.dispatch(*group.users.all())
+        return self.redirect(request, group_id, user_id)
 
-        return HttpResponse(status=200)
+class UnbindUserGroup(UnbindGroupUser):
+    def redirect(self, request, group_id, user_id):
+        return ManageUserGroups.as_view()(request, user_id)
 
 class UpdateGroup(GuardianView):
     """
@@ -273,25 +301,6 @@ class PasteAllPosts(GuardianView):
         clipboard.posts.clear()
         return redirect('group_app:list-posts', 
         group_id=group.id)
-
-class BindGroupUser(GuardianView):
-    """
-    Everyone in the group can perform this view but its default organization
-    has to contain the group and the user has to be in the organization of the
-    group as well.
-    """
-
-    def get(self, request, group_id, user_id):
-        user     = User.objects.get(id=user_id, organizations=self.me.default)
-        group = self.me.groups.get(id=group_id, organization=self.me.default)
-
-        Groupship.objects.create(user=user, binder=self.me, group=group)
-
-        event = EBindGroupUser.objects.create(organization=self.me.default,
-        group=group, user=self.me, peer=user)
-        event.dispatch(*group.users.all())
-
-        return HttpResponse(status=200)
 
 class ManageUserGroups(GuardianView):
     """
@@ -431,6 +440,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id, organization=self.me.default)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 

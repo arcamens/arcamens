@@ -12,6 +12,9 @@ urlpatterns = [
     url(r'^manage-group-users/(?P<group_id>.+)/', views.ManageGroupUsers.as_view(), name='manage-group-users'),
     url(r'^bind-group-user/(?P<group_id>.+)/(?P<user_id>.+)/', views.BindGroupUser.as_view(), name='bind-group-user'),
     url(r'^unbind-group-user/(?P<group_id>.+)/(?P<user_id>.+)/', views.UnbindGroupUser.as_view(), name='unbind-group-user'),
+    url(r'^bind-user-group/(?P<group_id>.+)/(?P<user_id>.+)/', views.BindUserGroup.as_view(), name='bind-user-group'),
+    url(r'^unbind-user-group/(?P<group_id>.+)/(?P<user_id>.+)/', views.UnbindUserGroup.as_view(), name='unbind-user-group'),
+
     url(r'^group-link/(?P<group_id>.+)/', views.GroupLink.as_view(), name='group-link'),
     url(r'^pin-group/(?P<group_id>.+)/', views.PinGroup.as_view(), name='pin-group'),
     url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
@@ -20,6 +23,7 @@ urlpatterns = [
     url(r'^paste-all-posts/(?P<group_id>.+)/', views.PasteAllPosts.as_view(), name='paste-all-posts'),
 
 ]
+
 
 
 
