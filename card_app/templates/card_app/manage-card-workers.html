@@ -27,7 +27,7 @@ Workers on card <span class="glyphicon glyphicon-file"></span> {{card.label|trun
 
 <br>
 
-<a class="e-post" style="color:red; font-size:70%" data-form="#userSearchForm"
+<a class="r-post" style="color:red; font-size:70%" data-form="#userSearchForm"
 data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> Unbind</a>  
 
@@ -44,7 +44,7 @@ data-show="{% url 'card_app:unbind-card-worker' card.id ind.id %}" href="#">
 <small> {{ind.email}} </small>  
 <br>
 
-<a class="e-post" style="color:green;font-size:70%" data-form="#userSearchForm"
+<a class="r-post" style="color:green;font-size:70%" data-form="#userSearchForm"
 data-show="{% url 'card_app:bind-card-worker' card.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> bind </a> 
 
@@ -72,6 +72,7 @@ data-show="{% url 'card_app:manage-card-workers' card.id  %}"
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 

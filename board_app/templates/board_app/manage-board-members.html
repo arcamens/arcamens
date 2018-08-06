@@ -24,7 +24,7 @@ Available {{board.name|truncatechars:20}}'s Members
 
 <small> {{ind.email}} </small>   <br>
 
-<a class="e-post" data-form="#userSearchForm" style="color:red;font-size:70%"
+<a class="r-post" data-form="#userSearchForm" style="color:red;font-size:70%"
 data-show="{% url 'board_app:unbind-board-user' board.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> Unbind</a>  
 
@@ -41,7 +41,7 @@ data-show="{% url 'board_app:unbind-board-user' board.id ind.id %}" href="#">
 <small> {{ind.email}} </small>  
 <br>
 
-<a class="e-post" data-form="#userSearchForm" style="color:green;font-size:70%"
+<a class="r-post" data-form="#userSearchForm" style="color:green;font-size:70%"
 data-show="{% url 'board_app:bind-board-user' board.id ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> Bind </a> 
 
@@ -67,6 +67,7 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
 

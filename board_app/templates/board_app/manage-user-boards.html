@@ -12,7 +12,7 @@ Available {{user.name}}'s Boards <span class="badge">{{count}}/{{total}}</span><
 <div class="pre-scrollable">
 {% for ind in included %}
 <p>
-<a class="e-post" style="color:red" data-form="#boardSearchForm"
+<a class="r-post" style="color:red" data-form="#boardSearchForm"
 data-show="{% url 'board_app:unbind-user-board' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a> 
 
@@ -26,7 +26,7 @@ data-show="{% url 'board_app:unbind-user-board' ind.id user.id %}" href="#">
 
 {% for ind in excluded %}
 <p>
-<a class="e-post" data-form="#boardSearchForm"
+<a class="r-post" data-form="#boardSearchForm"
 data-show="{% url 'board_app:bind-user-board' ind.id user.id %}" href="#"> 
 <span class="glyphicon glyphicon-plus"></span> </a> 
 
@@ -67,5 +67,6 @@ class="btn btn-default e-post"> {% trans "Search" %} </button>
 </button>
 
 </div>
+
 
 
