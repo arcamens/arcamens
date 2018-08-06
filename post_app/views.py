@@ -262,7 +262,7 @@ class UnassignPostUser(GuardianView):
     Same as in update-post view.
     """
 
-    def get(self, request, post_id, user_id):
+    def post(self, request, post_id, user_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         user = User.objects.get(id=user_id)
 
@@ -276,15 +276,14 @@ class UnassignPostUser(GuardianView):
         event.save()
 
         post.save()
-
-        return HttpResponse(status=200)
+        return ManagePostWorkers.as_view()(request, post_id)
 
 class AssignPostUser(GuardianView):
     """
     Same as in update-post view.
     """
 
-    def get(self, request, post_id, user_id):
+    def post(self, request, post_id, user_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         user = User.objects.get(id=user_id)
 
@@ -295,8 +294,7 @@ class AssignPostUser(GuardianView):
 
         event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
-
-        return HttpResponse(status=200)
+        return ManagePostWorkers.as_view()(request, post_id)
 
 class ManagePostWorkers(GuardianView):
     """
@@ -550,7 +548,7 @@ class UnbindPostTag(GuardianView):
     Same as in update-post view.
     """
 
-    def get(self, request, post_id, tag_id):
+    def post(self, request, post_id, tag_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         tag = Tag.objects.get(id=tag_id)
 
@@ -562,14 +560,14 @@ class UnbindPostTag(GuardianView):
         event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
-        return HttpResponse(status=200)
+        return ManagePostTags.as_view()(request, post_id)
 
 class BindPostTag(GuardianView):
     """
     Same as in update-post view.
     """
 
-    def get(self, request, post_id, tag_id):
+    def post(self, request, post_id, tag_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
         tag = Tag.objects.get(id=tag_id)
 
@@ -581,7 +579,7 @@ class BindPostTag(GuardianView):
         event.dispatch(*post.ancestor.users.all(), *post.workers.all())
         event.save()
 
-        return HttpResponse(status=200)
+        return ManagePostTags.as_view()(request, post_id)
 
 class Undo(GuardianView):
     """
@@ -943,6 +941,7 @@ class PostFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
