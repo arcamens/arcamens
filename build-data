@@ -60,8 +60,7 @@ user1.organizations.add(organization1)
 user1.organizations.add(organization0)
 
 board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
-Boardship.objects.create(board=board, member=user1, binder=user1)
-board.admins.add(user1)
+Boardship.objects.create(board=board, member=user1, binder=user1, admin=True)
 
 group = Group.objects.create(organization=organization1, owner=user1, name='beta')
 Groupship.objects.create(group=group, user=user1, binder=user1)
@@ -83,6 +82,7 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
+
 
 
 

@@ -38,18 +38,20 @@ class CreateBoard(GuardianView):
 
         board       = form.save()
         board.owner = self.me
-
-        # The board members.
-        members = self.me.default.users.all() if board.open else (self.me,)
-
-        boardships = (Boardship(member=ind, board=board, 
-        binder=self.me) for ind in members)
-
-        Boardship.objects.bulk_create(boardships)
-
-        board.admins.add(self.me)
         board.organization = self.me.default
         board.save()
+
+        # The board members if it is open.
+        members    = self.me.default.users.all() if board.open else (self.me,)
+        boardships = (Boardship(member=ind, board=board, 
+        binder=self.me) for ind in members)
+        Boardship.objects.bulk_create(boardships)
+
+        # Make myself admin of the board after adding me
+        # as a regular user.
+        boardship = self.me.member_boardship.get(board=board)
+        boardship.admin = True
+        boardship.save()
 
         event = ECreateBoard.objects.create(organization=self.me.default,
         board=board, user=self.me)
@@ -183,8 +185,11 @@ class ManageBoardAdmins(GuardianView):
     def get(self, request, board_id):
         board = self.me.boards.get(id=board_id, organization=self.me.default)
 
-        included = board.admins.all()
-        excluded = board.members.exclude(id__in=included)
+        included = board.members.filter(member_boardship__admin=True, 
+        member_boardship__board=board)
+
+        excluded = board.members.filter(member_boardship__admin=False,
+        member_boardship__board=board)
 
         total = included.count() + excluded.count()
 
@@ -198,8 +203,11 @@ class ManageBoardAdmins(GuardianView):
         form   = forms.UserSearchForm(request.POST, sqlike=sqlike)
         board  = self.me.boards.get(id=board_id, organization=self.me.default)
 
-        included = board.admins.all()
-        excluded = board.members.exclude(id__in=included)
+        included = board.members.filter(member_boardship__admin=True, 
+        member_boardship__board=board)
+
+        excluded = board.members.filter(member_boardship__admin=False,
+        member_boardship__board=board)
 
         total = included.count() + excluded.count()
 
@@ -302,8 +310,8 @@ class UpdateBoard(GuardianView):
         record = Board.objects.get(id=board_id)
         # Make sure i'm admin of the board and it belongs to 
         # my default organization.
-        record = self.me.managed_boards.get(
-            id=board_id, organization=self.me.default)
+        # record = self.me.managed_boards.get(
+            # id=board_id, organization=self.me.default)
 
         form = forms.UpdateBoardForm(request.POST, instance=record)
         if not form.is_valid():
@@ -388,9 +396,11 @@ class BindBoardUser(GuardianView):
 
     def get(self, request, board_id, user_id):
         # Make sure the user belongs to my default organization.
-        user     = User.objects.get(id=user_id, organizations=self.me.default)
-        board    = Board.objects.get(id=board_id, organization=self.me.default)
-        me_admin = board.admins.filter(id=self.me.id).exists()
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        board = Board.objects.get(id=board_id, organization=self.me.default)
+
+        me_admin = self.me.member_boardship.filter(
+        board=board, admin=True).exists()
 
         if not me_admin:
             return HttpResponse("Just admins can add users!", status=403)
@@ -416,8 +426,11 @@ class UnbindBoardUser(GuardianView):
             return HttpResponse("You can't remove \
                 the board owner!", status=403)
 
-        is_admin = board.admins.filter(id=user.id).exists()
-        me_admin = board.admins.filter(id=self.user_id).exists()
+        is_admin = user.member_boardship.filter(
+        board=board, admin=True).exists()
+
+        me_admin = self.me.member_boardship.filter(
+        board=board, admin=True).exists()
 
         me_owner = board.owner == self.me
 
@@ -434,8 +447,6 @@ class UnbindBoardUser(GuardianView):
         event.dispatch(*board.members.all())
 
         user.member_boardship.get(board=board).delete()
-        board.admins.remove(user)
-        board.save()
 
         return HttpResponse(status=200)
 
@@ -448,8 +459,9 @@ class BindBoardAdmin(GuardianView):
         if board.owner != self.me:
             return HttpResponse("Just the owner can do that!", status=403)
 
-        board.admins.add(user)
-        board.save()
+        boardship = user.member_boardship.get(board=board)
+        boardship.admin = True
+        boardship.save()
 
         return HttpResponse(status=200)
 
@@ -467,10 +479,9 @@ class UnbindBoardAdmin(GuardianView):
         if board.owner != self.me:
             return HttpResponse("Just the owner can do that!", status=403)
 
-        # This code shows up in board_app.views?
-        # something is odd.
-        board.admins.remove(user)
-        board.save()
+        boardship = user.member_boardship.get(board=board)
+        boardship.admin = False
+        boardship.save()
 
         return HttpResponse(status=200)
 
@@ -496,6 +507,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
 
 
 

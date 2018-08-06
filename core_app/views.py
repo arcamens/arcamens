@@ -9,6 +9,8 @@ from card_app.models import Card, GlobalCardFilter
 from django.shortcuts import render, redirect
 from slock.forms import UpdatePasswordForm
 from core_app.forms import SignupForm
+from board_app.models import Board
+from group_app.models import Group
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -800,7 +802,15 @@ class RemoveOrganizationUser(GuardianView):
                 'core_app/remove-organization-user.html', 
                     {'user': user, 'form': form})
 
-        self.me.default.revoke_access(self.me, user)
+
+        boardships = Boardship.objects.filter(
+        board__owner=user, board__organization=organization)
+        boardships.update(member=self.me, admin=True)
+
+        boards = user.owned_boards.filter(organization=organization)
+        boards.update(owner=self.me)
+
+        # self.me.default.revoke_access(self.me, user)
         clipboard0, _    = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
@@ -998,6 +1008,7 @@ class SetTimezone(GuardianView):
         print('ooooo', request.POST['timezone'])
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
