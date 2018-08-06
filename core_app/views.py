@@ -432,7 +432,7 @@ class CreateTag(GuardianView):
         return redirect('core_app:list-tags')
 
 class UnbindUserTag(GuardianView):
-    def get(self, request, user_id, tag_id):
+    def post(self, request, user_id, tag_id):
         # Make sure the user belongs to my default organization.
         # This is necessary otherwise he can drop an user_id and tag_id
         # and unbind all tags from all users(hacking).
@@ -447,10 +447,10 @@ class UnbindUserTag(GuardianView):
         users = self.me.default.users.all()
         event.dispatch(*users)
 
-        return HttpResponse(status=200)
+        return ManageUserTags.as_view()(request, user_id)
 
 class BindUserTag(GuardianView):
-    def get(self, request, user_id, tag_id):
+    def post(self, request, user_id, tag_id):
         # Make sure the user/tag belongs are related to my default organization.
         user = User.objects.get(id=user_id, organizations=self.me.default)
         tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
@@ -461,8 +461,7 @@ class BindUserTag(GuardianView):
         organization=self.me.default, user=self.me, peer=user, tag=tag)
         users = self.me.default.users.all()
         event.dispatch(*users)
-
-        return HttpResponse(status=200)
+        return ManageUserTags.as_view()(request, user_id)
 
 class InviteOrganizationUser(GuardianView):
     def get(self, request):
@@ -1031,6 +1030,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
