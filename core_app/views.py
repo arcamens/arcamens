@@ -1,4 +1,4 @@
-from core_app.models import Organization, User, UserTagship, \
+from core_app.models import Organization, User, UserTagship, Period,\
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
 EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
@@ -9,8 +9,8 @@ from card_app.models import Card, GlobalCardFilter
 from django.shortcuts import render, redirect
 from slock.forms import UpdatePasswordForm
 from core_app.forms import SignupForm
-from board_app.models import Board
-from group_app.models import Group
+from board_app.models import Board, Boardship
+from group_app.models import Group, Groupship
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -564,16 +564,27 @@ class JoinOrganization(View):
         invite.user.default = organization
         invite.user.save()
     
-        # Create the free period record for the user.
-        period = Period.objects.create(paid=False, total=0, user=invite.user)
+        # Add the user to the opened boards.
+        boards = organization.boards.filter(open=True)
+        boards = boards.only('id', 'owner')
+
+        boardships = (Boardship(member=invite.user, board=ind, 
+        binder=ind.owner) for ind in boards)
+        Boardship.objects.bulk_create(boardships)
+
+        # Add the user to the opened groups.
+        groups = organization.groups.filter(open=True)
+        groups = groups.only('id', 'owner')
+
+        groupships = (Groupship(user=invite.user, group=ind, 
+        binder=ind.owner) for ind in groups)
+
+        Groupship.objects.bulk_create(groupships)
 
         # The user should be Arcamens Service(thinking about it later).
         event = EJoinOrganization.objects.create(organization=organization, 
         peer=invite.user, user=invite.user)
         event.dispatch(*organization.users.all())
-
-        organization.set_open_boards(invite.user)
-        organization.set_open_groups(invite.user)
 
         # Authenticate the user.
         request.session['user_id'] = invite.user.id
@@ -606,6 +617,9 @@ class SignupFromInvite(View):
         record = form.save(commit=False)
         record.enabled = True
         record.save()
+
+        # Create the free period record for the user.
+        period = Period.objects.create(paid=False, total=0, user=record)
 
         return redirect('core_app:join-organization', 
         organization_id=organization_id, token=token)
@@ -802,26 +816,25 @@ class RemoveOrganizationUser(GuardianView):
                 'core_app/remove-organization-user.html', 
                     {'user': user, 'form': form})
 
-
-        boardships = Boardship.objects.filter(
-        board__owner=user, board__organization=organization)
+        boardships = Boardship.objects.filter(board__owner=user, 
+        board__organization=self.me.default)
         boardships.update(member=self.me, admin=True)
 
-        boards = user.owned_boards.filter(organization=organization)
+        boards = user.owned_boards.filter(organization=self.me.default)
         boards.update(owner=self.me)
 
-        groupships = Groupship.objects.filter(
-        group__owner=user, group__organization=organization)
-        groupships.update(member=self.me, admin=True)
+        groupships = Groupship.objects.filter(group__owner=user, 
+        group__organization=self.me.default)
+        groupships.update(user=self.me)
 
-        groups = user.owned_groups.filter(organization=organization)
+        groups = user.owned_groups.filter(organization=self.me.default)
         groups.update(owner=self.me)
 
         # self.me.default.revoke_access(self.me, user)
-        clipboard0, _    = Clipboard.objects.get_or_create(
+        clipboard0, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
-        clipboard1, _    = Clipboard.objects.get_or_create(
+        clipboard1, _ = Clipboard.objects.get_or_create(
         user=user, organization=self.me.default)
 
         clipboard0.posts.add(*clipboard1.posts.all())
@@ -831,6 +844,10 @@ class RemoveOrganizationUser(GuardianView):
         clipboard1.posts.clear()
         clipboard1.cards.clear()
         clipboard1.lists.clear()
+
+        user.organizations.remove(self.me.default)
+        user.default = None
+        user.save()
 
         event = ERemoveOrganizationUser.objects.create(
         organization=self.me.default, user=self.me, peer=user, 

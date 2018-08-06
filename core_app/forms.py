@@ -13,8 +13,15 @@ import datetime
 class OrganizationForm(forms.Form):
     name = forms.CharField(help_text='Example: Your business name.')
 
+class ConfirmOrganizationDeletionForm(ConfirmGroupDeletionForm):
+    name = forms.CharField(required=True,
+    help_text='Type the organization name to confirm!')
+
 class RemoveUserForm(forms.Form):
     reason = forms.CharField(required=False, help_text='You are fired!')
+
+class UserSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False, help_text='tag:developer')
 
 class TagSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, help_text='Example: developer')
@@ -24,10 +31,6 @@ class OrganizationInviteForm(forms.Form):
 
 class ShoutForm(forms.Form):
     msg = forms.CharField(required=False)
-
-class ConfirmOrganizationDeletionForm(ConfirmGroupDeletionForm):
-    name = forms.CharField(required=True,
-    help_text='Type the organization name to confirm!')
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -49,14 +52,11 @@ class UpdateOrganizationForm(forms.ModelForm):
         model = models.Organization
         fields = ( 'name', )
 
-class UserSearchForm(SqLikeForm, forms.Form):
-    pattern = forms.CharField(required=False,
-    help_text='tag:developer + tag:python')
-
 class SignupForm(SetPasswordForm):
     class Meta:
         model   = models.User
-        exclude = ('organizations', 'default', 'service', 
+        exclude = ('organizations', 'default', 
+        'enabled', 'tags', 'c_storage', 'c_download',
         'expiration', 'max_users', 'paid')
 
 class NodeFilterForm(forms.ModelForm):
@@ -107,5 +107,6 @@ class FileAttachment:
         self.user.default.owner.c_storage = c_storage
         self.user.default.owner.save()
         return super(FileAttachment, self).save(*args, **kwargs)
+
 
 

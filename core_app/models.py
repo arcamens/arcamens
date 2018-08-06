@@ -118,70 +118,6 @@ class OrganizationMixin(models.Model):
     class Meta:
         abstract = True
 
-    def set_open_boards(self, user):
-        """
-        Add the user to all open boards.
-        """
-
-        boards = self.boards.filter(open=True)
-        boards = boards.only('members')
-        for ind in boards:
-            ind.members.add(user)
-
-    def set_open_groups(self, user):
-        """
-        Add the user to all open groups.
-        """
-
-        groups = self.groups.filter(open=True)
-        groups = groups.only('users')
-
-        for ind in groups:
-            ind.users.add(user)
-
-    def revoke_access(self, admin, user):
-        # Should be pondered about it yet.
-        # self.cancel_assignments(user)
-        self.revoke_groups(admin, user)
-        self.revoke_boards(admin, user)
-        user.organizations.remove(self)
-
-        # In case the user default organization is this one
-        # it sets the value to None.
-        user.default = None
-        user.save()
-
-    def cancel_assignments(self, user):
-        # Remove user from all posts/cards he is assigned to.
-        # This method is not working it cleans all post.workers
-        # and card.workers m2m field.
-        user.assignments.through.objects.filter(
-            post__ancestor__organization=self).delete()
-
-        user.tasks.through.objects.filter(
-            card__ancestor__ancestor__organization=self).delete()
-
-    def revoke_groups(self, admin, user):
-        """
-        Remove user access to all groups in this organization and
-        set admin as user and owner.
-        """
-
-        groups = user.groups.filter(organization=self)
-        groups = groups.only('users')
-        for ind in groups:
-            ind.revoke_access(admin, user)
-
-    def revoke_boards(self, admin, user):
-        """
-        Revoke user access to boards and assign admin to these boards.
-        """
-
-        boards = user.boards.filter(organization=self)
-        boards = boards.only('members', 'admins')
-        for ind in boards:
-            ind.revoke_access(admin, user)
-
     def __str__(self):
         return self.name
 
@@ -494,6 +430,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
