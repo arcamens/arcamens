@@ -1,4 +1,4 @@
-from core_app.models import Organization, User, UserTagship, Period,\
+from core_app.models import Organization, User, UserTagship, Period, Membership,\
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
 EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
@@ -161,11 +161,9 @@ class CreateOrganization(AuthenticatedView):
         organization = Organization.objects.create(
         name=form.cleaned_data['name'], owner=self.me) 
 
-        self.me.organizations.add(organization)
-        organization.admins.add(self.me)
+        Membership.objects.create(user=self.me, admin=True,
+        organization=organization, inviter=self.me)
 
-        # self.me.default = organization
-        # self.me.save()
         # Redirect the user so the ui will be reloaded over all tabs.
         return redirect('core_app:switch-organization', 
         organization_id=organization.id)
@@ -559,7 +557,9 @@ class JoinOrganization(View):
         # Delete all the invites for this user.
         organization = Organization.objects.get(id=organization_id)
 
-        invite.user.organizations.add(organization)
+        Membership.objects.create(user=invite.user, 
+        organization=invite.organization, inviter=invite.peer)
+
         invite.user.default = organization
         invite.user.save()
     
@@ -891,10 +891,15 @@ class CancelInvite(GuardianView):
 
 class ManageOrganizationAdmins(GuardianView):
     def get(self, request):
-        included = self.me.default.admins.all()
-        users    = self.me.default.users.all()
-        excluded = users.exclude(id__in=included)
-        total    = included.count() + excluded.count()
+        included = User.objects.filter(
+        user_membership__organization=self.me.default, 
+        user_membership__admin=True)
+
+        excluded = User.objects.filter(
+        user_membership__organization=self.me.default, 
+        user_membership__admin=False)
+
+        total = included.count() + excluded.count()
 
         return render(request, 'core_app/manage-organization-admins.html', 
         {'included': included, 'excluded': excluded,
@@ -902,13 +907,17 @@ class ManageOrganizationAdmins(GuardianView):
         'count': total, 'total': total,})
 
     def post(self, request):
-        sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        sqlike   = User.from_sqlike()
+        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        included = User.objects.filter(
+        user_membership__organization=self.me.default, 
+        user_membership__admin=True)
 
-        included = self.me.default.admins.all()
-        users    = self.me.default.users.all()
-        excluded = users.exclude(id__in=included)
-        total    = included.count() + excluded.count()
+        excluded = User.objects.filter(
+        user_membership__organization=self.me.default, 
+        user_membership__admin=False)
+
+        total = included.count() + excluded.count()
         
         if not form.is_valid():
             return render(request, 'core_app/manage-organization-admins.html', 
@@ -925,7 +934,7 @@ class ManageOrganizationAdmins(GuardianView):
         'count': count, 'total': total,})
 
 class BindOrganizationAdmin(GuardianView):
-    def get(self, request, user_id):
+    def post(self, request, user_id):
         # Make sure the user belongs to the organization otherwise
         # should return not existing record error.
         user = self.me.default.users.get(id=user_id)
@@ -933,13 +942,14 @@ class BindOrganizationAdmin(GuardianView):
         if self.me.default.owner != self.me:
             return HttpResponse("Just owner can do that!", status=403)
 
-        self.me.default.admins.add(user)
-        self.me.default.save()
-
-        return HttpResponse(status=200)
+        membership = Membership.objects.get(
+            user=user, organization=self.me.default)
+        membership.admin = True
+        membership.save()
+        return ManageOrganizationAdmins.as_view()(request)
 
 class UnbindOrganizationAdmin(GuardianView):
-    def get(self, request, user_id):
+    def post(self, request, user_id):
         # Grab the user from the organization users so it makes sure
         # he belongs to the organization. It can avoid some misbehaviors.
         user = self.me.default.users.get(id=user_id)
@@ -950,9 +960,11 @@ class UnbindOrganizationAdmin(GuardianView):
         if self.me.default.owner != self.me:
             return HttpResponse("No permission for that!", status=403)
 
-        self.me.default.admins.remove(user)
-        self.me.default.save()
-        return HttpResponse(status=200)
+        membership = Membership.objects.get(
+            user=user, organization=self.me.default)
+        membership.admin = False
+        membership.save()
+        return ManageOrganizationAdmins.as_view()(request)
 
 class ListNodes(GuardianView):
     """
@@ -1030,6 +1042,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 

@@ -164,6 +164,20 @@ class Node(models.Model):
 
     indexer = models.AutoField(primary_key=True)
 
+class Membership(models.Model):
+    """    
+    """
+    user = models.ForeignKey('User', 
+    null=True, related_name='user_membership')
+
+    organization = models.ForeignKey('Organization', null=True)
+
+    inviter = models.ForeignKey('core_app.User', 
+    null=True, related_name='admin_membership')
+
+    admin   = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
 class Organization(OrganizationMixin):
     name = models.CharField(null=False,
     blank=False, verbose_name=_("Name"),  max_length=100)
@@ -174,9 +188,6 @@ class Organization(OrganizationMixin):
     related_name='owned_organizations', blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=True)
-
-    admins = models.ManyToManyField('User', symmetrical=False,
-    related_name='managed_organizations')
 
 class Period(BasicItem):
     """
@@ -242,8 +253,9 @@ class UserTagship(models.Model):
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
 class User(UserMixin, BasicUser):
-    organizations = models.ManyToManyField(
-    'Organization', related_name='users', symmetrical=False)
+    organizations = models.ManyToManyField('Organization', 
+    related_name='users', through=Membership, symmetrical=False,
+    through_fields=('user', 'organization'))
 
     tags = models.ManyToManyField('Tag', through=UserTagship,
     through_fields=('user', 'tag'), related_name='users', symmetrical=False)
@@ -430,6 +442,7 @@ class OurStorage(S3Boto3Storage):
        scm = urlparse(super(OurStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
+
 
 
 
