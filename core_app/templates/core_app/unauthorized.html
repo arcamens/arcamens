@@ -1,1 +1,11 @@
-<p> Unauthorized! </p>
+<h3> You're logged out! </h3>
+
+<p> Redirecting ... </p>
+
+<script>
+setTimeout(function() {
+    window.location = "{% url 'site_app:index' %}";
+}, 2000);
+
+</script>
+
