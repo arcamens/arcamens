@@ -73,6 +73,15 @@ class EventFilterForm(forms.ModelForm):
             'end': forms.SelectDateWidget()
         }
 
+    def clean(self):
+        super(EventFilterForm, self).clean()
+        start = self.cleaned_data.get('start')
+        end   = self.cleaned_data.get('end')
+    
+        if start > end:
+            raise forms.ValidationError(("Invalid date!"
+                "Start has to be lesser than end").format())
+
 class FileAttachment:
     """
     We have to set different file size upload limits.
@@ -107,6 +116,7 @@ class FileAttachment:
         self.user.default.owner.c_storage = c_storage
         self.user.default.owner.save()
         return super(FileAttachment, self).save(*args, **kwargs)
+
 
 
 

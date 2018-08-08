@@ -16,14 +16,6 @@
 
 <div class="modal-footer">
 
-<div class="pull-left">
-<a href="#" data-toggle="collapse" data-target="#collapseEventFilterForm">
-<span class="glyphicon glyphicon-filter"></span>
-Set filter?</a>
-</div>
-
-<div id="collapseEventFilterForm" class="collapse">
-
 <form id="eventFilterForm" enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_field form.start  size='md' %}
@@ -32,7 +24,6 @@ Set filter?</a>
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-</div>
 
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
@@ -43,6 +34,7 @@ Set filter?</a>
 class="btn btn-default e-post"> {% trans "Filter" %} </button>
 
 </div>
+
 
 
 
