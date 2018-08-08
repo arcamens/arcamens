@@ -662,8 +662,8 @@ class ListLogs(GuardianView):
         events = self.me.seen_events.filter(organization=self.me.default)
         total = events.count()
 
-        events = events.filter(created__lte=filter.end,
-        created__gte=filter.start)
+        events = events.filter(created__date__lte=filter.end,
+        created__date__gte=filter.start)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
@@ -689,8 +689,8 @@ class ListLogs(GuardianView):
                      'organization': self.me.default})
         form.save()
 
-        events = events.filter(created__lte=filter.end,
-        created__gte=filter.start)
+        events = events.filter(created__date__lte=filter.end,
+        created__date__gte=filter.start)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
@@ -1042,6 +1042,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
