@@ -657,4 +657,48 @@ for ind in users:
 from core_app.models import Event
 events = Event.objects.all()
 events.delete()
+##############################################################################
+# assign us to organizations.
+from core_app.models import Organization, User, Membership
+orgs = Organization.objects.all()
+user0 = User.objects.get(email='last.src@gmail.com')
+user1 = User.objects.get(email='porton.victor@gmail.com')
+
+for ind in orgs:
+    Membership.objects.create(user=user0, organization=ind, inviter=user0)
+
+for ind in orgs:
+    Membership.objects.create(user=user1, organization=ind, inviter=user1)
+
+# assign us to all boards.
+from board_app.models import Board, Boardship
+
+boards = Board.objects.all()
+
+for ind in boards:
+    Boardship.objects.create(member=user0, admin=True, board=ind)
+
+for ind in boards:
+    Boardship.objects.create(member=user1, admin=True, board=ind)
+
+
+# assign us to all groups.
+from group_app.models import Group, Groupship
+
+groups = Group.objects.all()
+
+for ind in groups:
+    try:
+        Groupship.objects.create(user=user0, group=ind)
+    except:
+        pass
+
+for ind in groups:
+    try:
+        Groupship.objects.create(user=user1,  group=ind)
+    except:
+        pass
+
+
+
 
