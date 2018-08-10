@@ -187,7 +187,9 @@ class NoOrganization(AuthenticatedView):
         organization = Organization.objects.create(
         name=form.cleaned_data['name'], owner=self.me) 
 
-        self.me.organizations.add(organization)
+        Membership.objects.create(user=self.me, 
+        organization=organization, inviter=self.me)
+
         self.me.default = organization
         organization.admins.add(self.me)
         self.me.save()
@@ -1048,6 +1050,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
