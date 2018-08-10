@@ -89,10 +89,10 @@ class EnableAccount(View):
         process = RegisterProcess.objects.get(user__id=user_id, token=token)
         process.user.enabled = True
         process.user.save()
-        process.delete()
     
         # Create the free period record.
-        period = Period.objects.create(paid=False, total=0, user=self.me)
+        period = Period.objects.create(paid=False, total=0, user=process.user)
+        process.delete()
 
         request.session['user_id'] = user_id
         return redirect('core_app:index')
