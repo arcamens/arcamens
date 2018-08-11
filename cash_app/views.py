@@ -137,9 +137,9 @@ class PaypalManualPayment(AuthenticatedView):
         'currency_code': settings.CURRENCY_CODE,
         'amount': cost,
         'quantity': 1,
-        'shopping_url': 'https://staging.arcamens.com',
-        'return': 'https://staging.arcamens.com',
-        'cancel_return': 'https://staging.arcamens.com',
+        'shopping_url': settings.LOCAL_ADDR,
+        'return': settings.LOCAL_ADDR,
+        'cancel_return': settings.LOCAL_ADDR,
         # 'image_url': 'http://FIXME.gif',
         'no_shipping': '1'}
 
@@ -190,5 +190,6 @@ class PayPalIPN(paybills.views.PayPalIPN):
         """
         """
         print('Manual payment happened!')
+
 
 

@@ -74,7 +74,7 @@ EMAIL_HOST_USER = 'arcamens.softwares@gmail.com'
 EMAIL_HOST_PASSWORD = 'arcamenssoftwares'
 
 # just a workaround.
-LOCAL_ADDR = 'http://127.0.0.1:8000'if DEBUG else 'https://www.arcamens.com'
+LOCAL_ADDR = 'http://127.0.0.1:8000'
 
 NOCAPTCHA = True
 
@@ -226,6 +226,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 
