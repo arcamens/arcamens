@@ -14,6 +14,8 @@ import os
 from paybills.misc import get_addr
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# In days.
+SIGNUP_EXP = 2
 
 ONE_SIGNAL_APPID = 'e4387e31-b5c1-493a-8a28-f56bfed98c27'
 ONE_SIGNAL_API_KEY = 'YjQ5NDc3MWItYzNjNS00MmZhLWEyNTYtZTk5YjJkYjkwZTY4'
@@ -224,6 +226,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

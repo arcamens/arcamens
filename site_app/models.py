@@ -42,6 +42,8 @@ class RegisterProcess(RegisterProcessMixin, models.Model):
     signup_url = models.CharField(null=True,
     blank=False, max_length=256)
 
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
 
 
 
