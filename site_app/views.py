@@ -1,4 +1,5 @@
 from paybills.submitters import ManualForm, SubscriptionForm
+from django.db.models import Q
 from core_app.models import Organization
 from slock.views import LogoutView, LoginView
 from slock.forms import SetPasswordForm
@@ -86,7 +87,13 @@ class SignUp(LoginView):
 
 class EnableAccount(View):
     def get(self, request, user_id, token):
-        process = RegisterProcess.objects.get(user__id=user_id, token=token)
+        query   = Q(user__id=user_id, token=token)
+        process = None
+        try:
+            process = RegisterProcess.objects.get(query)
+        except Exception as e:
+            return render(request, 
+                'site_app/invalid-confirmation-link.html', {})
         process.user.enabled = True
         process.user.save()
     
@@ -163,6 +170,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 
