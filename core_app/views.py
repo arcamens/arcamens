@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from post_app.models import Post
 from django.db.models import Q
-from datetime import date
+from datetime import date, timedelta
 from jscroll.wrappers import JScroll
 from django.urls import reverse
 from django.conf import settings
@@ -662,8 +662,11 @@ class ListLogs(GuardianView):
         events = self.me.seen_events.filter(organization=self.me.default)
         total = events.count()
 
-        events = events.filter(created__date__lte=filter.end,
-        created__date__gte=filter.start)
+        events = events.filter(created__lt=filter.end + timedelta(days=1),
+        created__gte=filter.start)
+
+        # events = events.filter(created__date__lte=filter.end,
+        # created__date__gte=filter.start)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
@@ -689,8 +692,11 @@ class ListLogs(GuardianView):
                      'organization': self.me.default})
         form.save()
 
-        events = events.filter(created__date__lte=filter.end,
-        created__date__gte=filter.start)
+        events = events.filter(created__lt=filter.end + timedelta(days=1),
+        created__gte=filter.start)
+
+        # events = events.filter(created__date__lte=filter.end,
+        # created__date__gte=filter.start)
 
         count  = events.count()
         events = events.values('html').order_by('-created')
@@ -1042,6 +1048,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
