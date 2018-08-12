@@ -12,7 +12,11 @@
 
 <p class="text-warning">
 {% if me.enabled %}
-It will expire on {{ me.expiration }}.
+    {% if me.expiration %}
+        It will expire on {{ me.expiration }}.
+    {% else %}
+        It will never expire.
+    {% endif %}
 {% else %}
 Your account was expired on {{ me.expiration }}.
 {% endif %}
@@ -57,6 +61,7 @@ Date: {{ind.period.created}}
 </div>
 
 </div>
+
 
 
 
