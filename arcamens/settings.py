@@ -17,9 +17,6 @@ from paybills.misc import get_addr
 # In days.
 SIGNUP_EXP = 2
 
-# In days, the account will expired after expiration + BONUS_EXP
-BONUS_EXP = 1
-
 ONE_SIGNAL_APPID = 'e4387e31-b5c1-493a-8a28-f56bfed98c27'
 ONE_SIGNAL_API_KEY = 'YjQ5NDc3MWItYzNjNS00MmZhLWEyNTYtZTk5YjJkYjkwZTY4'
 ONE_SIGNAL_DEVICE_APP = 'core_app'
