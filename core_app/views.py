@@ -1,8 +1,9 @@
-from core_app.models import Organization, User, UserTagship, Period, Membership,\
+from core_app.models import Organization, User, UserTagship, Membership,\
 UserFilter, Tag, EDeleteTag, ECreateTag, EUnbindUserTag, EBindUserTag, \
 Invite, EInviteUser, EJoinOrganization,  Clipboard, Event, EShout, \
 EUpdateOrganization, ERemoveOrganizationUser, Node, NodeFilter, \
 EventFilter, EDisabledAccount
+from cash_app.models import Period
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.dateparse import parse_datetime
 from card_app.models import Card, GlobalCardFilter
@@ -1045,6 +1046,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 

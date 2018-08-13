@@ -6,7 +6,8 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
 django.setup()
 
-from core_app.models import User, Organization, Period, Membership
+from core_app.models import User, Organization, Membership
+from cash_app.models import Period
 from group_app.models import Group, Groupship
 
 from card_app.models import Card
@@ -57,6 +58,7 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
+
 
 
 

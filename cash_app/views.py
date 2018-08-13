@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from core_app.models import User
 from core_app.views import AuthenticatedView
+from cash_app.models import Period
 import paybills.views
 from . import forms
 import group_app
@@ -190,6 +191,7 @@ class PayPalIPN(paybills.views.PayPalIPN):
         """
         """
         print('Manual payment happened!')
+
 
 
 

@@ -11,7 +11,8 @@ from django.http import HttpResponse
 from slock.forms import LoginForm
 from django.urls import reverse
 from django.conf import settings
-from core_app.models import User, Period
+from core_app.models import User
+from cash_app.models import Period
 from core_app.views import AuthenticatedView
 import paybills.views
 from . import forms

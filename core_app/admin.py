@@ -21,8 +21,8 @@ admin.site.register(models.EInviteUser)
 admin.site.register(models.Tag)
 admin.site.register(models.Event)
 admin.site.register(models.UserTagship)
-admin.site.register(models.Period)
 admin.site.register(models.Membership)
+
 
 
 

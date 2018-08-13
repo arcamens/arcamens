@@ -1,7 +1,7 @@
 from slock.forms import SetPasswordForm
 from captcha.fields import ReCaptchaField
 from django import forms
-import core_app.models
+from cash_app.models import Period
 from django.conf import settings
 import datetime
 
@@ -14,7 +14,7 @@ class PeriodForm(forms.ModelForm):
         super(PeriodForm, self).__init__(*args, **kwargs)
 
     class Meta:
-        model   = core_app.models.Period
+        model   = Period
         exclude = ('user', 'price', 'total', 'paid')
 
     def clean(self):
@@ -39,4 +39,5 @@ class PeriodForm(forms.ModelForm):
         elif self.expiration and expiration == self.expiration and max_users == self.max_users:
             raise forms.ValidationError("Either increase the number of users \
                 or increase expiration date!")
+
 
