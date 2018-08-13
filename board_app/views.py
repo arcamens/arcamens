@@ -307,11 +307,11 @@ class UpdateBoard(GuardianView):
         {'board': board, 'form': forms.UpdateBoardForm(instance=board)})
 
     def post(self, request, board_id):
-        record = Board.objects.get(id=board_id)
-        # Make sure i'm admin of the board and it belongs to 
+        # record = Board.objects.get(id=board_id)
+        # Make sure i'm owner of the board and it belongs to 
         # my default organization.
-        # record = self.me.managed_boards.get(
-            # id=board_id, organization=self.me.default)
+        record = self.me.owned_boards.get(
+            id=board_id, organization=self.me.default)
 
         form = forms.UpdateBoardForm(request.POST, instance=record)
         if not form.is_valid():
@@ -517,6 +517,7 @@ class BoardLink(GuardianView):
         'default': self.me.default, 'organizations': organizations,  'boardpins': boardpins,
         'listpins': listpins, 'cardpins': cardpins, 'grouppins': grouppins,
         'settings': settings})
+
 
 
 
