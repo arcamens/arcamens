@@ -134,7 +134,7 @@ class RecoverAccount(LoginView):
 
 class RedefinePassword(LoginView):
     def get(self, request, user_id, token):
-        user = group_app.models.User.objects.get(id = user_id)
+        user = User.objects.get(id = user_id)
         form = SetPasswordForm()
 
         return render(request, 'site_app/redefine-password.html', 
@@ -143,7 +143,7 @@ class RedefinePassword(LoginView):
     def post(self, request, user_id, token):
         # First attempt to grab the ticket
         # if it doesnt then it just throws an inter server error.
-        user   = group_app.models.User.objects.get(id = user_id)
+        user   = User.objects.get(id = user_id)
         ticket = PasswordTicket.objects.filter(user=user)
         form   = SetPasswordForm(request.POST, instance=user)
 
