@@ -354,7 +354,6 @@ class DeleteBoard(GuardianView):
                 'board_app/delete-board.html', 
                     {'board': board, 'form': form}, status=400)
 
-
         event = EDeleteBoard.objects.create(organization=self.me.default,
         board_name=board.name, user=self.me)
         event.dispatch(*board.members.all())

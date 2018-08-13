@@ -84,10 +84,6 @@ class Index(AuthenticatedView):
         'organization': self.me.default, 'organizations': organizations,
          'settings': settings})
 
-    def set_default_organization(self):
-        self.me.default = self.me.organizanitions.first()
-        self.me.save()
-
 class ResendEmailConfirmation(AuthenticatedView):
     """
     """
@@ -1049,6 +1045,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
