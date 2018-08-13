@@ -113,17 +113,14 @@ class RecoverAccount(LoginView):
         form = forms.RecoverAccountForm(request.POST)
 
         if not form.is_valid():
-            return render(request, 'site_app/recover-account.html',
-                        {'form': form})
+            return render(request, 
+                'site_app/recover-account.html', {'form': form})
 
-        email = form.cleaned_data['email']
-        user = group_app.models.User.objects.get(email = email)
-
-        token = 'invite%s%s' % (random.randint(1000, 10000), time.time())
-
+        email  = form.cleaned_data['email']
+        user   = User.objects.get(email = email)
+        token  = 'ticket%s%s' % (user.id, time.time())
         ticket = PasswordTicket.objects.create(token=token, user=user)
-
-        url = reverse('site_app:redefine-password', kwargs={
+        url    = reverse('site_app:redefine-password', kwargs={
         'user_id': user.id, 'token': token})
 
         url = '%s%s' % (settings.LOCAL_ADDR, url)
@@ -133,7 +130,7 @@ class RecoverAccount(LoginView):
         fail_silently=False)
 
         return render(request, 'site_app/recover-mail-sent.html', 
-        {'form': form})
+        {'form': form, 'user': user})
 
 class RedefinePassword(LoginView):
     def get(self, request, user_id, token):

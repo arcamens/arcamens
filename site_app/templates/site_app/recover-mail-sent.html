@@ -16,10 +16,25 @@
 <body>
 
 <div class="container">
-<h2> Account recover mail was sent !  </h2>
+  <div class="jumbotron">
+    <h1>Arcamens</h1> 
+
+<p>An e-mail was sent to {{user.email}}. 
+Click on the link to reset your password.</p> 
+
+<a href="{% url 'site_app:login' %}"> Login? </a> 
+
+</div>
 </div>
 
+
 </body>
+</html>
+
+
+
+
+
 
 
 
