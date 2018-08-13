@@ -67,6 +67,7 @@ git pull
 # erase database.
 cd ~/projects/arcamens-code
 python manage.py blowdb
+./create-superusers
 ./build-data
 
 python manage.py makemigrations
@@ -453,6 +454,7 @@ python manage.py reset_counters
 python manage.py check_deadlines
 
 pip install --upgrade git+ssh://git@bitbucket.org/arcamens/django-jsim.git
+
 
 
 

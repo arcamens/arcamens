@@ -81,9 +81,7 @@ class SignUp(LoginView):
         # Authenticates the user afterwards so
         # he can resend email confirmation etc.
         request.session['user_id'] = record.id
-
-        return render(request, 
-            'site_app/confirm-email.html', {'user': record})
+        return render(request, 'site_app/confirm-email.html', {'user': record})
 
 class EnableAccount(View):
     def get(self, request, user_id, token):
@@ -170,6 +168,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

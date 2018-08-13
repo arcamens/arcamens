@@ -2,18 +2,10 @@
 
 import os
 import django
-# import pika
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
 django.setup()
 
-
-# your imports, e.g. Django models
-from django.contrib.auth.models import User
-User.objects.create_superuser('admin', 'admin@example.com', 'itrocksalot')
-
-# connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-# channel    = connection.channel()
 from core_app.models import User, Organization, Period, Membership
 from group_app.models import Group, Groupship
 
@@ -24,8 +16,8 @@ from list_app.models import List
 organization0 = Organization.objects.create(name='Arcamens' )
 organization1 = Organization.objects.create(name='Splittask' )
 
-user0  = User.objects.create(name='Victor Porton',  email='porton@narod.ru', password='111', default=organization0)
-user1 = User.objects.create(name='Iury de oliveira',  email='ioliveira@id.uff.br', password='111', default=organization1)
+user0  = User.objects.create(name='Victor Porton',  email='porton@narod.ru', password='111', default=organization0, enabled=True)
+user1 = User.objects.create(name='Iury de oliveira',  email='ioliveira@id.uff.br', password='111', default=organization1, enabled=True)
 
 # queue0 = channel.queue_declare(queue=str(user0.id), durable=True)
 period0 = Period.objects.create(paid=False, total=0, user=user0)
@@ -65,14 +57,6 @@ for ind in range(50):
 # user2.organizations.add(organization0)
 # user2.organizations.add(organization1)
 # user2.save()
-
-
-
-
-
-
-
-
 
 
 
