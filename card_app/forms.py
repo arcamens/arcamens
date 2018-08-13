@@ -4,22 +4,11 @@ from datetimewidget.widgets import DateTimeWidget
 from core_app.forms import FileAttachment
 from sqlike.forms import SqLikeForm
 from . import models
+from django.utils import timezone
 
-class UserSearchForm(SqLikeForm, forms.Form):
-    pattern = forms.CharField(required=False,
-    help_text='Example: tag:arcamens + tag:bug-hunter')
-
-class DeadlineForm(forms.ModelForm):
-    class Meta:
-        model   = models.Card
-        fields  = ('deadline', )
-        widgets = {
-            'deadline': DateTimeWidget(usel10n = True, 
-                 bootstrap_version=3)
-        }
-
+class DeadlineMixinForm:
     def clean(self):
-        super(DeadlineForm, self).clean()
+        super(DeadlineMixinForm, self).clean()
         deadline = self.cleaned_data.get('deadline')
 
         # Check if one of the parents has a deadline set
@@ -29,20 +18,26 @@ class DeadlineForm(forms.ModelForm):
         ERR2  = ("Can't remove deadline!"
         "Doesn't meet parent: {label} " "Deadline: {deadline}")
 
-        if elem and not deadline: raise forms.ValidationError(
-        ERR2.format(label=elem.label, deadline=elem.deadline))
-        elif not deadline: return
+        if elem and not deadline: 
+            raise forms.ValidationError(ERR2.format(
+                label=elem.label, deadline=elem.deadline))
+        elif not deadline: 
+            return
+
+        if deadline < timezone.now():
+            raise forms.ValidationError('Invalid deadline')
 
         # Check if one of the children has a none deadline
         # in that case he has to go and set the deadline.
         cards = self.instance.children.filter(Q(
-            deadline=None) | Q(deadline__gt=deadline))
+        deadline=None) | Q(deadline__gt=deadline))
 
         elem = cards.first()
         ERR0 = ("Can't set deadline!"
         "Doesn't meet fork: {label} " "Deadline: {deadline}")
-        if elem: raise forms.ValidationError(
-        ERR0.format(label=elem.label, deadline=elem.deadline))
+
+        if elem: raise forms.ValidationError(ERR0.format(
+        label=elem.label, deadline=elem.deadline))
 
         # Check if one of the parent deadlines doesnt meet
         # the desired deadline. The parent deadline has to be
@@ -51,8 +46,22 @@ class DeadlineForm(forms.ModelForm):
         elem  = cards.first()
         ERR1  = ("Can't set deadline!"
         "It doesn't meet parent: {label} " "Deadline: {deadline}")
-        if elem: raise forms.ValidationError(
-        ERR1.format(label=elem.label, deadline=elem.deadline))
+
+        if elem: raise forms.ValidationError(ERR1.format(
+        label=elem.label, deadline=elem.deadline))
+
+class UserSearchForm(SqLikeForm, forms.Form):
+    pattern = forms.CharField(required=False,
+    help_text='Example: tag:arcamens + tag:bug-hunter')
+
+class DeadlineForm(DeadlineMixinForm, forms.ModelForm):
+    class Meta:
+        model   = models.Card
+        fields  = ('deadline', )
+        widgets = {
+            'deadline': DateTimeWidget(usel10n = True, 
+                 bootstrap_version=3)
+        }
 
 class CardSearchForm(SqLikeForm, forms.Form):
     done = forms.BooleanField(required=False)
@@ -115,7 +124,6 @@ class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
         exclude = ('card', )
-
 
 
 
