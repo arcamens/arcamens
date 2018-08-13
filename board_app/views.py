@@ -310,8 +310,13 @@ class UpdateBoard(GuardianView):
         # record = Board.objects.get(id=board_id)
         # Make sure i'm owner of the board and it belongs to 
         # my default organization.
-        record = self.me.owned_boards.get(
-            id=board_id, organization=self.me.default)
+
+        record = None    
+        try:
+            record = self.me.owned_boards.get(
+                id=board_id, organization=self.me.default)
+        except Exception as e:
+            return HttpResponse("Just the owner can do that!", status=403)
 
         form = forms.UpdateBoardForm(request.POST, instance=record)
         if not form.is_valid():
