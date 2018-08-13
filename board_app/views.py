@@ -310,13 +310,9 @@ class UpdateBoard(GuardianView):
         # record = Board.objects.get(id=board_id)
         # Make sure i'm owner of the board and it belongs to 
         # my default organization.
-
-        record = None    
-        try:
-            record = self.me.owned_boards.get(
-                id=board_id, organization=self.me.default)
-        except Exception as e:
-            return HttpResponse("Just the owner can do that!", status=403)
+        record = self.me.boards.get(id=board_id, organization=self.me.default)
+        if not record.owner == self.me: return HttpResponse(
+            "Just the owner can do that!", status=403)
 
         form = forms.UpdateBoardForm(request.POST, instance=record)
         if not form.is_valid():
@@ -346,8 +342,9 @@ class DeleteBoard(GuardianView):
         {'board': board, 'form': form})
 
     def post(self, request, board_id):
-        board = self.me.owned_boards.get(
-            id=board_id, organization=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+        if not board.owner == self.me: return HttpResponse(
+            "Just the owner can do that!", status=403)
 
         form = forms.ConfirmBoardDeletionForm(request.POST, 
         confirm_token=board.name)
