@@ -170,10 +170,11 @@ class UnbindGroupUser(BindGroupUser):
         if group.owner == user:
             return HttpResponse("You can't remove the group owner!", status=403)
 
-        user.user_groupship.get(group=group).delete()
         event = EUnbindGroupUser.objects.create(organization=self.me.default,
         group=group, user=self.me, peer=user)
         event.dispatch(*group.users.all())
+        user.user_groupship.get(group=group).delete()
+
         return self.redirect(request, group_id, user_id)
 
 class UnbindUserGroup(UnbindGroupUser):
@@ -440,6 +441,7 @@ class Unpin(GuardianView):
         pin = self.me.grouppin_set.get(id=pin_id, organization=self.me.default)
         pin.delete()
         return redirect('board_app:list-pins')
+
 
 
 
