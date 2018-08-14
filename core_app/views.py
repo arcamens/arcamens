@@ -805,9 +805,12 @@ class RemoveOrganizationUser(GuardianView):
         if self.me.default.owner == user:
             return HttpResponse("You can't remove the owner!", status=403)
 
-        is_admin = self.me.default.admins.filter(id=user.id).exists()
+        is_admin = user.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
         me_owner = self.me.default.owner == self.me
-        me_admin = self.me.default.admins.filter(id=self.me.id).exists()
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
 
         # If the user is an admin and i'm not the owner.
         if is_admin and not me_owner:
@@ -851,15 +854,14 @@ class RemoveOrganizationUser(GuardianView):
         clipboard1.cards.clear()
         clipboard1.lists.clear()
 
-        user.organizations.remove(self.me.default)
-        user.default = None
-        user.save()
-
         event = ERemoveOrganizationUser.objects.create(
         organization=self.me.default, user=self.me, peer=user, 
         reason=form.cleaned_data['reason'])
-
         event.dispatch(*self.me.default.users.all())
+
+        user.user_membership.filter(organization=self.me.default).delete()
+        user.default = None
+        user.save()
 
         msg = 'You no longer belong to %s!\n\n%s' % (self.me.default.name, 
         form.cleaned_data['reason'])
