@@ -1,5 +1,6 @@
 {% load bootstrap3 %}
 {% load i18n %}
+{% load bname %}
 
 <script>
 $('#NoteFileWrapperForm-{{note.id}}').change(function(){
@@ -29,10 +30,11 @@ $('#NoteFileWrapperForm-{{note.id}}').change(function(){
 data-show="{% url 'note_app:detach-file' ind.id %}"> 
 <span class="glyphicon glyphicon-remove"></span></a> 
 
-<a href="{% url 'note_app:note-file-download' ind.id %}" target="_blank"> {{ind.file.name}} </a>
+<a href="{% url 'note_app:note-file-download' ind.id %}" target="_blank"> {{ind.file.name|bname}} </a>
 {% empty %}
 No attachments.
 {% endfor %}
+
 
 
 
