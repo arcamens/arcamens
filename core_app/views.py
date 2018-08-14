@@ -854,14 +854,14 @@ class RemoveOrganizationUser(GuardianView):
         clipboard1.cards.clear()
         clipboard1.lists.clear()
 
+        user.user_membership.filter(organization=self.me.default).delete()
+        user.default = None
+        user.save()
+
         event = ERemoveOrganizationUser.objects.create(
         organization=self.me.default, user=self.me, peer=user, 
         reason=form.cleaned_data['reason'])
         event.dispatch(*self.me.default.users.all())
-
-        user.user_membership.filter(organization=self.me.default).delete()
-        user.default = None
-        user.save()
 
         msg = 'You no longer belong to %s!\n\n%s' % (self.me.default.name, 
         form.cleaned_data['reason'])
