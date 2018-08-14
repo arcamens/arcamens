@@ -1,7 +1,9 @@
 from django.utils.translation import ugettext_lazy as _
+from django.core.files.storage import FileSystemStorage
 from slock.models import BasicUser
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from sqlike.parser import SqLike, SqNode
@@ -399,16 +401,18 @@ class EDisabledAccount(Event):
     html_template = 'core_app/e-disabled-account.html'
 
 
-class OurStorage(S3Boto3Storage):
+class StorageMixin:
    def generate_filename(self, filename):
        v = 'storage ' + str(datetime.now().timestamp())+'/'+str(random.SystemRandom())
        dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
-       return '%s/%s' % (dir, filename)
+       return '%s/%s-%s' % (dir, timezone.now(), filename)
 
-   def url(self, name):
-       scm = urlparse(super(OurStorage, self).url(name))
-       url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
-       return url
+class AmazonStorage(StorageMixin, S3Boto3Storage):
+    pass
+
+class LocalStorage(StorageMixin, FileSystemStorage):
+    pass
+
 
 
 

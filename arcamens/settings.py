@@ -91,6 +91,7 @@ PAID_DOWNLOAD_LIMIT = 2 * 1024 * 1024
 FREE_MAX_FILE_SIZE = 1000 * 1024 * 1024
 PAID_MAX_FILE_SIZE = 1 * 1024 * 1024
 
+DEFAULT_FILE_STORAGE = 'core_app.models.LocalStorage'
 # Production.
 # RECAPTCHA_PUBLIC_KEY = '6Lfz3lUUAAAAAJh0h0dNMWqgx-rGZR_aY9FJRecP'
 # RECAPTCHA_PRIVATE_KEY = '6Lfz3lUUAAAAAEdgDWRrN2yLPVDR1pyNhW_6UPil'
@@ -226,6 +227,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

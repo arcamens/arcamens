@@ -7,8 +7,8 @@ register = template.Library()
 
 @register.filter
 def bname(filename):
-    now = timezone.now()
-    return '%s-%s' % (now.today(), basename(filename))
+    return basename(filename)
+
 
 
 
