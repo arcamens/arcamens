@@ -406,7 +406,7 @@ class StorageMixin:
        dir = hmac.new(settings.SECRET_KEY.encode(), v.encode()).hexdigest()
        return '%s/%s-%s' % (dir, timezone.now(), filename)
 
-class AmazonStorage(S3Boto3Storage, StorageMixin):
+class AmazonStorage(StorageMixin, S3Boto3Storage):
    def url(self, name):
        scm = urlparse(super(AmazonStorage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
@@ -414,6 +414,7 @@ class AmazonStorage(S3Boto3Storage, StorageMixin):
 
 class LocalStorage(StorageMixin, FileSystemStorage):
     pass
+
 
 
 
