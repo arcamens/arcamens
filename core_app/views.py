@@ -383,7 +383,7 @@ class DeleteTag(GuardianView):
     then an error message.
     """
 
-    def get(self, request, tag_id):
+    def post(self, request, tag_id):
         # Make sure the tag belongs to my default orgnization.
         tag   = Tag.objects.get(id=tag_id, organization=self.me.default)
         event = EDeleteTag.objects.create(
@@ -392,8 +392,7 @@ class DeleteTag(GuardianView):
 
         users = self.me.default.users.all()
         event.dispatch(*users)
-
-        return HttpResponse(status=200)
+        return ListTags.as_view()(request)
 
 class CreateTag(GuardianView):
     def get(self, request):

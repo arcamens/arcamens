@@ -16,7 +16,7 @@
 
 <div class="pre-scrollable">
 {% for ind in tags %}
-<p class="rm"> <a class="r-get" style="color:red"
+<p> <a class="r-post" style="color:red" data-form="#tagSearchForm"
 data-show="{% url 'core_app:delete-tag' ind.id %}" href="#"> 
 <span class="glyphicon glyphicon-remove"></span> </a>
 
@@ -49,6 +49,7 @@ data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default e-post"> {% t
      {% trans "Close" %}
 </button>
 </div>
+
 
 
 
