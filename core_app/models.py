@@ -410,7 +410,7 @@ class StorageMixin:
 
 class AmazonStorage(StorageMixin, S3Boto3Storage):
    def url(self, name):
-       scm = urlparse(super(OurStorage, self).url(name))
+       scm = urlparse(super(S3Boto3Storage, self).url(name))
        url = '%s%s?%s' % (settings.MEDIA_URL, scm.path.strip('/'), scm.query)
        return url
 
