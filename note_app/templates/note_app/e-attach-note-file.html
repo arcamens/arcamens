@@ -1,14 +1,11 @@
 {% extends 'group_app/event.html' %}
 {% load i18n %}
+{% load bname %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-<span class="glyphicon glyphicon-user"></span>
+File <a href="{% url 'note_app:note-file-download' event.filewrapper.id %}" target="_blank"> {{event.filewrapper.file.name|bname}} </a>
 
-{{event.user}} </a> has attached file <a href="{{event.filewrapper.file.url}}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span>
-
-{{event.filewrapper.file}} </a> to 
+was attached to 
 
 <a class="e-get"
 data-shell="#bigModalContent" 
@@ -17,6 +14,7 @@ href="{{event.note.get_link_url}}">
 <span class="glyphicon glyphicon-book"></span> Note </a> 
 
 {% endblock %}
+
 
 
 

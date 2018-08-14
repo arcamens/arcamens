@@ -1,9 +1,9 @@
 {% extends 'group_app/event.html' %}
 {% load i18n %}
+{% load bname %}
 
 {% block content %}
-File <a href="{{event.filewrapper.file.url}}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span> {{event.filewrapper.file}} </a> attached to snippet
+File <a href="{% url 'snippet_app:snippet-file-download' event.filewrapper.id %}" target="_blank"> {{event.filewrapper.file.name|bname}} </a> attached to snippet
 
 <a class="e-get"
 data-shell="#bigModalContent" 
@@ -12,6 +12,7 @@ data-show="{% url 'snippet_app:snippet' event.snippet.id %}" href="{{event.snipp
 {{event.snippet.title}} </a>
 
 {% endblock %}
+
 
 
 

@@ -1,11 +1,11 @@
 {% extends 'group_app/event.html' %}
 {% load i18n %}
+{% load bname %}
 
 {% block content %}
-File <a href="{{event.filewrapper.file.url}}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span>
+File <a href="{% url 'post_app:post-file-download' event.filewrapper.id %}" target="_blank"> {{event.filewrapper.file.name|bname}} </a>
 
-{{event.filewrapper.file}} </a> was attached to post
+was attached to post
 
 <a class="e-get"
 data-shell="#main-view"
@@ -14,6 +14,7 @@ data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_
 {{event.post.label}} </a>
 
 {% endblock %}
+
 
 
 

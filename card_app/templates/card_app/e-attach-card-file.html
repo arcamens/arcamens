@@ -1,10 +1,11 @@
 {% extends 'group_app/event.html' %}
 {% load i18n %}
+{% load bname %}
 
 {% block content %}
 
-File <a href="{{event.filewrapper.file.url}}" target="_blank"> 
-<span class="glyphicon glyphicon-file"></span> {{event.filewrapper.file}} </a> was attached to card
+File File <a href="{% url 'card_app:card-file-download' event.filewrapper.id %}" target="_blank"> {{event.filewrapper.file.name|bname}} </a>
+ was attached to card
 
 <a class="e-get"
 data-shell="#bigModalContent"
@@ -15,6 +16,7 @@ href="{{event.card.get_link_url}}">
 {{event.card.label|truncatechars:40}} </a> 
 
 {% endblock %}
+
 
 
 
