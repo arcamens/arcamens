@@ -466,13 +466,14 @@ class InviteOrganizationUser(GuardianView):
 
     def post(self, request):
         # I can send invite just if i'm admin of the organization.
-        me_admin = self.me.default.admins.filter(id=self.me.id).exists()
-        msg0     = "Only admins can do that!"
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
 
+        MSG0 = "Only admins can do that!"
         if not me_admin:
-            return HttpResponse(msg0, status=403)
+            return HttpResponse(MSG0, status=403)
 
-        msg1 = 'Max users limit was arrived!\
+        MSG1 = 'Max users limit was arrived!\
         You need to upgrade your plan!'
 
         # Calculate the amount of users + invites
@@ -492,7 +493,7 @@ class InviteOrganizationUser(GuardianView):
         
         max_users = n_users + n_invites
         if self.me.default.owner.max_users <= max_users:
-            return HttpResponse(msg1, status=403)
+            return HttpResponse(MSG1, status=403)
 
         form = forms.OrganizationInviteForm(request.POST)
         if not form.is_valid():
@@ -506,16 +507,16 @@ class InviteOrganizationUser(GuardianView):
 
         # If the user is not a member then notify with an error.
         is_member = user.organizations.filter(id=self.me.default.id).exists()
-        msg2      = "The user is already a member!"
+        MSG2      = "The user is already a member!"
         if is_member:
-            return HttpResponse(msg2, status=403)
+            return HttpResponse(MSG2, status=403)
 
         # If there is already an invite just tell him it was sent.
         is_sent = user.invites.filter(organization=self.me.default).exists()
-        msg3 = "The user was already invited!"
+        MSG3 = "The user was already invited!"
 
         if is_sent:
-            return HttpResponse(msg3, status=403)
+            return HttpResponse(MSG3, status=403)
 
         invite = Invite.objects.create(
             organization=self.me.default, peer=self.me, user=user)
@@ -530,7 +531,10 @@ class InviteOrganizationUser(GuardianView):
 
 class ResendInvite(GuardianView):
     def get(self, request, invite_id):
-        if not self.me.default.admins.filter(id=self.me.id).exists():
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        if not me_admin:
             return HttpResponse("Only admins can do that!", status=403)
 
         invite = Invite.objects.get(id=invite_id)
@@ -876,7 +880,10 @@ class ListInvites(GuardianView):
 
 class CancelInvite(GuardianView):
     def get(self, request, invite_id):
-        if not self.me.default.admins.filter(id=self.me.id).exists():
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        if not me_admin:
             return HttpResponse("Only admins can cancel invites!", status=403)
 
         # We need to make sure the invite belongs to our self.me.default
@@ -1046,6 +1053,7 @@ class SetTimezone(GuardianView):
     def post(self, request):
         request.session['django_timezone'] = request.POST['timezone']
         return redirect('core_app:index')
+
 
 
 
