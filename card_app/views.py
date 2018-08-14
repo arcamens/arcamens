@@ -626,8 +626,6 @@ class UnbindCardWorker(BindCardWorker):
         user = User.objects.get(id=user_id, organizations=self.me.default)
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        user.card_workership.get(card=card).delete()
-
         event = models.EUnbindCardWorker.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
         board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
@@ -635,6 +633,8 @@ class UnbindCardWorker(BindCardWorker):
         event.dispatch(*card.workers.all(), 
         *card.ancestor.ancestor.members.all())
         event.save()
+
+        user.card_workership.get(card=card).delete()
         return ManageCardWorkers.as_view()(request, card_id)
 
 # class UnbindWorkerCard(UnbindCardWorker):
@@ -1028,6 +1028,7 @@ class CardFileDownload(FileDownload):
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
 
 
 
