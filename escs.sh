@@ -91,7 +91,7 @@ stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 cd ~/.virtualenvs/
 ls -la
 # by default, python3 has executable named python in arch linux.
-virtualenv arcamens -p /usr/bin/python
+virtualenv arcamens -p /usr/bin/python3.6
 ##############################################################################
 # activate arcamens virtualenv.
 cd ~/.virtualenvs/
@@ -102,7 +102,7 @@ cd ~/projects/arcamens-code
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
-pip install -r debug.requirements.txt 
+pip install -r requirements.txt 
 ##############################################################################
 # create arcamens project.
 cd ~/projects/
@@ -454,6 +454,8 @@ python manage.py reset_counters
 python manage.py check_deadlines
 
 pip install --upgrade git+ssh://git@bitbucket.org/arcamens/django-jsim.git
+
+
 
 
 
