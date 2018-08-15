@@ -76,7 +76,8 @@ class BitbucketHandle(View):
 
     def create_note(self, card, data, url):
         bitbot, _ = User.objects.get_or_create(
-        email=settings.BITBUCKET_BOT_EMAIL, name=settings.BITBUCKET_BOT_NAME)
+        email=settings.BITBUCKET_BOT_EMAIL, name=settings.BITBUCKET_BOT_NAME,
+        bio='Bitbucket Integration.')
 
         note  = Note.objects.create(card=card, data=data, owner=bitbot)
         event = EBitbucketCommit.objects.create(
@@ -146,6 +147,7 @@ class CreateBitbucketHook(GuardianView):
         record.organization = self.me.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 

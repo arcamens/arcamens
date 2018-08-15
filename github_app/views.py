@@ -73,7 +73,8 @@ class GithubHandle(View):
 
     def create_note(self, card, data, url):
         bitbot, _ = User.objects.get_or_create(
-        email=settings.GITHUB_BOT_EMAIL, name=settings.GITHUB_BOT_NAME)
+        email=settings.GITHUB_BOT_EMAIL, name=settings.GITHUB_BOT_NAME,
+        bio='Github Integration.')
 
         note  = Note.objects.create(card=card, data=data, owner=bitbot)
         event = EGithubCommit.objects.create(
@@ -134,6 +135,7 @@ class CreateGithubHook(GuardianView):
         record.organization = self.me.default
         record.save()
         return redirect('github_app:list-github-hooks')
+
 
 
 
