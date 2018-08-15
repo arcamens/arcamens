@@ -107,7 +107,13 @@ class ListBitbucketHooks(GuardianView):
 
 class DeleteBitbucketHook(GuardianView):
     def get(self, request, hook_id):
-        user = User.objects.get(id=self.user_id)
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        MSG0 = "Only admins can do that!"
+        if not me_admin:
+            return HttpResponse(MSG0, status=403)
+
         hook = BitbucketHook.objects.get(id=hook_id)
         hook.delete()
 
@@ -122,18 +128,25 @@ class CreateBitbucketHook(GuardianView):
         {'form':form, 'user': user})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        MSG0 = "Only admins can do that!"
+        if not me_admin:
+            return HttpResponse(MSG0, status=403)
+
         form = forms.BitbucketHookForm(request.POST)
 
         if not form.is_valid():
             return render(request, 
                 'bitbucket_app/create-bitbucket-hook.html', 
-                    {'form':form, 'user': user})
+                    {'form':form, 'user': self.me})
 
         record = form.save(commit=False)
-        record.organization = user.default
+        record.organization = self.me.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 

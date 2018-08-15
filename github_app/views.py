@@ -96,7 +96,13 @@ class ListGithubHooks(GuardianView):
 
 class DeleteGithubHook(GuardianView):
     def get(self, request, hook_id):
-        user = User.objects.get(id=self.user_id)
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        MSG0 = "Only admins can do that!"
+        if not me_admin:
+            return HttpResponse(MSG0, status=403)
+
         hook = GithubHook.objects.get(id=hook_id)
         hook.delete()
 
@@ -104,28 +110,30 @@ class DeleteGithubHook(GuardianView):
 
 class CreateGithubHook(GuardianView):
     def get(self, request):
-        user = User.objects.get(id=self.user_id)
         form = forms.GithubHookForm()
 
         return render(request, 'github_app/create-github-hook.html', 
-        {'form':form, 'user': user})
+        {'form':form, 'user': self.me})
 
     def post(self, request):
-        user = User.objects.get(id=self.user_id)
+        me_admin = self.me.user_membership.filter(
+        organization=self.me.default, admin=True).exists()
+
+        MSG0 = "Only admins can do that!"
+        if not me_admin:
+            return HttpResponse(MSG0, status=403)
+
         form = forms.GithubHookForm(request.POST)
 
         if not form.is_valid():
             return render(request, 
                 'github_app/create-github-hook.html', 
-                    {'form':form, 'user': user})
+                    {'form':form, 'user': self.me})
 
         record = form.save(commit=False)
-        record.organization = user.default
+        record.organization = self.me.default
         record.save()
         return redirect('github_app:list-github-hooks')
-
-
-
 
 
 
