@@ -14,10 +14,11 @@ git+ssh://git@bitbucket.org/arcamens/django-jsim.git@1.2.0
 mysqlclient
 pygments
 git+ssh://git@bitbucket.org/arcamens/django-sqlike.git@1.0.1
-git+ssh://git@bitbucket.org/arcamens/django-onesignal.git@1.0.0
+git+ssh://git@bitbucket.org/arcamens/django-onesignal.git@1.0.1
 git+ssh://git@bitbucket.org/arcamens/django-jscroll.git@1.1.0
 django-storages
 boto3
+
 
 
 
