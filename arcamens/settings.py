@@ -17,8 +17,8 @@ from paybills.misc import get_addr
 # In days.
 SIGNUP_EXP = 2
 
-ONE_SIGNAL_APPID = 'e4387e31-b5c1-493a-8a28-f56bfed98c27'
-ONE_SIGNAL_API_KEY = 'YjQ5NDc3MWItYzNjNS00MmZhLWEyNTYtZTk5YjJkYjkwZTY4'
+ONE_SIGNAL_APPID = '80e3df68-9927-4668-8a11-106eb25932fe'
+ONE_SIGNAL_API_KEY = 'OWJiMGEzMjItZTZlYS00OThhLWI4ZWItODY4ZmE4YTdmNjA2'
 ONE_SIGNAL_DEVICE_APP = 'core_app'
 ONE_SIGNAL_DEVICE_MODEL = 'User'
 
@@ -35,7 +35,7 @@ SECRET_KEY = '9!3k4j3p94v4jl!2ex^(ep$y7-^e4is9a!d-xw)pj$unf(o@m7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0']
 
 # The addon bots settings.
 ARCAMENS_BOT_EMAIL = 'arcabot@arcamens.com'
@@ -227,6 +227,7 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
 
 
 

@@ -443,6 +443,9 @@ payload = {'app_id': 'e4387e31-b5c1-493a-8a28-f56bfed98c27', 'contents': {'en': 
 req = requests.post(url, data=json.dumps(payload), headers=headers)
 req
 req.text
+##############################################################################
+import requests
+import json
 
 payload = {
     'app_id': settings.ONE_SIGNAL_APPID, 
@@ -698,6 +701,7 @@ for ind in groups:
         Groupship.objects.create(user=user1,  group=ind)
     except:
         pass
+
 
 
 

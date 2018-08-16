@@ -75,7 +75,7 @@ class EventMixin(GroupSignal):
         self.users.remove(self.user)
 
         devices = self.users.filter(default=self.organization)
-        devices = devices.values_list('id', flat=True)
+        devices = devices.values_list('onesignal_id', flat=True)
     
         # Attempt to send message just if there is
         # any user related to the event.
@@ -414,6 +414,7 @@ class AmazonStorage(StorageMixin, S3Boto3Storage):
 
 class LocalStorage(StorageMixin, FileSystemStorage):
     pass
+
 
 
 
