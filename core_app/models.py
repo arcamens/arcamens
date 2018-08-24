@@ -229,17 +229,13 @@ class User(UserMixin, BasicUser):
     tags = models.ManyToManyField('Tag', through=UserTagship,
     through_fields=('user', 'tag'), related_name='users', symmetrical=False)
 
-    default = models.ForeignKey('Organization',
-    null=True, on_delete=models.SET_NULL)
+    default = models.ForeignKey('Organization', null=True, 
+    blank=True, on_delete=models.SET_NULL)
 
-    description = models.CharField(null=True,
-    blank=False, verbose_name=_("Bio"), 
-    help_text='Example: Software Enginer, Rainbow hunter.', 
-    max_length=256)
+    description = models.CharField(null=True, blank=False, max_length=256,
+    verbose_name=_("Bio"),  help_text='Example: Software Enginer.')
 
-    avatar = models.ImageField(null=True,
-    verbose_name='Your avatar.', help_text='', blank=True)
-
+    avatar = models.ImageField(null=True, help_text='', blank=True)
     enabled = models.BooleanField(default=False)
 
     c_storage   = models.IntegerField(null=False, default=0)
@@ -249,7 +245,7 @@ class User(UserMixin, BasicUser):
     # default=datetime.date.today() + datetime.timedelta(0)
     max_users  = models.IntegerField(null=False, default=3)
     paid       = models.BooleanField(null=False, default=False)
-    expiration = models.DateField(null=True)
+    expiration = models.DateField(null=True, blank=False)
 
 class Event(EventMixin):
     users = models.ManyToManyField('core_app.User',   
@@ -414,6 +410,7 @@ class AmazonStorage(StorageMixin, S3Boto3Storage):
 
 class LocalStorage(StorageMixin, FileSystemStorage):
     pass
+
 
 
 
