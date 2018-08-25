@@ -1,7 +1,7 @@
 <span class="glyphicon glyphicon-file"></span> {% if card.done %} (Done) {% endif %} Card by 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{card.owner.email}}"  data-content="{{card.owner.description}}"> {{card.owner.name}} </a> on list
 
-<a class="e-get" href="#"
+<a class="e-get" href="{{card.ancestor.get_link_url}}" target="_blank"
 data-show="{% url 'card_app:list-cards' card.ancestor.id %}"
 data-shell="#main-view" > 
 <span class="glyphicon glyphicon-list-alt"> </span>
@@ -20,6 +20,7 @@ data-show="{% url 'post_app:post' card.parent_post.id %}" > <span class="glyphic
 
 <a href="#" class="e-get" data-show="{% url 'card_app:find' %}"  data-shell="#bigModalContent"> 
 <span class="glyphicon glyphicon-search">  </span> T/C</a>
+
 
 
 
