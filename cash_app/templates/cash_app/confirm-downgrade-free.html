@@ -7,31 +7,27 @@
 </div>
 
 <div class="modal-body">
+<p class="text-danger"> Downgrading to the free plan will turn all your organizations, boards and groups to be public! </p>
+
+<p class="text-info"> Your account contains {{c_admins}} admins, {{c_members}} members, {{c_contributors}} contributors.
+It sums up {{n_users}} users. <p> 
 
 <p class="text-warning">
 Are you sure you want to downgrade?
 </p>
 
-<p> <b> Total Users:  {{n_users}} </b>
-<br>
-<small class="text-info">  All your organization users summed up. </small>
-</p>
-
-<p> 
-<b> Max Users: {{me.max_users}} </b>
-</br>
-<small class="text-info"> The max amount of users all your organizations can have when summed up. </small></p>
-
 </div>
 
 <div class="modal-footer">
 <button  type="button" data-show="{% url 'cash_app:upgrade' %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button  type="button" data-show="{% url 'cash_app:downgrade-free' %}" 
-class="btn btn-default e-get"> {% trans "Do it!" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-ok"></span> {% trans "Do it!" %} </button>
 
 </div>
+
+
 
 
 

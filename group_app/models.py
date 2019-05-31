@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from core_app.models import  User, Event, Node
 from sqlike.parser import SqLike, SqNode
 from django.db import models
@@ -66,10 +66,14 @@ class GroupPinMixin(models.Model):
             kwargs={'group_id': self.group.id})
 
 class GroupPin(GroupPinMixin):
-    user = models.ForeignKey('core_app.User', null=True, blank=True)
+    user = models.ForeignKey('core_app.User', 
+    null=True, on_delete=models.CASCADE)
+
     organization = models.ForeignKey('core_app.Organization', 
-    blank=True, null=True)
-    group = models.ForeignKey('group_app.Group', null=True, blank=True)
+    null=True, on_delete=models.CASCADE)
+
+    group = models.ForeignKey('group_app.Group', 
+    null=True, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('user', 'organization', 'group')
@@ -77,29 +81,42 @@ class GroupPin(GroupPinMixin):
 class Groupship(models.Model):
     """    
     """
-    group = models.ForeignKey('Group', null=True, blank=True)
+    group = models.ForeignKey('Group', null=True, on_delete=models.CASCADE)
 
-    user = models.ForeignKey('core_app.User', null=True, 
-    related_name='user_groupship', blank=True)
+    user = models.ForeignKey('core_app.User', null=True, on_delete=models.CASCADE,
+    related_name='user_groupship')
 
-    binder = models.ForeignKey('core_app.User', null=True, 
+    binder = models.ForeignKey('core_app.User', null=True, on_delete=models.CASCADE,
     related_name='binder_groupship', blank=True)
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
+
+    CHOICES = (
+        ('0', 'Admin'),
+        ('1','Member'),
+        ('2','Guest'),
+
+    )
+
+    status = models.CharField(max_length=6, 
+    choices=CHOICES, default='2')
 
     class Meta:
         unique_together = ('group', 'user', )
 
 class Group(GroupMixin):
-    users = models.ManyToManyField('core_app.User', null=True,  
+    users = models.ManyToManyField('core_app.User',
     through=Groupship, related_name='groups', blank=True, 
     through_fields=('group', 'user'), symmetrical=False)
 
     organization = models.ForeignKey('core_app.Organization', 
-    related_name='groups', null=True, blank=True)
+    related_name='groups', null=False, on_delete=models.CASCADE)
 
     open = models.BooleanField(blank=True, default=False,
-    help_text='Include all organization members.')
+    help_text='Contributors can also post over.')
+
+    public = models.BooleanField(blank=True, default=False,
+    help_text='Visible to all organization members.')
 
     name = models.CharField(null=True, blank=False,
     verbose_name=_("Name"), help_text='Example: Bugs', max_length=250)
@@ -109,13 +126,13 @@ class Group(GroupMixin):
     max_length=626)
 
     owner = models.ForeignKey('core_app.User', null=True, 
-    blank=True, related_name='owned_groups')
+    on_delete=models.CASCADE, related_name='owned_groups')
 
     created  = models.DateTimeField(auto_now_add=True, 
     null=True)
 
     node = models.OneToOneField('core_app.Node', 
-    null=False, related_name='group')
+    null=False, related_name='group', on_delete=models.CASCADE)
 
 class EDeleteGroup(Event):
     group_name = models.CharField(null=True,
@@ -125,43 +142,44 @@ class EDeleteGroup(Event):
 
 class ECreateGroup(Event):
     group = models.ForeignKey('Group', 
-    related_name='e_create_group', blank=True)
+    related_name='e_create_group', null=True, on_delete=models.CASCADE)
     html_template = 'group_app/e-create-group.html'
 
 class EUpdateGroup(Event):
     group = models.ForeignKey('Group', 
-    related_name='e_update_group', blank=True)
+    related_name='e_update_group', null=True, on_delete=models.CASCADE)
     html_template = 'group_app/e-update-group.html'
 
 class EBindGroupUser(Event):
     group = models.ForeignKey('Group', 
-    related_name='e_bind_group_user', blank=True)
+    related_name='e_bind_group_user', null=True, on_delete=models.CASCADE)
 
-    peer = models.ForeignKey('core_app.User', null=True, blank=True)
+    peer = models.ForeignKey('core_app.User', null=True, on_delete=models.CASCADE)
+
+    CHOICES = (
+        ('0', 'Admin'),
+        ('1','Member'),
+        ('2','Guest'),
+    )
+
+    status = models.CharField(max_length=6, choices=CHOICES)
+
     html_template = 'group_app/e-bind-group-user.html'
 
 class EUnbindGroupUser(Event):
     group = models.ForeignKey('Group', 
-    related_name='e_unbind_group_user', blank=True)
+    related_name='e_unbind_group_user', null=True, on_delete=models.CASCADE)
 
-    peer = models.ForeignKey('core_app.User', null=True, blank=True)
+    peer = models.ForeignKey('core_app.User', null=True, on_delete=models.CASCADE)
     html_template = 'group_app/e-unbind-group-user.html'
 
 class EPastePost(Event):
     group = models.ForeignKey('group_app.Group', 
-    related_name='e_paste_post0', blank=True)
+    related_name='e_paste_post0', null=True, on_delete=models.CASCADE)
 
-    posts = models.ManyToManyField('post_app.Post', null=True,  
+    posts = models.ManyToManyField('post_app.Post',
     related_name='e_paste_post1', blank=True, symmetrical=False)
     html_template = 'group_app/e-paste-post.html'
-
-
-
-
-
-
-
-
 
 
 

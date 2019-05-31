@@ -9,11 +9,12 @@
 </div>
 
 <div class="modal-body">
-<form id="form-board-data" enctype="multipart/form-data">
+<form id="boardForm" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.public  size='md' %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -24,23 +25,17 @@
 </div>
 
 <div class="modal-footer">
-<button  type="button" 
-data-show="{% url 'board_app:delete-board' board.id %}"
-class="btn btn-danger e-get"> 
-{% trans "Delete" %}
-</button>
+<div class="btn-group btn-group-sm">
 
-<button  type="button" data-form="#form-board-data" data-shell="#main-view" 
+<button  type="button"  data-show="{% url 'board_app:delete-board' board.id %}" class="btn btn-danger e-get"> 
+<span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %} </button>
+
+<button  type="button" data-form="#boardForm" data-shell="#main-view" 
 data-show="{% url 'board_app:update-board' board.id %}"
-class="btn btn-default e-post"> 
-{% trans "Update" %}
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-edit"></span> {% trans "Update" %}
 </button>
-
 </div>
 
-
-
-
-
+</div>
 
 

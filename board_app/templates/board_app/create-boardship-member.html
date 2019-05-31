@@ -1,0 +1,43 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> <span class="glyphicon glyphicon-plus"></span> Create Board Relationship</h5>
+</div>
+
+<div class="modal-body">
+<p class="text-warning">  Bind {{member.name}} to the board {{board.name}}?</p>
+
+<form id="boardshipForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.status  size='sm' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+
+<small>
+<p class="text-info"> Admins can create/delete content.</p>
+<p class="text-info"> Workers can create content.</p>
+<p class="text-info"> Guests can feedback on events and receive notification..</p>
+</small>
+
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'board_app:bind-board-members' board.id %}"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-form="#boardshipForm" data-show="{% url 'board_app:create-boardship-member' board.id member.id  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Done" %} </button>
+</div>
+
+</div>
+

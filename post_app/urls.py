@@ -1,57 +1,56 @@
-from django.conf.urls import url
+from django.urls import path
 from . import views
 
+app_name = 'post_app'
 urlpatterns = [
-    url(r'^post/(?P<post_id>.+)/', views.Post.as_view(), name='post'),
-    url(r'^refresh-post/(?P<post_id>.+)/', views.RefreshPost.as_view(), name='refresh-post'),
+    path('post/<int:post_id>/', views.Post.as_view(), name='post'),
 
-    url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
-    url(r'^alert-post-workers/(?P<post_id>.+)/', views.AlertPostWorkers.as_view(), name='alert-post-workers'),
+    path('refresh-post/<int:post_id>/', views.RefreshPost.as_view(), name='refresh-post'),
 
-    url(r'^done/(?P<post_id>.+)/', views.Done.as_view(), name='done'),
-    url(r'^undo/(?P<post_id>.+)/', views.Undo.as_view(), name='undo'),
+    path('post-link/<int:post_id>/', views.PostLink.as_view(), name='post-link'),
 
-    url(r'^create-post/(?P<ancestor_id>.+)/', views.CreatePost.as_view(), name='create-post'),
-    url(r'^update-post/(?P<post_id>.+)/', views.UpdatePost.as_view(), name='update-post'),
-    url(r'^attach-file/(?P<post_id>.+)/', views.AttachFile.as_view(), name='attach-file'),
-    url(r'^detach-file/(?P<filewrapper_id>.+)/', views.DetachFile.as_view(), name='detach-file'),
-    url(r'^post-file-download/(?P<filewrapper_id>.+)/', views.PostFileDownload.as_view(), name='post-file-download'),
+    path('done/<int:post_id>/', views.Done.as_view(), name='done'),
+    path('undo/<int:post_id>/', views.Undo.as_view(), name='undo'),
 
-    url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
-    url(r'^delete-post/(?P<post_id>.+)/', views.DeletePost.as_view(), name='delete-post'),
-    url(r'^post-link/(?P<post_id>.+)/', views.PostLink.as_view(), name='post-link'),
+    path('create-post/<int:ancestor_id>/', views.CreatePost.as_view(), name='create-post'),
+    path('update-post/<int:post_id>/', views.UpdatePost.as_view(), name='update-post'),
+    path('post-diff/<int:event_id>/', views.PostDiff.as_view(), name='post-diff'),
 
-    url(r'^post-worker-information/(?P<peer_id>.+)/(?P<post_id>.+)/', views.PostWorkerInformation.as_view(), name='post-worker-information'),
-    url(r'^post-tag-information/(?P<tag_id>.+)/(?P<post_id>.+)/', views.PostTagInformation.as_view(), name='post-tag-information'),
+    path('attach-file/<int:post_id>/', views.AttachFile.as_view(), name='attach-file'),
+    path('detach-file/<int:filewrapper_id>/', views.DetachFile.as_view(), name='detach-file'),
+    path('post-file-download/<int:filewrapper_id>/', views.PostFileDownload.as_view(), name='post-file-download'),
 
-    url(r'^manage-post-workers/(?P<post_id>.+)/', views.ManagePostWorkers.as_view(), name='manage-post-workers'),
-    url(r'^assign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.AssignPostUser.as_view(), name='assign-post-user'),
-    url(r'^unassign-post-user/(?P<post_id>.+)/(?P<user_id>.+)', views.UnassignPostUser.as_view(), name='unassign-post-user'),
-    url(r'^setup-post-filter/(?P<group_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
-    url(r'^find/', views.Find.as_view(), name='find'),
+    path('delete-post/<int:post_id>/', views.DeletePost.as_view(), name='delete-post'),
+    path('delete-post/<int:post_id>/', views.DeletePost.as_view(), name='delete-post'),
+    path('post-link/<int:post_id>/', views.PostLink.as_view(), name='post-link'),
 
-    url(r'^cut-post/(?P<post_id>.+)/', views.CutPost.as_view(), name='cut-post'),
-    url(r'^copy-post/(?P<post_id>.+)/', views.CopyPost.as_view(), name='copy-post'),
-    url(r'^manage-post-tags/(?P<post_id>.+)/', views.ManagePostTags.as_view(), name='manage-post-tags'),
-    url(r'^bind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.BindPostTag.as_view(), name='bind-post-tag'),
-    url(r'^unbind-post-tag/(?P<post_id>.+)/(?P<tag_id>.+)', views.UnbindPostTag.as_view(), name='unbind-post-tag'),
-    url(r'^request-post-attention/(?P<peer_id>.+)/(?P<post_id>.+)', views.RequestPostAttention.as_view(), name='request-post-attention'),
-    url(r'^confirm-post-deletion/(?P<post_id>.+)/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
-    url(r'^select-fork-list/(?P<post_id>.+)/', views.SelectForkList.as_view(), name='select-fork-list'),
-    url(r'^create-post-fork/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.CreatePostFork.as_view(), name='create-post-fork'),
-    url(r'^pull-card-content/(?P<ancestor_id>.+)/(?P<post_id>.+)/', views.PullCardContent.as_view(), name='pull-card-content'),
-    url(r'^post-events/(?P<post_id>.+)/', views.PostEvents.as_view(), name='post-events'),
-    url(r'^pin-post/(?P<post_id>.+)/', views.PinPost.as_view(), name='pin-post'),
-    url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
-    url(r'^set-post-priority-down/(?P<post0_id>.+)/(?P<post1_id>.+)/', views.SetPostPriorityDown.as_view(), name='set-post-priority-down'),
-    url(r'^set-post-priority-up/(?P<post0_id>.+)/(?P<post1_id>.+)/', views.SetPostPriorityUp.as_view(), name='set-post-priority-up'),
-    url(r'^post-priority/(?P<post_id>.+)/', views.PostPriority.as_view(), name='post-priority'),
+    path('post-tag-information/(?P<tag_id>.+)/<int:post_id>/', views.PostTagInformation.as_view(), name='post-tag-information'),
+    path('like-post/<int:post_id>/', views.LikePost.as_view(), name='like-post'),
+    path('unlike-post/<int:post_id>/', views.UnlikePost.as_view(), name='unlike-post'),
+
+    path('unbind-post-tags/<int:post_id>/', views.UnbindPostTags.as_view(), name='unbind-post-tags'),
+    path('bind-post-tags/<int:post_id>/', views.BindPostTags.as_view(), name='bind-post-tags'),
+    path('create-post-tagship/<int:post_id>/<int:tag_id>/', views.CreatePostTagship.as_view(), name='create-post-tagship'),
+    path('delete-post-tagship/<int:post_id>/<int:tag_id>/', views.DeletePostTagship.as_view(), name='delete-post-tagship'),
+
+    path('setup-post-filter/(?P<group_id>.+)', views.SetupPostFilter.as_view(), name='setup-post-filter'),
+    path('find/', views.Find.as_view(), name='find'),
+
+    path('cut-post/<int:post_id>/', views.CutPost.as_view(), name='cut-post'),
+    path('copy-post/<int:post_id>/', views.CopyPost.as_view(), name='copy-post'),
+    path('confirm-post-deletion/<int:post_id>/', views.ConfirmPostDeletion.as_view(), name='confirm-post-deletion'),
+    path('select-fork-list/<int:post_id>/', views.SelectForkList.as_view(), name='select-fork-list'),
+    path('create-post-fork/<int:ancestor_id>/<int:post_id>/', views.CreatePostFork.as_view(), name='create-post-fork'),
+    path('pull-card-content/<int:ancestor_id>/<int:post_id>/', views.PullCardContent.as_view(), name='pull-card-content'),
+    path('post-events/<int:post_id>/', views.PostEvents.as_view(), name='post-events'),
+    path('pin-post/<int:post_id>/', views.PinPost.as_view(), name='pin-post'),
+    path('unpin/<int:pin_id>/', views.Unpin.as_view(), name='unpin'),
+    path('set-post-priority-down/<int:post0_id>/<int:post1_id>/', views.SetPostPriorityDown.as_view(), name='set-post-priority-down'),
+    path('set-post-priority-up/<int:post0_id>/<int:post1_id>/', views.SetPostPriorityUp.as_view(), name='set-post-priority-up'),
+    path('post-priority/<int:post_id>/', views.PostPriority.as_view(), name='post-priority'),
+    path('restore-post/(?P<event_id>.+)/', views.RestorePost.as_view(), name='restore-post'),
 
 ]
-
-
-
-
 
 
 

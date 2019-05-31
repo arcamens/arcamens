@@ -1,25 +1,27 @@
 from django.views.generic.base import RedirectView
-from django.conf.urls import url
+from django.conf.urls import re_path
 from . import views
 
+app_name = 'list_app'
 urlpatterns = [
-    url(r'^list-lists/(?P<board_id>.+)/', views.ListLists.as_view(), name='list-lists'),
-    url(r'^update-list/(?P<list_id>.+)/', views.UpdateList.as_view(), name='update-list'),
-    url(r'^create-list/(?P<board_id>.+)/', views.CreateList.as_view(), name='create-list'),
-    url(r'^delete-list/(?P<list_id>.+)/', views.DeleteList.as_view(), name='delete-list'),
-    url(r'^pin-list/(?P<list_id>.+)/', views.PinList.as_view(), name='pin-list'),
-    url(r'^select-destin-list/(?P<list_id>.+)/', views.SelectDestinList.as_view(), name='select-destin-list'),
-    url(r'^paste-card/(?P<list_id>.+)/(?P<card_id>.+)/', views.PasteCard.as_view(), name='paste-card'),
-    url(r'^paste-all-cards/(?P<list_id>.+)/', views.PasteAllCards.as_view(), name='paste-all-cards'),
-    url(r'^cut-list/(?P<list_id>.+)/', views.CutList.as_view(), name='cut-list'),
-    url(r'^copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
-    url(r'^setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
-    url(r'^undo-clipboard/(?P<list_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
-    url(r'^list-link/(?P<list_id>.+)/', views.ListLink.as_view(), name='list-link'),
-    url(r'^confirm-list-deletion/(?P<list_id>.+)/', views.ConfirmListDeletion.as_view(), name='confirm-list-deletion'),
-    url(r'^unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
+    re_path('list-lists/(?P<board_id>.+)/', views.ListLists.as_view(), name='list-lists'),
+    re_path('update-list/(?P<list_id>.+)/', views.UpdateList.as_view(), name='update-list'),
+    re_path('create-list/(?P<board_id>.+)/', views.CreateList.as_view(), name='create-list'),
+    re_path('delete-list/(?P<list_id>.+)/', views.DeleteList.as_view(), name='delete-list'),
+    re_path('pin-list/(?P<list_id>.+)/', views.PinList.as_view(), name='pin-list'),
+    re_path('paste-card/(?P<list_id>.+)/(?P<card_id>.+)/', views.PasteCard.as_view(), name='paste-card'),
+    re_path('paste-card/(?P<list_id>.+)/', views.PasteCard.as_view(), name='paste-card'),
+    re_path('paste-all-cards/(?P<list_id>.+)/', views.PasteAllCards.as_view(), name='paste-all-cards'),
+    re_path('cut-list/(?P<list_id>.+)/', views.CutList.as_view(), name='cut-list'),
+    re_path('copy-list/(?P<list_id>.+)/', views.CopyList.as_view(), name='copy-list'),
+    re_path('setup-list-filter/(?P<board_id>.+)', views.SetupListFilter.as_view(), name='setup-list-filter'),
+    re_path('undo-clipboard/(?P<list_id>.+)/', views.UndoClipboard.as_view(), name='undo-clipboard'),
+    re_path('list-link/(?P<list_id>.+)/', views.ListLink.as_view(), name='list-link'),
+    re_path('confirm-list-deletion/(?P<list_id>.+)/', views.ConfirmListDeletion.as_view(), name='confirm-list-deletion'),
+    re_path('unpin/(?P<pin_id>.+)/', views.Unpin.as_view(), name='unpin'),
 
 ]
+
 
 
 

@@ -4,7 +4,8 @@
 
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
-<h5>  <span class="glyphicon glyphicon-random"></span> Fork card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} on list.. </h5>
+  <span class="glyphicon glyphicon-random"></span> Fork card <a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
 
 </div>
 
@@ -38,24 +39,16 @@ href="{{card.ancestor.get_link_url}}" >
 
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
 <button  type="button" data-shell="#bigModalContent" 
 data-show="{% url 'card_app:view-data' card.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#selectForkListForm" 
 data-show="{% url 'card_app:select-fork-list'  card.id %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
-
+class="btn btn-default e-post">   <span class="glyphicon glyphicon-search"></span> {% trans "Search" %} </button>
 </div>
 
-
-
-
-
-
-
-
-
-
-
+</div>
 

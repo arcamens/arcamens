@@ -20,22 +20,16 @@ Call {{peer.name}} attention on card <span class="glyphicon glyphicon-file"></sp
 
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
 <button  type="button" data-shell="#smallModalContent" 
 data-show="{% url 'card_app:card-worker-information' peer.id card.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#requestCardAttentionForm" data-show="{% url 'card_app:request-card-attention' peer.id card.id  %}"
-class="btn btn-default e-post"> {% trans "Send e-mail" %} </button>
-
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-send"></span> {% trans "Send e-mail" %} </button>
 </div>
 
-
-
-
-
-
-
-
-
-
+</div>
 

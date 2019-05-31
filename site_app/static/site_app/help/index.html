@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Arcamens Docs</title>
+  <title>Arcamens</title>
   <style type="text/css">
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
@@ -16,38 +16,35 @@
   <![endif]-->
 </head>
 <body>
-<header>
-<h1 class="title">Arcamens Docs</h1>
+<header id="title-block-header">
+<h1 class="title">Arcamens</h1>
 </header>
 <nav id="TOC">
 <ul>
 <li><a href="#intro">Intro</a></li>
+<li><a href="#organization-creation">Organization Creation</a></li>
 <li><a href="#board-creation">Board Creation</a></li>
 <li><a href="#list-creation">List Creation</a></li>
 <li><a href="#card-creation">Card Creation</a></li>
 <li><a href="#card-editing">Card Editing</a></li>
 <li><a href="#events">Events</a></li>
 <li><a href="#card-workers">Card Workers</a></li>
-<li><a href="#board-permissions">Board Permissions</a></li>
+<li><a href="#board-members">Board Members</a></li>
 <li><a href="#tag-creation">Tag Creation</a></li>
 <li><a href="#card-tags">Card Tags</a></li>
 <li><a href="#card-prioritization">Card Prioritization</a></li>
 <li><a href="#search-for-taskscards">Search for Tasks/Cards</a></li>
-<li><a href="#organization-creation">Organization Creation</a></li>
-<li><a href="#groups">Groups</a></li>
 <li><a href="#group-creation">Group Creation</a></li>
-<li><a href="#posts">Posts</a></li>
 <li><a href="#post-creation">Post Creation</a></li>
 <li><a href="#post-editing">Post Editing</a></li>
 <li><a href="#post-workers">Post Workers</a></li>
 <li><a href="#post-tags">Post Tags</a></li>
 <li><a href="#organization-invites">Organization Invites</a></li>
-<li><a href="#organization-admins">Organization Admins</a></li>
 <li><a href="#group-members">Group Members</a></li>
 <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
 <li><a href="#post-prioritization">Post Prioritization</a></li>
 <li><a href="#search-for-tasksposts">Search for Tasks/Posts</a></li>
-<li><a href="#event-comments">Event Comments</a></li>
+<li><a href="#event-feedbacks">Event Feedbacks</a></li>
 <li><a href="#post-filter">Post Filter</a></li>
 <li><a href="#collection-filter">Collection Filter</a></li>
 <li><a href="#card-colors">Card Colors</a></li>
@@ -63,7 +60,6 @@
 <li><a href="#group-settingsremoval">Group Settings/Removal</a></li>
 <li><a href="#board-settingsremoval">Board Settings/Removal</a></li>
 <li><a href="#bitbucket-integration">Bitbucket Integration</a></li>
-<li><a href="#organization-user-removal">Organization User Removal</a></li>
 <li><a href="#organization-settingsremoval">Organization Settings/Removal</a></li>
 <li><a href="#logs">Logs</a></li>
 </ul>
@@ -91,8 +87,26 @@
 </figure>
 <p><strong>Note:</strong> You can pin boards, lists, cards or groups.</p>
 <p>Arcamens makes usage of cut/copy for moving cards around, it is much more efficient than the usual drag&amp;drop approach. You can cut several cards, these will stay on the clipboard when you’re ready just paste them somewhere.</p>
+<p>Arcamens also has a powerful set of permissions for users. There are roles that are used to restrict user interaction with boards, groups etc. There is complete support for organizations that demand having their projects exposed to the extern world.</p>
+<p>The concept of public organizations, boards and groups help our customers to better organize their businesses workflow.</p>
+<h3 id="organization-creation">Organization Creation</h3>
+<p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
+<p>It all depends on how big your business is and on your necessities of designing your business workflow.</p>
+<p>Organizations contain users, boards and groups. Each one of the users will have a specific role in relation to the organization, such a role determins the kind of interaction the user will have.</p>
+<p>A given user can be binded to an organization as being a Staff, Worker or Contributor. An organization staff is allowed to bind/unbind users from the organization also creating boards/groups. A worker has permissions to create boards, groups but not sending invites. A contributor is not allowed to create boards, groups nor sending invites.</p>
+<p>When you create an organization you will be binded as a staff, you’ll have total permissions over the organization.</p>
+<p>Organizations can be either public or private depending on your plan, public organizations are exposed to the extern world. Public organizations allow other arcamens users to join it on their own, when these users join your public organizations they will have a contributor status it means they will not be allowed to create new boards nor groups.</p>
+<p>For creating an organization just click on your current organization icon at the navbar:</p>
+<figure>
+<img src="/static/site_app/help/organization-creation-0.png" alt="organization-creation-0" /><figcaption>organization-creation-0</figcaption>
+</figure>
+<p>Then click on +Organization link, you would get:</p>
+<figure>
+<img src="/static/site_app/help/organization-creation-1.png" alt="organization-creation-1" /><figcaption>organization-creation-1</figcaption>
+</figure>
+<p>Type your new organizatio name then click Create.</p>
 <h3 id="board-creation">Board Creation</h3>
-<p>You can create as many boards as you desire. For creating a new board just click on Home at the navbar and then use the popup menu by clicking the wrench icon shown at this image:</p>
+<p>You can create as many boards as you desire. For creating a new board just click on +Board:</p>
 <figure>
 <img src="/static/site_app/help/board-creation-0.png" alt="board-creation-0" /><figcaption>board-creation-0</figcaption>
 </figure>
@@ -100,6 +114,8 @@
 <figure>
 <img src="/static/site_app/help/board-creation-1.png" alt="board-creation-1" /><figcaption>board-creation-1</figcaption>
 </figure>
+<p>Boards can be public or private, public boards are visibile to all organization users. When a public board is created then every organization user is binded to the board as a Guest. Board users can have three possible roles Admin, Member or Guest.</p>
+<p><strong>See:</strong> <a href="#board-members">Board Members</a></p>
 <p>One may find it necessary to have boards that are related to the same project, in such situations it is possible to set their descriptions with a slug to group them according to their project.</p>
 <p>Imagine you have a project named arcamens that has many plugins, you have a team for each one of the plugins. You could come up with boards description like:</p>
 <pre><code>Arcamens/Github
@@ -126,8 +142,8 @@ Github/Doing
 
 ...</code></pre>
 <p>It allows designing your project workflow without creating multiple boards for its plugins.</p>
+<p>Board guests aren’t allowed to create/edit nor delete lists.</p>
 <h3 id="card-creation">Card Creation</h3>
-<p>Card are the entities which contain actual information pieces.</p>
 <p>Cards are created inside lists, after accessing a list just click on +Card:</p>
 <figure>
 <img src="/static/site_app/help/card-creation-0.png" alt="card-creation-0" /><figcaption>card-creation-0</figcaption>
@@ -143,7 +159,7 @@ Github/Doing
 <p>You can change all attributes for the card there, whenever an attribute is changed then an event is fired. All users who are related to the card will get notified. These users are those who belong to the card board or are assigned to the card.</p>
 <h3 id="card-editing">Card Editing</h3>
 <p>After a card is created it can have its Label/Data attributes changed. Such a change generates an event. Everyone who is attached to the card’s board will get notified as well as all workers of the card.</p>
-<p>In order to edit/update a card just access the card and click on: Update</p>
+<p>In order to edit/update a card just access the card and click on: Edit</p>
 <figure>
 <img src="/static/site_app/help/card-editing-0.png" alt="card-editing-0" /><figcaption>card-editing-0</figcaption>
 </figure>
@@ -157,7 +173,7 @@ Github/Doing
 <figure>
 <img src="/static/site_app/help/events-0.png" alt="events-0" /><figcaption>events-0</figcaption>
 </figure>
-<p>The action that was performed can be commented on thus giving constructive criticism about your peers work.</p>
+<p>The action that was performed can be feedbacked on thus giving constructive criticism about your peers work.</p>
 <p>Events will carry links to the objects that are related to the user action. You can left click on the links and inspect the cards, lists, etc in the same browser tab or just middle click and open them in new browser tabs.</p>
 <p>When you finished checking an user action you can mark the event as seen then it will be no longer listed in the Events dialog but you can still access it through your logs.</p>
 <h3 id="card-workers">Card Workers</h3>
@@ -169,21 +185,44 @@ Github/Doing
 <figure>
 <img src="/static/site_app/help/card-workers-1.png" alt="card-workers-1" /><figcaption>card-workers-1</figcaption>
 </figure>
-<p>Type a string that matches either the user name or email then hit enter. So you will be able to add users to the card task.</p>
-<p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
-<h3 id="board-permissions">Board Permissions</h3>
-<p>A board will have a owner (the one who has created it), admins and members. The owner is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board but members aren’t allowed to remove peers.</p>
-<p>For adding new members to the board (assuming you’re the owner or an admin), just access the board then click on the wrench icon:</p>
+<p>Click on: Bind Workers</p>
 <figure>
-<img src="/static/site_app/help/board-permissions-0.png" alt="board-permissions-0" /><figcaption>board-permissions-0</figcaption>
+<img src="/static/site_app/help/card-workers-2.png" alt="card-workers-2" /><figcaption>card-workers-2</figcaption>
 </figure>
-<p>Then click on Members, you would get:</p>
+<p>Type a string that matches either the user name or email then hit enter. So you will be able to add users to the card task.</p>
+<p>Once the user is binded to the card as a worker everyone who is related to the card will get notified.</p>
+<p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
+<h3 id="board-members">Board Members</h3>
+<p>Boards have users binded to them, a given user can have a specific role in relation to the board, it helps you to restrict the user interaction with the board. An user can have one of the following three possible roles: Admin, Member or Guest.</p>
+<p>Admins have all board permissions except deleting the board, members have all admins permissions except binding/unbinding users, guests have all member permissions except binding/unbinding users and creating new lists/cards.</p>
+<p>Boards are the most useful feature in arcamens, boards can be public or private. Public boards include all organization users. When a public board is created then all organization users will be binded as guests, their status can be changed afterwards on your necessities.</p>
+<p>Public boards are very useful for open source organizations whose visibility to the world is a necessary condition. These are also useful for large projects that demand all organization users to be interacting, it all depends on how you decide to design your workflow though.</p>
+<p>Private boards are only allowed for paid plans, you’ll be allowed to create only public boards on a free plan. It is possible for all organization staffs/members to create private boards on paid plans.</p>
+<p>Binding new users to a given board is quite simple, just …</p>
+<p>Click on the wrench icon at the board card.</p>
 <figure>
-<img src="/static/site_app/help/board-permissions-1.png" alt="board-permissions-1" /><figcaption>board-permissions-1</figcaption>
+<img src="/static/site_app/help/board-members-0.png" alt="board-members-0" /><figcaption>board-members-0</figcaption>
+</figure>
+<p>Then you would access the board members list.</p>
+<figure>
+<img src="/static/site_app/help/board-members-1.png" alt="board-members-1" /><figcaption>board-members-1</figcaption>
+</figure>
+<p>Click on Bind Members link to access the list of users who are outside the board.</p>
+<figure>
+<img src="/static/site_app/help/board-members-2.png" alt="board-members-2" /><figcaption>board-members-2</figcaption>
 </figure>
 <p>You can search users by using tag, email or name attributes, then add users.</p>
 <p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
 <p>After binding/unbinding a given user to a board he/she will get notified of it.</p>
+<p>In order to change/set an existing board member permissions just click on Settings.</p>
+<figure>
+<img src="/static/site_app/help/board-members-3.png" alt="board-members-3" /><figcaption>board-members-3</figcaption>
+</figure>
+<p>Then you would get.</p>
+<figure>
+<img src="/static/site_app/help/board-members-4.png" alt="board-members-4" /><figcaption>board-members-4</figcaption>
+</figure>
+<p>You can remove/change user role in that dialog, every member of the board will get notified. The scheme of permissions remains the same for updating user status.</p>
 <h3 id="tag-creation">Tag Creation</h3>
 <p>You can tag all kind of content in arcamens, for such you need to create tags first. Everyone is allowed to create new tags, when a tag is created an event is fired and everyone in the organization gets aware of it.</p>
 <p>Click on the wrench icon on the organization menu:</p>
@@ -259,21 +298,10 @@ Github/Doing
 <p>In the above pattern example it will find all cards that contain the strings ‘bug’ and ‘timezone’ either in the label or data attributes. When combined with the filter options it will narrow down the matched results according to the filter definitions so described above.</p>
 <p>You can get more than one match depending on the pattern and the existing cards. Once you have filtered the cards then you can click on the card link and open it in the actual browser tab or just right click and open in a new tab.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
-<h3 id="organization-creation">Organization Creation</h3>
-<p>Organizations can serve on multiple purposes depending on the kind of business and size. You can map a team to an organization, a business branch to an organization or even handle all your business team in a single organization.</p>
-<p>It all depends on how big your business is and on your necessities of designing your business workflow.</p>
-<p>For creating an organization just click on your current organization icon at the navbar:</p>
-<figure>
-<img src="/static/site_app/help/organization-creation-0.png" alt="organization-creation-0" /><figcaption>organization-creation-0</figcaption>
-</figure>
-<p>Then click on +Organization link, you would get:</p>
-<figure>
-<img src="/static/site_app/help/organization-creation-1.png" alt="organization-creation-1" /><figcaption>organization-creation-1</figcaption>
-</figure>
-<p>Type your new organizatio name then click Create.</p>
-<h3 id="groups">Groups</h3>
-<p>Groups are great for sharing information, storing notes regarding a project and even delegating simple tasks. Groups can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards it allows one to setup a group to be used as a scrum board backlog.</p>
 <h3 id="group-creation">Group Creation</h3>
+<p>Groups are great for sharing information, storing notes regarding a project and even delegating simple tasks. Groups can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards it allows one to setup a group to be used as a scrum board backlog.</p>
+<p>Groups also can be used as a mean of reporting issues by organization contributors. In the context of public organizations, public groups play an excellent tool to receive all kind of reports that are related to a project.</p>
+<p>Public groups are visible to all organization members, open groups allow organization contributors to create posts on.</p>
 <p>For creating a group just click on Home at the navbar then on the wrench icon at the organization toolbar:</p>
 <figure>
 <img src="/static/site_app/help/group-creation-0.png" alt="group-creation-0" /><figcaption>group-creation-0</figcaption>
@@ -291,21 +319,20 @@ Github/Doing
 <p>There are many ways of grouping boards and groups, feel free to pick up the best one for you. You don’t need to pick a description for your boards/groups at all.</p>
 <p><strong>See:</strong> Collection Filters</p>
 <p>After filling the fields you would get your group being listed altogether with your boards.</p>
-<h3 id="posts">Posts</h3>
-<p>Group posts can be used for multiple purposes, they can convey information about events, tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet can contain a title and markdown content.</p>
-<p>Tasks that demand one to collect information regarding a given subject can be delegated by using posts. The person attaches the missing information to the post as a snippet.</p>
+<h3 id="post-creation">Post Creation</h3>
+<p>Group posts can be used for multiple purposes, they can convey information about events, tasks and even play a nice role as project notes. Comments can be attached to posts, a comment can contain a title and markdown content.</p>
+<p>Tasks that demand one to collect information regarding a given subject can be delegated by using posts. The person attaches the missing information to the post as a comment.</p>
 <figure>
-<img src="/static/site_app/help/posts-0.png" alt="posts-0" /><figcaption>posts-0</figcaption>
+<img src="/static/site_app/help/post-creation-0.png" alt="posts-creation-0" /><figcaption>posts-creation-0</figcaption>
 </figure>
 <p>Some tasks arent directly related to a specific project these tasks can be delegated to a team or user by using a post.</p>
-<h3 id="post-creation">Post Creation</h3>
 <p>After a group is created just access it then click on +Post at the group toolbar:</p>
 <figure>
-<img src="/static/site_app/help/post-creation-0.png" alt="post-creation-0" /><figcaption>post-creation-0</figcaption>
+<img src="/static/site_app/help/post-creation-1.png" alt="post-creation-1" /><figcaption>post-creation-1</figcaption>
 </figure>
 <p>You would get:</p>
 <figure>
-<img src="/static/site_app/help/post-creation-1.png" alt="post-creation-1" /><figcaption>post-creation-1</figcaption>
+<img src="/static/site_app/help/post-creation-2.png" alt="post-creation-2" /><figcaption>post-creation-2</figcaption>
 </figure>
 <p>Posts can have a short title that holds a description of the post content and a markdown content. Once the post is created then files can be attached.</p>
 <p>After pressing Create the post will be created and every group user will get notified of the post creation.</p>
@@ -361,15 +388,6 @@ Github/Doing
 </figure>
 <p>Then fill the field with the peer e-mail to whom you would like to join your organization.</p>
 <p>You can cancel invites or just resend the invite link. Notice that your account invites can’t override your account max users limit. The invites sum up with regular users and should be lesser or equal your account max users limit.</p>
-<h3 id="organization-admins">Organization Admins</h3>
-<p>Organization admins are allowed to send invites and remove peers. In order to manage your organization admins just click on the wrench icon at the organization card:</p>
-<figure>
-<img src="/static/site_app/help/organization-admins-0.png" alt="organization-admins-0" /><figcaption>organization-admins-0</figcaption>
-</figure>
-<p>Then you would get:</p>
-<figure>
-<img src="/static/site_app/help/organization-admins-1.png" alt="organization-admins-1" /><figcaption>organization-admins-1</figcaption>
-</figure>
 <h3 id="group-members">Group Members</h3>
 <p>Users of a group get notification from all events that happen with the group. Whenever an user is binded/unbinded to a group everyone who is in the group gets notified.</p>
 <p>For binding/unbinding users to a group just access the group then:</p>
@@ -380,7 +398,12 @@ Github/Doing
 <figure>
 <img src="/static/site_app/help/group-members-1.png" alt="group-members-1" /><figcaption>group-members-1</figcaption>
 </figure>
-<p>From there you can search users from your organization that match a given criterea.</p>
+<p>Click on Bind Members then it would list all your organization users who aren’t belonging to the group.,</p>
+<figure>
+<img src="/static/site_app/help/group-members-2.png" alt="group-members-2" /><figcaption>group-members-2</figcaption>
+</figure>
+<p>Once you bind the new member then everyone in the group gets notified. A given group user can be an admin, worker or guest.</p>
+<p>Group admins can add/remove members, workers can’t remove/add members while group guests can only create comments or feedback on the group events. When the board is open then guests are allowed to create posts. The group permission scheme is very similar to the board permission scheme.</p>
 <p><strong>See:</strong> <a href="#advanced-user-search">Advanced User Search</a></p>
 <h3 id="post-e-mailnotifications">Post E-mail/Notifications</h3>
 <p>When a post has workers who were assigned it may be interesting to call attention of these workers through e-mail. A link for the post would be sent through e-mail with a message.</p>
@@ -426,32 +449,32 @@ Github/Doing
 <p>The option <strong>Assigned</strong> when checked would match against posts that have at least one worker assigned to. It means that it matches just against posts that are tasks.</p>
 <p>The option <strong>Assigned to me</strong> would perform the search pattern through all tasks that someone has assigned to you.</p>
 <p>If you option for <strong>Created by me</strong> then it would check the pattern against all posts that you created and it was at least one worker binded to.</p>
-<p>Consider you wanted to search for posts that contain the strings ‘form’, ‘html’ and ‘need a snippet’ either in the label or data attribute. After inserting that pattern you could combine with the so described filter options above.</p>
+<p>Consider you wanted to search for posts that contain the strings ‘form’, ‘html’ and ‘need a comment’ either in the label or data attribute. After inserting that pattern you could combine with the so described filter options above.</p>
 <p>Notice that the order of strings is not relevant; You could also try:</p>
-<pre><code>need a snippet + form + html</code></pre>
+<pre><code>need a comment + form + html</code></pre>
 <p>Which would work alike.</p>
 <p><strong>Note:</strong> Leave the Done attribute checked for searching only through the archived posts.</p>
 <p><strong>See:</strong> <a href="#advanced-post-search">Advanced Post Search</a></p>
-<h3 id="event-comments">Event Comments</h3>
-<p>All kind of user actions in Arcamens are liable of being commented. Whenever an user assigns a worker to a post it generates an event then the event/action can be commented out.</p>
-<p>When an user action is commented then another event is generated but it doesn’t allow comments for action comments.</p>
+<h3 id="event-feedbacks">Event Feedbacks</h3>
+<p>All kind of user actions in Arcamens are liable of being feedbacked. Whenever an user assigns a worker to a post it generates an event then the event/action can be feedbacked out.</p>
+<p>When an user action is feedbacked then another event is generated but it doesn’t allow feedbacks for action feedbacks.</p>
 <p>Click on Events at the navbar:</p>
 <figure>
-<img src="/static/site_app/help/event-comments-0.png" alt="event-comments-0" /><figcaption>event-comments-0</figcaption>
+<img src="/static/site_app/help/event-feedbacks-0.png" alt="event-feedbacks-0" /><figcaption>event-feedbacks-0</figcaption>
 </figure>
 <p>Then you would get:</p>
 <figure>
-<img src="/static/site_app/help/event-comments-1.png" alt="event-comments-1" /><figcaption>event-comments-1</figcaption>
+<img src="/static/site_app/help/event-feedbacks-1.png" alt="event-feedbacks-1" /><figcaption>event-feedbacks-1</figcaption>
 </figure>
-<p>By clicking on the event Comments link:</p>
+<p>By clicking on the event Feedbacks link:</p>
 <figure>
-<img src="/static/site_app/help/event-comments-2.png" alt="event-comments-2" /><figcaption>event-comments-2</figcaption>
+<img src="/static/site_app/help/event-feedbacks-2.png" alt="event-feedbacks-2" /><figcaption>event-feedbacks-2</figcaption>
 </figure>
 <p>The users who are related to the event would get a new event like:</p>
 <figure>
-<img src="/static/site_app/help/event-comments-3.png" alt="event-comments-3" /><figcaption>event-comments-3</figcaption>
+<img src="/static/site_app/help/event-feedbacks-3.png" alt="event-feedbacks-3" /><figcaption>event-feedbacks-3</figcaption>
 </figure>
-<p>They can reply by clicking on the event Comments link.</p>
+<p>They can reply by clicking on the event Feedbacks link.</p>
 <h3 id="post-filter">Post Filter</h3>
 <p>It is possible to filter group posts as well, whenever you access the group then it will list just posts that match the filter pattern.</p>
 <p>For such just access the group then click on Filter at the group menu:</p>
@@ -704,12 +727,17 @@ Other nix commands have a special flag for this exact use-case, for example $ ls
 <p>It would find all cards that are tagged as related to bugs and are from boards where the string ‘arcamens’ shows up.</p>
 <p><strong>Created</strong></p>
 <p>Filter cards based on its creation date. List cards based on its creation date:</p>
-<pre><code>created:2018</code></pre>
 <p>Would find all cards that were created in 2018.</p>
 <pre><code>created:2018-05-23</code></pre>
 <p>The above example would find all cards that were created on 2018-05-23. The general format is: year-month-day</p>
-<p>For finding cards created in the month 05 then do:</p>
-<pre><code>created:-05-</code></pre>
+<p>For finding cards created in a given period you could do:</p>
+<pre><code>created&gt;:2018-05-08 + created&lt;:2018-05-01 </code></pre>
+<p>Or you could merely do:</p>
+<pre><code>created&gt;:2018-05-08</code></pre>
+<p><strong>Deadline</strong></p>
+<p>Cards can have deadlines, for finding cards that are in a given deadline:</p>
+<pre><code>deadline&gt;:2018-05-08 + deadline&lt;:2018-05-01 
+</code></pre>
 <p><strong>File</strong></p>
 <p>Filter cards whose one of its attachments contains some string. Imagine you wanted to find a card that has a given pdf file attached to.</p>
 <p>The file will contain the string ‘.pdf’ showing in its name thus you could do:</p>
@@ -792,11 +820,15 @@ method (3) and the interpretation of the can_use_chunked_reads flag. More on thi
 <p>That finds all posts that have a worker whose email is porton@arcamens.com binded to.</p>
 <p><strong>Tag</strong></p>
 <p>Match against the post tags.</p>
-<pre><code>tag:snippet + tag:django</code></pre>
-<p>Find all posts that are tagged with snippet and django.</p>
+<pre><code>tag:comment + tag:django</code></pre>
+<p>Find all posts that are tagged with comment and django.</p>
 <p><strong>Created</strong></p>
 <p>Regarding the post creation date.</p>
-<pre><code>created:2017</code></pre>
+<p>Would find posts created in the defined date range:</p>
+<pre><code>created&gt;:2018-05-08 + created&lt;:2018-05-01 </code></pre>
+<p>Or you could just do:</p>
+<pre><code>created:2018-05-08
+</code></pre>
 <p>Find all posts that were created in the year of 2017.</p>
 <p><strong>Label</strong></p>
 <p>The post title.</p>
@@ -833,10 +865,10 @@ method (3) and the interpretation of the can_use_chunked_reads flag. More on thi
 <p>In order to get additional information about the above attributes.</p>
 <p><strong>See:</strong> <a href="#advanced-card-search">Advanced Card Search</a></p>
 <p>In addition to cards the posts can have the following different attributes:</p>
-<p><strong>Snippet</strong></p>
+<p><strong>Comment</strong></p>
 <p>It allows one to match against posts that contain a given string either in the title or in the data attribute.</p>
-<p>Imagine you want to find a post which contains a snippet whose title is:</p>
-<pre><code>A snippet how to use gle aka google searcher library for python.</code></pre>
+<p>Imagine you want to find a post which contains a comment whose title is:</p>
+<pre><code>A comment how to use gle aka google searcher library for python.</code></pre>
 <p>And its data field contains:</p>
 <pre><code>from gle import Google
 
@@ -848,18 +880,18 @@ for indi in pages:
     for indj in indi:
         print(indj)</code></pre>
 <p>Then the below filter pattern would do the job to find such a post.</p>
-<pre><code>snippet:use gle + snippet:x.search</code></pre>
-<p><strong>Snippet Title</strong></p>
-<p>The above attribute matches strictly the snippet title.</p>
-<pre><code>snippet.title:some string in the title</code></pre>
-<p><strong>Snippet File</strong></p>
-<p>This one matches against posts that have snippets with attachments.</p>
-<pre><code>snippet.file:engine.pdf </code></pre>
-<p>That would find all posts that have a snippet with an attachment whose filename contains the string ‘engine.pdf’.</p>
-<p><strong>Snippet Owner</strong></p>
-<p>This one is regarding the snippet creator.</p>
-<pre><code>snippet.owner:Norris</code></pre>
-<p>Would find all posts that have at least one snippet that was created by a guy named Norris.</p>
+<pre><code>comment:use gle + comment:x.search</code></pre>
+<p><strong>Comment Title</strong></p>
+<p>The above attribute matches strictly the comment title.</p>
+<pre><code>comment.title:some string in the title</code></pre>
+<p><strong>Comment File</strong></p>
+<p>This one matches against posts that have comments with attachments.</p>
+<pre><code>comment.file:engine.pdf </code></pre>
+<p>That would find all posts that have a comment with an attachment whose filename contains the string ‘engine.pdf’.</p>
+<p><strong>Comment Owner</strong></p>
+<p>This one is regarding the comment creator.</p>
+<pre><code>comment.owner:Norris</code></pre>
+<p>Would find all posts that have at least one comment that was created by a guy named Norris.</p>
 <p><strong>Group</strong></p>
 <p>It narrows down the results by including posts from a specific group.</p>
 <pre><code>group:arcamens/backlog</code></pre>
@@ -938,7 +970,7 @@ for indi in pages:
 <p>From there you can as well delete the board, you’ll be asked for confirmation.</p>
 <h3 id="bitbucket-integration">Bitbucket Integration</h3>
 <p>Arcamens integrates with bitbucket, it is possible to reference cards from commit messages through links. When a card link shows on a commit message then an event is fired and a note is created on the card.</p>
-<p>The event is sent to everyone who is related to the card it means that if you belong to the card board or you’re an worker of the card then you’ll receive the commit event.</p>
+<p>The event is sent to everyone who is related to the card, it means that if you belong to the card board or you’re an worker of the card then you’ll receive the commit event.</p>
 <p>In order to register a bitbucket web hook just access the organization card then click on Settings:</p>
 <figure>
 <img src="/static/site_app/help/bitbucket-integration-0.png" alt="bitbucket-integration-0" /><figcaption>bitbucket-integration-0</figcaption>
@@ -967,16 +999,6 @@ for indi in pages:
 <p>That would be enough to list all cards that were referenced from a bitbucket commit. If you want to be more specific you could even search for cards that were referenced by commits and its commit author:</p>
 <pre><code>note:bitbucket + note:author_name</code></pre>
 <p>That would be enough to list the desired cards.</p>
-<h3 id="organization-user-removal">Organization User Removal</h3>
-<p>In order to remove an user from an organization it is necessary to be admin of the organization. The one who is removing the user will own all timeliens and boards of the removed user.</p>
-<p>Click on the wrench icon at the organization menu:</p>
-<figure>
-<img src="/static/site_app/help/organization-user-removal-0.png" alt="organization-user-removal-0" /><figcaption>organization-user-removal-0</figcaption>
-</figure>
-<p>Then click on Members, you would get:</p>
-<figure>
-<img src="/static/site_app/help/organization-user-removal-1.png" alt="organization-user-removal-1" /><figcaption>organization-user-removal-1</figcaption>
-</figure>
 <h3 id="organization-settingsremoval">Organization Settings/Removal</h3>
 <p>Click on wrench icon at the organization menu then Settings:</p>
 <figure>
@@ -986,6 +1008,7 @@ for indi in pages:
 <figure>
 <img src="/static/site_app/help/organization-settings-removal-1.png" alt="organization-settings-removal-1" /><figcaption>organization-settings-removal-1</figcaption>
 </figure>
+<p>Once clicking on Delete it will erase all organization data and its members will get notified.</p>
 <h3 id="logs">Logs</h3>
 <p>After an event is marked as seen it gets available through the logs window. In the logs window you can filter logs based on date.It is mostly useful to check what has been done in a period of time.</p>
 <p>For inspecting your logs just click on your name at the navbar and click on Logs.</p>

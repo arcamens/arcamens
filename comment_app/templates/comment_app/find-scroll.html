@@ -1,0 +1,31 @@
+{% for ind in elems %}
+<p>
+<a class="e-get" data-shell="#bigModalContent" 
+data-show="{{ind.get_absolute_url}}"
+href="{{ind.get_link_url}}" > 
+<span class="glyphicon glyphicon-file"></span>
+
+{{ind.title}} 
+
+</a> 
+
+<br>
+<small> On card
+<span class="glyphicon glyphicon-file"></span>
+{{ind.post.label|truncatechars:40}}</small>
+
+</p>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+

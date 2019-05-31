@@ -12,15 +12,14 @@ data-show="{% url 'note_app:list-notes' note.card.id %}"
 class="btn btn-default e-get"> {% trans "Back" %} </button>
 
 <button  type="button" 
-data-form="#form-note-data" 
-data-shell="#bigModalContent" 
-data-shell-error="#bigModalContent" 
-data-show="{% url 'note_app:update-note' note.id %}"
+data-form="#noteForm"  data-shell="#bigModalContent" 
+data-shell-error="#bigModalContent"  data-show="{% url 'note_app:update-note' note.id %}"
 class="btn btn-default e-post"> 
 {% trans "Update" %}
 </button>
 
 {% endblock %}
+
 
 
 

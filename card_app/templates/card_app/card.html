@@ -3,6 +3,9 @@
 <div class="panel panel-default {% if card.parent or card.parent_post %} fork {% else %} card {% endif %}" >
 <div class="panel-body text-center" >
 
+<form id="cutCardForm" enctype="multipart/form-data"> {% csrf_token %} </form>
+<form id="copyCardForm" enctype="multipart/form-data"> {% csrf_token %} </form>
+
 <div class="pull-right" >
 <a class=" e-get text-default"  href="#" 
 data-shell="#pins"  data-show="{% url 'card_app:pin-card' card.id %}">
@@ -10,11 +13,11 @@ data-shell="#pins"  data-show="{% url 'card_app:pin-card' card.id %}">
 </div>
 
 <div class="pull-left"> 
-<a class=" e-get text-default"  href="#" 
+<a class=" e-post text-default"  href="#" data-form="#copyCardForm"
 data-shell="#main-view" data-show="{% url 'card_app:copy-card' card.id %}">
 <span class="glyphicon glyphicon-copy"></span></a> 
 
-<a class=" e-get text-warning"  href="#" 
+<a class=" e-post text-warning"  href="#" data-form="#cutCardForm"
 data-shell="#main-view" data-show="{% url 'card_app:cut-card' card.id %}">
 <span class="glyphicon glyphicon-scissors"></span> </a> 
 
@@ -45,6 +48,7 @@ data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
 
 
 </div>
+
 
 
 

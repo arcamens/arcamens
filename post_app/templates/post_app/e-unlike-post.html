@@ -1,0 +1,33 @@
+{% extends 'group_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label}} </a> was disliked !
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

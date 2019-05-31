@@ -6,21 +6,21 @@ from . import models
 class PostForm(forms.ModelForm):
     class Meta:
         model  = models.Post
-        exclude = ('user', 'ancestor', 'html', 'parent', 'priority')
+        fields = ('label', 'data')
 
 class PostFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.PostFileWrapper
-        exclude = ('post', )
+        fields = ('file', )
 
 class PostFilterForm(SqLikeForm, forms.ModelForm):
     class Meta:
         model  = models.PostFilter
         exclude = ('user', 'group')
 
-class GlobalPostFilterForm(SqLikeForm, forms.ModelForm):
+class PostSearchForm(SqLikeForm, forms.ModelForm):
     class Meta:
-        model  = models.GlobalPostFilter
+        model  = models.PostSearch
         exclude = ('user', 'organization')
 
 class UserSearchForm(SqLikeForm, forms.Form):
@@ -48,6 +48,18 @@ class ListSearchform(SqLikeForm, forms.Form):
 class PostPriorityForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: owner:oliveira + tag:bug')
+
+# class PostTaskshipForm(forms.ModelForm):
+    # class Meta:
+        # model  = models.PostTaskship
+        # fields = ('status',)
+
+class PostTagshipForm(forms.ModelForm):
+    class Meta:
+        model  = models.PostTagship
+        fields = ()
+
+
 
 
 

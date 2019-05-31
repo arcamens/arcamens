@@ -11,8 +11,10 @@ User <a href="#" data-toggle="popover" data-trigger="hover" title="{{event.peer.
 data-shell="#bigModalContent"
 data-show="{% url 'card_app:view-data' event.card.id %}" href="{{event.card.get_link_url}}"> 
 <span class="glyphicon glyphicon-file"></span> {{event.card.label|truncatechars:40}} </a> 
+<p> <b> Status Message</b>: {{event.status}} </p>
 
 {% endblock %}
+
 
 
 

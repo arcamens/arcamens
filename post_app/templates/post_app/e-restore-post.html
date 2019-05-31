@@ -1,0 +1,32 @@
+{% extends 'group_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+Post <a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" 
+href="{{event.post.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> {{event.post.label|truncatechars:40}} </a> 
+was restored on group
+
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'group_app:list-posts' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
+<span class="glyphicon glyphicon-eye-open"></span>
+{{event.ancestor.name}} </a> ... from
+
+<div class="panel panel-default">
+<div class="panel-body">
+{{event.event_html|safe}}
+</div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+

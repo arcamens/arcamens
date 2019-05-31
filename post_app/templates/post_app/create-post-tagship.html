@@ -1,0 +1,52 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> <span class="glyphicon glyphicon-plus"></span> Create Tag Relationship </h5>
+</div>
+
+<div class="modal-body">
+<p class="text-warning">  Bind tag <span class="glyphicon glyphicon-tag"></span> {{tag.name}} to the post {{post.name}}?</p>
+
+<form id="postTagshipForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+</div>
+
+<div class="modal-footer">
+<script>
+function refreshPost() {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
+}
+</script>
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'post_app:bind-post-tags' post.id %}"> {% trans "Back" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-callback="refreshPost();" data-form="#postTagshipForm" data-show="{% url 'post_app:create-post-tagship' post.id tag.id  %}"
+class="btn btn-default e-post"> {% trans "Done" %} </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

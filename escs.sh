@@ -9,7 +9,7 @@ git add *
 git commit -a
 git push -u origin staging
 #############################################################################
-# push arcamens alpha branch.
+# push arcamens django-v2 branch.
 cd ~/projects/arcamens-code
 # clean up all .pyc files. 
 find . -name "*.pyc" -exec rm -f {} \;
@@ -17,7 +17,7 @@ rm -fr ~/projects/arcamens-code/static/media
 git status
 git add *
 git commit -a
-git push -u origin alpha
+git push -u origin django-v2
 ##############################################################################
 # push arcamens on master.
 cd ~/projects/arcamens-code
@@ -72,6 +72,7 @@ python manage.py blowdb
 
 python manage.py makemigrations
 python manage.py migrate
+y
 ##############################################################################
 # stress-db.
 ./stress-db teta 1
@@ -79,6 +80,10 @@ python manage.py migrate
 # create alpha branch.
 git checkout -b alpha
 git push --set-upstream origin alpha
+##############################################################################
+# create staging branch.
+git checkout -b staging
+git push --set-upstream origin staging
 ##############################################################################
 # switch to alpha branch.
 git checkout alpha
@@ -91,16 +96,34 @@ stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 cd ~/.virtualenvs/
 ls -la
 # by default, python3 has executable named python in arch linux.
-virtualenv arcamens -p /usr/bin/python3.6
+virtualenv arcamens -p python3.5
+#####k#########################################################################
+# create arcamens django-v2 virtualenv.
+cd ~/.virtualenvs/
+ls -la
+# by default, python3 has executable named python in arch linux.
+virtualenv arcamens-v2 -p python3.5
+
 ##############################################################################
 # activate arcamens virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
 cd ~/projects/arcamens-code
 ##############################################################################
+# activate arcamens-v2 virtualenv.
+cd ~/.virtualenvs/
+source arcamens-v2/bin/activate
+cd ~/projects/arcamens-code
+##############################################################################
 # install arcamens dependencies virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
+cd ~/projects/arcamens-code
+pip install -r requirements.txt 
+##############################################################################
+# install arcamens-v2 dependencies virtualenv.
+cd ~/.virtualenvs/
+source arcamens-v2/bin/activate
 cd ~/projects/arcamens-code
 pip install -r requirements.txt 
 ##############################################################################
@@ -111,6 +134,10 @@ django-admin startproject arcamens arcamens-code
 # create core_app app.
 cd ~/projects/arcamens-code
 python manage.py startapp core_app
+##############################################################################
+# create gitlab app.
+cd ~/projects/arcamens-code
+python manage.py startapp gitlab_app
 ##############################################################################
 # create onesignal app.
 cd ~/projects/arcamens-code
@@ -146,9 +173,10 @@ cd ~/projects/django-paybills-code
 python setup.py install
 rm -fr build
 ##############################################################################
-# access victor server through ssh.
+# access staging user on server through ssh .
 
-tee -i >(stdbuf -o 0 ssh ssh admin@staging.arcamens.com 'bash -i')
+tee -i >(stdbuf -o 0 ssh ssh staging@arcamens.com 'bash -i')
+password: eeth4Shu
 ##############################################################################
 # run supervisord.
 supervisord -n -c ../conf/supervisord.conf
@@ -406,15 +434,6 @@ mkdir ~/.virtualenvs/
 cp -i ~arcamens/.ssh/id_rsa.pub ~staging/.ssh/id_rsa.pub
 cp `~/.ssh/id_rsa`  `~/.ssh/id_rsa.pub`
 
-# open supervisord.conf and replace all arcamens -> staging
-# except arcamens-code
-
-grep -rl --exclude-dir='.git' 'Timeline' ./ | xargs sed -i 's/Timeline/Group/g'
-grep -rl --exclude-dir='.git' 'timeline' ./ | xargs sed -i 's/timeline/group/g'
-
-sed -i 's/Timeline/Group/g' arcamens-db.json
-
-sed -i 's/timeline/group/g' arcamens-db.json
 ##############################################################################
 # Approach for renaming django app with existing db.
 
@@ -429,7 +448,7 @@ sed -i 's/appname/newappname/g' arcamens-db.json
 # cases though.
 python manage.py loaddata arcamens-db.json
 
-python manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude core_app.Tag --exclude core_app.Event --exclude core_app.UserTagship --exclude card_app.CardTagship --exclude card_app.CardTaskship --exclude post_app.PostTaskship --exclude post_app.PostTagship --exclude card_app.GlobalCardFilter --exclude post_app.GlobalPostFilter > arcamens-db.json
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude core_app.Tag --exclude core_app.Event --exclude core_app.UserTagship --exclude card_app.CardTagship --exclude card_app.CardTaskship --exclude post_app.PostTaskship --exclude post_app.PostTagship --exclude card_app.GlobalCardFilter --exclude post_app.PostSearch > arcamens-db.json
 
 
 #############################################################################
@@ -454,5 +473,24 @@ python manage.py reset_counters
 python manage.py check_deadlines
 
 pip install --upgrade git+ssh://git@bitbucket.org/arcamens/django-jsim.git
+
+##############################################################################
+git rm --cached db.sqlite3
+##############################################################################
+python manage.py custom_dumps Arcamens
+python manage.py custom_loads data.json ioliveira@id.uff.br
+##############################################################################
+cd ~/card_app
+grep -rl --exclude-dir='.git' 'GlobalCardFilter' ./ | xargs sed -i 's/GlobalCardFilter/CardSearch/g'
+
+grep -rl --exclude-dir='.git' 'comment' ./ | xargs sed -i 's/comment/feedback/g'
+grep -rl --exclude-dir='.git' 'Comment' ./ | xargs sed -i 's/Comment/Feedback/g'
+
+grep -rl --exclude-dir='.git' 'comment' ./ | xargs sed -i 's/sippet/feedback/g'
+
+##############################################################################
+export PATH=$PATH:~/.local/bin
+
+
 
 

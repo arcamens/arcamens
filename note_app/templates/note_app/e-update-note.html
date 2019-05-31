@@ -2,18 +2,18 @@
 {% load i18n %}
 
 {% block content %}
-<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
-
-<span class="glyphicon glyphicon-user"></span>
-{{event.user}} </a> has updated a 
-
 <a class="e-get"
 data-shell="#bigModalContent" 
 data-show="{% url 'note_app:preview-note' event.note.id %}" 
 href="{{event.note.get_link_url}}"> 
-<span class="glyphicon glyphicon-book"></span> Note </a> 
+<span class="glyphicon glyphicon-book"></span> Note </a>  ...
+<a class="e-get"
+data-shell="#bigModalContent"
+data-show="{% url 'note_app:note-diff' event.id %}" 
+href="{{event.note.get_link_url}}"> 
+<span class="glyphicon glyphicon-check"></span> Diff </a>?
 
-on
+was updated on
 
 <a class="e-get"
 data-shell="#bigModalContent"
@@ -23,37 +23,5 @@ href="{{event.child.get_link_url}}">
 {{event.child.label|truncatechars:40}} </a> 
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

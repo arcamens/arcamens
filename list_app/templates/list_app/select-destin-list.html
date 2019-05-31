@@ -14,19 +14,14 @@ Cards on Clipboard
 
 
 <div class="modal-body">
+<form id="pasteCardForm"> {% csrf_token %} </form>
+
 <div class="pre-scrollable">
 {% for ind in cards %}
-
-<p> 
-<span class="glyphicon glyphicon-file"></span>
-
-{{ind.label|truncatechars:100}} 
+<p>  <span class="glyphicon glyphicon-file"></span> {{ind.label|truncatechars:100}} 
 <br>
-
-<small>
-<a class="e-get" data-show="{% url 'list_app:paste-card' list.id ind.id %} "
-href="#"> <span class="glyphicon glyphicon-paste"></span> Paste</a>
-</small>
+<small> <a class="e-post" data-form="#pasteCardForm" data-show="{% url 'list_app:paste-card' list.id ind.id %} "
+href="#"> <span class="glyphicon glyphicon-paste"></span> Paste</a> </small>
 
 </p>
 {% empty %}
@@ -43,26 +38,10 @@ $('#mediumModal').one('hidden.bs.modal', function () {
 })
 </script>
 
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<button type="button" class="btn btn-sm btn-default" data-dismiss="modal"> <span class="glyphicon glyphicon-thumbs-down"></span>
+Close</button>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

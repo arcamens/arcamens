@@ -13,9 +13,16 @@ was updated on list
 data-shell="#main-view"
 data-show="{% url 'card_app:list-cards' event.ancestor.id %}" href="{{event.ancestor.get_link_url}}"> 
 <span class="glyphicon glyphicon-list-alt"></span>
-{{event.ancestor.name}} </a> 
+{{event.ancestor.name}} </a> ...
+<a class="e-get"
+data-shell="#bigModalContent"
+data-show="{% url 'card_app:card-diff' event.id %}" 
+href="{{event.card.get_link_url}}"> 
+<span class="glyphicon glyphicon-check"></span> Diff </a>?
 
 {% endblock %}
+
+
 
 
 

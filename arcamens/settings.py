@@ -61,8 +61,6 @@ PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
 PAYPAL_IPN_VIEW   = 'cash_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
-# Max users per account for free plan.
-FREE_MAX_USERS = 3
 USER_COST      = 10
 
 # Mail settings.
@@ -71,7 +69,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'arcamens.softwares@gmail.com'
-EMAIL_HOST_PASSWORD = 'arcamenssoftwares'
+EMAIL_HOST_PASSWORD = 'bianca15041986'
 
 # just a workaround.
 LOCAL_ADDR = 'http://0.0.0.0:8000'
@@ -110,7 +108,7 @@ INSTALLED_APPS = [
     'core_app',
     'group_app',
     'post_app',
-    'comment_app',
+    'feedback_app',
     'paybills',
     'board_app',
     'site_app', 
@@ -120,7 +118,7 @@ INSTALLED_APPS = [
     'card_app', 
     'jsim',
     'jscroll',
-    'snippet_app',
+    'comment_app',
     'note_app',
     'bootstrap3',
     'blowdb',
@@ -227,32 +225,6 @@ try:
     from local_settings import *
 except ImportError:
     pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

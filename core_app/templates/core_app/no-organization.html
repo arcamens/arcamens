@@ -29,6 +29,9 @@
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.public  size='md' %}
+
 {% bootstrap_form_errors form type='non_fields' %}
 {% buttons submit='Create' layout='inline' %}{% endbuttons %}
 
@@ -43,6 +46,8 @@
 
 </body>
 </html>
+
+
 
 
 

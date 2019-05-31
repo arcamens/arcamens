@@ -1,0 +1,19 @@
+{% extends 'group_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+File <span class="text-danger"> 
+<span class="glyphicon glyphicon-file"></span> {{event.filename}}</span> dettached from comment
+
+<a class="e-get"
+data-shell="#bigModalContent" 
+data-show="{% url 'comment_app:comment' event.comment.id %}" href="{{event.comment.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.comment.title}} </a>
+
+{% endblock %}
+
+
+
+
+

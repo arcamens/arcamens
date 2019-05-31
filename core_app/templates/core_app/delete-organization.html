@@ -18,20 +18,18 @@
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
+</div>
+
 <div class="modal-footer">
-<button type="button" class="btn btn-default" 
-data-dismiss="modal">Cancel</button>
+<div class="btn-group btn-group-sm">
+<button type="button" class="btn btn-default"  data-dismiss="modal">
+<span class="glyphicon glyphicon-thumbs-down"></span> Cancel</button>
 
 <button type="button" data-form="#confirmOrganizationDeletionForm" data-callback="location.reload()" 
 data-show="{% url 'core_app:delete-organization'  %}" data-shell=""
-class="btn btn-danger e-post"> 
-     {% trans "Delete" %}
-</button>
+class="btn btn-danger e-post">  <span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %} </button>
+</div>
 
-
-
-
-
-
+</div>
 
 

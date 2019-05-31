@@ -24,9 +24,7 @@ class PeriodForm(forms.ModelForm):
             return
 
         max_users = self.cleaned_data.get('max_users')
-        if max_users <= settings.FREE_MAX_USERS:
-            raise forms.ValidationError("That is a free plan.")
-        elif max_users < self.max_users:
+        if max_users < self.max_users:
             raise forms.ValidationError("Max users can't be \
                 smaller than your account members number!")
 
@@ -39,5 +37,6 @@ class PeriodForm(forms.ModelForm):
         elif self.expiration and expiration == self.expiration and max_users == self.max_users:
             raise forms.ValidationError("Either increase the number of users \
                 or increase expiration date!")
+
 
 

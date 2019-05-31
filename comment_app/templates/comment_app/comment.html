@@ -1,0 +1,85 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<div class="modal-header">
+<form id="deleteCommentForm"> {% csrf_token %} </form>
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<span class="glyphicon glyphicon-book"></span> 
+Comment by <a href="#" data-toggle="popover" data-trigger="hover" title="{{comment.owner.email}}"  data-content="{{comment.owner.description}}"> {{comment.owner.name}} </a>  on post
+<a  href="{{post.get_link_url}}" data-shell="#main-view"  data-show="{% url 'post_app:post' post.id %}"
+class="e-get"> <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
+
+<a href="#" data-shell="#bigModalContent" data-show="{% url 'comment_app:find' %}"
+class="e-get">  <span class="glyphicon glyphicon-search"></span> Comments </a>
+
+</div>
+
+<div class="modal-body">
+
+{{comment.title}} 
+
+{{comment.html | safe}}
+
+<hr>
+<div  style="font-size:80%">
+<div id="comment-attachments-{{comment.id}}" style="min-height:52px;"> </div>
+
+<script> 
+$.get({ 
+url: "{% url 'comment_app:attach-file' comment.id %}",
+async: true},
+
+function(data) {
+    $('#comment-attachments-{{comment.id}}').html(data);
+});
+
+</script>
+
+</div>
+
+
+</div>
+
+<div class="modal-footer">
+<div class="pull-left">
+<p> On <a href="{{comment.get_link_url}}" target="_blank"> {{comment.created}}</a> </p>
+</div>
+
+<div class="btn-group btn-group-sm">
+
+<button  type="button" 
+data-show="{% url 'comment_app:comment-events' comment.id %}"
+data-shell="#mediumModalContent" 
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-bell"></span> {% trans "Activity" %} </button>
+
+<button  type="button" 
+data-show="{% url 'comment_app:update-comment' comment.id %}"
+data-shell="#bigModalContent" 
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-edit"></span> {% trans "Update" %} </button>
+
+<button  type="button" data-show="{% url 'comment_app:delete-comment' comment.id %}" data-form="#deleteCommentForm"
+data-shell="#post-{{post.id}}" 
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-remove"></span> {% trans "Remove" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-up"></span>     {% trans "Close" %}
+</button>
+</div>
+</div>
+
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' comment.post.id  %}');
+})
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+
+</script>
+
+
+
+
+
+

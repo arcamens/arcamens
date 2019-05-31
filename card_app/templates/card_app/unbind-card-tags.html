@@ -1,0 +1,71 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% load avatar %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Tags on card <a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} </a>
+
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+<form id="cardTagshipForm">
+{% csrf_token %}
+
+{% for ind in included %}
+<p class="text-center"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}} <br>
+
+<small> {{ind.description}} </small>   <br>
+
+<a class="e-post" style="font-size:70%"  data-form="#cardTagshipForm" data-show="{% url 'card_app:delete-card-tagship' card.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Unbind</a>  
+</p>
+{% empty %}
+No tags to unbind ...
+{% endfor %}
+
+</form>
+
+</div>
+
+<br>
+
+<form id="tagSearchForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+<a href="#" data-show="{% url 'card_app:bind-card-tags' card.id %}" class="e-get"> 
+ <span class="glyphicon glyphicon-tag"></span> Bind Tags? </a>
+
+</div>
+
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'card_app:view-data' card.id %}"
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button type="button" data-form="#tagSearchForm" 
+data-show="{% url 'card_app:unbind-card-tags' card.id  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-search"></span> {% trans "Search" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Close" %}
+</button>
+</div>
+
+</div>
+

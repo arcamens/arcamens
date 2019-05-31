@@ -1,0 +1,19 @@
+{% extends 'group_app/event.html' %}
+{% load i18n %}
+{% load bname %}
+
+{% block content %}
+File <a href="{% url 'comment_app:comment-file-download' event.filewrapper.id %}" target="_blank"> {{event.filewrapper.file.name|bname}} </a> attached to comment
+
+<a class="e-get"
+data-shell="#bigModalContent" 
+data-show="{% url 'comment_app:comment' event.comment.id %}" href="{{event.comment.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.comment.title}} </a>
+
+{% endblock %}
+
+
+
+
+

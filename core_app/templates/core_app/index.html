@@ -83,22 +83,7 @@ OneSignal.push(function() {
 </script>
 
 
-<nav class="navbar navbar-inverse" style="background-color:#071152">
-<div class="container-fluid">
-
-<div class="navbar-header"> <a class="navbar-brand" href="{% url 'core_app:index' %}"> Arcamens</a> </div>
-
-{% include 'core_app/index-menu-navbar.html' %}
-
-</div>
-</div>
-
-</nav>
-
-
-{% block navbar %}
-
-{% endblock %}
+{% include 'core_app/index-navbar.html' %}
 
 <div class="clearfix"></div>
 
@@ -108,16 +93,4 @@ OneSignal.push(function() {
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 

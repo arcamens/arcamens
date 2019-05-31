@@ -1,0 +1,46 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> <span class="glyphicon glyphicon-thumbs-down"></span> Leave Board {{board.name}}?</h5>
+</div>
+
+<div class="modal-body">
+<p class="text-warning"> Are you sure you want to leave this board? </p>
+<form id="leaveBoardForm" enctype="multipart/form-data">
+{% csrf_token %}
+</form>
+
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-form="#leaveBoardForm" data-show="{% url 'board_app:leave-board' board.id %}"
+data-shell="#main-view" class="btn btn-default e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Done" %} </button>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

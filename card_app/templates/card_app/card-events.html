@@ -4,8 +4,9 @@
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h5>   <span class="glyphicon glyphicon-bell"></span>
-Events on card <span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:60}} 
-<span class="badge">{{count}}</span></h5>
+Events on card <a class="e-get" data-shell="#bigModalContent"
+data-show="{% url 'card_app:view-data' card.id %}" href="{{card.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:40}} <span class="badge">{{count}}</span></a> </h5>
 </div>
 
 <div class="modal-body pre-scrollable">
@@ -27,7 +28,8 @@ Events on card <span class="glyphicon glyphicon-file"></span> {{card.label|trunc
 <div class="modal-footer">
 <button  type="button" data-shell="#bigModalContent" 
 data-show="{% url 'card_app:view-data' card.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <script>
 
@@ -37,12 +39,5 @@ $(function () {
 </script>
 
 </div>
-
-
-
-
-
-
-
 
 

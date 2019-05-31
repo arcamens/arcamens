@@ -1,8 +1,11 @@
 {% include 'board_app/list-pins.html' %}
 
 <div id="post-{{post.id}}">
+<form id="cutPostForm"> {% csrf_token %} </form>
+<form id="copyPostForm"> {% csrf_token %} </form>
 
 {% include 'post_app/post-data.html' %}
 </div>
+
 
 

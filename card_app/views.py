@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.db.models.functions import Concat
 from django.db.models import Q, F, Exists, OuterRef, Count, Value, CharField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse
-from card_app.models import GlobalCardFilter, CardPin
+from card_app.models import CardSearch, CardPin, EBindTagCard, \
+EUnbindTagCard, CardTagship, EUpdateCard, Card
+from core_app.sqlikes import SqUser, SqTag
+from card_app.sqlikes import SqCard
 from core_app.models import Clipboard, Event, Tag
 from django.core.mail import send_mail
 from core_app.views import GuardianView, FileDownload
@@ -49,7 +52,7 @@ class CardLink(GuardianView):
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
-        # snippets = card.snippets.all()
+        # comments = card.comments.all()
         relations = card.relations.all()
         path = card.path.all()
 
@@ -84,10 +87,10 @@ class ListCards(GuardianView):
         user=self.me, organization=self.me.default, list=list)
 
         cards = list.cards.all()
-
         total = cards.count()
+        cards = cards.filter(done=False)
 
-        cards = filter.collect(cards)
+        cards = filter.from_sqcard(cards) if filter.status else cards
         count = cards.count()
 
         workers1 = User.objects.filter(pk=self.me.pk, tasks=OuterRef('pk'))
@@ -110,16 +113,15 @@ class ViewData(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
 
-        boardpins = self.me.boardpin_set.filter(organization=self.me.default)
-        listpins = self.me.listpin_set.filter(organization=self.me.default)
-        cardpins = self.me.cardpin_set.filter(organization=self.me.default)
-        grouppins = self.me.grouppin_set.filter(organization=self.me.default)
+        # boardpins = self.me.boardpin_set.filter(organization=self.me.default)
+        # listpins = self.me.listpin_set.filter(organization=self.me.default)
+        # cardpins = self.me.cardpin_set.filter(organization=self.me.default)
+        # grouppins = self.me.grouppin_set.filter(organization=self.me.default)
 
         forks = card.forks.all()
         workers = card.workers.all()
         attachments = card.cardfilewrapper_set.all()
         tags = card.tags.all()
-        # snippets = card.snippets.all()
         relations = card.related.all()
         path = card.path.all()
         # post_forks = card.post_forks.all()
@@ -135,9 +137,8 @@ class ViewData(GuardianView):
 
         return render(request, 'card_app/view-data.html', 
         {'card': card, 'forks': forks, 'ancestor': card.ancestor, 'path': path,
-        'attachments': attachments, 'user': self.me, 'workers': workers,  'grouppins': grouppins,
-        'relations': relations, 'listpins': listpins, 'boardpins': boardpins,
-        'cardpins': cardpins, 'tags': tags})
+        'attachments': attachments, 'user': self.me, 'workers': workers,  
+        'relations': relations, 'tags': tags})
 
 class ConfirmCardDeletion(GuardianView):
     def get(self, request, card_id):
@@ -188,7 +189,12 @@ class CreateCard(GuardianView):
         ancestor = list_app.models.List.objects.get(id=ancestor_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
-        form     = forms.CardForm(request.POST)
+        boardship = self.me.member_boardship.get(board=ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't create cards!", status=403)
+
+        form = forms.CardForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'card_app/create-card.html', 
@@ -211,8 +217,13 @@ class CreateCard(GuardianView):
         return redirect('card_app:view-data', card_id=card.id)
 
     def create_relations(self, card, ids):
-        cards = models.Card.get_allowed_cards(self.me)
-        cards = cards.filter(id__in=ids)
+        # It makes sure the card in fact can be accessed by the logged user.
+        query0 = Q(ancestor__ancestor__organization=self.me.default)
+        query1 = Q(ancestor__ancestor__members=self.me)
+        query2 = Q(workers=self.me)
+        query3 = query0 & (query1 | query2)
+        cards  = Card.objects.filter(query3).distinct()
+        cards  = cards.filter(id__in=ids)
 
         for ind in cards:
             self.relate(card, ind)
@@ -329,6 +340,11 @@ class ArchiveAll(GuardianView):
         list = List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
+        boardship = self.me.member_boardship.get(board=list.ancestor)
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                archive cards!", status=403)
+
         cards = list.cards.filter(done=False)
         cards = cards.filter(Q(forks__done=True) | Q(forks__isnull=True))
 
@@ -348,8 +364,13 @@ class ArchiveAll(GuardianView):
         return redirect('card_app:list-cards', list_id=list.id)
 
 class DeleteCard(GuardianView):
-    def get(self, request, card_id):
+    def post(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't delete cards!", status=403)
+
         event = models.EDeleteCard.objects.create(organization=self.me.default,
         ancestor=card.ancestor, board=card.ancestor.ancestor, 
         label=card.label, user=self.me)
@@ -362,11 +383,15 @@ class DeleteCard(GuardianView):
         list_id=card.ancestor.id)
 
 class CutCard(GuardianView):
-    def get(self, request, card_id):
+    def post(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
-        list = card.ancestor
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
 
-        clipboard, _    = Clipboard.objects.get_or_create(
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't cut cards!", status=403)
+
+        list = card.ancestor
+        clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
     
         # To avoid the possibility of another user/me
@@ -386,8 +411,13 @@ class CutCard(GuardianView):
         list_id=list.id)
 
 class CopyCard(GuardianView):
-    def get(self, request, card_id):
+    def post(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't copy cards!", status=403)
+
         copy = card.duplicate()
 
         clipboard, _ = Clipboard.objects.get_or_create(
@@ -420,6 +450,7 @@ class AttachFile(GuardianView):
 
     def post(self, request, card_id):
         card        = models.Card.locate(self.me, self.me.default, card_id)
+
         attachments = card.cardfilewrapper_set.all()
 
         form = forms.CardFileWrapperForm(request.POST, 
@@ -428,6 +459,7 @@ class AttachFile(GuardianView):
         if not form.is_valid():
             return render(request, 'card_app/attach-file.html', 
                 {'card':card, 'form': form, 'attachments': attachments})
+
         record = form.save(commit = False)
         record.card = card
         record.organization = self.me.default
@@ -451,6 +483,12 @@ class DetachFile(GuardianView):
         Q(card__ancestor__ancestor__members=self.me) | Q(card__workers=self.me),
         id=filewrapper_id, card__ancestor__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
+
+        boardship = self.me.member_boardship.get(
+            board=filewrapper.card.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't dettach files!", status=403)
 
         attachments = filewrapper.card.cardfilewrapper_set.all()
         form = forms.CardFileWrapperForm()
@@ -477,17 +515,22 @@ class UpdateCard(CreateCard):
 
     def post(self, request, card_id):
         record = models.Card.locate(self.me, self.me.default, card_id)
-        form    = forms.CardForm(request.POST, instance=record)
+        boardship = self.me.member_boardship.get(board=record.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't update cards!", status=403)
+
+        event = models.EUpdateCard.objects.create(card_data=record.data, card_html=record.html,
+        organization=self.me.default, ancestor=record.ancestor, card_label=record.label,
+        board=record.ancestor.ancestor, card=record, user=self.me)
+
+        form  = forms.CardForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'card_app/update-card.html',
                         {'form': form, 'card':record, }, status=400)
 
         record.save()
-
-        event = models.EUpdateCard.objects.create(
-        organization=self.me.default, ancestor=record.ancestor, 
-        board=record.ancestor.ancestor, card=record, user=self.me)
 
         event.dispatch(*record.workers.all(), 
         *record.ancestor.ancestor.members.all())
@@ -502,9 +545,15 @@ class UpdateCard(CreateCard):
         card_id=record.id)
 
     def update_relations(self, card, ids):
-        cards = models.Card.get_allowed_cards(self.me)
-        cards = cards.filter(id__in=ids)
-        cards = cards.exclude(id__in=card.relations.all())
+        # It makes sure the card in fact can be 
+        # accessed by the logged user.
+        query0 = Q(ancestor__ancestor__organization=self.me.default)
+        query1 = Q(ancestor__ancestor__members=self.me)
+        query2 = Q(workers=self.me)
+        query3 = query0 & (query1 | query2)
+        cards  = Card.objects.filter(query3).distinct()
+        cards  = cards.filter(id__in=ids)
+        cards  = cards.exclude(id__in=card.relations.all())
 
         for ind in cards:
             self.relate(card, ind)
@@ -546,7 +595,7 @@ class SetupCardFilter(GuardianView):
         filter = models.CardFilter.objects.get(user__id=self.user_id, 
         organization__id=self.me.default.id, list__id=list_id)
 
-        sqlike = models.Card.from_sqlike()
+        sqlike = SqCard()
         form   = forms.CardFilterForm(request.POST, 
             sqlike=sqlike, instance=filter)
 
@@ -567,156 +616,13 @@ class PinCard(GuardianView):
 
         return redirect('board_app:list-pins')
 
-class ManageCardWorkers(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        included = card.workers.all()
-        excluded = self.me.default.users.exclude(tasks=card)
-        total = included.count() + excluded.count()
-
-        return render(request, 'card_app/manage-card-workers.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'me': self.me, 'organization': self.me.default, 'total': total, 
-        'count': total, 'form':forms.UserSearchForm()})
-
-    def post(self, request, card_id):
-        sqlike   = User.from_sqlike()
-        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
-        card     = models.Card.locate(self.me, self.me.default, card_id)
-        included = card.workers.all()
-        excluded = self.me.default.users.exclude(tasks=card)
-        total    = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'card_app/manage-card-workers.html', 
-                {'me': self.me, 'card': card, 'form':form, 'total': total, 
-                    'count': total,}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-        count = included.count() + excluded.count()
-
-        return render(request, 'card_app/manage-card-workers.html', 
-        {'included': included, 'excluded': excluded, 'card': card, 'total': total,
-        'count': count, 'me': self.me, 'form':form})
-
-class BindCardWorker(GuardianView):
-    def post(self, request, card_id, user_id):
-        user = User.objects.get(id=user_id, organizations=self.me.default)
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        models.CardTaskship.objects.create(worker=user, assigner=self.me, card=card)
-
-        event = models.EBindCardWorker.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
-
-        event.dispatch(*card.workers.all(), 
-        *card.ancestor.ancestor.members.all())
-        event.save()
-        return ManageCardWorkers.as_view()(request, card_id)
-
-# class BindWorkerCard(BindCardWorker):
-    # def redirect(self, request, card_id, user_id):
-        # return ManageCardWorkers.as_view()(request, card_id)
-
-class UnbindCardWorker(BindCardWorker):
-    def post(self, request, card_id, user_id):
-        user = User.objects.get(id=user_id, organizations=self.me.default)
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        event = models.EUnbindCardWorker.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
-
-        event.dispatch(*card.workers.all(), 
-        *card.ancestor.ancestor.members.all())
-        event.save()
-
-        user.card_workership.get(card=card).delete()
-        return ManageCardWorkers.as_view()(request, card_id)
-
-# class UnbindWorkerCard(UnbindCardWorker):
-    # def redirect(self, request, card_id, user_id):
-        # return ManageCardWorkers.as_view()(request, card_id)
-
-class ManageCardTags(GuardianView):
-    def get(self, request, card_id):
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        included = card.tags.all()
-        excluded = self.me.default.tags.exclude(cards=card)
-        total = included.count() + excluded.count()
-
-        return render(request, 'card_app/manage-card-tags.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'organization': self.me.default,'form':forms.TagSearchForm(),
-        'total': total, 'count': total})
-
-    def post(self, request, card_id):
-        sqlike = Tag.from_sqlike()
-        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
-
-        card = models.Card.locate(self.me, self.me.default, card_id)
-
-        included = card.tags.all()
-        excluded = self.me.default.tags.exclude(cards=card)
-        total = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'card_app/manage-card-tags.html', 
-                {'organization': self.me.default, 'card': card, 'total': total,
-                        'count': 0, 'form':form}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-
-        count = included.count() + excluded.count()
-
-        return render(request, 'card_app/manage-card-tags.html', 
-        {'included': included, 'excluded': excluded, 'card': card,
-        'me': self.me, 'organization': self.me.default,
-        'total': total, 'count': count, 'form':form})
-
-class UnbindCardTag(GuardianView):
-    def post(self, request, card_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id, 
-        organization=self.me.default)
-
-        card = models.Card.locate(self.me, self.me.default, card_id)
-        card.cardtagship_set.get(tag=tag).delete()
-
-        event = models.EUnbindTagCard.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
-
-        event.dispatch(*card.workers.all(), 
-        *card.ancestor.ancestor.members.all())
-        event.save()
-        return ManageCardTags.as_view()(request, card_id)
-
-class BindCardTag(GuardianView):
-    def post(self, request, card_id, tag_id):
-        tag = core_app.models.Tag.objects.get(id=tag_id, 
-        organization=self.me.default)
-
-        card = models.Card.locate(self.me, self.me.default, card_id)
-        models.CardTagship.objects.create(tag=tag, card=card, tagger=self.me)
-
-
-        event = models.EBindTagCard.objects.create(
-        organization=self.me.default, ancestor=card.ancestor, 
-        board=card.ancestor.ancestor, card=card, tag=tag, user=self.me)
-
-        event.dispatch(*card.workers.all(), 
-        *card.ancestor.ancestor.members.all())
-        event.save()
-        return ManageCardTags.as_view()(request, card_id)
-
 class Done(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                archive cards!", status=403)
 
         can_archive = all(card.forks.values_list('done', flat=True))
         if not can_archive:
@@ -738,14 +644,18 @@ class Done(GuardianView):
         event.dispatch(*card.workers.all(), *users)
         event.save()
 
-        return redirect('card_app:view-data', card_id=card.id)
+        return redirect('card_app:list-cards', list_id=card.ancestor.id)
 
 class Undo(GuardianView):
     def get(self, request, card_id):
         card = models.Card.locate(self.me, self.me.default, card_id)
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                unaarchive cards!", status=403)
+
         card.done = False
         card.save()
-
         # cards in the clipboard cant be archived.
         event    = models.EUnarchiveCard.objects.create(
         organization=self.me.default, ancestor=card.ancestor, 
@@ -754,7 +664,7 @@ class Undo(GuardianView):
         users = card.ancestor.ancestor.members.all()
         event.dispatch(*card.workers.all(), *users)
 
-        return redirect('card_app:view-data', card_id=card.id)
+        return redirect('card_app:list-cards', list_id=card.ancestor.id)
 
 class CardWorkerInformation(GuardianView):
     def get(self, request, peer_id, card_id):
@@ -850,14 +760,19 @@ class AlertCardWorkers(GuardianView):
 
 class Find(GuardianView):
     def get(self, request):
-        filter, _ = GlobalCardFilter.objects.get_or_create(
+        filter, _ = CardSearch.objects.get_or_create(
         user=self.me, organization=self.me.default)
-        form   = forms.GlobalCardFilterForm(instance=filter)
-        cards  = models.Card.get_allowed_cards(self.me)
+
+        form   = forms.CardSearchForm(instance=filter)
+        query0 = Q(ancestor__ancestor__organization=self.me.default)
+        query1 = Q(ancestor__ancestor__members=self.me)
+        query2 = Q(workers=self.me)
+        query3 = query0 & (query1 | query2)
+        cards  = Card.objects.filter(query3).distinct()
         total  = cards.count()
 
         cards  = filter.get_partial(cards)
-        sqlike = models.Card.from_sqlike()
+        sqlike = SqCard()
 
         sqlike.feed(filter.pattern)
 
@@ -871,14 +786,19 @@ class Find(GuardianView):
         {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
 
     def post(self, request):
-        filter, _ = GlobalCardFilter.objects.get_or_create(
+        filter, _ = CardSearch.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
-        sqlike = models.Card.from_sqlike()
-        form  = forms.GlobalCardFilterForm(request.POST, sqlike=sqlike, instance=filter)
+        sqlike = SqCard()
+        form   = forms.CardSearchForm(request.POST, 
+        sqlike=sqlike, instance=filter)
 
-        cards = models.Card.get_allowed_cards(self.me)
-        total = cards.count()
+        query0 = Q(ancestor__ancestor__organization=self.me.default)
+        query1 = Q(ancestor__ancestor__members=self.me)
+        query2 = Q(workers=self.me)
+        query3 = query0 & (query1 | query2)
+        cards  = Card.objects.filter(query3).distinct()
+        total  = cards.count()
 
         if not form.is_valid():
             return render(request, 'card_app/find.html', 
@@ -919,11 +839,14 @@ class CardEvents(GuardianView):
         Q(esetcardprioritydown__card1=card.id) |\
         Q(eunarchivecard__card__id=card.id)|\
         Q(esetcarddeadline__card__id=card.id)|\
-        Q(ebitbucketcommit__note__card__id=card.id)
+        Q(ebitbucketcommit__note__card__id=card.id)|\
+        Q(erestorenote__card__id=card.id)|\
+        Q(erestorecard__card__id=card.id)
 
         events = Event.objects.filter(query).order_by('-created').values('html')
+        count = events.count()
         return render(request, 'card_app/card-events.html', 
-        {'card': card, 'elems': events})
+        {'card': card, 'elems': events, 'count': count})
 
 class CardPriority(GuardianView):
     def get(self, request, card_id):
@@ -938,7 +861,7 @@ class CardPriority(GuardianView):
         'cards': cards, 'form': forms.CardPriorityForm()})
 
     def post(self, request, card_id):
-        sqlike = models.Card.from_sqlike()
+        sqlike = SqCard()
         card   = models.Card.locate(self.me, self.me.default, card_id)
         cards  = card.ancestor.cards.filter(done=False)
         cards = cards.exclude(id=card_id)
@@ -1030,7 +953,319 @@ class CardFileDownload(FileDownload):
         return self.get_file_url(filewrapper.file)
 
 
+class UnbindCardWorkers(GuardianView):
+    """
+    """
 
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+        included = card.workers.all()
+        total    = included.count() 
+
+        return render(request, 'card_app/unbind-card-workers.html', {
+        'included': included, 'card': card, 'organization': self.me.default,
+        'form':forms.UserSearchForm(), 'me': self.me, 
+        'count': total, 'total': total,})
+
+    def post(self, request, card_id):
+        sqlike   = SqUser()
+        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
+
+        card     = models.Card.objects.get(id=card_id)
+        included = card.workers.all()
+        users    = self.me.default.users.all()
+        total    = included.count() 
+        
+        if not form.is_valid():
+            return render(request, 'card_app/unbind-card-workers.html', 
+                {'me': self.me, 'card': card, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        included = sqlike.run(included)
+        count = included.count() 
+
+        return render(request, 'card_app/unbind-card-workers.html', 
+        {'included': included, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class BindCardWorkers(GuardianView):
+    """
+    The listed users are supposed to belong to the logged user default
+    organization. It also checks if the user belongs to the card
+    in order to list its users.
+    """
+
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+
+        users  = self.me.default.users.all()
+        excluded = users.exclude(tasks=card)
+        total    = excluded.count()
+
+        return render(request, 'card_app/bind-card-workers.html', 
+        {'excluded': excluded, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':forms.UserSearchForm(), 
+        'count': total, 'total': total,})
+
+    def post(self, request, card_id):
+        sqlike   = SqUser()
+        form     = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        card     = models.Card.objects.get(id=card_id)
+        users    = self.me.default.users.all()
+        excluded = users.exclude(tasks=card)
+
+        total = excluded.count()
+        
+        if not form.is_valid():
+            return render(request, 'card_app/bind-card-workers.html', 
+                {'me': self.me, 'card': card, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        excluded = sqlike.run(excluded)
+        count = excluded.count()
+
+        return render(request, 'card_app/bind-card-workers.html', 
+        {'excluded': excluded, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class CreateCardTaskshipUser(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id, user_id):
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+        form  = forms.CardTaskshipForm()
+
+        return render(request, 'card_app/create-card-taskship-user.html', {
+        'user': user, 'card': card, 'form': form})
+
+    def post(self, request, card_id, user_id):
+        user = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+
+        boardship0 = self.me.member_boardship.get(board=card.ancestor.ancestor)
+        error0     = "Board guests can't bind card workers!"
+
+        if boardship0.status == '2':
+            return HttpResponse(error0, status=403)
+
+        form = forms.CardTaskshipForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'card_app/create-card-taskship-user.html', {
+                'user': user, 'card': card, 'form': form})
+
+        record          = form.save(commit=False)
+        record.worker   = user
+        record.assigner = self.me
+        record.card     = card
+        record.save()
+
+
+        event = models.EBindCardWorker.objects.create(status=record.status,
+        organization=self.me.default, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
+
+        event.dispatch(*card.workers.all(),
+        *card.ancestor.ancestor.members.all())
+        event.save()
+
+        return redirect('card_app:bind-card-workers', card_id=card.id)
+
+class DeleteCardTaskshipUser(GuardianView):
+    def post(self, request, card_id, user_id):
+        user  = User.objects.get(id=user_id, organizations=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                unbind card workers!", status=403)
+
+        event = models.EUnbindCardWorker.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        board=card.ancestor.ancestor, card=card, user=self.me, peer=user)
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
+        event.save()
+
+
+        user.card_workership.get(card=card).delete()
+        return redirect('card_app:unbind-card-workers', card_id=card.id)
+
+class UnbindCardTags(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id):
+        card = models.Card.objects.get(id=card_id)
+
+        included = card.tags.all()
+        total    = included.count() 
+
+        return render(request, 'card_app/unbind-card-tags.html', {
+        'included': included, 'card': card, 'organization': self.me.default,
+        'form':forms.TagSearchForm(), 'me': self.me, 
+        'count': total, 'total': total,})
+
+    def post(self, request, card_id):
+        sqlike   = SqTag()
+        form     = forms.TagSearchForm(request.POST, sqlike=sqlike)
+        card     = models.Card.objects.get(id=card_id)
+
+        included = card.tags.all()
+        tags     = self.me.default.tags.all()
+        total    = included.count() 
+        
+        if not form.is_valid():
+            return render(request, 'card_app/unbind-card-tags.html', 
+                {'me': self.me, 'card': card, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        included = sqlike.run(included)
+        count = included.count() 
+
+        return render(request, 'card_app/unbind-card-tags.html', 
+        {'included': included, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class BindCardTags(GuardianView):
+    """
+    The listed tags are supposed to belong to the logged tag default
+    organization. It also checks if the tag belongs to the card
+    in order to list its tags.
+    """
+
+    def get(self, request, card_id):
+        card     = models.Card.objects.get(id=card_id)
+        tags     = self.me.default.tags.all()
+        excluded = tags.exclude(cards=card)
+        total    = excluded.count()
+
+        return render(request, 'card_app/bind-card-tags.html', 
+        {'excluded': excluded, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':forms.TagSearchForm(), 
+        'count': total, 'total': total,})
+
+    def post(self, request, card_id):
+        sqlike   = SqTag()
+        form     = forms.TagSearchForm(request.POST, sqlike=sqlike)
+        card     = models.Card.objects.get(id=card_id)
+        tags     = self.me.default.tags.all()
+        excluded = tags.exclude(cards=card)
+        total    = excluded.count()
+        
+        if not form.is_valid():
+            return render(request, 'card_app/bind-card-tags.html', 
+                {'me': self.me, 'card': card, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        excluded = sqlike.run(excluded)
+        count = excluded.count()
+
+        return render(request, 'card_app/bind-card-tags.html', 
+        {'excluded': excluded, 'card': card, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class CreateCardTagship(GuardianView):
+    """
+    """
+
+    def get(self, request, card_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+        form  = forms.CardTagshipForm()
+
+        return render(request, 'card_app/create-card-tagship.html', {
+        'tag': tag, 'card': card, 'form': form})
+
+    def post(self, request, card_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                bind card tags!", status=403)
+
+        form = forms.CardTagshipForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'card_app/create-card-tagship.html', {
+                'tag': tag, 'card': card, 'form': form})
+
+        record        = form.save(commit=False)
+        record.tag   = tag
+        record.tagger = self.me
+        record.card  = card
+        record.save()
+
+        event = EBindTagCard.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, board=card.ancestor.ancestor, user=self.me)
+        event.dispatch(*card.ancestor.ancestor.members.all(), *card.workers.all())
+        event.save()
+
+
+
+        return redirect('card_app:bind-card-tags', card_id=card.id)
+
+class DeleteCardTagship(GuardianView):
+    def post(self, request, card_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        card = models.Card.objects.get(id=card_id)
+
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't \
+                        unbind card tags!", status=403)
+
+        event = EUnbindTagCard.objects.create(
+        organization=self.me.default, ancestor=card.ancestor, 
+        card=card, tag=tag, board=card.ancestor.ancestor, user=self.me)
+        event.dispatch(*card.ancestor.ancestor.members.all(), *card.workers.all())
+        event.save()
+
+        CardTagship.objects.get(card=card, tag=tag).delete()
+        return redirect('card_app:unbind-card-tags', card_id=card.id)
+
+class CardDiff(GuardianView):
+    def get(self, request, event_id):
+        event = EUpdateCard.objects.get(id=event_id)
+
+        # Necessary to check permissions.
+        card = models.Card.locate(self.me, self.me.default, event.card.id)
+
+
+        return render(request, 'card_app/card-diff.html', 
+        {'card': card, 'event': event})
+
+class RestoreCard(GuardianView):
+    def post(self, request, event_id):
+        event = EUpdateCard.objects.get(id=event_id)
+        card  = models.Card.locate(self.me, self.me.default, event.card.id)
+
+        boardship = self.me.member_boardship.get(board=card.ancestor.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't update cards!", status=403)
+
+        card.label = event.card_label
+        card.data = event.card_data
+        card.save()
+
+        event = models.ERestoreCard.objects.create(
+        event_html=event.html, organization=self.me.default, ancestor=card.ancestor,
+        board=card.ancestor.ancestor, card=card, user=self.me)
+
+        event.dispatch(*card.workers.all(), 
+        *card.ancestor.ancestor.members.all())
+        event.save()
+        return redirect('card_app:view-data', card_id=card.id)
 
 
 

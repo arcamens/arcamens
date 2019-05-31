@@ -1,0 +1,64 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> <span class="glyphicon glyphicon-cog"></span> Set Group Relationship</h5>
+</div>
+
+<div class="modal-body">
+<p class="text-warning"> Change {{user.name}} status on group {{group.name}}? </p>
+
+<form id="groupshipForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.status  size='sm' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+{% if user.id == me.id %}
+<a class="e-get" data-shell="#smallModalContent" 
+data-show="{% url 'group_app:leave-group' group.id %}" 
+href="#"> <span class="glyphicon glyphicon-thumbs-down"></span> 
+{% trans "Leave?" %}</a>
+{% else %}
+<a href="#" data-show="{% url 'group_app:delete-user-groupship' group.id user.id %}" class="e-get text-warning"> 
+ <span class="glyphicon glyphicon-remove"></span> Remove {{user.name}}? </a>
+
+{% endif %}
+
+
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'group_app:unbind-user-groups' user.id %}"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-form="#groupshipForm"  
+data-show="{% url 'group_app:set-user-groupship' group.id user.id  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Done" %} </button>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

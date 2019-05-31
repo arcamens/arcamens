@@ -1,0 +1,50 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<form id="commentForm" enctype="multipart/form-data">
+
+<div class="modal-body">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+{% bootstrap_field form.title  size='md' %}
+
+{% csrf_token %}
+
+<div class="collapse" id="data"> {% bootstrap_field form.data  size='md' %} </div>
+
+{% bootstrap_form_errors form type='non_fields' %}
+
+</div>
+</form>
+
+
+<div class="modal-footer">
+<script>
+$('#bigModal').one('hidden.bs.modal', function () {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
+})
+
+</script>
+
+{% block buttons %}
+<div class="btn-group btn-group-sm">
+
+<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#data">
+<span class="glyphicon glyphicon-book"></span> Markdown</button> 
+
+<button type="button" class="btn btn-default" data-dismiss="modal">
+<span class="glyphicon glyphicon-thumbs-down"></span>
+Cancel</button>
+
+<button  type="button" data-form="#commentForm" 
+data-shell="#post-{{post.id}}"  data-show="{% url 'comment_app:create-comment' post.id %}"
+class="btn btn-default e-post"> 
+<span class="glyphicon glyphicon-file"></span>     {% trans "Create" %}
+</button>
+</div>
+
+{% endblock %}
+</div>
+
+
+
+

@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from core_app.models import User
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from card_app.models import Card, EArrivedCardDeadline
 from django.db.models import Q, F
 from django.utils import timezone

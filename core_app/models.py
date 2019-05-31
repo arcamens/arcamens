@@ -4,7 +4,7 @@ from django.utils import timezone
 from slock.models import BasicUser
 from django.db import models
 from datetime import datetime
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.loader import get_template
 from sqlike.parser import SqLike, SqNode
 from django.db.models import Q
@@ -24,27 +24,27 @@ class UserMixin(Device):
         return reverse('core_app:user', 
         kwargs={'user_id': self.id})
 
-    @classmethod
-    def from_sqlike(cls):
-        email = lambda ind: Q(email__icontains=ind)
-        name  = lambda ind: Q(name__icontains=ind)
-        desc  = lambda ind: Q(description__icontains=ind)
-        tag   = lambda ind: Q(tags__name__icontains=ind)
-        default = lambda ind: Q(email__icontains=ind) | Q(name__icontains=ind)
-        sqlike = SqLike(cls, SqNode(None, default),
-        SqNode(('m', 'email'), email),
-        SqNode(('n', 'name'), name), 
-        SqNode(('t', 'tag'), tag, chain=True), 
-        SqNode(('d', 'description'), desc),)
-        return sqlike
+    def c_acc_peers(self):
+        # Calculate the amount of users + invites
+        # the actual default organization owner has.
+        users = User.objects.filter(
+        organizations__owner__id=self.default.owner.id)
 
-    @classmethod
-    def collect_users(cls, users, pattern):
-        sqlike = cls.from_sqlike()
-        sqlike.feed(pattern)
-        users = sqlike.run(users)
-        return users
+        # Don't count contributors.
+        users   = users.exclude(user_membership__status='2')
+        users   = users.distinct()
+        n_users = users.count()
 
+        invites = Invite.objects.filter(
+            organization__owner__id=self.default.owner.id)
+
+        # Not sure if necessary at all.
+        invites = invites.distinct()
+        n_invites = invites.count()
+        
+        max_users = n_users + n_invites
+
+        return max_users
     def __str__(self):
         return self.name
 
@@ -151,14 +151,6 @@ class TagMixin(models.Model):
     class Meta:
         abstract = True
 
-    @classmethod
-    def from_sqlike(cls):
-        default  = lambda ind: Q(name__icontains=ind) | Q(
-        description__icontains=ind)
-
-        sqlike = SqLike(cls, SqNode(None, default))
-        return sqlike
-
 class Node(models.Model):
     """    
     """
@@ -169,42 +161,66 @@ class Membership(models.Model):
     """    
     """
     user = models.ForeignKey('User', 
-    null=True, related_name='user_membership')
+    null=True, related_name='user_membership', on_delete=models.CASCADE)
 
-    organization = models.ForeignKey('Organization', null=True)
+    organization = models.ForeignKey('Organization', null=True, on_delete=models.CASCADE)
 
     inviter = models.ForeignKey('core_app.User', 
-    null=True, related_name='admin_membership')
+    null=True, related_name='admin_membership', on_delete=models.SET_NULL)
 
-    admin   = models.BooleanField(default=False)
+    CHOICES = (
+        ('0','Staff'),
+        ('1','Worker'),
+        ('2','Contributor'),
+    )
+
+    status = models.CharField(max_length=6, 
+    choices=CHOICES, default='0')
+
     created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return '%s %s' % (self.user.name, self.organization.name)
 
 class Organization(OrganizationMixin):
     name = models.CharField(null=False,
     blank=False, verbose_name=_("Name"),  max_length=100)
 
+    description = models.CharField(null=False,
+    blank=False, verbose_name=_("Description"),  max_length=100)
+
     expiration = models.DateTimeField(blank=True, null=True)
 
     owner = models.ForeignKey('User', null=True, 
-    related_name='owned_organizations', blank=True)
+    related_name='owned_organizations', blank=True, on_delete=models.SET_NULL)
 
+    public = models.BooleanField(default=False, blank=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
 class Invite(InviteMixin):
-    # email = models.EmailField(max_length=70, 
-    # null=True, blank=False)
-    user = models.ForeignKey('core_app.User', 
-    null=False, related_name='invites')
+    email = models.EmailField(max_length=70, null=True, blank=False)
 
-    peer = models.ForeignKey('core_app.User', null=False, 
-    related_name='sent_invites')
+    user = models.ForeignKey('core_app.User', 
+    null=False, related_name='invites', on_delete=models.CASCADE)
+
+    peer = models.ForeignKey('core_app.User', 
+    null=False, related_name='sent_invites', on_delete=models.CASCADE)
 
     # should have a count to avoid mail spam.
     token = models.CharField(null=False, blank=False, max_length=256)
     invite_url = models.CharField(null=False, blank=False, max_length=256)
 
     organization = models.ForeignKey('Organization', 
-    null=False, related_name='invites')
+    null=False, related_name='invites', on_delete=models.CASCADE)
+
+    CHOICES = (
+        ('0','Staff'),
+        ('1','Worker'),
+        ('2','Contributor'),
+    )
+
+    status = models.CharField(max_length=6, 
+    choices=CHOICES, default='2')
 
     created = models.DateTimeField(auto_now_add=True, null=False)
 
@@ -212,12 +228,13 @@ class UserTagship(models.Model):
     """    
     """
     user = models.ForeignKey('core_app.User', null=True, 
-    related_name='user_tagship', blank=True)
+    related_name='user_tagship', blank=True, on_delete=models.CASCADE)
 
-    tag = models.ForeignKey('core_app.Tag', null=True, blank=True)
+    tag = models.ForeignKey('core_app.Tag', null=True, 
+    related_name='user_tagship',blank=True, on_delete=models.CASCADE)
 
     tagger = models.ForeignKey('core_app.User', null=True, 
-    related_name='user_taggership', blank=True)
+    related_name='user_taggership', blank=True, on_delete=models.CASCADE)
 
     created  = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -252,11 +269,11 @@ class Event(EventMixin):
     related_name='events', symmetrical=False)
 
     organization = models.ForeignKey('Organization', 
-    related_name='events', null=True)
+    related_name='events', null=True, on_delete=models.CASCADE)
 
     # created = models.DateTimeField(auto_now=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=False)
-    user    = models.ForeignKey('core_app.User', null=True)
+    user    = models.ForeignKey('core_app.User', null=True, on_delete=models.SET_NULL)
 
     signers = models.ManyToManyField('core_app.User', 
     related_name='seen_events', symmetrical=False)
@@ -276,13 +293,13 @@ class Tag(TagMixin):
     # When the organization is deleted all its tags
     # are deleted too.
     organization = models.ForeignKey('core_app.Organization',
-    related_name='tags', null=False)
+    related_name='tags', null=False, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('name', 'organization')
 
 class EInviteUser(Event):
-    peer = models.ForeignKey('User', null=False, 
+    peer = models.ForeignKey('User', null=True, on_delete=models.SET_NULL,
     related_name='e_invite_user0')
     html_template = 'core_app/e-invite-user.html'
 
@@ -293,19 +310,19 @@ class EShout(EShoutMixin, Event):
     html_template = 'core_app/e-shout.html'
 
 class EJoinOrganization(Event):
-    peer = models.ForeignKey('User', null=False, 
+    peer = models.ForeignKey('User', null=True, on_delete=models.SET_NULL,
     related_name='e_join_organization0')
     html_template = 'core_app/e-join-organization.html'
 
-class EBindUserTag(Event):
-    peer = models.ForeignKey('User', null=False, 
+class EBindTagUser(Event):
+    peer = models.ForeignKey('User', null=True, on_delete=models.SET_NULL,
     related_name='e_bind_user_tag0')
 
-    tag = models.ForeignKey('Tag', null=False)
+    tag = models.ForeignKey('Tag', null=True, on_delete=models.SET_NULL)
     html_template = 'core_app/e-bind-user-tag.html'
 
 class ECreateTag(Event):
-    tag = models.ForeignKey('Tag', null=False, 
+    tag = models.ForeignKey('Tag', null=True, on_delete=models.SET_NULL,
     related_name='e_create_tag1')
     html_template = 'core_app/e-create-tag.html'
 
@@ -313,21 +330,21 @@ class EDeleteTag(Event):
     tag_name = models.CharField(null=False, max_length=256)
     html_template = 'core_app/e-delete-tag.html'
 
-class EUnbindUserTag(Event):
-    peer = models.ForeignKey('User', null=False, 
+class EUnbindTagUser(Event):
+    peer = models.ForeignKey('User', null=True, on_delete=models.SET_NULL,
     related_name='e_unbind_user_tag0')
 
-    tag = models.ForeignKey('Tag', null=False)
+    tag = models.ForeignKey('Tag', null=True, on_delete=models.SET_NULL)
     html_template = 'core_app/e-unbind-user-tag.html'
 
 class UserFilter(models.Model):
     organization = models.ForeignKey('core_app.Organization', 
-    blank=True, default='')
+    null=True, on_delete=models.SET_NULL, default='')
 
     pattern  = models.CharField(max_length=255, blank=True, default='',
     help_text='Example: oliveira@arcamens.com')
 
-    user = models.ForeignKey('core_app.User', null=False)
+    user = models.ForeignKey('core_app.User', null=False, on_delete=models.CASCADE)
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..
@@ -335,9 +352,9 @@ class UserFilter(models.Model):
         unique_together = ('user', 'organization',)
 
 class Clipboard(models.Model):
-    organization = models.ForeignKey('core_app.Organization', null=False)
+    organization = models.ForeignKey('core_app.Organization', null=False, on_delete=models.CASCADE)
 
-    user  = models.ForeignKey('core_app.User', null=False)
+    user  = models.ForeignKey('core_app.User', null=False, on_delete=models.CASCADE)
     posts = models.ManyToManyField('post_app.Post', 
     related_name='post_clipboard_users', symmetrical=False)
 
@@ -354,7 +371,7 @@ class EUpdateOrganization(Event):
     html_template = 'core_app/e-update-organization.html'
 
 class ERemoveOrganizationUser(Event):
-    peer = models.ForeignKey('User', null=False, 
+    peer = models.ForeignKey('User', null=True, on_delete=models.SET_NULL,
     related_name='e_remove_organization_user0')
 
     reason = models.CharField(null=False, default='',
@@ -366,9 +383,9 @@ class NodeFilter(models.Model):
     pattern = models.CharField(max_length=255, blank=True, 
     default='', help_text='/projectname/', )
 
-    user = models.ForeignKey('core_app.User', null=False)
+    user = models.ForeignKey('core_app.User', null=False, on_delete=models.CASCADE)
 
-    organization = models.ForeignKey('core_app.Organization', null=False)
+    organization = models.ForeignKey('core_app.Organization', null=False, on_delete=models.CASCADE)
     status = models.BooleanField(blank=True, default=False, 
     help_text='Filter On/Off.')
 
@@ -381,9 +398,9 @@ class EventFilter(models.Model):
     start = models.DateField(null=True, default=datetime.now, blank=False)
     end   = models.DateField(null=True, default=datetime.now, blank=False)
 
-    user = models.ForeignKey('core_app.User', null=False)
+    user = models.ForeignKey('core_app.User', null=False, on_delete=models.CASCADE)
 
-    organization = models.ForeignKey('core_app.Organization', null=False)
+    organization = models.ForeignKey('core_app.Organization', null=False, on_delete=models.CASCADE)
 
     # It warrants there will exist only one user and organization
     # filter. If we decide to permit more filters..
@@ -410,6 +427,16 @@ class AmazonStorage(StorageMixin, S3Boto3Storage):
 
 class LocalStorage(StorageMixin, FileSystemStorage):
     pass
+
+
+
+
+
+
+
+
+
+
 
 
 

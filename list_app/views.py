@@ -1,7 +1,7 @@
 from django.views.generic import View
 from list_app.models import ListFilter, EDeleteList, List, ECreateList, \
 EUpdateList, EPasteCard, ECutList, ECopyList
-from core_app.models import Clipboard, User
+from core_app.models import Clipboard, User, Membership
 from board_app.models import Board, EPasteList
 from list_app.models import ListPin
 from django.shortcuts import render, redirect
@@ -58,8 +58,13 @@ class CreateList(GuardianView):
         {'form':form, 'board': board})
 
     def post(self, request, board_id):
-        form = forms.ListForm(request.POST)
         board = self.me.boards.get(id=board_id, organization=self.me.default)
+        boardship = self.me.member_boardship.get(board=board)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't create lists!", status=403)
+
+        form = forms.ListForm(request.POST)
 
         if not form.is_valid():
             return render(request, 'list_app/create-list.html',
@@ -87,7 +92,7 @@ class ConfirmListDeletion(GuardianView):
         {'list': list})
 
 class DeleteList(GuardianView):
-    def get(self, request, list_id):
+    def post(self, request, list_id):
         list = models.List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
@@ -119,6 +124,11 @@ class UpdateList(GuardianView):
 
     def post(self, request, list_id):
         record  = List.objects.get(id=list_id)
+        boardship = self.me.member_boardship.get(board=record.ancestor)
+
+        if boardship.status == '2':
+            return HttpResponse("Board guests can't update lists!", status=403)
+
         form    = forms.ListForm(request.POST, instance=record)
 
         if not form.is_valid():
@@ -134,8 +144,8 @@ class UpdateList(GuardianView):
         return redirect('card_app:list-cards', 
         list_id=record.id)
 
-class SelectDestinList(GuardianView):
-    def get(self, request, list_id):
+class PasteCard(GuardianView):
+    def get(self, request, list_id, card_id=None):
         list = models.List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
@@ -148,8 +158,7 @@ class SelectDestinList(GuardianView):
         return render(request, 'list_app/select-destin-list.html', 
         {'user': self.me, 'list': list, 'cards': cards,  'total': total})
 
-class PasteCard(GuardianView):
-    def get(self, request, list_id, card_id):
+    def post(self, request, list_id, card_id):
         list = models.List.objects.get(id=list_id, 
         ancestor__organization=self.me.default, ancestor__members=self.me)
 
@@ -180,7 +189,7 @@ class PasteCard(GuardianView):
 
         clipboard.cards.remove(card)
 
-        return redirect('list_app:select-destin-list', list_id=list.id)
+        return redirect('list_app:paste-card', list_id=list.id)
 
 class PasteAllCards(GuardianView):
     def get(self, request, list_id):
@@ -345,6 +354,9 @@ class Unpin(GuardianView):
         pin = self.me.listpin_set.get(id=pin_id)
         pin.delete()
         return redirect('board_app:list-pins')
+
+
+
 
 
 

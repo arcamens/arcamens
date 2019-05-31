@@ -2,7 +2,8 @@ from core_app.views import GuardianView
 from board_app.models import ECreateBoard, Board, BoardPin, Boardship,\
 EPasteList, EUpdateBoard, EDeleteBoard, EBindBoardUser, EUnbindBoardUser, Board
 from django.shortcuts import render, redirect
-from core_app.models import Clipboard, User, Organization
+from core_app.sqlikes import SqUser
+from core_app.models import Clipboard, User, Organization, Membership
 from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
@@ -30,7 +31,12 @@ class CreateBoard(GuardianView):
         {'form':form})
 
     def post(self, request):
-        form = forms.BoardForm(request.POST)
+        membership = Membership.objects.get(
+            user=self.me, organization=self.me.default)
+
+        if membership.status == '2':
+            return HttpResponse("Contributors can't create boards!", status=403)
+        form = forms.BoardForm(request.POST, me=self.me)
 
         if not form.is_valid():
             return render(request, 'board_app/create-board.html',
@@ -42,7 +48,7 @@ class CreateBoard(GuardianView):
         board.save()
 
         # The board members if it is open.
-        members    = self.me.default.users.all() if board.open else (self.me,)
+        members    = self.me.default.users.all() if board.public else (self.me,)
         boardships = (Boardship(member=ind, board=board, 
         binder=self.me) for ind in members)
         Boardship.objects.bulk_create(boardships)
@@ -50,8 +56,11 @@ class CreateBoard(GuardianView):
         # Make myself admin of the board after adding me
         # as a regular user.
         boardship = self.me.member_boardship.get(board=board)
-        boardship.admin = True
+        boardship.status = '0'
         boardship.save()
+
+        # Boardship.objects.create(member=self.me, board=board, 
+        # binder=self.me, status='0')
 
         event = ECreateBoard.objects.create(organization=self.me.default,
         board=board, user=self.me)
@@ -74,155 +83,6 @@ class PinBoard(GuardianView):
         pin   = BoardPin.objects.create(user=self.me, 
         organization=self.me.default, board=board)
         return redirect('board_app:list-pins')
-
-class ManageUserBoards(GuardianView):
-    """
-    One is supposed to view a given user boards only if he belongs
-    to the logged user default organization. It is gonna show a list of
-    boards that i'm attached to.
-    """
-
-    def get(self, request, user_id):
-        # Make sure the user belongs to my default organization. It is necessary
-        # because it would allow one to view which boards the user is in. It is a security
-        # flaw if we dont do this checking.
-        user     = User.objects.get(id=user_id, organizations=self.me.default)
-        boards   = self.me.boards.filter(organization=self.me.default)
-        total    = boards.count()
-
-        excluded = boards.exclude(members=user)
-        included = boards.filter(members=user)
-
-        env = {'user': user, 'included': included, 'excluded': excluded,
-        'me': self.me, 'organization': self.me.default, 'total': total,
-        'form':forms.BoardSearchForm(), 'count': total}
-
-        return render(request, 'board_app/manage-user-boards.html', env)
-
-    def post(self, request, user_id):
-        # Does the necessary checking to make sure the user 
-        # belongs to my default organization.
-        user   = User.objects.get(id=user_id, organizations=self.me.default)
-        sqlike = Board.from_sqlike()
-        form   = forms.BoardSearchForm(request.POST, sqlike=sqlike)
-
-        boards = self.me.boards.filter(organization=self.me.default)
-        total = boards.count()
-
-        if not form.is_valid():
-            return render(request, 'board_app/manage-user-boards.html', 
-                {'user': user, 'me': self.me, 'organization': self.me.default, 
-                        'form':form}, status=400)
-
-        excluded = boards.exclude(members=user)
-        included = boards.filter(members=user)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-
-        count = included.count() + excluded.count()
-        env   = {'user': user, 'included': included, 'excluded': excluded, 
-        'total': total, 'me': self.me, 'organization': self.me.default,
-        'form':form, 'count': count}
-
-        return render(request, 'board_app/manage-user-boards.html', env)
-
-class ManageBoardMembers(GuardianView):
-    """
-    The logged user is supposed to view all existing members of the board
-    altogether with the organization members.
-
-    This dialog should be shown just if the user in fact belongs to the board
-    and his default organization contains the board.
-    """
-
-    def get(self, request, board_id):
-        # Make sure the board belong to the user organization.
-        # Otherwise it would be possible to view members of other
-        # board organizations.
-        board = self.me.boards.get(id=board_id, organization=self.me.default)
-
-        included = board.members.all()
-        users = self.me.default.users.all()
-        excluded = users.exclude(boards=board)
-
-        total = included.count() + excluded.count()
-
-        return render(request, 'board_app/manage-board-members.html', 
-        {'included': included, 'excluded': excluded, 'board': board,
-        'me': self.me, 'count': total, 'total': total, 
-        'form':forms.UserSearchForm()})
-
-    def post(self, request, board_id):
-        sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-        board = self.me.boards.get(id=board_id, organization=self.me.default)
-        included = board.members.all()
-
-        users = self.me.default.users.all()
-        excluded = users.exclude(boards=board)
-        total = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'board_app/manage-board-members.html', 
-                {'me': self.me, 'board': board, 'total': total, 'count': 0,
-                        'form':form}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-        count = included.count() + excluded.count()
-
-        return render(request, 'board_app/manage-board-members.html', 
-        {'included': included, 'excluded': excluded, 'board': board,
-        'me': self.me, 'total': total, 'count': count, 'form':form})
-
-class ManageBoardAdmins(GuardianView):
-    """
-    One is supposed view the dialog only if he belongs to the board
-    and his default organization contains the board.
-    """
-
-    def get(self, request, board_id):
-        board = self.me.boards.get(id=board_id, organization=self.me.default)
-
-        included = board.members.filter(member_boardship__admin=True, 
-        member_boardship__board=board)
-
-        excluded = board.members.filter(member_boardship__admin=False,
-        member_boardship__board=board)
-
-        total = included.count() + excluded.count()
-
-        return render(request, 'board_app/manage-board-admins.html', 
-        {'included': included, 'excluded': excluded, 'board': board,
-        'me': self.me, 'count': total, 'total': total, 
-        'form':forms.UserSearchForm()})
-
-    def post(self, request, board_id):
-        sqlike = User.from_sqlike()
-        form   = forms.UserSearchForm(request.POST, sqlike=sqlike)
-        board  = self.me.boards.get(id=board_id, organization=self.me.default)
-
-        included = board.members.filter(member_boardship__admin=True, 
-        member_boardship__board=board)
-
-        excluded = board.members.filter(member_boardship__admin=False,
-        member_boardship__board=board)
-
-        total = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'board_app/manage-board-admins.html', 
-                {'me': self.me, 'board': board, 'total': total, 'count': 0,
-                        'form':form}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-        count = included.count() + excluded.count()
-
-        return render(request, 'board_app/manage-board-admins.html', 
-        {'included': included, 'excluded': excluded, 'board': board,
-        'me': self.me, 'total': total, 'count': count, 'form':form})
 
 class SelectDestinBoard(GuardianView):
     def get(self, request, board_id):
@@ -304,23 +164,22 @@ class UpdateBoard(GuardianView):
         # but allows the user to view the update dialog template.
         board = self.me.boards.get(id=board_id, organization=self.me.default)
         return render(request, 'board_app/update-board.html',
-        {'board': board, 'form': forms.UpdateBoardForm(instance=board)})
+        {'board': board, 'form': forms.BoardForm(instance=board)})
 
     def post(self, request, board_id):
-        # record = Board.objects.get(id=board_id)
         # Make sure i'm owner of the board and it belongs to 
         # my default organization.
         record = self.me.boards.get(id=board_id, organization=self.me.default)
-        if not record.owner == self.me: return HttpResponse(
-            "Just the owner can do that!", status=403)
+        if not record.owner == self.me: 
+            return HttpResponse("Just the owner can do that!", status=403)
 
-        form = forms.UpdateBoardForm(request.POST, instance=record)
+        form = forms.BoardForm(request.POST, instance=record, me=self.me)
+
         if not form.is_valid():
             return render(request, 'board_app/update-board.html',
                         {'form': form, 'board':record, }, status=400)
 
         record.save()
-
         event = EUpdateBoard.objects.create(organization=self.me.default,
         board=record, user=self.me)
         event.dispatch(*record.members.all())
@@ -343,11 +202,11 @@ class DeleteBoard(GuardianView):
 
     def post(self, request, board_id):
         board = self.me.boards.get(id=board_id, organization=self.me.default)
-        if not board.owner == self.me: return HttpResponse(
-            "Just the owner can do that!", status=403)
+        if not board.owner == self.me: 
+            return HttpResponse("Just the owner can do that!", status=403)
 
-        form = forms.ConfirmBoardDeletionForm(request.POST, 
-        confirm_token=board.name)
+        form  = forms.ConfirmBoardDeletionForm(
+        request.POST,  confirm_token=board.name)
 
         if not form.is_valid():
             return render(request, 
@@ -390,112 +249,6 @@ class Unpin(GuardianView):
         pin.delete()
         return redirect('board_app:list-pins')
 
-class BindBoardUser(GuardianView):
-    """
-    Secured.
-    """
-
-    def redirect(self, request, board_id, user_id):
-        return ManageBoardMembers.as_view()(request, board_id)
-
-    def post(self, request, board_id, user_id):
-        # Make sure the user belongs to my default organization.
-        user  = User.objects.get(id=user_id, organizations=self.me.default)
-        board = Board.objects.get(id=board_id, organization=self.me.default)
-
-        me_admin = self.me.member_boardship.filter(
-        board=board, admin=True).exists()
-
-        if not me_admin:
-            return HttpResponse("Just admins can add users!", status=403)
-
-        Boardship.objects.create(member=user, binder=self.me, board=board)
-
-        event = EBindBoardUser.objects.create(organization=self.me.default,
-        board=board, user=self.me, peer=user)
-        event.dispatch(*board.members.all())
-
-        return self.redirect(request, board_id, user_id)
-
-class BindUserBoard(BindBoardUser):
-    def redirect(self, request, board_id, user_id):
-        return ManageUserBoards.as_view()(request, user_id)
-
-class UnbindBoardUser(GuardianView):
-    """
-    Secured.
-    """
-    def redirect(self, request, board_id, user_id):
-        return ManageBoardMembers.as_view()(request, board_id)
-
-    def post(self, request, board_id, user_id):
-        user  = User.objects.get(id=user_id, organizations=self.me.default)
-        board = Board.objects.get(id=board_id, organization=self.me.default)
-
-        if board.owner == user:
-            return HttpResponse("You can't remove \
-                the board owner!", status=403)
-
-        is_admin = user.member_boardship.filter(
-        board=board, admin=True).exists()
-
-        me_admin = self.me.member_boardship.filter(
-        board=board, admin=True).exists()
-
-        me_owner = board.owner == self.me
-
-        # In order to remove an user it is necessary to be an admin.
-        if not me_admin:
-            return HttpResponse("Just admins can do that!", status=403)
-
-        if is_admin and not me_owner:
-            return HttpResponse("Just the owner can do that!", status=403)
-
-        # We make sure the user is no longer an admin at all.
-        event = EUnbindBoardUser.objects.create(organization=self.me.default,
-        board=board, user=self.me, peer=user)
-        event.dispatch(*board.members.all())
-
-        user.member_boardship.get(board=board).delete()
-        return self.redirect(request, board_id, user_id)
-
-class UnbindUserBoard(UnbindBoardUser):
-    def redirect(self, request, board_id, user_id):
-        return ManageUserBoards.as_view()(request, user_id)
-
-class BindBoardAdmin(GuardianView):
-    def post(self, request, board_id, user_id):
-        user  = User.objects.get(id=user_id, organizations=self.me.default)
-        board = Board.objects.get(id=board_id, organization=self.me.default)
-
-        # Just the owner can add/remove admins.
-        if board.owner != self.me:
-            return HttpResponse("Just the owner can do that!", status=403)
-
-        boardship = user.member_boardship.get(board=board)
-        boardship.admin = True
-        boardship.save()
-        return ManageBoardAdmins.as_view()(request, board_id)
-
-class UnbindBoardAdmin(GuardianView):
-    def post(self, request, board_id, user_id):
-        user  = User.objects.get(id=user_id, organizations=self.me.default)
-        board = Board.objects.get(id=board_id, organization=self.me.default)
-
-        # The owner admin status cant be removed.
-        if board.owner == user:
-            return HttpResponse("You can't \
-                remove the owner!", status=403)
-
-        # Just the owner can add/remove admins.
-        if board.owner != self.me:
-            return HttpResponse("Just the owner can do that!", status=403)
-
-        boardship = user.member_boardship.get(board=board)
-        boardship.admin = False
-        boardship.save()
-        return ManageBoardAdmins.as_view()(request, board_id)
-
 class BoardLink(GuardianView):
     """
     Make sure the user belongs to the board and his default
@@ -520,9 +273,456 @@ class BoardLink(GuardianView):
         'settings': settings})
 
 
+class UnbindBoardMembers(GuardianView):
+    """
+    The listed members are supposed to belong to the logged member default
+    organization. It also checks if the member belongs to the board
+    in order to list its members.
+    """
+
+    def get(self, request, board_id):
+        board = self.me.boards.get(id=board_id, 
+        organization=self.me.default)
+
+        included = board.members.all()
+        members    = self.me.default.users.all()
+        total    = included.count() 
+
+        return render(request, 'board_app/unbind-board-members.html', {
+        'included': included, 'board': board, 'organization': self.me.default,
+        'form':forms.UserSearchForm(), 'me': self.me, 
+        'count': total, 'total': total,})
+
+    def post(self, request, board_id):
+        sqlike = SqUser()
+        form   = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        included = board.members.all()
+        members  = self.me.default.users.all()
+        total    = included.count() 
+        
+        if not form.is_valid():
+            return render(request, 'board_app/manage-board-members.html', 
+                {'me': self.me, 'board': board, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        included = sqlike.run(included)
+        count = included.count() 
+
+        return render(request, 'board_app/unbind-board-members.html', 
+        {'included': included, 'board': board, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class BindBoardMembers(GuardianView):
+    """
+    The listed members are supposed to belong to the logged member default
+    organization. It also checks if the member belongs to the board
+    in order to list its members.
+    """
+
+    def get(self, request, board_id):
+        board = self.me.boards.get(id=board_id, 
+        organization=self.me.default)
+
+        members    = self.me.default.users.all()
+        excluded = members.exclude(boards=board)
+        total    = excluded.count()
+
+        return render(request, 'board_app/bind-board-members.html', 
+        {'excluded': excluded, 'board': board, 'me': self.me, 
+        'organization': self.me.default,'form':forms.UserSearchForm(), 
+        'count': total, 'total': total,})
+
+    def post(self, request, board_id):
+        sqlike = SqUser()
+        form   = forms.UserSearchForm(request.POST, sqlike=sqlike)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        members  = self.me.default.users.all()
+        excluded = members.exclude(boards=board)
+        total    = excluded.count()
+        
+        if not form.is_valid():
+            return render(request, 'board_app/bind-board-members.html', 
+                {'me': self.me, 'board': board, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        excluded = sqlike.run(excluded)
+        count = excluded.count()
+
+        return render(request, 'board_app/bind-board-members.html', 
+        {'excluded': excluded, 'board': board, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class UnbindMemberBoards(GuardianView):
+    """
+    Make sure the logged member can view the boards that he belongs to.
+    It also makes sure the listed boards belong to his default organization.
+    """
+
+    def get(self, request, member_id):
+        # Make sure the member belongs to my default organization.
+        member      = User.objects.get(id=member_id, organizations=self.me.default)
+        boards = self.me.boards.filter(organization=self.me.default)
+        total     = boards.count()
+
+        included  = boards.filter(members=member)
+        count = included.count()
+
+        env = {'member': member, 'included': included, 
+        'count': count, 'total': total, 'me': self.me, 
+        'organization': self.me.default, 'form':forms.BoardSearchForm()}
+
+        return render(request, 'board_app/unbind-member-boards.html', env)
+
+    def post(self, request, member_id):
+        # Make sure the member belongs to my default organization.
+        member      = User.objects.get(id=member_id, organizations=self.me.default)
+        sqlike    = Board.from_sqlike()
+        form      = forms.BoardSearchForm(request.POST, sqlike=sqlike)
+        boards = self.me.boards.filter(organization=self.me.default)
+        total     = boards.count()
+
+        if not form.is_valid():
+            return render(request, 'board_app/unbind-member-boards.html', 
+                {'member': member, 'me': self.me, 'organization': self.me.default, 
+                    'count': 0,'form':form, 'total': total,}, status=400)
+
+        included  = boards.filter(members=member)
+        included = sqlike.run(included)
+        count    = included.count() 
+        env      = {'member': member, 'included': included, 
+        'total': total, 'me': self.me, 'organization': self.me.default, 
+        'form':form, 'count': count}
+
+        return render(request, 'board_app/unbind-member-boards.html', env)
+
+class BindMemberBoards(GuardianView):
+    """
+    Make sure the logged member can view the boards that he belongs to.
+    It also makes sure the listed boards belong to his default organization.
+    """
+
+    def get(self, request, member_id):
+        # Make sure the member belongs to my default organization.
+        member      = User.objects.get(id=member_id, organizations=self.me.default)
+        boards = self.me.boards.filter(organization=self.me.default)
+        total     = boards.count()
+
+        excluded = boards.exclude(members=member)
+        count    = excluded.count()
+
+        env      = {'member': member, 'excluded': excluded,  'count': count, 
+        'total': total, 'me': self.me,  'organization': self.me.default, 
+        'form':forms.BoardSearchForm()}
+
+        return render(request, 'board_app/bind-member-boards.html', env)
+
+    def post(self, request, member_id):
+        # Make sure the member belongs to my default organization.
+        member      = User.objects.get(id=member_id, organizations=self.me.default)
+        sqlike    = Board.from_sqlike()
+        form      = forms.BoardSearchForm(request.POST, sqlike=sqlike)
+        boards = self.me.boards.filter(organization=self.me.default)
+        total     = boards.count()
+
+        if not form.is_valid():
+            return render(request, 'board_app/bind-member-boards.html', 
+                {'member': member, 'me': self.me, 'organization': self.me.default, 
+                    'count': 0,'form':form, 'total': total,}, status=400)
+
+        excluded  = boards.exclude(members=member)
+        count    = excluded.count()
+        env      = {'member': member, 'excluded': excluded, 
+        'total': total, 'me': self.me, 'organization': self.me.default, 
+        'form':form, 'count': count}
+
+        return render(request, 'board_app/bind-member-boards.html', env)
+
+class CreateBoardshipMember(GuardianView):
+    """
+    """
+
+    def get(self, request, board_id, member_id):
+        member  = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+        form  = forms.BoardshipForm()
+
+        return render(request, 'board_app/create-boardship-member.html', {
+        'member': member, 'board': board, 'form': form})
+
+    def post(self, request, board_id, member_id):
+        member  = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        form = forms.BoardshipForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template, {
+                'member': member, 'board': board, 'form': form})
+
+        boardship = Boardship.objects.get(member=self.me, board=board)
+        if boardship.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        membership = Membership.objects.get(
+        user=member_id, organization=self.me.default)
+
+        if membership.status == '2' and form.cleaned_data['status'] != '2':
+            return HttpResponse("User is a contributor! Contributors\
+                can only be board guests.", status=403)
+
+        record = form.save(commit=False)
+        record.member = member
+        record.binder = self.me
+        record.board  = board
+        record.save()
+
+        event = EBindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member, status=record.status)
+        event.dispatch(*board.members.all())
+
+        return redirect('board_app:bind-board-members', board_id=board.id)
+
+class SetBoardshipMember(GuardianView):
+    """
+    """
+
+    def get(self, request, board_id, member_id):
+        member = User.objects.get(id=member_id, organizations=self.me.default)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        boardship = Boardship.objects.get(member=member, board=board)
+        form      = forms.BoardshipForm(instance=boardship)
+
+        return render(request, 'board_app/set-boardship-member.html', {
+        'member': member, 'board': board, 'me': self.me, 'form': form})
+
+    def post(self, request, board_id, member_id):
+        member     = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        boardship0 = Boardship.objects.get(member=member, board=board)
+        form      = forms.BoardshipForm(request.POST, instance=boardship0)
+
+        if not form.is_valid():
+            return render(request, 'board_app/set-boardship-member.html', {
+                'member': member, 'board': board, 'form': form})
+
+        if member == board.owner:
+            return HttpResponse("Can't change owner status!", status=403)
+
+        boardship1 = Boardship.objects.get(member=self.me, board=board)
+        if boardship1.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        membership = Membership.objects.get(
+        user=member_id, organization=self.me.default)
+
+        if membership.status == '2' and form.cleaned_data['status'] != '2':
+            return HttpResponse("User is a contributor! Contributors\
+                can only be board guests.", status=403)
+
+        record = form.save()
+
+        event = EBindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member, status=record.status)
+        event.dispatch(*board.members.all())
+        return redirect('board_app:unbind-board-members', board_id=board.id)
+
+class CreateMemberBoardship(GuardianView):
+    """
+    """
+
+    def get(self, request, board_id, member_id):
+        member  = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+        form  = forms.BoardshipForm()
+
+        return render(request, 'board_app/create-member-boardship.html', {
+        'member': member, 'board': board, 'form': form})
+
+    def post(self, request, board_id, member_id):
+        member  = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        form = forms.BoardshipForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template, {
+                'member': member, 'board': board, 'form': form})
+
+        boardship = Boardship.objects.get(member=self.me, board=board)
+        if boardship.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        membership = Membership.objects.get(
+        user=member_id, organization=self.me.default)
+
+        if membership.status == '2' and form.cleaned_data['status'] != '2':
+            return HttpResponse("User is a contributor! Contributors\
+                can only be board guests.", status=403)
+
+        record = form.save(commit=False)
+        record.member   = member
+        record.binder = self.me
+        record.board  = board
+        record.save()
 
 
+        event = EBindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member, status=record.status)
+        event.dispatch(*board.members.all())
 
+        return redirect('board_app:bind-member-boards', member_id=member.id)
+
+
+class SetMemberBoardship(GuardianView):
+    """
+    """
+    def get(self, request, board_id, member_id):
+        member     = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+        boardship = Boardship.objects.get(member=member, board=board)
+        form  = forms.BoardshipForm(instance=boardship)
+
+        return render(request, 'board_app/set-member-boardship.html', {
+        'member': member, 'board': board, 'me': self.me, 'form': form})
+
+    def post(self, request, board_id, member_id):
+        member  = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        boardship = Boardship.objects.get(member=member, board=board)
+        form      = forms.BoardshipForm(request.POST, instance=boardship)
+        if not form.is_valid():
+            return render(request, 'board_app/set-member-boardship.html', {
+                'member': member, 'board': board, 'form': form})
+
+        if member == board.owner:
+            return HttpResponse("Can't change owner status!", status=403)
+
+        boardship = Boardship.objects.get(member=self.me, board=board)
+        if boardship.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        membership = Membership.objects.get(
+        user=member_id, organization=self.me.default)
+
+        if membership.status == '2' and form.cleaned_data['status'] != '2':
+            return HttpResponse("User is a contributor! Contributors\
+                can only be board guests.", status=403)
+
+        record = form.save()
+        event = EBindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member, status=record.status)
+        event.dispatch(*board.members.all())
+        return redirect('board_app:unbind-member-boards', member_id=member.id)
+
+class DeleteBoardshipMember(GuardianView):
+    """
+    """
+
+    def get(self, request, board_id, member_id):
+        member = User.objects.get(id=member_id, organizations=self.me.default)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        boardship = Boardship.objects.get(member=member, board=board)
+
+        return render(request, 'board_app/delete-boardship-member.html', {
+        'member': member, 'board': board})
+
+    def post(self, request, board_id, member_id):
+        member     = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        if member == board.owner:
+            return HttpResponse("Can't change owner status!", status=403)
+
+        boardship0 = Boardship.objects.get(member=member, board=board)
+        boardship1 = Boardship.objects.get(member=self.me, board=board)
+        if boardship1.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        event = EUnbindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member)
+        event.dispatch(*board.members.all())
+
+        boardship0.delete()
+        return redirect('board_app:unbind-board-members', board_id=board.id)
+
+class DeleteMemberBoardship(GuardianView):
+    """
+    """
+
+    def get(self, request, board_id, member_id):
+        member = User.objects.get(id=member_id, organizations=self.me.default)
+        board  = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        boardship = Boardship.objects.get(member=member, board=board)
+
+        return render(request, 'board_app/delete-member-boardship.html', {
+        'member': member, 'board': board})
+
+    def post(self, request, board_id, member_id):
+        member     = User.objects.get(id=member_id, organizations=self.me.default)
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        if member == board.owner:
+            return HttpResponse("Can't change owner status!", status=403)
+
+        boardship0 = Boardship.objects.get(member=member, board=board)
+        boardship1 = Boardship.objects.get(member=self.me, board=board)
+        if boardship1.status != '0':
+            return HttpResponse("No permissions for that!", status=403)
+
+        event = EUnbindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=member)
+        event.dispatch(*board.members.all())
+
+        boardship0.delete()
+        return redirect('board_app:unbind-member-boards', member_id=member.id)
+
+class JoinPublicBoard(GuardianView):
+    """
+    """
+
+    def post(self, request, board_id):
+        board = models.Board.objects.get(id=board_id, organization=self.me.default)
+        organization = Organization.objects.get(id=organization_id)
+
+        Boardship.objects.create(user=self.me, status='2',
+        organization=organization, board=board, binder=self.me)
+
+        event = EBindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=self.me, status='2')
+        event.dispatch(*board.users.all())
+
+        return redirect('core_app:index')
+
+class LeaveBoard(GuardianView):
+    """
+    """
+    def get(self, request, board_id):
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        return render(request, 'board_app/leave-board.html', {'board': board})
+
+    def post(self, request, board_id):
+        board = self.me.boards.get(id=board_id, organization=self.me.default)
+
+        if board.owner == self.me: 
+            return HttpResponse("Owner can't leave the board!", status=403)
+
+        boardship = Boardship.objects.get(member=self.me, board=board)
+        boardship.delete()
+
+        event = EUnbindBoardUser.objects.create(organization=self.me.default,
+        board=board, user=self.me, peer=self.me)
+        event.dispatch(*board.members.all())
+
+        return redirect('core_app:list-nodes')
 
 
 

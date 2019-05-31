@@ -23,7 +23,7 @@ Settings</a></li>
 
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#smallModalContent" data-show="{% url 'group_app:manage-group-users' group.id %}" href="#">
+<li><a class="e-get" data-shell="#smallModalContent" data-show="{% url 'group_app:unbind-group-users' group.id %}" href="#">
 <span class="glyphicon glyphicon-user"></span>  {% trans "Members" %}</a></li>
 
 <li class="divider"></li>
@@ -48,48 +48,11 @@ data-show="{% url 'group_app:select-destin-group' group.id %}" href="#">
 data-show="{% url 'group_app:paste-all-posts' group.id %}" href="#">
 <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste All" %}</a></li>
 
+<li><a class="e-get" data-shell="#smallModalContent" 
+data-show="{% url 'group_app:leave-group' group.id %}" 
+href="#"> <span class="glyphicon glyphicon-thumbs-down"></span> 
+{% trans "Leave?" %}</a></li>
+
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

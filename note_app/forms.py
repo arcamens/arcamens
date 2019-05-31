@@ -1,4 +1,5 @@
 from core_app.forms import FileAttachment
+from sqlike.forms import SqLikeForm
 from django import forms
 from . import models
 
@@ -11,7 +12,13 @@ class NoteForm(forms.ModelForm):
 class NoteFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.NoteFileWrapper
-        exclude = ('note', )
+        fields = ('file', )
+
+class NoteSearchForm(SqLikeForm, forms.ModelForm):
+    class Meta:
+        model  = models.NoteSearch
+        exclude = ('user', 'organization')
+
 
 
 

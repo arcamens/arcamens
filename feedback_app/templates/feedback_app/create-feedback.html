@@ -1,0 +1,56 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+<h4 class="modal-title">
+<span class="glyphicon glyphicon-bell"></span>
+Feedback
+<span class="badge">{{records.count}}</span>
+</h4>
+
+</div>
+
+<div class="modal-body pre-scrollable">
+{% for ind in records %}
+<div style="word-wrap: break-word;"> 
+
+<p> <a href="#" title="{{ind.created}}"> {{ind.user.name}}: </a>
+{{ind.data}} 
+<br>
+<em class="text-info" style="font-size:70%; "> 
+On {{ind.created}}</em>
+
+</p>
+
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<div class="modal-footer" >
+<form id="eventFeedbackForm" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% bootstrap_field form.data layout='inline' size='sm' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+<button type="button" class="btn btn-default e-get">  
+<span class="glyphicon glyphicon-arrow-left"></span>
+Back </button>
+
+<button  id="sendeventFeedback" type="button" 
+data-form="#eventFeedbackForm" 
+data-show="{% url 'feedback_app:create-feedback' event.id %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-bell"></span> {% trans "Send" %} </button>
+
+</div>
+
+

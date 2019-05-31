@@ -17,23 +17,21 @@
 
 
 <div class="modal-footer">
+<form id="deleteCardForm" enctype="multipart/form-data">
+{% csrf_token %}
+</form>
+
+<div class="btn-group btn-group-sm">
+
 <button  type="button" data-shell="#bigModalContent" 
 data-show="{% url 'card_app:view-data' card.id %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button type="button" 
-data-shell="#main-view" data-show="{% url 'card_app:delete-card' card.id %}"
-class="btn btn-danger e-get"> 
-     {% trans "Delete" %}
+data-shell="#main-view" data-show="{% url 'card_app:delete-card' card.id %}" data-form="#deleteCardForm"
+class="btn btn-danger e-post"> 
+<span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %}
 </button>
+</div>
 
-
-<script>
-
-
-
-
-
-
-
-
+</div>

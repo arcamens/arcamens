@@ -1,0 +1,50 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5> <span class="glyphicon glyphicon-plus"></span> Create Task Relationship</h5>
+</div>
+
+<div class="modal-body">
+<p class="text-warning">  Bind {{user.name}} to the card {{card.name}}?</p>
+
+<form id="cardTaskshipForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.status  size='sm' %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+</form>
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'card_app:bind-card-workers' card.id %}"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Cancel" %}
+</button>
+
+<button  type="button" data-form="#cardTaskshipForm" data-show="{% url 'card_app:create-card-taskship-user' card.id user.id  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Done" %} </button>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

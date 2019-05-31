@@ -1,0 +1,36 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load bname %}
+
+<script>
+$('#CommentFileWrapperForm-{{comment.id}}').change(function(){
+   var formData = new FormData($('#CommentFileWrapperForm-{{comment.id}}')[0]);
+   $.ajax({
+   url: '{% url 'comment_app:attach-file' comment.id  %}', 
+   type: 'POST',
+   success: function(data) {
+   $('#comment-attachments-{{comment.id}}').html(data);},
+   data: formData,
+   cache: false,
+   contentType: false,
+   processData: false});
+});
+
+</script>
+
+
+<form id="CommentFileWrapperForm-{{comment.id}}" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.file  size='md' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+{% for ind in attachments %}
+<a class="e-get text-danger" data-shell="#comment-attachments-{{comment.id}}" href="#"
+data-show="{% url 'comment_app:detach-file' ind.id %}"> 
+<span class="glyphicon glyphicon-remove"></span></a> 
+<a href="{% url 'comment_app:comment-file-download' ind.id %}" target="_blank"> {{ind.file.name|bname}} </a>
+
+{% empty %}
+No attachments.
+{% endfor %}

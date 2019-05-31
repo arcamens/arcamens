@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>  
+<span class="glyphicon glyphicon-bell"></span>
+Events on comment <a class="e-get" data-shell="#bigModalContent"
+data-show="{% url 'comment_app:comment' comment.id %}" href="{{comment.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> {{comment.title|truncatechars:40}} <span class="badge">{{count}}</span></a></h5>
+</div>
+
+<div class="modal-body pre-scrollable">
+{% for ind in elems %}
+<div class="panel panel-default">
+<div class="panel-body">
+{{ind.html | safe}}
+</div> </div>
+{% endfor %}
+
+</div>
+
+
+<div class="modal-footer">
+<button  type="button" data-shell="#bigModalContent" 
+data-show="{% url 'comment_app:comment' comment.id %}"
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-up"></span>  {% trans "Close" %}
+</button>
+<script>
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+
+</div>
+
+
+
+
+
+
+
+

@@ -3,10 +3,11 @@ from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView, FileDownload
-
+from jscroll.wrappers import JScroll
 from django.http import HttpResponse
 from card_app.models import Card
-from core_app.models import User
+from core_app.models import User, Event
+from note_app.models import Note, NoteSearch, ERestoreNote, EUpdateNote
 from . import models
 from . import forms
 
@@ -143,28 +144,26 @@ class UpdateNote(GuardianView):
 
     def post(self, request, note_id):
         record = models.Note.locate(self.me, self.me.default, note_id)
-        form    = forms.NoteForm(request.POST, instance=record)
+
+        event = models.EUpdateNote.objects.create(note_data=record.data,
+        organization=self.me.default, child=record.card, note_html=record.html,
+        note=record, user=self.me)
+
+        form = forms.NoteForm(request.POST, instance=record)
 
         if not form.is_valid():
             return render(request, 'note_app/update-note.html',
                         {'form': form, 'note':record, }, status=400)
 
         record.save()
-
-        event = models.EUpdateNote.objects.create(
-        organization=self.me.default, child=record.card, 
-        note=record, user=self.me)
-
         event.dispatch(*record.card.ancestor.ancestor.members.all())
         event.save()
-
-        # user.ws_sound(record.card.ancestor.ancestor)
 
         return redirect('note_app:preview-note', 
         note_id=record.id)
 
 class DeleteNote(GuardianView):
-    def get(self, request, note_id):
+    def post(self, request, note_id):
         note = models.Note.locate(self.me, self.me.default, note_id)
 
         event = models.EDeleteNote.objects.create(organization=self.me.default,
@@ -186,5 +185,104 @@ class NoteFileDownload(FileDownload):
         id=filewrapper_id).distinct().first()
 
         return self.get_file_url(filewrapper.file)
+
+class NoteDiff(GuardianView):
+    def get(self, request, event_id):
+        event = models.EUpdateNote.objects.get(id=event_id)
+        note = models.Note.locate(self.me, self.me.default, event.note.id)
+
+
+        return render(request, 'note_app/note-diff.html', 
+        {'note': note, 'event': event, 'card': note.card})
+
+class Find(GuardianView):
+    def get(self, request):
+        filter, _ = NoteSearch.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        form   = forms.NoteSearchForm(instance=filter)
+
+        notes = models.Note.objects.filter(
+        Q(card__ancestor__ancestor__members=self.me) &
+        Q(card__ancestor__ancestor__organization=self.me.default) |\
+        Q(card__workers=self.me)).distinct()
+
+        total  = notes.count()
+
+        sqlike = models.Note.from_sqlike()
+
+        sqlike.feed(filter.pattern)
+
+        notes = sqlike.run(notes)
+        count = notes.count()
+
+        notes = notes.only('card__label', 'card__id', 'data', 'id').order_by('id')
+        elems = JScroll(self.me.id, 'note_app/find-scroll.html', notes)
+
+        return render(request, 'note_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+    def post(self, request):
+        filter, _ = NoteSearch.objects.get_or_create(
+        user=self.me, organization=self.me.default)
+
+        sqlike = models.Note.from_sqlike()
+        form  = forms.NoteSearchForm(request.POST, sqlike=sqlike, instance=filter)
+
+        notes = models.Note.objects.filter(
+        Q(card__ancestor__ancestor__members=self.me) &
+        Q(card__ancestor__ancestor__organization=self.me.default) |\
+        Q(card__workers=self.me)).distinct()
+
+        total = notes.count()
+
+        if not form.is_valid():
+            return render(request, 'note_app/find.html', 
+                {'form': form, 'total': total, 'count': 0}, status=400)
+        form.save()
+
+        notes = sqlike.run(notes)
+
+        count =  notes.count()
+        notes = notes.only('card__label', 'card__id', 'data', 'id').order_by('id')
+        elems = JScroll(self.me.id, 'note_app/find-scroll.html', notes)
+
+        return render(request, 'note_app/find.html', 
+        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+
+
+class RestoreNote(GuardianView):
+    def post(self, request, event_id):
+        event = EUpdateNote.objects.get(id=event_id)
+        note  = models.Note.locate(self.me, self.me.default, event.note.id)
+
+        note.data = event.note_data
+        note.save()
+
+        event = models.ERestoreNote.objects.create(
+        event_html=event.html, organization=self.me.default, 
+        card=note.card, note=note, user=self.me)
+
+        event.dispatch(*note.card.ancestor.ancestor.members.all())
+        event.save()
+        return redirect('note_app:preview-note', note_id=note.id)
+
+class NoteEvents(GuardianView):
+    def get(self, request, note_id):
+        note = models.Note.locate(self.me, self.me.default, note_id)
+
+        query = Q(ecreatenote__note__id=note.id) | \
+        Q(eupdatenote__note__id=note.id) |\
+        Q(eattachnotefile__note__id=note.id) |\
+        Q(edettachnotefile__note__id=note.id)|\
+        Q(erestorenote__id=note.id)
+
+        events = Event.objects.filter(query).order_by('-created').values('html')
+        count = events.count()
+
+        return render(request, 'note_app/note-events.html', 
+        {'note': note, 'elems': events, 'count': count})
+
+
 
 

@@ -1,7 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
-from group_app.forms import ConfirmGroupDeletionForm
+from core_app.models import Organization, User, Invite
+from group_app.forms import ConfirmDeletionForm
 from slock.forms import SetPasswordForm
-from core_app.models import User
+from core_app.models import User, Membership
 from sqlike.forms import SqLikeForm
 from card_app.models import Card
 from django.conf import settings
@@ -10,10 +11,8 @@ from . import models
 import site_app.forms
 import datetime
 
-class OrganizationForm(forms.Form):
-    name = forms.CharField(help_text='Example: Your business name.')
 
-class ConfirmOrganizationDeletionForm(ConfirmGroupDeletionForm):
+class ConfirmOrganizationDeletionForm(ConfirmDeletionForm):
     name = forms.CharField(required=True,
     help_text='Type the organization name to confirm!')
 
@@ -24,10 +23,48 @@ class UserSearchForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, help_text='tag:developer')
 
 class TagSearchForm(SqLikeForm, forms.Form):
-    pattern = forms.CharField(required=False, help_text='Example: developer')
+    pattern = forms.CharField(required=False, 
+    help_text='Example: feature')
 
-class OrganizationInviteForm(forms.Form):
-    email = forms.EmailField(help_text="Insert user E-mail.")
+class InviteForm(forms.ModelForm):
+    class Meta:
+        model  = models.Invite
+        fields = ('email', 'status')
+
+    def __init__(self, *args, me=None, **kwargs):
+        self.me = me
+        super(InviteForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(InviteForm, self).clean()
+
+        # It is necessary otherwise the form doesn't display errors
+        # when the email is not valid.
+        if self.errors: return
+
+        email = self.cleaned_data.get('email')
+        status = self.cleaned_data.get('status')
+        user, _ = User.objects.get_or_create(email=email)
+
+        # If the user is already a member then notify with an error.
+        if user.organizations.filter(id=self.me.default.id).exists():
+            raise forms.ValidationError("The user is already a member!")
+
+        # If there is already an invite just tell him it was sent.
+        if user.invites.filter(organization=self.me.default).exists():
+            raise forms.ValidationError("The user was already invited!")
+
+        if self.me.paid and status != '2' and self.is_max_users():
+            raise forms.ValidationError('Max users limit was arrived!\
+                You need to upgrade your plan!')
+
+        self.instance.organization = self.me.default
+        self.instance.peer = self.me
+        self.instance.user = user
+
+    def is_max_users(self):
+        max_users = self.me.default.owner.c_acc_peers()
+        return self.me.default.owner.max_users <= max_users
 
 class ShoutForm(forms.Form):
     msg = forms.CharField(required=False)
@@ -47,10 +84,20 @@ class TagForm(forms.ModelForm):
         model  = models.Tag
         exclude = ('organization', )
 
-class UpdateOrganizationForm(forms.ModelForm):
+class OrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
-        fields = ( 'name', )
+        fields = ( 'name', 'public', 'description')
+
+    def __init__(self, *args, me=None, **kwargs):
+        self.me = me
+        super(OrganizationForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(OrganizationForm, self).clean()
+        if not self.me.paid and not self.cleaned_data['public']:
+            raise forms.ValidationError('Free accounts can have\
+                just public organizatoins')
 
 class SignupForm(SetPasswordForm):
     class Meta:
@@ -116,6 +163,33 @@ class FileAttachment:
         self.user.default.owner.c_storage = c_storage
         self.user.default.owner.save()
         return super(FileAttachment, self).save(*args, **kwargs)
+
+class MembershipForm(forms.ModelForm):
+    class Meta:
+        model  = models.Membership
+        fields = ('status',)
+
+    def __init__(self, *args, me=None, **kwargs):
+        self.me = me
+        self.old_status = kwargs['instance'].status
+        super(MembershipForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(MembershipForm, self).clean()
+        # Means the user attempted to change from contributor to other status.
+        cond = self.old_status == '2' and ('status' in self.changed_data)
+        if self.me.default.owner.paid and cond and self.is_max_users():
+            raise forms.ValidationError("Can't change user\
+                    status, upgrade your plan!")
+    
+    def is_max_users(self):
+        max_users = self.me.default.owner.c_acc_peers()
+        return self.me.default.owner.max_users <= max_users
+
+class UserTagshipForm(forms.ModelForm):
+    class Meta:
+        model  = models.UserTagship
+        fields = ()
 
 
 

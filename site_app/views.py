@@ -49,6 +49,7 @@ class Login(LoginView):
             return render(request, 'site_app/index.html',
                         {'form': form})
 
+        form.authenticate()
         return redirect('core_app:index')
 
 class Logout(LogoutView):
@@ -166,6 +167,7 @@ class RedefinePassword(LoginView):
 
         # Redirect to the application.
         return redirect('core_app:index')
+
 
 
 

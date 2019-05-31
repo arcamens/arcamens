@@ -7,6 +7,8 @@ from django.conf import settings
 from core_app.models import User
 from core_app.views import AuthenticatedView
 from cash_app.models import Period
+from board_app.models import Board
+from group_app.models import Group
 import paybills.views
 from . import forms
 import group_app
@@ -24,22 +26,42 @@ class CustomPayment(AuthenticatedView):
 
 class Upgrade(AuthenticatedView):
     def get(self, request):
-        items = self.me.items.all().order_by('-created')
+        items        = self.me.items.all().order_by('-created')
+        users        = User.objects.filter(organizations__owner__id=self.me.id)
+        users        = users.distinct()
+        admins       = users.filter(user_membership__status='0')
+        members      = users.filter(user_membership__status='1')
+        contributors = users.filter(user_membership__status='2')
 
-        return render(request, 'cash_app/upgrade.html', 
-        {'items': items, 'me': self.me, 'CURRENCY_CODE': settings.CURRENCY_CODE})
+        n_users = users.count()
+        c_admins = admins.count()
+        c_members = members.count()
+        c_contributors = contributors.count()
+
+        return render(request, 'cash_app/upgrade.html',  {'items': items, 
+        'me': self.me, 'n_users': n_users, 'c_admins': c_admins,
+        'CURRENCY_CODE': settings.CURRENCY_CODE, 'c_members': c_members,
+        'c_contributors': c_contributors})
 
 class ConfirmDowngradeFree(AuthenticatedView):
     def get(self, request):
-        users   = User.objects.filter(organizations__owner__id=self.me.id)
-        users   = users.distinct()
-        n_users = users.count()
+        users        = User.objects.filter(organizations__owner__id=self.me.id)
+        users        = users.distinct()
+        admins       = users.filter(user_membership__status='0')
+        members      = users.filter(user_membership__status='1')
+        contributors = users.filter(user_membership__status='2')
+        n_users      = users.count()
+
+        c_admins = admins.count()
+        c_members = members.count()
+        c_contributors = contributors.count()
 
         # if not me.paid:
             # return HttpResponse('Your plan is already free!', status=403)
 
         return render(request, 'cash_app/confirm-downgrade-free.html', 
-        {'n_users':n_users, 'me': self.me, 'settings': settings})
+        {'n_users':n_users, 'me': self.me, 'c_members': c_members, 
+        'c_admins': c_admins, 'c_contributors': c_contributors, 'settings': settings})
 
 class DowngradeFree(AuthenticatedView):
     def get(self, request):
@@ -47,13 +69,16 @@ class DowngradeFree(AuthenticatedView):
         users   = users.distinct()
         n_users = users.count()
 
-        if n_users > settings.FREE_MAX_USERS:
-            return render(request, 'cash_app/downgrade-free-max-users-error.html', 
-                {'me': self.me, 'n_users':n_users}, status=403)
-
         if self.me.expiration > datetime.date.today():
             return render(request, 'cash_app/downgrade-free-expiration-error.html', 
                 {'me': self.me, 'n_users':n_users}, status=403)
+
+        # Turn all boards/groups to be public.
+        boards = Board.objects.filter(owner=self.me)
+        boards.update(public=True)
+
+        groups = Group.objects.filter(owner=self.me)
+        groups.update(public=True)
 
         period = Period.objects.create(paid=False, total=0, user=self.me)
         self.me.max_users  = period.max_users
@@ -191,6 +216,7 @@ class PayPalIPN(paybills.views.PayPalIPN):
         """
         """
         print('Manual payment happened!')
+
 
 
 

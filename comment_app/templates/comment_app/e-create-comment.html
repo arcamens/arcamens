@@ -1,23 +1,20 @@
+{% extends 'group_app/event.html' %}
 {% load i18n %}
 
-<div>
-<small> 
-<b class="text-warning"> *Commented* </b> </small>
-{{event.event.html|safe|safe}}
-</div>
+{% block content %}
+Comment <a class="e-get"
+data-shell="#bigModalContent" 
+data-show="{% url 'comment_app:comment' event.comment.id %}" href="{{event.comment.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.comment.title}} </a> was created on
 
-<script>
-$(function () {
-    $('[data-toggle="popover"]').popover()
-})
-</script>
+<a class="e-get"
+data-shell="#main-view"
+data-show="{% url 'post_app:post' event.child.id %}" 
+href="{{ event.child.get_link_url }}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.child.label|truncatechars:40}} </a> 
 
-
-
-
-
-
-
-
+{% endblock %}
 
 

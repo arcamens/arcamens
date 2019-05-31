@@ -3,9 +3,16 @@
 {% include 'board_app/list-pins.html' %}
 
 {% include "group_app/list-posts-menu-group.html" %}
+<form id="cutPostForm"> {% csrf_token %} </form>
+<form id="copyPostForm"> {% csrf_token %} </form>
+<form id="likePostForm"> {% csrf_token %} </form>
+
 <br>
 
 {{ elems | safe }}
+
+
+
 
 
 

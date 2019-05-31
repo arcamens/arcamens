@@ -23,22 +23,28 @@ Paypal <small> Manual Payment </small></h3>
 <small class="text-info"> Cost based on current expiration and max users limit. 
 
 <span class="text-warning"> Cost per user {{settings.USER_COST}} {{settings.CURRENCY_CODE}} per 30 days. </span>
+
 </small></p>
 
+<p> Contributor users are costless! </p>
 </div>
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
 
 <button  type="button" data-show="{% url 'cash_app:upgrade' %}" 
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button  type="button" data-show="{% url 'cash_app:calculate-period-cost' %}" data-form="#paypalManualPaymentForm"
-class="btn btn-default e-post"> {% trans "Calc/Cost" %} </button>
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-usd"></span> {% trans "Calc/Cost" %} </button>
 
 <button  type="button" data-show="{% url 'cash_app:paypal-manual-payment' %}" data-form="#paypalManualPaymentForm"
-class="btn btn-default e-post"> {% trans "Purchase" %} </button>
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Purchase" %} </button>
+</div>
 
 </div>
+
+
 
 
 

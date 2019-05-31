@@ -17,21 +17,20 @@
 {% bootstrap_field form.name  size='md' %}
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
+</div>
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
 <button type="button" class="btn btn-default" 
-data-dismiss="modal">Cancel</button>
+data-dismiss="modal"><span class="glyphicon glyphicon-thumbs-down"></span> Cancel</button>
 
 <button type="button" data-form="#confirmGroupDeletionForm"
 data-shell="#main-view"  
 data-show="{% url 'group_app:delete-group' group.id %}"
 class="btn btn-danger e-post"> 
-     {% trans "Delete" %}
+<span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %}
 </button>
-
-
-
-
-
+</div>
 
 

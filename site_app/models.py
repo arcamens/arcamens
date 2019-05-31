@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 import random
@@ -23,8 +23,8 @@ class PasswordTicket(models.Model):
     token = models.CharField(null=True,
     blank=False, max_length=256)
 
-    user = models.ForeignKey('core_app.User', null=True, 
-    related_name='password_tickets', blank=True)
+    user = models.ForeignKey('core_app.User', null=False, on_delete=models.CASCADE,
+    related_name='password_tickets')
 
     # expiration = models.DateTimeField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -32,8 +32,8 @@ class PasswordTicket(models.Model):
 class RegisterProcess(RegisterProcessMixin, models.Model):
     # email = models.EmailField(max_length=70, 
     # null=True, blank=False)
-    user = models.OneToOneField('core_app.User', null=True, 
-    blank=True, related_name='register_process')
+    user = models.OneToOneField('core_app.User', null=False, on_delete=models.CASCADE,
+    related_name='register_process')
 
     # should have a count to avoid mail spam.
     token = models.CharField(null=True,

@@ -15,7 +15,7 @@ List </h4>
 </div>
 
 <div class="modal-body">
-<form id="form-list-data" enctype="multipart/form-data">
+<form id="listForm" enctype="multipart/form-data">
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
@@ -24,32 +24,16 @@ List </h4>
 {% bootstrap_form_errors form type='non_fields' %}
 
 </form>
+</div>
 
 <div class="modal-footer">
 {% block buttons %}
-<button  type="button" data-form="#form-list-data" data-shell="#main-view" href="#"
-data-show="{% url 'list_app:create-list' board.id %}" class="btn btn-default e-post">  {% trans "Create" %} </button>
+<button  type="button" data-form="#listForm" data-shell="#main-view" href="#"
+data-show="{% url 'list_app:create-list' board.id %}" class="btn btn-sm btn-default e-post">  
+<span class="glyphicon glyphicon glyphicon-ok"></span>
+{% trans "Create" %} </button>
 {% endblock %}
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

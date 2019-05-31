@@ -41,14 +41,22 @@ href="#"> <span class="glyphicon glyphicon-tag"></span> New tag?</a>
 
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
 
 <button  type="button" data-form="#tagSearchForm" 
-data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default e-post"> {% trans "Search" %} </button>
+data-show="{% url 'core_app:list-tags'  %}" class="btn btn-default e-post"> 
+<span class="glyphicon glyphicon-search"></span>
+
+{% trans "Search" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span>
      {% trans "Close" %}
 </button>
 </div>
+
+</div>
+
 
 
 

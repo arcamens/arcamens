@@ -13,10 +13,11 @@ function refreshPost() {
 <button  type="button" data-form="#postForm" id="updatePost"
 data-shell="#post-{{post.id}}"  data-callback="refreshPost();" data-show="{% url 'post_app:update-post' post.id %}"
 class="btn btn-default e-post"> 
-     {% trans "Update" %}
+<span class="glyphicon glyphicon-edit"></span>     {% trans "Update" %}
 </button>
 
 {% endblock %}
+
 
 
 

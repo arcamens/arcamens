@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<b class="text-warning"> *Feedbacked*  </b>
+<div class="panel panel-default">
+<div class="panel-body">
+{{event.event.html|safe}}
+
+</div>
+</div>
+<p class="text-info">{{event.data}}</p>
+
+<small>
+
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}">
+<span class="glyphicon glyphicon-user"></span> {{event.user}} </a> on {{event.created}}
+</small>
+
+<script>
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+
+
+
+
+
+
+
+
+
+
+

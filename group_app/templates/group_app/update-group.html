@@ -5,17 +5,21 @@
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
 <h5 class="modal-title">
-<span class="glyphicon glyphicon-cog"></span>
-{{group.name}}'s settings</h5>
+<span class="glyphicon glyphicon-cog"></span> Settings</h5>
 
 </div>
 
 <div class="modal-body">
-<form id="form-group-data" enctype="multipart/form-data">
+<form id="groupForm" enctype="multipart/form-data">
 
 {% csrf_token %}
 {% bootstrap_field form.name  size='sm' %}
 {% bootstrap_field form.description  size='sm' %}
+{% bootstrap_field form.open  size='sm' %}
+{% bootstrap_field form.public  size='sm' %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+
 </form>
 
 {% if group.open %}  
@@ -26,23 +30,23 @@
 
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
 <button  type="button" data-show="{% url 'group_app:delete-group' group.id %}"
 class="btn btn-danger e-get"> 
-{% trans "Delete" %}
+<span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %}
 </button>
 
-<button  type="button" data-form="#form-group-data" 
+<button  type="button" data-form="#groupForm" 
 data-shell="#main-view" data-show="{% url 'group_app:update-group' group.id %}"
 class="btn btn-default e-post"> 
-{% trans "Update" %}
+<span class="glyphicon glyphicon-edit"></span> {% trans "Update" %}
 </button>
 
 </button>
-
 </div>
 
-
-
+</div>
 
 
 

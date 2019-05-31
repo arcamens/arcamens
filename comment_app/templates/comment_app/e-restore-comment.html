@@ -1,0 +1,30 @@
+{% extends 'group_app/event.html' %}
+{% load i18n %}
+
+{% block content %}
+Comment <a class="e-get" data-shell="#bigModalContent" data-show="{% url 'comment_app:comment' event.comment.id %}"  href="{{event.comment.get_link_url}}"> 
+<span class="glyphicon glyphicon-book"></span> {{event.comment.title|truncatechars:50}} </a> 
+was restored on post
+
+<a class="e-get" data-shell="#main-view"
+data-show="{% url 'post_app:post' event.post.id %}" href="{{event.post.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span>
+{{event.post.label|truncatechars:50}} </a> ... from
+
+<div class="panel panel-default">
+<div class="panel-body">
+{{event.event_html|safe}}
+</div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

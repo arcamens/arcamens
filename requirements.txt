@@ -1,23 +1,29 @@
-Django==1.11
+Django==2.1.7
 py-gfm
 django-bootstrap3
 django-datetime-widget
 pillow
-markdown
-django-recaptcha
+markdown==2.6.11
+django-recaptcha==2.0.2
 requests
 django-blowdb
 django-listutils
-git+ssh://git@bitbucket.org/arcamens/django-paybills.git@1.1.0
-git+ssh://git@bitbucket.org/arcamens/django-slock.git@1.1.0
-git+ssh://git@bitbucket.org/arcamens/django-jsim.git@1.2.0
-mysqlclient
+git+ssh://git@github.com/arcamens/django-paybills.git
+git+ssh://git@github.com/arcamens/django-slock.git
+git+ssh://git@github.com/arcamens/django-jsim.git
 pygments
-git+ssh://git@bitbucket.org/arcamens/django-sqlike.git@1.0.1
-git+ssh://git@bitbucket.org/arcamens/django-onesignal.git@1.0.1
-git+ssh://git@bitbucket.org/arcamens/django-jscroll.git@1.1.0
+git+ssh://git@github.com/arcamens/django-sqlike.git
+git+ssh://git@github.com/arcamens/django-onesignal.git
+git+ssh://git@github.com/arcamens/django-jscroll.git
 django-storages
 boto3
+
+
+
+
+
+
+
 
 
 

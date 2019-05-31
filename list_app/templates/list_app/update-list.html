@@ -8,15 +8,14 @@
 
 
 {% block buttons %}
-<button  type="button" 
-data-form="#form-list-data" 
-data-shell="#main-view" 
-data-shell-error="#smallModalContent" 
-data-show="{% url 'list_app:update-list' list.id %}"
-class="btn btn-default e-post"> 
-{% trans "Update" %}
+<button  type="button" data-form="#listForm"  data-shell="#main-view" 
+data-shell-error="#smallModalContent"  data-show="{% url 'list_app:update-list' list.id %}"
+class="btn btn-sm btn-default e-post"> 
+<span class="glyphicon glyphicon-edit"></span> {% trans "Update" %}
 </button>
 {% endblock %}
+
+
 
 
 

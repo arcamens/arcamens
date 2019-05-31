@@ -1,0 +1,17 @@
+
+{% extends "comment_app/create-comment.html" %}
+{% load i18n %}
+{% block title %}
+<span class="glyphicon glyphicon-edit"></span> 
+Update card
+{% endblock %}
+
+{% block buttons %}
+<button  type="button" data-form="#commentForm" 
+data-shell="#bigModalContent"  data-shell-error="#bigModalContent"  data-show="{% url 'comment_app:update-comment' comment.id %}"
+class="btn btn-default e-post"> 
+{% trans "Update" %}
+</button>
+{% endblock %}
+
+

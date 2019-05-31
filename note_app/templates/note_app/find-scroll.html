@@ -1,0 +1,30 @@
+{% for ind in elems %}
+<div class="panel panel-default">
+<div class="panel-body">
+
+<pre>
+{{ind.data|truncatechars:300}}
+</pre>
+<small>
+<a class="e-get" href="{{ind.get_link_url}}" data-show="{% url 'note_app:preview-note' ind.id %}"> 
+<span class="glyphicon glyphicon-bell"></span>
+Note </a> on card <a href="{{ind.card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' ind.card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{ind.card.label|truncatechars:60}} </a>
+</small>
+</div>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+

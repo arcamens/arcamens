@@ -7,22 +7,23 @@
 
 </div>
 <div class="modal-body">
-<p class="text-info"> Your account can have at most {{ me.max_users }} users.
+<h4> Account Details </h4>
+<p class="text-info"> Your account contains {{c_admins}} admins, {{c_members}} members, {{c_contributors}} contributors.
 </p>
 
-<p class="text-warning">
+<p class="text-info">
 {% if me.enabled %}
-    {% if me.expiration %}
-        It will expire on {{ me.expiration }}.
-    {% else %}
+    {% if me.paid %}
         It will never expire.
+    {% else %}
+        It will expire on {{ me.expiration }}.
     {% endif %}
 {% else %}
 Your account was expired on {{ me.expiration }}.
 {% endif %}
 </p>
 
-<h5 class="text-info"> Your purchases: </h5>
+<h4> Purchases: </h4>
 <div class="pre-scrollable" style="font-size:90%">
 {% for ind in items %}
 <p> 
@@ -50,28 +51,16 @@ Date: {{ind.period.created}}
 </div>
 
 <div class="modal-footer">
-
-<div class="text-center">
- <a class="e-get" data-show="{% url 'cash_app:paypal-manual-payment' %}" href="#"> Paypal </a> 
-<a class="e-get" data-show="{% url 'cash_app:custom-payment' %}" href="#"> Custom </a> 
+<div class="btn-group btn-group-sm">
+<button type="button" class="btn btn-default e-get" data-show="{% url 'cash_app:paypal-manual-payment' %}" href="#"> Paypal </button> 
+<button type="button"class="btn btn-default e-get" data-show="{% url 'cash_app:custom-payment' %}" href="#"> Custom </button> 
 
 {% if me.paid %}
-<a class="e-get" data-show="{% url 'cash_app:confirm-downgrade-free' %}" href="#"> Downgrade Free </a> 
+<button type="button" class="btn btn-default e-get" data-show="{% url 'cash_app:confirm-downgrade-free' %}" href="#"> Downgrade Free </button> 
 {% endif %}
 </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 

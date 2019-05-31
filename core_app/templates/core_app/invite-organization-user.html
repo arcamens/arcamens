@@ -10,23 +10,38 @@
 </div>
 
 <div class="modal-body">
-<form id="bind-user-form" enctype="multipart/form-data">
+<form id="inviteForm" enctype="multipart/form-data">
 
 {% csrf_token %}
 
-{% bootstrap_field form.email  size='md' %}
+{% bootstrap_form form %}
 
-{% bootstrap_form_errors form type='non_fields' %}
 </form>
+<small>
+<p class="text-info"> Staffs can add/remove organization users. </p>
+<p class="text-info"> Workers can't add/remove organization users.  </p>
+<p class="text-info"> Contributors can't create/delete groups/boards. </p>
+<p class="text-info"> Contributors are always costless. </p>
+
+</small>
 
 </div>
 
 <div class="modal-footer">
-<button  type="button" data-show="{% url 'core_app:list-invites'  %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+<div class="btn-group btn-group-sm">
 
-<button  type="button" data-form="#bind-user-form" data-show="{% url 'core_app:invite-organization-user'  %}"
-class="btn btn-default e-post"> {% trans "Send" %} </button>
+<button  type="button" data-show="{% url 'core_app:list-invites'  %}"
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span>
+{% trans "Back" %} </button>
+
+<button  type="button" data-form="#inviteForm" data-show="{% url 'core_app:invite-organization-user'  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-send"></span>
+{% trans "Send" %} </button>
 </div>
+
+</div>
+
+
+
 
 

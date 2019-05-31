@@ -1,52 +1,35 @@
-"""gnosis URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.10/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
-from django.conf.urls import url, include
+from django.urls import path, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
-# from django.conf.urls import handler404, handler500
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', RedirectView.as_view(pattern_name='site_app:index')),
-     url(r'^core_app/', include('core_app.urls', namespace='core_app')), 
-     url(r'^group_app/', include('group_app.urls', namespace='group_app')), 
-     url(r'^board_app/', include('board_app.urls', namespace='board_app')), 
-     url(r'^comment_app/', include('comment_app.urls', namespace='comment_app')), 
-     url(r'^site_app/', include('site_app.urls', namespace='site_app')), 
-     url(r'^cash_app/', include('cash_app.urls', namespace='cash_app')), 
+    path(r'admin/', admin.site.urls),
+     path(r'core_app/', include('core_app.urls')),
+     path(r'group_app/', include('group_app.urls')),
+     path(r'board_app/', include('board_app.urls')),
+     path(r'feedback_app/', include('feedback_app.urls')),
+     path(r'site_app/', include('site_app.urls')),
+     path(r'cash_app/', include('cash_app.urls')),
 
-     url(r'^post_app/', include('post_app.urls', namespace='post_app')), 
-     url(r'^group_app/', include('group_app.urls', namespace='group_app')),
-     url(r'^paybills/', include('paybills.urls', namespace='paybills')), 
-     url(r'^onesignal/', include('onesignal.urls', namespace='onesignal')), 
-    url(r'^board_app/', include('board_app.urls', namespace='board_app')),
-    url(r'^card_app/', include('card_app.urls', namespace='card_app')),
-    url(r'^snippet_app/', include('snippet_app.urls', namespace='snippet_app')),
-    url(r'^note_app/', include('note_app.urls', namespace='note_app')),
-    url(r'^jscroll/', include('jscroll.urls', namespace='jscroll')),
+     path(r'post_app/', include('post_app.urls', namespace='post_app')),
+     path(r'paybills/', include('paybills.urls')),
+     path(r'onesignal/', include('onesignal.urls')),
+    path(r'card_app/', include('card_app.urls')),
+    path(r'comment_app/', include('comment_app.urls')),
+    path(r'note_app/', include('note_app.urls')),
+    path(r'jscroll/', include('jscroll.urls')),
 
-    url(r'^bitbucket_app/', include('bitbucket_app.urls', namespace='bitbucket_app')),
-    url(r'^github_app/', include('github_app.urls', namespace='github_app')),
+    path(r'bitbucket_app/', include('bitbucket_app.urls')),
+    path(r'github_app/', include('github_app.urls')),
 
-    url(r'^list_app/', include('list_app.urls', namespace='list_app')),
+    path(r'list_app/', include('list_app.urls')),
 
+    path(r'', RedirectView.as_view(pattern_name='site_app:index')),
 ]
 
 
 # handler500 = 'core_app.views.default_error'
+
 
 
 

@@ -1,0 +1,28 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+
+<div class="panel panel-default">
+ <div class="panel-body">
+
+<p style="font-size:80%"> 
+<span class="glyphicon glyphicon-bell"></span> 
+
+By <a href="#" data-toggle="popover" data-trigger="hover" title="{{note.owner.email}}"  data-content="{{note.owner.description}}"> {{note.owner.name}} </a>
+on <a href="{{note.get_link_url}}" target="_blank"> {{note.created}} </a> 
+
+</p>
+
+<div style="word-wrap: break-word;">  {{note.html | safe}} </div>
+
+On card 
+<a href="{{card.get_link_url}}" data-shell="#bigModalContent" data-show="{% url 'card_app:view-data' note.card.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{note.card.label|truncatechars:60}} </a>
+
+</div>
+
+
+</div>
+
+
+

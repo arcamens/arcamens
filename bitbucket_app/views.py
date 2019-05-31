@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from bitbucket_app.models import BitbucketHook, EBitbucketCommit
-from core_app.models import User
+from core_app.models import User, Membership
 from card_app.models import Card
 from note_app.models import Note
 from . import forms
@@ -107,12 +107,12 @@ class ListBitbucketHooks(GuardianView):
 
 class DeleteBitbucketHook(GuardianView):
     def get(self, request, hook_id):
-        me_admin = self.me.user_membership.filter(
-        organization=self.me.default, admin=True).exists()
+        membership = Membership.objects.get(
+            user=self.me, organization=self.me.default)
 
-        MSG0 = "Only admins can do that!"
-        if not me_admin:
-            return HttpResponse(MSG0, status=403)
+        ERROR0 = "Only staffs can do that!"
+        if membership.status != '0':
+            return HttpResponse(ERROR0, status=403)
 
         hook = BitbucketHook.objects.get(id=hook_id)
         hook.delete()
@@ -128,12 +128,12 @@ class CreateBitbucketHook(GuardianView):
         {'form':form, 'user': user})
 
     def post(self, request):
-        me_admin = self.me.user_membership.filter(
-        organization=self.me.default, admin=True).exists()
+        membership = Membership.objects.get(
+            user=self.me, organization=self.me.default)
 
-        MSG0 = "Only admins can do that!"
-        if not me_admin:
-            return HttpResponse(MSG0, status=403)
+        ERROR0 = "Only staffs can do that!"
+        if membership.status != '0':
+            return HttpResponse(ERROR0, status=403)
 
         form = forms.BitbucketHookForm(request.POST)
 
@@ -146,6 +146,7 @@ class CreateBitbucketHook(GuardianView):
         record.organization = self.me.default
         record.save()
         return redirect('bitbucket_app:list-bitbucket-hooks')
+
 
 
 

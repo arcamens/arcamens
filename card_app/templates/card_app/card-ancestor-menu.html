@@ -2,6 +2,7 @@
 
 
 <div class="pull-right dropdown">
+<form id="pasteCardForm"> {% csrf_token %} </form>
 
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
 <span class="glyphicon glyphicon-wrench"></span>  </a>
@@ -19,7 +20,7 @@ href="#"> <span class="glyphicon glyphicon-remove"></span>  {% trans "Delete" %}
 
 <li class="divider"></li>
 
-<li><a class="e-get" data-shell="#mediumModalContent"  data-show="{% url 'list_app:select-destin-list' list.id %}" 
+<li><a class="e-get" data-shell="#mediumModalContent"  data-show="{% url 'list_app:paste-card' list.id %}" 
 href="#"> <span class="glyphicon glyphicon-paste"></span>  {% trans "Paste" %}</a></li>
 <li class="divider"></li>
 
@@ -32,5 +33,6 @@ href="#"> <span class="glyphicon glyphicon-paste"></span>  {% trans "Archive All
 
 </ul>
 </div>
+
 
 

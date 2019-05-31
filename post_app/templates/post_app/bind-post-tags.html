@@ -1,0 +1,60 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% load avatar %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Possible tags for post <a href="{{post.get_link_url}}" data-shell="#main-view" data-show="{% url 'post_app:post' post.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+{% for ind in excluded %}
+<p class="text-center"> <span class="glyphicon glyphicon-tag"></span> {{ind.name}}  
+<br>
+
+<small> {{ind.description}} </small>   <br>
+
+<a class="e-get" style="font-size:70%" data-show="{% url 'post_app:create-post-tagship' post.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-plus"></span> Bind</a>  
+
+</p>
+{% empty %}
+No tags to bind ...
+{% endfor %}
+
+</div>
+
+<br>
+
+<form id="tagSearchForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'post_app:unbind-post-tags' post.id %}"> {% trans "Back" %} </button>
+
+<button type="button" data-form="#tagSearchForm" 
+data-show="{% url 'post_app:bind-post-tags' post.id  %}"
+class="btn btn-default e-post"> {% trans "Search" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+     {% trans "Close" %}
+</button>
+</div>
+
+</div>
+

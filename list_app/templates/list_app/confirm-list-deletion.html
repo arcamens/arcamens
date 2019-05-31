@@ -14,21 +14,21 @@
 
 
 <div class="modal-footer">
+<form id="deleteListForm" enctype="multipart/form-data">
+{% csrf_token %}
+</form>
+
+<div class="btn-group btn-group-sm">
+
 <button type="button" class="btn btn-default" 
-data-dismiss="modal">Cancel</button>
+data-dismiss="modal"><span class="glyphicon glyphicon-thumbs-down"></span> Cancel</button>
 
 <button  id="createCard" type="button" 
 data-shell="#main-view"  
-data-shell-error="#smallModalContent" data-show="{% url 'list_app:delete-list' list.id %}"
-class="btn btn-danger e-get"> 
-     {% trans "Delete" %}
+data-shell-error="#smallModalContent" data-show="{% url 'list_app:delete-list' list.id %}" data-form="#deleteListForm"
+class="btn btn-danger e-post">  <span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %}
 </button>
-
-
-<script>
-
-
-
-
+</div>
+</div>
 
 

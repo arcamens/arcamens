@@ -1,0 +1,68 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% load avatar %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Available {{group.name|truncatechars:20}}'s Members 
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+{% for ind in excluded %}
+<p class="text-center">
+<img class="img-responsive center-block"  width="50" height="50"  src="{% avatar ind.avatar %}" />
+{{ind.name}}  
+<br>
+
+<small> {{ind.email}} </small>   <br>
+
+<a class="e-get" style="font-size:70%" data-show="{% url 'group_app:create-groupship-user' group.id ind.id %} " href="#"> 
+<span class="glyphicon glyphicon-plus"></span> Bind</a>  
+
+</p>
+{% empty %}
+
+No users to bind...
+{% endfor %}
+
+</div>
+
+<br>
+
+<form id="userSearchForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
+
+<div class="modal-footer">
+<div class="btn-group btn-group-sm">
+
+<button  type="button" class="btn btn-default e-get" data-show="{% url 'group_app:unbind-group-users' group.id %}"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
+<button type="button" data-form="#userSearchForm" 
+data-show="{% url 'group_app:bind-group-users' group.id  %}"
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-search"></span>
+{% trans "Search" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span>
+     {% trans "Close" %}
+</button>
+</div>
+
+</div>
+
+
+
+

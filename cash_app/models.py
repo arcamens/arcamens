@@ -18,7 +18,7 @@ class Period(BasicItem):
     # attempt to add more users to his account than the max then he is
     # asked to upgrade his limits. This way i think we may be able
     # to implement subscription.
-    max_users = models.IntegerField(null=False, default=3,
+    max_users = models.IntegerField(null=True, 
     help_text="Max users until the expiration.")
 
     expiration = models.DateField(null=True, 
@@ -34,4 +34,5 @@ class Period(BasicItem):
         'Max Users: {max_users}').format(paid=self.paid, 
             price=self.price, expiration=self.expiration, 
                 max_users=self.max_users)
+
 

@@ -1,0 +1,47 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+
+<div id="view-data">
+<div class="modal-header">
+<button type="button"  class="close" data-dismiss="modal">&times;</button>
+<h4> 
+<span class="glyphicon glyphicon-search"></span>
+
+Notes
+<span class="badge">{{count}}/{{total}}</span><h4>
+</div>
+
+<div class="modal-body">
+<div class="pre-scrollable"> {{elems | safe}} </div>
+
+<hr>
+
+<form id="noteSearchForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md'  %}
+
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+</div>
+
+</div>
+</div>
+
+<div class="modal-footer">
+<button  type="button" data-form="#noteSearchForm"  data-show="{% url 'note_app:find'  %}"
+class="btn btn-default e-post"> {% trans "Filter" %} </button>
+
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 ---
-title: Arcamens Docs
+title: Arcamens 
 ---
 
 ### Intro
@@ -42,16 +42,63 @@ Arcamens makes usage of cut/copy for moving cards around, it is much more effici
 the usual drag&drop approach.  You can cut several cards, these will stay on the clipboard
 when you're ready just paste them somewhere.
 
+Arcamens also has a powerful set of permissions for users. There are roles that are used
+to restrict user interaction with boards, groups etc. There is complete support
+for organizations that demand having their projects exposed to the extern world. 
+
+The concept of public organizations, boards and groups help our customers to better
+organize their businesses workflow.
+
+### Organization Creation
+
+Organizations can serve on multiple purposes depending on the kind of business and size. 
+You can map a team to an organization, a business branch to an organization or even handle all your
+business team in a single organization. 
+
+It all depends on how big your business is and on your necessities of designing your business workflow.
+
+Organizations contain users, boards and groups. Each one of the users will have a specific role
+in relation to the organization, such a role determins the kind of interaction the user will
+have. 
+
+A given user can be binded to an organization as being a Staff, Worker or Contributor. An
+organization staff is allowed to bind/unbind users from the organization also creating boards/groups. A worker
+has permissions to create boards, groups but not sending invites.  A contributor is not allowed to create boards, 
+groups nor sending invites.
+
+When you create an organization you will be binded as a staff, you'll have total permissions
+over the organization.
+
+Organizations can be either public or private depending on your plan, public organizations are
+exposed to the extern world. Public organizations allow other arcamens users to join it on their own,
+when these users join your public organizations they will have a contributor status it means they will
+not be allowed to create new boards nor groups.
+
+For creating an organization just click on your current organization icon at the navbar:
+
+![organization-creation-0](/static/site_app/help/organization-creation-0.png)
+
+Then click on +Organization link, you would get:
+
+![organization-creation-1](/static/site_app/help/organization-creation-1.png)
+
+Type your new organizatio name then click Create.
+
 ### Board Creation
 
-You can create as many boards as you desire. For creating a new board just click on Home at the navbar
-and then use the popup menu by clicking the wrench icon shown at this image:
+You can create as many boards as you desire. For creating a new board just click on +Board:
 
 ![board-creation-0](/static/site_app/help/board-creation-0.png)
 
 You would get:
 
 ![board-creation-1](/static/site_app/help/board-creation-1.png)
+
+Boards can be public or private, public boards are visibile to all organization users. When a public
+board is created then every organization user is binded to the board as a Guest. Board users
+can have three possible roles Admin, Member or Guest.
+
+**See:** [Board Members](#board-members)
 
 One may find it necessary to have boards that are related to the same project, in such situations
 it is possible to set their descriptions with a slug to group them according to their project.
@@ -103,9 +150,9 @@ using the approach of setting slugs for each one of your project plugins as foll
 It allows designing your project workflow without creating multiple
 boards for its plugins.
 
-### Card Creation
+Board guests aren't allowed to create/edit nor delete lists.
 
-Card are the entities which contain actual information pieces.
+### Card Creation
 
 Cards are created inside lists, after accessing a list just click on +Card:
 
@@ -131,7 +178,7 @@ After a card is created it can have its Label/Data attributes changed. Such
 a change generates an event. Everyone who is attached to the card's board will
 get notified as well as all workers of the card.
 
-In order to edit/update a card just access the card and click on: Update
+In order to edit/update a card just access the card and click on: Edit
 
 ![card-editing-0](/static/site_app/help/card-editing-0.png)
 
@@ -148,7 +195,7 @@ are means of knowing what is going on with your teams.
 
 ![events-0](/static/site_app/help/events-0.png)
 
-The action that was performed can be commented on thus giving constructive criticism about your peers
+The action that was performed can be feedbacked on thus giving constructive criticism about your peers
 work.
 
 Events will carry links to the objects that are related to the user action. You can left click on the links
@@ -168,31 +215,71 @@ You would get:
 
 ![card-workers-1](/static/site_app/help/card-workers-1.png)
 
+Click on: Bind Workers
+
+![card-workers-2](/static/site_app/help/card-workers-2.png)
+
 Type a string that matches either the user name or email then hit enter.
 So you will be able to add users to the card task.
 
+Once the user is binded to the card as a worker everyone who is related to the card will
+get notified.
+
 **See:** [Advanced User Search](#advanced-user-search)
 
-### Board Permissions
+### Board Members
 
-A board will have a owner (the one who has created it), admins and members. The owner
-is the only one who can make a member become an admin. Admins are allowed to add/remove members to the board
-but members aren't allowed to remove peers.
+Boards have users binded to them, a given user can have a specific role in relation to the board,
+it helps you to restrict the user interaction with the board. An user can have one of the following
+three possible roles: Admin, Member or Guest. 
 
-For adding new members to the board (assuming you're the owner or an admin), just access the board 
-then click on the wrench icon:
+Admins have all board permissions except deleting the board,
+members have all admins permissions except binding/unbinding users,
+guests have all member permissions except binding/unbinding users and
+creating new lists/cards.
 
-![board-permissions-0](/static/site_app/help/board-permissions-0.png)
+Boards are the most useful feature in arcamens, boards can be public or private. Public boards
+include all organization users. When a public board is created then all organization users will be
+binded as guests, their status can be changed afterwards on your necessities. 
 
-Then click on Members, you would get:
+Public boards are very useful for open source organizations whose visibility to the world is a necessary
+condition. These are also useful for large projects that demand all organization users to be interacting,
+it all depends on how you decide to design your workflow though.
 
-![board-permissions-1](/static/site_app/help/board-permissions-1.png)
+Private boards are only allowed for paid plans, you'll be allowed to create only public boards on a free plan.
+It is possible for all organization staffs/members to create private boards on paid plans.
+
+Binding new users to a given board is quite simple, just ...
+
+Click on the wrench icon at the board card.
+
+![board-members-0](/static/site_app/help/board-members-0.png)
+
+Then you would access the board members list.
+
+![board-members-1](/static/site_app/help/board-members-1.png)
+
+Click on Bind Members link to access the list of users who are outside the board.
+
+![board-members-2](/static/site_app/help/board-members-2.png)
 
 You can search users by using tag, email or name attributes, then add users.
 
 **See:** [Advanced User Search](#advanced-user-search)
 
 After binding/unbinding a given user to a board he/she will get notified of it.
+
+In order to change/set an existing board member permissions just click on Settings.
+
+![board-members-3](/static/site_app/help/board-members-3.png)
+
+Then you would get.
+
+![board-members-4](/static/site_app/help/board-members-4.png)
+
+You can remove/change user role in that dialog, every member
+of the board will get notified. The scheme of permissions remains
+the same for updating user status.
 
 ### Tag Creation
 
@@ -338,31 +425,18 @@ actual browser tab or just right click and open in a new tab.
 
 **See:** [Advanced Card Search](#advanced-card-search)
 
-### Organization Creation
-
-Organizations can serve on multiple purposes depending on the kind of business and size. 
-You can map a team to an organization, a business branch to an organization or even handle all your
-business team in a single organization. 
-
-It all depends on how big your business is and on your necessities of designing your business workflow.
-
-For creating an organization just click on your current organization icon at the navbar:
-
-![organization-creation-0](/static/site_app/help/organization-creation-0.png)
-
-Then click on +Organization link, you would get:
-
-![organization-creation-1](/static/site_app/help/organization-creation-1.png)
-
-Type your new organizatio name then click Create.
-
-### Groups
+### Group Creation
 
 Groups are great for sharing information, storing notes regarding a project and even delegating simple tasks.
 Groups can be used as super backlogs when deaing with Scrum Methodology. As posts can be forked into cards
 it allows one to setup a group to be used as a scrum board backlog.
 
-### Group Creation
+Groups also can be used as a mean of reporting issues by organization contributors. In the context
+of public organizations, public groups play an excellent tool to receive all kind of reports
+that are related to a project.
+
+Public groups are visible to all organization members, open groups allow organization contributors
+to create posts on.
 
 For creating a group just click on Home at the navbar then on the wrench icon at the organization
 toolbar:
@@ -393,29 +467,27 @@ best one for you. You don't need to pick a description for your boards/groups at
 
 After filling the fields you would get your group being listed altogether with your boards.
 
-### Posts
+### Post Creation
 
 Group posts can be used for multiple purposes, they can convey information about events,
-tasks and even play a nice role as project notes. Snippets can be attached to posts, a snippet
+tasks and even play a nice role as project notes. Comments can be attached to posts, a comment
 can contain a title and markdown content. 
 
 Tasks that demand one to collect information regarding a given subject can be delegated by using posts. 
-The person attaches the missing information to the post as a snippet.
+The person attaches the missing information to the post as a comment.
 
-![posts-0](/static/site_app/help/posts-0.png)
+![posts-creation-0](/static/site_app/help/post-creation-0.png)
 
 Some tasks arent directly related to a specific project these tasks
 can be delegated to a team or user by using a post.
 
-### Post Creation
-
 After a group is created just access it then click on +Post at the group toolbar:
 
-![post-creation-0](/static/site_app/help/post-creation-0.png)
+![post-creation-1](/static/site_app/help/post-creation-1.png)
 
 You would get:
 
-![post-creation-1](/static/site_app/help/post-creation-1.png)
+![post-creation-2](/static/site_app/help/post-creation-2.png)
 
 Posts can have a short title that holds a description of the post content and
 a markdown content. Once the post is created then files can be attached.
@@ -498,17 +570,6 @@ You can cancel invites or just resend the invite link. Notice that your account 
 can't override your account max users limit. The invites sum up with regular users and should
 be lesser or equal your account max users limit.
 
-### Organization Admins
-
-Organization admins are allowed to send invites and remove peers. In order to manage
-your organization admins just click on the wrench icon at the organization card:
-
-![organization-admins-0](/static/site_app/help/organization-admins-0.png)
-
-Then you would get:
-
-![organization-admins-1](/static/site_app/help/organization-admins-1.png)
-
 ### Group Members
 
 Users of a group get notification from all events that happen with the group. Whenever an user
@@ -522,10 +583,20 @@ Then you would get:
 
 ![group-members-1](/static/site_app/help/group-members-1.png)
 
-From there you can search users from your organization that match a given criterea.
+Click on Bind Members then it would list all your organization users who aren't belonging
+to the group.,
+
+![group-members-2](/static/site_app/help/group-members-2.png)
+
+Once you bind the new member then everyone in the group gets notified. A given group user
+can be an admin, worker or guest.
+
+Group admins can add/remove members, workers can't remove/add members while group guests
+can only create comments or feedback on the group events. When the board is open then guests
+are allowed to create posts. The group permission scheme is very similar to the board
+permission scheme.
 
 **See:** [Advanced User Search](#advanced-user-search)
-
 
 ### Post E-mail/Notifications
 
@@ -609,14 +680,14 @@ all tasks that someone has assigned to you.
 If you option for  **Created by me** then it would check the pattern against all posts
 that you created and it was at least one worker binded to.
 
-Consider you wanted to search for posts that contain the strings 'form', 'html' and 'need a snippet'
+Consider you wanted to search for posts that contain the strings 'form', 'html' and 'need a comment'
 either in the label or data attribute. After inserting that pattern you could combine
 with the so described filter options above.
 
 Notice that the order of strings is not relevant; You could also try:
 
 ~~~
-need a snippet + form + html
+need a comment + form + html
 ~~~
 
 Which would work alike.
@@ -625,32 +696,32 @@ Which would work alike.
 
 **See:** [Advanced Post Search](#advanced-post-search)
 
-### Event Comments
+### Event Feedbacks
 
-All kind of user actions in Arcamens are liable of being commented. Whenever an user
-assigns a worker to a post it generates an event then the event/action can be commented out.
+All kind of user actions in Arcamens are liable of being feedbacked. Whenever an user
+assigns a worker to a post it generates an event then the event/action can be feedbacked out.
 
-When an user action is commented then another event is generated but it doesn't allow
-comments for action comments.
+When an user action is feedbacked then another event is generated but it doesn't allow
+feedbacks for action feedbacks.
 
 Click on Events at the navbar:
 
-![event-comments-0](/static/site_app/help/event-comments-0.png)
+![event-feedbacks-0](/static/site_app/help/event-feedbacks-0.png)
 
 Then you would get:
 
-![event-comments-1](/static/site_app/help/event-comments-1.png)
+![event-feedbacks-1](/static/site_app/help/event-feedbacks-1.png)
 
-By clicking on the event Comments link:
+By clicking on the event Feedbacks link:
 
-![event-comments-2](/static/site_app/help/event-comments-2.png)
+![event-feedbacks-2](/static/site_app/help/event-feedbacks-2.png)
 
 
 The users who are related to the event would get a new event like:
 
-![event-comments-3](/static/site_app/help/event-comments-3.png)
+![event-feedbacks-3](/static/site_app/help/event-feedbacks-3.png)
 
-They can reply by clicking on the event Comments link.
+They can reply by clicking on the event Feedbacks link.
 
 ### Post Filter
 
@@ -1423,10 +1494,10 @@ binded to.
 Match against the post tags.
 
 ~~~
-tag:snippet + tag:django
+tag:comment + tag:django
 ~~~
 
-Find all posts that are tagged with snippet and django.
+Find all posts that are tagged with comment and django.
 
 **Created**
 
@@ -1539,15 +1610,15 @@ In order to get additional information about the above attributes.
 
 In addition to cards the posts can have the following different attributes:
 
-**Snippet**
+**Comment**
 
 It allows one to match against posts that contain a given string either in the title
 or in the data attribute.
 
-Imagine you want to find a post which contains a snippet whose title is:
+Imagine you want to find a post which contains a comment whose title is:
 
 ~~~
-A snippet how to use gle aka google searcher library for python.
+A comment how to use gle aka google searcher library for python.
 ~~~
 
 And its data field contains:
@@ -1567,37 +1638,37 @@ for indi in pages:
 Then the below filter pattern would do the job to find such a post.
 
 ~~~
-snippet:use gle + snippet:x.search
+comment:use gle + comment:x.search
 ~~~
 
-**Snippet Title**
+**Comment Title**
 
-The above attribute matches strictly the snippet title.
-
-~~~
-snippet.title:some string in the title
-~~~
-
-**Snippet File**
-
-This one matches against posts that have snippets with attachments.
+The above attribute matches strictly the comment title.
 
 ~~~
-snippet.file:engine.pdf 
+comment.title:some string in the title
 ~~~
 
-That would find all posts that have a snippet with an attachment whose filename contains
+**Comment File**
+
+This one matches against posts that have comments with attachments.
+
+~~~
+comment.file:engine.pdf 
+~~~
+
+That would find all posts that have a comment with an attachment whose filename contains
 the string 'engine.pdf'.
 
-**Snippet Owner**
+**Comment Owner**
 
-This one is regarding the snippet creator.
+This one is regarding the comment creator.
 
 ~~~
-snippet.owner:Norris
+comment.owner:Norris
 ~~~
 
-Would find all posts that have at least one snippet that was created by a guy
+Would find all posts that have at least one comment that was created by a guy
 named Norris.
 
 **Group**
@@ -1806,18 +1877,6 @@ note:bitbucket + note:author_name
 
 That would be enough to list the desired cards.
 
-### Organization User Removal
-
-In order to remove an user from an organization it is necessary to be admin of the organization.
-The one who is removing the user will own all timeliens and boards of the removed user.
-
-Click on the wrench icon at the organization menu:
-
-![organization-user-removal-0](/static/site_app/help/organization-user-removal-0.png)
-
-Then click on Members, you would get:
-
-![organization-user-removal-1](/static/site_app/help/organization-user-removal-1.png)
 
 ### Organization Settings/Removal
 
@@ -1828,6 +1887,9 @@ Click on wrench icon at the organization menu then Settings:
 You would get:
 
 ![organization-settings-removal-1](/static/site_app/help/organization-settings-removal-1.png)
+
+Once clicking on Delete it will erase all organization data and its members will get
+notified.
 
 ### Logs
 
@@ -1845,6 +1907,11 @@ Then you would get:
 
 From there you can specify the starting/ending date to filter your
 logs.
+
+
+
+
+
 
 
 

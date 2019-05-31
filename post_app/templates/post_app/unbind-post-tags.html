@@ -1,0 +1,81 @@
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% load avatar %}
+
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>
+<span class="glyphicon glyphicon-search"></span>
+Tags on post <a href="{{post.get_link_url}}" data-shell="#main-view" data-show="{% url 'post_app:post' post.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a>
+
+<span class="badge">{{count}}/{{total}}</span>
+</h5>
+</div>
+
+<div class="modal-body">
+
+<div class="pre-scrollable">
+<form id="postTagshipForm">
+{% csrf_token %}
+
+{% for ind in included %}
+<p class="text-center">
+{{ind.name}}
+<br>
+
+<small> {{ind.description}} </small>   <br>
+
+<a class="e-post" style="font-size:70%"  data-form="#postTagshipForm" data-show="{% url 'post_app:delete-post-tagship' post.id ind.id %}" href="#"> 
+<span class="glyphicon glyphicon-remove"></span> Unbind</a>  
+
+</p>
+{% empty %}
+No tags to unbind ...
+{% endfor %}
+
+</form>
+
+</div>
+
+<br>
+
+<form id="tagSearchForm" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_field form.pattern  size='md' layout='inline' %}
+{% bootstrap_form_errors form type='non_fields' %}
+</form>
+
+<a href="#" data-show="{% url 'post_app:bind-post-tags' post.id %}" class="e-get"> 
+ <span class="glyphicon glyphicon-tag"></span> Bind Tags? </a>
+
+</div>
+
+
+<div class="modal-footer">
+<script>
+function refreshPost() {
+    $('#post-{{post.id}}').load('{% url 'post_app:refresh-post' post.id  %}');
+}
+</script>
+
+<div class="btn-group btn-group-sm">
+<button type="button" data-form="#tagSearchForm" data-callback="refreshPost();"
+data-show="{% url 'post_app:unbind-post-tags' post.id  %}"
+class="btn btn-default e-post"> 
+<span class="glyphicon glyphicon-search"></span> {% trans "Search" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span>     {% trans "Close" %}
+</button>
+</div>
+
+</div>
+
+
+
+
+
+

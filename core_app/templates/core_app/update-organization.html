@@ -13,32 +13,34 @@
 {% csrf_token %}
 
 {% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.public  size='md' %}
+
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
 
-<a href="#" class="e-get" data-show="{% url 'bitbucket_app:list-bitbucket-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
-Bitbucket/Webhooks</a>
+{% if organization.public %}
+<hr>
+<h5> Public Link </h5>
+<p> {{link}} </p>
 
-<a href="#" class="e-get" data-show="{% url 'github_app:list-github-hooks' %}" > <span class="glyphicon glyphicon-share-alt"></span>  
-Github/Webhooks</a>
-
+<p class="text-info"> Users who click on this link
+will become contributors of this organization.</p>
+{% endif %}
 </div>
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
 
 <button  type="button" data-show="{% url 'core_app:delete-organization' %}" class="btn btn-danger e-get">  
-{% trans "Delete" %} </button>
+<span class="glyphicon glyphicon-remove"></span> {% trans "Delete" %} </button>
 
 <button  type="button" data-form="#organizationForm" data-callback="location.reload()"  data-shell="" data-shell-error="#smallModalContent" 
-data-show="{% url 'core_app:update-organization' %}" class="btn btn-default e-post"> {% trans "Update" %}
+data-show="{% url 'core_app:update-organization' %}" class="btn btn-default e-post"> <span class="glyphicon glyphicon-edit"></span> {% trans "Update" %}
 </button>
-
 </div>
 
-
-
-
-
+</div>
 
 
 

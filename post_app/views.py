@@ -1,13 +1,15 @@
 from post_app.models import EUnbindTagPost, ECreatePost, EUpdatePost, \
-PostFileWrapper, EDeletePost, EAssignPost, EBindTagPost, EUnassignPost, \
-PostFilter, GlobalPostFilter, ECutPost, EArchivePost, ECopyPost, \
-EUnarchivePost, PostPin
+PostFileWrapper, EDeletePost, EBindTagPost, ELikePost, EUnlikePost, \
+PostFilter, PostSearch, ECutPost, EArchivePost, ECopyPost, \
+EUnarchivePost, PostPin, PostTagship
+from post_app.sqlikes import SqPost
 from django.db.models import Q, F, Exists, OuterRef, Count, Sum
 from core_app.models import Clipboard, Tag, User, Event
+from core_app.sqlikes import SqUser, SqTag
 from django.db.models.functions import Concat
 from django.shortcuts import render, redirect
 from core_app.views import GuardianView, FileDownload
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import View
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -28,8 +30,6 @@ import json
 
 class Post(GuardianView):
     """
-    This view is supposed to be performed only if the user
-    belongs to the group or if he is a worker of the post.
     """
 
     def get(self, request, post_id):
@@ -84,14 +84,20 @@ class CreatePost(GuardianView):
         ancestor   = self.me.groups.get(id=ancestor_id, 
         organization=self.me.default)
 
+        groupship = self.me.user_groupship.get(group=ancestor)
+        if groupship.status == '2' and not ancestor.open:
+            return HttpResponse("The group is not opened, you're a guest\
+                you can't create posts!", status=403)
+
         form = forms.PostForm(request.POST, request.FILES)
+        print('fooo')
 
         if not form.is_valid():
             return render(request, 'post_app/create-post.html',
                         {'form': form, 'ancestor': ancestor}, status=400)
 
         post          = form.save(commit=False)
-        post.user     = self.me
+        post.owner     = self.me
         post.ancestor = ancestor
         post.save()
 
@@ -106,11 +112,6 @@ class CreatePost(GuardianView):
 
 class UpdatePost(GuardianView):
     """
-    The post can be updated by everyone who belongs to the 
-    group or is a worker of the post. 
-
-    It also makes sure the user who performs this view has set as 
-    default the organization whose post belongs to.
     """
 
     def get(self, request, post_id):
@@ -121,17 +122,24 @@ class UpdatePost(GuardianView):
 
     def post(self, request, post_id):
         record = models.Post.locate(self.me, self.me.default, post_id)
-        form = forms.PostForm(request.POST, request.FILES, instance=record)
 
+        groupship = self.me.user_groupship.get(group=record.ancestor)
+        if groupship.status == '2' and not record.ancestor.open:
+            return HttpResponse("The group is not opened, you're a guest\
+                you can't update posts!", status=403)
+
+        form = forms.PostForm(request.POST, request.FILES, instance=record)
         if not form.is_valid():
             return render(request, 'post_app/update-post.html',
                    {'post': record, 'form': form}, status=400)
+
         record.save()
 
         event = EUpdatePost.objects.create(organization=self.me.default,
-        group=record.ancestor, post=record, user=self.me)
+        group=record.ancestor, post=record, user=self.me, post_label=record.label,
+        post_data=record.data, post_html=record.html)
 
-        event.dispatch(*record.ancestor.users.all(), *record.workers.all())
+        event.dispatch(*record.ancestor.users.all())
 
         return redirect('post_app:refresh-post', 
         post_id=record.id)
@@ -170,7 +178,7 @@ class AttachFile(GuardianView):
         organization=self.me.default, filewrapper=record, 
         post=post, user=self.me)
 
-        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
+        event.dispatch(*post.ancestor.users.all())
         event.save()
 
         return self.get(request, post_id)
@@ -182,21 +190,25 @@ class DetachFile(GuardianView):
 
     def get(self, request, filewrapper_id):
         filewrapper = PostFileWrapper.objects.filter(
-        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
-        id=filewrapper_id, post__ancestor__organization=self.me.default)
+        Q(post__ancestor__users=self.me), id=filewrapper_id, 
+        post__ancestor__organization=self.me.default)
+
         filewrapper = filewrapper.distinct().first()
         attachments = filewrapper.post.postfilewrapper_set.all()
 
-        form = forms.PostFileWrapperForm()
+        groupship = self.me.user_groupship.get(group=filewrapper.post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("You're a group guest,\
+                you can't dettach post files!", status=403)
 
+        form = forms.PostFileWrapperForm()
         event = models.EDettachPostFile.objects.create(
         organization=self.me.default, filename=filewrapper.file.name, 
         post=filewrapper.post, user=self.me)
 
         filewrapper.delete()
 
-        event.dispatch(*filewrapper.post.ancestor.users.all(),
-        *filewrapper.post.workers.all())
+        event.dispatch(*filewrapper.post.ancestor.users.all())
         event.save()
 
         return render(request, 'post_app/attach-file.html', 
@@ -207,46 +219,24 @@ class DeletePost(GuardianView):
     The same permission scheme for update-post view.
     """
 
-    def get(self, request, post_id):
+    def post(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("Group guests can't delete posts!", status=403)
+
         event = EDeletePost.objects.create(organization=self.me.default,
         group=post.ancestor, post_label=post.label, user=self.me)
         users = post.ancestor.users.all()
-        event.dispatch(*users, *post.workers.all())
+        event.dispatch(*users)
 
         ancestor = post.ancestor
         post.delete()
 
-        return redirect('group_app:list-posts', 
-        group_id=ancestor.id)
-
-class PostWorkerInformation(GuardianView):
-    """
-    Same permission scheme as in Post view.
-    """
-
-    def get(self, request, peer_id, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        peer = User.objects.get(id=peer_id, organizations=self.me.default)
-
-        taskship = models.PostTaskship.objects.get(worker=peer, post=post)
-
-        active_posts = peer.assignments.filter(done=False)
-        done_posts = peer.assignments.filter(done=True)
-
-        active_posts = peer.tasks.filter(done=False)
-        done_posts = peer.tasks.filter(done=True)
-
-        active_tasks = active_posts.count() + active_posts.count()
-        done_tasks = done_posts.count() + done_posts.count()
-
-        return render(request, 'post_app/post-worker-information.html', 
-        {'peer': peer, 'created': taskship.created, 'active_tasks': active_tasks,
-        'done_tasks': done_tasks, 'assigner':taskship.assigner, 'post': post})
+        return redirect('group_app:list-posts', group_id=ancestor.id)
 
 class PostTagInformation(GuardianView):
     """
-    Same permission scheme as PostWorkerInformation.
     """
 
     def get(self, request, tag_id, post_id):
@@ -257,82 +247,6 @@ class PostTagInformation(GuardianView):
         return render(request, 'post_app/post-tag-information.html', 
         {'tagger': tagship.tagger, 'created': tagship.created, 'tag':tag})
 
-class UnassignPostUser(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def post(self, request, post_id, user_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        user = User.objects.get(id=user_id)
-
-        event = EUnassignPost.objects.create(
-        organization=self.me.default, ancestor=post.ancestor, 
-        post=post, user=self.me, peer=user)
-
-        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
-        event.save()
-
-        user.post_workership.get(post=post).delete()
-        return ManagePostWorkers.as_view()(request, post_id)
-
-class AssignPostUser(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def post(self, request, post_id, user_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        user = User.objects.get(id=user_id)
-
-        models.PostTaskship.objects.create(worker=user, assigner=self.me, post=post)
-
-        event = EAssignPost.objects.create(organization=self.me.default, 
-        ancestor=post.ancestor, post=post, user=self.me, peer=user)
-
-        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
-        event.save()
-        return ManagePostWorkers.as_view()(request, post_id)
-
-class ManagePostWorkers(GuardianView):
-    """
-    Same as in post view.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        included = post.workers.all()
-        excluded = self.me.default.users.exclude(assignments=post)
-        total    = included.count() + excluded.count()
-
-        return render(request, 'post_app/manage-post-workers.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'count': total, 'total': total, 'me': self.me, 
-        'form':forms.UserSearchForm()})
-
-    def post(self, request, post_id):
-        sqlike = User.from_sqlike()
-        form = forms.UserSearchForm(request.POST, sqlike=sqlike)
-
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        included = post.workers.all()
-        excluded = self.me.default.users.exclude(assignments=post)
-        total    = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'post_app/manage-post-workers.html',  
-                {'me': self.me, 'total': total, 'count': 0, 'post': post, 
-                    'form':form}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-        count = included.count() + excluded.count()
-
-        return render(request, 'post_app/manage-post-workers.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'me': self.me, 'form':form, 'total': total, 'count': count,})
 
 class SetupPostFilter(GuardianView):
     """
@@ -350,17 +264,17 @@ class SetupPostFilter(GuardianView):
         filter = PostFilter.objects.get(
         user__id=self.user_id, group__id=group_id)
 
-
         return render(request, 'post_app/setup-post-filter.html', 
-        {'form': forms.PostFilterForm(instance=filter), 
-        'group': group})
+        {'form': forms.PostFilterForm(instance=filter), 'group': group})
 
     def post(self, request, group_id):
         record = PostFilter.objects.get(
         group__id=group_id, user__id=self.user_id)
-        sqlike = models.Post.from_sqlike()
 
-        form     = forms.PostFilterForm(request.POST, sqlike=sqlike, instance=record)
+        sqlike = SqPost()
+        form   = forms.PostFilterForm(
+        request.POST, sqlike=sqlike, instance=record)
+
         group = self.me.groups.get(id=group_id, 
         organization=self.me.default)
 
@@ -368,6 +282,7 @@ class SetupPostFilter(GuardianView):
             return render(request, 'post_app/setup-post-filter.html',
                    {'group': record, 'form': form}, status=400)
         form.save()
+
         return redirect('group_app:list-posts', group_id=group.id)
 
 class Find(GuardianView):
@@ -377,35 +292,43 @@ class Find(GuardianView):
     """
 
     def get(self, request):
-        filter, _ = GlobalPostFilter.objects.get_or_create(
+        filter, _ = PostSearch.objects.get_or_create(
         user=self.me, organization=self.me.default)
-        form   = forms.GlobalPostFilterForm(instance=filter)
-        posts  = models.Post.get_allowed_posts(self.me)
-        total  = posts.count()
 
-        sqlike = models.Post.from_sqlike()
+        form   = forms.PostSearchForm(instance=filter)
+        q0     = Q(ancestor__organization=self.me.default)
+        q1     = Q(ancestor__users=self.me) 
+        posts  = models.Post.objects.filter(q0 & q1)
+
+        posts  = posts.distinct()
+        total  = posts.count()
+        sqlike = SqPost()
         posts  = filter.get_partial(posts)
 
         sqlike.feed(filter.pattern)
 
         posts = sqlike.run(posts)
         count = posts.count()
-
         posts = posts.only('done', 'label', 'id').order_by('id')
         elems = JScroll(self.me.id, 'post_app/find-scroll.html', posts)
 
-        return render(request, 'post_app/find.html', 
-        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+        return render(request, 'post_app/find.html', {'form': form, 
+        'elems':  elems.as_div(), 'total': total, 'count': count})
 
     def post(self, request):
-        filter, _ = GlobalPostFilter.objects.get_or_create(
+        filter, _ = PostSearch.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
-        sqlike = models.Post.from_sqlike()
-        form  = forms.GlobalPostFilterForm(request.POST, sqlike=sqlike, instance=filter)
+        sqlike = SqPost()
+        form   = forms.PostSearchForm(
+        request.POST, sqlike=sqlike, instance=filter)
 
-        posts = models.Post.get_allowed_posts(self.me)
-        total = posts.count()
+        q0     = Q(ancestor__organization=self.me.default)
+        q1     = Q(ancestor__users=self.me) 
+        posts  = models.Post.objects.filter(q0 & q1)
+
+        posts  = posts.distinct()
+        total  = posts.count()
 
         if not form.is_valid():
             return render(request, 'post_app/find.html', 
@@ -416,20 +339,24 @@ class Find(GuardianView):
         posts = sqlike.run(posts)
 
         count = posts.count()
-
         posts = posts.only('done', 'label', 'id').order_by('id')
         elems = JScroll(self.me.id, 'post_app/find-scroll.html', posts)
 
-        return render(request, 'post_app/find.html', 
-        {'form': form, 'elems':  elems.as_div(), 'total': total, 'count': count})
+        return render(request, 'post_app/find.html', {'form': form, 
+        'elems':  elems.as_div(), 'total': total, 'count': count})
 
 class CutPost(GuardianView):
     """
     Same as in update-post view permission scheme.
     """
 
-    def get(self, request, post_id):
+    def post(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
+
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("Group guests can't cut posts!", status=403)
+
         group = post.ancestor
 
 
@@ -445,7 +372,7 @@ class CutPost(GuardianView):
         event = ECutPost.objects.create(organization=self.me.default,
         group=group, post=post, user=self.me)
         users = group.users.all()
-        event.dispatch(*users, *post.workers.all())
+        event.dispatch(*users)
 
         return redirect('group_app:list-posts', 
         group_id=group.id)
@@ -455,9 +382,14 @@ class CopyPost(GuardianView):
     Same as in CutPost view.
     """
 
-    def get(self, request, post_id):
+    def post(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
-        copy         = post.duplicate()
+
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("Group guests can't copy posts!", status=403)
+
+        copy = post.duplicate()
         clipboard, _ = Clipboard.objects.get_or_create(
         user=self.me, organization=self.me.default)
 
@@ -469,7 +401,7 @@ class CopyPost(GuardianView):
         event = ECopyPost.objects.create(organization=self.me.default,
         group=post.ancestor, post=post, user=self.me)
         users = post.ancestor.users.all()
-        event.dispatch(*users, *post.workers.all())
+        event.dispatch(*users)
 
         return redirect('group_app:list-posts', 
         group_id=post.ancestor.id)
@@ -481,6 +413,9 @@ class Done(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("Group guests can't archive posts!", status=403)
 
         can_archive = all(post.card_forks.values_list('done', flat=True))
         if not can_archive:
@@ -495,89 +430,11 @@ class Done(GuardianView):
         group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
-        event.dispatch(*users, *post.workers.all())
+        event.dispatch(*users)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
 
-class ManagePostTags(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        included = post.tags.all()
-        excluded = self.me.default.tags.exclude(posts=post)
-        total = included.count() + excluded.count()
-
-        return render(request, 'post_app/manage-post-tags.html', 
-        {'included': included, 'excluded': excluded, 'post': post,
-        'organization': self.me.default,'form':forms.TagSearchForm(), 
-        'total': total, 'count': total})
-
-    def post(self, request, post_id):
-        sqlike = Tag.from_sqlike()
-        form = forms.TagSearchForm(request.POST, sqlike=sqlike)
-
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        included = post.tags.all()
-        excluded = self.me.default.tags.exclude(posts=post)
-        total = included.count() + excluded.count()
-
-        if not form.is_valid():
-            return render(request, 'post_app/manage-post-tags.html', 
-                {'total': total, 'organization': self.me.default, 
-                    'post': post, 'form':form, 'count': 0}, status=400)
-
-        included = sqlike.run(included)
-        excluded = sqlike.run(excluded)
-        count = included.count() + excluded.count()
-
-        return render(request, 'post_app/manage-post-tags.html', 
-        {'included': included, 'excluded': excluded, 'post': post, 
-        'total': total, 'count': count, 'me': self.me, 'form':form, 
-        'organization': self.me.default, })
-
-class UnbindPostTag(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def post(self, request, post_id, tag_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        tag = Tag.objects.get(id=tag_id)
-
-        post.posttagship_set.get(tag=tag).delete()
-
-        event = EUnbindTagPost.objects.create(
-        organization=self.me.default, ancestor=post.ancestor, 
-        post=post, tag=tag, user=self.me)
-        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
-        event.save()
-
-        return ManagePostTags.as_view()(request, post_id)
-
-class BindPostTag(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def post(self, request, post_id, tag_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-        tag = Tag.objects.get(id=tag_id)
-
-        models.PostTagship.objects.create(tag=tag, post=post, tagger=self.me)
-
-        event = EBindTagPost.objects.create(
-        organization=self.me.default, ancestor=post.ancestor, 
-        post=post, tag=tag, user=self.me)
-        event.dispatch(*post.ancestor.users.all(), *post.workers.all())
-        event.save()
-
-        return ManagePostTags.as_view()(request, post_id)
 
 class Undo(GuardianView):
     """
@@ -586,95 +443,23 @@ class Undo(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        if groupship.status == '2':
+            return HttpResponse("Group guests can't unarchive posts!", status=403)
+
         post.done = False
         post.save()
-
         event = EUnarchivePost.objects.create(organization=self.me.default,
         group=post.ancestor, post=post, user=self.me)
 
         users = post.ancestor.users.all()
-        event.dispatch(*users, *post.workers.all())
+        event.dispatch(*users)
 
         return redirect('post_app:refresh-post', 
         post_id=post.id)
 
-
-class RequestPostAttention(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def get(self, request, peer_id, post_id):
-        peer = User.objects.get(id=peer_id, organizations=self.me.default)
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        form = forms.PostAttentionForm()
-        return render(request, 'post_app/request-post-attention.html', 
-        {'peer': peer,  'post': post, 'form': form})
-
-    def post(self, request, peer_id, post_id):
-        peer = User.objects.get(id=peer_id, organizations=self.me.default)
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        form = forms.PostAttentionForm(request.POST)
-
-        if not form.is_valid():
-            return render(request, 'post_app/request-post-attention.html', 
-                    {'peer': peer, 'post': post, 'form': form})    
-
-        url  = reverse('post_app:post-link', 
-            kwargs={'post_id': post.id})
-
-        url = '%s%s' % (settings.LOCAL_ADDR, url)
-        msg = '%s (%s) has requested your attention on\n%s\n\n%s' % (
-        self.me.name, self.me.email, url, form.cleaned_data['message'])
-
-        send_mail('%s %s' % (self.me.default.name, 
-        self.me.name), msg, self.me.email, [peer.email], fail_silently=False)
-
-        return redirect('post_app:post-worker-information', 
-        peer_id=peer.id, post_id=post.id)
-
-class AlertPostWorkers(GuardianView):
-    """
-    Same as in update-post view.
-    """
-
-    def get(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        form = forms.AlertPostWorkersForm()
-        return render(request, 'post_app/alert-post-workers.html', 
-        {'post': post, 'form': form, 'user': self.me})
-
-    def post(self, request, post_id):
-        post = models.Post.locate(self.me, self.me.default, post_id)
-
-        form = forms.AlertPostWorkersForm(request.POST)
-
-        if not form.is_valid():
-            return render(request,'post_app/alert-post-workers.html', 
-                    {'user': self.me, 'post': post, 'form': form})    
-
-        url  = reverse('post_app:post-link', 
-        kwargs={'post_id': post.id})
-
-        url = '%s%s' % (settings.LOCAL_ADDR, url)
-        msg = '%s (%s) has alerted you on\n%s\n\n%s' % (
-        self.me.name, self.me.email, url, form.cleaned_data['message'])
-
-        for ind in post.workers.values_list('email'):
-            send_mail('%s %s' % (self.me.default.name, 
-                self.me.name), msg, self.me.email, 
-                    [ind[0]], fail_silently=False)
-
-        return render(request, 'post_app/alert-post-workers-sent.html', {})
-
 class ConfirmPostDeletion(GuardianView):
     """
-    The user is supposed to view this dialog only if he
-    belongs to the group post or is a worker of the post.
-    
     It enforces his default organization contains the post's group
     as well.
     """
@@ -749,7 +534,7 @@ class CreatePostFork(GuardianView):
 
         # The group users and the board users get the event.
         event.dispatch(*post.ancestor.users.all(), 
-        *fork.ancestor.ancestor.members.all(), *post.workers.all())
+        *fork.ancestor.ancestor.members.all())
 
         return redirect('card_app:view-data', card_id=fork.id)
 
@@ -791,27 +576,30 @@ class PostEvents(GuardianView):
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
 
-        query = Q(eunbindtagpost__post__id= post.id) | \
-        Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) | \
-        Q(eassignpost__post__id=post.id) | Q(ebindtagpost__post__id= post.id) |\
-        Q(eunassignpost__post__id= post.id)| \
+        query = Q(eunbindtagpost__post__id= post.id) |\
+        Q(ecreatepost__post__id=post.id) | Q(eupdatepost__post__id= post.id) |\
+        Q(elikepost__post__id=post.id) | Q(ebindtagpost__post__id= post.id) |\
         Q(ecutpost__post__id = post.id) | Q(earchivepost__post__id=post.id) |\
         Q(ecopypost__post__id=post.id) | Q(ecreatepostfork__post__id=post.id) | \
-        Q(epastepost__posts=post.id) | Q(ecreatesnippet__child__id=post.id) | \
-        Q(eupdatesnippet__child__id=post.id) | Q(edeletesnippet__child__id=post.id) |\
-        Q(eattachsnippetfile__snippet__post__id=post.id) | \
+        Q(epastepost__posts=post.id) | Q(ecreatecomment__child__id=post.id) | \
+        Q(eupdatecomment__child__id=post.id) | Q(edeletecomment__child__id=post.id) |\
+        Q(eattachcommentfile__comment__post__id=post.id) | \
         Q(eattachpostfile__post__id=post.id) | \
         Q(edettachpostfile__post__id=post.id) | \
-        Q(edettachsnippetfile__snippet__post__id=post.id)|\
+        Q(edettachcommentfile__comment__post__id=post.id)|\
         Q(esetpostpriorityup__post0__id=post.id)|\
         Q(esetpostprioritydown__post0__id=post.id)|\
         Q(esetpostpriorityup__post1__id=post.id)|\
         Q(esetpostprioritydown__post1__id=post.id)|\
-        Q(eunarchivepost__post__id=post.id)
+        Q(erestorepost__post__id=post.id)|\
+        Q(eunarchivepost__post__id=post.id)|\
+        Q(erestorecomment__post__id=post.id)
+
         events = Event.objects.filter(query).order_by('-created').values('html')
+        count = events.count()
 
         return render(request, 'post_app/post-events.html', 
-        {'post': post, 'elems': events})
+        {'post': post, 'elems': events, 'count': count})
 
 
 class PinPost(GuardianView):
@@ -835,11 +623,9 @@ class RefreshPost(GuardianView):
 
     def get(self, request, post_id):
         post = models.Post.locate(self.me, self.me.default, post_id)
-        # boardpins = user.boardpin_set.filter(organization=user.default)
-        # listpins = user.listpin_set.filter(organization=user.default)
-        # cardpins = user.cardpin_set.filter(organization=user.default)
-        # grouppins = user.grouppin_set.filter(organization=user.default)
 
+        # Some workaround to not need to rewrite the post_app/post-data.html template.
+        post.in_likers = post.likes.filter(id=self.me.id).exists()
         return render(request, 'post_app/post-data.html', 
         {'post':post, 'tags': post.tags.all(), 'user': self.me, })
 
@@ -856,7 +642,7 @@ class PostPriority(GuardianView):
         'posts': posts, 'form': forms.PostPriorityForm()})
 
     def post(self, request, post_id):
-        sqlike = models.Post.from_sqlike()
+        sqlike = SqPost()
         post   = models.Post.locate(self.me, self.me.default, post_id)
         posts  = post.ancestor.posts.filter(done=False)
         total  = posts.count()
@@ -896,8 +682,6 @@ class SetPostPriorityUp(GuardianView):
         event = models.ESetPostPriorityUp.objects.create(organization=self.me.default,
         ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
 
-        # As workers may not be in the board at all, there is no
-        # need to notify them separately.
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
 
@@ -923,8 +707,6 @@ class SetPostPriorityDown(GuardianView):
         event = models.ESetPostPriorityDown.objects.create(organization=self.me.default,
         ancestor=post0.ancestor, post0=post0, post1=post1, user=self.me)
 
-        # As workers may not be in the board at all, there is no
-        # need to notify them separately.
 
         event.dispatch(*post0.ancestor.users.all())
         print('Priority', [[ind.label, ind.priority] for ind in post0.ancestor.posts.all().order_by('-priority')])
@@ -934,17 +716,196 @@ class SetPostPriorityDown(GuardianView):
 class PostFileDownload(FileDownload):
     def get(self, request, filewrapper_id):
         filewrapper = PostFileWrapper.objects.filter(
-        Q(post__ancestor__users=self.me) | Q(post__workers=self.me),
+        Q(post__ancestor__users=self.me),
         id=filewrapper_id, post__ancestor__organization=self.me.default)
         filewrapper = filewrapper.distinct().first()
 
         return self.get_file_url(filewrapper.file)
 
+class LikePost(GuardianView):
+    def post(self, request, post_id):
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        post.likes.add(self.me)
+
+        event = ELikePost.objects.create(organization=self.me.default, 
+        ancestor=post.ancestor, post=post, user=self.me)
+
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
+
+        return redirect('post_app:refresh-post', post_id=post.id)
+
+class UnlikePost(GuardianView):
+    def post(self, request, post_id):
+        post = models.Post.locate(self.me, self.me.default, post_id)
+        post.likes.remove(self.me)
+
+        event = EUnlikePost.objects.create(organization=self.me.default, 
+        ancestor=post.ancestor, post=post, user=self.me)
+
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
+
+        return redirect('post_app:refresh-post', post_id=post.id)
+
+class UnbindPostTags(GuardianView):
+    """
+    """
+
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+        included = post.tags.all()
+        total    = included.count() 
+
+        return render(request, 'post_app/unbind-post-tags.html', {
+        'included': included, 'post': post, 'organization': self.me.default,
+        'form':forms.TagSearchForm(), 'me': self.me, 
+        'count': total, 'total': total,})
+
+    def post(self, request, post_id):
+        sqlike   = SqTag()
+        form     = forms.TagSearchForm(request.POST, sqlike=sqlike)
+        post     = models.Post.objects.get(id=post_id)
+        included = post.tags.all()
+        tags     = self.me.default.tags.all()
+        total    = included.count() 
+        
+        if not form.is_valid():
+            return render(request, 'post_app/unbind-post-tags.html', 
+                {'me': self.me, 'post': post, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        included = sqlike.run(included)
+        count = included.count() 
+
+        return render(request, 'post_app/unbind-post-tags.html', 
+        {'included': included, 'post': post, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class BindPostTags(GuardianView):
+    """
+    The listed tags are supposed to belong to the logged tag default
+    organization. It also checks if the tag belongs to the post
+    in order to list its tags.
+    """
+
+    def get(self, request, post_id):
+        post = models.Post.objects.get(id=post_id)
+
+        tags  = self.me.default.tags.all()
+        excluded = tags.exclude(posts=post)
+        total    = excluded.count()
+
+        return render(request, 'post_app/bind-post-tags.html', 
+        {'excluded': excluded, 'post': post, 'me': self.me, 
+        'organization': self.me.default,'form':forms.TagSearchForm(), 
+        'count': total, 'total': total,})
+
+    def post(self, request, post_id):
+        sqlike   = SqTag()
+        form     = forms.TagSearchForm(request.POST, sqlike=sqlike)
+        post     = models.Post.objects.get(id=post_id)
+        tags     = self.me.default.tags.all()
+        excluded = tags.exclude(posts=post)
+
+        total = excluded.count()
+        
+        if not form.is_valid():
+            return render(request, 'post_app/bind-post-tags.html', 
+                {'me': self.me, 'post': post, 'count': 0, 'total': total,
+                        'form':form}, status=400)
+
+        excluded = sqlike.run(excluded)
+        count = excluded.count()
+
+        return render(request, 'post_app/bind-post-tags.html', 
+        {'excluded': excluded, 'post': post, 'me': self.me, 
+        'organization': self.me.default,'form':form, 
+        'count': count, 'total': total,})
+
+class CreatePostTagship(GuardianView):
+    """
+    """
+
+    def get(self, request, post_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        post = models.Post.objects.get(id=post_id)
+        form  = forms.PostTagshipForm()
+
+        return render(request, 'post_app/create-post-tagship.html', {
+        'tag': tag, 'post': post, 'form': form})
+
+    def post(self, request, post_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        post = models.Post.objects.get(id=post_id)
+
+        form = forms.PostTagshipForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'post_app/create-post-tagship.html', {
+                'tag': tag, 'post': post, 'form': form})
+
+        record        = form.save(commit=False)
+        record.tag   = tag
+        record.tagger = self.me
+        record.post  = post
+        record.save()
+
+        event = EBindTagPost.objects.create(
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=self.me)
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
 
 
 
+        return redirect('post_app:bind-post-tags', post_id=post.id)
 
+class DeletePostTagship(GuardianView):
+    def post(self, request, post_id, tag_id):
+        tag  = Tag.objects.get(id=tag_id, organization=self.me.default)
+        post = models.Post.objects.get(id=post_id)
 
+        event = EUnbindTagPost.objects.create(
+        organization=self.me.default, ancestor=post.ancestor, 
+        post=post, tag=tag, user=self.me)
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
+
+        PostTagship.objects.get(post=post, tag=tag).delete()
+        return redirect('post_app:unbind-post-tags', post_id=post.id)
+
+class PostDiff(GuardianView):
+    def get(self, request, event_id):
+        event = EUpdatePost.objects.get(id=event_id)
+        post = models.Post.locate(self.me, self.me.default, event.post.id)
+
+        return render(request, 'post_app/post-diff.html', 
+        {'post': post, 'event': event})
+
+class RestorePost(GuardianView):
+    def post(self, request, event_id):
+        event = EUpdatePost.objects.get(id=event_id)
+        post  = models.Post.locate(self.me, self.me.default, event.post.id)
+
+        groupship = self.me.user_groupship.get(group=post.ancestor)
+        error    = "The group is not opened, you're a guest\
+        you can't update posts!"
+
+        if groupship.status == '2' and not post.ancestor.open:
+            return HttpResponse(error, status=403)
+
+        post.label = event.post_label
+        post.data = event.post_data
+        post.save()
+
+        event = models.ERestorePost.objects.create(
+        event_html=event.html, organization=self.me.default, 
+        ancestor=post.ancestor,post=post, user=self.me)
+
+        event.dispatch(*post.ancestor.users.all())
+        event.save()
+        return redirect('post_app:post', post_id=post.id)
 
 
 

@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h5>  
+<span class="glyphicon glyphicon-bell"></span>
+Events on note <a class="e-get" data-shell="#bigModalContent"
+data-show="{% url 'note_app:preview-note' note.id %}" href="{{note.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> Note <span class="badge">{{count}}</span></a></h5>
+</div>
+
+<div class="modal-body pre-scrollable">
+{% for ind in elems %}
+<div class="panel panel-default">
+<div class="panel-body">
+{{ind.html | safe}}
+</div> </div>
+{% endfor %}
+
+</div>
+
+
+<div class="modal-footer">
+
+<button  type="button" data-shell="#bigModalContent" data-show="{% url 'note_app:list-notes' note.card.id %}" class="btn btn-default e-get"> 
+<span class="glyphicon glyphicon-arrow-left"></span> {% trans "Notes" %} </button>
+
+<button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-up"></span>  {% trans "Close" %}
+</button>
+
+<script>
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+
+</div>
+
+
+
+
+
+
+
+
+

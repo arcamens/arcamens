@@ -69,8 +69,8 @@ from post_app.models import *
 from group_app.models import *
 from site_app.models import *
 from note_app.models import *
-from snippet_app.models import *
 from comment_app.models import *
+from feedback_app.models import *
 
 events = Event.objects.all()
 
@@ -129,7 +129,7 @@ fields = {
     'c': lambda ind: Q(created__icontains=ind),
     'l': lambda ind: Q(label__icontains=ind),
     'd': lambda ind: Q(data__icontains=ind),
-    's': lambda ind: Q(snippets_label__icontains=ind),
+    's': lambda ind: Q(comments_label__icontains=ind),
     'n': lambda ind: Q(note__data__icontains=ind),
     't': lambda ind: Q(tags__name__icontains=ind),
 
@@ -180,7 +180,7 @@ fields = {
     'c': lambda ind: Q(created__icontains=ind),
     'l': lambda ind: Q(label__icontains=ind),
     'd': lambda ind: Q(data__icontains=ind),
-    's': lambda ind: Q(snippets_label__icontains=ind),
+    's': lambda ind: Q(comments_label__icontains=ind),
     'n': lambda ind: Q(note__data__icontains=ind),
     't': lambda ind: Q(tags__name__icontains=ind),
 
@@ -252,8 +252,8 @@ created = lambda ind: Q(created__icontains=ind)
 label   = lambda ind: Q(label__icontains=ind)
 data    = lambda ind: Q(data__icontains=ind)
 
-snippet = lambda ind: Q(snippets_label__icontains=ind) | Q(
-snippets_data__icontains=ind)
+comment = lambda ind: Q(comments_label__icontains=ind) | Q(
+comments_data__icontains=ind)
 
 note  = lambda ind: Q(note__data__icontains=ind)
 tag   = lambda ind: Q(tags__name__icontains=ind)

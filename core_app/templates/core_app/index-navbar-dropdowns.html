@@ -1,0 +1,57 @@
+{% load i18n %}
+{% load static %}
+
+<div class="collapse navbar-collapse" id="myNavbar">
+<ul class="nav navbar-nav navbar-right">
+<li class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#"> <span class="glyphicon glyphicon-flag"></span> {{organization.name}}
+
+<span class="caret"></span></a>
+
+<ul class="dropdown-menu">
+<li><a class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:create-organization' %}" href="#">  <span class="glyphicon glyphicon-plus"></span>  {% trans "Organization" %}</a></li>
+
+{% if organizations %}
+<li class="divider"></li>
+{% endif %}
+
+{% for ind in organizations %}
+<li><a href="{% url 'core_app:switch-organization' ind.id %}"> <span class="glyphicon glyphicon-flag"></span> {{ind.name}}</a></li>
+{% endfor %}
+
+</ul>
+
+<li class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#"> <span class="glyphicon glyphicon-user"></span>
+{% if not user.enabled %} 
+(Disabled)  
+{% endif %}
+{{user.name}}
+<span class="caret"></span></a>
+
+<ul class="dropdown-menu">
+<li><a class="e-get" data-show="{% url 'core_app:update-user-information' %}" data-shell="#smallModalContent" href="#"> <span class="glyphicon glyphicon-edit"></span> {% trans "Settings" %}</a></li>
+
+<li class="divider"></li>
+
+<li><a  href="{% static 'site_app/help/index.html' %}" target="_blank"><span class="glyphicon glyphicon-book"></span> {% trans "Help" %}</a></li>
+<li class="divider"></li>
+
+<li> <a class="e-get" data-shell="#mediumModalContent" data-show="{% url 'cash_app:upgrade' %}" href="#"> <span class="glyphicon glyphicon-credit-card"></span> Upgrade</a> </li>
+<li class="divider"></li>
+
+<li> <a class="e-get" data-shell="#mediumModalContent" data-show="{% url 'core_app:list-logs'  %}" href="#">
+<span class="glyphicon glyphicon-info-sign"></span> Logs </a> </li>
+
+<li class="divider"></li>
+<li><a  href="{% url 'core_app:set-timezone' %}" target="_blank"><span class="glyphicon glyphicon-time"></span> {% trans "Timezone" %}</a></li>
+
+<li class="divider"></li>
+<li><a href="{% url 'site_app:logout' %}"><span class="glyphicon glyphicon-log-out"></span> {% trans "Logout" %}</a></li>
+</ul>
+</li>
+
+</ul>
+</div>
+
+

@@ -1,0 +1,53 @@
+{% load i18n %}
+<nav class="navbar navbar-inverse" style="background-color:#071152">
+<div class="container-fluid">
+<div class="navbar-header"> <a class="navbar-brand" href="{% url 'core_app:index' %}"> Arcamens</a> </div>
+
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span> 
+</button>
+
+<button type="button" data-show="{% url 'core_app:list-nodes' %}" class="navbar-toggle btn btn-info e-get" 
+data-shell="#main-view"role="button"> <span class="glyphicon glyphicon-home"></span>  </button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get eventsButton" 
+data-show="{% url 'core_app:list-events' %}" data-callback="$('.eventsButton').removeClass('new-events')" 
+data-shell="#mediumModalContent" href="#"> <span class="glyphicon glyphicon-bell"></span>  </button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get" data-show="{% url 'post_app:find' %}" data-shell="#bigModalContent"> 
+<span class="glyphicon glyphicon-search">  </span> P</button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get" data-show="{% url 'card_app:find' %}" data-shell="#bigModalContent"> 
+<span class="glyphicon glyphicon-search">  </span> C</button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get"  data-show="{% url 'note_app:find' %}" data-shell="#bigModalContent"> 
+<span class="glyphicon glyphicon-search">  </span> N</button>
+
+<button type="button" class="navbar-toggle btn btn-info e-get"  data-show=""  data-shell="#bigModalContent">  <span class="glyphicon glyphicon-search">  </span> S</button>
+
+
+<ul class="nav navbar-nav">
+<li class="hidden-xs"><a data-show="{% url 'core_app:list-nodes' %}" class="e-get" 
+href="#" data-shell="#main-view"> <span class="glyphicon glyphicon-home"></span>  Home</a></li>
+
+<li class="hidden-xs"><a class="e-get eventsButton" data-show="{% url 'core_app:list-events' %}" 
+data-shell="#mediumModalContent" data-callback="$('.eventsButton').removeClass('new-events')" href="#"><span class="glyphicon glyphicon-bell"></span> 
+{% trans "Events" %}</a></li>
+
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'post_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Tasks/Posts</a></li>
+
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'card_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Tasks/Cards</a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'note_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Notes</a></li>
+<li class="hidden-xs"><a href="#" class="e-get" data-shell="#bigModalContent" data-show="{% url 'comment_app:find' %}" > <span class="glyphicon glyphicon-search"></span> Comments</a></li>
+
+</ul>
+
+{% include "core_app/index-navbar-dropdowns.html" %}
+
+</div>
+</div>
+
+</nav>
+

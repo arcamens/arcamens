@@ -63,12 +63,6 @@ class DeadlineForm(DeadlineMixinForm, forms.ModelForm):
                  bootstrap_version=3)
         }
 
-class CardSearchForm(SqLikeForm, forms.Form):
-    done = forms.BooleanField(required=False)
-
-    pattern = forms.CharField(required=False, 
-    help_text='Example: owner:oliveira + tag:bug')
-
 class CardPriorityForm(SqLikeForm, forms.Form):
     pattern = forms.CharField(required=False, 
     help_text='Example: owner:oliveira + tag:bug')
@@ -104,9 +98,9 @@ class AlertCardWorkersForm(forms.Form):
     required=False, widget=forms.Textarea,
     help_text='I need this task done a!')
 
-class GlobalCardFilterForm(SqLikeForm, forms.ModelForm):
+class CardSearchForm(SqLikeForm, forms.ModelForm):
     class Meta:
-        model  = models.GlobalCardFilter
+        model  = models.CardSearch
         exclude = ('user', 'organization')
 
 class CardFilterForm(SqLikeForm, forms.ModelForm):
@@ -123,7 +117,19 @@ class CardForm(forms.ModelForm):
 class CardFileWrapperForm(FileAttachment, forms.ModelForm):
     class Meta:
         model  = models.CardFileWrapper
-        exclude = ('card', )
+        fields = ('file', )
+
+class CardTaskshipForm(forms.ModelForm):
+    class Meta:
+        model  = models.CardTaskship
+        fields = ('status',)
+
+class CardTagshipForm(forms.ModelForm):
+    class Meta:
+        model  = models.CardTagship
+        fields = ()
+
+
 
 
 

@@ -1,0 +1,55 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Arcamens</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+<div class="jumbotron"> 
+<h1>Arcamens <br><small> Supporting the open source ideology! </small></h1> 
+
+<p>Public organizations can be accessed by everyone. Be a contributor!</p>
+
+{% for ind in organizations %}
+<div class="panel panel-default">
+ <div class="panel-heading"><span class="glyphicon glyphicon-flag"></span> By {{ind.owner.name}} ({{ind.owner.email}})</div>
+  <div class="panel-body">
+    <h3> {{ind.name}} <small> {{ind.description}} </small>  <br>  </h3>
+    <div class="pull-right"> 
+    <form action="{% url 'core_app:join-public-organization' ind.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" 
+    class="btn btn-default">Join Organization?</button>
+    </form>
+    </div>
+
+  </div>
+</div>
+{% endfor %}
+
+</div>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

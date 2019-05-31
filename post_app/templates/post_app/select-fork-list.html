@@ -4,10 +4,10 @@
 
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
-<h5> 
 <span class="glyphicon glyphicon-random"></span>
-Fork {{post.label|truncatechars:40}} on list..
-</h5>
+Fork post <a href="{{post.get_link_url}}" data-shell="#main-view" data-show="{% url 'post_app:post' post.id %}"
+class="e-get">  <span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:60}} </a> on list..
+
 </div>
 
 <div class="modal-body">
@@ -34,12 +34,17 @@ Fork {{post.label|truncatechars:40}} on list..
 </div>
 
 <div class="modal-footer">
+<div class="btn-group btn-group-sm">
 
 <button  type="button" data-form="#selectForkListForm" data-show="{% url 'post_app:select-fork-list'  post.id %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+class="btn btn-default e-post"> <span class="glyphicon glyphicon-search"></span> {% trans "Search" %} </button>
 
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<button type="button" class="btn btn-default" data-dismiss="modal">
+<span class="glyphicon glyphicon-thumbs-down"></span> Close</button>
 </div>
+</div>
+
+
 
 
 

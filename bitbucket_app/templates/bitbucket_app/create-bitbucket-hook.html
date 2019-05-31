@@ -29,28 +29,11 @@ It is necessary to add a Webhook for push events to your repository.
 </div>
 
 <div class="modal-footer">
-<button  type="button" class="btn btn-default e-get"> {% trans "Back" %} </button>
 
-{% block buttons %}
+<button  type="button" class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
+
 <button  type="button" data-form="#bitbuckethookForm" data-show="{% url 'bitbucket_app:create-bitbucket-hook' %}"
-class="btn btn-default e-post">  {% trans "Create" %} </button>
-{% endblock %}
+class="btn btn-default e-post">  <span class="glyphicon glyphicon-ok"></span> {% trans "Create" %} </button>
+
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

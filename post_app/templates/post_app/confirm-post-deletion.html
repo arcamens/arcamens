@@ -17,17 +17,24 @@
 
 
 <div class="modal-footer">
+<form id="deletePostForm" enctype="multipart/form-data">
+{% csrf_token %}
+</form>
+<div class="btn-group btn-group-sm">
+
 <button type="button" class="btn btn-default" 
-data-dismiss="modal">Cancel</button>
+data-dismiss="modal"><span class="glyphicon glyphicon-thumbs-down"></span> Cancel</button>
 
 <button  id="createpost" type="button" 
-data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}"
-class="btn btn-danger e-get"> 
-     {% trans "Delete" %}
+data-shell="#main-view" data-show="{% url 'post_app:delete-post' post.id %}" data-form="#deletePostForm"
+class="btn btn-danger e-post"> 
+<span class="glyphicon glyphicon-remove"></span>     {% trans "Delete" %}
 </button>
-
+</div>
 
 <script>
+
+
 
 
 

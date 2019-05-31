@@ -25,21 +25,17 @@
 </form>
 
 
-
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
+<span class="glyphicon glyphicon-thumbs-down"></span>
      {% trans "Cancel" %}
 </button>
 
 <button  type="button" data-form="#eventFilterForm" data-show="{% url 'core_app:list-logs'  %}"
-class="btn btn-default e-post"> {% trans "Filter" %} </button>
+class="btn btn-default e-post"> 
+<span class="glyphicon glyphicon-search"></span>
+{% trans "Filter" %} </button>
 
 </div>
-
-
-
-
-
-
 
 
 

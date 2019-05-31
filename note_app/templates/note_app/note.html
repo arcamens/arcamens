@@ -3,10 +3,10 @@
 {% load static %}
 
 <div class="panel panel-default">
-  <div class="panel-body">
-
+<div class="panel-body">
+<form id="deleteNoteForm"> {% csrf_token %} </form>
 <p style="font-size:80%"> 
-<span class="glyphicon glyphicon-comment"></span> 
+<span class="glyphicon glyphicon-bell"></span> 
 
 By 
 <a href="#" data-toggle="popover" data-trigger="hover" title="{{note.owner.email}}"  data-content="{{note.owner.description}}"> {{note.owner.name}} </a>
@@ -31,11 +31,19 @@ async: true},
 function(data) {
     $('#note-attachments-{{note.id}}').html(data);
 });
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+
 </script> 
 
 </span>
 
 <br>
+<a data-show="{% url 'note_app:note-events' note.id %}" href="#"
+data-shell="#mediumModalContent" class="e-get"> <span class="glyphicon glyphicon-bell"></span> 
+{% trans "Activity" %} </a>
 
 <a href="#"
 data-show="{% url 'note_app:update-note' note.id %}"
@@ -44,10 +52,7 @@ class="text-warning e-get">
 <span class="glyphicon glyphicon-edit"></span> 
 {% trans "Update" %} </a>
 
-<a href="#"
-data-show="{% url 'note_app:delete-note' note.id %}"
-data-shell="#bigModalContent" 
-class="text-danger e-get"> 
+<a href="#" data-form="#deleteNoteForm" data-show="{% url 'note_app:delete-note' note.id %}" data-shell="#bigModalContent" class="text-danger e-post"> 
 <span class="glyphicon glyphicon-remove"></span> 
 
 {% trans "Remove" %} </a>
@@ -56,4 +61,9 @@ class="text-danger e-get">
 
 
 </div>
+
+
+
+
+
 

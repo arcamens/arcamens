@@ -5,10 +5,8 @@
 <div class="modal-header">
 <button type="button"  class="close" data-dismiss="modal">&times;</button>
 
-{% block title %}
 <span class="glyphicon glyphicon-flag"></span>
 New organization
-{% endblock %}
 
 </div>
 
@@ -22,25 +20,24 @@ New organization
 
 {% block formfields %}
 {% bootstrap_field form.name  size='md' %}
+{% bootstrap_field form.description  size='md' %}
+{% bootstrap_field form.public  size='md' %}
+
 {% endblock %}
 
 {% bootstrap_form_errors form type='non_fields' %}
 </form>
+<a href="{% url 'core_app:list-public-organizations' %}" target="_blank">  <span class="glyphicon glyphicon-globe"></span> Join a Public Organizations? </a>
 
 </div>
 
 <div class="modal-footer">
-{% block buttons %}
 
 <button  type="button" data-form="#organizationForm" 
-data-callback="window.location='{% url 'core_app:index' %}';" 
-data-shell=""
-data-shell-error="#smallModalContent" 
+data-callback="window.location='{% url 'core_app:index' %}';" data-shell="" data-shell-error="#smallModalContent" 
 data-show="{% url 'core_app:create-organization' %}"
-class="btn btn-default e-post">  {% trans "Create" %} </button>
-{% endblock %}
+class="btn btn-default btn-sm e-post"> <span class="glyphicon glyphicon-ok"></span> {% trans "Create" %} </button>
 
 </div>
-
 
 

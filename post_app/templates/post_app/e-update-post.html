@@ -12,31 +12,12 @@ href="{{event.post.get_link_url}}">
 
 <a class="e-get" data-shell="#main-view"
 data-show="{% url 'group_app:list-posts' event.group.id %}" href="{{event.group.get_link_url}}"> 
-<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>  
+<span class="glyphicon glyphicon-eye-open"></span> {{event.group.name}} </a>   ...
 
+<a class="e-get"
+data-shell="#bigModalContent"
+data-show="{% url 'post_app:post-diff' event.id %}" 
+href="{{event.post.get_link_url}}"> 
+<span class="glyphicon glyphicon-check"></span> Diff </a>?
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

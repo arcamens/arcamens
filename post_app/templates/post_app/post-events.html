@@ -6,7 +6,10 @@
 <h5>  
 <span class="glyphicon glyphicon-bell"></span>
 
-{{post.label|truncatechars:40}}'s Events <span class="badge">{{count}}</span></h5>
+Events on post <a class="e-get" data-shell="#main-view"
+data-show="{% url 'post_app:post' post.id %}" href="{{post.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> {{post.label|truncatechars:40}} <span class="badge">{{count}}</span></a></h5>
+
 </div>
 
 <div class="modal-body pre-scrollable">
@@ -22,7 +25,7 @@
 
 <div class="modal-footer">
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Close" %}
+<span class="glyphicon glyphicon-thumbs-down"></span>     {% trans "Close" %}
 </button>
 <script>
 
@@ -32,6 +35,9 @@ $(function () {
 </script>
 
 </div>
+
+
+
 
 
 

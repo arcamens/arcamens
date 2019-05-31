@@ -1,12 +1,12 @@
 {% load bootstrap3 %}
 {% load i18n %}
 
-<form id="form-note-data" enctype="multipart/form-data">
+<form id="noteForm" enctype="multipart/form-data">
 
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 <h4> 
-<span class="glyphicon glyphicon glyphicon-comment"></span>
+<span class="glyphicon glyphicon glyphicon-bell"></span>
  Note </h4>
 </div>
 
@@ -29,13 +29,14 @@ class="btn btn-default e-get">
      {% trans "Back" %}
 </button>
 
-<button  type="button" data-form="#form-note-data" 
+<button  type="button" data-form="#noteForm" 
 data-show="{% url 'note_app:create-note' card.id %}"
 class="btn btn-default e-post"> 
      {% trans "Create" %}
 </button>
 {% endblock %}
 </div>
+
 
 
 

@@ -25,16 +25,17 @@
 </div>
 
 <div class="modal-footer">
+
 <button  type="button" data-show="{% url 'core_app:list-events'  %}"
-class="btn btn-default e-get"> {% trans "Back" %} </button>
+class="btn btn-default e-get"> <span class="glyphicon glyphicon-arrow-left"></span> {% trans "Back" %} </button>
 
 <button  type="button" data-form="#shoutForm" id="shoutFormButton"
-data-show="{% url 'core_app:shout'  %}" class="btn btn-default e-post"> {% trans "Shout" %} </button>
+data-show="{% url 'core_app:shout'  %}" class="btn btn-default e-post"> 
+<span class="glyphicon glyphicon-ok"></span> {% trans "Shout" %} </button>
 
 <button  type="button" data-dismiss="modal" class="btn btn-default"> 
-     {% trans "Close" %}
+<span class="glyphicon glyphicon-thumbs-down"></span>     {% trans "Close" %}
 </button>
+
 </div>
-
-
 

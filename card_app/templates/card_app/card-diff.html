@@ -1,0 +1,42 @@
+{% load bootstrap3 %}
+{% load i18n %}
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<span class="glyphicon glyphicon-file"></span> Change by 
+<a href="#" data-toggle="popover" data-trigger="hover" title="{{event.user.email}}"  data-content="{{event.user.description}}"> {{event.user.name}} </a> 
+
+</a>
+on card <a class="e-get"
+data-shell="#bigModalContent"
+data-show="{% url 'card_app:view-data' card.id %}" 
+href="{{event.card.get_link_url}}"> 
+<span class="glyphicon glyphicon-file"></span> {{card.label|truncatechars:40}} </a>
+</div>
+
+<div class="modal-body">
+<div class="panel panel-default">
+
+<div class="panel-body">
+<h5> {{event.card_label}}.. </h5>
+{{event.card_html | safe}}
+</div>
+
+</div>
+<form id="restoreCardForm"> {% csrf_token %} </form>
+
+<a href="#" data-shell="#bigModalContent" data-form="#restoreCardForm"  data-show="{% url 'card_app:restore-card' event.id  %}"
+class="e-post"> <span class="glyphicon glyphicon-repeat"></span> Restore changes? </a>
+
+<script>
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
+</script>
+
+</div>
+
+
+
+
+

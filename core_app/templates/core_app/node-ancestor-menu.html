@@ -1,5 +1,17 @@
 {% load i18n %}
 
+<style>
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+</style>
+
 <div class="pull-right dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 <span class="glyphicon glyphicon-wrench"></span>  </a>
@@ -7,11 +19,6 @@
 <ul class="dropdown-menu" role="menu">
 <li> <a  class="e-get" data-shell="#smallModalContent" data-show="{% url 'group_app:create-group' organization.id %}"
 href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Group" %}</a> </li>
-<li class="divider"></li>
-
-<li><a class="e-get" data-shell="#smallModalContent" href="#" data-show="{% url 'core_app:manage-organization-admins' %}">
-<span class="glyphicon glyphicon-user"></span> Admins </a> </li>
-
 <li class="divider"></li>
 
 <li><a href="#" class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:list-users'  %}">
@@ -23,6 +30,16 @@ href="#"><span class="glyphicon glyphicon-plus"></span> {% trans "Group" %}</a> 
 data-show="{% url 'core_app:list-tags' %}" >
 <span class="glyphicon glyphicon-tag"></span> Tags
 </a></li>
+<li class="divider"></li>
+
+<li> <a href="#" tabindex="-1" class="e-get" data-shell="#mediumModalContent" data-show="{% url 'github_app:list-github-hooks' %}" > <span class="glyphicon glyphicon-cog"></span>  
+Github</a></li>
+<li class="divider"></li>
+
+<li> <a href="#" tabindex="-1" class="e-get" data-shell="#mediumModalContent" data-show="{% url 'bitbucket_app:list-bitbucket-hooks' %}" > <span class="glyphicon glyphicon-cog"></span>  
+Bitbucket</a> </li> 
+
+<li class="divider"></li>
 
 <li class="divider"></li>
 <li><a class="e-get" data-shell="#mediumModalContent" data-show = "{% url 'core_app:list-clipboard' %}" href="#">
@@ -33,9 +50,10 @@ data-show="{% url 'core_app:list-tags' %}" >
 <li><a href="#" class="e-get" data-shell="#smallModalContent" data-show="{% url 'core_app:update-organization' %}">
 <span class="glyphicon glyphicon-cog"></span> Settings </a></li>
 
-
 </ul>
 </div>
+
+
 
 
 
