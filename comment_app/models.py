@@ -68,7 +68,7 @@ class CommentMixin(models.Model):
         """
 
         comment = cls.objects.filter(
-        Q(post__ancestor__users=user) | Q(post__workers=user), 
+        Q(post__ancestor__users=user), 
         post__ancestor__organization=organization, id=comment_id,
         post__post_clipboard_users__isnull=True).distinct()
 
@@ -221,6 +221,7 @@ def delete_filewrapper(sender, instance, **kwargs):
     is_unique = is_unique.count() == 1
     if is_unique: 
         clean_disk(instance)
+
 
 
 
