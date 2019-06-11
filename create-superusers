@@ -8,6 +8,6 @@ django.setup()
 
 # your imports, e.g. Django models
 from django.contrib.auth.models import User
-User.objects.create_superuser('oliveira', 'last.src@gmail.com', 'itrocksalot')
-User.objects.create_superuser('porton', 'porton@narod.ru', 'itrocksalot')
+User.objects.create_superuser('arcamens', 'developer@arcamens.com', 'arcamens')
+
 

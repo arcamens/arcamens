@@ -2,6 +2,7 @@
 
 import os
 import django
+from random import randint
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcamens.settings")
 django.setup()
@@ -17,62 +18,29 @@ from list_app.models import List
 organization0 = Organization.objects.create(name='Arcamens' )
 organization1 = Organization.objects.create(name='Splittask' )
 
-user0  = User.objects.create(name='Victor Porton',  email='porton@narod.ru', password='111', default=organization0, enabled=True, paid=True)
-user1 = User.objects.create(name='Iury de oliveira',  email='ioliveira@id.uff.br', password='111', default=organization1, enabled=True, paid=True)
-# user2 = User.objects.create(name='Tau',  email='last.src@gmail.com', password='111', default=organization1, enabled=True, paid=True)
+user0  = User.objects.create(name='Developer',  email='developer@arcamens.com', 
+password='arcamens', default=organization1, enabled=True, paid=True)
 
-# queue0 = channel.queue_declare(queue=str(user0.id), durable=True)
 period0 = Period.objects.create(paid=False, total=0, user=user0)
-period1 = Period.objects.create(paid=False, total=0, user=user1)
-# period2 = Period.objects.create(paid=False, total=0, user=user2)
 
-organization1.owner = user1
-organization0.owner = user1
+organization0.owner = user0
+organization1.owner = user0
 organization0.save()
 organization1.save()
 
-Membership.objects.create(user=user1, status='2', organization=organization0, inviter=user1)
-Membership.objects.create(user=user0, status='2',organization=organization0, inviter=user1)
-# Membership.objects.create(user=user2, status='0',organization=organization0, inviter=user1)
+Membership.objects.create(user=user0, status='2',organization=organization0, inviter=user0)
+Membership.objects.create(user=user0, status='0', organization=organization1, inviter=user0)
 
-Membership.objects.create(user=user1, status='0', organization=organization1, inviter=user1)
-Membership.objects.create(user=user0, status='0', organization=organization1, inviter=user1)
-# Membership.objects.create(user=user2, status='0', organization=organization1, inviter=user1)
+board = Board.objects.create(organization=organization1, owner=user0, name='Alpha')
+Boardship.objects.create(board=board, member=user0, binder=user0, status='0')
 
+group = Group.objects.create(organization=organization1, owner=user0, name='beta')
+Groupship.objects.create(group=group, user=user0, binder=user0, status='0')
 
-board = Board.objects.create(organization=organization1, owner=user1, name='Alpha')
-Boardship.objects.create(board=board, member=user1, binder=user1, status='0')
-
-group = Group.objects.create(organization=organization1, owner=user1, name='beta')
-Groupship.objects.create(group=group, user=user1, binder=user1, status='0')
-
-list = List.objects.create(owner=user1, name='Alpha', ancestor=board)
-from random import randint
+list = List.objects.create(owner=user0, name='Alpha', ancestor=board)
 
 label= 'This is a card label and it should be used with caution.'
-
 for ind in range(50):
-    Card.objects.create(owner=user1, 
+    Card.objects.create(owner=user0, 
         label=label * randint(0, 10), ancestor=list)
-
-
-# user2  = User.objects.create(name='foobar',  email='aosu@sss.com', password='111', default=organization0)
-# queue0 = channel.queue_declare(queue=str(user2.id), durable=True)
-# period0 = Period.objects.create(paid=False, total=0, user=user2)
-# user2.enabled = True
-# user2.organizations.add(organization0)
-# user2.organizations.add(organization1)
-# user2.save()
-
-
-
-
-
-
-
-
-
-
-
-
 
