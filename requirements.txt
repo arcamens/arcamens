@@ -1,7 +1,6 @@
 Django==2.1.7
 py-gfm
 django-bootstrap3
-django-datetime-widget
 pillow
 markdown==2.6.11
 django-recaptcha==2.0.2
@@ -15,8 +14,10 @@ pygments
 git+ssh://git@github.com/arcamens/django-sqlike.git
 git+ssh://git@github.com/arcamens/django-onesignal.git
 git+ssh://git@github.com/arcamens/django-jscroll.git
+git+ssh://git@github.com/arcamens/django-datetime-widget
 django-storages
 boto3
+
 
 
 
