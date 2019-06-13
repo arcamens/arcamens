@@ -19,27 +19,38 @@ Cut&Paste concept instead of the usual Drag&Drop.
 
 # Features
 
-* Powerful Event System 
-
-* Event Feedback
+* Powerful Event System  
+    Every user action generates an event, every event can be commented out.    
 
 * Facebook-like Groups 
+    Groups are ideal for storing information, sharing ideas, delegating tasks.
 
 * Superbacklog 
-
+    Groups posts can be forked into cards thus working as backlogs.
+   
 * Flexible Search Mechanism
- 
+    A flexible and intuitive pattern search language to find easily cards, posts, etc
+
 * Flexible Boards Perspective
+    Board lists are visualized in a totally new perspective which gives the user
+    easier access to information.
 
 * Extensibility
+    Arcamens is extremely modular it is also to customize it also implement your own plugins.
 
 * Mobile Responsive
+    Everything was designed to work similarly in both desktops and mobiles. Arcamens's UI
+    is practically the same in both kind of devices.
 
 * Workspaces
+    All users can create their own boards, groups etc.
 
 * Public/Private Organizations
+    Organizations can be public or private, people willing to collaborate with your
+    projects can easily join your public organizations.
 
 # Setup/Development
+
 
 First it is necessary to setup a virtualenv.
 
@@ -95,5 +106,6 @@ I had such an insight due to disliking so much other project management platform
 
 Victor Porton has given feedback about features, tested code also helped to implement django-paybills package
 which is the paypal module.
+
 
 
