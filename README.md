@@ -108,13 +108,3 @@ password arcamens
 ~~~
 
 
-# History
-
-Arcamens concepts were conceived by me when i was working with Victor Porton in the spec of another platform.
-I had such an insight due to disliking so much other project management platform that we were using by the time.
-
-Victor Porton has given feedback about features, tested code also helped to implement django-paybills package
-which is the paypal module.
-
-
-
