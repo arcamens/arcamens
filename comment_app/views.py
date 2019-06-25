@@ -196,8 +196,7 @@ class Find(GuardianView):
 
         comments = models.Comment.objects.filter(
         Q(post__ancestor__users=self.me) &
-        Q(post__ancestor__organization=self.me.default) |\
-        Q(post__workers=self.me)).distinct()
+        Q(post__ancestor__organization=self.me.default)).distinct()
 
         total  = comments.count()
 
@@ -223,8 +222,7 @@ class Find(GuardianView):
 
         comments = models.Comment.objects.filter(
         Q(post__ancestor__users=self.me) &
-        Q(post__ancestor__organization=self.me.default) |\
-        Q(post__workers=self.me)).distinct()
+        Q(post__ancestor__organization=self.me.default)).distinct()
 
         total = comments.count()
 
@@ -274,6 +272,7 @@ class CommentEvents(GuardianView):
 
         return render(request, 'comment_app/comment-events.html', 
         {'comment': comment, 'elems': events, 'count': count})
+
 
 
 
