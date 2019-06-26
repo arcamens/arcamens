@@ -417,11 +417,12 @@ python manage.py normalize_events
 cd ~/projects/arcamens-code/site_app/static/site_app/help
 pandoc --toc -s index.md -o index.html
 
+cd ~/projects/arcamens-code/site_app/static/site_app/help
 pandoc -c ~/pandoc-style.css --toc -s index.md -o out.html
 
 # Using bootstrap style.
-
-pandoc index.md -o out.html --template /home/tau/projects/pandoc-bootstrap-template-code/template.html --css /home/tau/projects/pandoc-bootstrap-template-code/template.css --toc 
+cd ~/projects/arcamens-code/site_app/static/site_app/help
+pandoc index.md -o index.html --template /home/tau/projects/pandoc-bootstrap-template-code/template.html --css template.css --toc 
 
 ##############################################################################
 # site password.
