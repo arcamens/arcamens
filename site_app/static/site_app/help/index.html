@@ -1,70 +1,77 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Arcamens</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/home/tau/projects/pandoc-bootstrap-template-code/template.css" />
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">Arcamens</h1>
-</header>
-<nav id="TOC">
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#organization-creation">Organization Creation</a></li>
-<li><a href="#board-creation">Board Creation</a></li>
-<li><a href="#list-creation">List Creation</a></li>
-<li><a href="#card-creation">Card Creation</a></li>
-<li><a href="#card-editing">Card Editing</a></li>
-<li><a href="#events">Events</a></li>
-<li><a href="#card-workers">Card Workers</a></li>
-<li><a href="#board-members">Board Members</a></li>
-<li><a href="#tag-creation">Tag Creation</a></li>
-<li><a href="#card-tags">Card Tags</a></li>
-<li><a href="#card-prioritization">Card Prioritization</a></li>
-<li><a href="#search-for-taskscards">Search for Tasks/Cards</a></li>
-<li><a href="#group-creation">Group Creation</a></li>
-<li><a href="#post-creation">Post Creation</a></li>
-<li><a href="#post-editing">Post Editing</a></li>
-<li><a href="#post-workers">Post Workers</a></li>
-<li><a href="#post-tags">Post Tags</a></li>
-<li><a href="#organization-invites">Organization Invites</a></li>
-<li><a href="#group-members">Group Members</a></li>
-<li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
-<li><a href="#post-prioritization">Post Prioritization</a></li>
-<li><a href="#search-for-tasksposts">Search for Tasks/Posts</a></li>
-<li><a href="#event-feedbacks">Event Feedbacks</a></li>
-<li><a href="#post-filter">Post Filter</a></li>
-<li><a href="#collection-filter">Collection Filter</a></li>
-<li><a href="#card-colors">Card Colors</a></li>
-<li><a href="#card-e-mailnotifications">Card E-mail/Notifications</a></li>
-<li><a href="#card-filter">Card Filter</a></li>
-<li><a href="#card-relations">Card Relations</a></li>
-<li><a href="#card-forks">Card Forks</a></li>
-<li><a href="#post-forks">Post Forks</a></li>
-<li><a href="#advanced-user-search">Advanced User Search</a></li>
-<li><a href="#advanced-card-search">Advanced Card Search</a></li>
-<li><a href="#advanced-post-search">Advanced Post Search</a></li>
-<li><a href="#advanced-list-search">Advanced List Search</a></li>
-<li><a href="#group-settingsremoval">Group Settings/Removal</a></li>
-<li><a href="#board-settingsremoval">Board Settings/Removal</a></li>
-<li><a href="#bitbucket-integration">Bitbucket Integration</a></li>
-<li><a href="#organization-settingsremoval">Organization Settings/Removal</a></li>
-<li><a href="#logs">Logs</a></li>
-</ul>
-</nav>
-<h3 id="intro">Intro</h3>
+    <div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <span class="doc-title">Arcamens</span>
+        <ul class="nav pull-right doc-info">
+                            </ul>
+      </div>
+    </div>
+  </div>
+    <div class="container">
+    <div class="row">
+            <div id="TOC" class="span3">
+        <div class="well toc">
+        <ul>
+          <li class="nav-header">Table of Contents</li>
+        </ul>
+        <ul>
+        <li><a href="#intro">Intro</a></li>
+        <li><a href="#organization-creation">Organization Creation</a></li>
+        <li><a href="#board-creation">Board Creation</a></li>
+        <li><a href="#list-creation">List Creation</a></li>
+        <li><a href="#card-creation">Card Creation</a></li>
+        <li><a href="#card-editing">Card Editing</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#card-workers">Card Workers</a></li>
+        <li><a href="#board-members">Board Members</a></li>
+        <li><a href="#tag-creation">Tag Creation</a></li>
+        <li><a href="#card-tags">Card Tags</a></li>
+        <li><a href="#card-prioritization">Card Prioritization</a></li>
+        <li><a href="#search-for-taskscards">Search for Tasks/Cards</a></li>
+        <li><a href="#group-creation">Group Creation</a></li>
+        <li><a href="#post-creation">Post Creation</a></li>
+        <li><a href="#post-editing">Post Editing</a></li>
+        <li><a href="#post-workers">Post Workers</a></li>
+        <li><a href="#post-tags">Post Tags</a></li>
+        <li><a href="#organization-invites">Organization Invites</a></li>
+        <li><a href="#group-members">Group Members</a></li>
+        <li><a href="#post-e-mailnotifications">Post E-mail/Notifications</a></li>
+        <li><a href="#post-prioritization">Post Prioritization</a></li>
+        <li><a href="#search-for-tasksposts">Search for Tasks/Posts</a></li>
+        <li><a href="#event-feedbacks">Event Feedbacks</a></li>
+        <li><a href="#post-filter">Post Filter</a></li>
+        <li><a href="#collection-filter">Collection Filter</a></li>
+        <li><a href="#card-colors">Card Colors</a></li>
+        <li><a href="#card-e-mailnotifications">Card E-mail/Notifications</a></li>
+        <li><a href="#card-filter">Card Filter</a></li>
+        <li><a href="#card-relations">Card Relations</a></li>
+        <li><a href="#card-forks">Card Forks</a></li>
+        <li><a href="#post-forks">Post Forks</a></li>
+        <li><a href="#advanced-user-search">Advanced User Search</a></li>
+        <li><a href="#advanced-card-search">Advanced Card Search</a></li>
+        <li><a href="#advanced-post-search">Advanced Post Search</a></li>
+        <li><a href="#advanced-list-search">Advanced List Search</a></li>
+        <li><a href="#group-settingsremoval">Group Settings/Removal</a></li>
+        <li><a href="#board-settingsremoval">Board Settings/Removal</a></li>
+        <li><a href="#bitbucket-integration">Bitbucket Integration</a></li>
+        <li><a href="#organization-settingsremoval">Organization Settings/Removal</a></li>
+        <li><a href="#logs">Logs</a></li>
+        </ul>
+        </div>
+      </div>
+            <div class="span9">
+            <h3 id="intro">Intro</h3>
 <p>Arcamens was designed to allow a high level of communication and collaboration by teams. It implements so called Kanban Boards and Groups. Groups can be used to delegate isolated tasks, share information, events, questions and even store information that is pertinent to a project.</p>
 <p>The aim of arcamens is being as flexible as possible. It allows better dealing with high payloads of information and facilitates better organization of information. Arcamens is ideal for all kind of teams whose motto is simplicity and flexibility.</p>
 <p>The boards, lists and cards are structured in a tree-like manner what allows a succinct perspective of the information that is relevant to the board team.</p>
@@ -1020,5 +1027,8 @@ for indi in pages:
 <img src="/static/site_app/help/logs-1.png" alt="logs-1" /><figcaption>logs-1</figcaption>
 </figure>
 <p>From there you can specify the starting/ending date to filter your logs.</p>
+            </div>
+    </div>
+  </div>
 </body>
 </html>

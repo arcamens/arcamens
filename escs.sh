@@ -417,6 +417,12 @@ python manage.py normalize_events
 cd ~/projects/arcamens-code/site_app/static/site_app/help
 pandoc --toc -s index.md -o index.html
 
+pandoc -c ~/pandoc-style.css --toc -s index.md -o out.html
+
+# Using bootstrap style.
+
+pandoc index.md -o out.html --template /home/tau/projects/pandoc-bootstrap-template-code/template.html --css /home/tau/projects/pandoc-bootstrap-template-code/template.css --toc 
+
 ##############################################################################
 # site password.
 
@@ -491,6 +497,7 @@ grep -rl --exclude-dir='.git' 'comment' ./ | xargs sed -i 's/sippet/feedback/g'
 ##############################################################################
 export PATH=$PATH:~/.local/bin
 ##############################################################################
+
 
 
 
