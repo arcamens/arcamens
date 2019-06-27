@@ -17,8 +17,8 @@ from paybills.misc import get_addr
 # In days.
 SIGNUP_EXP = 2
 
-ONE_SIGNAL_APPID = '80e3df68-9927-4668-8a11-106eb25932fe'
-ONE_SIGNAL_API_KEY = 'OWJiMGEzMjItZTZlYS00OThhLWI4ZWItODY4ZmE4YTdmNjA2'
+ONE_SIGNAL_APPID = ''
+ONE_SIGNAL_API_KEY = ''
 ONE_SIGNAL_DEVICE_APP = 'core_app'
 ONE_SIGNAL_DEVICE_MODEL = 'User'
 
@@ -57,7 +57,7 @@ PAYBILLS_USER = 'core_app.User'
 
 CURRENCY_CODE = 'USD'
 PAYPAL_URL = 'https://www.sandbox.paypal.com'
-PAYPAL_IPN_DOMAIN = 'https://staging.arcamens.com'
+PAYPAL_IPN_DOMAIN = 'https://www.arcamens.com'
 PAYPAL_IPN_VIEW   = 'cash_app:paypal-ipn'
 PAYPAL_BUSINESS_NAME = ''
 
@@ -68,8 +68,8 @@ USER_COST      = 10
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'arcamens.softwares@gmail.com'
-EMAIL_HOST_PASSWORD = 'bianca15041986'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 # just a workaround.
 LOCAL_ADDR = 'http://0.0.0.0:8000'
@@ -223,6 +223,7 @@ MEDIA_URL ='/static/media/'
 
 # When serving with a web server.
 # STATIC_ROOT = os.path.join(BASE_DIR, 'arcamens', "static/")
+
 
 
 
