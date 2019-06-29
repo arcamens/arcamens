@@ -5,7 +5,6 @@ pillow
 markdown==2.6.11
 django-recaptcha==2.0.2
 requests
-django-blowdb
 django-listutils
 django-paybills==1.0.0
 django-slock==1.0.0
@@ -17,6 +16,8 @@ django-jscroll==1.0.0
 django-datetime-widget
 django-storages
 boto3
+
+
 
 
 

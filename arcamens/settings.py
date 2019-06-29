@@ -121,7 +121,6 @@ INSTALLED_APPS = [
     'comment_app',
     'note_app',
     'bootstrap3',
-    'blowdb',
     'slock',
     'onesignal',
     'listutils',
@@ -223,6 +222,7 @@ MEDIA_URL ='/static/media/'
 
 # When serving with a web server.
 # STATIC_ROOT = os.path.join(BASE_DIR, 'arcamens', "static/")
+
 
 
 

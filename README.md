@@ -1,5 +1,7 @@
 # Arcamens
 
+https://arcamens.com/
+
 Kanban Boards, Super Backlogs with Cut&amp;Paste and new perspective of boards, lists, cards.
 Arcamens is a robust and powerful project management platform whose goal is optmizing busines's workflow.
 It is extremely versatile when dealing with high payloads of tasks.
@@ -87,7 +89,12 @@ The steps below show how to get Arcamens running for development.
 
 ~~~
 cd ~/projects/arcamens-code
-python manage.py blowdb
+python manage.py makemigrations core_app group_app post_app \
+feedback_app paybills board_app site_app  cash_app datetimewidget \
+list_app  card_app  jsim jscroll comment_app note_app bootstrap3 \
+blowdb slock onesignal listutils captcha bitbucket_app github_app
+
+python manage.py migrate
 
 # Create the django admin site super user arcamens.
 ./create-superusers
