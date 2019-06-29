@@ -1,4 +1,4 @@
-Django==2.1.7
+Django==2.1.9
 py-gfm
 django-bootstrap3
 pillow
@@ -17,6 +17,7 @@ django-jscroll==1.0.0
 django-datetime-widget
 django-storages
 boto3
+
 
 
 
