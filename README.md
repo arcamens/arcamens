@@ -19,6 +19,9 @@ The boards are visualized in a tree-like manner, boards, lists, cards are displa
 four columns. Such a perspective of boards allow a nifty management of information due to the
 Cut&Paste concept instead of the usual Drag&Drop.
 
+[Known more...](https://arcamens.com/static/site_app/help/index.html)
+
+
 # Features
 
 * Powerful Event System  
@@ -113,5 +116,6 @@ Login with.
 email developer@arcamens.com
 password arcamens
 ~~~
+
 
 
