@@ -1,7 +1,5 @@
 # Arcamens
 
-https://arcamens.com/
-
 Kanban Boards, Super Backlogs with Cut&amp;Paste and new perspective of boards, lists, cards.
 Arcamens is a robust and powerful project management platform whose goal is optmizing busines's workflow.
 It is extremely versatile when dealing with high payloads of tasks.
@@ -18,8 +16,6 @@ based on multiple criterias.
 The boards are visualized in a tree-like manner, boards, lists, cards are displayed along
 four columns. Such a perspective of boards allow a nifty management of information due to the
 Cut&Paste concept instead of the usual Drag&Drop.
-
-[Known more...](https://arcamens.com/static/site_app/help/index.html)
 
 
 # Features
@@ -116,6 +112,7 @@ Login with.
 email developer@arcamens.com
 password arcamens
 ~~~
+
 
 
 
