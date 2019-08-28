@@ -218,10 +218,11 @@ STATICFILES_DIRS = (
  )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
-MEDIA_URL ='/static/media/'
+MEDIA_URL ='/media/'
 
 # When serving with a web server.
 # STATIC_ROOT = os.path.join(BASE_DIR, 'arcamens', "static/")
+
 
 
 

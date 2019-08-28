@@ -96,15 +96,8 @@ stdbuf -o 0 python manage.py runserver 0.0.0.0:8000
 cd ~/.virtualenvs/
 ls -la
 # by default, python3 has executable named python in arch linux.
-virtualenv arcamens -p python3.5
+virtualenv arcamens -p python
 #####k#########################################################################
-# create arcamens django-v2 virtualenv.
-cd ~/.virtualenvs/
-ls -la
-# by default, python3 has executable named python in arch linux.
-virtualenv arcamens-v2 -p python3.5
-
-##############################################################################
 # activate arcamens virtualenv.
 cd ~/.virtualenvs/
 source arcamens/bin/activate
@@ -498,6 +491,7 @@ grep -rl --exclude-dir='.git' 'comment' ./ | xargs sed -i 's/sippet/feedback/g'
 ##############################################################################
 export PATH=$PATH:~/.local/bin
 ##############################################################################
+
 
 
 

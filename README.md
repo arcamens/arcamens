@@ -91,7 +91,7 @@ cd ~/projects/arcamens-code
 python manage.py makemigrations core_app group_app post_app \
 feedback_app paybills board_app site_app  cash_app datetimewidget \
 list_app  card_app  jsim jscroll comment_app note_app bootstrap3 \
-blowdb slock onesignal listutils captcha bitbucket_app github_app
+slock onesignal listutils captcha bitbucket_app github_app
 
 python manage.py migrate
 
@@ -112,6 +112,7 @@ Login with.
 email developer@arcamens.com
 password arcamens
 ~~~
+
 
 
 
