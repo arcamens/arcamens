@@ -1,4 +1,4 @@
-Django==2.2.4
+Django==5.2.17
 py-gfm
 django-bootstrap3
 pillow
